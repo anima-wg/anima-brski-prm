@@ -1,8 +1,8 @@
-module ietf-async-voucher-request {
+module ietf-voucher-request-prm {
   yang-version 1.1;
 
   namespace
-    "urn:ietf:params:xml:ns:yang:ietf-async-voucher-request";
+    "urn:ietf:params:xml:ns:yang:ietf-voucher-request-prm";
   prefix "constrained";
 
   import ietf-restconf {
@@ -31,12 +31,13 @@ module ietf-async-voucher-request {
     WG List:  <mailto:anima@ietf.org>
     Author:   Steffen Fries
               <mailto:steffen.fries@siemens.com>
-    Author:   Hendrik Brockhaus
-              <mailto: hendrik.brockhaus@siemens.com>
     Author:   Eliot Lear
               <mailto: lear@cisco.com>
     Author:   Thomas Werner
-              <mailto: thomas-werner@siemens.com>";
+              <mailto: thomas-werner@siemens.com>
+    Author:   Michael Richardson
+              <mailto: mcr+ietf@sandelman.ca>";
+
   description
    "This module defines an extension of the RFC8995 voucher
     request to permit a registrar-agent to convey the adjacency
@@ -50,20 +51,20 @@ module ietf-async-voucher-request {
     description
      "Initial version";
     reference
-     "RFC XXXX: Voucher Request for Asynchronous Enrollment";
+     "RFC XXXX: VBRSKI for Pledge in Responder Mode";
   }
-  rc:yang-data voucher-request-async-artifact {
+  rc:yang-data voucher-request-prm-artifact {
     // YANG data template for a voucher-request.
-    uses voucher-request-async-grouping;
+    uses voucher-request-prm-grouping;
   }
   // Grouping defined for future usage
-  grouping voucher-request-async-grouping {
+  grouping voucher-request-prm-grouping {
     description
       "Grouping to allow reuse/extensions in future work.";
     uses vcr:voucher-request-grouping {
 	
       augment voucher {
-        description "Base the async-voucher-request upon the
+        description "Base the voucher-request-prm upon the
           regular one";
         leaf agent-signed-data {
           type binary;

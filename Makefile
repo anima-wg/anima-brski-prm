@@ -1,4 +1,4 @@
-DRAFT:=draft-ietf-anima-brski-async-enroll
+DRAFT:=draft-ietf-anima-brski-prm
 
 html: xml
 	xml2rfc ${DRAFT}.xml --html
