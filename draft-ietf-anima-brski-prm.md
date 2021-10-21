@@ -119,16 +119,16 @@ informative:
 This document defines enhancements to the bootstrapping a remote secure
 key infrastructure (BRSKI, {{RFC8995}} ) to facilitate bootstrapping 
 in domains featuring no or only timely limited connectivity between
-the pledge and the domain registrar. This specifically targets situations, 
+a pledge and the domain registrar. This specifically targets situations, 
 in which the interaction model changes from a pledge-initiator-mode as 
-in BRSKI to a pledge-responder-mode. To support this functionality BRSKI-PRM
-introduces with a registrar-agent a new component, which facilitates the 
-communication between pledge and registrar during the bootstrapping. 
-To support the establishment of a the trust relation between the pledge 
-and the domain registrar, BRSKI-PRM relies on the exchange of authenticated 
-self-contained objects (signature-wrapped objects). 
-The defined approach is agnostic regarding the utilized enrollment
-protocol, employed by the registrar to communicate with the CA. 
+in BRSKI to a pledge-responder-mode as desribed here. To support this 
+functionality BRSKI-PRM introduces a new registrar-agent component, 
+which facilitates the communication between pledge and registrar during 
+the bootstrapping phase. To support the establishment of a trust relation 
+between a pledge and the domain registrar, BRSKI-PRM relies on the exchange
+of authenticated self-contained objects (signature-wrapped objects). The 
+defined approach is agnostic regarding the utilized enrollment protocol, 
+deployed by the registrar to communicate with the Domain CA. 
 
 
 --- middle
@@ -254,9 +254,9 @@ authenticated self-contained object:
 
 
 
-# Scope of solution
+# Scope of Solution
 
-## Supported environment {#sup-env}
+## Supported Environment {#sup-env}
 
 The solution is intended to be applicable in domains
 in which pledges have no direct connection to the domain registrar,
@@ -279,7 +279,7 @@ in situation, in which the pledge acts as a server and only answers
 specific requests.
 
 
-### Building automation
+### Building Automation
 
 In building automation, a use case can be described by a detached
 building or the basement of a building equipped with sensor,
@@ -306,7 +306,7 @@ different network. In this cases connectivity to the domain registrar
 may be facilitated by the service technician's laptop.
 
 
-### Infrastructure isolation policy
+### Infrastructure Isolation Policy
 
 This refers to any case in which network infrastructure is normally
 isolated from the Internet as a matter of policy, most likely for
@@ -316,7 +316,7 @@ time, for example when a batch of new devices are deployed, but
 impossible at other times.
 
 
-### Less operational security in the target domain
+### Less Operational Security in the Target-Domain
 
 The registration point performing the authorization of a certificate
 request is a critical PKI component and therefore implicates higher
@@ -333,7 +333,7 @@ operational security.
 
 
 
-# Requirement discussion and mapping to solution elements {#req-sol}
+# Requirements Discussion and Mapping to Solution-Elements {#req-sol}
 
 Based on the intended target environment described in {{sup-env}} and
 the motivated application examples
@@ -402,7 +402,7 @@ request, BRSKI-PRM relies on the defined message wrapping mechanisms
 of the enrollment protocols stated in {{req-sol}} above.
 
 
-## Pledge-responder-mode: Registrar-agent communication with Pledges {#uc2}
+## Pledge-responder-mode (PRM): Registrar-agent Communication with Pledges {#uc2}
 
 To support mutual trust establishment of pledges, not directly
 connected to the domain registrar this approach relies on the exchange of
@@ -439,7 +439,7 @@ small enhancements.
    |                                      +--------------+---------+
    |                                                     ^
    |                                                     |  BRSKI-
-   V                                                     |   MASA
+   V    BRSKI-PRM                                        |   MASA
 +-------+     +---------+   .............................|.........
 |       |     |         |   .                            |        .
 |       |     |         |   .  +-----------+       +-----v-----+  .
@@ -447,7 +447,7 @@ small enhancements.
 |Pledge |     |Agent    |   .  |   Join    |       | Domain    |  .
 |       |     |         |   .  |   Proxy   |       | Registrar |  .
 |       <----->.........<------>...........<-------> (PKI RA)  |  .
-|       |     |         |   .  |       BRSKI-PRM   |           |  .
+|       |     |         |   .  |           |       |           |  .
 |       |     |         |   .  |           |       +-----+-----+  .
 |IDevID |     | LDevID  |   .  +-----------+             |        .
 |       |     |         |   .         +------------------+-----+  .
@@ -593,7 +593,7 @@ proof-of-possession of the private key in the context of the TLS
 handshake. The provisionally accepted LDevID(Reg) EE certificate can
 be verified after the voucher has been processed by the pledge.
 
-### Behavior of a pledge in pledge-responder-mode {#pledge_ep}
+### Behavior of Pledge in Pledge-Responder-Mode {#pledge_ep}
 
 In contrast to BRSKI the pledge acts as a server component. It is triggered 
 by the registrar-agent for the generation of pledge-voucher-request and 
@@ -624,7 +624,7 @@ The following endpoints are defined for the pledge in this document:
 
 
 
-### Behavior of a registrar-agent
+### Behavior of Registrar-Agent
 
 The registrar-agent is a new component in the BRSKI context. It
 provides connectivity between the pledge and the domain registrar
@@ -688,7 +688,7 @@ The following information is therefore available at the registrar-agent:
   to be bootstrapped.
 
 
-#### Registrar discovery by the registrar-agent {#discovery_uc2_reg}
+#### Discovery of Registrar by Registrar-Agent {#discovery_uc2_reg}
 
 The discovery of the domain registrar may be done as specified in
 {{RFC8995}} with the
@@ -698,7 +698,7 @@ with the address of the domain registrar and the certificate
 of the domain registrar.
 
 
-#### Pledge discovery by the registrar-agent {#discovery_uc2_ppa}
+#### Discovery of Pledge by Registrar-Agent {#discovery_uc2_ppa}
 
 The discovery of the pledge by registrar-agent should be done
 by using DNS-based Service Discovery {{RFC6763}} over Multicast DNS
@@ -715,7 +715,7 @@ on the provided list of product-serial-number.
 
 
 
-### Bootstrapping objects and corresponding exchanges {#exchanges_uc2}
+### Bootstrapping Objects and Corresponding Exchanges {#exchanges_uc2}
 
 The interaction of the pledge with the registrar-agent may be
 accomplished using different transport means (protocols and or
@@ -844,7 +844,7 @@ components into:
   registrar-agent and the registrar.
 
 
-####  Request objects acquisition (registrar-agent - pledge) {#exchanges_uc2_1}
+####  Request Objects Acquisition by Registrar-Agent from Pledge {#exchanges_uc2_1}
 
 The following description assumes that the registrar-agent already
 discovered the pledge. This may be done as described in
@@ -899,7 +899,7 @@ Preconditions:
 {: #exchangesfig_uc2_1 title='Request collection (registrar-agent - pledge)' artwork-align="left"}
 
 Triggering the pledge to create the pledge-voucher-request is done using
-HTTPS POST on the defined pledge endpoint
+HTTP POST on the defined pledge endpoint
 "/.well-known/brski/pledge-voucher-request".
 
 The registrar-agent pledge-voucher-request Content-Type header is:
@@ -1178,7 +1178,7 @@ bootstrapping of multiple pledges using the same connection between
 the registrar-agent and the domain registrar.
 
 
-#### Request handling (registrar-agent - infrastructure) {#exchanges_uc2_2}
+#### Request Handling - Registrar-Agent (Infrastructure) {#exchanges_uc2_2}
 
 The bootstrapping exchange between the registrar-agent and the domain
 registrar resembles the exchanges between the pledge and the domain
@@ -1257,7 +1257,7 @@ voucher-request and enrollment-request (instead of the objects for
 voucher-request (CMS-signed JSON) and enrollment-request (PKCS#10).
 
 The registrar-agent sends the pledge-voucher-request to the
-registrar with an HTTPS POST to the endpoint
+registrar with an HTTP-over-TLS POST to the endpoint
 "/.well-known/brski/requestvoucher".
 
 The pledge-voucher-request Content-Type used in the
@@ -1376,7 +1376,7 @@ which corresponds to the certificate signaled in the JOSE header.
 {: #rvr title='Example of registrar-voucher-request' artwork-align="left"}
 
 The registrar sends the registrar-voucher-request to the
-MASA with an HTTPS POST at the endpoint
+MASA with an HTTP-over-TLS POST at the endpoint
 "/.well-known/brski/requestvoucher".
 
 The registrar-voucher-request Content-Type is defined in
@@ -1466,7 +1466,7 @@ in the JOSE object. The signature is created using the pledge's
 IDevID to provide proof-of-identity as outlined in {{per}}.
 
 When using EST, the registrar-agent sends the enrollment request
-to the registrar with an HTTPS POST at the endpoint
+to the registrar with an HTTP-over-TLS POST at the endpoint
 "/.well-known/est/simpleenroll".
 
 The enrollment-request Content-Type is:
@@ -1520,6 +1520,16 @@ A successful interaction with the domain CA will result in the pledge
 LDevID EE certificate, which is then forwarded by the registrar to the
 registrar-agent using the content type "application/pkcs7-mime".
 
+[RFC Editor: please delete] /\*
+
+Open Issue: the enrollment response object may also be an
+application/jose object with a signature of the domain registrar.
+Note:  
+Communicaion between domain CA and registrar is of content
+type "application/pkcs7-mime" 
+Communicaion between registrar, registrar-agent and furter to the pledge
+should be of content type "application/jose" . \*/
+
 The registrar-agent has now finished the exchanges with the
 domain registrar and can supply the voucher-response
 (from MASA via Registrar) and the enrollment-response (LDevID EE
@@ -1529,7 +1539,7 @@ of the response objects is defined through the voucher {{RFC8366}} and
 the certificate {{RFC5280}}.
 
 
-#### Response object supply (registrar-agent - pledge) {#exchanges_uc2_3}
+#### Response Object Supply by Registrar-Agent to Pledge {#exchanges_uc2_3}
 
 The following description assumes that the registrar-agent has
 obtained the response objects from the domain registrar. It will
@@ -1548,7 +1558,7 @@ Preconditions in addition to {{exchanges_uc2_2}}:
 
 ~~~~
 +--------+                        +-----------+
-| Pledge |                        | Registrar |
+| Pledge |                        | Registrar-|
 |        |                        | Agent     |
 |        |                        | (RegAgt)  |
 +--------+                        +-----------+
@@ -1701,7 +1711,7 @@ establishes a TLS connection with the registrar as stated in
 {{exchanges_uc2_2}}.
 
 The registrar-agent sends the pledge voucher-status object
-without modification to the registrar with an HTTPS POST using the
+without modification to the registrar with an HTTP-over-TLS POST using the
 operation path value of "/.well-known/brski/voucher_status". The
 Content-Type header is kept as "application/jose" as described in
 {{exchangesfig_uc2_3}} and depicted in the example in {{vstat}}.
@@ -1727,7 +1737,7 @@ registrar. The status indicates the pledge could process the
 enroll-response object and holds the corresponding private key.
 
 The registrar-agent sends the pledge enroll-status object
-without modification to the registrar with an HTTPS POST using the
+without modification to the registrar with an HTTP-over-TLS POST using the
 operation path value of "/.well-known/brski/enrollstatus". The
 Content-Type header is kept as "application/jose" as described in
 {{exchangesfig_uc2_3}} and depicted in the example in {{estat}}.
@@ -1748,7 +1758,7 @@ SHOULD capture this telemetry information.
 
 
 
-# Voucher Request artifact {#voucher-request-prm-yang}
+# Voucher Request Artifact {#voucher-request-prm-yang}
 The following enhancement extends the voucher-request as defined in 
 {{RFC8995}} to include additional fields necessary for handling 
 bootstrapping in the pledge-responder-mode. 
@@ -1968,13 +1978,13 @@ information to the MASA.
 
 # Security Considerations
 
-## Exhaustion attack on pledge
+## Exhaustion Attack on Pledge
 
 Exhaustion attack on pledge based on DoS attack (connection
 establishment, etc.)
 
 
-## Misuse of acquired voucher and enrollment responses by Registrar-agent
+## Misuse of acquired Voucher and Enrollment responses by Registrar-Agent
 A Registrar-agent that uses acquired voucher and enrollment response for
 domain 1 in domain 2 can be detected by the pledge-voucher-request 
 processing on the domain registrar side. This requires the domain 
@@ -1986,7 +1996,7 @@ on the product-serial-number contained in the pledge-voucher-request.
 Misbinding of pledge by a faked domain registrar is countered as
 described in BRSKI security considerations (section 11.4).
 
-## Misuse of registrar-agent credentials
+## Misuse of Registrar-Agent Credentials
 Concerns have been raised, that there may be opportunities to misuse 
 the registrar-agent with a valid LDevID. This may be addressed by 
 utilizing short-lived certificates (e.g., valid for a day) to 
@@ -2022,7 +2032,7 @@ call flows.
 
 --- back
 
-# History of changes [RFC Editor: please delete] {#app_history}
+# History of Changes [RFC Editor: please delete] {#app_history}
 
 From IETF draft-ietf-anima-brski-async-enroll-03 -> IETF anima-brski-prm-internal-00:
 

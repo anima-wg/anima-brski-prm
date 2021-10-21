@@ -13,16 +13,16 @@
        This document defines enhancements to the bootstrapping a remote secure
 key infrastructure (BRSKI,   ) to facilitate bootstrapping 
 in domains featuring no or only timely limited connectivity between
-the pledge and the domain registrar. This specifically targets situations, 
+a pledge and the domain registrar. This specifically targets situations, 
 in which the interaction model changes from a pledge-initiator-mode as 
-in BRSKI to a pledge-responder-mode. To support this functionality BRSKI-PRM
-introduces with a registrar-agent a new component, which facilitates the 
-communication between pledge and registrar during the bootstrapping. 
-To support the establishment of a the trust relation between the pledge 
-and the domain registrar, BRSKI-PRM relies on the exchange of authenticated 
-self-contained objects (signature-wrapped objects). 
-The defined approach is agnostic regarding the utilized enrollment
-protocol, employed by the registrar to communicate with the CA. 
+in BRSKI to a pledge-responder-mode as desribed here. To support this 
+functionality BRSKI-PRM introduces a new registrar-agent component, 
+which facilitates the communication between pledge and registrar during 
+the bootstrapping phase. To support the establishment of a trust relation 
+between a pledge and the domain registrar, BRSKI-PRM relies on the exchange
+of authenticated self-contained objects (signature-wrapped objects). The 
+defined approach is agnostic regarding the utilized enrollment protocol, 
+deployed by the registrar to communicate with the Domain CA. 
     " name="description">
 <meta content="xml2rfc 3.10.0" name="generator">
 <meta content="draft-ietf-anima-brski-prm-00" name="ietf.draft">
@@ -1203,7 +1203,7 @@ li > p:last-of-type {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 18 April 2022</td>
+<td class="center">Expires 24 April 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1216,12 +1216,12 @@ li > p:last-of-type {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-00</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-10-15" class="published">15 October 2021</time>
+<time datetime="2021-10-21" class="published">21 October 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-04-18">18 April 2022</time></dd>
+<dd class="expires"><time datetime="2022-04-24">24 April 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1249,16 +1249,16 @@ li > p:last-of-type {
 <p id="section-abstract-1">This document defines enhancements to the bootstrapping a remote secure
 key infrastructure (BRSKI, <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> ) to facilitate bootstrapping 
 in domains featuring no or only timely limited connectivity between
-the pledge and the domain registrar. This specifically targets situations, 
+a pledge and the domain registrar. This specifically targets situations, 
 in which the interaction model changes from a pledge-initiator-mode as 
-in BRSKI to a pledge-responder-mode. To support this functionality BRSKI-PRM
-introduces with a registrar-agent a new component, which facilitates the 
-communication between pledge and registrar during the bootstrapping. 
-To support the establishment of a the trust relation between the pledge 
-and the domain registrar, BRSKI-PRM relies on the exchange of authenticated 
-self-contained objects (signature-wrapped objects). 
-The defined approach is agnostic regarding the utilized enrollment
-protocol, employed by the registrar to communicate with the CA.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+in BRSKI to a pledge-responder-mode as desribed here. To support this 
+functionality BRSKI-PRM introduces a new registrar-agent component, 
+which facilitates the communication between pledge and registrar during 
+the bootstrapping phase. To support the establishment of a trust relation 
+between a pledge and the domain registrar, BRSKI-PRM relies on the exchange
+of authenticated self-contained objects (signature-wrapped objects). The 
+defined approach is agnostic regarding the utilized enrollment protocol, 
+deployed by the registrar to communicate with the Domain CA.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1279,7 +1279,7 @@ protocol, employed by the registrar to communicate with the CA.<a href="#section
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 18 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 24 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1315,51 +1315,51 @@ protocol, employed by the registrar to communicate with the CA.<a href="#section
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-terminology" class="xref">Terminology</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-scope-of-solution" class="xref">Scope of solution</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-scope-of-solution" class="xref">Scope of Solution</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-supported-environment" class="xref">Supported environment</a></p>
+                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-supported-environment" class="xref">Supported Environment</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
                 <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-application-examples" class="xref">Application Examples</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.1">
-                    <p id="section-toc.1-1.3.2.2.2.1.1"><a href="#section-3.2.1" class="xref">3.2.1</a>.  <a href="#name-building-automation" class="xref">Building automation</a></p>
+                    <p id="section-toc.1-1.3.2.2.2.1.1"><a href="#section-3.2.1" class="xref">3.2.1</a>.  <a href="#name-building-automation" class="xref">Building Automation</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.2">
-                    <p id="section-toc.1-1.3.2.2.2.2.1"><a href="#section-3.2.2" class="xref">3.2.2</a>.  <a href="#name-infrastructure-isolation-po" class="xref">Infrastructure isolation policy</a></p>
+                    <p id="section-toc.1-1.3.2.2.2.2.1"><a href="#section-3.2.2" class="xref">3.2.2</a>.  <a href="#name-infrastructure-isolation-po" class="xref">Infrastructure Isolation Policy</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.3">
-                    <p id="section-toc.1-1.3.2.2.2.3.1"><a href="#section-3.2.3" class="xref">3.2.3</a>.  <a href="#name-less-operational-security-i" class="xref">Less operational security in the target domain</a></p>
+                    <p id="section-toc.1-1.3.2.2.2.3.1"><a href="#section-3.2.3" class="xref">3.2.3</a>.  <a href="#name-less-operational-security-i" class="xref">Less Operational Security in the Target-Domain</a></p>
 </li>
                 </ul>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-requirement-discussion-and-" class="xref">Requirement discussion and mapping to solution elements</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-requirements-discussion-and" class="xref">Requirements Discussion and Mapping to Solution-Elements</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-architectural-overview-and-" class="xref">Architectural Overview and Communication Exchanges</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-pledge-responder-mode-regis" class="xref">Pledge-responder-mode: Registrar-agent communication with Pledges</a></p>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-pledge-responder-mode-prm-r" class="xref">Pledge-responder-mode (PRM): Registrar-agent Communication with Pledges</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
-                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="xref">5.1.1</a>.  <a href="#name-behavior-of-a-pledge-in-ple" class="xref">Behavior of a pledge in pledge-responder-mode</a></p>
+                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="xref">5.1.1</a>.  <a href="#name-behavior-of-pledge-in-pledg" class="xref">Behavior of Pledge in Pledge-Responder-Mode</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.2">
-                    <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="xref">5.1.2</a>.  <a href="#name-behavior-of-a-registrar-age" class="xref">Behavior of a registrar-agent</a></p>
+                    <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="xref">5.1.2</a>.  <a href="#name-behavior-of-registrar-agent" class="xref">Behavior of Registrar-Agent</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.3">
-                    <p id="section-toc.1-1.5.2.1.2.3.1"><a href="#section-5.1.3" class="xref">5.1.3</a>.  <a href="#name-bootstrapping-objects-and-c" class="xref">Bootstrapping objects and corresponding exchanges</a></p>
+                    <p id="section-toc.1-1.5.2.1.2.3.1"><a href="#section-5.1.3" class="xref">5.1.3</a>.  <a href="#name-bootstrapping-objects-and-c" class="xref">Bootstrapping Objects and Corresponding Exchanges</a></p>
 </li>
                 </ul>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-voucher-request-artifact" class="xref">Voucher Request artifact</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-voucher-request-artifact" class="xref">Voucher Request Artifact</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-tree-diagram" class="xref">Tree Diagram</a></p>
@@ -1379,13 +1379,13 @@ protocol, employed by the registrar to communicate with the CA.<a href="#section
             <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="xref">9.1</a>.  <a href="#name-exhaustion-attack-on-pledge" class="xref">Exhaustion attack on pledge</a></p>
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="xref">9.1</a>.  <a href="#name-exhaustion-attack-on-pledge" class="xref">Exhaustion Attack on Pledge</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="xref">9.2</a>.  <a href="#name-misuse-of-acquired-voucher-" class="xref">Misuse of acquired voucher and enrollment responses by Registrar-agent</a></p>
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="xref">9.2</a>.  <a href="#name-misuse-of-acquired-voucher-" class="xref">Misuse of acquired Voucher and Enrollment responses by Registrar-Agent</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
-                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="xref">9.3</a>.  <a href="#name-misuse-of-registrar-agent-c" class="xref">Misuse of registrar-agent credentials</a></p>
+                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="xref">9.3</a>.  <a href="#name-misuse-of-registrar-agent-c" class="xref">Misuse of Registrar-Agent Credentials</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.4">
                 <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="xref">9.4</a>.  <a href="#name-yang-module-security-consid" class="xref">YANG Module Security Considerations</a></p>
@@ -1407,7 +1407,7 @@ protocol, employed by the registrar to communicate with the CA.<a href="#section
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-history-of-changes-rfc-edit" class="xref">History of changes [RFC Editor: please delete]</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-history-of-changes-rfc-edit" class="xref">History of Changes [RFC Editor: please delete]</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
             <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
@@ -1558,12 +1558,12 @@ the EE certificate.<a href="#section-2-3.16" class="pilcrow">¶</a>
 <div id="scope-of-solution">
 <section id="section-3">
       <h2 id="name-scope-of-solution">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-scope-of-solution" class="section-name selfRef">Scope of solution</a>
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-scope-of-solution" class="section-name selfRef">Scope of Solution</a>
       </h2>
 <div id="sup-env">
 <section id="section-3.1">
         <h3 id="name-supported-environment">
-<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-supported-environment" class="section-name selfRef">Supported environment</a>
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-supported-environment" class="section-name selfRef">Supported Environment</a>
         </h3>
 <p id="section-3.1-1">The solution is intended to be applicable in domains
 in which pledges have no direct connection to the domain registrar,
@@ -1590,7 +1590,7 @@ specific requests.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <div id="building-automation">
 <section id="section-3.2.1">
           <h4 id="name-building-automation">
-<a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-building-automation" class="section-name selfRef">Building automation</a>
+<a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-building-automation" class="section-name selfRef">Building Automation</a>
           </h4>
 <p id="section-3.2.1-1">In building automation, a use case can be described by a detached
 building or the basement of a building equipped with sensor,
@@ -1618,7 +1618,7 @@ may be facilitated by the service technician's laptop.<a href="#section-3.2.1-3"
 <div id="infrastructure-isolation-policy">
 <section id="section-3.2.2">
           <h4 id="name-infrastructure-isolation-po">
-<a href="#section-3.2.2" class="section-number selfRef">3.2.2. </a><a href="#name-infrastructure-isolation-po" class="section-name selfRef">Infrastructure isolation policy</a>
+<a href="#section-3.2.2" class="section-number selfRef">3.2.2. </a><a href="#name-infrastructure-isolation-po" class="section-name selfRef">Infrastructure Isolation Policy</a>
           </h4>
 <p id="section-3.2.2-1">This refers to any case in which network infrastructure is normally
 isolated from the Internet as a matter of policy, most likely for
@@ -1631,7 +1631,7 @@ impossible at other times.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
 <div id="less-operational-security-in-the-target-domain">
 <section id="section-3.2.3">
           <h4 id="name-less-operational-security-i">
-<a href="#section-3.2.3" class="section-number selfRef">3.2.3. </a><a href="#name-less-operational-security-i" class="section-name selfRef">Less operational security in the target domain</a>
+<a href="#section-3.2.3" class="section-number selfRef">3.2.3. </a><a href="#name-less-operational-security-i" class="section-name selfRef">Less Operational Security in the Target-Domain</a>
           </h4>
 <p id="section-3.2.3-1">The registration point performing the authorization of a certificate
 request is a critical PKI component and therefore implicates higher
@@ -1652,8 +1652,8 @@ operational security.<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
 </div>
 <div id="req-sol">
 <section id="section-4">
-      <h2 id="name-requirement-discussion-and-">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-requirement-discussion-and-" class="section-name selfRef">Requirement discussion and mapping to solution elements</a>
+      <h2 id="name-requirements-discussion-and">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-requirements-discussion-and" class="section-name selfRef">Requirements Discussion and Mapping to Solution-Elements</a>
       </h2>
 <p id="section-4-1">Based on the intended target environment described in <a href="#sup-env" class="xref">Section 3.1</a> and
 the motivated application examples
@@ -1727,8 +1727,8 @@ request, BRSKI-PRM relies on the defined message wrapping mechanisms
 of the enrollment protocols stated in <a href="#req-sol" class="xref">Section 4</a> above.<a href="#section-5-3" class="pilcrow">¶</a></p>
 <div id="uc2">
 <section id="section-5.1">
-        <h3 id="name-pledge-responder-mode-regis">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-pledge-responder-mode-regis" class="section-name selfRef">Pledge-responder-mode: Registrar-agent communication with Pledges</a>
+        <h3 id="name-pledge-responder-mode-prm-r">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-pledge-responder-mode-prm-r" class="section-name selfRef">Pledge-responder-mode (PRM): Registrar-agent Communication with Pledges</a>
         </h3>
 <p id="section-5.1-1">To support mutual trust establishment of pledges, not directly
 connected to the domain registrar this approach relies on the exchange of
@@ -1765,7 +1765,7 @@ small enhancements.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
    |                                      +--------------+---------+
    |                                                     ^
    |                                                     |  BRSKI-
-   V                                                     |   MASA
+   V    BRSKI-PRM                                        |   MASA
 +-------+     +---------+   .............................|.........
 |       |     |         |   .                            |        .
 |       |     |         |   .  +-----------+       +-----v-----+  .
@@ -1773,7 +1773,7 @@ small enhancements.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 |Pledge |     |Agent    |   .  |   Join    |       | Domain    |  .
 |       |     |         |   .  |   Proxy   |       | Registrar |  .
 |       &lt;-----&gt;.........&lt;------&gt;...........&lt;-------&gt; (PKI RA)  |  .
-|       |     |         |   .  |       BRSKI-PRM   |           |  .
+|       |     |         |   .  |           |       |           |  .
 |       |     |         |   .  |           |       +-----+-----+  .
 |IDevID |     | LDevID  |   .  +-----------+             |        .
 |       |     |         |   .         +------------------+-----+  .
@@ -1907,8 +1907,8 @@ handshake. The provisionally accepted LDevID(Reg) EE certificate can
 be verified after the voucher has been processed by the pledge.<a href="#section-5.1-13" class="pilcrow">¶</a></p>
 <div id="pledge_ep">
 <section id="section-5.1.1">
-          <h4 id="name-behavior-of-a-pledge-in-ple">
-<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-behavior-of-a-pledge-in-ple" class="section-name selfRef">Behavior of a pledge in pledge-responder-mode</a>
+          <h4 id="name-behavior-of-pledge-in-pledg">
+<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-behavior-of-pledge-in-pledg" class="section-name selfRef">Behavior of Pledge in Pledge-Responder-Mode</a>
           </h4>
 <p id="section-5.1.1-1">In contrast to BRSKI the pledge acts as a server component. It is triggered 
 by the registrar-agent for the generation of pledge-voucher-request and 
@@ -1940,10 +1940,10 @@ pledge (optional).<a href="#section-5.1.1-2.5" class="pilcrow">¶</a>
           </ul>
 </section>
 </div>
-<div id="behavior-of-a-registrar-agent">
+<div id="behavior-of-registrar-agent">
 <section id="section-5.1.2">
-          <h4 id="name-behavior-of-a-registrar-age">
-<a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-behavior-of-a-registrar-age" class="section-name selfRef">Behavior of a registrar-agent</a>
+          <h4 id="name-behavior-of-registrar-agent">
+<a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-behavior-of-registrar-agent" class="section-name selfRef">Behavior of Registrar-Agent</a>
           </h4>
 <p id="section-5.1.2-1">The registrar-agent is a new component in the BRSKI context. It
 provides connectivity between the pledge and the domain registrar
@@ -2004,8 +2004,8 @@ to be bootstrapped.<a href="#section-5.1.2-7.3" class="pilcrow">¶</a>
           </ul>
 <div id="discovery_uc2_reg">
 <section id="section-5.1.2.1">
-            <h5 id="name-registrar-discovery-by-the-">
-<a href="#section-5.1.2.1" class="section-number selfRef">5.1.2.1. </a><a href="#name-registrar-discovery-by-the-" class="section-name selfRef">Registrar discovery by the registrar-agent</a>
+            <h5 id="name-discovery-of-registrar-by-r">
+<a href="#section-5.1.2.1" class="section-number selfRef">5.1.2.1. </a><a href="#name-discovery-of-registrar-by-r" class="section-name selfRef">Discovery of Registrar by Registrar-Agent</a>
             </h5>
 <p id="section-5.1.2.1-1">The discovery of the domain registrar may be done as specified in
 <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> with the
@@ -2017,8 +2017,8 @@ of the domain registrar.<a href="#section-5.1.2.1-1" class="pilcrow">¶</a></p>
 </div>
 <div id="discovery_uc2_ppa">
 <section id="section-5.1.2.2">
-            <h5 id="name-pledge-discovery-by-the-reg">
-<a href="#section-5.1.2.2" class="section-number selfRef">5.1.2.2. </a><a href="#name-pledge-discovery-by-the-reg" class="section-name selfRef">Pledge discovery by the registrar-agent</a>
+            <h5 id="name-discovery-of-pledge-by-regi">
+<a href="#section-5.1.2.2" class="section-number selfRef">5.1.2.2. </a><a href="#name-discovery-of-pledge-by-regi" class="section-name selfRef">Discovery of Pledge by Registrar-Agent</a>
             </h5>
 <p id="section-5.1.2.2-1">The discovery of the pledge by registrar-agent should be done
 by using DNS-based Service Discovery <span>[<a href="#RFC6763" class="xref">RFC6763</a>]</span> over Multicast DNS
@@ -2038,7 +2038,7 @@ on the provided list of product-serial-number.<a href="#section-5.1.2.2-2" class
 <div id="exchanges_uc2">
 <section id="section-5.1.3">
           <h4 id="name-bootstrapping-objects-and-c">
-<a href="#section-5.1.3" class="section-number selfRef">5.1.3. </a><a href="#name-bootstrapping-objects-and-c" class="section-name selfRef">Bootstrapping objects and corresponding exchanges</a>
+<a href="#section-5.1.3" class="section-number selfRef">5.1.3. </a><a href="#name-bootstrapping-objects-and-c" class="section-name selfRef">Bootstrapping Objects and Corresponding Exchanges</a>
           </h4>
 <p id="section-5.1.3-1">The interaction of the pledge with the registrar-agent may be
 accomplished using different transport means (protocols and or
@@ -2169,7 +2169,7 @@ registrar-agent and the registrar.<a href="#section-5.1.3-7.4" class="pilcrow">�
 <div id="exchanges_uc2_1">
 <section id="section-5.1.3.1">
             <h5 id="name-request-objects-acquisition">
-<a href="#section-5.1.3.1" class="section-number selfRef">5.1.3.1. </a><a href="#name-request-objects-acquisition" class="section-name selfRef">Request objects acquisition (registrar-agent - pledge)</a>
+<a href="#section-5.1.3.1" class="section-number selfRef">5.1.3.1. </a><a href="#name-request-objects-acquisition" class="section-name selfRef">Request Objects Acquisition by Registrar-Agent from Pledge</a>
             </h5>
 <p id="section-5.1.3.1-1">The following description assumes that the registrar-agent already
 discovered the pledge. This may be done as described in
@@ -2225,7 +2225,7 @@ vendor / manufacturer and site-specific LDevID CA certificate.<a href="#section-
               </figcaption></figure>
 </div>
 <p id="section-5.1.3.1-6">Triggering the pledge to create the pledge-voucher-request is done using
-HTTPS POST on the defined pledge endpoint
+HTTP POST on the defined pledge endpoint
 "/.well-known/brski/pledge-voucher-request".<a href="#section-5.1.3.1-6" class="pilcrow">¶</a></p>
 <p id="section-5.1.3.1-7">The registrar-agent pledge-voucher-request Content-Type header is:<a href="#section-5.1.3.1-7" class="pilcrow">¶</a></p>
 <p id="section-5.1.3.1-8">application/json: defines a JSON document to provide three parameter:<a href="#section-5.1.3.1-8" class="pilcrow">¶</a></p>
@@ -2494,7 +2494,7 @@ the registrar-agent and the domain registrar.<a href="#section-5.1.3.1-54" class
 <div id="exchanges_uc2_2">
 <section id="section-5.1.3.2">
             <h5 id="name-request-handling-registrar-">
-<a href="#section-5.1.3.2" class="section-number selfRef">5.1.3.2. </a><a href="#name-request-handling-registrar-" class="section-name selfRef">Request handling (registrar-agent - infrastructure)</a>
+<a href="#section-5.1.3.2" class="section-number selfRef">5.1.3.2. </a><a href="#name-request-handling-registrar-" class="section-name selfRef">Request Handling - Registrar-Agent (Infrastructure)</a>
             </h5>
 <p id="section-5.1.3.2-1">The bootstrapping exchange between the registrar-agent and the domain
 registrar resembles the exchanges between the pledge and the domain
@@ -2573,7 +2573,7 @@ the registrar will receive JOSE objects from the pledge for
 voucher-request and enrollment-request (instead of the objects for
 voucher-request (CMS-signed JSON) and enrollment-request (PKCS#10).<a href="#section-5.1.3.2-6" class="pilcrow">¶</a></p>
 <p id="section-5.1.3.2-7">The registrar-agent sends the pledge-voucher-request to the
-registrar with an HTTPS POST to the endpoint
+registrar with an HTTP-over-TLS POST to the endpoint
 "/.well-known/brski/requestvoucher".<a href="#section-5.1.3.2-7" class="pilcrow">¶</a></p>
 <p id="section-5.1.3.2-8">The pledge-voucher-request Content-Type used in the
 pledge-responder-mode is defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="xref">I-D.ietf-anima-jws-voucher</a>]</span> as:<a href="#section-5.1.3.2-8" class="pilcrow">¶</a></p>
@@ -2689,7 +2689,7 @@ which corresponds to the certificate signaled in the JOSE header.<a href="#secti
               </figcaption></figure>
 </div>
 <p id="section-5.1.3.2-24">The registrar sends the registrar-voucher-request to the
-MASA with an HTTPS POST at the endpoint
+MASA with an HTTP-over-TLS POST at the endpoint
 "/.well-known/brski/requestvoucher".<a href="#section-5.1.3.2-24" class="pilcrow">¶</a></p>
 <p id="section-5.1.3.2-25">The registrar-voucher-request Content-Type is defined in
 <span>[<a href="#I-D.ietf-anima-jws-voucher" class="xref">I-D.ietf-anima-jws-voucher</a>]</span> as:<a href="#section-5.1.3.2-25" class="pilcrow">¶</a></p>
@@ -2776,7 +2776,7 @@ registrar-agent is involved in the exchange, the PKCS#10 is contained
 in the JOSE object. The signature is created using the pledge's
 IDevID to provide proof-of-identity as outlined in <a href="#per" class="xref">Figure 6</a>.<a href="#section-5.1.3.2-34" class="pilcrow">¶</a></p>
 <p id="section-5.1.3.2-35">When using EST, the registrar-agent sends the enrollment request
-to the registrar with an HTTPS POST at the endpoint
+to the registrar with an HTTP-over-TLS POST at the endpoint
 "/.well-known/est/simpleenroll".<a href="#section-5.1.3.2-35" class="pilcrow">¶</a></p>
 <p id="section-5.1.3.2-36">The enrollment-request Content-Type is:<a href="#section-5.1.3.2-36" class="pilcrow">¶</a></p>
 <p id="section-5.1.3.2-37">application/jose<a href="#section-5.1.3.2-37" class="pilcrow">¶</a></p>
@@ -2825,19 +2825,27 @@ accept RA-verified requests.
 <p id="section-5.1.3.2-44">A successful interaction with the domain CA will result in the pledge
 LDevID EE certificate, which is then forwarded by the registrar to the
 registrar-agent using the content type "application/pkcs7-mime".<a href="#section-5.1.3.2-44" class="pilcrow">¶</a></p>
-<p id="section-5.1.3.2-45">The registrar-agent has now finished the exchanges with the
+<p id="section-5.1.3.2-45">[RFC Editor: please delete] /*<a href="#section-5.1.3.2-45" class="pilcrow">¶</a></p>
+<p id="section-5.1.3.2-46">Open Issue: the enrollment response object may also be an
+application/jose object with a signature of the domain registrar.
+Note:
+Communicaion between domain CA and registrar is of content
+type "application/pkcs7-mime" 
+Communicaion between registrar, registrar-agent and furter to the pledge
+should be of content type "application/jose" . */<a href="#section-5.1.3.2-46" class="pilcrow">¶</a></p>
+<p id="section-5.1.3.2-47">The registrar-agent has now finished the exchanges with the
 domain registrar and can supply the voucher-response
 (from MASA via Registrar) and the enrollment-response (LDevID EE
 certificate) to the pledge. It can close the TLS connection to the
 domain registrar and provide the objects to the pledge(s). The content
 of the response objects is defined through the voucher <span>[<a href="#RFC8366" class="xref">RFC8366</a>]</span> and
-the certificate <span>[<a href="#RFC5280" class="xref">RFC5280</a>]</span>.<a href="#section-5.1.3.2-45" class="pilcrow">¶</a></p>
+the certificate <span>[<a href="#RFC5280" class="xref">RFC5280</a>]</span>.<a href="#section-5.1.3.2-47" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="exchanges_uc2_3">
 <section id="section-5.1.3.3">
-            <h5 id="name-response-object-supply-regi">
-<a href="#section-5.1.3.3" class="section-number selfRef">5.1.3.3. </a><a href="#name-response-object-supply-regi" class="section-name selfRef">Response object supply (registrar-agent - pledge)</a>
+            <h5 id="name-response-object-supply-by-r">
+<a href="#section-5.1.3.3" class="section-number selfRef">5.1.3.3. </a><a href="#name-response-object-supply-by-r" class="section-name selfRef">Response Object Supply by Registrar-Agent to Pledge</a>
             </h5>
 <p id="section-5.1.3.3-1">The following description assumes that the registrar-agent has
 obtained the response objects from the domain registrar. It will
@@ -2855,7 +2863,7 @@ from the first contact with the pledge.<a href="#section-5.1.3.3-1" class="pilcr
               <div class="alignLeft art-text artwork" id="section-5.1.3.3-4.1">
 <pre>
 +--------+                        +-----------+
-| Pledge |                        | Registrar |
+| Pledge |                        | Registrar-|
 |        |                        | Agent     |
 |        |                        | (RegAgt)  |
 +--------+                        +-----------+
@@ -3011,7 +3019,7 @@ voucher successfully or not.<a href="#section-5.1.3.4-5" class="pilcrow">¶</a><
 establishes a TLS connection with the registrar as stated in
 <a href="#exchanges_uc2_2" class="xref">Section 5.1.3.2</a>.<a href="#section-5.1.3.4-6" class="pilcrow">¶</a></p>
 <p id="section-5.1.3.4-7">The registrar-agent sends the pledge voucher-status object
-without modification to the registrar with an HTTPS POST using the
+without modification to the registrar with an HTTP-over-TLS POST using the
 operation path value of "/.well-known/brski/voucher_status". The
 Content-Type header is kept as "application/jose" as described in
 <a href="#exchangesfig_uc2_3" class="xref">Figure 10</a> and depicted in the example in <a href="#vstat" class="xref">Figure 11</a>.<a href="#section-5.1.3.4-7" class="pilcrow">¶</a></p>
@@ -3032,7 +3040,7 @@ service as described in section 5.8 of <span>[<a href="#RFC8995" class="xref">RF
 registrar. The status indicates the pledge could process the
 enroll-response object and holds the corresponding private key.<a href="#section-5.1.3.4-11" class="pilcrow">¶</a></p>
 <p id="section-5.1.3.4-12">The registrar-agent sends the pledge enroll-status object
-without modification to the registrar with an HTTPS POST using the
+without modification to the registrar with an HTTP-over-TLS POST using the
 operation path value of "/.well-known/brski/enrollstatus". The
 Content-Type header is kept as "application/jose" as described in
 <a href="#exchangesfig_uc2_3" class="xref">Figure 10</a> and depicted in the example in <a href="#estat" class="xref">Figure 12</a>.<a href="#section-5.1.3.4-12" class="pilcrow">¶</a></p>
@@ -3059,7 +3067,7 @@ SHOULD capture this telemetry information.<a href="#section-5.1.3.4-14" class="p
 <div id="voucher-request-prm-yang">
 <section id="section-6">
       <h2 id="name-voucher-request-artifact">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-voucher-request-artifact" class="section-name selfRef">Voucher Request artifact</a>
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-voucher-request-artifact" class="section-name selfRef">Voucher Request Artifact</a>
       </h2>
 <p id="section-6-1">The following enhancement extends the voucher-request as defined in 
 <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> to include additional fields necessary for handling 
@@ -3297,7 +3305,7 @@ information to the MASA.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <div id="exhaustion-attack-on-pledge">
 <section id="section-9.1">
         <h3 id="name-exhaustion-attack-on-pledge">
-<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-exhaustion-attack-on-pledge" class="section-name selfRef">Exhaustion attack on pledge</a>
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-exhaustion-attack-on-pledge" class="section-name selfRef">Exhaustion Attack on Pledge</a>
         </h3>
 <p id="section-9.1-1">Exhaustion attack on pledge based on DoS attack (connection
 establishment, etc.)<a href="#section-9.1-1" class="pilcrow">¶</a></p>
@@ -3306,7 +3314,7 @@ establishment, etc.)<a href="#section-9.1-1" class="pilcrow">¶</a></p>
 <div id="misuse-of-acquired-voucher-and-enrollment-responses-by-registrar-agent">
 <section id="section-9.2">
         <h3 id="name-misuse-of-acquired-voucher-">
-<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-misuse-of-acquired-voucher-" class="section-name selfRef">Misuse of acquired voucher and enrollment responses by Registrar-agent</a>
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-misuse-of-acquired-voucher-" class="section-name selfRef">Misuse of acquired Voucher and Enrollment responses by Registrar-Agent</a>
         </h3>
 <p id="section-9.2-1">A Registrar-agent that uses acquired voucher and enrollment response for
 domain 1 in domain 2 can be detected by the pledge-voucher-request 
@@ -3322,7 +3330,7 @@ described in BRSKI security considerations (section 11.4).<a href="#section-9.2-
 <div id="misuse-of-registrar-agent-credentials">
 <section id="section-9.3">
         <h3 id="name-misuse-of-registrar-agent-c">
-<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-misuse-of-registrar-agent-c" class="section-name selfRef">Misuse of registrar-agent credentials</a>
+<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-misuse-of-registrar-agent-c" class="section-name selfRef">Misuse of Registrar-Agent Credentials</a>
         </h3>
 <p id="section-9.3-1">Concerns have been raised, that there may be opportunities to misuse 
 the registrar-agent with a valid LDevID. This may be addressed by 
@@ -3506,7 +3514,7 @@ call flows.<a href="#section-10-1" class="pilcrow">¶</a></p>
 <div id="app_history">
 <section id="appendix-A">
       <h2 id="name-history-of-changes-rfc-edit">
-<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-history-of-changes-rfc-edit" class="section-name selfRef">History of changes [RFC Editor: please delete]</a>
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-history-of-changes-rfc-edit" class="section-name selfRef">History of Changes [RFC Editor: please delete]</a>
       </h2>
 <p id="appendix-A-1">From IETF draft-ietf-anima-brski-async-enroll-03 -&gt; IETF anima-brski-prm-internal-00:<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 <ul class="normal">
