@@ -66,32 +66,8 @@ normative:
   I-D.ietf-netconf-sztp-csr:
 informative:
   RFC2986:
-  RFC4210:
-  RFC4211:
-  RFC5272:
   RFC5280:
-  RFC5652:
-  I-D.ietf-lamps-lightweight-cmp-profile:
-  I-D.ietf-lamps-cmp-updates:
   RFC8340:
-  RFC8894:
-  I-D.selander-ace-coap-est-oscore:
-  IEC-62351-9:
-    title: 'IEC 62351 - Power systems management and associated information exchange
-      - Data and communications security - Part 9: Cyber security key management for
-      power system equipment'
-    author:
-    - org: International Electrotechnical Commission
-    date: 2017-05
-    seriesinfo:
-      IEC: '62351-9 '
-  NERC-CIP-005-5:
-    title: Cyber Security - Electronic Security Perimeter
-    author:
-    - org: North American Reliability Council
-    date: 2013-12
-    seriesinfo:
-      CIP: 005-5
   IEEE-802.1AR:
     title: IEEE 802.1AR Secure Device Identifier
     author:
@@ -99,20 +75,6 @@ informative:
     date: 2018-06
     seriesinfo:
       IEEE: '802.1AR '
-  ISO-IEC-15118-2:
-    title: 'ISO/IEC 15118-2 Road vehicles - Vehicle-to-Grid Communication Interface
-      - Part 2: Network and application protocol requirements'
-    author:
-    - org: International Standardization Organization / International Electrotechnical
-        Commission
-    date: 2014-04
-    seriesinfo:
-      ISO/IEC: '15118-2 '
-  OCPP:
-    title: Open Charge Point Protocol 2.0.1 (Draft)
-    author:
-    - org: Open Charge Alliance
-    date: 2019-12
 
 --- abstract
 
