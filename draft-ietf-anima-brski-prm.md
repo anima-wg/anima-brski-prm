@@ -1764,7 +1764,7 @@ as well as the registrar-proximity-certificate and the
 agent-signing certificate.
 
 ~~~~
-<CODE BEGINS> file "ietf-voucher-request-prm@2021-10-15.yang"
+<CODE BEGINS> file "ietf-voucher-request-prm@2021-10-26.yang"
 
 module ietf-voucher-request-prm {
   yang-version 1.1;
@@ -1807,19 +1807,36 @@ module ietf-voucher-request-prm {
               <mailto: mcr+ietf@sandelman.ca>";
 
   description
-   "This module defines an extension of the RFC8995 voucher
-    request to permit a registrar-agent to convey the adjacency
-    relationship from the registrar-agent to the registrar.
+   "This module defines the format for a voucher-request.
+    It is a superset of the voucher itself.
+    It provides content to the MASA for consideration
+    during a voucher-request.
 
-    The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL',
-    'SHALL NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'MAY',
-    and 'OPTIONAL' in the module text are to be interpreted as
-    described in RFC 2119.";
-  revision 2021-08-19 {
+    The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL
+    NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'NOT RECOMMENDED',
+    'MAY', and 'OPTIONAL' in this document are to be interpreted as
+    described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
+    they appear in all capitals, as shown here.
+
+    Copyright (c) 2021 IETF Trust and the persons identified as
+    authors of the code. All rights reserved.
+
+    Redistribution and use in source and binary forms, with or
+    without modification, is permitted pursuant to, and subject
+    to the license terms contained in, the Simplified BSD License
+    set forth in Section 4.c of the IETF Trust's Legal Provisions
+    Relating to IETF Documents
+    (https://trustee.ietf.org/license-info).
+
+    This version of this YANG module is part of RFC 8995; see the
+    RFC itself for full legal notices.";
+	
+
+  revision 2021-10-26 {
     description
      "Initial version";
     reference
-     "RFC XXXX: VBRSKI for Pledge in Responder Mode";
+     "RFC XXXX: BRSKI for Pledge in Responder Mode";
   }
   rc:yang-data voucher-request-prm-artifact {
     // YANG data template for a voucher-request.
