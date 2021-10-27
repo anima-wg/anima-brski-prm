@@ -264,10 +264,8 @@ already existing in the installation network. In this case
 connectivity to the backend PKI may be facilitated by the service
 technician's laptop.
 
-Contrary, the information can also be collected from the
-pledges directly and provided to a domain registrar deployed in a
-different network. In this cases connectivity to the domain registrar
-may be facilitated by the service technician's laptop.
+Contrarily, the information can also be collected from the pledges directly and provided to a domain registrar deployed in a different network.
+In this cases connectivity to the domain registrar may be facilitated by the service technician's laptop.
 
 
 ### Infrastructure Isolation Policy
