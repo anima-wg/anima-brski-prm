@@ -151,12 +151,14 @@ According to BRSKI the domain registrar acts as EST server and is also
 acting as registration authority (RA).
 
 To be done:
+
 * include reasoning for not using TLS (IDevID does not contain SAN,
   TLS server flag) between the pledge and the registrar-agent.
+
 * Enhancements to EST state machine necessary to process
   self-contained objects on the registrar-agent and domain-registrar
-* accepting
 
+* accepting CMP certificate requests (XXX?)
 
 # Terminology
 
