@@ -96,14 +96,27 @@ Security information about the target domain, specifically the target domain cer
 These vouchers are signed objects, which are provided via the domain registrar to the pledge and originate from a Manufacturer's Authorized Signing Authority (MASA).
 
 BRSKI addresses scenarios in which the pledge acts as client for the bootstrapping and is the initiator of the bootstrapping.
-In industrial environments the pledge may behave as a server and thus does not initiate the bootstrapping with the domain registrar.
+
+In industrial environments, network connectivity may not be available at the time that devices are installed.
+There are many reasons for this, including lack of available power at the construction site at the time of installation.
+The new device may need to have temporary power applied, or may need to have a physical switch thrown to enable onboarding.
+In other indistrial environments, onboarding is done by Bluetooth connectivity, which requires very close physical proximity.
+Battery operated devices may wake up only for a short time.
+
+In these situations, it is easier if the pledge behaves as a server and thus does not initiate the bootstrapping with the domain registrar.
 In this scenarios it is expected that the pledge will be triggered to generate request objects to be bootstrapped in the registrar's domain.
 For this, an additional component is introduced acting as an agent for the domain registrar (registrar-agent) towards the pledge.
-This may be a functionality of a commissioning tool or it may be even co-located with the registrar.
+
+Installation personnel will carry the registrar agent to the device, and typically will onboard many devices in a single physical pass.
+In new buildings the devices may be in basements or other places which are difficult to reach until the network is bootstrapped.
+
+The registrar-agent may be a functionally part of a commissioning tool or it may be even co-located with a mobile registrar.
+
 In contrast to BRSKI the registrar-agent performs the object exchange with the pledge and provides/retrieves data objects to/from the domain registrar.
 For the interaction with the domain registrar the registrar agent will use existing BRSKI endpoints.
 
 The goal is to enhance BRSKI to be usable also for a pledge in responder mode.
+
 This is addressed by
 
 * introducing the registrar-agent as new component to facilitate the communication between the pledge and the registrar, when the pledge is in responder mode (acting as server).
