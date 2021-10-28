@@ -340,7 +340,6 @@ The following list describes the components in a (customer) site domain:
 * Domain Registrar: In general the domain registrar fulfills the same functionality regarding the bootstrapping of the pledge in a (customer) site domain by facilitating the communication of the pledge with the MASA service and the domain PKI service.
   In contrast to {{RFC8995}}, the domain registrar does not interact with a pledge directly but  through the registrar-agent.
   The registrar detects if the bootstrapping is performed by the pledge directly or by the  registrar-agent.
-
 The manufacturer provided components/services (MASA and Ownership tracker) are used as defined in {{RFC8995}}.
 For issuing a voucher, the MASA may perform additional checks on voucher-request objects, to issue a voucher indicating agent-proximity instead of registrar-proximity.
 
