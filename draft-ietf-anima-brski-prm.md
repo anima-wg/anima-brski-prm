@@ -343,14 +343,14 @@ The following list describes the components in a (customer) site domain:
 The manufacturer provided components/services (MASA and Ownership tracker) are used as defined in {{RFC8995}}.
 For issuing a voucher, the MASA may perform additional checks on voucher-request objects, to issue a voucher indicating agent-proximity instead of registrar-proximity.
 
-#### To Be Removed Note:RFC8366bis
+[RFC Editor: please delete] /\* Note:RFC8366bis
 
 Open Issues: The voucher defined in {{RFC8366}} defines
 the leaf assertion as enum, which cannot be extended.
 To define an additional assertion RFC 8366 may be revised.
 There is currently ongoing work for a RFC8366bis. \*/
 
-#### To Be Removed Note:YANG_DOCTOR
+[RFC Editor: please delete] /\*:YANG_DOCTOR
 
 We do have a YANG process issue with this document.
 We need to inroduce a new value for the agent-proximity, but it is an enum, and these seem to be intrinsically non-extensible even though the transport encodings would give us what we need, so it seems o be a yang process, but not encoding issue:
