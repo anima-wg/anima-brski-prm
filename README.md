@@ -2,8 +2,8 @@
 
 This is the working area for the WG Internet-Draft, "BRSKI support of Pledge Responder Mode (BRSKI-PRM) [former BRSKI-AE Use Case 02)"
 
-* [Current WG Draft](https://tools.ietf.org/html/draft-ietf-anima-brski-async-enroll-02) TODO: reference "draft-ietf-anima-brski-prm" when available
-* [Datatracker page](https://datatracker.ietf.org/doc/draft-ietf-anima-brski-async-enroll/) TODO: reference "draft-ietf-anima-brski-prm" when available
+* [Current WG Draft](https://www.ietf.org/archive/id/draft-ietf-anima-brski-prm-00.html) 
+* [Datatracker page](https://datatracker.ietf.org/doc/draft-ietf-anima-brski-prm/) 
 
 
 
