@@ -4,4 +4,4 @@ html: xml
 	xml2rfc ${DRAFT}.xml --html
 
 xml:
-	kdrfc ${DRAFT}.md
+	kdrfc -3 ${DRAFT}.md
