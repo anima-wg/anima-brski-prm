@@ -2,8 +2,8 @@
 
 This is the working area for the WG Internet-Draft, "BRSKI support of Pledge Responder Mode (BRSKI-PRM) [former BRSKI-AE Use Case 02)"
 
-* [Current WG Draft](https://www.ietf.org/archive/id/draft-ietf-anima-brski-prm-00.html) 
-* [Datatracker page](https://datatracker.ietf.org/doc/draft-ietf-anima-brski-prm/) 
+* [Current WG Draft - draft-ietf-anima-brski-prm](https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-prm) 
+* [Datatracker page - draft-ietf-anima-brski-prm](https://datatracker.ietf.org/doc/draft-ietf-anima-brski-prm/) 
 
 
 
