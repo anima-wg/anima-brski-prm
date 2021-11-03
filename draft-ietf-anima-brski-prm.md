@@ -74,6 +74,11 @@ informative:
     seriesinfo:
       IEEE: '802.1AR '
 
+venue:
+   group: ANIMA
+   mail: anima@ietf.org
+   github: anima-wg/anima-brski-prm.git
+
 --- abstract
 
 This document defines enhancements to the bootstrapping a remote secure key infrastructure (BRSKI, {{RFC8995}} ) to facilitate bootstrapping in domains featuring no or only timely limited connectivity between a pledge and the domain registrar.
