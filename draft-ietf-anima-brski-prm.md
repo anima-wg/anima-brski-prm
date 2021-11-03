@@ -22,7 +22,6 @@ author:
   abbrev: Siemens
   street: Otto-Hahn-Ring 6
   city: Munich
-  region: Bavaria
   code: '81739'
   country: Germany
   email: steffen.fries@siemens.com
@@ -33,7 +32,6 @@ author:
   abbrev: Siemens
   street: Otto-Hahn-Ring 6
   city: Munich
-  region: Bavaria
   code: '81739'
   country: Germany
   email: thomas-werner@siemens.com
