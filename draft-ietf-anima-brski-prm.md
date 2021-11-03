@@ -1,7 +1,7 @@
 ---
 stand_alone: true
 ipr: trust200902
-docname: draft-ietf-anima-brski-prm-00
+docname: draft-ietf-anima-brski-prm-01
 cat: std
 pi:
   toc: 'yes'
@@ -74,15 +74,10 @@ informative:
     seriesinfo:
       IEEE: '802.1AR '
 
-venue:
-   group: ANIMA
-   mail: anima@ietf.org
-   github: anima-wg/anima-brski-prm.git
-
 --- abstract
 
 This document defines enhancements to the bootstrapping a remote secure key infrastructure (BRSKI, {{RFC8995}} ) to facilitate bootstrapping in domains featuring no or only timely limited connectivity between a pledge and the domain registrar.
-This specifically targets situations, in which the interaction model changes from a pledge-initiator-mode as in BRSKI to a pledge-responder-mode as desribed here.
+This specifically targets situations, in which the interaction model changes from a pledge-initiator-mode as in BRSKI to a pledge-responder-mode as described here.
 To support this functionality BRSKI-PRM introduces a new registrar-agent component, which facilitates the communication between pledge and registrar during the bootstrapping phase.
 To support the establishment of a trust relation between a pledge and the domain registrar, BRSKI-PRM relies on the exchange of authenticated self-contained objects (signature-wrapped objects).
 The defined approach is agnostic regarding the utilized enrollment protocol, deployed by the registrar to communicate with the Domain CA.
@@ -240,7 +235,7 @@ Solution examples (not complete) based on existing technology are provided with 
 
 # Architectural Overview and Communication Exchanges {#architecture}
 
-To BRSKI wirh pledge in responder mode, the base system architecture defined in BRSKI {{RFC8995}} is enhanced to facilitate the use case.
+To BRSKI with pledge in responder mode, the base system architecture defined in BRSKI {{RFC8995}} is enhanced to facilitate the use case.
 The pledge-responder-mode) allows delegated bootstrapping using a registrar-agent instead a direct connection from the pledge to the domain registrar.
 The communication model between registrar-agent and pledge assumes that the pledge is acting as server and responds to requests.
 
@@ -346,29 +341,13 @@ The following list describes the components in a (customer) site domain:
 The manufacturer provided components/services (MASA and Ownership tracker) are used as defined in {{RFC8995}}.
 For issuing a voucher, the MASA may perform additional checks on voucher-request objects, to issue a voucher indicating agent-proximity instead of registrar-proximity.
 
-[RFC Editor: please delete] /\* Note:RFC8366bis
+[RFC Editor: please delete] /* Note:RFC8366bis
 
 Open Issues: The voucher defined in {{RFC8366}} defines
 the leaf assertion as enum, which cannot be extended.
 To define an additional assertion RFC 8366 may be revised.
-There is currently ongoing work for a RFC8366bis. \*/
+There is currently ongoing work for a RFC8366bis. */
 
-[RFC Editor: please delete] /\*:YANG_DOCTOR
-
-We do have a YANG process issue with this document.
-We need to inroduce a new value for the agent-proximity, but it is an enum, and these seem to be intrinsically non-extensible even though the transport encodings would give us what we need, so it seems o be a yang process, but not encoding issue:
-
-If we would amend the assertion with the new agent-proximity enum value, binary transport would indicate this as a new numerical value, and string transports would indicate this as the new string value "agent-proximity".
-
-In both cases, pre-exising voucher implementation would recognize an unrecognized values and would fail on the voucher, which is exactly what we want.
-
-Aka: if it was not for the fact that enum are not meant to be extensible, it seems there would be no issue ?
-
-We are looking for YANG doctor guidance/recommendations for this issue, boh for how to deal with this extension, but also (ideally) with the best option how to minimize he overhead when the next assertion extension comes along.
-
-Ideally, the solution would allow us to automatically get a string value encoding for string transports and a numerical encoding vor binary transports. And new values would just require additions to a TBD IANA registry we would define into an appropriate draft.
-
-This issue tracked at: #18 Please discuss on anima@ietf.org so the discussion reaches the whole community.
 
 ### Agent-Proximity
 
@@ -709,7 +688,7 @@ The pledge-voucher-request Content-Type is defined in {{I-D.ietf-anima-jws-vouch
 application/voucher-jws+json
 
 The pledge SHOULD include this Content-Type header field indicating the included media type for the voucher response.
-Note that this is also an indication regarding the acceptable fromat of the voucher response.
+Note that this is also an indication regarding the acceptable format of the voucher response.
 This format is included by the registrar as described in {{exchanges_uc2_2}}.
 
 Once the registrar-agent has received the pledge-voucher-request it can trigger the pledge to generate an enrollment-request object.
@@ -729,8 +708,10 @@ The CSR already assures proof of possession of the private key corresponding to 
 In addition, based on the additional signature using the IDevID, proof of identity is provided.
 Here, a JOSE object is being created in which the body utilizes the YANG module ietf-ztp-types with the grouping for csr-grouping for the CSR as defined in {{I-D.ietf-netconf-sztp-csr}}.
 
-[RFC Editor: please delete] /\*
-Open Issues: Reuse of the sub-tree ietf-sztp-csr:csr may not be possible as it is not the complete module. \*/
+[RFC Editor: please delete] /*
+Open Issues: Verification of usage of ietf-ztp-types to convey the 
+P10 in enrollment request. 
+*/
 
 Depending on the capability of the pledge, it constructs the enrollment request as plain PKCS#10.
 Note that the focus in this use case is placed on PKCS#10 as PKCS#10 can be transmitted in different enrollment protocols like EST, CMP, CMS, and SCEP.
@@ -786,13 +767,13 @@ The JOSE object is signed using the pledge's IDevID credential, which correspond
 
 With the collected pledge-voucher-request object and the pledge-enrollment-request object, the registrar-agent starts the interaction with the domain registrar.
 
-[RFC Editor: please delete] /\*
-Open Issues: further description necessary at least for
-
-* Values to be taken from the IDevID into the PKCS#10
-  (like product-serial-number or subjectName, or certificate
-  template)
-\*/
+[RFC Editor: please delete] /*
+Open Issues: further description necessary at least for Values to be 
+taken from the IDevID into the PKCS#10 (like product-serial-number 
+or subjectName, or certificate template) - provide at least hint 
+that product serial number must be contained. 
+BRSKI references RFC7030 for this.
+*/
 
 Once the registrar-agent has collected the pledge-voucher-request and pledge-enrollment-request objects, it connects to the registrar and sends the request objects.
 As the registrar-agent is intended to work between the pledge and the domain registrar, a  collection of requests from more than one pledges is possible, allowing a bulk bootstrapping of multiple pledges using the same connection between the registrar-agent and the domain registrar.
@@ -1008,7 +989,7 @@ Note that the registrar is already aware that the bootstrapping is performed in 
 * If both succeed, the registrar utilizes the PKCS#10 request contained in the JOSE body as "P10" parameter of "ietf-sztp-csr:csr" for further processing of the enrollment request with the domain CA.
 
 
-[RFC Editor: please delete] /\*
+[RFC Editor: please delete] /*
 
 Open Issues:
 
@@ -1019,19 +1000,19 @@ Open Issues:
   the PKCS#10 request destroys the initial proof of possession
   of the corresponding private key, the CA would need to
   accept RA-verified requests.
-\*/
+*/
 
 A successful interaction with the domain CA will result in the pledge LDevID EE certificate, which is then forwarded by the registrar to the registrar-agent using the content type "application/pkcs7-mime".
 
-[RFC Editor: please delete] /\*
+[RFC Editor: please delete] /*
 
 Open Issue: the enrollment response object may also be an
 application/jose object with a signature of the domain registrar.
 Note:
-Communicaion between domain CA and registrar is of content
+Communication between domain CA and registrar is of content
 type "application/pkcs7-mime"
-Communicaion between registrar, registrar-agent and furter to the pledge
-should be of content type "application/jose" . \*/
+Communication between registrar, registrar-agent and further to the pledge
+should be of content type "application/jose" . */
 
 The registrar-agent has now finished the exchanges with the domain registrar and can supply the voucher-response (from MASA via Registrar) and the enrollment-response (LDevID EE certificate) to the pledge.
 It can close the TLS connection to the domain registrar and provide the objects to the pledge(s).
@@ -1107,14 +1088,14 @@ The registrar-agent enroll-response Content-Type header when using EST {{RFC7030
 
 application/pkcs7-mime: note that it only contains the LDevID certificate for the pledge, not the certificate chain.
 
-[RFC Editor: please delete] /\*
+[RFC Editor: please delete] /*
 
 Open Issue: the enrollment response object may also be an
 application/jose object with a signature of the domain registrar.
 This may be used either to transport additional data which is bound
 to the LDevID or it may be considered for enrollment status to
 ensure that in an error case the registrar providing the certificate
-can be identified. \*/
+can be identified. */
 
 After successful verification the pledge MUST reply with a status telemetry message as defined in section 5.9.4 of {{RFC8995}}.
 As for the other objects, the defined object is provided with an additional signature using the JOSE.
@@ -1460,20 +1441,23 @@ The YANG module specified in this document defines the schema for data that is s
 As such, all of the YANG-modeled data is protected from modification.
 The use of YANG to define data structures, via the "yang-data" statement, is relatively
 new and distinct from the traditional use of YANG to define an API accessed by network management protocols such as NETCONF {{RFC6241}} and RESTCONF {{RFC8040}}.
-For this reason, these guidelines do not follow the template described by Section 3.7 of {{RFC8407}}].
+For this reason, these guidelines do not follow the template described by Section 3.7 of {{RFC8407}}.
 
 
 # Acknowledgments
 
-We would like to thank the various reviewers, in particular Brian E. Carpenter, Michael Richardson, Giorgio Romanenghi, Oskar Camenzind, for their input and discussion on use cases and
-call flows.
+We would like to thank the various reviewers, in particular Brian E. Carpenter and Oskar Camenzind, for their input and discussion on use cases and call flows.
 
 
 --- back
 
 # History of Changes [RFC Editor: please delete] {#app_history}
 
-From IETF draft-ietf-anima-brski-async-enroll-03 -> IETF anima-brski-prm-internal-00:
+From IETF draft 00 -> IETF draft 01:
+
+* Housekeeping: Removed already addressed open issues.
+  
+From IETF draft-ietf-anima-brski-async-enroll-03 -> IETF anima-brski-prm-00:
 
 * Moved UC2 related parts defining the pledge in responder mode from
   draft-ietf-anima-brski-async-enroll-03 to this document
