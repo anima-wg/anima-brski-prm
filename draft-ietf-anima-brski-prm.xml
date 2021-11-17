@@ -74,10 +74,10 @@
 
 
 <t>This document defines enhancements to bootstrapping a remote secure key infrastructure (BRSKI, <xref target="RFC8995"/> ) to facilitate bootstrapping in domains featuring no or only timely limited connectivity between a pledge and the domain registrar.
-This specifically targets situations, in which the interaction model changes from a pledge-initiator-mode as used in BRSKI to a pledge-responder-mode as described here.
-To support this functionality BRSKI-PRM introduces a new registrar-agent component, which facilitates the communication between pledge and registrar during the bootstrapping phase.
-To support the establishment of a trust relation between a pledge and the domain registrar, BRSKI-PRM relies on the exchange of authenticated self-contained objects (signature-wrapped objects).
-The defined approach is agnostic regarding the utilized enrollment protocol, deployed by the registrar to communicate with the Domain CA.</t>
+It specifically targets situations, in which the interaction model changes from a pledge-initiator-mode, as used in BRSKI, to a pledge-responder-mode as described in this document.
+To support both, BRSKI-PRM introduces a new registrar-agent component, which facilitates the communication between pledge and registrar during the bootstrapping phase.
+To enable the establishment of a trust relation between a pledge and the domain registrar, BRSKI-PRM relies on the exchange of authenticated self-contained objects (signature-wrapped objects).
+The defined approach is agnostic regarding the utilized enrollment protocol, deployed by the domain registrar to communicate with the Domain CA.</t>
 
 
 
@@ -90,28 +90,28 @@ The defined approach is agnostic regarding the utilized enrollment protocol, dep
   <middle>
 
 
-<section anchor="introduction" title="Introduction">
+<section anchor="introduction"><name>Introduction</name>
 <t>BRSKI as defined in <xref target="RFC8995"/> specifies a solution for secure zero-touch (automated) bootstrapping of devices (pledges) in a (customer) site domain.
 This includes the discovery of network elements in the target domain, time synchronization, and the exchange of security information necessary to establish trust between a pledge and the domain.
 Security information about the target domain, specifically the target domain certificate, is exchanged utilizing voucher objects as defined in <xref target="RFC8366"/>.
-These vouchers are signed objects, which are provided via the domain registrar to the pledge and originate from a Manufacturer’s Authorized Signing Authority (MASA).</t>
+These vouchers are signed objects, provided via the domain registrar to the pledge and originate from a Manufacturer's Authorized Signing Authority (MASA).</t>
 
-<t>BRSKI addresses scenarios in which the pledge acts as client for the bootstrapping and is the initiator of the bootstrapping.
+<t>BRSKI addresses scenarios in which the pledge acts as client for the bootstrapping and is the initiator of the bootstrapping (this document refers to the approach as pledge-initiator-mode).
 In industrial environments the pledge may behave as a server and thus does not initiate the bootstrapping with the domain registrar.
-In this scenarios it is expected that the pledge will be triggered to generate request objects to be bootstrapped in the registrar’s domain.
+In this scenarios it is expected that the pledge will be triggered to generate request objects to be bootstrapped in the registrar's domain (this document refers to the approach as pledge-responder-mode).
 For this, an additional component is introduced acting as an agent for the domain registrar (registrar-agent) towards the pledge.
 This may be a functionality of a commissioning tool or it may be even co-located with the registrar.
 In contrast to BRSKI the registrar-agent performs the object exchange with the pledge and provides/retrieves data objects to/from the domain registrar.
-For the interaction with the domain registrar the registrar agent will use existing BRSKI endpoints.</t>
+For the interaction with the domain registrar the registrar-agent will use existing BRSKI endpoints.</t>
 
-<t>The goal is to enhance BRSKI to be usable also for a pledge in responder mode.
+<t>The goal is to enhance BRSKI to support pledges in responder mode also.
 This is addressed by</t>
 
 <t><list style="symbols">
   <t>introducing the registrar-agent as new component to facilitate the communication between the pledge and the registrar, when the pledge is in responder mode (acting as server).</t>
   <t>handling the security on application layer only to enable application of arbitrary transport means between the pledge and the domain registrar, by keeping the registrar-agent in the communication path.
 Examples may be connectivity via IP based networks (wired or wireless) but also connectivity via Bluetooth or NFC between the pledge and the registrar-agent.</t>
-  <t>allowing to utilize credentials different from the pledge’s IDevID to establish a TLS connection to the domain registrar, which is necessary in case of using a registrar-agent.</t>
+  <t>allowing to utilize credentials different from the pledge's IDevID to establish a TLS connection to the domain registrar, which is necessary in case of using a registrar-agent.</t>
   <t>defining the interaction (data exchange and data objects) between a pledge acting as server and a registrar-agent and the domain registrar.</t>
 </list></t>
 
@@ -119,84 +119,113 @@ Examples may be connectivity via IP based networks (wired or wireless) but also 
 EST in turn relies on a binding of the certification request to an underlying TLS connection between the EST client and the EST server.
 According to BRSKI the domain registrar acts as EST server and is also acting as registration authority (RA) for its domain.
 To utilize the EST server endpoints on the domain-registrar, the registrar-agent defined in this document will act as client towards the domain registrar.
-The registrar-agent will act as client when communicating with the pledge in responder mode. 
+The registrar-agent will also act as client when communicating with the pledge in responder mode. 
 Here, TLS with server-side, certificate-based authentication is not directly applicable, as the pledge only possesses an IDevID certificate, which does not contain a subject alternative name (SAN) for the target domain and does also not contain a TLS server flag. 
 This is one reason for relying on higher layer security by using signature wrapped objects for the exchange between the pledge and the registrar agent. 
-This additional wrapping signature requires some pre-processing specifically for EST, as it currently uses PKCS#10 requests only.</t>
-
-<t>[RFC editor: please delete] /* Points should be addressed by the part above:
-* include reasoning for not using TLS (IDevID does not contain SAN, TLS server flag) between the pledge and the registrar-agent.
-* Enhancements to EST state machine necessary to process self-contained objects on the registrar-agent and domain-registrar
-* accepting
-*/</t>
+A further reason is the application on different transports, for which TLS may not be available, like Bluetooth or NFC.
+As the described solution will rely on additional wrapping signature it will require pre-processing specifically for EST, as it currently uses PKCS#10 requests only.</t>
 
 </section>
-<section anchor="terminology" title="Terminology">
+<section anchor="terminology"><name>Terminology</name>
 
-<t>The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL
-NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”,
-“MAY”, and “OPTIONAL” in this document are to be interpreted as
+<t>The key words "<bcp14>MUST</bcp14>", "<bcp14>MUST NOT</bcp14>", "<bcp14>REQUIRED</bcp14>", "<bcp14>SHALL</bcp14>", "<bcp14>SHALL
+NOT</bcp14>", "<bcp14>SHOULD</bcp14>", "<bcp14>SHOULD NOT</bcp14>", "<bcp14>RECOMMENDED</bcp14>", "<bcp14>NOT RECOMMENDED</bcp14>",
+"<bcp14>MAY</bcp14>", and "<bcp14>OPTIONAL</bcp14>" in this document are to be interpreted as
 described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only when, they
 appear in all capitals, as shown here.</t>
 
 <t>This document relies on the terminology defined in <xref target="RFC8995"/>.
 The following terms are defined additionally:</t>
 
-<t><list style="hanging">
-  <t hangText="CA:">
-  Certification authority, issues certificates.</t>
-  <t hangText="RA:">
-  Registration authority, an optional system component to which a CA delegates certificate management functions such as authorization checks.</t>
-  <t hangText="IED:">
-  Intelligent Electronic Device (in essence a pledge).</t>
-  <t hangText="on-site:">
-  Describes a component or service or functionality available in the target deployment domain.</t>
-  <t hangText="off-site:">
-  Describes a component or service or functionality available in an operator domain different from
+<dl>
+  <dt>
+CA:  </dt>
+  <dd>
+    <t>Certification authority, issues certificates.</t>
+  </dd>
+  <dt>
+RA:  </dt>
+  <dd>
+    <t>Registration authority, an optional system component to which a CA delegates certificate management functions such as authorization checks.</t>
+  </dd>
+  <dt>
+POP:  </dt>
+  <dd>
+    <t>Prove of possession (of a private key)</t>
+  </dd>
+  <dt>
+POI:  </dt>
+  <dd>
+    <t>Prove of identity</t>
+  </dd>
+  <dt>
+IED:  </dt>
+  <dd>
+    <t>Intelligent Electronic Device (in essence a pledge).</t>
+  </dd>
+  <dt>
+on-site:  </dt>
+  <dd>
+    <t>Describes a component or service or functionality available in the target deployment domain.</t>
+  </dd>
+  <dt>
+off-site:  </dt>
+  <dd>
+    <t>Describes a component or service or functionality available in an operator domain different from
 the target deployment domain.
 This may be a central site or a cloud service, to which only a temporary connection is available, or which is in a different administrative domain.</t>
-  <t hangText="asynchronous communication:">
-  Describes a timely interrupted communication between an end entity and a PKI component.</t>
-  <t hangText="synchronous communication:">
-  Describes a timely uninterrupted communication between an end entity and a PKI component.</t>
-  <t hangText="authenticated self-contained object:">
-  Describes an object, which is cryptographically bound to the EE certificate (IDevID certificate or LDEVID certificate) of a pledge.
+  </dd>
+  <dt>
+asynchronous communication:  </dt>
+  <dd>
+    <t>Describes a timely interrupted communication between an end entity and a PKI component.</t>
+  </dd>
+  <dt>
+synchronous communication:  </dt>
+  <dd>
+    <t>Describes a timely uninterrupted communication between an end entity and a PKI component.</t>
+  </dd>
+  <dt>
+authenticated self-contained object:  </dt>
+  <dd>
+    <t>Describes an object, which is cryptographically bound to the EE certificate (IDevID certificate or LDEVID certificate) of a pledge.
 The binding is assumed to be provided through a digital signature of the actual object using the corresponding private key of the EE certificate.</t>
-</list></t>
+  </dd>
+</dl>
 
 </section>
-<section anchor="scope-of-solution" title="Scope of Solution">
+<section anchor="scope-of-solution"><name>Scope of Solution</name>
 
-<section anchor="sup-env" title="Supported Environment">
+<section anchor="sup-env"><name>Supported Environment</name>
 
-<t>The solution is intended to be applicable in domains in which pledges have no direct connection to the domain registrar, but are expected to be managed by the registrar.
+<t>The described solution is applicable in domains in which pledges have no direct connection to the domain registrar, but are expected to be managed by this registrar.
 This can be motivated by pledges featuring a different technology stack or by pledges without an existing connection to the domain registrar during bootstrapping.
 These pledges are likely to act in a server role.
-Therefore, the pledge has to offer endpoints on which it can be triggered for the generation of voucher-request objects and certification objects as well as to provide the response objects to the pledge.</t>
+Therefore, the pledge has to offer endpoints on which it can be triggered for the generation of pledge-voucher-request objects and certification objects as well as to provide the response objects to the pledge.</t>
 
 </section>
-<section anchor="app-examples" title="Application Examples">
+<section anchor="app-examples"><name>Application Examples</name>
 
-<t>The following examples are intended to motivate the support of additional bootstrapping approaches in general by introducing industrial applications cases, which could leverage BRSKI as such but also require support of in situation, in which the pledge acts as a server and only answers requests.</t>
+<t>The following examples are intended to motivate the support of additional bootstrapping approaches in general by introducing industrial applications cases, which could leverage BRSKI as such but also require support a pledge acting as server and only answers requests as well as scenarios with limited connectivity to the registrar.</t>
 
-<section anchor="building-automation" title="Building Automation">
+<section anchor="building-automation"><name>Building Automation</name>
 
-<t>In building automation, a use case can be described by a detached building or the basement of a building equipped with sensor, actuators, and controllers connected, but with only limited or no connection to the centralized building management system.
+<t>In building automation, a use case can be described by a detached building (or a cabinet) or the basement of a building equipped with sensor, actuators, and controllers connected, but with only limited or no connection to the centralized building management system.
 This limited connectivity may be during the installation time but also during operation time.
-During the installation in the basement, a service technician collects the device specific information from the basement network and provides them to the central building management system, e.g., using a laptop or even a mobile phone to transport the information.
-A domain registrar may be part of the central building management system and already and already operating in the installation network.
+During the installation in the basement, a service technician collects the device specific information from the basement network and provides them to the central building management system, e.g., using a laptop or a mobile device to transport the information.
+A domain registrar may be part of the central building management system and already be operational in the installation network.
 The central building management system can then provide operational parameters for the specific devices in the basement.
 This operational parameters may comprise values and settings required in the operational phase of the sensors/actuators, beyond them a certificate issued by the operator to authenticate against other components and services.
-These operational parameters are then provided to the devices in the basement facilitated by the service technician’s laptop.</t>
+These operational parameters are then provided to the devices in the basement facilitated by the service technician's laptop.</t>
 
 </section>
-<section anchor="infrastructure-isolation-policy" title="Infrastructure Isolation Policy">
+<section anchor="infrastructure-isolation-policy"><name>Infrastructure Isolation Policy</name>
 
 <t>This refers to any case in which network infrastructure is normally isolated from the Internet as a matter of policy, most likely for security reasons.
 In such a case, limited access to a domain registrar may be allowed in carefully controlled short periods of time, for example when a batch of new devices are deployed, but impossible at other times.</t>
 
 </section>
-<section anchor="less-operational-security-in-the-target-domain" title="Less Operational Security in the Target-Domain">
+<section anchor="less-operational-security-in-the-target-domain"><name>Less Operational Security in the Target-Domain</name>
 
 <t>The registration authority (RA) performing the authorization of a certificate request is a critical PKI component and therefore implicates higher operational security than other components utilizing the issued certificates .
 CAs may also demand higher security in the registration procedures. Especially the CA/Browser forum currently increases the security requirements in the certificate issuance procedures for publicly trusted certificates.
@@ -205,55 +234,54 @@ There may be the situation in which the target domain does not offer enough secu
 </section>
 </section>
 </section>
-<section anchor="req-sol" title="Requirements Discussion and Mapping to Solution-Elements">
+<section anchor="req-sol"><name>Requirements Discussion and Mapping to Solution-Elements</name>
 
-<t>Based on the intended target environment described in <xref target="sup-env"/> and the motivated application examples described in <xref target="app-examples"/> the following base requirements are derived to support authenticated self-contained objects as container carrying the request and response messages to support the communication over a registrar-agent.</t>
+<t>Based on the intended target environment described in <xref target="sup-env"/> and the motivated application examples described in <xref target="app-examples"/> the following base requirements are derived to support to support the communication between a pledge and a registrar over a registrar-agent.</t>
 
 <t>At least the following properties are required:</t>
 
 <t><list style="symbols">
-  <t>Proof of Possession: proves that an entity possesses and controls the private key corresponding to the public key contained in the certification request, typically by adding a signature using the private key.</t>
-  <t>Proof of Identity: provides data-origin authentication of a data object, e.g., a certificate request, utilizing an existing IDevID.
+  <t>Proof of Possession (POP): proves that an entity possesses and controls the private key corresponding to the public key contained in the certification request, typically by adding a signature using the private key.</t>
+  <t>Proof of Identity (POI): provides data-origin authentication of a data object, e.g., a certificate request, utilizing an existing IDevID.
 Certificate updates may utilize the certificate that is to be updated.</t>
 </list></t>
 
-<t>Solution examples (not complete) based on existing technology are provided with the focus on existing IETF documents:</t>
+<t>Solution examples based on existing technology are provided with the focus on existing IETF documents:</t>
 
 <t><list style="symbols">
-  <t>Certification request objects: Certification requests are data structures which may only protect the integrity of the contained data providing a proof-of-private-key-possession for locally generated key pairs.
-An example is:  <list style="symbols">
-      <t>PKCS#10 <xref target="RFC2986"/>: Defines a structure for a certification request.
-The structure is signed to ensure integrity protection and proof of possession of the private key of the requester that corresponds to the contained public key.</t>
-    </list>
-Note that the integrity of the certification request is bound to the public key contained in the certification request by performing a signature operation with the corresponding private key.
-In the considered application examples, this is not sufficient to provide data origin authentication and needs to be bound to the existing credential of the pledge (IDevID) additionally.
-This binding supports the authorization decision for the certification request through the provisioning of a proof of identity.
-The binding of data origin authentication to the certification request may be delegated to the protocol used for certificate management or it may be provided directly by the certification request object.</t>
+  <t>Voucher request and response objects as used in <xref target="RFC8995"/> already provide both, POP and POI, through a digital signature to protect the integrity of the voucher object, while the corresponding signing certificate contains the identity of the signer.</t>
+  <t>Certification request objects: Certification requests are data structures containing the information from a requester for a CA to create a certificate. 
+The certification request format in BRSKI utilizes PKCS#10 <xref target="RFC2986"/>.
+Here, the structure is signed to ensure integrity protection and proof of possession of the private key of the requester that corresponds to the contained public key.
+In the considered application examples, this is not sufficient to provide data origin authentication and therefore needs to be bound to the existing credential of the pledge (IDevID) additionally.
+This binding supports the authorization decision for the certification request through a proof of identity.
+The binding of data origin authentication to the certification request may be delegated to the protocol used for certificate management or it may be provided directly by the certification request object.
+While BRSKI uses the binding to TLS, BRSKI-PRM aims at an additional signature of the PCKS#10 object using the existing credential on the pledge (IDevID).</t>
 </list></t>
 
 </section>
-<section anchor="architecture" title="Architectural Overview and Communication Exchanges">
+<section anchor="architecture"><name>Architectural Overview and Communication Exchanges</name>
 
-<t>For BRSKI with pledge in responder mode, the base system architecture defined in BRSKI <xref target="RFC8995"/> is enhanced to facilitate the use case.
+<t>For BRSKI with pledge in responder mode, the base system architecture defined in BRSKI <xref target="RFC8995"/> is enhanced to facilitate the new use case.
 The pledge-responder-mode allows delegated bootstrapping using a registrar-agent instead of a direct connection from the pledge to the domain registrar.
 The communication model between registrar-agent and pledge in this document assumes that the pledge is acting as server and responds to requests.</t>
 
-<t>Necessary enhancements to support authenticated self-contained objects for certificate enrollment are kept on a minimum to ensure reuse of already defined architecture elements and interactions.</t>
+<t>Necessary enhancements to support authenticated self-contained objects for certificate enrollment are kept at a minimum to ensure reuse of already defined architecture elements and interactions.</t>
 
 <t>For the authenticated self-contained objects used for the certification request, BRSKI-PRM relies on the defined message wrapping mechanisms of the enrollment protocols stated in <xref target="req-sol"/> above.</t>
 
-<section anchor="uc2" title="Pledge-responder-mode (PRM): Registrar-agent Communication with Pledges">
+<section anchor="uc2"><name>Pledge-responder-mode (PRM): Registrar-agent Communication with Pledges</name>
 
-<t>To support mutual trust establishment of pledges, not directly connected to the domain registrar, this approach relies on the exchange of authenticated self-contained objects (the voucher request/response objects as known from BRSKI and the enrollment request/response objects as introduced by BRSKI-PRM).
-This allows independence of a potential protection provided by the used transport protocol.</t>
+<t>To support mutual trust establishment of pledges, not directly connected to the domain registrar, this document relies on the exchange of authenticated self-contained objects (the voucher request/response objects as known from BRSKI and the enrollment request/response objects as introduced by BRSKI-PRM).
+This allows independence from protection provided by the utilized transport protocol.</t>
 
-<t>In contrast to BRSKI, the object exchanges performed with the help of a registrar-agent component, supporting the interaction of the pledge with the domain registrar.
-It may be an integrated functionality of a commissioning tool.
+<t>In contrast to BRSKI, the object exchanges with the domain registrar are performed with the help of a registrar-agent component.
+The registrar-agent may be an integrated functionality of a commissioning tool.
 This leads to enhancements of the logical elements in the BRSKI architecture as shown in <xref target="uc2figure"/>.
 The registrar-agent interacts with the pledge to acquire and to supply the required data objects for bootstrapping, which are also exchanged between the registrar-agent and the domain registrar.
-Moreover, the addition of the registrar-agent also influences the sequences for the data exchange between the pledge and the domain registrar described in <xref target="RFC8995"/>.
-The general goal for the registrar-agent application is the reuse of already defined endpoints of the domain registrar side.
-The functionality of the already existing registrar endpoints may need small enhancements.</t>
+Moreover, the addition of the registrar-agent influences the sequences of the data exchange between the pledge and the domain registrar described in <xref target="RFC8995"/>.
+A general goal for the registrar-agent application is the reuse of already defined endpoints of the domain registrar side.
+The functionality of the already existing registrar endpoints may need small enhancements to cope with the additional signatures.</t>
 
 <figure title="Architecture overview using registrar-agent" anchor="uc2figure"><artwork align="left"><![CDATA[
                                           +------------------------+
@@ -295,7 +323,7 @@ It is recommended to use short lived registrar-agent LDevIDs in the range of day
 <t>If a registrar detects a request originates from a registrar-agent it is able to switch the operational mode from BRSKI to BRSKI-PRM.</t>
 
 <t>In addition, the domain registrar may authenticate the user operating the registrar-agent to perform additional authorization of a pledge bootstrapping action.
-Examples for such user level authentication are the application of HTTP authentication or the usage of authorization tokens or other.
+Examples for such user level authentication may be HTTP authentication or the usage of authorization tokens or other.
 This is out of scope of this document.</t>
 
 <t>The following list describes the components in a (customer) site domain:</t>
@@ -308,19 +336,19 @@ A pledge acting as a server during bootstrapping leads to some differences to BR
       <t>Discovery of the domain registrar by the pledge is not needed as the pledge will be triggered by the registrar-agent.</t>
       <t>Discovery of the pledge by the registrar-agent must be possible.</t>
       <t>As the registrar-agent must be able to request data objects for bootstrapping of the pledge, the pledge must offer corresponding endpoints.</t>
-      <t>The registrar-agent may provide additional data to the pledge, in the context of the triggering request.</t>
+      <t>The registrar-agent may provide additional data to the pledge, in the context of the triggering request, to make itself visible to the domain registrar.</t>
       <t>Order of exchanges in the call flow may be different as the registrar-agent collects both objects, pledge-voucher-request objects and pledge-enrollment-request objects, at once and provides them to the registrar.
 This approach may also be used to perform a bulk bootstrapping of several devices.</t>
       <t>The data objects utilized for the data exchange between the pledge and the registrar are self-contained authenticated objects (signature-wrapped objects).</t>
     </list></t>
   <t>Registrar-agent: provides a communication path to exchange data objects between the pledge and the domain registrar.
 The registrar-agent facilitates situations, in which the domain registrar is not directly reachable by the pledge, either due to a different technology stack or due to missing connectivity.
-The registrar-agent triggers the pledge to create bootstrapping information such as voucher  request objects and enrollment request objects from one or multiple pledges at once and performs a bulk bootstrapping based on the collected data.
+The registrar-agent triggers a pledge to create bootstrapping information such as voucher-request objects and enrollment-request objects from one or multiple pledges at once and performs a bulk bootstrapping based on the collected data.
 The registrar-agent is expected to possess information of the domain registrar, either by configuration or by using the discovery mechanism defined in <xref target="RFC8995"/>.
 There is no trust assumption between the pledge and the registrar-agent as only authenticated self-contained objects are applied, which are transported via the registrar-agent and provided either by the pledge or the registrar.
-The trust assumption between the registrar-agent and the registrar bases on an own LDevID of the registrar-agent, acting as registrar component.
-This allows the registrar-agent to authenticate towards the registrar.
-The registrar can utilize this authentication to distinguish communication with a pledge from a registrar-agent based on the exchanged objects.</t>
+The trust assumption between the registrar-agent and the registrar bases on the LDevID of the registrar-agent, provided by the PKI responsible for the domain. 
+This allows the registrar-agent to authenticate towards the registrar, e.g., in a TLS handshake.
+Based on this, the registrar is able to distinguish a pledge from a registrar-agent during the session establishment.</t>
   <t>Join Proxy: same functionality as described in <xref target="RFC8995"/>.
 Note that it may be used by the registrar-agent instead of the pledge to find the registrar, if not configured.</t>
   <t>Domain Registrar: In general the domain registrar fulfills the same functionality regarding the bootstrapping of the pledge in a (customer) site domain by facilitating the communication of the pledge with the MASA service and the domain PKI service.
@@ -337,26 +365,26 @@ the leaf assertion as enum, which cannot be extended.
 To define an additional assertion RFC 8366 may be revised.
 There is currently ongoing work for a RFC8366bis. */</t>
 
-<section anchor="agent-proximity" title="Agent-Proximity">
+<section anchor="agent-proximity"><name>Agent-Proximity</name>
 
-<t>“Agent-proximity” is a weaker assertion then “proximity”.
-In case of “agent-proximity” it is a statement, that the proximity-registrar-certificate was provided via the registrar-agent and not directly to the pledge.
+<t>"Agent-proximity" is a weaker assertion then "proximity".
+In case of "agent-proximity" it is a statement, that the proximity-registrar-certificate was provided via the registrar-agent and not directly to the pledge.
 This can be verified by the registrar and also by the MASA during the voucher-request processing.
-Note that at the time of creating the voucher-request, the pledge cannot verify the registrar’s LDevID(Reg) EE certificate and has no proof-of-possession of the corresponding private key for the certificate.
-Trust handover to the domain is established via the “pinned-domain-certificate” in the voucher.</t>
+Note that at the time of creating the voucher-request, the pledge cannot verify the registrar's LDevID(Reg) EE certificate and has no proof-of-possession of the corresponding private key for the certificate.
+Trust handover to the domain is established via the "pinned-domain-certificate" in the voucher.</t>
 
-<t>In contrast, “proximity” provides a statement, that the pledge was in direct contact with the registrar and was able to verify proof-of-possession of the private key in the context of the TLS handshake.
+<t>In contrast, "proximity" provides a statement, that the pledge was in direct contact with the registrar and was able to verify proof-of-possession of the private key in the context of the TLS handshake.
 The provisionally accepted LDevID(Reg) EE certificate can be verified after the voucher has been processed by the pledge.</t>
 
 </section>
-<section anchor="pledge_ep" title="Behavior of Pledge in Pledge-Responder-Mode">
+<section anchor="pledge_ep"><name>Behavior of Pledge in Pledge-Responder-Mode</name>
 
 <t>In contrast to BRSKI the pledge acts as a server component.
 It is triggered by the registrar-agent for the generation of pledge-voucher-request and pledge-enrollment-request objects as well as for the processing of the response objects and the generation of status information.
 Due to the use of the registrar-agent, the interaction with the domain registrar is changed as shown in <xref target="exchangesfig_uc2_1"/>.
-To enable interaction with the registrar-agent, the pledge provides endpoints using the BRSKI interface based on the “/.well-known/brski” URI tree.</t>
+To enable interaction with the registrar-agent, the pledge provides endpoints using the BRSKI interface based on the "/.well-known/brski" URI tree.</t>
 
-<t>The following endpoints are defined for the <spanx style="emph">pledge</spanx> in this document:</t>
+<t>The following endpoints are defined for the <em>pledge</em> in this document:</t>
 
 <t><list style="symbols">
   <t>/.well-known/brski/pledge-voucher-request: trigger pledge to create voucher request.
@@ -371,7 +399,7 @@ It returns the pledge-enrollment-status.</t>
 </list></t>
 
 </section>
-<section anchor="behavior-of-registrar-agent" title="Behavior of Registrar-Agent">
+<section anchor="behavior-of-registrar-agent"><name>Behavior of Registrar-Agent</name>
 
 <t>The registrar-agent is a new component in the BRSKI context.
 It provides connectivity between the pledge and the domain registrar and reuses the endpoints of the domain registrar side already specified in <xref target="RFC8995"/>.
@@ -382,13 +410,13 @@ This new component changes the general interaction between the pledge and the do
 
 <t>The registrar-agent is expected to already possess an LDevID(RegAgt) to authenticate towards the domain registrar.
 The registrar-agent will use this LDevID(RegAgt) when establishing the TLS session with the domain registrar in the context of for TLS client-side authentication.
-The LDevID(RegAgt) certificate MUST include a SubjectKeyIdentifier (SKID), which is used as reference in the context of an agent-signed-data object as defined in <xref target="exchanges_uc2_1"/>.
+The LDevID(RegAgt) certificate <bcp14>MUST</bcp14> include a SubjectKeyIdentifier (SKID), which is used as reference in the context of an agent-signed-data object as defined in <xref target="exchanges_uc2_1"/>.
 Note that this is an additional requirement for issuing the certificate, as <xref target="IEEE-802.1AR"/> only requires the SKID to be included for intermediate CA certificates.
 In BRSKI-PRM, the SKID is used in favor of a certificate fingerprint to avoid additional computations.</t>
 
-<t>Using an LDevID for TLS client-side authentication is a deviation from <xref target="RFC8995"/>, in which the pledge’s IDevID credential is used to perform TLS client authentication.
+<t>Using an LDevID for TLS client-side authentication is a deviation from <xref target="RFC8995"/>, in which the pledge's IDevID credential is used to perform TLS client authentication.
 The use of the LDevID(RegAgt) allows the domain registrar to distinguish, if bootstrapping is initiated from a pledge or from a registrar-agent and adopt the internal handling accordingly.
-As BRSKI-PRM uses authenticated self-contained data objects between the pledge and the domain registrar, the binding of the pledge identity to the request object is provided by the data object signature employing the pledge’s IDevID.
+As BRSKI-PRM uses authenticated self-contained data objects between the pledge and the domain registrar, the binding of the pledge identity to the request object is provided by the data object signature employing the pledge's IDevID.
 The objects exchanged between the pledge and the domain registrar used in the context of this specifications are JOSE objects</t>
 
 <t>In addition to the LDevID(RegAgt), the registrar-agent is provided with the product-serial-numbers of the pledges to be bootstrapped.
@@ -405,24 +433,24 @@ The list may be provided by administrative means or the registrar agent may get 
   <t>Serial-number(s): product-serial-number(s) of pledge(s) to be bootstrapped.</t>
 </list></t>
 
-<section anchor="discovery_uc2_reg" title="Discovery of Registrar by Registrar-Agent">
+<section anchor="discovery_uc2_reg"><name>Discovery of Registrar by Registrar-Agent</name>
 
 <t>The discovery of the domain registrar may be done as specified in <xref target="RFC8995"/> with the
 deviation that it is done between the registrar-agent and the domain registrar.
 Alternatively, the registrar-agent may be configured with the address of the domain registrar and the certificate of the domain registrar.</t>
 
 </section>
-<section anchor="discovery_uc2_ppa" title="Discovery of Pledge by Registrar-Agent">
+<section anchor="discovery_uc2_ppa"><name>Discovery of Pledge by Registrar-Agent</name>
 
 <t>The discovery of the pledge by registrar-agent should be done by using DNS-based Service Discovery <xref target="RFC6763"/> over Multicast DNS <xref target="RFC6762"/> to discover the pledge at “product-serial-number.brski-pledge._tcp.local.”
-The pledge constructs a local host name based on device local information (product-serial-number), which results in “product-serial-number.brski-pledge._tcp.local.”
+The pledge constructs a local host name based on device local information (product-serial-number), which results in "product-serial-number.brski-pledge._tcp.local."
 It can then be discovered by the registrar-agent via mDNS. Note that other mechanisms for discovery may be used.</t>
 
 <t>The registrar-agent is able to build the same information based on the provided list of product-serial-number.</t>
 
 </section>
 </section>
-<section anchor="exchanges_uc2" title="Bootstrapping Objects and Corresponding Exchanges">
+<section anchor="exchanges_uc2"><name>Bootstrapping Objects and Corresponding Exchanges</name>
 
 <t>The interaction of the pledge with the registrar-agent may be accomplished using different transport means (protocols and or network technologies).
 For this document the usage of HTTP is targeted as in BRSKI.
@@ -430,19 +458,19 @@ Alternatives may be CoAP, Bluetooth Low Energy (BLE), or Nearfield Communication
 This requires independence of the exchanged data objects between the pledge and the registrar from transport security.
 Therefore, authenticated self-contained objects (here: signature-wrapped objects) are applied in the data exchange between the pledge and the registrar.</t>
 
-<t>The registrar-agent provides the domain-registrar certificate (LDevID(Reg) EE certificate) to the pledge to be included into the “agent-provided-proximity-registrar-certificate” leaf of the pledge-voucher-request object.
+<t>The registrar-agent provides the domain-registrar certificate (LDevID(Reg) EE certificate) to the pledge to be included into the "agent-provided-proximity-registrar-certificate" leaf of the pledge-voucher-request object.
 This enables the registrar to verify, that it is the target registrar for handling the request.
 The registrar certificate may be configured at the registrar-agent or may be fetched by the registrar-agent based on a prior TLS connection establishment with the domain registrar.
 In addition, the registrar-agent provides agent-signed-data containing the product-serial-number in the body, signed with the LDevID(RegAgt).
 This enables the registrar to verify and log, which registrar-agent was in contact with the pledge, when verifying the pledge-voucher-request.
-Optionally the registrar-agent may provide its LDevID(RegAgt) certificate to the pledge for inclusion into the pledge-voucher-request as “agent-sign-cert” leaf.
+Optionally the registrar-agent may provide its LDevID(RegAgt) certificate to the pledge for inclusion into the pledge-voucher-request as "agent-sign-cert" leaf.
 Note that this may be omitted in constraint environments to safe bandwidth between the registrar-agent and the pledge.
-If not contained, the registrar-agent MUST fetch the LDevID(RegAgt) certificate based on the SubjectKeyIdentifier (SKID) in the header of the agent-signed-data.
+If not contained, the registrar-agent <bcp14>MUST</bcp14> fetch the LDevID(RegAgt) certificate based on the SubjectKeyIdentifier (SKID) in the header of the agent-signed-data.
 The registrar may include the LDevID(RegAgt) certificate information into the registrar-voucher-request.</t>
 
-<t>The MASA in turn verifies the LDevID(Reg) certificate is included in the pledge-voucher-request (prior-signed-voucher-request) in the “agent-provided-proximity-registrar-certificate” leaf and may assert in the voucher “verified” or “logged” instead of “proximity”, as there is no direct connection between the pledge and the registrar.
-If the LDevID(RegAgt) certificate is included contained in the “agent-sign-cert” leave of the registrar-voucher-request, the MASA can verify the LDevID(RegAgt) certificate and the signature of the registrar-agent in the agent-signed-data provided in the prior-signed-voucher-request.
-If both can be verified successfully, the MASA can assert “agent-proximity” in the voucher. Otherwise, it may assert “verified” or “logged”.
+<t>The MASA in turn verifies the LDevID(Reg) certificate is included in the pledge-voucher-request (prior-signed-voucher-request) in the "agent-provided-proximity-registrar-certificate" leaf and may assert in the voucher "verified" or "logged" instead of "proximity", as there is no direct connection between the pledge and the registrar.
+If the LDevID(RegAgt) certificate is included contained in the "agent-sign-cert" leave of the registrar-voucher-request, the MASA can verify the LDevID(RegAgt) certificate and the signature of the registrar-agent in the agent-signed-data provided in the prior-signed-voucher-request.
+If both can be verified successfully, the MASA can assert "agent-proximity" in the voucher. Otherwise, it may assert "verified" or "logged".
 The voucher can then be supplied via the registrar to the registrar-agent.</t>
 
 <t><xref target="exchangesfig_uc2_all"/> provides an overview of the exchanges detailed in the following sub sections.</t>
@@ -511,7 +539,7 @@ The voucher can then be supplied via the registrar to the registrar-agent.</t>
   <t>Status handling addresses the exchanges between the registrar-agent and the registrar.</t>
 </list></t>
 
-<section anchor="exchanges_uc2_1" title="Request Objects Acquisition by Registrar-Agent from Pledge">
+<section anchor="exchanges_uc2_1"><name>Request Objects Acquisition by Registrar-Agent from Pledge</name>
 
 <t>The following description assumes that the registrar-agent already discovered the pledge.
 This may be done as described in <xref target="discovery_uc2_ppa"/> based on mDNS.</t>
@@ -551,7 +579,7 @@ Note that the product-serial-number may have been used during the pledge discove
     |                                        | pledge-enrollment-req.
 ]]></artwork></figure>
 
-<t>Triggering the pledge to create the pledge-voucher-request is done using HTTP POST on the defined pledge endpoint “/.well-known/brski/pledge-voucher-request”.</t>
+<t>Triggering the pledge to create the pledge-voucher-request is done using HTTP POST on the defined pledge endpoint "/.well-known/brski/pledge-voucher-request".</t>
 
 <t>The registrar-agent pledge-voucher-request Content-Type header is: application/json.
 It defines a JSON document to provide three parameter:</t>
@@ -577,8 +605,8 @@ It may not verify the agent-sign-cert itself due to missing issuing CA informati
 <t>The body of the agent-signed-data contains an ietf-voucher-request-prm:agent-signed-data element (defined in <xref target="voucher-request-prm-yang"/>):</t>
 
 <t><list style="symbols">
-  <t>created-on: MUST contain the creation date and time in yang:date-and-time format.</t>
-  <t>serial-number: MUST contain the product-serial-number as type string as defined in <xref target="RFC8995"/>,  section 2.3.1.
+  <t>created-on: <bcp14>MUST</bcp14> contain the creation date and time in yang:date-and-time format.</t>
+  <t>serial-number: <bcp14>MUST</bcp14> contain the product-serial-number as type string as defined in <xref target="RFC8995"/>,  section 2.3.1.
 The serial-number corresponds with the product-serial-number contained in the X520SerialNumber field of the IDevID certificate of the pledge.</t>
 </list></t>
 
@@ -598,17 +626,17 @@ The serial-number corresponds with the product-serial-number contained in the X5
 }
 ]]></artwork></figure>
 
-<t>Upon receiving the voucher-request trigger, the pledge SHOULD construct the body of the pledge-voucher-request object as defined in <xref target="RFC8995"/>.
+<t>Upon receiving the voucher-request trigger, the pledge <bcp14>SHOULD</bcp14> construct the body of the pledge-voucher-request object as defined in <xref target="RFC8995"/>.
 This object becomes a JSON-in-JWS object as defined in <xref target="I-D.ietf-anima-jws-voucher"/>.</t>
 
-<t>The header of the pledge-voucher-request SHALL contain the following parameter as defined in <xref target="RFC7515"/>:</t>
+<t>The header of the pledge-voucher-request <bcp14>SHALL</bcp14> contain the following parameter as defined in <xref target="RFC7515"/>:</t>
 
 <t><list style="symbols">
   <t>alg: algorithm used for creating the object signature.</t>
   <t>x5c: contains the base64-encoded pledge IDevID certificate.</t>
 </list></t>
 
-<t>The body of the pledge-voucher-request object MUST contain the following parameter as part of the ietf-voucher-request-prm:voucher as defined in <xref target="RFC8995"/>:</t>
+<t>The body of the pledge-voucher-request object <bcp14>MUST</bcp14> contain the following parameter as part of the ietf-voucher-request-prm:voucher as defined in <xref target="RFC8995"/>:</t>
 
 <t><list style="symbols">
   <t>created-on: contains the current date and time in yang:date-and-time format.</t>
@@ -620,8 +648,8 @@ This object becomes a JSON-in-JWS object as defined in <xref target="I-D.ietf-an
 <t>The ietf-voucher-request:voucher is enhanced with additional parameters:</t>
 
 <t><list style="symbols">
-  <t>agent-provided-proximity-registrar-cert: MUST be included and contains the base64-encoded LDevID(Reg) EE certificate (provided as trigger parameter by the registrar-agent).</t>
-  <t>agent-signed-data: MUST contain the base64-encoded agent-signed-data (as defined in <xref target="asd"/>) and provided as trigger parameter.</t>
+  <t>agent-provided-proximity-registrar-cert: <bcp14>MUST</bcp14> be included and contains the base64-encoded LDevID(Reg) EE certificate (provided as trigger parameter by the registrar-agent).</t>
+  <t>agent-signed-data: <bcp14>MUST</bcp14> contain the base64-encoded agent-signed-data (as defined in <xref target="asd"/>) and provided as trigger parameter.</t>
   <t>agent-sign-cert: May contain the base64-encoded LDevID(RegAgt) EE certificate if provided as trigger parameter.</t>
 </list></t>
 
@@ -654,15 +682,15 @@ This object becomes a JSON-in-JWS object as defined in <xref target="I-D.ietf-an
 
 <t>application/voucher-jws+json</t>
 
-<t>The pledge SHOULD include this Content-Type header field indicating the included media type for the voucher response.
+<t>The pledge <bcp14>SHOULD</bcp14> include this Content-Type header field indicating the included media type for the voucher response.
 Note that this is also an indication regarding the acceptable format of the voucher response.
 This format is included by the registrar as described in <xref target="exchanges_uc2_2"/>.</t>
 
 <t>Once the registrar-agent has received the pledge-voucher-request it can trigger the pledge to generate an enrollment-request object.
-As in BRSKI the enrollment request object is a PKCS#10, but additionally signed using the pledge’s IDevID.
+As in BRSKI the enrollment request object is a PKCS#10, but additionally signed using the pledge's IDevID.
 Note, as the initial enrollment aims to request a general certificate, no certificate attributes are provided to the pledge.</t>
 
-<t>Triggering the pledge to create the enrollment-request is done using HTTP POST on the defined pledge endpoint “/.well-known/brski/pledge-enrollment-request”.</t>
+<t>Triggering the pledge to create the enrollment-request is done using HTTP POST on the defined pledge endpoint "/.well-known/brski/pledge-enrollment-request".</t>
 
 <t>The registrar-agent pledge-enrollment-request Content-Type header is: <spanx style="verb">application/json</spanx>
 with an empty body.</t>
@@ -670,7 +698,7 @@ with an empty body.</t>
 <t>Note that using HTTP POST allows for an empty body, but also to provide additional data, like CSR attributes or information about the enroll type: initial or re-enroll.
 In the following the enrollment is described as initial enrollment.</t>
 
-<t>Upon receiving the enrollment-trigger, the pledge SHALL construct the pledge-enrollment-request as authenticated self-contained object.
+<t>Upon receiving the enrollment-trigger, the pledge <bcp14>SHALL</bcp14> construct the pledge-enrollment-request as authenticated self-contained object.
 The CSR already assures proof of possession of the private key corresponding to the contained public key.
 In addition, based on the additional signature using the IDevID, proof of identity is provided.
 Here, a JOSE object is being created in which the body utilizes the YANG module ietf-ztp-types with the grouping for csr-grouping for the CSR as defined in <xref target="I-D.ietf-netconf-sztp-csr"/>.</t>
@@ -685,14 +713,14 @@ Note that the focus in this use case is placed on PKCS#10 as PKCS#10 can be tran
 If the pledge is already implementing an enrollment protocol, it may leverage that functionality for the creation of the enrollment request object.
 Note also that <xref target="I-D.ietf-netconf-sztp-csr"/> also allows for inclusion of certification request objects such as CMP or CMC.</t>
 
-<t>The pledge SHOULD construct the pledge-enrollment-request as PKCS#10 object.
-In this case it MUST sign it additionally with its IDevID credential to achieve proof-of-identity bound to the PKCS#10 as described below.</t>
+<t>The pledge <bcp14>SHOULD</bcp14> construct the pledge-enrollment-request as PKCS#10 object.
+In this case it <bcp14>MUST</bcp14> sign it additionally with its IDevID credential to achieve proof-of-identity bound to the PKCS#10 as described below.</t>
 
 <t>A successful enrollment will result in a generic LDevID certificate for the pledge in the new domain, which can be used to request further LDevID certificates if necessary for its operation.</t>
 
 <t>[RFC Editor: please delete] /* Open Issues: Depending on target
 environment, it may be useful to assume that the pledge may already
-“know” its functional scope and therefore the number of certificates
+"know" its functional scope and therefore the number of certificates
 needed during operation.  As a result, multiple CSRs may be generated
 to provide achieve multiple certificates as a result of the
 enrollment.  This would need further description and potential
@@ -703,20 +731,20 @@ different CSRs. */</t>
 
 <t>The registrar-agent enrollment-request Content-Type header for a wrapped PKCS#10 is: <spanx style="verb">application/jose</spanx></t>
 
-<t>The header of the pledge enrollment-request SHALL contain the following parameter as defined in <xref target="RFC7515"/>:</t>
+<t>The header of the pledge enrollment-request <bcp14>SHALL</bcp14> contain the following parameter as defined in <xref target="RFC7515"/>:</t>
 
 <t><list style="symbols">
   <t>alg: algorithm used for creating the object signature.</t>
   <t>x5c: contains the base64-encoded pledge IDevID certificate.</t>
 </list></t>
 
-<t>The body of the pledge enrollment-request object SHOULD contain a P10 parameter (for PKCS#10) as defined for ietf-ztp-types:p10-csr in <xref target="I-D.ietf-netconf-sztp-csr"/>:</t>
+<t>The body of the pledge enrollment-request object <bcp14>SHOULD</bcp14> contain a P10 parameter (for PKCS#10) as defined for ietf-ztp-types:p10-csr in <xref target="I-D.ietf-netconf-sztp-csr"/>:</t>
 
 <t><list style="symbols">
   <t>P10: contains the base64-encoded PKCS#10 of the pledge.</t>
 </list></t>
 
-<t>The JOSE object is signed using the pledge’s IDevID credential, which corresponds to the certificate signaled in the JOSE header.</t>
+<t>The JOSE object is signed using the pledge's IDevID credential, which corresponds to the certificate signaled in the JOSE header.</t>
 
 <figure title="Example of pledge-enrollment-request" anchor="per"><artwork align="left"><![CDATA[
 {
@@ -747,7 +775,7 @@ BRSKI references RFC7030 for this.
 As the registrar-agent is intended to work between the pledge and the domain registrar, a  collection of requests from more than one pledges is possible, allowing a bulk bootstrapping of multiple pledges using the same connection between the registrar-agent and the domain registrar.</t>
 
 </section>
-<section anchor="exchanges_uc2_2" title="Request Handling - Registrar-Agent (Infrastructure)">
+<section anchor="exchanges_uc2_2"><name>Request Handling - Registrar-Agent (Infrastructure)</name>
 
 <t>The bootstrapping exchange between the registrar-agent and the domain registrar resembles the exchanges between the pledge and the domain registrar from BRSKI in the pledge-initiator-mode with some deviations.</t>
 
@@ -794,58 +822,58 @@ The registrar-agent has acquired pledge-voucher-request and pledge-enrollment-re
 
 <t>The registrar-agent establishes a TLS connection with the registrar.
 As already stated in <xref target="RFC8995"/>, the use of TLS 1.3 (or newer) is encouraged.
-TLS 1.2 or newer is REQUIRED on the registrar-agent side.
-TLS 1.3 (or newer) SHOULD be available on the registrar, but TLS 1.2 MAY be used.
-TLS 1.3 (or newer) SHOULD be available on the MASA, but TLS 1.2 MAY be used.</t>
+TLS 1.2 or newer is <bcp14>REQUIRED</bcp14> on the registrar-agent side.
+TLS 1.3 (or newer) <bcp14>SHOULD</bcp14> be available on the registrar, but TLS 1.2 <bcp14>MAY</bcp14> be used.
+TLS 1.3 (or newer) <bcp14>SHOULD</bcp14> be available on the MASA, but TLS 1.2 <bcp14>MAY</bcp14> be used.</t>
 
 <t>In contrast to <xref target="RFC8995"/> client authentication is achieved by using the LDevID(RegAgt) of the registrar-agent instead of the IDevID of the pledge.
 This allows the registrar to distinguish between pledge-initiator-mode and pledge-responder-mode. In pledge-responder-mode the registrar has no direct connection to the pledge but via the registrar-agent.
 The registrar can receive request objects in different forms as defined in <xref target="RFC8995"/>. Specifically, the registrar will receive JOSE objects from the pledge for voucher-request and enrollment-request (instead of the objects for voucher-request (CMS-signed JSON) and enrollment-request (PKCS#10).</t>
 
-<t>The registrar-agent sends the pledge-voucher-request to the registrar with an HTTP-over-TLS POST to the endpoint “/.well-known/brski/requestvoucher”.</t>
+<t>The registrar-agent sends the pledge-voucher-request to the registrar with an HTTP-over-TLS POST to the endpoint "/.well-known/brski/requestvoucher".</t>
 
 <t>The pledge-voucher-request Content-Type used in the pledge-responder-mode is defined in <xref target="I-D.ietf-anima-jws-voucher"/> as: <spanx style="verb">application/voucher-jws+json</spanx></t>
 
 <t>(see <xref target="pvr"/> for the content definition).</t>
 
-<t>The registrar-agent SHOULD include the “Accept” header field indicating the pledge acceptable Content-Type for the voucher-response.
-The voucher-response Content-Type “application/voucher-jws+json” is defined in <xref target="I-D.ietf-anima-jws-voucher"/>.</t>
+<t>The registrar-agent <bcp14>SHOULD</bcp14> include the "Accept" header field indicating the pledge acceptable Content-Type for the voucher-response.
+The voucher-response Content-Type "application/voucher-jws+json" is defined in <xref target="I-D.ietf-anima-jws-voucher"/>.</t>
 
-<t>Upon reception of the pledge-voucher-request, the registrar SHALL perform the verification of the voucher-request parameter as defined in section 5.3 of <xref target="RFC8995"/>.
+<t>Upon reception of the pledge-voucher-request, the registrar <bcp14>SHALL</bcp14> perform the verification of the voucher-request parameter as defined in section 5.3 of <xref target="RFC8995"/>.
 In addition, the registrar shall verify the following parameters from the pledge-voucher-request:</t>
 
 <t><list style="symbols">
-  <t>agent-provided-proximity-registrar-cert: MUST contain the own LDevID(Reg) EE certificate to ensure the registrar in proximity is the target registrar for the request.</t>
-  <t>agent-signed-data: The registrar MUST verify that the data has been signed with the LDevID(RegAgt) credential indicated in the “kid” JOSE header parameter.
+  <t>agent-provided-proximity-registrar-cert: <bcp14>MUST</bcp14> contain the own LDevID(Reg) EE certificate to ensure the registrar in proximity is the target registrar for the request.</t>
+  <t>agent-signed-data: The registrar <bcp14>MUST</bcp14> verify that the data has been signed with the LDevID(RegAgt) credential indicated in the "kid" JOSE header parameter.
 If the certificate is not contained in the agent-sign-cert component of the pledge-voucher-request, it must fetch the certificate from a repository.</t>
   <t>agent-sign-cert: May contain the base64-encoded LDevID(RegAgt)  certificate.
-If contained the registrar MUST verify that the connected credential used to sign the data was valid at signature creation time and that the corresponding registrar-agent was authorized to be involved in the bootstrapping.</t>
+If contained the registrar <bcp14>MUST</bcp14> verify that the connected credential used to sign the data was valid at signature creation time and that the corresponding registrar-agent was authorized to be involved in the bootstrapping.</t>
 </list></t>
 
-<t>If validation fails the registrar SHOULD respond with the HTTP 404 error code to the registrar-agent.
+<t>If validation fails the registrar <bcp14>SHOULD</bcp14> respond with the HTTP 404 error code to the registrar-agent.
 If the pledge-voucher-request is in an unknown format, then an HTTP 406 error code is more appropriate.</t>
 
 <t>If validation succeeds, the registrar will accept the pledge request to join the domain as defined in section 5.3 of <xref target="RFC8995"/>.
 The registrar then establishes a TLS connection with the MASA as described in section 5.4 of <xref target="RFC8995"/> to obtain a voucher for the pledge.</t>
 
-<t>The registrar SHALL construct the body of the registrar-voucher-request object as defined in <xref target="RFC8995"/>.
-The encoding SHALL be done as JOSE object as defined in <xref target="I-D.ietf-anima-jws-voucher"/>.</t>
+<t>The registrar <bcp14>SHALL</bcp14> construct the body of the registrar-voucher-request object as defined in <xref target="RFC8995"/>.
+The encoding <bcp14>SHALL</bcp14> be done as JOSE object as defined in <xref target="I-D.ietf-anima-jws-voucher"/>.</t>
 
-<t>The header of the registrar-voucher-request SHALL contain the following parameter as defined in <xref target="RFC7515"/>:</t>
+<t>The header of the registrar-voucher-request <bcp14>SHALL</bcp14> contain the following parameter as defined in <xref target="RFC7515"/>:</t>
 
 <t><list style="symbols">
   <t>alg: algorithm used for creating the object signature.</t>
   <t>x5c: contains the base64-encoded registrar LDevID certificate.</t>
 </list></t>
 
-<t>The body of the registrar-voucher-request object MUST contain the following parameter as part of the voucher as defined in <xref target="RFC8995"/>:</t>
+<t>The body of the registrar-voucher-request object <bcp14>MUST</bcp14> contain the following parameter as part of the voucher as defined in <xref target="RFC8995"/>:</t>
 
 <t><list style="symbols">
   <t>created-on: contains the current date and time in yang:date-and-time format for the registrar-voucher-request creation time.</t>
   <t>nonce: copied form the pledge-voucher-request</t>
   <t>serial-number: contains the base64-encoded product-serial-number.
-The registrar MUST verify that the product-serial-number contained in the IDevID certificate of  the pledge matches the serial-number field in the pledge-voucher-request.
-In addition, it MUST be equal to the serial-number field contained in the agent-signed data of pledge-voucher-request.</t>
+The registrar <bcp14>MUST</bcp14> verify that the product-serial-number contained in the IDevID certificate of  the pledge matches the serial-number field in the pledge-voucher-request.
+In addition, it <bcp14>MUST</bcp14> be equal to the serial-number field contained in the agent-signed data of pledge-voucher-request.</t>
   <t>assertion: contains the voucher assertion requested the pledge (agent-proximity).
 The registrar provides this information to assure successful verification of agent proximity based on the agent-signed-data.</t>
 </list></t>
@@ -853,7 +881,7 @@ The registrar provides this information to assure successful verification of age
 <t>The voucher can be optionally enhanced with the following additional parameter as defined in <xref target="voucher-request-prm-yang"/>:</t>
 
 <t><list style="symbols">
-  <t>agent-sign-cert: Contain the base64-encoded LDevID(RegAgt) EE certificate if MASA verification of agent-proximity is required to provide the assertion “agent-proximity”.</t>
+  <t>agent-sign-cert: Contain the base64-encoded LDevID(RegAgt) EE certificate if MASA verification of agent-proximity is required to provide the assertion "agent-proximity".</t>
 </list></t>
 
 <t>The object is signed using the registrar LDevID(Reg) credential, which corresponds to the certificate signaled in the JOSE header.</t>
@@ -878,32 +906,32 @@ The registrar provides this information to assure successful verification of age
 }
 ]]></artwork></figure>
 
-<t>The registrar sends the registrar-voucher-request to the MASA with an HTTP-over-TLS POST at the endpoint “/.well-known/brski/requestvoucher”.</t>
+<t>The registrar sends the registrar-voucher-request to the MASA with an HTTP-over-TLS POST at the endpoint "/.well-known/brski/requestvoucher".</t>
 
 <t>The registrar-voucher-request Content-Type is defined in <xref target="I-D.ietf-anima-jws-voucher"/> as: <spanx style="verb">application/voucher-jws+json</spanx></t>
 
-<t>The registrar SHOULD include an “Accept” header field indicating the acceptable media type for the voucher-response.
-The media type “application/voucher-jws+json” is defined in <xref target="I-D.ietf-anima-jws-voucher"/>.</t>
+<t>The registrar <bcp14>SHOULD</bcp14> include an "Accept" header field indicating the acceptable media type for the voucher-response.
+The media type "application/voucher-jws+json" is defined in <xref target="I-D.ietf-anima-jws-voucher"/>.</t>
 
-<t>Once the MASA receives the registrar-voucher-request it SHALL perform the verification of the contained components as described in section 5.5 in <xref target="RFC8995"/>.</t>
+<t>Once the MASA receives the registrar-voucher-request it <bcp14>SHALL</bcp14> perform the verification of the contained components as described in section 5.5 in <xref target="RFC8995"/>.</t>
 
-<t>In addition, the following additional processing SHALL be done for components contained in the prior-signed-voucher-request:</t>
+<t>In addition, the following additional processing <bcp14>SHALL</bcp14> be done for components contained in the prior-signed-voucher-request:</t>
 
 <t><list style="symbols">
-  <t>agent-provided-proximity-registrar-cert: The MASA MAY verify that this field contains the LDevID(Reg) certificate.
-If so, it MUST be consistent with the certificate used to sign the registrar-voucher-request.</t>
-  <t>agent-signed-data: The MASA MAY verify this field to be able to provide an assertion “agent-proximity”.
-If so, the agent-signed-data MUST contain the product-serial-number of the pledge contained in the serial-number component of the prior-signed-voucher and also in serial-number component of  the registrar-voucher-request.
-The LDevID(RegAgt) used to generate provide the signature is identified by the “kid” parameter of the JOSE header (agent-signed-data).
-If the assertion “agent-proximity” is requested, the registrar-voucher-request MUST contain the corresponding LDevID(RegAgt) EE certificate in the agent-sign-cert, which can be verified by the MASA as issued by the same domain CA as the LDevID(Reg) EE certificate.
-If the agent-sign-cert is not provided, the MASA MAY provide a lower level assertion “logged” or “verified”</t>
+  <t>agent-provided-proximity-registrar-cert: The MASA <bcp14>MAY</bcp14> verify that this field contains the LDevID(Reg) certificate.
+If so, it <bcp14>MUST</bcp14> be consistent with the certificate used to sign the registrar-voucher-request.</t>
+  <t>agent-signed-data: The MASA <bcp14>MAY</bcp14> verify this field to be able to provide an assertion "agent-proximity".
+If so, the agent-signed-data <bcp14>MUST</bcp14> contain the product-serial-number of the pledge contained in the serial-number component of the prior-signed-voucher and also in serial-number component of  the registrar-voucher-request.
+The LDevID(RegAgt) used to generate provide the signature is identified by the "kid" parameter of the JOSE header (agent-signed-data).
+If the assertion "agent-proximity" is requested, the registrar-voucher-request <bcp14>MUST</bcp14> contain the corresponding LDevID(RegAgt) EE certificate in the agent-sign-cert, which can be verified by the MASA as issued by the same domain CA as the LDevID(Reg) EE certificate.
+If the agent-sign-cert is not provided, the MASA <bcp14>MAY</bcp14> provide a lower level assertion "logged" or "verified"</t>
 </list></t>
 
-<t>If validation fails, the MASA SHOULD respond with an HTTP error code to the registrar.
+<t>If validation fails, the MASA <bcp14>SHOULD</bcp14> respond with an HTTP error code to the registrar.
 The error codes are kept as defined in section 5.6 of <xref target="RFC8995"/>, <!-- XXX -->and comprise the response codes 403, 404, 406, and 415.</t>
 
-<t>The voucher response format is as indicated in the submitted Accept header fields or based on the MASA’s prior understanding of proper format for this pledge.
-Specifically for the pledge-responder-mode the “application/voucher-jws+json” as defined in <xref target="I-D.ietf-anima-jws-voucher"/> is applied.
+<t>The voucher response format is as indicated in the submitted Accept header fields or based on the MASA's prior understanding of proper format for this pledge.
+Specifically for the pledge-responder-mode the "application/voucher-jws+json" as defined in <xref target="I-D.ietf-anima-jws-voucher"/> is applied.
 The syntactic details of vouchers are described in detail in <xref target="RFC8366"/>. <xref target="MASA-vr"/> shows an example of the contents of a voucher.</t>
 
 <figure title="Example of MASA issued voucher" anchor="MASA-vr"><artwork align="left"><![CDATA[
@@ -930,25 +958,25 @@ The syntactic details of vouchers are described in detail in <xref target="RFC83
 After receiving the voucher the registrar may evaluate the voucher for transparency and logging purposes as outlined in section 5.6 of <xref target="RFC8995"/>.
 The registrar forwards the voucher without changes to the registrar-agent.</t>
 
-<t>After receiving the voucher, the registrar-agent sends the pledge’s enrollment-request to the registrar.
+<t>After receiving the voucher, the registrar-agent sends the pledge's enrollment-request to the registrar.
 Deviating from BRSKI the enrollment-request is not a raw PKCS#10 request.
-As the registrar-agent is involved in the exchange, the PKCS#10 is contained in the JOSE object. The signature is created using the pledge’s IDevID to provide proof-of-identity as outlined in <xref target="per"/>.</t>
+As the registrar-agent is involved in the exchange, the PKCS#10 is contained in the JOSE object. The signature is created using the pledge's IDevID to provide proof-of-identity as outlined in <xref target="per"/>.</t>
 
-<t>When using EST, the registrar-agent sends the enrollment request to the registrar with an HTTP-over-TLS POST at the endpoint “/.well-known/est/simpleenroll”.</t>
+<t>When using EST, the registrar-agent sends the enrollment request to the registrar with an HTTP-over-TLS POST at the endpoint "/.well-known/est/simpleenroll".</t>
 
 <t>The enrollment-request Content-Type is: <spanx style="verb">application/jose</spanx></t>
 
-<t>If validation of the wrapping signature fails, the registrar SHOULD respond with the HTTP 404 error code.
+<t>If validation of the wrapping signature fails, the registrar <bcp14>SHOULD</bcp14> respond with the HTTP 404 error code.
 If the voucher-request is in an unknown format, then an HTTP 406 error code is more appropriate.
-A situation that could be resolved with administrative action (such as adding a vendor/manufacturer IDevID CA as trusted party) MAY be responded with an 403 HTTP error code.</t>
+A situation that could be resolved with administrative action (such as adding a vendor/manufacturer IDevID CA as trusted party) <bcp14>MAY</bcp14> be responded with an 403 HTTP error code.</t>
 
 <t>This results in a deviation from the content types used in <xref target="RFC7030"/> and results in additional processing at the domain registrar as EST server as following.
 Note that the registrar is already aware that the bootstrapping is performed in a pledge-responder-mode due to the use of the LDevID(RegAgt) certificate in the TLS establishment and the provided pledge-voucher-request in JOSE object.</t>
 
 <t><list style="symbols">
-  <t>If registrar receives the enrollment-request with the Content Type application/jose, it MUST verify the signature using the certificate indicated in the JOSE header.</t>
-  <t>The domain registrar verifies that the serial-number contained in the pledge’s IDevID certificate contained in the JOSE header as being accepted to join the domain, based on the verification of the pledge-voucher-request.</t>
-  <t>If both succeed, the registrar utilizes the PKCS#10 request contained in the JOSE body as “P10” parameter of “ietf-sztp-csr:csr” for further processing of the enrollment request with the domain CA.</t>
+  <t>If registrar receives the enrollment-request with the Content Type application/jose, it <bcp14>MUST</bcp14> verify the signature using the certificate indicated in the JOSE header.</t>
+  <t>The domain registrar verifies that the serial-number contained in the pledge's IDevID certificate contained in the JOSE header as being accepted to join the domain, based on the verification of the pledge-voucher-request.</t>
+  <t>If both succeed, the registrar utilizes the PKCS#10 request contained in the JOSE body as "P10" parameter of "ietf-sztp-csr:csr" for further processing of the enrollment request with the domain CA.</t>
 </list></t>
 
 <t>[RFC Editor: please delete] /*</t>
@@ -966,7 +994,7 @@ accept RA-verified requests.
 */</t>
 </list></t>
 
-<t>A successful interaction with the domain CA will result in the pledge LDevID EE certificate, which is then forwarded by the registrar to the registrar-agent using the content type “application/pkcs7-mime”.</t>
+<t>A successful interaction with the domain CA will result in the pledge LDevID EE certificate, which is then forwarded by the registrar to the registrar-agent using the content type "application/pkcs7-mime".</t>
 
 <t>[RFC Editor: please delete] /*</t>
 
@@ -974,16 +1002,16 @@ accept RA-verified requests.
 application/jose object with a signature of the domain registrar.
 Note:
 Communication between domain CA and registrar is of content
-type “application/pkcs7-mime”
+type "application/pkcs7-mime"
 Communication between registrar, registrar-agent and further to the pledge
-should be of content type “application/jose” . */</t>
+should be of content type "application/jose" . */</t>
 
 <t>The registrar-agent has now finished the exchanges with the domain registrar and can supply the voucher-response (from MASA via Registrar) and the enrollment-response (LDevID EE certificate) to the pledge.
 It can close the TLS connection to the domain registrar and provide the objects to the pledge(s).
 The content of the response objects is defined through the voucher <xref target="RFC8366"/> and the certificate <xref target="RFC5280"/>.</t>
 
 </section>
-<section anchor="exchanges_uc2_3" title="Response Object Supply by Registrar-Agent to Pledge">
+<section anchor="exchanges_uc2_3"><name>Response Object Supply by Registrar-Agent to Pledge</name>
 
 <t>The following description assumes that the registrar-agent has obtained the response objects from the domain registrar.
 It will re-start the interaction with the pledge.
@@ -1014,17 +1042,17 @@ To contact the pledge, it may either discover the pledge as described in <xref t
 
 <t>The registrar-agent provides the information via two distinct endpoints to the pledge as following.</t>
 
-<t>The voucher response is provided with a HTTP POST using the operation path value of “/.well-known/brski/pledge-voucher”.</t>
+<t>The voucher response is provided with a HTTP POST using the operation path value of "/.well-known/brski/pledge-voucher".</t>
 
-<t>The registrar-agent voucher-response Content-Type header is “application/voucher-jws+json and contains the voucher as provided by the MASA. An example if given in <xref target="MASA-vr"/>.</t>
+<t>The registrar-agent voucher-response Content-Type header is "application/voucher-jws+json and contains the voucher as provided by the MASA. An example if given in <xref target="MASA-vr"/>.</t>
 
 <t>The pledge verifies the voucher as described in section 5.6.1 in <xref target="RFC8995"/>.</t>
 
-<t>After successful verification the pledge MUST reply with a status telemetry message as defined in section 5.7 of <xref target="RFC8995"/>.
+<t>After successful verification the pledge <bcp14>MUST</bcp14> reply with a status telemetry message as defined in section 5.7 of <xref target="RFC8995"/>.
 As for the other objects, the defined object is provided with an additional signature using JOSE. The pledge generates the voucher-status-object and provides it in the response message to the registrar-agent.</t>
 
-<t>The response has the Content-Type “application/jose”, signed using the IDevID of the pledge as shown in <xref target="vstat"/>.
-As the reason field is optional (see <xref target="RFC8995"/>), it MAY be omitted in case of success.</t>
+<t>The response has the Content-Type "application/jose", signed using the IDevID of the pledge as shown in <xref target="vstat"/>.
+As the reason field is optional (see <xref target="RFC8995"/>), it <bcp14>MAY</bcp14> be omitted in case of success.</t>
 
 <figure title="Example of pledge voucher-status telemetry" anchor="vstat"><artwork align="left"><![CDATA[
 {
@@ -1041,7 +1069,7 @@ As the reason field is optional (see <xref target="RFC8995"/>), it MAY be omitte
 }
 ]]></artwork></figure>
 
-<t>The enrollment response is provided with a HTTP POST using the operation path value of “/.well-known/brski/pledge-enrollment”.</t>
+<t>The enrollment response is provided with a HTTP POST using the operation path value of "/.well-known/brski/pledge-enrollment".</t>
 
 <t>The registrar-agent enroll-response Content-Type header, when using EST <xref target="RFC7030"/> as enrollment protocol between the registrar-agent and the infrastructure, is:</t>
 
@@ -1056,12 +1084,12 @@ to the LDevID or it may be considered for enrollment status to
 ensure that in an error case the registrar providing the certificate
 can be identified. */</t>
 
-<t>After successful verification the pledge MUST reply with a status telemetry message as defined in section 5.9.4 of <xref target="RFC8995"/>.
+<t>After successful verification the pledge <bcp14>MUST</bcp14> reply with a status telemetry message as defined in section 5.9.4 of <xref target="RFC8995"/>.
 As for the other objects, the defined object is provided with an additional signature using JOSE.
 The pledge generates the enrollment status and provides it in the response message to the registrar-agent.</t>
 
-<t>The response has the Content-Type “application/jose”, signed using the LDevID of the pledge as shown in <xref target="estat"/>.
-As the reason field is optional, it MAY be omitted in case of success.</t>
+<t>The response has the Content-Type "application/jose", signed using the LDevID of the pledge as shown in <xref target="estat"/>.
+As the reason field is optional, it <bcp14>MAY</bcp14> be omitted in case of success.</t>
 
 <figure title="Example of pledge enroll-status telemetry" anchor="estat"><artwork align="left"><![CDATA[
 {
@@ -1081,7 +1109,7 @@ As the reason field is optional, it MAY be omitted in case of success.</t>
 <t>Once the registrar-agent has collected the information, it can connect to the registrar agent to provide the status responses to the registrar.</t>
 
 </section>
-<section anchor="exchanges_uc2_4" title="Telemetry status handling (registrar-agent - domain registrar)">
+<section anchor="exchanges_uc2_4"><name>Telemetry status handling (registrar-agent - domain registrar)</name>
 
 <t>The following description assumes that the registrar-agent has collected the status objects from the pledge.
 It will provide the status objects to the registrar for further processing and audit log
@@ -1113,42 +1141,42 @@ objects from pledge.</t>
     |                  |              |            |
 ]]></artwork></figure>
 
-<t>The registrar-agent MUST provide the collected pledge voucher-status to the registrar. This status indicates if the pledge could process the voucher successfully or not.</t>
+<t>The registrar-agent <bcp14>MUST</bcp14> provide the collected pledge voucher-status to the registrar. This status indicates if the pledge could process the voucher successfully or not.</t>
 
 <t>If the TLS connection to the registrar was closed, the registrar-agent establishes a TLS connection with the registrar as stated in <xref target="exchanges_uc2_2"/>.</t>
 
-<t>The registrar-agent sends the pledge voucher-status object without modification to the registrar with an HTTP-over-TLS POST using the operation path value of “/.well-known/brski/voucher_status”. The Content-Type header is kept as “application/jose” as described in <xref target="exchangesfig_uc2_3"/> and depicted in the example in <xref target="vstat"/>.</t>
+<t>The registrar-agent sends the pledge voucher-status object without modification to the registrar with an HTTP-over-TLS POST using the operation path value of "/.well-known/brski/voucher_status". The Content-Type header is kept as "application/jose" as described in <xref target="exchangesfig_uc2_3"/> and depicted in the example in <xref target="vstat"/>.</t>
 
-<t>The registrar SHALL verify the signature of the pledge voucher-status and validate that it belongs to an accepted device in his domain based on the contained “serial-number” in the IDevID certificate referenced in the header of the voucher-status object.</t>
+<t>The registrar <bcp14>SHALL</bcp14> verify the signature of the pledge voucher-status and validate that it belongs to an accepted device in his domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher-status object.</t>
 
-<t>According to <xref target="RFC8995"/> section 5.7, the registrar SHOULD respond with an HTTP 200 but MAY simply fail with an HTTP 404 error.
+<t>According to <xref target="RFC8995"/> section 5.7, the registrar <bcp14>SHOULD</bcp14> respond with an HTTP 200 but <bcp14>MAY</bcp14> simply fail with an HTTP 404 error.
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
-Within the server logs the server SHOULD capture this telemetry information.</t>
+Within the server logs the server <bcp14>SHOULD</bcp14> capture this telemetry information.</t>
 
-<t>The registrar SHOULD proceed with collecting and logging status information by requesting the MASA audit-log from the MASA service as described in section 5.8 of <xref target="RFC8995"/>.</t>
+<t>The registrar <bcp14>SHOULD</bcp14> proceed with collecting and logging status information by requesting the MASA audit-log from the MASA service as described in section 5.8 of <xref target="RFC8995"/>.</t>
 
-<t>The registrar-agent MUST provide the pledge’s enroll-status object to the registrar.
+<t>The registrar-agent <bcp14>MUST</bcp14> provide the pledge's enroll-status object to the registrar.
 The status indicates the pledge could process the enroll-response object and holds the corresponding private key.</t>
 
-<t>The registrar-agent sends the pledge enroll-status object without modification to the registrar with an HTTP-over-TLS POST using the operation path value of “/.well-known/brski/enrollstatus”.
-The Content-Type header is kept as “application/jose” as described in <xref target="exchangesfig_uc2_3"/> and depicted in the example in <xref target="estat"/>.</t>
+<t>The registrar-agent sends the pledge enroll-status object without modification to the registrar with an HTTP-over-TLS POST using the operation path value of "/.well-known/brski/enrollstatus".
+The Content-Type header is kept as "application/jose" as described in <xref target="exchangesfig_uc2_3"/> and depicted in the example in <xref target="estat"/>.</t>
 
-<t>The registrar SHALL verify the signature of the pledge enroll-status object and validate that it belongs to an accepted device in his domain based on the contained product-serial-number in the LDevID EE certificate referenced in the header of the enroll-status object.
+<t>The registrar <bcp14>SHALL</bcp14> verify the signature of the pledge enroll-status object and validate that it belongs to an accepted device in his domain based on the contained product-serial-number in the LDevID EE certificate referenced in the header of the enroll-status object.
 Note that the verification of a signature of the object is a deviation form the described handling in section 5.9.4 of <xref target="RFC8995"/>.</t>
 
-<t>According to <xref target="RFC8995"/> section 5.9.4, the registrar SHOULD respond with an HTTP 200 but MAY simply fail with an HTTP 404 error.
+<t>According to <xref target="RFC8995"/> section 5.9.4, the registrar <bcp14>SHOULD</bcp14> respond with an HTTP 200 but <bcp14>MAY</bcp14> simply fail with an HTTP 404 error.
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
-Within the server log the registrar SHOULD capture this telemetry information.</t>
+Within the server log the registrar <bcp14>SHOULD</bcp14> capture this telemetry information.</t>
 
 </section>
 </section>
 </section>
 </section>
-<section anchor="voucher-request-prm-yang" title="Voucher Request Artifact">
+<section anchor="voucher-request-prm-yang"><name>Voucher Request Artifact</name>
 
 <t>The following enhancement extends the voucher-request as defined in <xref target="RFC8995"/> to include additional fields necessary for handling bootstrapping in the pledge-responder-mode.</t>
 
-<section anchor="tree-diagram" title="Tree Diagram">
+<section anchor="tree-diagram"><name>Tree Diagram</name>
 
 <t>The following tree diagram is mostly a duplicate of the contents of <xref target="RFC8995"/>, with the addition of the fields agent-signed-data, the registrar-proximity-certificate, and agent-signing certificate.
 The tree diagram is described in <xref target="RFC8340"/>.
@@ -1177,7 +1205,7 @@ module: ietf-voucher-request-prm
 ]]></artwork></figure>
 
 </section>
-<section anchor="voucher-request-prm-yang-module" title="YANG Module">
+<section anchor="voucher-request-prm-yang-module"><name>YANG Module</name>
 
 <t>The following YANG module extends the <xref target="RFC8995"/> Voucher Request to include a signed artifact from the registrar-agent (agent-signed-data) as well as the registrar-proximity-certificate and the
 agent-signing certificate.</t>
@@ -1342,11 +1370,11 @@ module ietf-voucher-request-prm {
 
 </section>
 </section>
-<section anchor="iana-considerations" title="IANA Considerations">
+<section anchor="iana-considerations"><name>IANA Considerations</name>
 
 <t>This document requires the following IANA actions:</t>
 
-<t>IANA is requested to enhance the Registry entitled: “BRSKI well-known URIs” with the following:</t>
+<t>IANA is requested to enhance the Registry entitled: "BRSKI well-known URIs" with the following:</t>
 
 <figure><artwork align="left"><![CDATA[
  URI                       document  description
@@ -1358,20 +1386,20 @@ module ietf-voucher-request-prm {
 ]]></artwork></figure>
 
 </section>
-<section anchor="privacy-considerations" title="Privacy Considerations">
+<section anchor="privacy-considerations"><name>Privacy Considerations</name>
 
 <t>The credential used by the registrar-agent to sign the data for the pledge in case of the pledge-initiator-mode should not contain personal information.
 Therefore, it is recommended to use an LDevID certificate associated with the device instead of a potential service technician operating the device, to avoid revealing this information to the MASA.</t>
 
 </section>
-<section anchor="security-considerations" title="Security Considerations">
+<section anchor="security-considerations"><name>Security Considerations</name>
 
-<section anchor="exhaustion-attack-on-pledge" title="Exhaustion Attack on Pledge">
+<section anchor="exhaustion-attack-on-pledge"><name>Exhaustion Attack on Pledge</name>
 
 <t>Exhaustion attack on pledge based on DoS attack (connection establishment, etc.)</t>
 
 </section>
-<section anchor="misuse-of-acquired-voucher-and-enrollment-responses-by-registrar-agent" title="Misuse of acquired Voucher and Enrollment responses by Registrar-Agent">
+<section anchor="misuse-of-acquired-voucher-and-enrollment-responses-by-registrar-agent"><name>Misuse of acquired Voucher and Enrollment responses by Registrar-Agent</name>
 
 <t>A Registrar-agent that uses acquired voucher and enrollment response for domain 1 in domain 2 can be detected by the pledge-voucher-request processing on the domain registrar side.
 This requires the domain registrar to verify the proximity-registrar-cert leaf in the pledge-voucher-request against his own LDevID.
@@ -1380,7 +1408,7 @@ In addition, the domain registrar has to verify the association of the pledge to
 <t>Misbinding of pledge by a faked domain registrar is countered as described in BRSKI security considerations (section 11.4).</t>
 
 </section>
-<section anchor="misuse-of-registrar-agent-credentials" title="Misuse of Registrar-Agent Credentials">
+<section anchor="misuse-of-registrar-agent-credentials"><name>Misuse of Registrar-Agent Credentials</name>
 
 <t>Concerns have been raised, that there may be opportunities to misuse the registrar-agent with a valid LDevID.
 This may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the registrar-agent against the domain registrar.
@@ -1388,19 +1416,19 @@ The LDevID certificate for the registrar-agent may be provided by a prior BRSKI 
 Alternatively, the LDevID may be acquired by a service technician after authentication against the issuing CA.</t>
 
 </section>
-<section anchor="yang-module-security-considerations" title="YANG Module Security Considerations">
+<section anchor="yang-module-security-considerations"><name>YANG Module Security Considerations</name>
 
 <t>The enhanced voucher-request described in section <xref target="voucher-request-prm-yang"/> bases on <xref target="RFC8995"/>, but uses a different encoding, based on <xref target="I-D.ietf-anima-jws-voucher"/>.
 Therefore, similar considerations as described in Section 11.7 (Security Considerations) of <xref target="RFC8995"/> apply.
 The YANG module specified in this document defines the schema for data that is subsequently encapsulated by a JOSE signed-data content type, as described <xref target="I-D.ietf-anima-jws-voucher"/>.
 As such, all of the YANG-modeled data is protected from modification.
-The use of YANG to define data structures, via the “yang-data” statement, is relatively
+The use of YANG to define data structures, via the "yang-data" statement, is relatively
 new and distinct from the traditional use of YANG to define an API accessed by network management protocols such as NETCONF <xref target="RFC6241"/> and RESTCONF <xref target="RFC8040"/>.
 For this reason, these guidelines do not follow the template described by Section 3.7 of <xref target="RFC8407"/>.</t>
 
 </section>
 </section>
-<section anchor="acknowledgments" title="Acknowledgments">
+<section anchor="acknowledgments"><name>Acknowledgments</name>
 
 <t>We would like to thank the various reviewers, in particular Brian E. Carpenter and Oskar Camenzind, for their input and discussion on use cases and call flows.</t>
 
@@ -1593,7 +1621,7 @@ For this reason, these guidelines do not follow the template described by Sectio
       <author fullname='Sean Turner'>
 	 <organization>sn3rd</organization>
       </author>
-      <date day='25' month='October' year='2021'/>
+      <date day='8' month='November' year='2021'/>
       <abstract>
 	 <t>   This draft extends the &quot;get-bootstrapping-data&quot; RPC defined in RFC
    8572 to include an optional certificate signing request (CSR),
@@ -1604,8 +1632,8 @@ For this reason, these guidelines do not follow the template described by Sectio
 	 </t>
       </abstract>
    </front>
-   <seriesInfo name='Internet-Draft' value='draft-ietf-netconf-sztp-csr-10'/>
-   <format target='https://www.ietf.org/archive/id/draft-ietf-netconf-sztp-csr-10.txt' type='TXT'/>
+   <seriesInfo name='Internet-Draft' value='draft-ietf-netconf-sztp-csr-11'/>
+   <format target='https://www.ietf.org/archive/id/draft-ietf-netconf-sztp-csr-11.txt' type='TXT'/>
 </reference>
 
 
@@ -1708,7 +1736,7 @@ For this reason, these guidelines do not follow the template described by Sectio
     </references>
 
 
-<section anchor="app_history" title="History of Changes [RFC Editor: please delete]">
+<section anchor="app_history"><name>History of Changes [RFC Editor: please delete]</name>
 
 <t>From IETF draft 00 -&gt; IETF draft 01:</t>
 
@@ -1878,495 +1906,497 @@ boundary conditions.</t>
   </back>
 
 <!-- ##markdown-source:
-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
-UMwBhFkx9TwqLga5o2saGcca2zuSytfcq45gmuiAI+oJQTNLV6Q5izwYjlk4
-ozmqM9LUbcgiOhd+i7f1arVUcgSK6g91JNqvX7NLoqhNANUPJkh71Aqc3vT7
-z261oqdNDSJ/E9FaNOuuD0W0bG6jauKx4qtqJar+mn7RBalnWUr+AhEKbiFo
-CqPV0djnB8U3rwxu1j1FdFxzk6B8XRu7SG+NNNMgptXVygUWX9wNE24EjPHk
-T+D/Z4ddLbbwElMaRdVNuvvvb2Ju4Wa9dd9Y5jBsuA7ihuuuaGcPrv//Cnge
-3b9cwcNLFDy8LMEnlyK49z47Qk0jWU+63ECLOCla8vPgp/A+oI19nPx8j8nc
-Hzqc936Jdg+b6SGp2g9KzX5QKnZP6nUAIAZSz0uRVO1VL7U/6srTXvfteH52
-LJV6ZT72/VOn4+q9zbcKsBjw2tCfaD41noOfQP1AHPXOMZYvHU+y7iy50P1S
-T2Kvu3c6iXq0ThL1b5hEuRsGqqtWMob0xGQi/3wCycq0V+v1qrcMI7ajElrA
-gvJx7RqRJDzbHhGN8Zi0GttJ0XEcb2f8NNmkipC32N6N4pMm5RJN4Vj1mZ7Y
-TcwD+P3p0b+8PT49OjR+hpZiB+qMedMbWwwPXh3hcAx2CZppX+3/q6v1eb8R
-kUn1DBa2OdIVd6PV2smvwEbKqd91NBATO6tLea0aj70eml7OYawzZti80meA
-oWishDw/6XeMeXfxdGB/Omkd1q4P5pfIQ/B2tF9rVVpMjbu0pfL5DiBpO9sZ
-YpqcmYLps1bZYuMI4Gl0GXWn0KvqfjHhOCIVbwZnp1t0tyrBHbw6k8Aeinrd
-6hzUmNg6TKJOQe6uJBPunZ3y6HcfofYwQswnB7w82xtJIOOaUKzx+mE+urp9
-HLnuGwjk23PDQKB/Gww26yzDtNcbfMG653hRPBUpgF3AbUUPZcnGPklQG72B
-Q0bedOE9HiCCGKKRjvJpf+q/u9G34417QVBHJyzatYXjVfUcHrEt3LSvoP0E
-Hmt/j8IiO6zkquY9vur3KupMAk7qa6xkoFJpIvb41qVuRd3eP4xWuwBiiqpf
-LTQrMNgiWHpeuP6VvQVqlfWrK4DWp6G0QgsT8QBR2KztCthfu9VrVcKoraoy
-YkKFtnvrSFdQxC5bNnPpp95K/gjTnlyboxWIiC5NtG66eqSe59Z0LVmUNdqA
-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
-JIZGTSyejVKhK846Hvx/khEmB41bAQA=
+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
+nSokhkZNLJ6NUqErzjoa/C9oRaOLI10BAA==
 
 -->
 

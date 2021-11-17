@@ -77,10 +77,10 @@ informative:
 --- abstract
 
 This document defines enhancements to bootstrapping a remote secure key infrastructure (BRSKI, {{RFC8995}} ) to facilitate bootstrapping in domains featuring no or only timely limited connectivity between a pledge and the domain registrar.
-This specifically targets situations, in which the interaction model changes from a pledge-initiator-mode as used in BRSKI to a pledge-responder-mode as described here.
-To support this functionality BRSKI-PRM introduces a new registrar-agent component, which facilitates the communication between pledge and registrar during the bootstrapping phase.
-To support the establishment of a trust relation between a pledge and the domain registrar, BRSKI-PRM relies on the exchange of authenticated self-contained objects (signature-wrapped objects).
-The defined approach is agnostic regarding the utilized enrollment protocol, deployed by the registrar to communicate with the Domain CA.
+It specifically targets situations, in which the interaction model changes from a pledge-initiator-mode, as used in BRSKI, to a pledge-responder-mode as described in this document.
+To support both, BRSKI-PRM introduces a new registrar-agent component, which facilitates the communication between pledge and registrar during the bootstrapping phase.
+To enable the establishment of a trust relation between a pledge and the domain registrar, BRSKI-PRM relies on the exchange of authenticated self-contained objects (signature-wrapped objects).
+The defined approach is agnostic regarding the utilized enrollment protocol, deployed by the domain registrar to communicate with the Domain CA.
 
 
 --- middle
@@ -89,17 +89,17 @@ The defined approach is agnostic regarding the utilized enrollment protocol, dep
 BRSKI as defined in {{RFC8995}} specifies a solution for secure zero-touch (automated) bootstrapping of devices (pledges) in a (customer) site domain.
 This includes the discovery of network elements in the target domain, time synchronization, and the exchange of security information necessary to establish trust between a pledge and the domain.
 Security information about the target domain, specifically the target domain certificate, is exchanged utilizing voucher objects as defined in {{RFC8366}}.
-These vouchers are signed objects, which are provided via the domain registrar to the pledge and originate from a Manufacturer's Authorized Signing Authority (MASA).
+These vouchers are signed objects, provided via the domain registrar to the pledge and originate from a Manufacturer's Authorized Signing Authority (MASA).
 
-BRSKI addresses scenarios in which the pledge acts as client for the bootstrapping and is the initiator of the bootstrapping.
+BRSKI addresses scenarios in which the pledge acts as client for the bootstrapping and is the initiator of the bootstrapping (this document refers to the approach as pledge-initiator-mode).
 In industrial environments the pledge may behave as a server and thus does not initiate the bootstrapping with the domain registrar.
-In this scenarios it is expected that the pledge will be triggered to generate request objects to be bootstrapped in the registrar's domain.
+In this scenarios it is expected that the pledge will be triggered to generate request objects to be bootstrapped in the registrar's domain (this document refers to the approach as pledge-responder-mode).
 For this, an additional component is introduced acting as an agent for the domain registrar (registrar-agent) towards the pledge.
 This may be a functionality of a commissioning tool or it may be even co-located with the registrar.
 In contrast to BRSKI the registrar-agent performs the object exchange with the pledge and provides/retrieves data objects to/from the domain registrar.
-For the interaction with the domain registrar the registrar agent will use existing BRSKI endpoints.
+For the interaction with the domain registrar the registrar-agent will use existing BRSKI endpoints.
 
-The goal is to enhance BRSKI to be usable also for a pledge in responder mode.
+The goal is to enhance BRSKI to support pledges in responder mode also.
 This is addressed by
 
 * introducing the registrar-agent as new component to facilitate the communication between the pledge and the registrar, when the pledge is in responder mode (acting as server).
@@ -115,17 +115,12 @@ For the enrollment of devices BRSKI relies on EST {{RFC7030}} to request and dis
 EST in turn relies on a binding of the certification request to an underlying TLS connection between the EST client and the EST server.
 According to BRSKI the domain registrar acts as EST server and is also acting as registration authority (RA) for its domain.
 To utilize the EST server endpoints on the domain-registrar, the registrar-agent defined in this document will act as client towards the domain registrar.
-The registrar-agent will act as client when communicating with the pledge in responder mode. 
+The registrar-agent will also act as client when communicating with the pledge in responder mode. 
 Here, TLS with server-side, certificate-based authentication is not directly applicable, as the pledge only possesses an IDevID certificate, which does not contain a subject alternative name (SAN) for the target domain and does also not contain a TLS server flag. 
 This is one reason for relying on higher layer security by using signature wrapped objects for the exchange between the pledge and the registrar agent. 
-This additional wrapping signature requires some pre-processing specifically for EST, as it currently uses PKCS#10 requests only. 
+A further reason is the application on different transports, for which TLS may not be available, like Bluetooth or NFC.
+As the described solution will rely on additional wrapping signature it will require pre-processing specifically for EST, as it currently uses PKCS#10 requests only. 
 
-
-[RFC editor: please delete] /* Points should be addressed by the part above:
-* include reasoning for not using TLS (IDevID does not contain SAN, TLS server flag) between the pledge and the registrar-agent.
-* Enhancements to EST state machine necessary to process self-contained objects on the registrar-agent and domain-registrar
-* accepting
-*/
 
 # Terminology
 
@@ -140,6 +135,14 @@ CA:
 
 RA:
 : Registration authority, an optional system component to which a CA delegates certificate management functions such as authorization checks.
+
+
+POP:
+: Prove of possession (of a private key)
+
+
+POI:
+: Prove of identity 
 
 
 IED:
@@ -174,23 +177,23 @@ authenticated self-contained object:
 
 ## Supported Environment {#sup-env}
 
-The solution is intended to be applicable in domains in which pledges have no direct connection to the domain registrar, but are expected to be managed by the registrar.
+The described solution is applicable in domains in which pledges have no direct connection to the domain registrar, but are expected to be managed by this registrar.
 This can be motivated by pledges featuring a different technology stack or by pledges without an existing connection to the domain registrar during bootstrapping.
 These pledges are likely to act in a server role.
-Therefore, the pledge has to offer endpoints on which it can be triggered for the generation of voucher-request objects and certification objects as well as to provide the response objects to the pledge.
+Therefore, the pledge has to offer endpoints on which it can be triggered for the generation of pledge-voucher-request objects and certification objects as well as to provide the response objects to the pledge.
 
 
 ## Application Examples {#app-examples}
 
-The following examples are intended to motivate the support of additional bootstrapping approaches in general by introducing industrial applications cases, which could leverage BRSKI as such but also require support of in situation, in which the pledge acts as a server and only answers requests.
+The following examples are intended to motivate the support of additional bootstrapping approaches in general by introducing industrial applications cases, which could leverage BRSKI as such but also require support a pledge acting as server and only answers requests as well as scenarios with limited connectivity to the registrar.
 
 
 ### Building Automation
 
-In building automation, a use case can be described by a detached building or the basement of a building equipped with sensor, actuators, and controllers connected, but with only limited or no connection to the centralized building management system.
+In building automation, a use case can be described by a detached building (or a cabinet) or the basement of a building equipped with sensor, actuators, and controllers connected, but with only limited or no connection to the centralized building management system.
 This limited connectivity may be during the installation time but also during operation time.
-During the installation in the basement, a service technician collects the device specific information from the basement network and provides them to the central building management system, e.g., using a laptop or even a mobile phone to transport the information.
-A domain registrar may be part of the central building management system and already and already operating in the installation network.
+During the installation in the basement, a service technician collects the device specific information from the basement network and provides them to the central building management system, e.g., using a laptop or a mobile device to transport the information.
+A domain registrar may be part of the central building management system and already be operational in the installation network.
 The central building management system can then provide operational parameters for the specific devices in the basement.
 This operational parameters may comprise values and settings required in the operational phase of the sensors/actuators, beyond them a certificate issued by the operator to authenticate against other components and services.
 These operational parameters are then provided to the devices in the basement facilitated by the service technician's laptop.
@@ -210,55 +213,53 @@ There may be the situation in which the target domain does not offer enough secu
 
 
 
-
 # Requirements Discussion and Mapping to Solution-Elements {#req-sol}
 
-Based on the intended target environment described in {{sup-env}} and the motivated application examples described in {{app-examples}} the following base requirements are derived to support authenticated self-contained objects as container carrying the request and response messages to support the communication over a registrar-agent.
+Based on the intended target environment described in {{sup-env}} and the motivated application examples described in {{app-examples}} the following base requirements are derived to support to support the communication between a pledge and a registrar over a registrar-agent.
 
 At least the following properties are required:
 
-* Proof of Possession: proves that an entity possesses and controls the private key corresponding to the public key contained in the certification request, typically by adding a signature using the private key.
+* Proof of Possession (POP): proves that an entity possesses and controls the private key corresponding to the public key contained in the certification request, typically by adding a signature using the private key.
 
-* Proof of Identity: provides data-origin authentication of a data object, e.g., a certificate request, utilizing an existing IDevID.
+* Proof of Identity (POI): provides data-origin authentication of a data object, e.g., a certificate request, utilizing an existing IDevID.
   Certificate updates may utilize the certificate that is to be updated.
 
-Solution examples (not complete) based on existing technology are provided with the focus on existing IETF documents:
+Solution examples based on existing technology are provided with the focus on existing IETF documents:
 
-* Certification request objects: Certification requests are data structures which may only protect the integrity of the contained data providing a proof-of-private-key-possession for locally generated key pairs.
-  An example is:
+* Voucher request and response objects as used in {{RFC8995}} already provide both, POP and POI, through a digital signature to protect the integrity of the voucher object, while the corresponding signing certificate contains the identity of the signer.
 
-  * PKCS#10 {{RFC2986}}: Defines a structure for a certification request.
-    The structure is signed to ensure integrity protection and proof of possession of the private key of the requester that corresponds to the contained public key.
-
-  Note that the integrity of the certification request is bound to the public key contained in the certification request by performing a signature operation with the corresponding private key.
-  In the considered application examples, this is not sufficient to provide data origin authentication and needs to be bound to the existing credential of the pledge (IDevID) additionally.
-  This binding supports the authorization decision for the certification request through the provisioning of a proof of identity.
+* Certification request objects: Certification requests are data structures containing the information from a requester for a CA to create a certificate. 
+  The certification request format in BRSKI utilizes PKCS#10 {{RFC2986}}.
+  Here, the structure is signed to ensure integrity protection and proof of possession of the private key of the requester that corresponds to the contained public key.
+  In the considered application examples, this is not sufficient to provide data origin authentication and therefore needs to be bound to the existing credential of the pledge (IDevID) additionally.
+  This binding supports the authorization decision for the certification request through a proof of identity.
   The binding of data origin authentication to the certification request may be delegated to the protocol used for certificate management or it may be provided directly by the certification request object.
+  While BRSKI uses the binding to TLS, BRSKI-PRM aims at an additional signature of the PCKS#10 object using the existing credential on the pledge (IDevID).
 
 
 # Architectural Overview and Communication Exchanges {#architecture}
 
-For BRSKI with pledge in responder mode, the base system architecture defined in BRSKI {{RFC8995}} is enhanced to facilitate the use case.
+For BRSKI with pledge in responder mode, the base system architecture defined in BRSKI {{RFC8995}} is enhanced to facilitate the new use case.
 The pledge-responder-mode allows delegated bootstrapping using a registrar-agent instead of a direct connection from the pledge to the domain registrar.
 The communication model between registrar-agent and pledge in this document assumes that the pledge is acting as server and responds to requests.
 
-Necessary enhancements to support authenticated self-contained objects for certificate enrollment are kept on a minimum to ensure reuse of already defined architecture elements and interactions.
+Necessary enhancements to support authenticated self-contained objects for certificate enrollment are kept at a minimum to ensure reuse of already defined architecture elements and interactions.
 
 For the authenticated self-contained objects used for the certification request, BRSKI-PRM relies on the defined message wrapping mechanisms of the enrollment protocols stated in {{req-sol}} above.
 
 
 ## Pledge-responder-mode (PRM): Registrar-agent Communication with Pledges {#uc2}
 
-To support mutual trust establishment of pledges, not directly connected to the domain registrar, this approach relies on the exchange of authenticated self-contained objects (the voucher request/response objects as known from BRSKI and the enrollment request/response objects as introduced by BRSKI-PRM).
-This allows independence of a potential protection provided by the used transport protocol.
+To support mutual trust establishment of pledges, not directly connected to the domain registrar, this document relies on the exchange of authenticated self-contained objects (the voucher request/response objects as known from BRSKI and the enrollment request/response objects as introduced by BRSKI-PRM).
+This allows independence from protection provided by the utilized transport protocol.
 
-In contrast to BRSKI, the object exchanges performed with the help of a registrar-agent component, supporting the interaction of the pledge with the domain registrar.
-It may be an integrated functionality of a commissioning tool.
+In contrast to BRSKI, the object exchanges with the domain registrar are performed with the help of a registrar-agent component.
+The registrar-agent may be an integrated functionality of a commissioning tool.
 This leads to enhancements of the logical elements in the BRSKI architecture as shown in {{uc2figure}}.
 The registrar-agent interacts with the pledge to acquire and to supply the required data objects for bootstrapping, which are also exchanged between the registrar-agent and the domain registrar.
-Moreover, the addition of the registrar-agent also influences the sequences for the data exchange between the pledge and the domain registrar described in {{RFC8995}}.
-The general goal for the registrar-agent application is the reuse of already defined endpoints of the domain registrar side.
-The functionality of the already existing registrar endpoints may need small enhancements.
+Moreover, the addition of the registrar-agent influences the sequences of the data exchange between the pledge and the domain registrar described in {{RFC8995}}.
+A general goal for the registrar-agent application is the reuse of already defined endpoints of the domain registrar side.
+The functionality of the already existing registrar endpoints may need small enhancements to cope with the additional signatures.
 
 
 ~~~~
@@ -302,7 +303,7 @@ It is recommended to use short lived registrar-agent LDevIDs in the range of day
 If a registrar detects a request originates from a registrar-agent it is able to switch the operational mode from BRSKI to BRSKI-PRM.
 
 In addition, the domain registrar may authenticate the user operating the registrar-agent to perform additional authorization of a pledge bootstrapping action.
-Examples for such user level authentication are the application of HTTP authentication or the usage of authorization tokens or other.
+Examples for such user level authentication may be HTTP authentication or the usage of authorization tokens or other.
 This is out of scope of this document.
 
 The following list describes the components in a (customer) site domain:
@@ -318,7 +319,7 @@ The following list describes the components in a (customer) site domain:
 
   * As the registrar-agent must be able to request data objects for bootstrapping of the pledge, the pledge must offer corresponding endpoints.
 
-  * The registrar-agent may provide additional data to the pledge, in the context of the triggering request.
+  * The registrar-agent may provide additional data to the pledge, in the context of the triggering request, to make itself visible to the domain registrar.
 
   * Order of exchanges in the call flow may be different as the registrar-agent collects both objects, pledge-voucher-request objects and pledge-enrollment-request objects, at once and provides them to the registrar.
     This approach may also be used to perform a bulk bootstrapping of several devices.
@@ -328,12 +329,12 @@ The following list describes the components in a (customer) site domain:
 
 * Registrar-agent: provides a communication path to exchange data objects between the pledge and the domain registrar.
   The registrar-agent facilitates situations, in which the domain registrar is not directly reachable by the pledge, either due to a different technology stack or due to missing connectivity.
-  The registrar-agent triggers the pledge to create bootstrapping information such as voucher  request objects and enrollment request objects from one or multiple pledges at once and performs a bulk bootstrapping based on the collected data.
+  The registrar-agent triggers a pledge to create bootstrapping information such as voucher-request objects and enrollment-request objects from one or multiple pledges at once and performs a bulk bootstrapping based on the collected data.
   The registrar-agent is expected to possess information of the domain registrar, either by configuration or by using the discovery mechanism defined in {{RFC8995}}.
   There is no trust assumption between the pledge and the registrar-agent as only authenticated self-contained objects are applied, which are transported via the registrar-agent and provided either by the pledge or the registrar.
-  The trust assumption between the registrar-agent and the registrar bases on an own LDevID of the registrar-agent, acting as registrar component.
-  This allows the registrar-agent to authenticate towards the registrar.
-  The registrar can utilize this authentication to distinguish communication with a pledge from a registrar-agent based on the exchanged objects.
+  The trust assumption between the registrar-agent and the registrar bases on the LDevID of the registrar-agent, provided by the PKI responsible for the domain. 
+  This allows the registrar-agent to authenticate towards the registrar, e.g., in a TLS handshake.
+  Based on this, the registrar is able to distinguish a pledge from a registrar-agent during the session establishment.
 
 * Join Proxy: same functionality as described in {{RFC8995}}.
   Note that it may be used by the registrar-agent instead of the pledge to find the registrar, if not configured.
