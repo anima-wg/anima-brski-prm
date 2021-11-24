@@ -1,4 +1,4 @@
-# BRSKI-PRM - BRSKI Pledge Responder Mode
+# BRSKI-PRM - BRSKI with Pledge in Responder Mode 
 
 This is the working area for the WG Internet-Draft, "BRSKI support of Pledge Responder Mode (BRSKI-PRM) [former BRSKI-AE Use Case 02)"
 

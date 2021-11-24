@@ -5,11 +5,11 @@
 ANIMA WG                                                        S. Fries
 Internet-Draft                                                 T. Werner
 Intended status: Standards Track                                 Siemens
-Expires: 21 May 2022                                             E. Lear
+Expires: 23 May 2022                                             E. Lear
                                                            Cisco Systems
                                                            M. Richardson
                                                 Sandelman Software Works
-                                                        17 November 2021
+                                                        19 November 2021
 
 
             BRSKI with Pledge in Responder Mode (BRSKI-PRM)
@@ -47,13 +47,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 May 2022.
+   This Internet-Draft will expire on 23 May 2022.
 
 
 
 
 
-Fries, et al.              Expires 21 May 2022                  [Page 1]
+Fries, et al.              Expires 23 May 2022                  [Page 1]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Fries, et al.              Expires 21 May 2022                  [Page 2]
+Fries, et al.              Expires 23 May 2022                  [Page 2]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -165,7 +165,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                  [Page 3]
+Fries, et al.              Expires 23 May 2022                  [Page 3]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -221,7 +221,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                  [Page 4]
+Fries, et al.              Expires 23 May 2022                  [Page 4]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -277,7 +277,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                  [Page 5]
+Fries, et al.              Expires 23 May 2022                  [Page 5]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -333,7 +333,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                  [Page 6]
+Fries, et al.              Expires 23 May 2022                  [Page 6]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -389,7 +389,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                  [Page 7]
+Fries, et al.              Expires 23 May 2022                  [Page 7]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -445,7 +445,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                  [Page 8]
+Fries, et al.              Expires 23 May 2022                  [Page 8]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -501,7 +501,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                  [Page 9]
+Fries, et al.              Expires 23 May 2022                  [Page 9]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -557,7 +557,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 10]
+Fries, et al.              Expires 23 May 2022                 [Page 10]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -613,7 +613,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 11]
+Fries, et al.              Expires 23 May 2022                 [Page 11]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -669,7 +669,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 12]
+Fries, et al.              Expires 23 May 2022                 [Page 12]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -725,7 +725,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 13]
+Fries, et al.              Expires 23 May 2022                 [Page 13]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -776,37 +776,36 @@ Internet-Draft                  BRSKI-PRM                  November 2021
    in the body, signed with the LDevID(RegAgt).  This enables the
    registrar to verify and log, which registrar-agent was in contact
    with the pledge, when verifying the pledge-voucher-request.
-   Optionally the registrar-agent may provide its LDevID(RegAgt)
-   certificate to the pledge for inclusion into the pledge-voucher-
+   Optionally the registrar-agent may provide its LDevID(RegAgt) EE
+   certificate to the pledge to be used in the "agent-sign-cert"
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 14]
+Fries, et al.              Expires 23 May 2022                 [Page 14]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
 
-   request as "agent-sign-cert" leaf.  Note that this may be omitted in
-   constraint environments to safe bandwidth between the registrar-agent
-   and the pledge.  If not contained, the registrar-agent MUST fetch the
-   LDevID(RegAgt) certificate based on the SubjectKeyIdentifier (SKID)
-   in the header of the agent-signed-data.  The registrar may include
-   the LDevID(RegAgt) certificate information into the registrar-
-   voucher-request.
+   properties of the pledge-voucher-request.  Note, this may be omitted
+   in constraint environments to safe bandwidth between the registrar-
+   agent and the pledge.  If not contained, the registrar-agent MUST
+   fetch the LDevID(RegAgt) certificate based on the
+   SubjectKeyIdentifier (SKID) in the header of the agent-signed-data.
+   The registrar may include the LDevID(RegAgt) certificate information
+   into the registrar-voucher-request.
 
    The MASA in turn verifies the LDevID(Reg) certificate is included in
    the pledge-voucher-request (prior-signed-voucher-request) in the
    "agent-provided-proximity-registrar-certificate" leaf and may assert
    in the voucher "verified" or "logged" instead of "proximity", as
    there is no direct connection between the pledge and the registrar.
-   If the LDevID(RegAgt) certificate is included contained in the
-   "agent-sign-cert" leave of the registrar-voucher-request, the MASA
-   can verify the LDevID(RegAgt) certificate and the signature of the
-   registrar-agent in the agent-signed-data provided in the prior-
-   signed-voucher-request.  If both can be verified successfully, the
-   MASA can assert "agent-proximity" in the voucher.  Otherwise, it may
-   assert "verified" or "logged".  The voucher can then be supplied via
-   the registrar to the registrar-agent.
+   If the LDevID(RegAgt) certificate information is contained in the
+   "agent-sign-cert" properties of the registrar-voucher-request, the
+   MASA can verify the signature of the agent-signed-data contained in
+   the prior-signed-voucher-request.  If both can be verified
+   successfully, the MASA can assert "agent-proximity" in the voucher.
+   Otherwise, it may assert "verified" or "logged".  The voucher can
+   then be supplied via the registrar to the registrar-agent.
 
    Figure 2 provides an overview of the exchanges detailed in the
    following sub sections.
@@ -834,15 +833,15 @@ Internet-Draft                  BRSKI-PRM                  November 2021
         |              |<------ TLS ----->|              |            |
         |              |-- Voucher-Req -->|              |            |
         |              |          [accept device?]       |            |
+        |              |          [contact vendor]       |            |
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 15]
+Fries, et al.              Expires 23 May 2022                 [Page 15]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
 
-        |              |          [contact vendor]       |            |
         |              |                  |------- Voucher-Req ------>|
         |              |                  |           [extract DomainID]
         |              |                  |           [update audit log]
@@ -893,7 +892,8 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 16]
+
+Fries, et al.              Expires 23 May 2022                 [Page 16]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -949,7 +949,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 17]
+Fries, et al.              Expires 23 May 2022                 [Page 17]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -966,11 +966,11 @@ Internet-Draft                  BRSKI-PRM                  November 2021
       LDevID(Reg) TLS EE certificate.
 
    *  agent-sign-cert: base64-encoded LDevID(RegAgt) signing certificate
-      (optional).
+      data (optional).
 
    *  agent-signed-data: base64-encoded JWS-object.
 
-   Note that optionally including the agent-sign-cert enables the pledge
+   Note, the optionally included agent-sign-cert data enables the pledge
    to verify at least the signature of the agent-signed-data.  It may
    not verify the agent-sign-cert itself due to missing issuing CA
    information.
@@ -1005,7 +1005,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 18]
+Fries, et al.              Expires 23 May 2022                 [Page 18]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1038,9 +1038,9 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
    *  x5c: contains the base64-encoded pledge IDevID certificate.
 
-   The body of the pledge-voucher-request object MUST contain the
-   following parameter as part of the ietf-voucher-request-prm:voucher
-   as defined in [RFC8995]:
+   The payload of the pledge-voucher-request (PVR) object MUST contain
+   the following parameter as part of the ietf-voucher-request-
+   prm:voucher as defined in [RFC8995]:
 
    *  created-on: contains the current date and time in yang:date-and-
       time format.
@@ -1048,27 +1048,23 @@ Internet-Draft                  BRSKI-PRM                  November 2021
    *  nonce: contains a cryptographically strong random or pseudo-random
       number.
 
-   *  serial-number: contains the base64-encoded pledge product-serial-
-      number.
+   *  serial-number: contains the pledge product-serial-number.
 
    *  assertion: contains the requested voucher assertion.
 
    The ietf-voucher-request:voucher is enhanced with additional
    parameters:
 
-
-
-
-
-
-Fries, et al.              Expires 21 May 2022                 [Page 19]
-
-Internet-Draft                  BRSKI-PRM                  November 2021
-
-
    *  agent-provided-proximity-registrar-cert: MUST be included and
       contains the base64-encoded LDevID(Reg) EE certificate (provided
       as trigger parameter by the registrar-agent).
+
+
+
+Fries, et al.              Expires 23 May 2022                 [Page 19]
+
+Internet-Draft                  BRSKI-PRM                  November 2021
+
 
    *  agent-signed-data: MUST contain the base64-encoded agent-signed-
       data (as defined in Figure 4) and provided as trigger parameter.
@@ -1117,7 +1113,11 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 20]
+
+
+
+
+Fries, et al.              Expires 23 May 2022                 [Page 20]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1173,7 +1173,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 21]
+Fries, et al.              Expires 23 May 2022                 [Page 21]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1229,7 +1229,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 22]
+Fries, et al.              Expires 23 May 2022                 [Page 22]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1285,7 +1285,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 23]
+Fries, et al.              Expires 23 May 2022                 [Page 23]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1341,7 +1341,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 24]
+Fries, et al.              Expires 23 May 2022                 [Page 24]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1384,20 +1384,20 @@ Internet-Draft                  BRSKI-PRM                  November 2021
    *  agent-signed-data: The registrar MUST verify that the data has
       been signed with the LDevID(RegAgt) credential indicated in the
       "kid" JOSE header parameter.  If the certificate is not contained
-      in the agent-sign-cert component of the pledge-voucher-request, it
-      must fetch the certificate from a repository.
+      in the agent-sign-cert properties of the pledge-voucher-request,
+      it must fetch from a repository.
 
    *  agent-sign-cert: May contain the base64-encoded LDevID(RegAgt)
-      certificate.  If contained the registrar MUST verify that the
-      connected credential used to sign the data was valid at signature
+      certificate data.  If contained the registrar MUST verify that the
+      credentials used to sign the data have been valid at signature
       creation time and that the corresponding registrar-agent was
-      authorized to be involved in the bootstrapping.
+      authorized to be involved in the bootstrapping process.
 
 
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 25]
+Fries, et al.              Expires 23 May 2022                 [Page 25]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1424,20 +1424,20 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
    *  x5c: contains the base64-encoded registrar LDevID certificate.
 
-   The body of the registrar-voucher-request object MUST contain the
-   following parameter as part of the voucher as defined in [RFC8995]:
+   The payload of the registrar-voucher-request (RVR) object MUST
+   contain the following parameter as part of the voucher as defined in
+   [RFC8995]:
 
    *  created-on: contains the current date and time in yang:date-and-
       time format for the registrar-voucher-request creation time.
 
    *  nonce: copied form the pledge-voucher-request
 
-   *  serial-number: contains the base64-encoded product-serial-number.
-      The registrar MUST verify that the product-serial-number contained
-      in the IDevID certificate of the pledge matches the serial-number
-      field in the pledge-voucher-request.  In addition, it MUST be
-      equal to the serial-number field contained in the agent-signed
-      data of pledge-voucher-request.
+   *  serial-number: contains the pledge product-serial-number.  The
+      registrar MUST verify that the product-serial-number contained in
+      the IDevID EE certificate of the pledge matches the serial-number
+      value in the PVR.  In addition, it MUST be equal to the serial-
+      number value contained in the agent-signed data of PVR.
 
    *  assertion: contains the voucher assertion requested the pledge
       (agent-proximity).  The registrar provides this information to
@@ -1447,13 +1447,13 @@ Internet-Draft                  BRSKI-PRM                  November 2021
    The voucher can be optionally enhanced with the following additional
    parameter as defined in Section 6:
 
-   *  agent-sign-cert: Contain the base64-encoded LDevID(RegAgt) EE
-      certificate if MASA verification of agent-proximity is required to
-      provide the assertion "agent-proximity".
+   *  agent-sign-cert: Contain the base64-encoded LDevID(RegAgt)
+      certificate data if MASA verification of agent-proximity is
+      required to provide the assertion "agent-proximity".
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 26]
+Fries, et al.              Expires 23 May 2022                 [Page 26]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1509,25 +1509,28 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 27]
+Fries, et al.              Expires 23 May 2022                 [Page 27]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
 
    *  agent-signed-data: The MASA MAY verify this field to be able to
-      provide an assertion "agent-proximity".  If so, the agent-signed-
-      data MUST contain the product-serial-number of the pledge
-      contained in the serial-number component of the prior-signed-
-      voucher and also in serial-number component of the registrar-
-      voucher-request.  The LDevID(RegAgt) used to generate provide the
-      signature is identified by the "kid" parameter of the JOSE header
-      (agent-signed-data).  If the assertion "agent-proximity" is
-      requested, the registrar-voucher-request MUST contain the
-      corresponding LDevID(RegAgt) EE certificate in the agent-sign-
-      cert, which can be verified by the MASA as issued by the same
-      domain CA as the LDevID(Reg) EE certificate.  If the agent-sign-
-      cert is not provided, the MASA MAY provide a lower level assertion
-      "logged" or "verified"
+      provide "agent-proximity" assertion.  If so, the agent-signed-data
+      MUST contain the pledge product-serial-number, contained in the
+      serial-number properties of the prior-signed-voucher and also in
+      serial-number properties of the registrar-voucher-request.  The
+      LDevID(RegAgt) EE certificate used to generate the signature is
+      identified by the "kid" parameter of the JOSE header (agent-
+      signed-data).  If the assertion "agent-proximity" is requested,
+      the registrar-voucher-request MUST contain the corresponding
+      LDevID(RegAgt) certificate data in the agent-sign-cert, which can
+      be verified by the MASA as issued by the same domain CA as the
+      LDevID(Reg) EE certificate.
+      If the agent-sign-cert information is not provided, the MASA MAY
+      provide a lower level assertion "logged" or "verified".
+      Note, in case the LDevID(RegAgt) EE certificate is issued by a
+      sub-CA and not the domain CA known to the MASA, sub-CA
+      certificate(s) MUST also be presented in the agent-sign-cert.
 
    If validation fails, the MASA SHOULD respond with an HTTP error code
    to the registrar.  The error codes are kept as defined in section 5.6
@@ -1562,10 +1565,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-
-
-
-Fries, et al.              Expires 21 May 2022                 [Page 28]
+Fries, et al.              Expires 23 May 2022                 [Page 28]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1621,7 +1621,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 29]
+Fries, et al.              Expires 23 May 2022                 [Page 29]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1677,7 +1677,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 30]
+Fries, et al.              Expires 23 May 2022                 [Page 30]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1733,7 +1733,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 31]
+Fries, et al.              Expires 23 May 2022                 [Page 31]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1789,7 +1789,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 32]
+Fries, et al.              Expires 23 May 2022                 [Page 32]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1845,7 +1845,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 33]
+Fries, et al.              Expires 23 May 2022                 [Page 33]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1901,7 +1901,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 34]
+Fries, et al.              Expires 23 May 2022                 [Page 34]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -1957,7 +1957,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 35]
+Fries, et al.              Expires 23 May 2022                 [Page 35]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -2013,7 +2013,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 36]
+Fries, et al.              Expires 23 May 2022                 [Page 36]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -2069,7 +2069,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 37]
+Fries, et al.              Expires 23 May 2022                 [Page 37]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -2125,7 +2125,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 38]
+Fries, et al.              Expires 23 May 2022                 [Page 38]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -2181,7 +2181,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 39]
+Fries, et al.              Expires 23 May 2022                 [Page 39]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -2237,7 +2237,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 40]
+Fries, et al.              Expires 23 May 2022                 [Page 40]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -2293,7 +2293,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 41]
+Fries, et al.              Expires 23 May 2022                 [Page 41]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -2349,7 +2349,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 42]
+Fries, et al.              Expires 23 May 2022                 [Page 42]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -2405,7 +2405,7 @@ Appendix A.  History of Changes [RFC Editor: please delete]
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 43]
+Fries, et al.              Expires 23 May 2022                 [Page 43]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -2461,7 +2461,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 44]
+Fries, et al.              Expires 23 May 2022                 [Page 44]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -2517,7 +2517,7 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 45]
+Fries, et al.              Expires 23 May 2022                 [Page 45]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -2573,7 +2573,7 @@ Authors' Addresses
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 46]
+Fries, et al.              Expires 23 May 2022                 [Page 46]
 
 Internet-Draft                  BRSKI-PRM                  November 2021
 
@@ -2629,4 +2629,4 @@ Internet-Draft                  BRSKI-PRM                  November 2021
 
 
 
-Fries, et al.              Expires 21 May 2022                 [Page 47]
+Fries, et al.              Expires 23 May 2022                 [Page 47]

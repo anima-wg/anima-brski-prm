@@ -453,13 +453,13 @@ This enables the registrar to verify, that it is the target registrar for handli
 The registrar certificate may be configured at the registrar-agent or may be fetched by the registrar-agent based on a prior TLS connection establishment with the domain registrar.
 In addition, the registrar-agent provides agent-signed-data containing the product-serial-number in the body, signed with the LDevID(RegAgt).
 This enables the registrar to verify and log, which registrar-agent was in contact with the pledge, when verifying the pledge-voucher-request.
-Optionally the registrar-agent may provide its LDevID(RegAgt) certificate to the pledge for inclusion into the pledge-voucher-request as "agent-sign-cert" leaf.
-Note that this may be omitted in constraint environments to safe bandwidth between the registrar-agent and the pledge.
+Optionally the registrar-agent may provide its LDevID(RegAgt) EE certificate to the pledge to be used in the "agent-sign-cert" properties of the pledge-voucher-request.
+Note, this may be omitted in constraint environments to safe bandwidth between the registrar-agent and the pledge.
 If not contained, the registrar-agent MUST fetch the LDevID(RegAgt) certificate based on the SubjectKeyIdentifier (SKID) in the header of the agent-signed-data.
 The registrar may include the LDevID(RegAgt) certificate information into the registrar-voucher-request.
 
 The MASA in turn verifies the LDevID(Reg) certificate is included in the pledge-voucher-request (prior-signed-voucher-request) in the "agent-provided-proximity-registrar-certificate" leaf and may assert in the voucher "verified" or "logged" instead of "proximity", as there is no direct connection between the pledge and the registrar.
-If the LDevID(RegAgt) certificate is included contained in the "agent-sign-cert" leave of the registrar-voucher-request, the MASA can verify the LDevID(RegAgt) certificate and the signature of the registrar-agent in the agent-signed-data provided in the prior-signed-voucher-request.
+If the LDevID(RegAgt) certificate information is contained in the "agent-sign-cert" properties of the registrar-voucher-request, the MASA can verify the signature of the agent-signed-data contained in the prior-signed-voucher-request.
 If both can be verified successfully, the MASA can assert "agent-proximity" in the voucher. Otherwise, it may assert "verified" or "logged".
 The voucher can then be supplied via the registrar to the registrar-agent.
 
@@ -585,12 +585,12 @@ It defines a JSON document to provide three parameter:
 
 * agent-provided-proximity-registrar-cert: base64-encoded LDevID(Reg) TLS EE certificate.
 
-* agent-sign-cert: base64-encoded LDevID(RegAgt) signing certificate (optional).
+* agent-sign-cert: base64-encoded LDevID(RegAgt) signing certificate data (optional).
 
 * agent-signed-data: base64-encoded JWS-object.
 
 
-Note that optionally including the agent-sign-cert enables the pledge to verify at least the signature of the agent-signed-data.
+Note, the optionally included agent-sign-cert data enables the pledge to verify at least the signature of the agent-signed-data.
 It may not verify the agent-sign-cert itself due to missing issuing CA information.
 
 The agent-signed-data is a JOSE object and contains the following information:
@@ -639,13 +639,13 @@ The header of the pledge-voucher-request SHALL contain the following parameter a
 * x5c: contains the base64-encoded pledge IDevID certificate.
 
 
-The body of the pledge-voucher-request object MUST contain the following parameter as part of the ietf-voucher-request-prm:voucher as defined in {{RFC8995}}:
+The payload of the pledge-voucher-request (PVR) object MUST contain the following parameter as part of the ietf-voucher-request-prm:voucher as defined in {{RFC8995}}:
 
 * created-on: contains the current date and time in yang:date-and-time format.
 
 * nonce: contains a cryptographically strong random or pseudo-random number.
 
-* serial-number: contains the base64-encoded pledge product-serial-number.
+* serial-number: contains the pledge product-serial-number.
 
 * assertion: contains the requested voucher assertion.
 
@@ -855,10 +855,10 @@ In addition, the registrar shall verify the following parameters from the pledge
 * agent-provided-proximity-registrar-cert: MUST contain the own LDevID(Reg) EE certificate to ensure the registrar in proximity is the target registrar for the request.
 
 * agent-signed-data: The registrar MUST verify that the data has been signed with the LDevID(RegAgt) credential indicated in the "kid" JOSE header parameter.
-  If the certificate is not contained in the agent-sign-cert component of the pledge-voucher-request, it must fetch the certificate from a repository.
+  If the certificate is not contained in the agent-sign-cert properties of the pledge-voucher-request, it must fetch from a repository.
 
-* agent-sign-cert: May contain the base64-encoded LDevID(RegAgt)  certificate.
-  If contained the registrar MUST verify that the connected credential used to sign the data was valid at signature creation time and that the corresponding registrar-agent was authorized to be involved in the bootstrapping.
+* agent-sign-cert: May contain the base64-encoded LDevID(RegAgt) certificate data.
+  If contained the registrar MUST verify that the credentials used to sign the data have been valid at signature creation time and that the corresponding registrar-agent was authorized to be involved in the bootstrapping process.
 
 
 If validation fails the registrar SHOULD respond with the HTTP 404 error code to the registrar-agent.
@@ -876,22 +876,21 @@ The header of the registrar-voucher-request SHALL contain the following paramete
 
 * x5c: contains the base64-encoded registrar LDevID certificate.
 
-The body of the registrar-voucher-request object MUST contain the following parameter as part of the voucher as defined in {{RFC8995}}:
+The payload of the registrar-voucher-request (RVR) object MUST contain the following parameter as part of the voucher as defined in {{RFC8995}}:
 
 * created-on: contains the current date and time in yang:date-and-time format for the registrar-voucher-request creation time.
 
 * nonce: copied form the pledge-voucher-request
-
-* serial-number: contains the base64-encoded product-serial-number.
-  The registrar MUST verify that the product-serial-number contained in the IDevID certificate of  the pledge matches the serial-number field in the pledge-voucher-request.
-  In addition, it MUST be equal to the serial-number field contained in the agent-signed data of pledge-voucher-request.
+* serial-number: contains the pledge product-serial-number.
+  The registrar MUST verify that the product-serial-number contained in the IDevID EE certificate of the pledge matches the serial-number value in the PVR.
+  In addition, it MUST be equal to the serial-number value contained in the agent-signed data of PVR.
 
 * assertion: contains the voucher assertion requested the pledge (agent-proximity).
   The registrar provides this information to assure successful verification of agent proximity based on the agent-signed-data.
 
 The voucher can be optionally enhanced with the following additional parameter as defined in {{voucher-request-prm-yang}}:
 
-* agent-sign-cert: Contain the base64-encoded LDevID(RegAgt) EE certificate if MASA verification of agent-proximity is required to provide the assertion "agent-proximity".
+* agent-sign-cert: Contain the base64-encoded LDevID(RegAgt) certificate data if MASA verification of agent-proximity is required to provide the assertion "agent-proximity".
 
 The object is signed using the registrar LDevID(Reg) credential, which corresponds to the certificate signaled in the JOSE header.
 
@@ -931,11 +930,13 @@ In addition, the following additional processing SHALL be done for components co
 * agent-provided-proximity-registrar-cert: The MASA MAY verify that this field contains the LDevID(Reg) certificate.
   If so, it MUST be consistent with the certificate used to sign the registrar-voucher-request.
 
-* agent-signed-data: The MASA MAY verify this field to be able to provide an assertion "agent-proximity".
-  If so, the agent-signed-data MUST contain the product-serial-number of the pledge contained in the serial-number component of the prior-signed-voucher and also in serial-number component of  the registrar-voucher-request.
-  The LDevID(RegAgt) used to generate provide the signature is identified by the "kid" parameter of the JOSE header (agent-signed-data).
-  If the assertion "agent-proximity" is requested, the registrar-voucher-request MUST contain the corresponding LDevID(RegAgt) EE certificate in the agent-sign-cert, which can be verified by the MASA as issued by the same domain CA as the LDevID(Reg) EE certificate.
-  If the agent-sign-cert is not provided, the MASA MAY provide a lower level assertion "logged" or "verified"
+* agent-signed-data: The MASA MAY verify this field to be able to provide "agent-proximity" assertion.
+  If so, the agent-signed-data MUST contain the pledge product-serial-number, contained in the serial-number properties of the prior-signed-voucher and also in serial-number properties of  the registrar-voucher-request.
+  The LDevID(RegAgt) EE certificate used to generate the signature is identified by the "kid" parameter of the JOSE header (agent-signed-data).
+  If the assertion "agent-proximity" is requested, the registrar-voucher-request MUST contain the corresponding LDevID(RegAgt) certificate data in the agent-sign-cert, which can be verified by the MASA as issued by the same domain CA as the LDevID(Reg) EE certificate.  
+If the agent-sign-cert information is not provided, the MASA MAY provide a lower level assertion "logged" or "verified".  
+  Note, in case the LDevID(RegAgt) EE certificate is issued by a sub-CA and not the domain CA known to the MASA, sub-CA certificate(s) MUST also be presented in the agent-sign-cert.
+  
 
 If validation fails, the MASA SHOULD respond with an HTTP error code to the registrar.
 The error codes are kept as defined in section 5.6 of {{RFC8995}}, <!-- XXX -->and comprise the response codes 403, 404, 406, and 415.
