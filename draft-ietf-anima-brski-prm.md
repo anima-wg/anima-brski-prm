@@ -211,19 +211,12 @@ The registration authority (RA) performing the authorization of a certificate re
 CAs may also demand higher security in the registration procedures. Especially the CA/Browser forum currently increases the security requirements in the certificate issuance procedures for publicly trusted certificates.
 There may be the situation in which the target domain does not offer enough security to operate a RA/CA and therefore this service is transferred to a backend that offers a higher level of operational security.
 
-## Applicability
+## Limitations
 
-The mechanisms in this draft presume the availability of the pledge to
-communicate with the registrar-agent.  
-This may not be possible in
-constrained environments where, in particular, power must be
-conserved.  In these situations, it is anticipated that the
-transceiver will be powered down most of the time.  This presents a
-rendezvous problem: the pledge is unavailable for certain periods of
-time, and the registrar-agent is similarly presumed to be unavailable for
-certain periods of time.  In this case, it is recommended that pledges
-initiate communications directly to the registrar as originally
-specified in {{RFC8995}}.
+The mechanisms in this draft presume the availability of the pledge to communicate with the registrar-agent.  
+This may not be possible in constrained environments where, in particular, power must be conserved.  
+In these situations, it is anticipated that the transceiver will be powered down most of the time.  
+This presents a rendezvous problem: the pledge is unavailable for certain periods of time, and the registrar-agent is similarly presumed to be unavailable for certain periods of time.  
 
 
 # Requirements Discussion and Mapping to Solution-Elements {#req-sol}
