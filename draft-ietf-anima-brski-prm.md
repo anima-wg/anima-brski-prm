@@ -214,7 +214,8 @@ There may be the situation in which the target domain does not offer enough secu
 ## Applicability
 
 The mechanisms in this draft presume the availability of the pledge to
-communicate with the pledge agent.  This may not be possible in
+communicate with the registrar-agent.  
+This may not be possible in
 constrained environments where, in particular, power must be
 conserved.  In these situations, it is anticipated that the
 transceiver will be powered down most of the time.  This presents a
