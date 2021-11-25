@@ -220,7 +220,7 @@ constrained environments where, in particular, power must be
 conserved.  In these situations, it is anticipated that the
 transceiver will be powered down most of the time.  This presents a
 rendezvous problem: the pledge is unavailable for certain periods of
-time, and the pledge agent is similarly presumed to be unavailable for
+time, and the registrar-agent is similarly presumed to be unavailable for
 certain periods of time.  In this case, it is recommended that pledges
 initiate communications directly to the registrar as originally
 specified in {{RFC8995}}.
