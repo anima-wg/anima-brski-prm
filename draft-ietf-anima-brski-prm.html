@@ -1191,11 +1191,11 @@ li > p:last-of-type {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">BRSKI-PRM</td>
-<td class="right">November 2021</td>
+<td class="right">December 2021</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 23 May 2022</td>
+<td class="center">Expires 6 June 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1208,12 +1208,12 @@ li > p:last-of-type {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-11-19" class="published">19 November 2021</time>
+<time datetime="2021-12-03" class="published">3 December 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-05-23">23 May 2022</time></dd>
+<dd class="expires"><time datetime="2022-06-06">6 June 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1263,7 +1263,7 @@ The defined approach is agnostic regarding the utilized enrollment protocol, dep
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 23 May 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 6 June 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1318,6 +1318,9 @@ The defined approach is agnostic regarding the utilized enrollment protocol, dep
 </li>
                 </ul>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="xref">3.3</a>.  <a href="#name-limitations" class="xref">Limitations</a></p>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
@@ -1346,13 +1349,18 @@ The defined approach is agnostic regarding the utilized enrollment protocol, dep
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-voucher-request-artifact" class="xref">Voucher Request Artifact</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-artifacts" class="xref">Artifacts</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-tree-diagram" class="xref">Tree Diagram</a></p>
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-voucher-request-artifact" class="xref">Voucher Request Artifact</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.1">
+                    <p id="section-toc.1-1.6.2.1.2.1.1"><a href="#section-6.1.1" class="xref">6.1.1</a>.  <a href="#name-tree-diagram" class="xref">Tree Diagram</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="xref">6.2</a>.  <a href="#name-yang-module" class="xref">YANG Module</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.2">
+                    <p id="section-toc.1-1.6.2.1.2.2.1"><a href="#section-6.1.2" class="xref">6.1.2</a>.  <a href="#name-yang-module" class="xref">YANG Module</a></p>
+</li>
+                </ul>
 </li>
             </ul>
 </li>
@@ -1578,6 +1586,17 @@ There may be the situation in which the target domain does not offer enough secu
 </div>
 </section>
 </div>
+<div id="limitations">
+<section id="section-3.3">
+        <h3 id="name-limitations">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-limitations" class="section-name selfRef">Limitations</a>
+        </h3>
+<p id="section-3.3-1">The mechanisms in this draft presume the availability of the pledge to communicate with the registrar-agent.<br>
+This may not be possible in constrained environments where, in particular, power must be conserved.<br>
+In these situations, it is anticipated that the transceiver will be powered down most of the time.<br>
+This presents a rendezvous problem: the pledge is unavailable for certain periods of time, and the registrar-agent is similarly presumed to be unavailable for certain periods of time.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="req-sol">
@@ -1718,20 +1737,16 @@ Note that it may be used by the registrar-agent instead of the pledge to find th
 In contrast to <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>, the domain registrar does not interact with a pledge directly but  through the registrar-agent.
 The registrar detects if the bootstrapping is performed by the pledge directly or by the  registrar-agent.
 The manufacturer provided components/services (MASA and Ownership tracker) are used as defined in <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.
-For issuing a voucher, the MASA may perform additional checks on voucher-request objects, to issue a voucher indicating agent-proximity instead of registrar-proximity.<a href="#section-5.1-9.4" class="pilcrow">¶</a>
+For issuing a voucher, the MASA may perform additional checks on voucher-request objects, to issue a voucher indicating agent-proximity instead of (registrar-)proximity.<a href="#section-5.1-9.4" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-5.1-10">[RFC Editor: please delete] /* Note:RFC8366bis<a href="#section-5.1-10" class="pilcrow">¶</a></p>
-<p id="section-5.1-11">Open Issues: The voucher defined in <span>[<a href="#RFC8366" class="xref">RFC8366</a>]</span> defines
-the leaf assertion as enum, which cannot be extended.
-To define an additional assertion RFC 8366 may be revised.
-There is currently ongoing work for a RFC8366bis. */<a href="#section-5.1-11" class="pilcrow">¶</a></p>
 <div id="agent-proximity">
 <section id="section-5.1.1">
           <h4 id="name-agent-proximity">
 <a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-agent-proximity" class="section-name selfRef">Agent-Proximity</a>
           </h4>
 <p id="section-5.1.1-1">"Agent-proximity" is a weaker assertion then "proximity".
+It is defined as additional assertion type in <span>[<a href="#I-D.richardson-anima-rfc8366bis" class="xref">I-D.richardson-anima-rfc8366bis</a>]</span>
 In case of "agent-proximity" it is a statement, that the proximity-registrar-certificate was provided via the registrar-agent and not directly to the pledge.
 This can be verified by the registrar and also by the MASA during the voucher-request processing.
 Note that at the time of creating the voucher-request, the pledge cannot verify the registrar's LDevID(Reg) EE certificate and has no proof-of-possession of the corresponding private key for the certificate.
@@ -1992,7 +2007,7 @@ It may not verify the agent-sign-cert itself due to missing issuing CA informati
               <li class="normal" id="section-5.1.4.1-12.2">kid: contains the base64-encoded SubjectKeyIdentifier of the LDevID(RegAgt) certificate.<a href="#section-5.1.4.1-12.2" class="pilcrow">¶</a>
 </li>
             </ul>
-<p id="section-5.1.4.1-13">The body of the agent-signed-data contains an ietf-voucher-request-prm:agent-signed-data element (defined in <a href="#voucher-request-prm-yang" class="xref">Section 6</a>):<a href="#section-5.1.4.1-13" class="pilcrow">¶</a></p>
+<p id="section-5.1.4.1-13">The body of the agent-signed-data contains an ietf-voucher-request-prm:agent-signed-data element (defined in <a href="#voucher-request-prm-yang" class="xref">Section 6.1</a>):<a href="#section-5.1.4.1-13" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.1.4.1-14.1">created-on: <span class="bcp14">MUST</span> contain the creation date and time in yang:date-and-time format.<a href="#section-5.1.4.1-14.1" class="pilcrow">¶</a>
 </li>
@@ -2052,7 +2067,7 @@ This object becomes a JSON-in-JWS object as defined in <span>[<a href="#I-D.ietf
               <li class="normal" id="section-5.1.4.1-22.3">agent-sign-cert: May contain the base64-encoded LDevID(RegAgt) EE certificate if provided as trigger parameter.<a href="#section-5.1.4.1-22.3" class="pilcrow">¶</a>
 </li>
             </ul>
-<p id="section-5.1.4.1-23">The enhancements of the YANG module for the ietf-voucher-request with these new leafs are defined in <a href="#voucher-request-prm-yang" class="xref">Section 6</a>.<a href="#section-5.1.4.1-23" class="pilcrow">¶</a></p>
+<p id="section-5.1.4.1-23">The enhancements of the YANG module for the ietf-voucher-request with these new leafs are defined in <a href="#voucher-request-prm-yang" class="xref">Section 6.1</a>.<a href="#section-5.1.4.1-23" class="pilcrow">¶</a></p>
 <p id="section-5.1.4.1-24">The object is signed using the pledges IDevID credential contained as x5c parameter of the JOSE header.<a href="#section-5.1.4.1-24" class="pilcrow">¶</a></p>
 <span id="name-example-of-pledge-voucher-r"></span><div id="pvr">
 <figure id="figure-5">
@@ -2274,7 +2289,7 @@ In addition, it <span class="bcp14">MUST</span> be equal to the serial-number va
 The registrar provides this information to assure successful verification of agent proximity based on the agent-signed-data.<a href="#section-5.1.4.2-19.4" class="pilcrow">¶</a>
 </li>
             </ul>
-<p id="section-5.1.4.2-20">The voucher can be optionally enhanced with the following additional parameter as defined in <a href="#voucher-request-prm-yang" class="xref">Section 6</a>:<a href="#section-5.1.4.2-20" class="pilcrow">¶</a></p>
+<p id="section-5.1.4.2-20">The voucher can be optionally enhanced with the following additional parameter as defined in <a href="#voucher-request-prm-yang" class="xref">Section 6.1</a>:<a href="#section-5.1.4.2-20" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.1.4.2-21.1">agent-sign-cert: Contain the base64-encoded LDevID(RegAgt) certificate data if MASA verification of agent-proximity is required to provide the assertion "agent-proximity".<a href="#section-5.1.4.2-21.1" class="pilcrow">¶</a>
 </li>
@@ -2577,22 +2592,26 @@ Within the server log the registrar <span class="bcp14">SHOULD</span> capture th
 </div>
 </section>
 </div>
-<div id="voucher-request-prm-yang">
+<div id="artifacts">
 <section id="section-6">
-      <h2 id="name-voucher-request-artifact">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-voucher-request-artifact" class="section-name selfRef">Voucher Request Artifact</a>
+      <h2 id="name-artifacts">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-artifacts" class="section-name selfRef">Artifacts</a>
       </h2>
-<p id="section-6-1">The following enhancement extends the voucher-request as defined in <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> to include additional fields necessary for handling bootstrapping in the pledge-responder-mode.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<div id="tree-diagram">
+<div id="voucher-request-prm-yang">
 <section id="section-6.1">
-        <h3 id="name-tree-diagram">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-tree-diagram" class="section-name selfRef">Tree Diagram</a>
+        <h3 id="name-voucher-request-artifact">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-voucher-request-artifact" class="section-name selfRef">Voucher Request Artifact</a>
         </h3>
-<p id="section-6.1-1">The following tree diagram is mostly a duplicate of the contents of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>, with the addition of the fields agent-signed-data, the registrar-proximity-certificate, and agent-signing certificate.
+<p id="section-6.1-1">The following enhancement extends the voucher-request as defined in <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> to include additional fields necessary for handling bootstrapping in the pledge-responder-mode.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<div id="tree-diagram">
+<section id="section-6.1.1">
+          <h4 id="name-tree-diagram">
+<a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-tree-diagram" class="section-name selfRef">Tree Diagram</a>
+          </h4>
+<p id="section-6.1.1-1">The following tree diagram is mostly a duplicate of the contents of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>, with the addition of the fields agent-signed-data, the registrar-proximity-certificate, and agent-signing certificate.
 The tree diagram is described in <span>[<a href="#RFC8340" class="xref">RFC8340</a>]</span>.
-The enhanced fields are described in Section Each node in the diagram is fully described by the YANG module in Section <a href="#voucher-request-prm-yang-module" class="xref">Section 6.2</a>.
-Please review the YANG module for a detailed description of the voucher-request format.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-6.1-2">
+Each node in the diagram is fully described by the YANG module in Section <a href="#voucher-request-prm-yang-module" class="xref">Section 6.1.2</a>.<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.1.1-2">
 <pre>
 module: ietf-voucher-request-prm
 
@@ -2612,27 +2631,26 @@ module: ietf-voucher-request-prm
      +-- agent-signed-data?                        binary
      +-- agent-provided-proximity-registrar-cert?  binary
      +-- agent-sign-cert?                          binary
-</pre><a href="#section-6.1-2" class="pilcrow">¶</a>
+</pre><a href="#section-6.1.1-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="voucher-request-prm-yang-module">
-<section id="section-6.2">
-        <h3 id="name-yang-module">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-yang-module" class="section-name selfRef">YANG Module</a>
-        </h3>
-<p id="section-6.2-1">The following YANG module extends the <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> Voucher Request to include a signed artifact from the registrar-agent (agent-signed-data) as well as the registrar-proximity-certificate and the
-agent-signing certificate.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<div id="section-6.2-2">
-<pre class="sourcecode">&lt;CODE BEGINS&gt; file "ietf-voucher-request-prm@2021-10-26.yang"
+<section id="section-6.1.2">
+          <h4 id="name-yang-module">
+<a href="#section-6.1.2" class="section-number selfRef">6.1.2. </a><a href="#name-yang-module" class="section-name selfRef">YANG Module</a>
+          </h4>
+<p id="section-6.1.2-1">The following YANG module extends the <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> Voucher Request to include a signed artifact from the registrar-agent (agent-signed-data) as well as the registrar-proximity-certificate and the
+agent-signing certificate.<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
+<div id="section-6.1.2-2">
+<pre class="sourcecode">&lt;CODE BEGINS&gt; file "ietf-voucher-request-prm@2021-12-03.yang"
 
 
 module ietf-voucher-request-prm {
   yang-version 1.1;
 
-  namespace
-    "urn:ietf:params:xml:ns:yang:ietf-voucher-request-prm";
-  prefix "constrained";
+  namespace "urn:ietf:params:xml:ns:yang:ietf-voucher-request-prm";
+  prefix vrprm;
 
   import ietf-restconf {
     prefix rc;
@@ -2693,12 +2711,14 @@ module ietf-voucher-request-prm {
     RFC itself for full legal notices.";
 
 
-  revision 2021-10-26 {
+  revision 2021-12-03 {
     description
      "Initial version";
     reference
      "RFC XXXX: BRSKI for Pledge in Responder Mode";
   }
+
+  // Top-level statement
   rc:yang-data voucher-request-prm-artifact {
     // YANG data template for a voucher-request.
     uses voucher-request-prm-grouping;
@@ -2708,6 +2728,34 @@ module ietf-voucher-request-prm {
     description
       "Grouping to allow reuse/extensions in future work.";
     uses vcr:voucher-request-grouping {
+      refine "voucher/expires-on" {
+        mandatory false;
+         description
+          "An expires-on field is not valid in a
+           voucher-request, and any occurrence MUST be ignored.";
+     }
+      refine "voucher/pinned-domain-cert" {
+        mandatory false;
+        description
+          "A pinned-domain-cert field is not valid in a
+           voucher-request, and any occurrence MUST be ignored.";
+      }
+      refine "voucher/last-renewal-date" {
+        description
+          "A last-renewal-date field is not valid in a
+           voucher-request, and any occurrence MUST be ignored.";
+      }
+      refine "voucher/domain-cert-revocation-checks" {
+        description
+          "The domain-cert-revocation-checks field is not valid in a
+           voucher-request, and any occurrence MUST be ignored.";
+      }
+      refine "voucher/assertion" {
+        mandatory false;
+        description
+          "Any assertion included in registrar voucher-requests
+           SHOULD be ignored by the MASA.";
+      }
 
       augment voucher {
         description "Base the voucher-request-prm upon the
@@ -2777,10 +2825,11 @@ module ietf-voucher-request-prm {
 }
 
 
-
-&lt;CODE ENDS&gt;</pre><a href="#section-6.2-2" class="pilcrow">¶</a>
+&lt;CODE ENDS&gt;</pre><a href="#section-6.1.2-2" class="pilcrow">¶</a>
 </div>
-<p id="section-6.2-3">Examples for the pledge-voucher-request are provided in <a href="#exchanges_uc2_2" class="xref">Section 5.1.4.2</a>.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-3">Examples for the pledge-voucher-request are provided in <a href="#exchanges_uc2_2" class="xref">Section 5.1.4.2</a>.<a href="#section-6.1.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 </section>
@@ -2853,7 +2902,7 @@ Alternatively, the LDevID may be acquired by a service technician after authenti
         <h3 id="name-yang-module-security-consid">
 <a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-yang-module-security-consid" class="section-name selfRef">YANG Module Security Considerations</a>
         </h3>
-<p id="section-9.4-1">The enhanced voucher-request described in section <a href="#voucher-request-prm-yang" class="xref">Section 6</a> bases on <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>, but uses a different encoding, based on <span>[<a href="#I-D.ietf-anima-jws-voucher" class="xref">I-D.ietf-anima-jws-voucher</a>]</span>.
+<p id="section-9.4-1">The enhanced voucher-request described in section <a href="#voucher-request-prm-yang" class="xref">Section 6.1</a> bases on <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>, but uses a different encoding, based on <span>[<a href="#I-D.ietf-anima-jws-voucher" class="xref">I-D.ietf-anima-jws-voucher</a>]</span>.
 Therefore, similar considerations as described in Section 11.7 (Security Considerations) of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> apply.
 The YANG module specified in this document defines the schema for data that is subsequently encapsulated by a JOSE signed-data content type, as described <span>[<a href="#I-D.ietf-anima-jws-voucher" class="xref">I-D.ietf-anima-jws-voucher</a>]</span>.
 As such, all of the YANG-modeled data is protected from modification.
@@ -2888,6 +2937,10 @@ For this reason, these guidelines do not follow the template described by Sectio
 <dt id="I-D.ietf-netconf-sztp-csr">[I-D.ietf-netconf-sztp-csr]</dt>
         <dd>
 <span class="refAuthor">Watsen, K.</span>, <span class="refAuthor">Housley, R.</span>, and <span class="refAuthor">S. Turner</span>, <span class="refTitle">"Conveying a Certificate Signing Request (CSR) in a Secure Zero Touch Provisioning (SZTP) Bootstrapping Request"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-netconf-sztp-csr-11</span>, <time datetime="2021-11-08" class="refDate">8 November 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-netconf-sztp-csr-11.txt">https://www.ietf.org/archive/id/draft-ietf-netconf-sztp-csr-11.txt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.richardson-anima-rfc8366bis">[I-D.richardson-anima-rfc8366bis]</dt>
+        <dd>
+<span class="refAuthor">Watsen, K.</span>, <span class="refAuthor">Richardson, M. C.</span>, <span class="refAuthor">Pritikin, M.</span>, and <span class="refAuthor">T. Eckert</span>, <span class="refTitle">"A Voucher Artifact for Bootstrapping Protocols"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-richardson-anima-rfc8366bis-04</span>, <time datetime="2021-12-01" class="refDate">1 December 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-richardson-anima-rfc8366bis-04.txt">https://www.ietf.org/archive/id/draft-richardson-anima-rfc8366bis-04.txt</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -2968,6 +3021,14 @@ For this reason, these guidelines do not follow the template described by Sectio
 <ul class="normal">
 <li class="normal" id="appendix-A-2.1">Housekeeping: Removed already addressed open issues.<a href="#appendix-A-2.1" class="pilcrow">¶</a>
 </li>
+        <li class="normal" id="appendix-A-2.2">Reworked text in from introduction to section pledge-responder-mode<a href="#appendix-A-2.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-2.3">Fixed "serial-number" in PVR/RVR, Note for sub-CA information to agent-signed-data, agent-sign-cert writings.<a href="#appendix-A-2.3" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-2.4">Inclusion of limitation section (pledge sleeps and needs to be waked up. Pledge is awake but registrar-agent is not available).<a href="#appendix-A-2.4" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-A-2.5">Assertion-type aligned with voucher in RFC8366bis, deleted related open issues<a href="#appendix-A-2.5" class="pilcrow">¶</a>
+</li>
       </ul>
 <p id="appendix-A-3">From IETF draft-ietf-anima-brski-async-enroll-03 -&gt; IETF anima-brski-prm-00:<a href="#appendix-A-3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -2977,7 +3038,7 @@ This required changes and adaptations in several sections to remove
 the description and references to UC1.<a href="#appendix-A-4.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="appendix-A-4.2">Addressed feedback for voucher-request enhancements from YANG doctor
-early review in <a href="#voucher-request-prm-yang" class="xref">Section 6</a> as well as in the
+early review in <a href="#voucher-request-prm-yang" class="xref">Section 6.1</a> as well as in the
 security considerations (formerly named ietf-async-voucher-request).<a href="#appendix-A-4.2" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="appendix-A-4.3">Renamed ietf-async-voucher-request to IETF-voucher-request-prm to

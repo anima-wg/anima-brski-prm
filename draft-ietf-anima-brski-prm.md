@@ -62,6 +62,7 @@ normative:
   RFC8995:
   I-D.ietf-anima-jws-voucher:
   I-D.ietf-netconf-sztp-csr:
+  I-D.richardson-anima-rfc8366bis:
 informative:
   RFC2986:
   RFC5280:
@@ -349,19 +350,12 @@ The following list describes the components in a (customer) site domain:
   In contrast to {{RFC8995}}, the domain registrar does not interact with a pledge directly but  through the registrar-agent.
   The registrar detects if the bootstrapping is performed by the pledge directly or by the  registrar-agent.
 The manufacturer provided components/services (MASA and Ownership tracker) are used as defined in {{RFC8995}}.
-For issuing a voucher, the MASA may perform additional checks on voucher-request objects, to issue a voucher indicating agent-proximity instead of registrar-proximity.
-
-[RFC Editor: please delete] /* Note:RFC8366bis
-
-Open Issues: The voucher defined in {{RFC8366}} defines
-the leaf assertion as enum, which cannot be extended.
-To define an additional assertion RFC 8366 may be revised.
-There is currently ongoing work for a RFC8366bis. */
-
+For issuing a voucher, the MASA may perform additional checks on voucher-request objects, to issue a voucher indicating agent-proximity instead of (registrar-)proximity.
 
 ### Agent-Proximity
 
 "Agent-proximity" is a weaker assertion then "proximity".
+It is defined as additional assertion type in {{I-D.richardson-anima-rfc8366bis}}
 In case of "agent-proximity" it is a statement, that the proximity-registrar-certificate was provided via the registrar-agent and not directly to the pledge.
 This can be verified by the registrar and also by the MASA during the voucher-request processing.
 Note that at the time of creating the voucher-request, the pledge cannot verify the registrar's LDevID(Reg) EE certificate and has no proof-of-possession of the corresponding private key for the certificate.
@@ -1197,16 +1191,17 @@ The registrar-agent may use the response to signal success / failure to the serv
 Within the server log the registrar SHOULD capture this telemetry information.
 
 
-# Voucher Request Artifact {#voucher-request-prm-yang}
+# Artifacts
+
+## Voucher Request Artifact {#voucher-request-prm-yang}
 
 The following enhancement extends the voucher-request as defined in {{RFC8995}} to include additional fields necessary for handling bootstrapping in the pledge-responder-mode.
 
-## Tree Diagram
+### Tree Diagram
 
 The following tree diagram is mostly a duplicate of the contents of {{RFC8995}}, with the addition of the fields agent-signed-data, the registrar-proximity-certificate, and agent-signing certificate.
 The tree diagram is described in {{RFC8340}}.
-The enhanced fields are described in Section Each node in the diagram is fully described by the YANG module in Section {{voucher-request-prm-yang-module}}.
-Please review the YANG module for a detailed description of the voucher-request format.
+Each node in the diagram is fully described by the YANG module in Section {{voucher-request-prm-yang-module}}.
 
 ~~~~
 module: ietf-voucher-request-prm
@@ -1230,21 +1225,20 @@ module: ietf-voucher-request-prm
 ~~~~
 {: artwork-align="left"}
 
-## YANG Module {#voucher-request-prm-yang-module}
+### YANG Module {#voucher-request-prm-yang-module}
 
 The following YANG module extends the {{RFC8995}} Voucher Request to include a signed artifact from the registrar-agent (agent-signed-data) as well as the registrar-proximity-certificate and the
 agent-signing certificate.
 
 ~~~~
-<CODE BEGINS> file "ietf-voucher-request-prm@2021-10-26.yang"
+<CODE BEGINS> file "ietf-voucher-request-prm@2021-12-03.yang"
 
 module ietf-voucher-request-prm {
   yang-version 1.1;
 
-  namespace
-    "urn:ietf:params:xml:ns:yang:ietf-voucher-request-prm";
-  prefix "constrained";
-
+  namespace "urn:ietf:params:xml:ns:yang:ietf-voucher-request-prm";
+  prefix vrprm;
+  
   import ietf-restconf {
     prefix rc;
     description
@@ -1304,12 +1298,14 @@ module ietf-voucher-request-prm {
     RFC itself for full legal notices.";
 
 
-  revision 2021-10-26 {
+  revision 2021-12-03 {
     description
      "Initial version";
     reference
      "RFC XXXX: BRSKI for Pledge in Responder Mode";
   }
+  
+  // Top-level statement
   rc:yang-data voucher-request-prm-artifact {
     // YANG data template for a voucher-request.
     uses voucher-request-prm-grouping;
@@ -1319,7 +1315,35 @@ module ietf-voucher-request-prm {
     description
       "Grouping to allow reuse/extensions in future work.";
     uses vcr:voucher-request-grouping {
-
+      refine "voucher/expires-on" {
+        mandatory false;
+         description
+          "An expires-on field is not valid in a
+           voucher-request, and any occurrence MUST be ignored.";
+     }
+      refine "voucher/pinned-domain-cert" {
+        mandatory false;
+        description
+          "A pinned-domain-cert field is not valid in a
+           voucher-request, and any occurrence MUST be ignored.";
+      }
+      refine "voucher/last-renewal-date" {
+        description
+          "A last-renewal-date field is not valid in a
+           voucher-request, and any occurrence MUST be ignored.";
+      }
+      refine "voucher/domain-cert-revocation-checks" {
+        description
+          "The domain-cert-revocation-checks field is not valid in a
+           voucher-request, and any occurrence MUST be ignored.";
+      }
+      refine "voucher/assertion" {
+        mandatory false;
+        description
+          "Any assertion included in registrar voucher-requests
+           SHOULD be ignored by the MASA.";
+      }
+	  
       augment voucher {
         description "Base the voucher-request-prm upon the
           regular one";
@@ -1387,14 +1411,11 @@ module ietf-voucher-request-prm {
   }
 }
 
-
 <CODE ENDS>
 ~~~~
 {: artwork-align="left"}
 
 Examples for the pledge-voucher-request are provided in {{exchanges_uc2_2}}.
-
-
 
 
 # IANA Considerations
@@ -1466,6 +1487,10 @@ We would like to thank the various reviewers, in particular Brian E. Carpenter a
 From IETF draft 00 -> IETF draft 01:
 
 * Housekeeping: Removed already addressed open issues.
+* Reworked text in from introduction to section pledge-responder-mode
+* Fixed "serial-number" in PVR/RVR, Note for sub-CA information to agent-signed-data, agent-sign-cert writings.
+* Inclusion of limitation section (pledge sleeps and needs to be waked up. Pledge is awake but registrar-agent is not available).
+* Assertion-type aligned with voucher in RFC8366bis, deleted related open issues
   
 From IETF draft-ietf-anima-brski-async-enroll-03 -> IETF anima-brski-prm-00:
 
