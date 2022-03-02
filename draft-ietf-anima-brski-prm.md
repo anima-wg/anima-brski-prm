@@ -625,7 +625,7 @@ The the trigger for the pledge to create a pledge-voucher-request is depicted in
    "agent-sign-cert": ["base64encodedvalue==", "base64encodedvalue==", ...]
 }
 ~~~~
-{: #pavrt title='Example of trigger to create pledge-voucher-request' artwork-align="left"}
+{: #pavrt title='Representation of trigger to create pledge-voucher-request' artwork-align="left"}
 
 The pledge provisionally accepts the agent-provided-proximity-registrar-cert and can verify it once it has received the voucher. 
 If the optionally agent-sign-cert data is included the pledge MAY verify at least the signature of the agent-signed-data using the first contained certificate, which is the LDevID(RegAgt) EE certificate. 
@@ -674,20 +674,22 @@ General JWS JSON Serialization
       "serial-number": "callee4711"
    }
    "signatures":[
-   {
-      "protected":{
-         "alg": "ES256",
-         "kid": "base64encodedvalue=="
-         }
-      "signature": "base64encodedvalue=="
-   }]
+     {
+        "protected":{
+           "alg": "ES256",
+           "kid": "base64encodedvalue=="
+           },
+        "signature": "base64encodedvalue=="
+     }
+   ]
 }
 ~~~~
+{: #asd title='Representation of agent-signed-data' artwork-align="left"}
 
-{: #asd title='Example of agent-signed-data' artwork-align="left"}
-
-Upon receiving the voucher-request trigger, the pledge SHOULD construct the body of the pledge-voucher-request object as defined in {{RFC8995}}.
+Upon receiving the voucher-request trigger, the pledge SHOULD construct the body of the pledge-voucher-request object as defined in {{RFC8995}}. 
+It will contain additional information provided by the registrar-agent as specified in the following.
 This object becomes a JSON-in-JWS object as defined in {{I-D.ietf-anima-jws-voucher}}.
+If the pledge is unable to construct the pledge-voucher-request it SHOULD respond with HTTP 406 error code to the registrar-agent to indicate that it is not able to create the pledge-voucher-request.
 
 The header of the pledge-voucher-request SHALL contain the following parameter as defined in {{RFC7515}}:
 
@@ -754,16 +756,17 @@ General JWS JSON Serialization
       "agent-sign-cert": ["base64encodedvalue==", "base64encodedvalue==", ...]
    }
    "signatures":[
-   {
-      "protected":{
-         "alg": "ES256",
-         "x5c": ["MIIB2jCC...dA=="] //may be unprotected "header"
-         }
-      "signature": "base64encodedvalue=="
-   }]
+      {
+        "protected":{
+           "alg": "ES256",
+           "x5c": ["MIIB2jCC...dA=="]
+         },
+         "signature": "base64encodedvalue=="
+      }
+   ]
 }
 ~~~~
-{: #pvr title='Example of pledge-voucher-request' artwork-align="left"}
+{: #pvr title='Representation of pledge-voucher-request' artwork-align="left"}
 
 The pledge-voucher-request Content-Type is defined in {{I-D.ietf-anima-jws-voucher}} as:
 
@@ -775,7 +778,7 @@ This format is included by the registrar as described in {{exchanges_uc2_2}}.
 
 Once the registrar-agent has received the pledge-voucher-request it can trigger the pledge to generate an enrollment-request object.
 As in BRSKI the enrollment request object is a PKCS#10, but additionally signed using the pledge's IDevID.
-Note, as the initial enrollment aims to request a general certificate, no certificate attributes are provided to the pledge.
+Note, as the initial enrollment aims to request a generic certificate, no certificate attributes are provided to the pledge.
 
 Triggering the pledge to create the enrollment-request is done using HTTP POST on the defined pledge endpoint "/.well-known/brski/pledge-enrollment-request".
 
@@ -798,14 +801,17 @@ In addition, based on the additional signature using the IDevID, proof of identi
 Here, a JOSE object is being created in which the body utilizes the YANG module ietf-ztp-types with the grouping for csr-grouping for the CSR as defined in {{I-D.ietf-netconf-sztp-csr}}.
 
 Depending on the capability of the pledge, it constructs the enrollment request as plain PKCS#10.
-Note that the focus in this use case is placed on PKCS#10 as PKCS#10 can be transmitted in different enrollment protocols like EST, CMP, CMS, and SCEP.
+Note that the focus in this use case is placed on PKCS#10 as PKCS#10 can be transmitted in different enrollment protocols in the infrastructure like EST, CMP, CMS, and SCEP. 
 If the pledge is already implementing an enrollment protocol, it may leverage that functionality for the creation of the enrollment request object.
 Note also that {{I-D.ietf-netconf-sztp-csr}} also allows for inclusion of certification request objects such as CMP or CMC.
 
 The pledge SHOULD construct the pledge-enrollment-request as PKCS#10 object.
 In BRSKI-PRM it MUST sign it additionally with its IDevID credential to provide proof-of-identity bound to the PKCS#10 as described below.
 
-A successful enrollment will result in a generic LDevID certificate for the pledge in the new domain, which can be used to request further LDevID certificates if necessary for its operation.
+If the pledge is unable to construct the enrollment-request it SHOULD respond with HTTP 406 error code to the registrar-agent to indicate that it is not able to create the enrollment-request.
+
+A successful enrollment will result in a generic LDevID certificate for the pledge in the new domain, which can be used to request further LDevID certificates if necessary for its operation. 
+The registrar-agent may use the endpoints specified in this document. 
 
 {{I-D.ietf-netconf-sztp-csr}} considers PKCS#10 but also CMP and CMC as certification request format. Note that the wrapping signature is only necessary for plain PKCS#10 as other request formats like CMP and CMS support the signature wrapping as part of their own certificate request format.
 
@@ -846,16 +852,17 @@ General JWS JSON Serialization
       "p10-csr": "base64encodedvalue=="
    }
    "signatures":[
-   {
-      "protected":{
-         "alg": "ES256",
-         "x5c": ["MIIB2jCC...dA=="] //may be unprotected "header"
+      {
+        "protected":{
+           "alg": "ES256",
+           "x5c": ["MIIB2jCC...dA=="]
          }
-      "signature": "base64encodedvalue=="
-   }]
+        "signature": "base64encodedvalue=="
+      }
+   ]
 }
 ~~~~
-{: #per title='Example of pledge-enrollment-request' artwork-align="left"}
+{: #per title='Representation of pledge-enrollment-request' artwork-align="left"}
 
 With the collected pledge-voucher-request object and the pledge-enrollment-request object, the registrar-agent starts the interaction with the domain registrar.
 
@@ -1040,17 +1047,18 @@ General JWS JSON Serialization
       "agent-sign-cert": ["base64encodedvalue==", "base64encodedvalue==", ...]
    }
    "signatures":[
-   {
-      "protected":{
-         "alg": "ES256",
-         "x5c": ["MIIB2jCC...dA=="] //may be unprotected "header"
-         }
-      "signature": "base64encodedvalue=="
-   }]
+      {
+        "protected":{
+           "alg": "ES256",
+           "x5c": ["MIIB2jCC...dA=="] 
+         },
+        "signature": "base64encodedvalue=="
+      }
+   ]
 }
 
 ~~~~
-{: #rvr title='Example of registrar-voucher-request' artwork-align="left"}
+{: #rvr title='Representation of registrar-voucher-request' artwork-align="left"}
 
 The registrar sends the registrar-voucher-request to the MASA by HTTP POST to the endpoint "/.well-known/brski/requestvoucher".
 
@@ -1112,17 +1120,18 @@ General JWS JSON Serialization
       "pinned-domain-cert": "MIIBpDCCA...w=="
    }
    "signatures":[
-   {
-      "protected":{
-         "alg": "ES256",
-         "x5c": ["MIIB2jCC...dA=="] //may be unprotected "header"
+      {
+        "protected":{
+           "alg": "ES256",
+           "x5c": ["MIIB2jCC...dA=="]
          }
-      "signature": "base64encodedvalue=="
-   }]
+        "signature": "base64encodedvalue=="
+      }
+   ]
 }
 
 ~~~~
-{: #MASA-vr title='Example of MASA issued voucher' artwork-align="left"}
+{: #MASA-vr title='Representation of MASA issued voucher' artwork-align="left"}
 
 The MASA responds the voucher to the registrar.
 
@@ -1141,24 +1150,25 @@ General JWS JSON Serialization
       "pinned-domain-cert": "MIIBpDCCA...w=="
    }
    "signatures":[
-   {
-      "protected":{ //MASA Signature
-         "alg": "ES256",
-         "x5c": ["MIIB2jCC...dA=="] //may be unprotected "header"
-         }
-      "signature": "base64encodedvalue=="
-   },   
-   {
-      "protected":{ //registrar-signature
-         "alg": "ES256",
-         "x5c": ["MIIB2jRR...dA=="] //may be unprotected "header"
-         }
-      "signature": "base64encodedvalue=="
-   }]
+      {
+        "protected":{ //MASA Signature
+           "alg": "ES256",
+           "x5c": ["MIIB2jCC...dA=="]
+         },
+        "signature": "base64encodedvalue=="
+      },   
+      {
+        "protected":{ //registrar-signature
+           "alg": "ES256",
+           "x5c": ["MIIB2jRR...dA=="]
+         },
+        "signature": "base64encodedvalue=="
+      }
+   ]
 }
 
 ~~~~
-{: #MASA-REG-vr title='Example of MASA issued voucher with additional registrar signature' artwork-align="left"}
+{: #MASA-REG-vr title='Representation of MASA issued voucher with additional registrar signature' artwork-align="left"}
 
 Depending on the security policy of the operator, this signature can also be interpreted as explicit authorization of the registrar to install the contained trust anchor.
 
@@ -1191,7 +1201,7 @@ If validation of the wrapping signature fails, the registrar SHOULD respond with
 HTTP 406 error code is more appropriate, if the pledge-enrollment-request is in an unknown format.  
 A situation that could be resolved with administrative action (such as adding a vendor/manufacturer IDevID CA as trusted party) MAY be responded with HTTP 403 error code.
 
-A successful interaction with the domain CA will result in the pledge LDevID EE certificate, which is then forwarded by the registrar to the registrar-agent using the Content-Type header: "application/pkcs7-mime".
+A successful interaction with the domain CA will result in a pledge LDevID EE certificate, which is then forwarded by the registrar to the registrar-agent using the Content-Type header: "application/pkcs7-mime".
 
 The registrar-agent has now finished the exchanges with the domain registrar and can supply the voucher-response (from MASA via Registrar) and the enrollment-response (LDevID EE certificate) to the pledge.
 It can close the TLS connection to the domain registrar and provide the objects to the pledge(s).
@@ -1235,22 +1245,22 @@ The registrar-agent voucher-response Content-Type header is "application/voucher
 
 If a single signature is contained, the pledge receives the voucher and verifies it as described in section 5.6.1 in {{RFC8995}}. 
 
-If multiple signatures are contained in the voucher the pledge performs the signature verification in the following order:
+If multiple signatures are contained in the voucher, the pledge SHALL perform the signature verification in the following order:
 
   1. Verify MASA signature as described in section 5.6.1 in {{RFC8995}} successfully.
-  2. Install contained trust anchor provisionally 
+  2. Install contained trust anchor provisionally. 
   3. Verify registrar signature as described in section 5.6.1 in {{RFC8995}} successfully, but take the registrar certificate instead of the MASA certificate for verification.
-  4. Verify the registrar certificate received in the agent-provided-proximity-registrar-cert in the voucher request successfully 
+  4. Verify the registrar certificate received in the agent-provided-proximity-registrar-cert in the voucher request successfully. 
   
-When all verifications have been performed successfully, release the provisional state for the trust anchor and the LDevID (REG). 
-When multiple signatures are contained, the pledge MUST verify all successfully.
+When all verification steps stated above have been performed successfully, the pledge SHALL end the provisional accept state for the domain trust anchor and the LDevID(Reg). 
+When multiple signatures are contained in the voucher-response, the pledge MUST verify all successfully.
 
-When an error occurs during the verification it SHALL be signaled in the pledge voucher-status object.
+When an error occurs during the verification it SHALL be signaled in the reason field of the pledge voucher-status object.
 
-After verification the pledge MUST reply with a status telemetry message as defined in section 5.7 of {{RFC8995}}.
-As for the other objects, the defined object is provided with an additional signature using JOSE. The pledge generates the voucher-status-object and provides it in the response message to the registrar-agent.
+After verification the pledge MUST reply with a status telemetry message as defined in section 5.7 of {{RFC8995}}.  
+The pledge generates the voucher-status-object and provides it as JOSE object with the wrapping signature in the response message to the registrar-agent.
 
-The response has the Content-Type "application/jose", signed using the IDevID of the pledge as shown in {{vstat}}.
+The response has the Content-Type "application/jose" and is signed using the IDevID of the pledge as shown in {{vstat}}.
 As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of success.
 
 
@@ -1279,16 +1289,17 @@ General JWS JSON Serialization
       "reason-context": { "additional" : "JSON" }
    }
    "signatures":[
-   {
-      "protected":{
-         "alg": "ES256",
-         "x5c": ["MIIB2jCC...dA=="] //may be unprotected "header"
-         }
-      "signature": "base64encodedvalue=="
-   }]
+      {
+        "protected":{
+           "alg": "ES256",
+           "x5c": ["MIIB2jCC...dA=="]
+         },
+        "signature": "base64encodedvalue=="
+      }
+   ]
 }
 ~~~~
-{: #vstat title='Example of pledge voucher-status telemetry' artwork-align="left"}
+{: #vstat title='Representation of pledge voucher-status telemetry' artwork-align="left"}
 
 The enrollment response is provided with a HTTP POST using the operation path value of "/.well-known/brski/pledge-enrollment".
 
@@ -1296,21 +1307,14 @@ The registrar-agent enroll-response Content-Type header, when using EST {{RFC703
 
 application/pkcs7-mime: note that it only contains the LDevID certificate for the pledge, not the certificate chain.
 
+Upon reception, the pledge verifies the LDevID certificate. 
+When an error occurs during the verification it SHALL be signaled in the reason field of the pledge enroll-status object.
 
-[RFC Editor: please delete] /*
-
-Open Issue: the enrollment response object may also be an
-application/jose object with a signature of the domain registrar.
-This may be used either to transport additional data which is bound
-to the LDevID or it may be considered for enrollment status to
-ensure that in an error case the registrar providing the certificate
-can be identified. According to resolution of issue #8 not needed*/
-
-After successful verification the pledge MUST reply with a status telemetry message as defined in section 5.9.4 of {{RFC8995}}.
+The pledge MUST reply with a status telemetry message as defined in section 5.9.4 of {{RFC8995}}.
 As for the other objects, the defined object is provided with an additional signature using JOSE.
 The pledge generates the enrollment status and provides it in the response message to the registrar-agent.
 
-The response has the Content-Type "application/jose", signed using the LDevID of the pledge as shown in {{estat}}.
+The response has the Content-Type "application/jose", signed using the freshly provided LDevID of the pledge as shown in {{estat}}.
 As the reason field is optional, it MAY be omitted in case of success.
 
 
@@ -1338,16 +1342,17 @@ General JWS JSON Serialization
       "reason-context": { "additional" : "JSON" }
    }
    "signatures":[
-   {
-      "protected":{
-         "alg": "ES256",
-         "x5c": ["MIIB2jCC...dA=="] //may be unprotected "header"
-         }
-      "signature": "base64encodedvalue=="
-   }]
+      {
+        "protected":{
+           "alg": "ES256",
+           "x5c": ["MIIB2jCC...dA=="]
+         },
+        "signature": "base64encodedvalue=="
+      }
+   ]
 }
 ~~~~
-{: #estat title='Example of pledge enroll-status telemetry' artwork-align="left"}
+{: #estat title='Representation of pledge enroll-status telemetry' artwork-align="left"}
 
 Once the registrar-agent has collected the information, it can connect to the registrar agent to provide the status responses to the registrar.
 
@@ -1717,10 +1722,15 @@ We would like to thank the various reviewers, in particular Brian E. Carpenter a
 
 From IETF draft 01 -> IETF draft 02:
 
-* Issue #15 included additional signature on voucher from registrar in section {{#exchanges_uc2_2}} and section {{#agt_prx}}
-  The verification of multiple signatures is described in section {{#exchanges_uc2_3}}
+* Issue #15 included additional signature on voucher from registrar in section {{exchanges_uc2_2}} and section {{agt_prx}}
+  The verification of multiple signatures is described in section {{exchanges_uc2_3}}
   
 * Included examples for General JWS JSON Serialization for examples
+
+* Included error responses from pledge if it is not able to create a pledge-voucher request or an enrollment request in section {{exchanges_uc2_1}}
+
+* Removed open issue regarding handling of multiple CSRs and enrollment responses during the bootstrapping as the initial target it the provisioning of a generic LDevID certificate. The defined endpoint on the pledge may also be used for management of further certificates.
+ 
 
 From IETF draft 00 -> IETF draft 01:
 

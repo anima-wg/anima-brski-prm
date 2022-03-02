@@ -5,15 +5,15 @@
 ANIMA WG                                                        S. Fries
 Internet-Draft                                                 T. Werner
 Intended status: Standards Track                                 Siemens
-Expires: 12 August 2022                                          E. Lear
+Expires: 3 September 2022                                        E. Lear
                                                            Cisco Systems
                                                            M. Richardson
                                                 Sandelman Software Works
-                                                         8 February 2022
+                                                            2 March 2022
 
 
             BRSKI with Pledge in Responder Mode (BRSKI-PRM)
-                     draft-ietf-anima-brski-prm-01
+                     draft-ietf-anima-brski-prm-02
 
 Abstract
 
@@ -47,15 +47,15 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 August 2022.
+   This Internet-Draft will expire on 3 September 2022.
 
 
 
 
 
-Fries, et al.            Expires 12 August 2022                 [Page 1]
+Fries, et al.           Expires 3 September 2022                [Page 1]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
 Copyright Notice
@@ -91,32 +91,32 @@ Table of Contents
        5.1.2.  Behavior of Pledge in Pledge-Responder-Mode . . . . .  13
        5.1.3.  Behavior of Registrar-Agent . . . . . . . . . . . . .  14
        5.1.4.  Bootstrapping Objects and Corresponding Exchanges . .  16
-   6.  Artifacts . . . . . . . . . . . . . . . . . . . . . . . . . .  39
-     6.1.  Voucher Request Artifact  . . . . . . . . . . . . . . . .  39
-       6.1.1.  Tree Diagram  . . . . . . . . . . . . . . . . . . . .  39
-       6.1.2.  YANG Module . . . . . . . . . . . . . . . . . . . . .  40
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  44
-   8.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  44
-   9.  Security Considerations . . . . . . . . . . . . . . . . . . .  44
-     9.1.  Exhaustion Attack on Pledge . . . . . . . . . . . . . . .  45
+   6.  Artifacts . . . . . . . . . . . . . . . . . . . . . . . . . .  44
+     6.1.  Voucher Request Artifact  . . . . . . . . . . . . . . . .  44
+       6.1.1.  Tree Diagram  . . . . . . . . . . . . . . . . . . . .  45
+       6.1.2.  YANG Module . . . . . . . . . . . . . . . . . . . . .  45
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  49
+   8.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  50
+   9.  Security Considerations . . . . . . . . . . . . . . . . . . .  50
+     9.1.  Exhaustion Attack on Pledge . . . . . . . . . . . . . . .  50
      9.2.  Misuse of acquired Voucher and Enrollment responses by
-           Registrar-Agent . . . . . . . . . . . . . . . . . . . . .  45
-     9.3.  Misuse of Registrar-Agent Credentials . . . . . . . . . .  45
-     9.4.  YANG Module Security Considerations . . . . . . . . . . .  45
-   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  46
-   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  46
-     11.1.  Normative References . . . . . . . . . . . . . . . . . .  46
+           Registrar-Agent . . . . . . . . . . . . . . . . . . . . .  50
+     9.3.  Misuse of Registrar-Agent Credentials . . . . . . . . . .  50
+     9.4.  YANG Module Security Considerations . . . . . . . . . . .  51
+   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  51
+   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  51
+     11.1.  Normative References . . . . . . . . . . . . . . . . . .  51
 
 
 
-Fries, et al.            Expires 12 August 2022                 [Page 2]
+Fries, et al.           Expires 3 September 2022                [Page 2]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
-     11.2.  Informative References . . . . . . . . . . . . . . . . .  47
-   Appendix A.  History of Changes [RFC Editor: please delete] . . .  48
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  53
+     11.2.  Informative References . . . . . . . . . . . . . . . . .  53
+   Appendix A.  History of Changes [RFC Editor: please delete] . . .  53
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  59
 
 1.  Introduction
 
@@ -165,9 +165,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                 [Page 3]
+Fries, et al.           Expires 3 September 2022                [Page 3]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    *  allowing to utilize credentials different from the pledge's IDevID
@@ -221,9 +221,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                 [Page 4]
+Fries, et al.           Expires 3 September 2022                [Page 4]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
       cryptographically bound to the EE certificate (IDevID certificate
@@ -277,9 +277,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                 [Page 5]
+Fries, et al.           Expires 3 September 2022                [Page 5]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
 3.1.  Supported Environment
@@ -333,9 +333,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                 [Page 6]
+Fries, et al.           Expires 3 September 2022                [Page 6]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
 3.2.2.  Infrastructure Isolation Policy
@@ -389,9 +389,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                 [Page 7]
+Fries, et al.           Expires 3 September 2022                [Page 7]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    *  Proof of Possession (POP): proves that an entity possesses and
@@ -445,9 +445,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                 [Page 8]
+Fries, et al.           Expires 3 September 2022                [Page 8]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    Necessary enhancements to support authenticated self-contained
@@ -501,9 +501,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                 [Page 9]
+Fries, et al.           Expires 3 September 2022                [Page 9]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
                                              +------------------------+
@@ -557,9 +557,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 10]
+Fries, et al.           Expires 3 September 2022               [Page 10]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    In addition, the domain registrar may authenticate the user operating
@@ -613,9 +613,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 11]
+Fries, et al.           Expires 3 September 2022               [Page 11]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
       objects on one or multiple pledges at performs may perform a bulk
@@ -669,9 +669,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 12]
+Fries, et al.           Expires 3 September 2022               [Page 12]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    In contrast, "proximity" provides a statement, that the pledge was in
@@ -725,9 +725,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 13]
+Fries, et al.           Expires 3 September 2022               [Page 13]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    Operations and their corresponding URIs:
@@ -781,9 +781,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 14]
+Fries, et al.           Expires 3 September 2022               [Page 14]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    the domain registrar in the context of for TLS client-side
@@ -837,9 +837,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 15]
+Fries, et al.           Expires 3 September 2022               [Page 15]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
 5.1.3.1.  Discovery of Registrar by Registrar-Agent
@@ -893,9 +893,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 16]
+Fries, et al.           Expires 3 September 2022               [Page 16]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    pledge to be used in the "agent-sign-cert" component of the pledge-
@@ -949,9 +949,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 17]
+Fries, et al.           Expires 3 September 2022               [Page 17]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
         |              |<------ TLS ----->|              |            |
@@ -1005,9 +1005,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 18]
+Fries, et al.           Expires 3 September 2022               [Page 18]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    *  Response object supply targets the exchanges and objects between
@@ -1061,9 +1061,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 19]
+Fries, et al.           Expires 3 September 2022               [Page 19]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    +--------+                             +-----------+
@@ -1113,23 +1113,25 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    "agent-sign-cert": ["base64encodedvalue==", "base64encodedvalue==", ...]
 }
 
-    Figure 5: Example of trigger to create pledge-voucher-request
+ Figure 5: Representation of trigger to create pledge-voucher-request
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 20]
+Fries, et al.           Expires 3 September 2022               [Page 20]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
+   The pledge provisionally accepts the agent-provided-proximity-
+   registrar-cert and can verify it once it has received the voucher.
    If the optionally agent-sign-cert data is included the pledge MAY
    verify at least the signature of the agent-signed-data using the
    first contained certificate, which is the LDevID(RegAgt) EE
-   certificate.  If further certificates are contained, they enable the
-   certificate chain validation.  The pledge may not verify the agent-
-   sign-cert itself as the domain trust has not been established at this
-   point of the communication.  It can be done, after the voucher has
-   been received.
+   certificate.  If further certificates are contained in the agent-
+   sign-cert, they enable also the certificate chain validation.  The
+   pledge may not verify the agent-sign-cert itself as the domain trust
+   has not been established at this point of the communication.  It can
+   be done, after the voucher has been received.
 
    The agent-signed-data is a JOSE object and contains the following
    information:
@@ -1152,6 +1154,31 @@ Internet-Draft                  BRSKI-PRM                  February 2022
       corresponds with the product-serial-number contained in the
       X520SerialNumber field of the IDevID certificate of the pledge.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 21]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
+   Compact JWS JSON Serialization
    {
        "alg": "ES256",
        "kid": "base64encodedvalue=="
@@ -1166,27 +1193,46 @@ Internet-Draft                  BRSKI-PRM                  February 2022
        SIGNATURE
    }
 
-                   Figure 6: Example of agent-signed-data
+   General JWS JSON Serialization
+   {
+      "payload":"ietf-voucher-request-prm:agent-signed-data": {
+         "created-on": "2021-04-16T00:00:01.000Z",
+         "serial-number": "callee4711"
+      }
+      "signatures":[
+        {
+           "protected":{
+              "alg": "ES256",
+              "kid": "base64encodedvalue=="
+              },
+           "signature": "base64encodedvalue=="
+        }
+      ]
+   }
 
-
-
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 21]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
+               Figure 6: Representation of agent-signed-data
 
    Upon receiving the voucher-request trigger, the pledge SHOULD
    construct the body of the pledge-voucher-request object as defined in
-   [RFC8995].  This object becomes a JSON-in-JWS object as defined in
-   [I-D.ietf-anima-jws-voucher].
+   [RFC8995].  It will contain additional information provided by the
+   registrar-agent as specified in the following.  This object becomes a
+   JSON-in-JWS object as defined in [I-D.ietf-anima-jws-voucher].  If
+   the pledge is unable to construct the pledge-voucher-request it
+   SHOULD respond with HTTP 406 error code to the registrar-agent to
+   indicate that it is not able to create the pledge-voucher-request.
 
    The header of the pledge-voucher-request SHALL contain the following
    parameter as defined in [RFC7515]:
 
    *  alg: algorithm used for creating the object signature.
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 22]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
 
    *  x5c: contains the base64-encoded pledge IDevID certificate.  It
       may optionally contain the certificate chain for this certificate.
@@ -1226,17 +1272,25 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    The enhancements of the YANG module for the ietf-voucher-request with
    these new leafs are defined in Section 6.1.
 
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 22]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
    The object is signed using the pledge's IDevID credential contained
    as x5c parameter of the JOSE header.
 
+
+
+
+
+
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 23]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
+Compact JWS JSON Serialization
 {
    "alg": "ES256",
    "x5c": ["MIIB2jCC...dA=="]
@@ -1256,12 +1310,41 @@ Internet-Draft                  BRSKI-PRM                  February 2022
     SIGNATURE
 }
 
-             Figure 7: Example of pledge-voucher-request
+General JWS JSON Serialization
+{
+   "payload":"  "ietf-voucher-request-prm:voucher": {
+      "created-on": "2021-04-16T00:00:02.000Z",
+      "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
+      "serial-number": "callee4711",
+      "assertion": "agent-proximity",
+      "agent-provided-proximity-registrar-cert": "base64encodedvalue==",
+      "agent-signed-data": "base64encodedvalue==",
+      "agent-sign-cert": ["base64encodedvalue==", "base64encodedvalue==", ...]
+   }
+   "signatures":[
+      {
+        "protected":{
+           "alg": "ES256",
+           "x5c": ["MIIB2jCC...dA=="]
+         },
+         "signature": "base64encodedvalue=="
+      }
+   ]
+}
+
+          Figure 7: Representation of pledge-voucher-request
 
    The pledge-voucher-request Content-Type is defined in
    [I-D.ietf-anima-jws-voucher] as:
 
    application/voucher-jws+json
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 24]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
 
    The pledge SHOULD include this Content-Type header field indicating
    the included media type for the voucher response.  Note that this is
@@ -1273,22 +1356,12 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    can trigger the pledge to generate an enrollment-request object.  As
    in BRSKI the enrollment request object is a PKCS#10, but additionally
    signed using the pledge's IDevID.  Note, as the initial enrollment
-   aims to request a general certificate, no certificate attributes are
+   aims to request a generic certificate, no certificate attributes are
    provided to the pledge.
 
    Triggering the pledge to create the enrollment-request is done using
    HTTP POST on the defined pledge endpoint "/.well-known/brski/pledge-
    enrollment-request".
-
-
-
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 23]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
 
    The registrar-agent pledge-enrollment-request Content-Type header is:
    application/json with an empty body.  Note that using HTTP POST
@@ -1314,37 +1387,50 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    YANG module ietf-ztp-types with the grouping for csr-grouping for the
    CSR as defined in [I-D.ietf-netconf-sztp-csr].
 
+
+
+
+
+
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 25]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
    Depending on the capability of the pledge, it constructs the
    enrollment request as plain PKCS#10.  Note that the focus in this use
    case is placed on PKCS#10 as PKCS#10 can be transmitted in different
-   enrollment protocols like EST, CMP, CMS, and SCEP.  If the pledge is
-   already implementing an enrollment protocol, it may leverage that
-   functionality for the creation of the enrollment request object.
-   Note also that [I-D.ietf-netconf-sztp-csr] also allows for inclusion
-   of certification request objects such as CMP or CMC.
+   enrollment protocols in the infrastructure like EST, CMP, CMS, and
+   SCEP.  If the pledge is already implementing an enrollment protocol,
+   it may leverage that functionality for the creation of the enrollment
+   request object.  Note also that [I-D.ietf-netconf-sztp-csr] also
+   allows for inclusion of certification request objects such as CMP or
+   CMC.
 
    The pledge SHOULD construct the pledge-enrollment-request as PKCS#10
    object.  In BRSKI-PRM it MUST sign it additionally with its IDevID
    credential to provide proof-of-identity bound to the PKCS#10 as
    described below.
 
+   If the pledge is unable to construct the enrollment-request it SHOULD
+   respond with HTTP 406 error code to the registrar-agent to indicate
+   that it is not able to create the enrollment-request.
+
    A successful enrollment will result in a generic LDevID certificate
    for the pledge in the new domain, which can be used to request
-   further LDevID certificates if necessary for its operation.
+   further LDevID certificates if necessary for its operation.  The
+   registrar-agent may use the endpoints specified in this document.
 
    [I-D.ietf-netconf-sztp-csr] considers PKCS#10 but also CMP and CMC as
    certification request format.  Note that the wrapping signature is
    only necessary for plain PKCS#10 as other request formats like CMP
    and CMS support the signature wrapping as part of their own
    certificate request format.
-
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 24]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
 
    The registrar-agent enrollment-request Content-Type header for a
    wrapped PKCS#10 is: application/jose
@@ -1363,9 +1449,19 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
    *  P10: contains the base64-encoded PKCS#10 of the pledge.
 
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 26]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
    The JOSE object is signed using the pledge's IDevID credential, which
    corresponds to the certificate signaled in the JOSE header.
 
+   Compact JWS JSON Serialization
    {
        "alg": "ES256",
        "x5c": ["MIIB2jCC...dA=="]
@@ -1379,7 +1475,23 @@ Internet-Draft                  BRSKI-PRM                  February 2022
        SIGNATURE
    }
 
-               Figure 9: Example of pledge-enrollment-request
+   General JWS JSON Serialization
+   {
+      "payload":"  "ietf-ztp-types": {
+         "p10-csr": "base64encodedvalue=="
+      }
+      "signatures":[
+         {
+           "protected":{
+              "alg": "ES256",
+              "x5c": ["MIIB2jCC...dA=="]
+            }
+           "signature": "base64encodedvalue=="
+         }
+      ]
+   }
+
+           Figure 9: Representation of pledge-enrollment-request
 
    With the collected pledge-voucher-request object and the pledge-
    enrollment-request object, the registrar-agent starts the interaction
@@ -1397,9 +1509,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 25]
+Fries, et al.           Expires 3 September 2022               [Page 27]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    work between the pledge and the domain registrar, a collection of
@@ -1453,9 +1565,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 26]
+Fries, et al.           Expires 3 September 2022               [Page 28]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    +-----------+    +-----------+   +--------+   +---------+
@@ -1509,9 +1621,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 27]
+Fries, et al.           Expires 3 September 2022               [Page 29]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    In contrast to [RFC8995] TLS client authentication is achieved by
@@ -1565,9 +1677,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 28]
+Fries, et al.           Expires 3 September 2022               [Page 30]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    *  agent-sign-cert: MAY contain an array of base64-encoded
@@ -1621,9 +1733,9 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 29]
+Fries, et al.           Expires 3 September 2022               [Page 31]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
    *  serial-number: contains the pledge product-serial-number.  The
@@ -1677,11 +1789,12 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 30]
+Fries, et al.           Expires 3 September 2022               [Page 32]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
+Compact JWS JSON Serialization
 {
    "alg": "ES256",
    "x5c": ["MIIB2jCC...dA=="]
@@ -1700,13 +1813,42 @@ Internet-Draft                  BRSKI-PRM                  February 2022
     SIGNATURE
 }
 
-           Figure 11: Example of registrar-voucher-request
+General JWS JSON Serialization
+{
+   "payload": "ietf-voucher-request-prm:voucher": {
+      "created-on": "2022-01-04T02:37:39.235Z",
+      "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
+      "serial-number": "callee4711",
+      "assertion": "agent-proximity",
+      "prior-signed-voucher-request": "base64encodedvalue==",
+      "agent-sign-cert": ["base64encodedvalue==", "base64encodedvalue==", ...]
+   }
+   "signatures":[
+      {
+        "protected":{
+           "alg": "ES256",
+           "x5c": ["MIIB2jCC...dA=="]
+         },
+        "signature": "base64encodedvalue=="
+      }
+   ]
+}
+
+        Figure 11: Representation of registrar-voucher-request
 
    The registrar sends the registrar-voucher-request to the MASA by HTTP
    POST to the endpoint "/.well-known/brski/requestvoucher".
 
    The registrar-voucher-request Content-Type header field is defined in
    [I-D.ietf-anima-jws-voucher] as: application/voucher-jws+json
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 33]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
 
    The registrar SHOULD include an Accept request-header field
    indicating the acceptable media type for the voucher-response.  The
@@ -1730,14 +1872,6 @@ Internet-Draft                  BRSKI-PRM                  February 2022
       the pledge product-serial-number, contained in the serial-number
       properties of the prior-signed-voucher and also in serial-number
       properties of the registrar-voucher-request.  The LDevID(RegAgt)
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 31]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
       EE certificate used to generate the signature is identified by the
       "kid" parameter of the JOSE header (agent-signed-data).  If the
       assertion "agent-proximity" is requested, the registrar-voucher-
@@ -1759,6 +1893,19 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    section 5.6 of [RFC8995], and comprise the codes: 403, 404, 406, and
    415.
 
+
+
+
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 34]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
    The expected voucher response format is indicated by the Accept
    request-header field or based on the MASA's prior understanding of
    proper format for this pledge.  Specifically for the pledge-
@@ -1767,6 +1914,7 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    described in detail by [RFC8366].  Figure 12 shows an example of the
    contents of a voucher.
 
+   Compact JWS JSON Serialization
    {
        "alg": "ES256",
        "x5c": ["MIIBkzCCAT...dA=="]
@@ -1784,35 +1932,97 @@ Internet-Draft                  BRSKI-PRM                  February 2022
        SIGNATURE
    }
 
-                 Figure 12: Example of MASA issued voucher
+
+   General JWS JSON Serialization
+   {
+      "payload": "ietf-voucher:voucher": {
+         "assertion": "agent-proximity",
+         "serial-number": "callee4711",
+         "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
+         "created-on": "2022-01-04T00:00:02.000Z",
+         "pinned-domain-cert": "MIIBpDCCA...w=="
+      }
+      "signatures":[
+         {
+           "protected":{
+              "alg": "ES256",
+              "x5c": ["MIIB2jCC...dA=="]
+            }
+           "signature": "base64encodedvalue=="
+         }
+      ]
+   }
+
+              Figure 12: Representation of MASA issued voucher
 
 
 
-
-Fries, et al.            Expires 12 August 2022                [Page 32]
+Fries, et al.           Expires 3 September 2022               [Page 35]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
-   The MASA responds the voucher to the registrar.  After receiving the
-   voucher the registrar may evaluate it for transparency and logging
-   purposes as outlined in section 5.6 of [RFC8995].
+   The MASA responds the voucher to the registrar.
 
-   The registrar forwards the voucher without any changes to the
-   registrar-agent.  The registrar MAY provide an additional signature
-   of the voucher.  This signature is done over the same content as the
-   MASA signature of the voucher and provides a proof of possession of
-   the private key corresponding to the LDevID(Reg) the pledge received
-   in the trigger for the PVR (see Figure 5).  Depending on the security
-   policy of the operator, this signature can also be interpreted as
-   explicit authorization of the registrar to install the contained
-   trust anchor.
+   After receiving the voucher the registrar SHOULD evaluate it for
+   transparency and logging purposes as outlined in section 5.6 of
+   [RFC8995].  The registrar MAY provide an additional signature of the
+   voucher.  This signature is done over the same content as the MASA
+   signature of the voucher and provides a proof of possession of the
+   private key corresponding to the LDevID(Reg) the pledge received in
+   the trigger for the PVR (see Figure 5).  The registrar MUST use the
+   same LDevID(Reg) credential that is used for authentication in the
+   TLS handshake to authenticate towards the registrar-agent.  This
+   ensures that the same LDevID(Reg) certificate can be used to verify
+   the signature as transmitted in the voucher request as is transferred
+   in the pledge-voucher-request in the agent-provided-proximity-
+   registrar-cert component.  Figure Figure 13 below provides an example
+   of the voucher with two signatures.
 
-   [RFC Editor: please delete] /*
+   General JWS JSON Serialization
+   {
+      "payload": "ietf-voucher:voucher": {
+         "assertion": "agent-proximity",
+         "serial-number": "callee4711",
+         "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
+         "created-on": "2022-01-04T00:00:02.000Z",
+         "pinned-domain-cert": "MIIBpDCCA...w=="
+      }
+      "signatures":[
+         {
+           "protected":{ //MASA Signature
+              "alg": "ES256",
+              "x5c": ["MIIB2jCC...dA=="]
+            },
+           "signature": "base64encodedvalue=="
+         },
+         {
+           "protected":{ //registrar-signature
+              "alg": "ES256",
+              "x5c": ["MIIB2jRR...dA=="]
+            },
+           "signature": "base64encodedvalue=="
+         }
+      ]
+   }
 
-   Open Issue: Further description/example of additional signature
+      Figure 13: Representation of MASA issued voucher with additional
+                            registrar signature
 
-   */
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 36]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
+   Depending on the security policy of the operator, this signature can
+   also be interpreted as explicit authorization of the registrar to
+   install the contained trust anchor.
+
+   The registrar forwards the voucher to the registrar-agent.
 
    After receiving the voucher, the registrar-agent sends the pledge-
    enrollment-request (PER) to the registrar.  Deviating from BRSKI the
@@ -1842,14 +2052,6 @@ Internet-Draft                  BRSKI-PRM                  February 2022
       wrapping signature using the certificate indicated in the JOSE
       header.
 
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 33]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
    *  The registrar verifies that the pledge's IDevID certificate of the
       x5c header field, is accepted to join the domain, based on the
       verification of the pledge-voucher-request.
@@ -1864,6 +2066,14 @@ Internet-Draft                  BRSKI-PRM                  February 2022
       the CA into the requested LDevID EE certificate and sends both
       (the original PKCS#10 request and the enhancements) to the domain
       CA.  As enhancing the PKCS#10 request destroys the initial proof
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 37]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
       of possession of the corresponding private key, the CA would need
       to accept RA-verified requests.  This handling is out of scope for
       this document.
@@ -1879,7 +2089,7 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    as adding a vendor/manufacturer IDevID CA as trusted party) MAY be
    responded with HTTP 403 error code.
 
-   A successful interaction with the domain CA will result in the pledge
+   A successful interaction with the domain CA will result in a pledge
    LDevID EE certificate, which is then forwarded by the registrar to
    the registrar-agent using the Content-Type header: "application/
    pkcs7-mime".
@@ -1892,20 +2102,6 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    objects is defined through the voucher [RFC8366] and the certificate
    [RFC5280].
 
-
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 34]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
 5.1.4.3.  Response Object Supply by Registrar-Agent to Pledge
 
    The following description assumes that the registrar-agent has
@@ -1917,6 +2113,22 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    Preconditions in addition to Section 5.1.4.2:
 
    *  Registrar-agent: possesses voucher and LDevID certificate.
+
+
+
+
+
+
+
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 38]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
 
    +--------+                        +-----------+
    | Pledge |                        | Registrar-|
@@ -1933,7 +2145,7 @@ Internet-Draft                  BRSKI-PRM                  February 2022
        |--------- enroll-status ---------->| - store
        |                                   |   pledge enroll-status
 
-         Figure 13: Response and status handling between pledge and
+         Figure 14: Response and status handling between pledge and
                               registrar-agent
 
    The registrar-agent provides the information via two distinct
@@ -1944,39 +2156,93 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
    The registrar-agent voucher-response Content-Type header is
    "application/voucher-jws+json and contains the voucher as provided by
-   the MASA.  An example if given in Figure 12.
+   the MASA.  An example if given in Figure 12 for a MASA only signed
+   voucher and in Figure Figure 13 for multiple signatures.
 
-   The pledge verifies the voucher as described in section 5.6.1 in
-   [RFC8995].
+   If a single signature is contained, the pledge receives the voucher
+   and verifies it as described in section 5.6.1 in [RFC8995].
 
-   [RFC Editor: please delete] /*
+   If multiple signatures are contained in the voucher, the pledge SHALL
+   perform the signature verification in the following order:
 
-   Open Issue: Further description/example of additional signature by
-   registrar - Sequence of validation: 1. verify MASA Signature 2.
-   install contained trust anchor preliminary 3. verify registrar
+   1.  Verify MASA signature as described in section 5.6.1 in [RFC8995]
+       successfully.
+
+   2.  Install contained trust anchor provisionally.
+
+   3.  Verify registrar signature as described in section 5.6.1 in
+       [RFC8995] successfully, but take the registrar certificate
+       instead of the MASA certificate for verification.
+
+   4.  Verify the registrar certificate received in the agent-provided-
+       proximity-registrar-cert in the voucher request successfully.
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 35]
+
+
+Fries, et al.           Expires 3 September 2022               [Page 39]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
-   signature on voucher response and also the registrar certificate and
-   finally accept received agent-provided-proximity-registrar-cert
-   (ending the preliminary state) When multiple signatures are
-   contained, the pledge MUST verify all successfully. */
+   When all verification steps stated above have been performed
+   successfully, the pledge SHALL end the provisional accept state for
+   the domain trust anchor and the LDevID(Reg).  When multiple
+   signatures are contained in the voucher-response, the pledge MUST
+   verify all successfully.
 
-   After successful verification the pledge MUST reply with a status
-   telemetry message as defined in section 5.7 of [RFC8995].  As for the
-   other objects, the defined object is provided with an additional
-   signature using JOSE.  The pledge generates the voucher-status-object
-   and provides it in the response message to the registrar-agent.
+   When an error occurs during the verification it SHALL be signaled in
+   the reason field of the pledge voucher-status object.
 
-   The response has the Content-Type "application/jose", signed using
-   the IDevID of the pledge as shown in Figure 14.  As the reason field
-   is optional (see [RFC8995]), it MAY be omitted in case of success.
+   After verification the pledge MUST reply with a status telemetry
+   message as defined in section 5.7 of [RFC8995].
+   The pledge generates the voucher-status-object and provides it as
+   JOSE object with the wrapping signature in the response message to
+   the registrar-agent.
 
+   The response has the Content-Type "application/jose" and is signed
+   using the IDevID of the pledge as shown in Figure 15.  As the reason
+   field is optional (see [RFC8995]), it MAY be omitted in case of
+   success.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 40]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
+   Compact JWS JSON Serialization
    {
        "alg": "ES256",
        "x5c": ["MIIB2jCC...dA=="]
@@ -1990,7 +2256,27 @@ Internet-Draft                  BRSKI-PRM                  February 2022
        SIGNATURE
    }
 
-           Figure 14: Example of pledge voucher-status telemetry
+
+   General JWS JSON Serialization
+   {
+      "payload": { // to be verified
+         "version": 1,
+         "status":true,
+         "reason":"Informative human readable message",
+         "reason-context": { "additional" : "JSON" }
+      }
+      "signatures":[
+         {
+           "protected":{
+              "alg": "ES256",
+              "x5c": ["MIIB2jCC...dA=="]
+            },
+           "signature": "base64encodedvalue=="
+         }
+      ]
+   }
+
+        Figure 15: Representation of pledge voucher-status telemetry
 
    The enrollment response is provided with a HTTP POST using the
    operation path value of "/.well-known/brski/pledge-enrollment".
@@ -2002,32 +2288,31 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    application/pkcs7-mime: note that it only contains the LDevID
    certificate for the pledge, not the certificate chain.
 
-   [RFC Editor: please delete] /*
-
-   Open Issue: the enrollment response object may also be an
-   application/jose object with a signature of the domain registrar.
-   This may be used either to transport additional data which is bound
-   to the LDevID or it may be considered for enrollment status to ensure
-   that in an error case the registrar providing the certificate can be
-   identified.  According to resolution of issue #8 not needed*/
 
 
 
-Fries, et al.            Expires 12 August 2022                [Page 36]
+
+
+Fries, et al.           Expires 3 September 2022               [Page 41]
 
-Internet-Draft                  BRSKI-PRM                  February 2022
+Internet-Draft                  BRSKI-PRM                     March 2022
 
 
-   After successful verification the pledge MUST reply with a status
-   telemetry message as defined in section 5.9.4 of [RFC8995].  As for
-   the other objects, the defined object is provided with an additional
-   signature using JOSE.  The pledge generates the enrollment status and
-   provides it in the response message to the registrar-agent.
+   Upon reception, the pledge verifies the LDevID certificate.  When an
+   error occurs during the verification it SHALL be signaled in the
+   reason field of the pledge enroll-status object.
+
+   The pledge MUST reply with a status telemetry message as defined in
+   section 5.9.4 of [RFC8995].  As for the other objects, the defined
+   object is provided with an additional signature using JOSE.  The
+   pledge generates the enrollment status and provides it in the
+   response message to the registrar-agent.
 
    The response has the Content-Type "application/jose", signed using
-   the LDevID of the pledge as shown in Figure 15.  As the reason field
-   is optional, it MAY be omitted in case of success.
+   the freshly provided LDevID of the pledge as shown in Figure 16.  As
+   the reason field is optional, it MAY be omitted in case of success.
 
+   Compact JWS JSON Serialization
    {
      "alg": "ES256",
      "x5c": ["MIIB56uz...dA=="]
@@ -2041,7 +2326,33 @@ Internet-Draft                  BRSKI-PRM                  February 2022
      SIGNATURE
    }
 
-            Figure 15: Example of pledge enroll-status telemetry
+   General JWS JSON Serialization
+   {
+      "payload": { // to be verified
+         "version": 1,
+         "status":true,
+         "reason":"Informative human readable message",
+         "reason-context": { "additional" : "JSON" }
+      }
+      "signatures":[
+         {
+           "protected":{
+              "alg": "ES256",
+              "x5c": ["MIIB2jCC...dA=="]
+            },
+           "signature": "base64encodedvalue=="
+         }
+      ]
+   }
+
+        Figure 16: Representation of pledge enroll-status telemetry
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 42]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
 
    Once the registrar-agent has collected the information, it can
    connect to the registrar agent to provide the status responses to the
@@ -2058,21 +2369,6 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
    *  Registrar-agent: possesses voucher-status and enroll-status
       objects from pledge.
-
-
-
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 37]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
 
    +-----------+    +-----------+   +--------+   +---------+
    | Registrar |    | Domain    |   | Domain |   | Vendor  |
@@ -2091,7 +2387,7 @@ Internet-Draft                  BRSKI-PRM                  February 2022
        |                  |              |            |
        |                  |              |            |
 
-                  Figure 16: Bootstrapping status handling
+                  Figure 17: Bootstrapping status handling
 
    The registrar-agent MUST provide the collected pledge voucher-status
    to the registrar.  This status indicates if the pledge could process
@@ -2105,7 +2401,14 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    modification to the registrar with an HTTP-over-TLS POST using the
    operation path value of "/.well-known/brski/voucher_status".  The
    Content-Type header is kept as "application/jose" as described in
-   Figure 13 and depicted in the example in Figure 14.
+   Figure 14 and depicted in the example in Figure 15.
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 43]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
 
    The registrar SHALL verify the signature of the pledge voucher-status
    and validate that it belongs to an accepted device in his domain
@@ -2122,14 +2425,6 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    information by requesting the MASA audit-log from the MASA service as
    described in section 5.8 of [RFC8995].
 
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 38]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
    The registrar-agent MUST provide the pledge's enroll-status object to
    the registrar.  The status indicates the pledge could process the
    enroll-response object and holds the corresponding private key.
@@ -2138,7 +2433,7 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    modification to the registrar with an HTTP-over-TLS POST using the
    operation path value of "/.well-known/brski/enrollstatus".  The
    Content-Type header is kept as "application/jose" as described in
-   Figure 13 and depicted in the example in Figure 15.
+   Figure 14 and depicted in the example in Figure 16.
 
    The registrar SHALL verify the signature of the pledge enroll-status
    object and validate that it belongs to an accepted device in his
@@ -2161,6 +2456,16 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    [RFC8995] to include additional fields necessary for handling
    bootstrapping in the pledge-responder-mode.
 
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 44]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
 6.1.1.  Tree Diagram
 
    The following tree diagram is mostly a duplicate of the contents of
@@ -2168,23 +2473,6 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    registrar-proximity-certificate, and agent-signing certificate.  The
    tree diagram is described in [RFC8340].  Each node in the diagram is
    fully described by the YANG module in Section Section 6.1.2.
-
-
-
-
-
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 39]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
 
    module: ietf-voucher-request-prm
 
@@ -2227,6 +2515,13 @@ Internet-Draft                  BRSKI-PRM                  February 2022
        reference "RFC 8040: RESTCONF Protocol";
      }
 
+
+
+Fries, et al.           Expires 3 September 2022               [Page 45]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
      import ietf-voucher-request {
        prefix vcr;
        description
@@ -2234,14 +2529,6 @@ Internet-Draft                  BRSKI-PRM                  February 2022
              which is produced by a pledge as part of the RFC8995
              onboarding process.";
        reference
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 40]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
          "RFC 8995: Bootstrapping Remote Secure Key Infrastructure";
      }
 
@@ -2283,6 +2570,14 @@ Internet-Draft                  BRSKI-PRM                  February 2022
        (https://trustee.ietf.org/license-info).
 
        This version of this YANG module is part of RFC 8995; see the
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 46]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
        RFC itself for full legal notices.";
 
 
@@ -2290,14 +2585,6 @@ Internet-Draft                  BRSKI-PRM                  February 2022
        description
         "Initial version";
        reference
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 41]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
         "RFC XXXX: BRSKI for Pledge in Responder Mode";
      }
 
@@ -2340,20 +2627,19 @@ Internet-Draft                  BRSKI-PRM                  February 2022
               SHOULD be ignored by the MASA.";
          }
 
+
+
+Fries, et al.           Expires 3 September 2022               [Page 47]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
          augment voucher {
            description "Base the voucher-request-prm upon the
              regular one";
            leaf agent-signed-data {
              type binary;
              description
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 42]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
                "The agent-signed-data field contains a JOSE [RFC7515]
                 object provided by the Registrar-Agent to the Pledge.
 
@@ -2389,31 +2675,31 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
            leaf-list agent-sign-cert {
              type binary;
-                     min-elements 1;
+           min-elements 1;
              description
                "An X.509 v3 certificate structure, as specified by
                 RFC 5280, Section 4, encoded using the ASN.1
                 distinguished encoding rules (DER), as specified
                 in ITU X.690.
                 This certificate can be used by the pledge,
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 48]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
                 the registrar, and the MASA to verify the signature
                 of agent-signed-data. It is an optional component
                 for the pledge-voucher request.
                 This MUST be populated in a registrar's
                 voucher-request when an agent-proximity assertion
                 is requested.
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 43]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
-                            It is defined as list to enable inclusion of further
-                            certificates along the certificate chain if different
-                            issuing CAs have been used for the registrar-agent
-                            and the registrar.";
+             It is defined as list to enable inclusion of further
+             certificates along the certificate chain if different
+             issuing CAs have been used for the registrar-agent
+             and the registrar.";
              reference
                "ITU X.690: Information Technology - ASN.1 encoding
                 rules: Specification of Basic Encoding Rules (BER),
@@ -2447,6 +2733,19 @@ Internet-Draft                  BRSKI-PRM                  February 2022
     pledge-CACerts            [THISRFC] supply CA certs to pledge
     requestenroll             [THISRFC] supply PER to registrar
 
+
+
+
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 49]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
 8.  Privacy Considerations
 
    The credential used by the registrar-agent to sign the data for the
@@ -2457,14 +2756,6 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    to the MASA.
 
 9.  Security Considerations
-
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 44]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
 
 9.1.  Exhaustion Attack on Pledge
 
@@ -2500,6 +2791,17 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    LDevID may be acquired by a service technician after authentication
    against the issuing CA.
 
+
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 50]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
 9.4.  YANG Module Security Considerations
 
    The enhanced voucher-request described in section Section 6.1 bases
@@ -2514,14 +2816,6 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    relatively new and distinct from the traditional use of YANG to
    define an API accessed by network management protocols such as
    NETCONF [RFC6241] and RESTCONF [RFC8040].  For this reason, these
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 45]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
    guidelines do not follow the template described by Section 3.7 of
    [RFC8407].
 
@@ -2550,6 +2844,20 @@ Internet-Draft                  BRSKI-PRM                  February 2022
               31 January 2022, <https://www.ietf.org/archive/id/draft-
               ietf-netconf-sztp-csr-13.txt>.
 
+
+
+
+
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 51]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
    [I-D.richardson-anima-rfc8366bis]
               Watsen, K., Richardson, M. C., Pritikin, M., and T.
               Eckert, "A Voucher Artifact for Bootstrapping Protocols",
@@ -2567,16 +2875,6 @@ Internet-Draft                  BRSKI-PRM                  February 2022
               and A. Bierman, Ed., "Network Configuration Protocol
               (NETCONF)", RFC 6241, DOI 10.17487/RFC6241, June 2011,
               <https://www.rfc-editor.org/info/rfc6241>.
-
-
-
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 46]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
 
    [RFC6762]  Cheshire, S. and M. Krochmal, "Multicast DNS", RFC 6762,
               DOI 10.17487/RFC6762, February 2013,
@@ -2608,6 +2906,14 @@ Internet-Draft                  BRSKI-PRM                  February 2022
               RFC 8366, DOI 10.17487/RFC8366, May 2018,
               <https://www.rfc-editor.org/info/rfc8366>.
 
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 52]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
    [RFC8407]  Bierman, A., "Guidelines for Authors and Reviewers of
               Documents Containing YANG Data Models", BCP 216, RFC 8407,
               DOI 10.17487/RFC8407, October 2018,
@@ -2625,15 +2931,6 @@ Internet-Draft                  BRSKI-PRM                  February 2022
               802.1AR Secure Device Identifier", IEEE 802.1AR, June
               2018.
 
-
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 47]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
    [RFC2986]  Nystrom, M. and B. Kaliski, "PKCS #10: Certification
               Request Syntax Specification Version 1.7", RFC 2986,
               DOI 10.17487/RFC2986, November 2000,
@@ -2650,6 +2947,34 @@ Internet-Draft                  BRSKI-PRM                  February 2022
               <https://www.rfc-editor.org/info/rfc8340>.
 
 Appendix A.  History of Changes [RFC Editor: please delete]
+
+   From IETF draft 01 -> IETF draft 02:
+
+   *  Issue #15 included additional signature on voucher from registrar
+      in section Section 5.1.4.2 and section Section 5.1.1 The
+      verification of multiple signatures is described in section
+      Section 5.1.4.3
+
+   *  Included examples for General JWS JSON Serialization for examples
+
+   *  Included error responses from pledge if it is not able to create a
+      pledge-voucher request or an enrollment request in section
+      Section 5.1.4.1
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 53]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
+
+   *  Removed open issue regarding handling of multiple CSRs and
+      enrollment responses during the bootstrapping as the initial
+      target it the provisioning of a generic LDevID certificate.  The
+      defined endpoint on the pledge may also be used for management of
+      further certificates.
 
    From IETF draft 00 -> IETF draft 01:
 
@@ -2683,13 +3008,6 @@ Appendix A.  History of Changes [RFC Editor: please delete]
    *  Reworked text in from introduction to section pledge-responder-
       mode
 
-
-
-Fries, et al.            Expires 12 August 2022                [Page 48]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
    *  Fixed "serial-number" encoding in PVR/RVR
 
    *  Added prior-signed-voucher-request in the parameter description of
@@ -2697,6 +3015,16 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
    *  Note added in Section 5.1.4.2 if sub-CAs are used, that the
       corresponding information is to be provided to the MASA.
+
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 54]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
 
    *  Inclusion of limitation section (pledge sleeps and needs to be
       waked up.  Pledge is awake but registrar-agent is not available)
@@ -2737,15 +3065,6 @@ Internet-Draft                  BRSKI-PRM                  February 2022
       required changes and adaptations in several sections to remove the
       description and references to UC1.
 
-
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 49]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
    *  Addressed feedback for voucher-request enhancements from YANG
       doctor early review in Section 6.1 as well as in the security
       considerations (formerly named ietf-async-voucher-request).
@@ -2753,6 +3072,15 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    *  Renamed ietf-async-voucher-request to IETF-voucher-request-prm to
       to allow better listing of voucher related extensions; aligned
       with constraint voucher (#20)
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 55]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
 
    *  Utilized ietf-voucher-request-async instead of ietf-voucher-
       request in voucher exchanges to utilize the enhanced voucher-
@@ -2794,20 +3122,21 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    *  Details on trust relationship between registrar-agent and
       registrar (issue #4, #5, #9) included in Section 5.1.
 
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 50]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
    *  Recommendation regarding short-lived certificates for registrar-
       agent authentication towards registrar (issue #7) in the security
       considerations.
 
    *  Introduction of reference to agent signing certificate using SKID
       in agent signed data (issue #11).
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 56]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
 
    *  Enhanced objects in exchanges between pledge and registrar-agent
       to allow the registrar to verify agent-proximity to the pledge
@@ -2848,22 +3177,22 @@ Internet-Draft                  BRSKI-PRM                  February 2022
       intended to support both use cases in the document.  An
       illustrative example is provided.
 
-
-
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 51]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
    *  Missing details provided for the description and call flow in
       pledge-agent use case Section 5.1, e.g. to accommodate
       distribution of CA certificates.
 
    *  Updated CMP example in to use lightweight CMP instead of CMP, as
       the draft already provides the necessary /.well-known endpoints.
+
+
+
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 57]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
 
    *  Requirements discussion moved to separate section in Section 4.
       Shortened description of proof of identity binding and mapping to
@@ -2905,15 +3234,6 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    *  Update of description of architecture elements and changes to
       BRSKI in Section 5.
 
-
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 52]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
-
-
    *  Enhanced consideration of existing enrollment protocols in the
       context of mapping the requirements to existing solutions in
       Section 4.
@@ -2922,6 +3242,13 @@ Internet-Draft                  BRSKI-PRM                  February 2022
 
    *  Update of examples, specifically for building automation as well
       as two new application use cases in Section 3.2.
+
+
+
+Fries, et al.           Expires 3 September 2022               [Page 58]
+
+Internet-Draft                  BRSKI-PRM                     March 2022
+
 
    *  Deletion of asynchronous interaction with MASA to not complicate
       the use case.  Note that the voucher exchange can already be
@@ -2945,7 +3272,6 @@ Authors' Addresses
    Otto-Hahn-Ring 6
    81739 Munich
    Germany
-
    Email: steffen.fries@siemens.com
    URI:   https://www.siemens.com/
 
@@ -2955,19 +3281,8 @@ Authors' Addresses
    Otto-Hahn-Ring 6
    81739 Munich
    Germany
-
    Email: thomas-werner@siemens.com
    URI:   https://www.siemens.com/
-
-
-
-
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 53]
-
-Internet-Draft                  BRSKI-PRM                  February 2022
 
 
    Eliot Lear
@@ -2975,50 +3290,15 @@ Internet-Draft                  BRSKI-PRM                  February 2022
    Richtistrasse 7
    CH-8304 Wallisellen
    Switzerland
-
    Phone: +41 44 878 9200
    Email: lear@cisco.com
 
 
    Michael C. Richardson
    Sandelman Software Works
-
    Email: mcr+ietf@sandelman.ca
    URI:   http://www.sandelman.ca/
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 12 August 2022                [Page 54]
+Fries, et al.           Expires 3 September 2022               [Page 59]
