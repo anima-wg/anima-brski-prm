@@ -622,7 +622,7 @@ The the trigger for the pledge to create a pledge-voucher-request is depicted in
 {
    "agent-provided-proximity-registrar-cert": "base64encodedvalue==",
    "agent-signed-data": "base64encodedvalue==",
-   "agent-sign-cert": ["base64encodedvalue==", "base64encodedvalue==", ...]
+   "agent-sign-cert": ["base64encodedvalue==", "base64encodedvalue==", "..."]
 }
 ~~~~
 {: #pavrt title='Representation of trigger to create pledge-voucher-request' artwork-align="left"}
@@ -652,36 +652,22 @@ The body of the agent-signed-data contains an ietf-voucher-request-prm:agent-sig
 
 
 ~~~~
-Compact JWS JSON Serialization
 {
-    "alg": "ES256",
-    "kid": "base64encodedvalue=="
-}
-{
-  "ietf-voucher-request-prm:agent-signed-data": {
-    "created-on": "2021-04-16T00:00:01.000Z",
-    "serial-number": "callee4711"
-  }
-}
-{
-    SIGNATURE
-}
-
-General JWS JSON Serialization
-{
-   "payload":"ietf-voucher-request-prm:agent-signed-data": {
+  "payload": {
+    "ietf-voucher-request-prm:agent-signed-data": {
       "created-on": "2021-04-16T00:00:01.000Z",
       "serial-number": "callee4711"
-   }
-   "signatures":[
-     {
-        "protected":{
-           "alg": "ES256",
-           "kid": "base64encodedvalue=="
-           },
+    },
+    "signatures": [
+      {
+        "protected": {
+          "alg": "ES256",
+          "kid": "base64encodedvalue=="
+        },
         "signature": "base64encodedvalue=="
-     }
-   ]
+      }
+    ]
+  }
 }
 ~~~~
 {: #asd title='Representation of agent-signed-data' artwork-align="left"}
@@ -722,48 +708,32 @@ The enhancements of the YANG module for the ietf-voucher-request with these new 
 
 The object is signed using the pledge's IDevID credential contained as x5c parameter of the JOSE header.
 
-
 ~~~~
-Compact JWS JSON Serialization
 {
-   "alg": "ES256",
-   "x5c": ["MIIB2jCC...dA=="]
-}
-{
-  "ietf-voucher-request-prm:voucher": {
-   "created-on": "2021-04-16T00:00:02.000Z",
-   "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
-   "serial-number": "callee4711",
-   "assertion": "agent-proximity",
-   "agent-provided-proximity-registrar-cert": "base64encodedvalue==",
-   "agent-signed-data": "base64encodedvalue==",
-   "agent-sign-cert": ["base64encodedvalue==", "base64encodedvalue==", ...]
-  }
-}
-{
-    SIGNATURE
-}
-
-General JWS JSON Serialization
-{
-   "payload":"  "ietf-voucher-request-prm:voucher": {
+  "payload": {
+    "ietf-voucher-request-prm:voucher": {
       "created-on": "2021-04-16T00:00:02.000Z",
       "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
       "serial-number": "callee4711",
       "assertion": "agent-proximity",
       "agent-provided-proximity-registrar-cert": "base64encodedvalue==",
       "agent-signed-data": "base64encodedvalue==",
-      "agent-sign-cert": ["base64encodedvalue==", "base64encodedvalue==", ...]
-   }
-   "signatures":[
+      "agent-sign-cert": [
+        "base64encodedvalue==",
+        "base64encodedvalue==",
+        "..."
+      ]
+    },
+    "signatures": [
       {
-        "protected":{
-           "alg": "ES256",
-           "x5c": ["MIIB2jCC...dA=="]
-         },
-         "signature": "base64encodedvalue=="
+        "protected": {
+          "alg": "ES256",
+          "x5c": [ "MIIB2jCC...dA==" ]
+        },
+        "signature": "base64encodedvalue=="
       }
-   ]
+    ]
+  }
 }
 ~~~~
 {: #pvr title='Representation of pledge-voucher-request' artwork-align="left"}
@@ -810,7 +780,7 @@ In BRSKI-PRM it MUST sign it additionally with its IDevID credential to provide 
 
 If the pledge is unable to construct the enrollment-request it SHOULD respond with HTTP 406 error code to the registrar-agent to indicate that it is not able to create the enrollment-request.
 
-A successful enrollment will result in a generic LDevID certificate for the pledge in the new domain, which can be used to request further LDevID certificates if necessary for its operation. 
+A successful enrollment will result in a generic LDevID certificate for the pledge in the new domain, which can be used to request further (application specific) LDevID certificates if necessary for its operation. 
 The registrar-agent may use the endpoints specified in this document. 
 
 {{I-D.ietf-netconf-sztp-csr}} considers PKCS#10 but also CMP and CMC as certification request format. Note that the wrapping signature is only necessary for plain PKCS#10 as other request formats like CMP and CMS support the signature wrapping as part of their own certificate request format.
@@ -832,47 +802,26 @@ The JOSE object is signed using the pledge's IDevID credential, which correspond
 
 
 ~~~~
-Compact JWS JSON Serialization
 {
-    "alg": "ES256",
-    "x5c": ["MIIB2jCC...dA=="]
-}
-{
-  "ietf-ztp-types": {
-    "p10-csr": "base64encodedvalue=="
-  }
-}
-{
-    SIGNATURE
-}
-
-General JWS JSON Serialization
-{
-   "payload":"  "ietf-ztp-types": {
+  "payload": {
+    "ietf-ztp-types": {
       "p10-csr": "base64encodedvalue=="
-   }
-   "signatures":[
+    },
+    "signatures": [
       {
-        "protected":{
-           "alg": "ES256",
-           "x5c": ["MIIB2jCC...dA=="]
-         }
+        "protected": {
+          "alg": "ES256",
+          "x5c": [ "MIIB2jCC...dA==" ]
+        },
         "signature": "base64encodedvalue=="
       }
-   ]
+    ]
+  }
 }
 ~~~~
 {: #per title='Representation of pledge-enrollment-request' artwork-align="left"}
 
 With the collected pledge-voucher-request object and the pledge-enrollment-request object, the registrar-agent starts the interaction with the domain registrar.
-
-[RFC Editor: please delete] /*
-Open Issues: further description necessary at least for Values to be 
-taken from the IDevID into the PKCS#10 (like product-serial-number 
-or subjectName, or certificate template) - provide at least hint 
-that product serial number must be contained. 
-BRSKI references RFC7030 for this.
-*/
 
 Once the registrar-agent has collected the pledge-voucher-request and pledge-enrollment-request objects, it connects to the registrar and sends the request objects.
 As the registrar-agent is intended to work between the pledge and the domain registrar, a  collection of requests from more than one pledge is possible, allowing a bulk bootstrapping of multiple pledges using the same connection between the registrar-agent and the domain registrar.
@@ -1000,16 +949,11 @@ The payload of the registrar-voucher-request (RVR) object MUST contain the follo
 
 The voucher request can be enhanced optionally with the following additional parameter as defined in {{voucher-request-prm-yang}}:
 
-* agent-sign-cert: May contain the certificate or certificate chain of the registrar-agent.
-  In the context of this document it is a JSON array of base64encoded certificate information and handled in the same way as x5c or x5bag header objects. 
+* agent-sign-cert: contains the certificate or the certificate including the chain of the registrar-agent.
+  In the context of this document it is a JSON array of base64encoded certificate information and handled in the same way as x5c header objects. 
   
-[RFC Editor: please delete] /*
-
-Open Issue:
-choice between x5c and x5bag has to be taken. If the pledge wants to verify the agent-signed-data, it needs to know where to finde the registrar agent certificate in the array. Currently it is placed on the first position. Does this rule out the use of x5bag?
-*/
-
-  If only a single object is contained in the list it MUST be the base64-encoded LDevID(RegAgt) EE certificate. If multiple certificates are included, the first MUST be the base64-encoded LDevID(RegAgt) EE certificate.
+If only a single object is contained in the list it MUST be the base64-encoded LDevID(RegAgt) EE certificate.
+If multiple certificates are included, the first MUST be the base64-encoded LDevID(RegAgt) EE certificate.
   
 The MASA uses this information for the verification of agent proximity to issue the corresponding assertion "agent-proximity". If the agent-sign-cert is not contained in the registrar-voucher-request, it is contained in the prior-signed-voucher from the pledge. 
 
@@ -1017,44 +961,30 @@ The object is signed using the registrar LDevID(Reg) credential, which correspon
 
 
 ~~~~
-Compact JWS JSON Serialization
 {
-   "alg": "ES256",
-   "x5c": ["MIIB2jCC...dA=="]
-}
-{
-  "ietf-voucher-request-prm:voucher": {
-   "created-on": "2022-01-04T02:37:39.235Z",
-   "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
-   "serial-number": "callee4711",
-   "assertion": "agent-proximity",
-   "prior-signed-voucher-request": "base64encodedvalue==",
-   "agent-sign-cert": ["base64encodedvalue==", "base64encodedvalue==", ...]
-  }
-}
-{
-    SIGNATURE
-}
-
-General JWS JSON Serialization
-{
-   "payload": "ietf-voucher-request-prm:voucher": {
+  "payload": {
+    "ietf-voucher-request-prm:voucher": {
       "created-on": "2022-01-04T02:37:39.235Z",
       "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
       "serial-number": "callee4711",
       "assertion": "agent-proximity",
       "prior-signed-voucher-request": "base64encodedvalue==",
-      "agent-sign-cert": ["base64encodedvalue==", "base64encodedvalue==", ...]
-   }
-   "signatures":[
+      "agent-sign-cert": [
+        "base64encodedvalue==",
+        "base64encodedvalue==",
+        "..."
+      ]
+    },
+    "signatures": [
       {
-        "protected":{
-           "alg": "ES256",
-           "x5c": ["MIIB2jCC...dA=="] 
-         },
+        "protected": {
+          "alg": "ES256",
+          "x5c": [ "MIIB2jCC...dA==" ]
+        },
         "signature": "base64encodedvalue=="
       }
-   ]
+    ]
+  }
 }
 
 ~~~~
@@ -1091,43 +1021,25 @@ Specifically for the pledge-responder-mode the "application/voucher-jws+json" as
 The voucher syntax is described in detail by {{RFC8366}}. {{MASA-vr}} shows an example of the contents of a voucher.
 
 ~~~~
-Compact JWS JSON Serialization
 {
-    "alg": "ES256",
-    "x5c": ["MIIBkzCCAT...dA=="]
-}
-{
-  "ietf-voucher:voucher": {
-    "assertion": "agent-proximity",
-    "serial-number": "callee4711",
-    "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
-    "created-on": "2022-01-04T00:00:02.000Z",
-    "pinned-domain-cert": "MIIBpDCCA...w=="
-  }
-}
-{
-    SIGNATURE
-}
-
-
-General JWS JSON Serialization
-{
-   "payload": "ietf-voucher:voucher": {
+  "payload": {
+    "ietf-voucher:voucher": {
       "assertion": "agent-proximity",
       "serial-number": "callee4711",
       "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
       "created-on": "2022-01-04T00:00:02.000Z",
       "pinned-domain-cert": "MIIBpDCCA...w=="
-   }
-   "signatures":[
+    },
+    "signatures": [
       {
-        "protected":{
-           "alg": "ES256",
-           "x5c": ["MIIB2jCC...dA=="]
-         }
+        "protected": {
+          "alg": "ES256",
+          "x5c": [ "MIIB2jCC...dA==" ]
+        },
         "signature": "base64encodedvalue=="
       }
-   ]
+    ]
+  }
 }
 
 ~~~~
@@ -1140,31 +1052,32 @@ The registrar MAY provide an additional signature of the voucher.
 This signature is done over the same content as the MASA signature of the voucher and provides a proof of possession of the private key corresponding to the LDevID(Reg) the pledge received in the trigger for the PVR (see {{pavrt}}). The registrar MUST use the same LDevID(Reg) credential that is used for authentication in the TLS handshake to authenticate towards the registrar-agent. This ensures that the same LDevID(Reg) certificate can be used to verify the signature as transmitted in the voucher request as is transferred in the pledge-voucher-request in the agent-provided-proximity-registrar-cert component. Figure {{MASA-REG-vr}} below provides an example of the voucher with two signatures. 
 
 ~~~~
-General JWS JSON Serialization
 {
-   "payload": "ietf-voucher:voucher": {
+  "payload": {
+    "ietf-voucher:voucher": {
       "assertion": "agent-proximity",
       "serial-number": "callee4711",
       "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
       "created-on": "2022-01-04T00:00:02.000Z",
       "pinned-domain-cert": "MIIBpDCCA...w=="
-   }
-   "signatures":[
+    },
+    "signatures": [
       {
-        "protected":{ //MASA Signature
-           "alg": "ES256",
-           "x5c": ["MIIB2jCC...dA=="]
-         },
+        "protected": {
+          "alg": "ES256",
+          "x5c": [ "MIIB2jCC...dA==" ]
+        },
         "signature": "base64encodedvalue=="
-      },   
+      },
       {
-        "protected":{ //registrar-signature
-           "alg": "ES256",
-           "x5c": ["MIIB2jRR...dA=="]
-         },
+        "protected": {
+          "alg": "ES256",
+          "x5c": [ "xURZmcWS...dA==" ]
+        },
         "signature": "base64encodedvalue=="
       }
-   ]
+    ]
+  }
 }
 
 ~~~~
@@ -1265,38 +1178,24 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
 
 
 ~~~~
-Compact JWS JSON Serialization
 {
-    "alg": "ES256",
-    "x5c": ["MIIB2jCC...dA=="]
-{
+  "payload": {
     "version": 1,
-    "status":true,
-    "reason":"Informative human readable message",
-    "reason-context": { "additional" : "JSON" }
-}
-{
-    SIGNATURE
-}
-
-
-General JWS JSON Serialization
-{
-   "payload": { // to be verified
-      "version": 1,
-      "status":true,
-      "reason":"Informative human readable message",
-      "reason-context": { "additional" : "JSON" }
-   }
-   "signatures":[
-      {
-        "protected":{
-           "alg": "ES256",
-           "x5c": ["MIIB2jCC...dA=="]
-         },
-        "signature": "base64encodedvalue=="
-      }
-   ]
+    "status": true,
+    "reason": "Informative human readable message",
+    "reason-context": {
+      "additional": "JSON"
+    }
+  },
+  "signatures": [
+    {
+      "protected": {
+        "alg": "ES256",
+        "x5c": [ "MIIB2jCC...dA==" ]
+      },
+      "signature": "base64encodedvalue=="
+    }
+  ]
 }
 ~~~~
 {: #vstat title='Representation of pledge voucher-status telemetry' artwork-align="left"}
@@ -1319,37 +1218,24 @@ As the reason field is optional, it MAY be omitted in case of success.
 
 
 ~~~~
-Compact JWS JSON Serialization
 {
-  "alg": "ES256",
-  "x5c": ["MIIB56uz...dA=="]
-{
-  "version": 1,
-  "status":true,
-  "reason":"Informative human readable message",
-  "reason-context": { "additional" : "JSON" }
-}
-{
-  SIGNATURE
-}
-
-General JWS JSON Serialization
-{
-   "payload": { // to be verified
-      "version": 1,
-      "status":true,
-      "reason":"Informative human readable message",
-      "reason-context": { "additional" : "JSON" }
-   }
-   "signatures":[
-      {
-        "protected":{
-           "alg": "ES256",
-           "x5c": ["MIIB2jCC...dA=="]
-         },
-        "signature": "base64encodedvalue=="
-      }
-   ]
+  "payload": {
+    "version": 1,
+    "status": true,
+    "reason": "Informative human readable message",
+    "reason-context": {
+      "additional": "JSON"
+    }
+  },
+  "signatures": [
+    {
+      "protected": {
+        "alg": "ES256",
+        "x5c": [ "MIIB2jCC...dA==" ]
+      },
+      "signature": "base64encodedvalue=="
+    }
+  ]
 }
 ~~~~
 {: #estat title='Representation of pledge enroll-status telemetry' artwork-align="left"}
@@ -1725,7 +1611,7 @@ From IETF draft 01 -> IETF draft 02:
 * Issue #15 included additional signature on voucher from registrar in section {{exchanges_uc2_2}} and section {{agt_prx}}
   The verification of multiple signatures is described in section {{exchanges_uc2_3}}
   
-* Included examples for General JWS JSON Serialization for examples
+* Included representation for General JWS JSON Serialization for examples
 
 * Included error responses from pledge if it is not able to create a pledge-voucher request or an enrollment request in section {{exchanges_uc2_1}}
 
