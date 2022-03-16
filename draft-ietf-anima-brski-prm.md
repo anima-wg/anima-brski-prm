@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-02
+docname: draft-ietf-anima-brski-prm-03
 area: Operations and Management
 wg: ANIMA WG
 date: 2022
@@ -979,7 +979,7 @@ The object is signed using the registrar LDevID(Reg) credential, which correspon
       {
         "protected": {
           "alg": "ES256",
-          "x5c": [ "MIIB2jCC...dA==" ]
+          "x5c": [ "base64encodedvalue==" ]
         },
         "signature": "base64encodedvalue=="
       }
@@ -1034,7 +1034,7 @@ The voucher syntax is described in detail by {{RFC8366}}. {{MASA-vr}} shows an e
       {
         "protected": {
           "alg": "ES256",
-          "x5c": [ "MIIB2jCC...dA==" ]
+          "x5c": [ "base64encodedvalue==" ]
         },
         "signature": "base64encodedvalue=="
       }
@@ -1065,14 +1065,14 @@ This signature is done over the same content as the MASA signature of the vouche
       {
         "protected": {
           "alg": "ES256",
-          "x5c": [ "MIIB2jCC...dA==" ]
+          "x5c": [ "base64encodedvalue==" ]
         },
         "signature": "base64encodedvalue=="
       },
       {
         "protected": {
           "alg": "ES256",
-          "x5c": [ "xURZmcWS...dA==" ]
+          "x5c": [ "base64encodedvalue==" ]
         },
         "signature": "base64encodedvalue=="
       }
@@ -1191,7 +1191,7 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
     {
       "protected": {
         "alg": "ES256",
-        "x5c": [ "MIIB2jCC...dA==" ]
+        "x5c": [ "base64encodedvalue==" ]
       },
       "signature": "base64encodedvalue=="
     }
@@ -1231,7 +1231,7 @@ As the reason field is optional, it MAY be omitted in case of success.
     {
       "protected": {
         "alg": "ES256",
-        "x5c": [ "MIIB2jCC...dA==" ]
+        "x5c": [ "base64encodedvalue==" ]
       },
       "signature": "base64encodedvalue=="
     }
@@ -1606,6 +1606,10 @@ We would like to thank the various reviewers, in particular Brian E. Carpenter a
 
 # History of Changes [RFC Editor: please delete] {#app_history}
 
+From IETF draft 02 -> IETF draft 03:
+
+* Updated examples to state "base64encodedvalue==" for x5c occurrences
+  
 From IETF draft 01 -> IETF draft 02:
 
 * Issue #15 included additional signature on voucher from registrar in section {{exchanges_uc2_2}} and section {{agt_prx}}
