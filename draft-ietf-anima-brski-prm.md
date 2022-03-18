@@ -62,7 +62,7 @@ normative:
   RFC8995:
   I-D.ietf-anima-jws-voucher:
   I-D.ietf-netconf-sztp-csr:
-  I-D.richardson-anima-rfc8366bis:
+  I-D.ietf-anima-rfc8366bis:
 informative:
   RFC2986:
   RFC5280:
@@ -361,7 +361,7 @@ For issuing a voucher, the MASA may perform additional checks on voucher-request
 ### Agent-Proximity {#agt_prx}
 
 "Agent-proximity" is a weaker assertion then "proximity".
-It is defined as additional assertion type in {{I-D.richardson-anima-rfc8366bis}}
+It is defined as additional assertion type in {{I-D.ietf-anima-rfc8366bis}}
 In case of "agent-proximity" it is a statement, that the proximity-registrar-certificate was provided via the registrar-agent and not directly to the pledge.
 This can be verified by the registrar and also by the MASA during the voucher-request processing.
 Note that at the time of creating the voucher-request, the pledge cannot verify the registrar's LDevID(Reg) EE certificate and has no proof-of-possession of the corresponding private key for the certificate. 
