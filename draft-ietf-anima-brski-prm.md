@@ -261,6 +261,15 @@ For the authenticated self-contained objects used for the certification request,
 
 The security used within the document for bootstrapping objects produced or consumed by the pledge bases on JOSE. In constraint environments it may provided based on COSE.
 
+<figure title="BRSKI-PRM abstract protocol overview">
+    <!-- Image converted from PDF using https://www.zamzar.com/convert/pdf-to-svg/-->
+    <artwork src="pics/brski-prm_overview_bw.svg">
+[ Cannot render SVG graphics - please view
+  https://raw.githubusercontent.com/anima-wg/anima-brski-prm/main/pics/brski-prm_overview_bw.svg ]
+    </artwork>
+</figure>
+
+
 
 ## Pledge-responder-mode (PRM): Registrar-agent Communication with Pledges {#uc2}
 
@@ -353,12 +362,12 @@ The following list describes the components in a (customer) site domain:
   Note that it may be used by the registrar-agent instead of the pledge to find the registrar, if not configured.
 
 * Domain Registrar: In general the domain registrar fulfills the same functionality regarding the bootstrapping of the pledge in a (customer) site domain by facilitating the communication of the pledge with the MASA service and the domain PKI service.
-  In contrast to {{RFC8995}}, the domain registrar does not interact with a pledge directly but  through the registrar-agent.
-  The registrar detects if the bootstrapping is performed by the pledge directly or by the  registrar-agent.
+  In contrast to {{RFC8995}}, the domain registrar does not interact with a pledge directly but through the registrar-agent.
+  The registrar detects if the bootstrapping is performed by the pledge directly or by the registrar-agent.
 The manufacturer provided components/services (MASA and Ownership tracker) are used as defined in {{RFC8995}}.
 For issuing a voucher, the MASA may perform additional checks on voucher-request objects, to issue a voucher indicating agent-proximity instead of (registrar-)proximity.
 
-### Agent-Proximity {#agt_prx}
+## Agent-Proximity Assertion {#agt_prx}
 
 "Agent-proximity" is a weaker assertion then "proximity".
 It is defined as additional assertion type in {{I-D.ietf-anima-rfc8366bis}}
@@ -371,7 +380,7 @@ Trust handover to the domain is established via the "pinned-domain-certificate" 
 In contrast, "proximity" provides a statement, that the pledge was in direct contact with the registrar and was able to verify proof-of-possession of the private key in the context of the TLS handshake.
 The provisionally accepted LDevID(Reg) EE certificate can be verified after the voucher has been processed by the pledge through a verification of an additional signature of the returned voucher by the registrar if contained (optional feature). 
 
-### Behavior of Pledge in Pledge-Responder-Mode {#pledge_ep}
+## Behavior of Pledge in Pledge-Responder-Mode {#pledge_ep}
 
 In contrast to BRSKI the pledge acts as a server component.
 It is triggered by the registrar-agent for the generation of pledge-voucher-request and pledge-enrollment-request objects as well as for the processing of the response objects and the generation of status information.
@@ -387,22 +396,22 @@ Operations and their corresponding URIs:
 | Operation              |Operation path              | Details |
 +========================+============================+=========+
 | Trigger pledge-voucher-| /pledge-voucher-request    | Section |
-| request creation       |                            | 5.1.4.1 |
+| request creation       |                            | 5.5.1   |
 | Returns                |                            |         |
 | pledge-voucher-request |                            |         |
 ++------------------------+----------------------------+---------+
 | Trigger pledge-        | /pledge-enrollment-request | Section |
-| enrollment-request     |                            | 5.1.4.1 |
+| enrollment-request     |                            | 5.5.1   |
 | Returns pledge-        |                            |         |
 | enrollment-request     |                            |         |
 +------------------------+----------------------------+---------+
 | Provide voucher to     | /pledge-voucher            | Section |
-| pledge                 |                            | 5.1.4.3 |
+| pledge                 |                            | 5.5.3   |
 | Returns                |                            |         |
 | pledge-voucher-status  |                            |         |
 +------------------------+----------------------------+---------+
 | Provide enrollment     | /pledge-enrollment         | Section |
-| response to pledge     |                            | 5.1.4.3 |
+| response to pledge     |                            | 5.5.3   |
 | Returns pledge-        |                            |         |
 | enrollment-status      |                            |         |
 +------------------------+----------------------------+---------+
@@ -413,7 +422,7 @@ Operations and their corresponding URIs:
 {: #eppfigure title='Endpoints on the pledge' artwork-align="left"}
 
 
-### Behavior of Registrar-Agent
+## Behavior of Registrar-Agent
 
 The registrar-agent is a new component in the BRSKI context.
 It provides connectivity between the pledge and the domain registrar and reuses the endpoints of the domain registrar side already specified in {{RFC8995}}.
@@ -448,14 +457,14 @@ The following information must therefore be available at the registrar-agent:
 * Serial-number(s): product-serial-number(s) of pledge(s) to be bootstrapped.
 
 
-#### Discovery of Registrar by Registrar-Agent {#discovery_uc2_reg}
+### Discovery of Registrar by Registrar-Agent {#discovery_uc2_reg}
 
 The discovery of the domain registrar may be done as specified in {{RFC8995}} with the
 deviation that it is done between the registrar-agent and the domain registrar.
 Alternatively, the registrar-agent may be configured with the address of the domain registrar and the certificate of the domain registrar.
 
 
-#### Discovery of Pledge by Registrar-Agent {#discovery_uc2_ppa}
+### Discovery of Pledge by Registrar-Agent {#discovery_uc2_ppa}
 
 The discovery of the pledge by registrar-agent should be done by using DNS-based Service Discovery {{RFC6763}} over Multicast DNS {{RFC6762}} to discover the pledge at “product-serial-number.brski-pledge.\_tcp.local.”
 The pledge constructs a local host name based on device local information (product-serial-number), which results in "product-serial-number.brski-pledge.\_tcp.local."
@@ -465,7 +474,7 @@ The registrar-agent is able to build the same information based on the provided 
 
 
 
-### Bootstrapping Objects and Corresponding Exchanges {#exchanges_uc2}
+## Bootstrapping Objects and Corresponding Exchanges {#exchanges_uc2}
 
 The interaction of the pledge with the registrar-agent may be accomplished using different transport means (protocols and or network technologies).
 For this document the usage of HTTP is targeted as in BRSKI.
@@ -561,7 +570,7 @@ The following sub sections split the interactions between the different componen
 * Status handling addresses the exchanges between the registrar-agent and the registrar.
 
 
-####  Request Objects Acquisition by Registrar-Agent from Pledge {#exchanges_uc2_1}
+###  Request Objects Acquisition by Registrar-Agent from Pledge {#exchanges_uc2_1}
 
 The following description assumes that the registrar-agent already discovered the pledge.
 This may be done as described in {{discovery_uc2_ppa}} based on mDNS.
@@ -827,7 +836,7 @@ Once the registrar-agent has collected the pledge-voucher-request and pledge-enr
 As the registrar-agent is intended to work between the pledge and the domain registrar, a  collection of requests from more than one pledge is possible, allowing a bulk bootstrapping of multiple pledges using the same connection between the registrar-agent and the domain registrar.
 
 
-#### Request Handling - Registrar-Agent (Infrastructure) {#exchanges_uc2_2}
+### Request Handling - Registrar-Agent (Infrastructure) {#exchanges_uc2_2}
 
 The BRSKI-PRM bootstrapping exchanges between registrar-agent and domain registrar resemble the BRSKI exchanges between pledge and domain registrar (pledge-initiator-mode) with some deviations.
 
@@ -1121,7 +1130,7 @@ It can close the TLS connection to the domain registrar and provide the objects 
 The content of the response objects is defined through the voucher {{RFC8366}} and the certificate {{RFC5280}}.
 
 
-#### Response Object Supply by Registrar-Agent to Pledge {#exchanges_uc2_3}
+### Response Object Supply by Registrar-Agent to Pledge {#exchanges_uc2_3}
 
 The following description assumes that the registrar-agent has obtained the response objects from the domain registrar.
 It will re-start the interaction with the pledge.
@@ -1243,7 +1252,7 @@ As the reason field is optional, it MAY be omitted in case of success.
 Once the registrar-agent has collected the information, it can connect to the registrar agent to provide the status responses to the registrar.
 
 
-#### Telemetry status handling (registrar-agent - domain registrar) {#exchanges_uc2_4}
+### Telemetry status handling (registrar-agent - domain registrar) {#exchanges_uc2_4}
 
 The following description assumes that the registrar-agent has collected the status objects from the pledge.
 It will provide the status objects to the registrar for further processing and audit log
@@ -1609,6 +1618,8 @@ We would like to thank the various reviewers, in particular Brian E. Carpenter a
 From IETF draft 02 -> IETF draft 03:
 
 * Updated examples to state "base64encodedvalue==" for x5c occurrences
+* Include SVG graphic as overview
+* Restructuring of section 5 to flatten hierarchy
   
 From IETF draft 01 -> IETF draft 02:
 
