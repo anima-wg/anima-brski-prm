@@ -1549,19 +1549,20 @@ Examples for the pledge-voucher-request are provided in {{exchanges_uc2_2}}.
 
 # IANA Considerations
 
-This document requires the following IANA actions:
+This document requires the following IANA actions.
 
-IANA is requested to enhance the Registry entitled: "BRSKI well-known URIs" with the following:
+##  BRSKI .well-known Registry
 
+IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with the following endpoints:
 
 ~~~~
- URI                       document  description
- pledge-voucher-request    [THISRFC] create pledge-voucher-request
- pledge-enrollment-request [THISRFC] create pledge-enrollment-request
- pledge-voucher            [THISRFC] supply voucher response
- pledge-enrollment         [THISRFC] supply enrollment response
- pledge-CACerts            [THISRFC] supply CA certs to pledge
- requestenroll             [THISRFC] supply PER to registrar
+ URI                        Description                        Reference
+ pledge-voucher-request     create pledge-voucher-request      [THISRFC] 
+ pledge-enrollment-request  create pledge-enrollment-request   [THISRFC] 
+ pledge-voucher             supply voucher response            [THISRFC] 
+ pledge-enrollment          supply enrollment response         [THISRFC] 
+ pledge-CACerts             supply CA certs to pledge          [THISRFC] 
+ requestenroll              supply PER to registrar            [THISRFC] 
 ~~~~
 {: artwork-align="left"}
 
