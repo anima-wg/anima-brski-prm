@@ -1196,7 +1196,7 @@ li > p:last-of-type {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 7 October 2022</td>
+<td class="center">Expires 9 October 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1209,12 +1209,12 @@ li > p:last-of-type {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-03</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-04-05" class="published">5 April 2022</time>
+<time datetime="2022-04-07" class="published">7 April 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-10-07">7 October 2022</time></dd>
+<dd class="expires"><time datetime="2022-10-09">9 October 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1264,7 +1264,7 @@ The defined approach is agnostic regarding the utilized enrollment protocol, dep
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 7 October 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 9 October 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -6684,7 +6684,7 @@ In BRSKI-PRM it <span class="bcp14">MUST</span> sign it additionally with its ID
 <p id="section-5.5.1-40">A successful enrollment will result in a generic LDevID certificate for the pledge in the new domain, which can be used to request further (application specific) LDevID certificates if necessary for its operation. 
 The registrar-agent may use the endpoints specified in this document.<a href="#section-5.5.1-40" class="pilcrow">¶</a></p>
 <p id="section-5.5.1-41"><span>[<a href="#I-D.ietf-netconf-sztp-csr" class="xref">I-D.ietf-netconf-sztp-csr</a>]</span> considers PKCS#10 but also CMP and CMC as certification request format. Note that the wrapping signature is only necessary for plain PKCS#10 as other request formats like CMP and CMS support the signature wrapping as part of their own certificate request format.<a href="#section-5.5.1-41" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-42">The registrar-agent enrollment-request Content-Type header for a wrapped PKCS#10 is: <code>application/jose</code><a href="#section-5.5.1-42" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-42">The registrar-agent enrollment-request Content-Type header for a wrapped PKCS#10 is: <code>application/jose+json</code><a href="#section-5.5.1-42" class="pilcrow">¶</a></p>
 <p id="section-5.5.1-43">The header of the pledge enrollment-request <span class="bcp14">SHALL</span> contain the following parameter as defined in <span>[<a href="#RFC7515" class="xref">RFC7515</a>]</span>:<a href="#section-5.5.1-43" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.5.1-44.1">alg: algorithm used for creating the object signature.<a href="#section-5.5.1-44.1" class="pilcrow">¶</a>
@@ -6999,11 +6999,11 @@ This signature is done over the same content as the MASA signature of the vouche
 Deviating from BRSKI the pledge-enrollment-request is not a raw PKCS#10 object.
 As the registrar-agent is involved in the exchange, the PKCS#10 is wrapped in a JWS object. The JWS object is signed with the pledge's IDevID to ensure proof-of-identity as outlined in <a href="#per" class="xref">Figure 10</a>.<a href="#section-5.5.2-40" class="pilcrow">¶</a></p>
 <p id="section-5.5.2-41">When using EST, the standard endpoint on the registrar cannot be used. EST requires to sent a raw PKCS#10 request to the simpleenroll endpoint. This document makes an enhancement by utilizing EST but with the exception to transport a signature wrapped PKCS#10 request. Therefore a new endpoint for the registrar is defined as "/.well-known/brski/requestenroll"<a href="#section-5.5.2-41" class="pilcrow">¶</a></p>
-<p id="section-5.5.2-42">The PER Content-Type header is: <code>application/jose</code>.<a href="#section-5.5.2-42" class="pilcrow">¶</a></p>
+<p id="section-5.5.2-42">The PER Content-Type header is: <code>application/jose+json</code>.<a href="#section-5.5.2-42" class="pilcrow">¶</a></p>
 <p id="section-5.5.2-43">This results in a deviation from the content types used in <span>[<a href="#RFC7030" class="xref">RFC7030</a>]</span> and in additional processing at the domain registrar as EST server as following.
 Note, the registrar is already aware that the bootstrapping is performed in a pledge-responder-mode due to the use of the LDevID(RegAgt) EE certificate in the TLS establishment and the provided pledge-voucher-request as JWS object.<a href="#section-5.5.2-43" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.5.2-44.1">If the registrar receives a pledge-enrollment-request with Content-Type header field "application/jose", it <span class="bcp14">MUST</span> verify the wrapping signature using the certificate indicated in the JOSE header.<a href="#section-5.5.2-44.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.5.2-44.1">If the registrar receives a pledge-enrollment-request with Content-Type header field "application/jose+json", it <span class="bcp14">MUST</span> verify the wrapping signature using the certificate indicated in the JOSE header.<a href="#section-5.5.2-44.1" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-5.5.2-44.2">The registrar verifies that the pledge's IDevID certificate of the x5c header field, is accepted to join the domain, based on the verification of the pledge-voucher-request.<a href="#section-5.5.2-44.2" class="pilcrow">¶</a>
 </li>
@@ -7081,7 +7081,7 @@ When multiple signatures are contained in the voucher-response, the pledge <span
 <p id="section-5.5.3-12">When an error occurs during the verification it <span class="bcp14">SHALL</span> be signaled in the reason field of the pledge voucher-status object.<a href="#section-5.5.3-12" class="pilcrow">¶</a></p>
 <p id="section-5.5.3-13">After verification the pledge <span class="bcp14">MUST</span> reply with a status telemetry message as defined in section 5.7 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.<br>
 The pledge generates the voucher-status-object and provides it as JOSE object with the wrapping signature in the response message to the registrar-agent.<a href="#section-5.5.3-13" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-14">The response has the Content-Type "application/jose" and is signed using the IDevID of the pledge as shown in <a href="#vstat" class="xref">Figure 16</a>.
+<p id="section-5.5.3-14">The response has the Content-Type "application/jose+json" and is signed using the IDevID of the pledge as shown in <a href="#vstat" class="xref">Figure 16</a>.
 As the reason field is optional (see <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>), it <span class="bcp14">MAY</span> be omitted in case of success.<a href="#section-5.5.3-14" class="pilcrow">¶</a></p>
 <span id="name-representation-of-pledge-vou"></span><div id="vstat">
 <figure id="figure-16">
@@ -7120,7 +7120,7 @@ When an error occurs during the verification it <span class="bcp14">SHALL</span>
 <p id="section-5.5.3-20">The pledge <span class="bcp14">MUST</span> reply with a status telemetry message as defined in section 5.9.4 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.
 As for the other objects, the defined object is provided with an additional signature using JOSE.
 The pledge generates the enrollment status and provides it in the response message to the registrar-agent.<a href="#section-5.5.3-20" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-21">The response has the Content-Type "application/jose", signed using the freshly provided LDevID of the pledge as shown in <a href="#estat" class="xref">Figure 17</a>.
+<p id="section-5.5.3-21">The response has the Content-Type "application/jose+json", signed using the freshly provided LDevID of the pledge as shown in <a href="#estat" class="xref">Figure 17</a>.
 As the reason field is optional, it <span class="bcp14">MAY</span> be omitted in case of success.<a href="#section-5.5.3-21" class="pilcrow">¶</a></p>
 <span id="name-representation-of-pledge-enr"></span><div id="estat">
 <figure id="figure-17">
@@ -7196,7 +7196,7 @@ objects from pledge.<a href="#section-5.5.4-3.1" class="pilcrow">¶</a>
 </div>
 <p id="section-5.5.4-5">The registrar-agent <span class="bcp14">MUST</span> provide the collected pledge voucher-status to the registrar. This status indicates if the pledge could process the voucher successfully or not.<a href="#section-5.5.4-5" class="pilcrow">¶</a></p>
 <p id="section-5.5.4-6">If the TLS connection to the registrar was closed, the registrar-agent establishes a TLS connection with the registrar as stated in <a href="#exchanges_uc2_2" class="xref">Section 5.5.2</a>.<a href="#section-5.5.4-6" class="pilcrow">¶</a></p>
-<p id="section-5.5.4-7">The registrar-agent sends the pledge voucher-status object without modification to the registrar with an HTTP-over-TLS POST using the operation path value of "/.well-known/brski/voucher_status". The Content-Type header is kept as "application/jose" as described in <a href="#exchangesfig_uc2_3" class="xref">Figure 15</a> and depicted in the example in <a href="#vstat" class="xref">Figure 16</a>.<a href="#section-5.5.4-7" class="pilcrow">¶</a></p>
+<p id="section-5.5.4-7">The registrar-agent sends the pledge voucher-status object without modification to the registrar with an HTTP-over-TLS POST using the operation path value of "/.well-known/brski/voucher_status". The Content-Type header is kept as "application/jose+json" as described in <a href="#exchangesfig_uc2_3" class="xref">Figure 15</a> and depicted in the example in <a href="#vstat" class="xref">Figure 16</a>.<a href="#section-5.5.4-7" class="pilcrow">¶</a></p>
 <p id="section-5.5.4-8">The registrar <span class="bcp14">SHALL</span> verify the signature of the pledge voucher-status and validate that it belongs to an accepted device in his domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher-status object.<a href="#section-5.5.4-8" class="pilcrow">¶</a></p>
 <p id="section-5.5.4-9">According to <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> section 5.7, the registrar <span class="bcp14">SHOULD</span> respond with an HTTP 200 but <span class="bcp14">MAY</span> simply fail with an HTTP 404 error.
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
@@ -7205,7 +7205,7 @@ Within the server logs the server <span class="bcp14">SHOULD</span> capture this
 <p id="section-5.5.4-11">The registrar-agent <span class="bcp14">MUST</span> provide the pledge's enroll-status object to the registrar.
 The status indicates the pledge could process the enroll-response object and holds the corresponding private key.<a href="#section-5.5.4-11" class="pilcrow">¶</a></p>
 <p id="section-5.5.4-12">The registrar-agent sends the pledge enroll-status object without modification to the registrar with an HTTP-over-TLS POST using the operation path value of "/.well-known/brski/enrollstatus".
-The Content-Type header is kept as "application/jose" as described in <a href="#exchangesfig_uc2_3" class="xref">Figure 15</a> and depicted in the example in <a href="#estat" class="xref">Figure 17</a>.<a href="#section-5.5.4-12" class="pilcrow">¶</a></p>
+The Content-Type header is kept as "application/jose+json" as described in <a href="#exchangesfig_uc2_3" class="xref">Figure 15</a> and depicted in the example in <a href="#estat" class="xref">Figure 17</a>.<a href="#section-5.5.4-12" class="pilcrow">¶</a></p>
 <p id="section-5.5.4-13">The registrar <span class="bcp14">SHALL</span> verify the signature of the pledge enroll-status object and validate that it belongs to an accepted device in his domain based on the contained product-serial-number in the LDevID EE certificate referenced in the header of the enroll-status object.
 Note that the verification of a signature of the object is a deviation form the described handling in section 5.9.4 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.<a href="#section-5.5.4-13" class="pilcrow">¶</a></p>
 <p id="section-5.5.4-14">According to <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> section 5.9.4, the registrar <span class="bcp14">SHOULD</span> respond with an HTTP 200 but <span class="bcp14">MAY</span> simply fail with an HTTP 404 error.

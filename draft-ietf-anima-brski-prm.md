@@ -794,7 +794,7 @@ The registrar-agent may use the endpoints specified in this document.
 
 {{I-D.ietf-netconf-sztp-csr}} considers PKCS#10 but also CMP and CMC as certification request format. Note that the wrapping signature is only necessary for plain PKCS#10 as other request formats like CMP and CMS support the signature wrapping as part of their own certificate request format.
 
-The registrar-agent enrollment-request Content-Type header for a wrapped PKCS#10 is: `application/jose`
+The registrar-agent enrollment-request Content-Type header for a wrapped PKCS#10 is: `application/jose+json`
 
 The header of the pledge enrollment-request SHALL contain the following parameter as defined in {{RFC7515}}:
 
@@ -1102,12 +1102,12 @@ As the registrar-agent is involved in the exchange, the PKCS#10 is wrapped in a 
 
 When using EST, the standard endpoint on the registrar cannot be used. EST requires to sent a raw PKCS#10 request to the simpleenroll endpoint. This document makes an enhancement by utilizing EST but with the exception to transport a signature wrapped PKCS#10 request. Therefore a new endpoint for the registrar is defined as "/.well-known/brski/requestenroll"
 
-The PER Content-Type header is: `application/jose`.
+The PER Content-Type header is: `application/jose+json`.
 
 This results in a deviation from the content types used in {{RFC7030}} and in additional processing at the domain registrar as EST server as following.
 Note, the registrar is already aware that the bootstrapping is performed in a pledge-responder-mode due to the use of the LDevID(RegAgt) EE certificate in the TLS establishment and the provided pledge-voucher-request as JWS object.
 
-* If the registrar receives a pledge-enrollment-request with Content-Type header field "application/jose", it MUST verify the wrapping signature using the certificate indicated in the JOSE header.
+* If the registrar receives a pledge-enrollment-request with Content-Type header field "application/jose+json", it MUST verify the wrapping signature using the certificate indicated in the JOSE header.
 
 * The registrar verifies that the pledge's IDevID certificate of the x5c header field, is accepted to join the domain, based on the verification of the pledge-voucher-request.
 
@@ -1182,7 +1182,7 @@ When an error occurs during the verification it SHALL be signaled in the reason 
 After verification the pledge MUST reply with a status telemetry message as defined in section 5.7 of {{RFC8995}}.  
 The pledge generates the voucher-status-object and provides it as JOSE object with the wrapping signature in the response message to the registrar-agent.
 
-The response has the Content-Type "application/jose" and is signed using the IDevID of the pledge as shown in {{vstat}}.
+The response has the Content-Type "application/jose+json" and is signed using the IDevID of the pledge as shown in {{vstat}}.
 As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of success.
 
 
@@ -1222,7 +1222,7 @@ The pledge MUST reply with a status telemetry message as defined in section 5.9.
 As for the other objects, the defined object is provided with an additional signature using JOSE.
 The pledge generates the enrollment status and provides it in the response message to the registrar-agent.
 
-The response has the Content-Type "application/jose", signed using the freshly provided LDevID of the pledge as shown in {{estat}}.
+The response has the Content-Type "application/jose+json", signed using the freshly provided LDevID of the pledge as shown in {{estat}}.
 As the reason field is optional, it MAY be omitted in case of success.
 
 
@@ -1291,7 +1291,7 @@ The registrar-agent MUST provide the collected pledge voucher-status to the regi
 
 If the TLS connection to the registrar was closed, the registrar-agent establishes a TLS connection with the registrar as stated in {{exchanges_uc2_2}}.
 
-The registrar-agent sends the pledge voucher-status object without modification to the registrar with an HTTP-over-TLS POST using the operation path value of "/.well-known/brski/voucher_status". The Content-Type header is kept as "application/jose" as described in {{exchangesfig_uc2_3}} and depicted in the example in {{vstat}}.
+The registrar-agent sends the pledge voucher-status object without modification to the registrar with an HTTP-over-TLS POST using the operation path value of "/.well-known/brski/voucher_status". The Content-Type header is kept as "application/jose+json" as described in {{exchangesfig_uc2_3}} and depicted in the example in {{vstat}}.
 
 The registrar SHALL verify the signature of the pledge voucher-status and validate that it belongs to an accepted device in his domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher-status object.
 
@@ -1305,7 +1305,7 @@ The registrar-agent MUST provide the pledge's enroll-status object to the regist
 The status indicates the pledge could process the enroll-response object and holds the corresponding private key.
 
 The registrar-agent sends the pledge enroll-status object without modification to the registrar with an HTTP-over-TLS POST using the operation path value of "/.well-known/brski/enrollstatus".
-The Content-Type header is kept as "application/jose" as described in {{exchangesfig_uc2_3}} and depicted in the example in {{estat}}.
+The Content-Type header is kept as "application/jose+json" as described in {{exchangesfig_uc2_3}} and depicted in the example in {{estat}}.
 
 The registrar SHALL verify the signature of the pledge enroll-status object and validate that it belongs to an accepted device in his domain based on the contained product-serial-number in the LDevID EE certificate referenced in the header of the enroll-status object.
 Note that the verification of a signature of the object is a deviation form the described handling in section 5.9.4 of {{RFC8995}}.
