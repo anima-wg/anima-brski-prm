@@ -68,6 +68,7 @@ informative:
   RFC5280:
   RFC8152:
   RFC8340:
+  RFC9238:
   IEEE-802.1AR:
     title: IEEE 802.1AR Secure Device Identifier
     author:
@@ -454,7 +455,7 @@ The objects exchanged between the pledge and the domain registrar used in the co
 
 In addition to the LDevID(RegAgt), the registrar-agent is provided with the product-serial-numbers of the pledges to be bootstrapped.
 This is necessary to allow the discovery of pledges by the registrar-agent using mDNS.
-The list may be provided by administrative means or the registrar agent may get the information via an interaction with the pledge, like scanning of product-serial-number information using a QR code or similar.
+The list may be provided by administrative means or the registrar agent may get the information via an interaction with the pledge. For instance, {{?RFC9238}} describes scanning of a QR code, the product-serial-number would be initialized from the 12N B005 Product Serial Number.
 
 According to {{RFC8995}} section 5.3, the domain registrar performs the pledge authorization for bootstrapping within his domain based on the pledge voucher-request object.
 
