@@ -503,6 +503,7 @@ The interaction of the pledge with the registrar-agent may be accomplished using
 For this document the usage of HTTP is targeted as in BRSKI.
 Alternatives may be CoAP, Bluetooth Low Energy (BLE), or Nearfield Communication (NFC).
 This requires independence of the exchanged data objects between the pledge and the registrar from transport security.
+These transport means may differ from, and are independent from, the ones used between the registrar-agent and the registrar.
 Therefore, authenticated self-contained objects (here: signature-wrapped objects) are applied in the data exchange between the pledge and the registrar.
 
 The registrar-agent provides the domain-registrar certificate (LDevID(Reg) EE certificate) to the pledge to be included into the "agent-provided-proximity-registrar-certificate" leaf of the PVR object.
@@ -617,9 +618,6 @@ Preconditions:
   * discovered by using a vendor specific approach, e.g., RF beacons
 
 * Registrar: possesses/trusts IDevID CA certificate and an own LDevID(Reg) credential.
-
-* MASA: possesses own credentials (voucher signing key, TLS server certificate) as well as IDevID CA certificate of pledge vendor / manufacturer and site-specific LDevID CA certificate.
-
 
 
 ~~~~
@@ -955,7 +953,7 @@ In addition, the registrar shall verify the following parameters from the PVR:
   If the certificate is not included in the agent-sign-cert properties of the PVR, it must be fetched out-of-band by the registrar if "agent-proximity" assertion is requested.
 
 * agent-sign-cert: MAY contain an array of base64-encoded certificate data starting with the LDevID(RegAgt) EE certificate.
-  If contained the registrar MUST verify that the LDevID(ReAgt) EE certificate, used to sign the data, is  still valid. 
+  If contained the registrar MUST verify that the LDevID(ReAgt) EE certificate, used to sign the data, is still valid. 
   If the certificate is already expired, the registrar SHALL reject the request.
   Validity of used signing certificates during bootstrapping is necessary as no trusted timestamp is available, see also {{sec_cons_reg-agt}}.   
   If the agent-signed-cert is not provided, the registrar MUST fetch the LDevID(RegAgt) EE certificate, based on the provided SubjectKeyIdentifier (SKID) contained in the kid header of the agent-signed-data, and perform this verification. 
@@ -1258,7 +1256,7 @@ If multiple signatures are contained in the voucher, the pledge SHALL perform th
   1. Validate MASA signature as described in section 5.6.1 in {{RFC8995}} successfully.
   2. Install contained trust anchor provisionally. 
   3. Verify registrar signature as described in section 5.6.1 in {{RFC8995}} successfully, but take the registrar certificate instead of the MASA certificate for verification.
-  4. Validate the registrar certificate received in the agent-provided-proximity-registrar-cert in the voucher request successfully, including revocation state of the certificate, validity, and authorization to bootstrap the particular pledge. 
+  4. Validate the registrar certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert") successfully, including validity and authorization to bootstrap the particular pledge. 
   
 If all verification steps stated above have been performed successfully, the pledge SHALL end the provisional accept state for the domain trust anchor and the LDevID(Reg). 
 If multiple signatures are contained in the voucher-response, the pledge MUST verify all successfully.
@@ -1312,7 +1310,6 @@ The registrar-agent SHALL send the enroll-response to the pledge by HTTP POST to
 The registrar-agent enroll-response Content-Type header, when using EST {{RFC7030}} as enrollment protocol between the registrar-agent and the infrastructure, is `application/pkcs7-mime`. Note that it only contains the LDevID certificate for the pledge, not the certificate chain.
 
 Upon reception, the pledge SHALL verify the received LDevID EE certificate. 
-The pledge MAY omit the revocation check as the EE LDevID certificate was freshly issued. 
 The pledge SHALL generate the enroll status object and provide it in the response message to the registrar-agent. If the verification of the LDevID EE certificate succeeds, the status SHALL be set to true, otherwise to FALSE. 
 
 The pledge MUST reply with a status telemetry message as defined in section 5.9.4 of {{RFC8995}}.
@@ -1376,6 +1373,7 @@ Preconditions in addition to {{exchanges_uc2_2}}:
     |<----- mTLS ----->|              |            |
     |                  |              |            |
     |--Voucher Status->|              |            |
+    |                  |-- req- device audit log ->|
     |                  |<---- device audit log ----|
     |           [verify audit log ]
     |                  |              |            |
@@ -1406,8 +1404,10 @@ The status indicates the pledge could process the enroll-response object and hol
 The registrar-agent sends the pledge enroll status object without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/enrollstatus".
 The Content-Type header is kept as `application/jose+json` as described in {{exchangesfig_uc2_3}} and depicted in the example in {{estat}}.
 
-The registrar SHALL verify the signature of the pledge enroll status object.
-In case the enroll status object indicates success the registrar SHALL validate that the pledge belongs to an accepted device in his domain based on the contained product-serial-number in the LDevID EE certificate referenced in the header of the enroll status object. In case the enroll status object indicates a failure, the pledge was unable to verify the received LDevID EE certificate and therefore signed the enroll status objects with its IDevID credential.
+The registrar MUST verify the signature of the pledge enroll status object.
+Also, the registrar SHALL validate that the pledge belongs to an accepted device in his domain based on the contained product-serial-number in the LDevID EE certificate referenced in the header of the enroll status object. 
+The registrar SHOULD log this event.
+In case the enroll status object indicates a failure, the pledge was unable to verify the received LDevID EE certificate and therefore signed the enroll status objects with its IDevID credential.
 Note that the verification of a signature of the object is a deviation from the described handling in section 5.9.4 of {{RFC8995}}.
 
 According to {{RFC8995}} section 5.9.4, the registrar SHOULD respond with an HTTP 200 in the success case or fail with HTTP 4xx/5xx codes as defined by the HTTP standard.
@@ -1455,7 +1455,7 @@ The following YANG module extends the {{RFC8995}} Voucher Request to include a s
 agent-signing certificate.
 
 ~~~~
-<CODE BEGINS> file "ietf-voucher-request-prm@2021-12-16.yang"
+<CODE BEGINS> file "ietf-voucher-request-prm@2022-07-05.yang"
 
 module ietf-voucher-request-prm {
   yang-version 1.1;
@@ -1497,8 +1497,9 @@ module ietf-voucher-request-prm {
               <mailto: mcr+ietf@sandelman.ca>";
 
   description
-   "This module defines the format for a voucher-request.
-    It is a superset of the voucher itself.
+   "This module defines the format for a voucher-request form the 
+    pledge in responder mode. It bases on the voucher-request 
+	defined in RFC 8995, which is a superset of the voucher itself.
     It provides content to the MASA for consideration
     during a voucher-request.
 
@@ -1508,7 +1509,7 @@ module ietf-voucher-request-prm {
     described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
     they appear in all capitals, as shown here.
 
-    Copyright (c) 2022 IETF Trust and the persons identified as
+    Copyright (c) 2021 IETF Trust and the persons identified as
     authors of the code. All rights reserved.
 
     Redistribution and use in source and binary forms, with or
@@ -1518,11 +1519,11 @@ module ietf-voucher-request-prm {
     Relating to IETF Documents
     (https://trustee.ietf.org/license-info).
 
-    This version of this YANG module is part of RFC 8995; see the
+    This version of this YANG module is part of RFC xxxx; see the
     RFC itself for full legal notices.";
 
 
-  revision 2021-12-16 {
+  revision 2022-07-05 {
     description
      "Initial version";
     reference
@@ -1539,35 +1540,7 @@ module ietf-voucher-request-prm {
     description
       "Grouping to allow reuse/extensions in future work.";
     uses vcr:voucher-request-grouping {
-      refine "voucher/expires-on" {
-        mandatory false;
-         description
-          "An expires-on field is not valid in a
-           voucher-request, and any occurrence MUST be ignored.";
-     }
-      refine "voucher/pinned-domain-cert" {
-        mandatory false;
-        description
-          "A pinned-domain-cert field is not valid in a
-           voucher-request, and any occurrence MUST be ignored.";
-      }
-      refine "voucher/last-renewal-date" {
-        description
-          "A last-renewal-date field is not valid in a
-           voucher-request, and any occurrence MUST be ignored.";
-      }
-      refine "voucher/domain-cert-revocation-checks" {
-        description
-          "The domain-cert-revocation-checks field is not valid in a
-           voucher-request, and any occurrence MUST be ignored.";
-      }
-      refine "voucher/assertion" {
-        mandatory false;
-        description
-          "Any assertion included in registrar voucher-requests
-           SHOULD be ignored by the MASA.";
-      }
-     
+	  
       augment voucher {
         description "Base the voucher-request-prm upon the
           regular one";
@@ -1609,7 +1582,7 @@ module ietf-voucher-request-prm {
 
         leaf-list agent-sign-cert {
           type binary;
-        min-elements 1;
+		  min-elements 1;
           description
             "An X.509 v3 certificate structure, as specified by
              RFC 5280, Section 4, encoded using the ASN.1
@@ -1622,10 +1595,10 @@ module ietf-voucher-request-prm {
              This MUST be populated in a registrar's
              voucher-request when an agent-proximity assertion
              is requested.
-          It is defined as list to enable inclusion of further
-          certificates along the certificate chain if different 
-          issuing CAs have been used for the registrar-agent 
-          and the registrar.";
+			 It is defined as list to enable inclusion of further
+			 certificates along the certificate chain if different 
+			 issuing CAs have been used for the registrar-agent 
+			 and the registrar.";
           reference
             "ITU X.690: Information Technology - ASN.1 encoding
              rules: Specification of Basic Encoding Rules (BER),
@@ -1724,6 +1697,7 @@ We would like to thank the various reviewers, in particular Brian E. Carpenter, 
 
 From IETF draft 03 -> IETF draft 04:
 
+* Simplified YANG definition by augmenting the voucher request from RFC 8995 instead of redefining it. 
 * Added explanation for terminology "endpoint" used in this document, issue #16
 * Added clarification that registrar-agent may collect PVR or PER or both in one run, issue #17
 * Added a statement that nonceless voucher may be accepted, issue #18
