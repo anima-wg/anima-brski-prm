@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-04
+docname: draft-ietf-anima-brski-prm-05
 area: Operations and Management
 wg: ANIMA WG
 date: 2022
@@ -50,6 +50,9 @@ author:
   org: Sandelman Software Works
   email: mcr+ietf@sandelman.ca
   uri: http://www.sandelman.ca/
+contributor:
+  name: Esko Dijk
+  email: esko.dijk@iotconsultancy.nl
 normative:
   RFC2986:
   RFC5280:
@@ -207,6 +210,8 @@ The following examples motivate support of BRSKI-PRM to support pledges acting a
 
 While BRSKI-PRM defines support for pledges in responder mode, there may be pledges, which can act in both modes, initiator and responder. 
 In these cases BRSKI-PRM can be combined with BRSKI as defined in {{RFC8995}} or BRSKI-AE {{I-D.ietf-anima-brski-ae}} to allow for more bootstrapping flexibility. 
+Once a pledge with such combined functionality has been bootstrapped, it may act as client for enrollment or re-enrollment of further certificates needed, e.g., using the enrollment protocol of choice. 
+If it still acts as server, the defined endpoints can be used to trigger a PER for further certificates. 
 
 
 ### Building Automation
@@ -715,7 +720,10 @@ The body of the agent-signed-data contains an ietf-voucher-request-prm:agent-sig
 Upon receiving the voucher-request trigger, the pledge SHALL construct the body of the PVR object as defined in {{RFC8995}}. 
 It will contain additional information provided by the registrar-agent as specified in the following.
 This object becomes a JSON-in-JWS object as defined in {{I-D.ietf-anima-jws-voucher}}.
-If the pledge is unable to construct the PVR it SHOULD respond with HTTP 406 error code to the registrar-agent to indicate that it is not able to create the PVR.
+If the pledge is unable to construct the PVR it SHOULD respond with a HTTP error code to the registrar-agent to indicate that it is not able to create the PVR.
+Error codes MAY be used:
+* 400: if the pledge detected an error in the format of the request, e.g. missing field, wrong data types, etc. or it's not valid JSON even though the PVR media type was set to `application/json`.
+* 403: if the pledge detected that parameter from the trigger message to create the PVR were not valid, e.g., the LDevID (Reg) certificate.
 
 The header of the PVR SHALL contain the following parameters as defined in {{RFC7515}}:
 
@@ -727,6 +735,7 @@ The header of the PVR SHALL contain the following parameters as defined in {{RFC
 The payload of the PVR object MUST contain the following parameters as part of the ietf-voucher-request-prm:voucher as defined in {{RFC8995}}:
 
 * created-on: SHALL contain the current date and time in yang:date-and-time format.
+  If the pledge does not have synchronized the time, it SHALL use the created-on time from the agent-signed-data, received in the trigger to create a PVR.
 
 * nonce: SHALL contain a cryptographically strong random or pseudo-random number.
 
@@ -793,16 +802,17 @@ Triggering the pledge to create the enrollment-request is done using HTTP POST o
 The registrar-agent PER Content-Type header is: `application/json`
 with an empty body.
 Note that using HTTP POST allows for an empty body, but also to provide additional data, like CSR attributes or information about the enroll type: "enroll-generic-cert" or "reenroll-generic-cert". 
-The "enroll-generic-cert" case is shown in {{raer}}.
+The "enroll-generic-cert" case is shown in {{raer}}. 
 
 ~~~~
 {
-  "enroll-type" = "enroll-generic-cert"
+  "enroll-type" : "enroll-generic-cert"
 }
 ~~~~
 {: #raer title='Example of trigger to create a PER' artwork-align="left"}
 
-In the following the enrollment is described as initial enrollment with an empty body.
+
+In the following the enrollment is described as initial enrollment with an empty HTTP POST body.
 
 Upon receiving the enrollment-trigger, the pledge SHALL construct the PER as authenticated self-contained object.
 The CSR already assures proof of possession of the private key corresponding to the contained public key.
@@ -817,7 +827,11 @@ Note also that {{I-D.ietf-netconf-sztp-csr}} also allows for inclusion of certif
 The pledge SHOULD construct the PER as PKCS#10 object.
 In BRSKI-PRM it MUST sign it additionally with its IDevID credential to provide proof-of-identity bound to the PKCS#10 as described below.
 
-If the pledge is unable to construct the enrollment-request it SHOULD respond with HTTP 406 error code to the registrar-agent to indicate that it is not able to create the enrollment-request.
+If the pledge is unable to construct the PER it SHOULD respond with HTTP 40 error code to the registrar-agent to indicate that it is not able to create the enrollment-request.
+If the pledge is unable to construct the PER it SHOULD respond with a HTTP error code to the registrar-agent to indicate that it is not able to create the PER.
+Error codes MAY be used:
+* 400: if the pledge detected an error in the format of the request or it's not valid JSON even though the PER media type was set to `application/json`.
+* 403: if the pledge detected that parameter (if provided) from the trigger message to create the PER were not valid.
 
 A successful enrollment will result in a generic LDevID certificate for the pledge in the new domain, which can be used to request further (application specific) LDevID certificates if necessary for its operation. 
 The registrar-agent SHALL use the endpoints specified in this document. 
@@ -878,7 +892,9 @@ Preconditions:
 
 * Registrar: possesses the IDevID CA certificate of the pledge vendor/manufacturer and an it's own LDevID(Reg) credentials of the site domain.
 
-* MASA: possesses it's own vendor/manufacturer credentials (voucher signing key, TLS server certificate) related to pledges IDevID and the site-specific LDevID CA certificate.
+* MASA: possesses it's own vendor/manufacturer credentials (voucher signing key, TLS server certificate) related to pledges IDevID and MAY possess the site-specific domain CA certificate. 
+  The latter is necessary to ensure that the MASA is able to verify the RVR. 
+  How the MASA will get the domain CA certificate is out of scope of this document.
 
 
 
@@ -956,7 +972,7 @@ In addition, the registrar shall verify the following parameters from the PVR:
 * agent-sign-cert: MAY contain an array of base64-encoded certificate data starting with the LDevID(RegAgt) certificate.
   If contained the registrar MUST verify that the LDevID(ReAgt) certificate, used to sign the data, is still valid. 
   If the certificate is already expired, the registrar SHALL reject the request.
-  Validity of used signing certificates during bootstrapping is necessary as no trusted timestamp is available, see also {{sec_cons_reg-agt}}.   
+  Validity of used signing certificates at the time of signing the agent-signed-data is necessary to avoid that a rogue registrar-agent generates agent-signed-data objects to onboard arbitrary pledges at a later point in time, see also {{sec_cons_reg-agt}}.   
   If the agent-signed-cert is not provided, the registrar MUST fetch the LDevID(RegAgt) certificate, based on the provided SubjectKeyIdentifier (SKID) contained in the kid header of the agent-signed-data, and perform this verification. 
   This requires, that the registrar can fetch the LDevID(RegAgt) certificate data (including intermediate CA certificates if existent) based on the SKID.
 
@@ -1039,7 +1055,7 @@ The registrar SHALL send the RVR to the MASA endpoint by HTTP POST: "/.well-know
 
 The RVR Content-Type header field is defined in {{I-D.ietf-anima-jws-voucher}} as: `application/voucher-jws+json`
 
-The RVR SHOULD set the Accept header indicating the desired media type for the voucher-response.
+The registrar SHOULD set the Accept header of the RVR indicating the desired media type for the voucher-response.
 The media type is `application/voucher-jws+json` as defined in {{I-D.ietf-anima-jws-voucher}}.
 
 Once the MASA receives the RVR it SHALL perform the verification as described in section 5.5 in {{RFC8995}}.
@@ -1054,7 +1070,7 @@ In addition, the following processing SHALL be performed for PVR data contained 
   If so, the agent-signed-data MUST contain the pledge product-serial-number, contained in the "serial-number" field of the PVR (from "prior-signed-voucher-request" field) and also in "serial-number" field of the RVR.
   The LDevID(RegAgt) certificate used to generate the signature is identified by the "kid" parameter of the JOSE header (agent-signed-data).
   If the assertion "agent-proximity" is requested, the RVR MUST contain the corresponding LDevID(RegAgt) certificate data in the "agent-sign-cert" field of either the LDevID(RegAgt) certificate of RVR or of PVR from "prior-signed-voucher-request" field. 
-  It MUST be verified by the MASA that it can be verified to the same domain CA as the LDevID(Reg) certificate.  
+  It MUST be verified by the MASA that it can verified the LDevID(RegAgt) certificate to the same domain CA as the LDevID(Reg) certificate.  
   If the "agent-sign-cert" field is not provided, the MASA MAY state a lower level assertion value, e.g.: "logged" or "verified"
   Note: Sub-CA certificate(s) MUST also be carried by "agent-sign-cert", in case the LDevID(RegAgt) certificate is issued by a sub-CA and not the domain CA known to the MASA. 
   As the "agent-sign-cert" field is defined as array (x5c), it can handle multiple certificates. 
@@ -1064,6 +1080,7 @@ If validation fails, the MASA SHOULD respond with an HTTP error code to the regi
 The HTTP error codes are kept the same as defined in section 5.6 of {{RFC8995}}, <!-- XXX -->and comprise the codes: 403, 404, 406, and 415.
 
 The expected voucher-response format for the pledge-responder-mode the `application/voucher-jws+json` as defined in {{I-D.ietf-anima-jws-voucher}} is applied.
+If the MASA detects that the Accept header of the PVR does not match the `application/voucher-jws+json` it SHOULD respond with the HTTP error code 406 as the pledge will not be able to parse the response.
 The voucher syntax is described in detail by {{RFC8366}}. {{MASA-vr}} shows an example of the contents of a voucher.
 
 ~~~~
@@ -1663,8 +1680,8 @@ Misbinding of a pledge by a faked domain registrar is countered as described in 
 
 ## Misuse of Registrar-Agent Credentials {#sec_cons_reg-agt}
 
-Concerns on opportunities to misuse the registrar-agent with a valid LDevID, may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the registrar-agent against the domain registrar.
-The LDevID(RegAgt) certificate may be acquired by a prior BRSKI run for the registrar-agent, if IDevID is available on registrar-agent.
+Concerns on opportunities to misuse the registrar-agent with a valid LDevID(RegAgt), may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the registrar-agent against the domain registrar.
+The LDevID(RegAgt) certificate may be acquired by a prior BRSKI run for the registrar-agent, if an IDevID is available on registrar-agent.
 Alternatively, the LDevID may be acquired by a service technician from the domain PKI system.
 
 In addition it is required that the LDevID(RegAgt) certificate is valid for the complete bootstrapping phase. 
@@ -1686,15 +1703,27 @@ For this reason these guidelines do not follow the template described by Section
 
 # Acknowledgments
 
-We would like to thank the various reviewers, in particular Brian E. Carpenter, Oskar Camenzind, and Hendrik Brockhaus for their input and discussion on use cases and call flows.
+We would like to thank the various reviewers, in particular Brian E. Carpenter, Oskar Camenzind, and Hendrik Brockhaus for their input and discussion on use cases and call flows. 
+Special thanks to Esko Dijk for the in deep review and the improving proposals.
 
 
 --- back
 
 # History of Changes [RFC Editor: please delete] {#app_history}
 
+Proof of Concept Code available
+
+From IETF draft 04 -> IETF draft 05:
+* PoP for private key to registrar certificate included as mandatory, issues #32 and #49
+* Issue #50 addressed by referring to the utilized enrollment protocol
+* Issue #47 MASA verification of LDevID(RegAgt) to the same LDevID(Reg) domain CA
+* Issue #31, clarified that combined pledge may act as client/server for further (re)enrollment
+* Issue #42, clarified that Registrar needs to verify the status responses with and ensure that they match the audit log response from the MASA, otherwise it needs drop the pledge and revoke the certificate    
+* Issue #43, clarified that the pledge shall use the create time from the trigger message if the time nas not yet synchronized.
+
 From IETF draft 03 -> IETF draft 04:
 
+* In deep Review by Esko Dijk lead to issues #22-#61, which are bein stepwise integrated
 * Simplified YANG definition by augmenting the voucher request from RFC 8995 instead of redefining it. 
 * Added explanation for terminology "endpoint" used in this document, issue #16
 * Added clarification that registrar-agent may collect PVR or PER or both in one run, issue #17
