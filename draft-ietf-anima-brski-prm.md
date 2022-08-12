@@ -62,6 +62,7 @@ normative:
   RFC7515:
   RFC8040:
   RFC8366:
+  RFC8792:
   RFC8995:
   I-D.ietf-anima-jws-voucher:
   I-D.ietf-netconf-sztp-csr:
@@ -444,6 +445,9 @@ Operations and their corresponding URIs:
 | Provide CA certs to    | /pledge-CACerts            | Section |
 | pledge                 |                            | 5.5.3   |
 +------------------------+----------------------------+---------+
+| Query bootstrapping    | /pledge-bootstrap-status   | Section |
+| status of pledge       |                            | 5.5.5   |
++------------------------+----------------------------+---------+
 ~~~~
 {: #eppfigure title='Endpoints on the pledge' artwork-align="left"}
 
@@ -615,7 +619,7 @@ Preconditions:
 
 * Pledge: possesses IDevID
 
-* Registrar-agent: possesses/trusts IDevID CA certificate and an own LDevID(RegAgt) EE credential for the registrar domain.
+* Registrar-agent: possesses/trusts IDevID CA certificate and an own LDevID(RegAgt) credential for the registrar domain.
   In addition, the registrar-agent MUST know the product-serial-number(s) of the pledge(s) to be bootstrapped. 
   The registrar-agent MAY be provided with the product-serial-number in different ways:
   * configured, e.g., as a list of pledges to be bootstrapped via QR code scanning
@@ -652,7 +656,7 @@ Note that the registrar-agent may trigger the pledge for the PVR or the PER or b
 
 Triggering the pledge to create the PVR is done using HTTP POST on the defined pledge endpoint "/.well-known/brski/pledge-voucher-request".
 
-The registrar-agent PVR Content-Type header is: `application/json`.
+The registrar-agent PVR trigger Content-Type header is: `application/json`.
 It defines a JSON document to provide three parameter:
 
 * agent-provided-proximity-registrar-cert: base64-encoded LDevID(Reg) TLS certificate.
@@ -692,7 +696,7 @@ The body of the agent-signed-data contains an ietf-voucher-request-prm:agent-sig
 
 * created-on: MUST contain the creation date and time in yang:date-and-time format.
 
-* serial-number: MUST contain the product-serial-number as type string as defined in {{RFC8995}},  section 2.3.1.
+* serial-number: MUST contain the product-serial-number as type string as defined in {{RFC8995}}, section 2.3.1.
   The serial-number corresponds with the product-serial-number contained in the X520SerialNumber field of the IDevID certificate of the pledge.
 
 
@@ -717,9 +721,9 @@ The body of the agent-signed-data contains an ietf-voucher-request-prm:agent-sig
 ~~~~
 {: #asd title='Representation of agent-signed-data' artwork-align="left"}
 
-Upon receiving the voucher-request trigger, the pledge SHALL construct the body of the PVR object as defined in {{RFC8995}}. 
+Upon receiving the voucher-request trigger, the pledge SHALL construct the body of the PVR as defined in {{RFC8995}}. 
 It will contain additional information provided by the registrar-agent as specified in the following.
-This object becomes a JSON-in-JWS object as defined in {{I-D.ietf-anima-jws-voucher}}.
+This PVR becomes a JSON-in-JWS object as defined in {{I-D.ietf-anima-jws-voucher}}.
 If the pledge is unable to construct the PVR it SHOULD respond with a HTTP error code to the registrar-agent to indicate that it is not able to create the PVR.
 Error codes MAY be used:
 * 400: if the pledge detected an error in the format of the request, e.g. missing field, wrong data types, etc. or it's not valid JSON even though the PVR media type was set to `application/json`.
@@ -755,7 +759,7 @@ The ietf-voucher-request:voucher is enhanced with additional parameters:
 
 The enhancements of the YANG module for the ietf-voucher-request with these new leafs are defined in {{voucher-request-prm-yang}}.
 
-The object is signed using the pledge's IDevID credential contained as x5c parameter of the JOSE header.
+The PVR is signed using the pledge's IDevID credential contained as x5c parameter of the JOSE header.
 
 ~~~~
 {
@@ -777,7 +781,8 @@ The object is signed using the pledge's IDevID credential contained as x5c param
       {
         "protected": {
           "alg": "ES256",
-          "x5c": [ "MIIB2jCC...dA==" ]
+          "x5c": [ "MIIB2jCC...dA==" ],
+          "typ": "voucher-jws+json"
         },
         "signature": "base64encodedvalue=="
       }
@@ -799,8 +804,7 @@ Note, as the initial enrollment aims to request a generic certificate, no certif
 
 Triggering the pledge to create the enrollment-request is done using HTTP POST on the defined pledge endpoint "/.well-known/brski/pledge-enrollment-request".
 
-The registrar-agent PER Content-Type header is: `application/json`
-with an empty body.
+The registrar-agent PER trigger Content-Type header is: `application/json` with an empty body.
 Note that using HTTP POST allows for an empty body, but also to provide additional data, like CSR attributes or information about the enroll type: "enroll-generic-cert" or "reenroll-generic-cert". 
 The "enroll-generic-cert" case is shown in {{raer}}. 
 
@@ -1040,7 +1044,8 @@ The object is signed using the registrar LDevID(Reg) credential, which correspon
       {
         "protected": {
           "alg": "ES256",
-          "x5c": [ "base64encodedvalue==" ]
+          "x5c": [ "base64encodedvalue==" ],
+          "typ": "voucher-jws+json"
         },
         "signature": "base64encodedvalue=="
       }
@@ -1097,7 +1102,8 @@ The voucher syntax is described in detail by {{RFC8366}}. {{MASA-vr}} shows an e
       {
         "protected": {
           "alg": "ES256",
-          "x5c": [ "base64encodedvalue==" ]
+          "x5c": [ "base64encodedvalue==" ],
+          "typ": "voucher-jws+json"
         },
         "signature": "base64encodedvalue=="
       }
@@ -1135,7 +1141,8 @@ This signature is done over the same content as the MASA signature of the vouche
       {
         "protected": {
           "alg": "ES256",
-          "x5c": [ "base64encodedvalue==" ]
+          "x5c": [ "base64encodedvalue==" ],
+          "typ": "voucher-jws+json"
         },
         "signature": "base64encodedvalue=="
       }
@@ -1289,7 +1296,7 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
   "payload": {
     "version": 1,
     "status": true,
-    "reason": "Informative human readable message",
+    "reason": "Voucher successfully processed",
     "reason-context": {
       "additional": "JSON"
     }
@@ -1309,7 +1316,7 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
 
 The registrar-agent SHALL provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-CAcerts".
 
-As the CA certificate provisioning is crucial from a security perspective, this provisioning SHALL only be done, if the voucher-response has been provided to the pledge.
+As the CA certificate provisioning is crucial from a security perspective, this provisioning SHALL only be done, if the voucher-response has been successfully provided to the pledge.
 
 The supply CA certificates message has the Content-Type `application/jose+json` and is signed using the LDevID(Reg) of the registrar pledge as shown in {{PCAC}}.
 
@@ -1340,7 +1347,7 @@ The response has the Content-Type `application/jose+json`.
   "payload": {
     "version": 1,
     "status": true,
-    "reason": "Informative human readable message",
+    "reason": "Enrollment response successfully processed",
     "reason-context": {
       "additional": "JSON"
     }
@@ -1368,11 +1375,7 @@ It SHALL provide the status objects to the registrar for further processing.
 
 Preconditions in addition to {{exchanges_uc2_2}}:
 
-
-* Registrar-agent: possesses voucher status and enroll status
-  objects from pledge.
-
-
+* Registrar-agent: possesses voucher status and enroll status objects from pledge.
 
 ~~~~
 +-----------+    +-----------+   +--------+   +---------+
@@ -1428,6 +1431,97 @@ According to {{RFC8995}} section 5.9.4, the registrar SHOULD respond with an HTT
 Based on the failure case the registrar MAY decide that for security reasons the pledge is not allowed to reside in the domain. In this case the registrar MUST revoke the certificate.
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
 Within the server log the registrar SHOULD capture this telemetry information.
+
+### Request pledge bootstrapping-status {#exchanges_uc2_5}
+
+The following assumes that a registrar-agent may need to query the bootstrapping-status of a pledge. 
+This information may be useful to solve errors, when the pledge was not able to connect to the target domain.
+The pledge MAY provide a dedicated endpoint to supply bootstrapping-status data.  
+
+Preconditions:
+
+* Registrar-agent: possesses LDevID (RegAgt), list of serial numbers of pledges to be queried and a list of corresponding manufacturer trust anchors to be able to verify signatures with the IDevID credential.  
+* Pledge: may already possess domain credentials and LDevID(Pledge).
+
+
+~~~~
++--------+                               +-----------+
+| Pledge |                               | Registrar-|
+|        |                               | Agent     |
+|        |                               | (RegAgt)  |
++--------+                               +-----------+
+    |                                          |
+    |<----- bootstrapping-status request ------|
+    |                                          |
+    |------ bootstrapping-status response ---->| 
+    |                                          |
+~~~~
+{: #exchangesfig_uc2_5 title='Bootstrapping-status handling between registrar-agent and pledge' artwork-align="left"}
+
+The registrar-agent requests the pledge bootstrapping-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/pledge-bootstrap-status"
+
+The registrar-agent request Content-Type header for pledge bootstrapping-status is: `application/jose+json`. 
+It contains information on the type of request, the time and date the request is created, and the serial-number of the pledge contacted as shown in {{stat_req}}. 
+The bootstrapping-status request is signed using the LDevID(RegAgt) credential. 
+
+TODO: JWS syntax check; potentially YANG or CDDL definition
+
+~~~~
+{
+  "payload": {
+      "reason": "bootstrapping-status",
+      "created-on": "2022-08-12T02:37:39.235Z",
+      "serial-number": "pledge-callee4711"
+  },
+  "signatures": [{
+      "protected": {
+        "alg": "ES256",
+        "x5c": [ "base64encodedvalue==" ],
+        "typ": "TODO?"
+      },
+      "signature": "base64encodedvalue=="
+    }]
+}
+~~~~
+{: #stat_req title='Representation of Registrar-agent request of pledge bootstrapping-status' artwork-align="left"}
+
+If the pledge receives the bootstrapping-status request message it SHALL react with a status response message based on the telemetry information described in section {{exchanges_uc2_3}}. 
+
+The pledge bootstrapping-status response Content-Type header is (TODO: may be more specific "typ"): `application/jose+json`. 
+It contains bootstrapping-status information as shown in {{stat_req_res}}. 
+The bootstrapping-status response is signed depending on the bootstrapping state of the pledge 
+
+~~~~
+{
+  "payload": {
+    "enum": ['factory-default', 'vouchered', 'enrolled']
+  },
+  "signatures": [{
+      "protected": {
+        "alg": "ES256",
+        "x5c": [ "base64encodedvalue==" ],
+        "typ": "jose+json, TODO: may be more specific"
+      },
+      "signature": "base64encodedvalue=="
+    }]
+}
+~~~~
+{: #stat_req_res title='Representation of pledge bootstrapping-status response' artwork-align="left"}
+
+Different cases may occur, which can be reflected in the enum (TODO: check CDDL):
+
+* (0): pledge has not been bootstrapped: "factory-default", the pledge signs the response message using its IDevID(Pledge).
+* (1): pledge has processed the voucher exchange successfully: "vouchered", the pledge signs the response message using its IDevID(Pledge).
+* (2): pledge has processed the enrollment exchange successfully: "enrolled", the pledge signs the response message using its LDevID(Pledge).
+
+TODO: check handling of potentials errors of previous "voucher status" and "enroll status" objects/information.
+This could be handled by sending the previous "voucher status" or "enroll status" objects again, or embedding into the new "bootstrapping-status" object?
+
+In case (0) the pledge does not possess the domain certificate resp. the domain trust-anchor. 
+It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.
+In cases (1) and (2) the pledge already possesses the domain certificate (has domain trust-anchore) and can therefore validate the signature of the registrar-agent. 
+If validation of the JWS signature fails, the pledge SHOULD respond with the HTTP 403 error code.
+The HTTP 406 error code SHOULD be used, if the response is in an unknown format. 
 
 
 # Artifacts
@@ -1513,8 +1607,8 @@ module ietf-voucher-request-prm {
 
   description
    "This module defines the format for a voucher-request form the 
-    pledge in responder mode. It bases on the voucher-request 
-	defined in RFC 8995, which is a superset of the voucher itself.
+    pledge in responder mode. It bases on the voucher-request
+    defined in RFC 8995, which is a superset of the voucher itself.
     It provides content to the MASA for consideration
     during a voucher-request.
 
@@ -1555,7 +1649,7 @@ module ietf-voucher-request-prm {
     description
       "Grouping to allow reuse/extensions in future work.";
     uses vcr:voucher-request-grouping {
-	  
+
       augment voucher {
         description "Base the voucher-request-prm upon the
           regular one";
@@ -1597,7 +1691,7 @@ module ietf-voucher-request-prm {
 
         leaf-list agent-sign-cert {
           type binary;
-		  min-elements 1;
+          min-elements 1;
           description
             "An X.509 v3 certificate structure, as specified by
              RFC 5280, Section 4, encoded using the ASN.1
@@ -1610,10 +1704,10 @@ module ietf-voucher-request-prm {
              This MUST be populated in a registrar's
              voucher-request when an agent-proximity assertion
              is requested.
-			 It is defined as list to enable inclusion of further
-			 certificates along the certificate chain if different 
-			 issuing CAs have been used for the registrar-agent 
-			 and the registrar.";
+             It is defined as list to enable inclusion of further
+             certificates along the certificate chain if different 
+             issuing CAs have been used for the registrar-agent 
+             and the registrar.";
           reference
             "ITU X.690: Information Technology - ASN.1 encoding
              rules: Specification of Basic Encoding Rules (BER),
@@ -1652,6 +1746,7 @@ IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with
  pledge-cacerts             supply CA certificates to pledge   [THISRFC] 
  requestenroll              supply PER to registrar            [THISRFC] 
  wrappedcacerts             request wrapped CA certificates    [THISRFC] 
+ pledge-bootstrap-status    query pledge bootstrapping status  [THISRFC] 
 ~~~~
 {: artwork-align="left"}
 
@@ -1708,18 +1803,356 @@ Special thanks to Esko Dijk for the in deep review and the improving proposals.
 
 
 --- back
+# Examples {#examples}
+
+These examples are folded according to {{RFC8792}} Single Backslash rule.
+
+## Example Pledge Voucher Request - PVR (from Pledge to Registrar-agent)  
+
+The following is an example request sent from a Pledge to the Registrar-agent, in "General JWS JSON Serialization".
+
+~~~~
+=============== NOTE: '\' line wrapping per RFC 8792 ================
+
+{
+  "payload":
+    "eyJpZXRmLXZvdWNoZXItcmVxdWVzdC1wcm06dm91Y2hlciI6eyJhc3NlcnRpb24\
+iOiJhZ2VudC1wcm94aW1pdHkiLCJzZXJpYWwtbnVtYmVyIjoiMDEyMzQ1Njc4OSIsIm5\
+vbmNlIjoiNW9Cb3UvUndqNCtkTUo3QlErVWp0Zz09IiwiY3JlYXRlZC1vbiI6IjIwMjI\
+tMDctMTJUMDQ6NDg6NTYuNTYzWiIsImFnZW50LXByb3ZpZGVkLXByb3hpbWl0eS1yZWd\
+pc3RyYXItY2VydCI6Ik1JSUI0akNDQVlpZ0F3SUJBZ0lHQVhZNzJiYlpNQW9HQ0NxR1N\
+NNDlCQU1DTURVeEV6QVJCZ05WQkFvTUNrMTVRblZ6YVc1bGMzTXhEVEFMQmdOVkJBY01\
+CRk5wZEdVeER6QU5CZ05WQkFNTUJsUmxjM1JEUVRBZUZ3MHlNREV5TURjd05qRTRNVEp\
+hRncwek1ERXlNRGN3TmpFNE1USmFNRDR4RXpBUkJnTlZCQW9NQ2sxNVFuVnphVzVsYzN\
+NeERUQUxCZ05WQkFjTUJGTnBkR1V4R0RBV0JnTlZCQU1NRDBSdmJXRnBibEpsWjJsemR\
+ISmhjakJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSUFCQmsxNksvaTc5b1J\
+rSzVZYmVQZzhVU1I4L3VzMWRQVWlaSE10b2tTZHFLVzVmbldzQmQrcVJMN1dSZmZlV2t\
+5Z2Vib0pmSWxsdXJjaTI1d25oaU9WQ0dqZXpCNU1CMEdBMVVkSlFRV01CUUdDQ3NHQVF\
+VRkJ3TUJCZ2dyQmdFRkJRY0RIREFPQmdOVkhROEJBZjhFQkFNQ0I0QXdTQVlEVlIwUkJ\
+FRXdQNElkY21WbmFYTjBjbUZ5TFhSbGMzUXVjMmxsYldWdWN5MWlkQzV1WlhTQ0huSmx\
+aMmx6ZEhKaGNpMTBaWE4wTmk1emFXVnRaVzV6TFdKMExtNWxkREFLQmdncWhrak9QUVF\
+EQWdOSUFEQkZBaUJ4bGRCaFpxMEV2NUpMMlByV0N0eVM2aERZVzF5Q08vUmF1YnBDN01\
+hSURnSWhBTFNKYmdMbmdoYmJBZzBkY1dGVVZvL2dHTjAvand6SlowU2wyaDR4SVhrMSI\
+sImFnZW50LXNpZ25lZC1kYXRhIjoiZXlKd1lYbHNiMkZrSWpvaVpYbEtjRnBZVW0xTVd\
+GcDJaRmRPYjFwWVNYUmpiVlo0WkZkV2VtUkRNWGRqYlRBMldWZGtiR0p1VVhSak1teHV\
+ZbTFXYTB4WFVtaGtSMFZwVDI1emFWa3pTbXhaV0ZKc1drTXhkbUpwU1RaSmFrbDNUV3B\
+KZEUxRVVYUk5hbHBWVFVSVk5rMUVZelpPUkVWMVRrUlJORmRwU1hOSmJrNXNZMjFzYUd\
+KRE1YVmtWekZwV2xoSmFVOXBTWGROVkVsNlRrUlZNazU2WnpWSmJqRTVJaXdpYzJsbmJ\
+tRjBkWEpsY3lJNlczc2ljSEp2ZEdWamRHVmtJam9pWlhsS2NtRlhVV2xQYVVwWlkwaHd\
+jMVJWZERSaVNFSkNUbXBvYWxaVVZrZFZWVEZaVmxoYWRWTldVVEpWV0dNNVNXbDNhVmx\
+YZUc1SmFtOXBVbFpOZVU1VVdXbG1VU0lzSW5OcFoyNWhkSFZ5WlNJNklrY3pWM2hHU0d\
+WMFdGQTRiR3hTVmkwNWRXSnlURmxxU25aUllUWmZlUzFRYWxGWk5FNWhkMW81Y0ZKaGI\
+yeE9TbTlFTm1SbFpXdHVTVjlGV0daemVWWlRZbmM0VTBONlRWcE1iakJoUVhWb2FVZFp\
+UakJSSW4xZGZRPT0iLCJhZ2VudC1zaWduLWNlcnQiOlsiTUlJQjFEQ0NBWHFnQXdJQkF\
+nSUVZbWQ0T1RBS0JnZ3Foa2pPUFFRREFqQStNUk13RVFZRFZRUUtEQXBOZVVKMWMybHV\
+aWE56TVEwd0N3WURWUVFIREFSVGFYUmxNUmd3RmdZRFZRUUREQTlVWlhOMFVIVnphRTF\
+2WkdWc1EwRXdIaGNOTWpJd05ESTJNRFEwTWpNeldoY05Nekl3TkRJMk1EUTBNak16V2p\
+BOU1STXdFUVlEVlFRS0RBcE5lVUoxYzJsdVpYTnpNUTB3Q3dZRFZRUUhEQVJUYVhSbE1\
+SY3dGUVlEVlFRRERBNVNaV2RwYzNSeVlYSkJaMlZ1ZERCWk1CTUdCeXFHU000OUFnRUd\
+DQ3FHU000OUF3RUhBMElBQkd4bHJOZmozaVJiNy9CUW9kVys1WWlvT3poK2pJdHlxdVJ\
+JTy9XejdZb1czaXdEYzNGeGV3TFZmekNyNU52RDEzWmFGYjdmcmFuK3Q5b3RZNVdMaEo\
+2alp6QmxNQTRHQTFVZER3RUIvd1FFQXdJSGdEQWZCZ05WSFNNRUdEQVdnQlJ2b1QxdWR\
+lMmY2TEVRaFU3SEhqK3ZKL2Q3SXpBZEJnTlZIUTRFRmdRVVhwemxNS3hscEE2OGNVNUZ\
+RTVhVdm5JVDZRd3dFd1lEVlIwbEJBd3dDZ1lJS3dZQkJRVUhBd0l3Q2dZSUtvWkl6ajB\
+FQXdJRFNBQXdSUUlnYzJ5NnhvT3RvUUJsSnNnbE9MMVZ4SEdvc1R5cEVxUmZ6MFF2NFp\
+FUHY0d0NJUUNWeWIyRjl6VjNuOTUrb2xnZkZKZ1pUV0V6NGRTYUYzaHpSUWIzWnVCMjl\
+RPT0iLCJNSUlCekRDQ0FYR2dBd0lCQWdJRVhYakhwREFLQmdncWhrak9QUVFEQWpBMU1\
+STXdFUVlEVlFRS0RBcE5lVUoxYzJsdVpYTnpNUTB3Q3dZRFZRUUhEQVJUYVhSbE1ROHd\
+EUVlEVlFRRERBWlVaWE4wUTBFd0hoY05NVGt3T1RFeE1UQXdPRE0yV2hjTk1qa3dPVEV\
+4TVRBd09ETTJXakErTVJNd0VRWURWUVFLREFwTmVVSjFjMmx1WlhOek1RMHdDd1lEVlF\
+RSERBUlRhWFJsTVJnd0ZnWURWUVFEREE5VVpYTjBVSFZ6YUUxdlpHVnNRMEV3V1RBVEJ\
+nY3Foa2pPUFFJQkJnZ3Foa2pPUFFNQkJ3TkNBQVRsRzBmd1QzM29leloxdmtIUWJldGV\
+ibWorQm9WK1pGc2pjZlF3MlRPa0pQaE9rT2ZBYnU5YlMxcVppOHlhRVY4b2VyS2wvNlp\
+YYmZ4T21CanJScmNYbzJZd1pEQVNCZ05WSFJNQkFmOEVDREFHQVFIL0FnRUFNQTRHQTF\
+VZER3RUIvd1FFQXdJQ0JEQWZCZ05WSFNNRUdEQVdnQlRvWklNelFkc0Qvai8rZ1gvN2N\
+CSnVjSC9YbWpBZEJnTlZIUTRFRmdRVWI2RTliblh0bitpeEVJVk94eDQvcnlmM2V5TXd\
+DZ1lJS29aSXpqMEVBd0lEU1FBd1JnSWhBUG5CMHcxTkN1cmhNeEp3d2ZqejdnRGlpeGt\
+VWUxQU1o5ZU45a29oTlFVakFpRUF3NFk3bHR4V2lQd0t0MUo5bmp5ZkRObDVNdUVEQml\
+teFIzQ1hvWktHUXJVPSJdfX0",
+  "signatures": 
+    [{ "protected":
+         "eyJ4NWMiOlsiTUlJQitUQ0NBYUNnQXdJQkFnSUdBWG5WanNVNU1Bb0dDQ3\
+FHU000OUJBTUNNRDB4Q3pBSkJnTlZCQVlUQWtGUk1SVXdFd1lEVlFRS0RBeEthVzVuU2\
+1sdVowTnZjbkF4RnpBVkJnTlZCQU1NRGtwcGJtZEthVzVuVkdWemRFTkJNQ0FYRFRJeE\
+1EWXdOREExTkRZeE5Gb1lEems1T1RreE1qTXhNak0xT1RVNVdqQlNNUXN3Q1FZRFZRUU\
+dFd0pCVVRFVk1CTUdBMVVFQ2d3TVNtbHVaMHBwYm1kRGIzSndNUk13RVFZRFZRUUZFd2\
+93TVRJek5EVTJOemc1TVJjd0ZRWURWUVFEREE1S2FXNW5TbWx1WjBSbGRtbGpaVEJaTU\
+JNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSUFCQzc5bGlhUmNCalpjRUVYdzdyVW\
+VhdnRHSkF1SDRwazRJNDJ2YUJNc1UxMWlMRENDTGtWaHRVVjIxbXZhS0N2TXgyWStTTW\
+dROGZmd0wyM3ozVElWQldqZFRCek1Dc0dDQ3NHQVFVRkJ3RWdCQjhXSFcxaGMyRXRkR1\
+Z6ZEM1emFXVnRaVzV6TFdKMExtNWxkRG81TkRRek1COEdBMVVkSXdRWU1CYUFGRlFMak\
+56UFwvU1wva291alF3amc1RTVmdndjWWJNQk1HQTFVZEpRUU1NQW9HQ0NzR0FRVUZCd0\
+1DTUE0R0ExVWREd0VCXC93UUVBd0lIZ0RBS0JnZ3Foa2pPUFFRREFnTkhBREJFQWlCdT\
+N3UkJMc0pNUDVzTTA3MEgrVUZyeU5VNmdLekxPUmNGeVJST2xxcUhpZ0lnWENtSkxUek\
+VsdkQycG9LNmR4NmwxXC91eW1UbmJRRERmSmxhdHVYMlJvT0U9Il0sInR5cCI6InZvdW\
+NoZXItandzK2pzb24iLCJhbGciOiJFUzI1NiJ9",
+      "signature":
+        "n1rKu3odtbq-rIPHlE08BU-gSf0vKFDtiUL5Q2j8y1BmDXvj4SPUYscjdiu\
+BxYF7SzsdECCfpPiL_jLbwQiG1Q"
+    }]
+}
+~~~~
+{: #ExamplePledgeVoucherRequestfigure title='Example Pledge Voucher Request - PVR' artwork-align="left"}
+
+## Example Parboiled Registrar Voucher Request - RVR (from Registrar to MASA)  
+
+The term parboiled refers to food which is partially cooked.  In [BRSKI], the term refers to a Pledge voucher-request (PVR) which has
+been received by the Registrar, and then has been processed by the Registrar ("cooked"), and is now being forwarded to the MASA.
+
+The following is an example Registrar voucher-request (RVR) sent from the Registrar to the MASA, in "General JWS JSON Serialization".
+Note that the previous PVR can be seen in the payload as "prior-signed-voucher-request".
+
+~~~~
+=============== NOTE: '\' line wrapping per RFC 8792 ================
+
+{
+  "payload": "eyJpZXRmLXZvdWNoZXItcmVxdWVzdC1wcm06dm91Y2hlciI6eyJhc3\
+NlcnRpb24iOiJhZ2VudC1wcm94aW1pdHkiLCJzZXJpYWwtbnVtYmVyIjoiMDEyMzQ1Nj\
+c4OSIsImlkZXZpZC1pc3N1ZXIiOiJCQmd3Rm9BVVZBdU0zTS85TCtTaTZORENPRGtUbC\
+svQnhocz0iLCJub25jZSI6IjVvQm91L1J3ajQrZE1KN0JRK1VqdGc9PSIsInByaW9yLX\
+NpZ25lZC12b3VjaGVyLXJlcXVlc3QiOiJleUp3WVhsc2IyRmtJam9pWlhsS2NGcFlVbT\
+FNV0ZwMlpGZE9iMXBZU1hSamJWWjRaRmRXZW1SRE1YZGpiVEEyWkcwNU1Wa3lhR3hqYV\
+VrMlpYbEthR016VG14amJsSndZakkwYVU5cFNtaGFNbFoxWkVNeGQyTnRPVFJoVnpGd1\
+pFaHJhVXhEU25wYVdFcHdXVmQzZEdKdVZuUlpiVlo1U1dwdmFVMUVSWGxOZWxFeFRtcG\
+pORTlUU1hOSmJUVjJZbTFPYkVscWIybE9WemxEWWpOVmRsVnVaSEZPUTNSclZGVnZNMU\
+ZzUlhKV1YzQXdXbm93T1VscGQybFpNMHBzV1ZoU2JGcERNWFppYVVrMlNXcEpkMDFxU1\
+hSTlJHTjBUVlJLVlUxRVVUWk9SR2MyVGxSWmRVNVVXWHBYYVVselNXMUdibHBYTlRCTV\
+dFSjVZak5hY0ZwSFZtdE1XRUo1WWpOb2NHSlhiREJsVXpGNVdsZGtjR016VW5sWldFbD\
+BXVEpXZVdSRFNUWkphekZLVTFWSk1HRnJUa1JSVm14d1dqQkdNMU5WU2tKYU1HeElVVl\
+pvV2s1NlNtbFpiSEJPVVZjNVNGRXdUbmhTTVU1T1RrUnNRMUZWTVVSVVZWSldaVVZXTm\
+xGV1NrTmFNRFZYVVd0R2RsUlZUbkpOVkZaU1lteGFObGxXWXpGaVIwMTZWRmhvUlZaRl\
+JrMVJiV1JQVm10S1Fsa3dNVU5TYXpWM1drVmtWbVZGVWpaUlZUVkRXakExVjFGclJrNV\
+VWVXB6VlcxNGFrMHhTa1ZWVmxKQ1dsVmFNMDFJYkU1U1JWWTFWRlZTYW1Rd05YRlNWRk\
+pPVmtWd2FGSnVZM2RsYXpGRlVsaHNUbEpIVGpOVWJYQkdUa1V4VlZOdFJrNVNSRkkwVW\
+xod1FsVnJTbTVVYkZwRFVWYzVUbEV5YzNoT1ZrWjFWbTV3YUZaNlZuTlplazVPWlVWU1\
+ZWRlZlRU5hTURWWFVXdEdhbFJWU2tkVWJrSnJVakZXTkZJd1VrSldNRXB1Vkd4YVExRl\
+ZNVTVTUkVKVFpHMUtXRkp1UW1saVJYQnpWMnBLYzJWdFVrbFRiV2hxWVd0S1lWUlZTaz\
+VTTUVvMVkxVmtWRlJVVVRWUlYyUkdVakJPUkdOVlpGUlVWRkUxVVZoa1JsTkZSWGRUVl\
+VaRFVXMXplRTVyYzNaaFZHTTFZakZLY2xONlZscFpiVlpSV25wb1ZsVXhTVFJNTTFaNl\
+RWZFNVVlpYYkdGVFJURXdZakowVkZwSVJreFdlbFp0WW14a2VsRnRVWEpqVmtwTlRqRm\
+tVMXB0V214V01uUTFXakpXYVdJd2NHMVRWM2h6WkZoS2FtRlVTVEZrTWpWdllWVTVWMU\
+V3WkhGYVdIQkRUbFV4UTAxRlpFSk5WbFpyVTJ4R1VsWXdNVU5WVldSRVVUTk9TRkZXUm\
+xaU2Ewb3pWRlZLUTFveVpIbFJiV1JHVW10S1Vsa3dVa2xTUlVaUVVXMWtUMVpyYUZKUF\
+JVcENXbXBvUmxGclJrNVJNRWt3VVZoa1ZGRldiRVZXYkVsM1ZXdEtSbEpZWkZGT1JXeH\
+JXVEl4VjJKdFJsbFVha0pxWWxWYU5WUkdhRk5pUjAxNlZWaFdhazF0ZUhOWmJHUlhaRm\
+RPTlUxWGJHdFJlbFl4VjJ4b1ZGRXdhSFZUYlhoaFRXMTRObHBGYUV0aFIwNXdUVlJDWV\
+ZkRk5IZFViV3N4WlcxR1dGWnVVbUZXZWxZMlZFWmtTMDFGZUhST1YzaHJVa1ZHVEZGdF\
+pHNWpWMmh5WVdzNVVWVldSa1ZSVjJSUFUxVkdSVkZyV2tKaFZVbzBZa2RTUTJGR2NIaE\
+5SVll5VGxWd1RVMXNRbmxXTUU0d1pWWk5NbUZGVWxwV2VrWTFVVEE0ZGxWdFJqRlpia0\
+pFVGpBeGFGTlZVbTVUVjJoQ1ZFWk9TMWx0WkUxaWJXUnZXVzFLUWxwNlFtdFpNV1JIVm\
+xaYWRrd3laRWhVYWtGMllXNWtObE5zYjNkVk1uZDVZVVJTTkZOV2FISk5VMGx6U1cxR2\
+JscFhOVEJNV0U1d1dqSTFiRnBETVd0WldGSm9TV3B2YVZwWWJFdGtNV3haWWtoT2FVMX\
+JXbkpUVjNCMllWWndXV0pGZEdwU2JrSmFWbGN3ZUZSV1pFZGpSRXBoVW0xU1VGbHFSbm\
+RYVms1WlZXMXdhVlpzYnpCWGExcHJWakpXZEZWclVrNVhSMUp4V1d4U1FrMXNaRmRhUj\
+NScFVqQndNVlpXYUZOaGF6RjBaVWhXV21KVVJsaFpWRUkwVjBaV2RHRkhkRk5OUmxwM1\
+ZrUkpNV1Z0UmxkaE0zQlVZbGhvWVZZd1drdGpNV1J5VkZob2EySlZjSGRWTVZKaFUyMU\
+djbUpFVGxWV00wSkxXa1ZWZUZKV1ZsbFZhelZvWWtoQ1YxWkdWbE5XYXpWeVRWVldXbV\
+ZzY0ZCVmExWlhUVlpTY2xWc1NrOVNiVkozVlRGb1QxTnRTbkpPV0U1YVRXcEdlbGxWWk\
+V0U1JURlpWbTEwVjJWclduZFdNbmh2VTIxR1ZrOVlRbFJYUjFKUFZtdFdjMDVzVW5KVm\
+JGcE9ZWHBWTWxkdWNGZFRiVXB4VWxSV1NtRllaSEJaZWtwelltMUtkRkpxUW10WFJYQn\
+pXVE5zU2s1c1kzcGpNbXhxVTBWd01scEZaRmRoYlZKSVZtMTBTbUZ0T1hCWGJHaHpVek\
+pPZEZKc2FGWldNbmhSV1ZaV2QxZHNhM2RoU0dScVRWWktWMXBGVWxOaFZrNUdVMnRPVl\
+dKWVFuWlpWM2hoVmxaYWNscEdXbGRXUlZwaFZtMTRiMWxYVWxkVWJHUldWa1Z3VjFZd1\
+pFNU9WazVZWWtST2FGWnRlRmxhVldNeFUyMUdkRTlZUWxaaVJuQlBXbFpWTVZaV1pGaG\
+lSekZXVlRCc2VsTlhOVTlqUm05NVRsZG9hMU5HV2pWWGJFNUtUbXRzY2xremNGZE5NbW\
+hJVlRCa1YwMUdaRWRSVkZKcFVqTm9WRlp0YTNkT1YxSllVMjVzVlZKdGVIaFZNalZoVl\
+d4c1ZWZHRXbXhWZWtaU1dWZDRSMWRyTlVaT1YyaHJUVmM0TVZrd1drdGhSMGw1WlVVNV\
+ZHSlViRVpVYlRGVFlrWndXR1JJVmxSV2FteEhWakJrWVdWdFZsZFhiRkphWW0xTk1GWl\
+VRazlPYkZKWFkwVXhhV0ZyU205VlZtaFhZakpHVmxwR2NGVmhhMHBUVTFjMGVGcEhXbE\
+pRVkRCcFRFTkthRm95Vm5Wa1F6RjZZVmRrZFV4WFRteGpibEZwVDJ4emFWUlZiRXBSYW\
+taRlVUQk9RbGRJUm01UldHUktVV3RHYmxOVlZscGlWMUV3VkRGU1FsTXdTbTVhTTBadl\
+lUSndVRlZHUmxKU1JVWnhVVk4wVGxWck1UTlNWa1phVWtaYVVsVlZkRVZSV0VKUFdsWl\
+dTMDFYVFhsaVNGWmhWMFUxTmxSV1JYZGtNRTR6VjFWU1YxVldSa2xTUlVaVFZrZEdXVl\
+Z0ZUU1VmJXUXpVbTFrV2xKR1dsSlZWVkpGVVZSc1ZsZHNhRTlOUmxaSlZtNXdhRkpVUm\
+pKWGEyUlhZekZGZDFKWVpFbGhSMDVQVkZkd1NtUXdOVVZUVkVwT1VrWkZkMVJYY0U1bG\
+JHUnZXVEExVG1WcmJETlVhMUpLVFdzeFJWVlVRazVoYXpFMlZqSndRazlWTVZOVVdHUk\
+dWVlpzUlZac1JsSlRNRkpDWTBVMWJGWlZiM2haZWtwelpGWndXVlJ1Y0U1VlZFSXpVVE\
+5rV2xKR1dsSlZWV2hGVVZaS1ZWbFdhRk5pUlRGVFdUTmtSMVZXYkVWV2JFWlNVa1ZTUW\
+s1V1RtRldNbEozV1hwT1UyVldiRmxUYTBwaFRXeGFNVnBGVWtOWGF6RkRWRlZrUTJWWV\
+JraFZNREF3VDFWR2JsSlZaRVJSTTBaSVZUQXdNRTlWUmpOU1ZXaENUVVZzUWxGclpEUm\
+lTRXBQV20xdmVtRldTbWxPZVRsRFZWYzVhMVo1Y3pGWFYyeDJWRE53YjBzeWNFcGtTR3\
+g0WkZaS1NsUjVPVmhsYW1SYVlqRmplbUZZWkVWWmVrNUhaVWRXTTFSR1dtMWxhMDU1VG\
+xVMU1sSkVSWHBYYlVaSFdXcGtiV050Um5WTE0xRTFZak5TV2s1V1pFMWhSVzh5WVd4d0\
+5sRnRlRTVSVkZKSVVWUkdWbHBGVWpOU1ZVbDJaREZHUmxGWVpFcFRSMlJGVVZkYVExb3\
+dOVmRUUms1T1VsVmtSVkZXWkc1UmJFb3lZakZSZUdSWFVteE5iVmt5VkVWV1VtRkdWVE\
+5UUldoeFN6TmFTMHd5VVROVFdIQkNXa1ZLYmxSc1drbFZWRkpHVW0xa1VsWldhSGRsYl\
+hoT1V6Tm9jMk5GUlRKUFIwNVdUbFZhVWxSV2FGWmtiVFZLVmtSYVVtUXpaRVprTVd4Rl\
+ZteEpkMkpGU2tKa00yUkVXakZzU2xNelpGcFJhMHBTVmxWb1FtUXdiRE5STW1SYVUxVj\
+BkbGRyYkRaaGFrSkdVVmhrU2xKR1RrSlJXR1JUVlZWc2JsbDZTalZPYm1oMlZETlNkbF\
+ZWU25OVGJrNXVZa1U1VFUxV1dqUlRSV1IyWXpGU05XTkZWbmhWYlZvMlRVWkdNazVHY0\
+VaVlNGa3daREJPU2xWVlRsZGxWMGw1VW1wc05sWnFUblZQVkZWeVlqSjRibHByV2t0YU\
+1YQlZWakJXTms1SFVsUlpWVmw2WVVod1UxVlhTWHBYYmxaRFRXcHNVbEJVTUdsTVEwcE\
+9VMVZzUTJWclVrUlJNRVpaVWpKa1FtUXdiRU5SVjJSS1VsWm9XV0ZyYUhkU1JVWk1VVz\
+FrYm1OWGFISmhhemxSVlZaR1JWRlhjRUpOVlRGVFZGaGtSbFZXYkVWV2JFWlNVekJTUW\
+1ORk5XeFdWVzk0V1hwS2MyUldjRmxVYm5CT1ZWUkNNMUV6WkZwU1JscFNWVlZvUlZGV1\
+NsVlpWbWhUWWtVeFVrOUlaRVZWVm14RlZteEdVbEpGVWtKWGJGWmhWMFUwZDFWVVFrWm\
+tNR2h2V1RBMVRsWkhkRE5VTVZKR1pVVXhWVkZZWkZCU1JUQjVWakpvYWxSck1YRmhNMl\
+JRVmtWV05GUldVa0prTURsRlZGUktXR0ZyUlhKVVZrcE9aREJXVWxkVlVsZFZWa1pNVW\
+tWR2QxUnRWbFpUYWtacVRXMTRNVmRzYUU5bGF6RlNUVWhrUkdReGJFVldiRVpTVTBWU1\
+FsVnNVbWhYUmtwelZGWktibVF3V201WFZWSlhWVlpHUlZKRlJUVldWbkJaVkdwQ1ZsTk\
+dXalpaVlZWNFpHeHdTRlp1VGxKTlJWWXpWakZTUWxaRlNtNVpNMFp2WVRKd1VGVkdSa3\
+BSYTBwdVdqTkdiMkV5Y0ZCVlJrWk9VV3RLTTFSclRrSlJWbEp6VW5wQ2JXUXhVWHBOTW\
+psc1pXeHZlR1J0ZEVsVlYwcHNaRWRXYVdKWGIzSlJiVGxYU3pGd1IyTXljR3BhYkVZel\
+RXeFNVR0V3Y0ZGaFJUbHlWREphUWxsdVZUVlpiRTE0WTFad2NFOUliR2hTVmxrMFlqSl\
+dlVk15ZDNaT2JIQlpXVzFhTkZReU1VTmhia3BUWTIxT1dXSjZTbHBrTVhCRlVWWk9RMW\
+93TlZkVFJrcE9VV3RHYlU5RlZrUlNSVVpJVVZaR1NVd3dSbTVTVlVaT1VWUlNTRkZVUm\
+xaYVJWSXpVbFZKZG1ReFJrWlJXR1JLVVRCS1JWRlhXa05hTURWWFUwWk9UbEpWWkVWUl\
+ZtUnVVV3hTZGxkcmJFNWxiRVpyWXpCUmRtRnBPSEphTVdkMlRqSk9RMU51Vm1wVFF6bF\
+pZbGR3UWxwRlNtNVViRnBKVlZSU1JsSnRaRkpXVjBreVVsUnNhV0pzYURCaWFYUndaVV\
+ZXU2xack9UUmxSRkYyWTI1c2JVMHlWalZVV0dSRVdqRnNTbE15T1dGVFdIQnhUVVZXUW\
+1Rd2JFVlZNVVpDWkRGS2JsTlhhRUpWUnpWRFRVaGplRlJyVGpGamJXaE9aVVZ3TTJReV\
+duRmxhbVJ1VWtkc2NHVkhkRlpYVlhoUlZURnZOVnBWTkRWaE1qbHZWR3hHVm1GclJuQl\
+NWVVl6VGtack0ySklValJXTW14UlpEQjBNRTFWYnpWaWJYQTFXbXRTVDJKRVZrNWtWVl\
+pGVVcxc2RHVkdTWHBSTVdoMlYydDBTRlZZU2xaUVUwcGtabGd3SWl3aWMybG5ibUYwZF\
+hKbGN5STZXM3NpY0hKdmRHVmpkR1ZrSWpvaVpYbEtORTVYVFdsUGJITnBWRlZzU2xGcG\
+RGVlJNRTVDV1ZWT2JsRllaRXBSYTBadVUxVmtRbGRITlZkaGJrNVdUbFV4UW1Jd1pFUl\
+JNMFpJVlRBd01FOVZTa0pVVlU1T1VrUkNORkV6Y0VKVGEwcHVWR3hhUTFGV2JGVlJWM1\
+JIVldzeFUxWllaRVprTVd4RlZteEdVbE13VWtKbFJYUm9WbnBXZFZVeU1YTmtWbTkzVk\
+c1YWFtSnJSalJTYm5CQ1ZtdEtibFJzV2tOUlZURk9Va2QwZDJOSFNuUmFSWFJvVm5wV2\
+RWWnJaRmRsYlZKR1ZHdEtUbEV3UmxsU1JsSktaVVV4UlZkWVpFOVNSVVY0Vkd0U1dtVk\
+ZOVWRpTVd4RlpXMXpNVlF4VW5KbFJURnhWRmhvVG1Gck1IaFVNVkpXVGxaa2NWRnNUaz\
+VWV0U0elVURkdXbEpHV2xKVlZXUkdaREJ3UTFaV1VrWldhekZEVkZWa1FrMVdWa1pSTW\
+1RelZGWk9kR0pJVm1GTlNFSjNXVzB4YTFKSFNYcFRibVJPVldzeE0xSldSbHBTUmxwU1\
+ZWVmFSbVF5T1ROVVZsSktaV3MxUlZaVVNrOWxiV014VkZaS2FtUXdXbEpYVlZKWFZWWk\
+dSVkpGUlRGVE1rWllUbGMxVkdKWGVERlhha0pUWWtkU2RHSkhjR0ZXUlVwaFZGVktUbE\
+l3U2pWalZXUlVWRlJSTlZGWFpFWlNNRTVFWTFWa1ZGUlVVVFZSV0dSR1UwVkZkMU5WUm\
+tOUmVtTTFZa2RzYUZWdFRrTmhiSEJxVWxWV1dXUjZaSGxXVjFab1pHNVNTRk5yUmpGVF\
+JGSjNZWHBTU2s1RVNqSlpWVXBPWXpGVmVFMVhiRTFTUlU1RVZFZDBWMkZJVWxaV2FrbD\
+RZbGhhYUZNd1RqSlVXR2Q1VjFOMFZGUlhaRkpQUjFwdFpEQjNlVTB6YjNwV1JXeFhVV3\
+hrY1ZwR1VrTmxhekZFWXpCa1JGRXpUa2hSVmtaV1VtdEtNMUpYWkVOUmFtaFlVMFpqZU\
+dGSFRYbFNXRkpyVWpGYU5scEZUVEZsYlVaWVZtNVNZVlo2VmpaVVJtUkxUVVY0ZEU1WG\
+VHdFNSemd4Vkd0U1VtVnJNVU5QUldSQ1RWWldhMU5ZWkZKWFZURkRXVlZHUjFKc1JrMW\
+hhelUyVlVaM2RsVXhkM1poTWpreFlXeEdNMkZ0WXpGU1ZGWnRaRzVrYWxkWFNrNVJhek\
+ZJVVZSR1ZscEZjRkpWVlRGT1VWYzVTRkV3VG5wU01FWlNWbFZhUTJRd01VUlVWVVV3VW\
+pCRmVGWlhVa1ZrTUZaRFdFTTVNMVZWVmtKa01HeEpXakJTUWxNd1NtNWFNMFp2WVRKd1\
+VGVkdSbEpTUlVadVZHdG9RbEpGU2taUlYyeERaRlJPTTFWclNrMWpNSEJPVlVSV2VsUl\
+VRVE5OUldkeVZsVmFlV1ZWTlZaT2JXUk1aV3Q0VUZWdFRrZGxWa3BUVkRKNGVHTlZhSE\
+JhTUd4dVYwVk9kRk5yZUZWbGExWnpaR3RSZVdOSE9VeE9iVkkwVG0xM2VGaERPVEZsVn\
+pGVlltMUtVbEpGVW0xVGJYaG9aRWhXV1Uxc1NuWlVNRlU1U1d3d2MwbHVValZqUTBrMl\
+NXNWFkbVJYVG05YVdFbDBZVzVrZWtzeWNIcGlNalJwVEVOS2FHSkhZMmxQYVVwR1ZYcE\
+pNVTVwU2praUxDSnphV2R1WVhSMWNtVWlPaUp1TVhKTGRUTnZaSFJpY1MxeVNWQkliRV\
+V3T0VKVkxXZFRaakIyUzBaRWRHbFZURFZSTW1vNGVURkNiVVJZZG1vMFUxQlZXWE5qYW\
+1ScGRVSjRXVVkzVTNwelpFVkRRMlp3VUdsTVgycE1ZbmRSYVVjeFVTSjlYWDA9IiwiY3\
+JlYXRlZC1vbiI6IjIwMjItMDctMTJUMDQ6NDk6MDcuMTM0WiIsImFnZW50LXNpZ24tY2\
+VydCI6WyJNSUlCMURDQ0FYcWdBd0lCQWdJRVltZDRPVEFLQmdncWhrak9QUVFEQWpBK0\
+1STXdFUVlEVlFRS0RBcE5lVUoxYzJsdVpYTnpNUTB3Q3dZRFZRUUhEQVJUYVhSbE1SZ3\
+dGZ1lEVlFRRERBOVVaWE4wVUhWemFFMXZaR1ZzUTBFd0hoY05Nakl3TkRJMk1EUTBNak\
+16V2hjTk16SXdOREkyTURRME1qTXpXakE5TVJNd0VRWURWUVFLREFwTmVVSjFjMmx1Wl\
+hOek1RMHdDd1lEVlFRSERBUlRhWFJsTVJjd0ZRWURWUVFEREE1U1pXZHBjM1J5WVhKQl\
+oyVnVkREJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSUFCR3hsck5majNpUm\
+I3L0JRb2RXKzVZaW9Pemgrakl0eXF1UklPL1d6N1lvVzNpd0RjM0Z4ZXdMVmZ6Q3I1Tn\
+ZEMTNaYUZiN2ZyYW4rdDlvdFk1V0xoSjZqWnpCbE1BNEdBMVVkRHdFQi93UUVBd0lIZ0\
+RBZkJnTlZIU01FR0RBV2dCUnZvVDF1ZGUyZjZMRVFoVTdISGordkovZDdJekFkQmdOVk\
+hRNEVGZ1FVWHB6bE1LeGxwQTY4Y1U1RlFNWFV2bklUNlF3d0V3WURWUjBsQkF3d0NnWU\
+lLd1lCQlFVSEF3SXdDZ1lJS29aSXpqMEVBd0lEU0FBd1JRSWdjMnk2eG9PdG9RQmxKc2\
+dsT0wxVnhIR29zVHlwRXFSZnowUXY0WkVQdjR3Q0lRQ1Z5YjJGOXpWM245NStvbGdmRk\
+pnWlRXRXo0ZFNhRjNoelJRYjNadUIyOVE9PSIsIk1JSUJ6RENDQVhHZ0F3SUJBZ0lFWF\
+hqSHBEQUtCZ2dxaGtqT1BRUURBakExTVJNd0VRWURWUVFLREFwTmVVSjFjMmx1WlhOek\
+1RMHdDd1lEVlFRSERBUlRhWFJsTVE4d0RRWURWUVFEREFaVVpYTjBRMEV3SGhjTk1Ua3\
+dPVEV4TVRBd09ETTJXaGNOTWprd09URXhNVEF3T0RNMldqQStNUk13RVFZRFZRUUtEQX\
+BOZVVKMWMybHVaWE56TVEwd0N3WURWUVFIREFSVGFYUmxNUmd3RmdZRFZRUUREQTlVWl\
+hOMFVIVnphRTF2WkdWc1EwRXdXVEFUQmdjcWhrak9QUUlCQmdncWhrak9QUU1CQndOQ0\
+FBVGxHMGZ3VDMzb2V6WjF2a0hRYmV0ZWJtaitCb1YrWkZzamNmUXcyVE9rSlBoT2tPZk\
+FidTliUzFxWmk4eWFFVjhvZXJLbC82WlhiZnhPbUJqclJyY1hvMll3WkRBU0JnTlZIUk\
+1CQWY4RUNEQUdBUUgvQWdFQU1BNEdBMVVkRHdFQi93UUVBd0lDQkRBZkJnTlZIU01FR0\
+RBV2dCVG9aSU16UWRzRC9qLytnWC83Y0JKdWNIL1htakFkQmdOVkhRNEVGZ1FVYjZFOW\
+JuWHRuK2l4RUlWT3h4NC9yeWYzZXlNd0NnWUlLb1pJemowRUF3SURTUUF3UmdJaEFQbk\
+IwdzFOQ3VyaE14Snd3Zmp6N2dEaWl4a1VZTFBTWjllTjlrb2hOUVVqQWlFQXc0WTdsdH\
+hXaVB3S3QxSjluanlmRE5sNU11RURCaW14UjNDWG9aS0dRclU9Il19fQ",
+  "signatures": [{
+    "protected": "eyJ4NWMiOlsiTUlJQm96Q0NBVXFnQXdJQkFnSUdBVzBlTHVJRk\
+1Bb0dDQ3FHU000OUJBTUNNRFV4RXpBUkJnTlZCQW9NQ2sxNVFuVnphVzVsYzNNeERUQU\
+xCZ05WQkFjTUJGTnBkR1V4RHpBTkJnTlZCQU1NQmxSbGMzUkRRVEFlRncweE9UQTVNVE\
+V3TWpNM016SmFGdzB5T1RBNU1URXdNak0zTXpKYU1GUXhFekFSQmdOVkJBb01DazE1UW\
+5WemFXNWxjM014RFRBTEJnTlZCQWNNQkZOcGRHVXhMakFzQmdOVkJBTU1KVkpsWjJsem\
+RISmhjaUJXYjNWamFHVnlJRkpsY1hWbGMzUWdVMmxuYm1sdVp5QkxaWGt3V1RBVEJnY3\
+Foa2pPUFFJQkJnZ3Foa2pPUFFNQkJ3TkNBQVQ2eFZ2QXZxVHoxWlVpdU5XaFhwUXNrYV\
+B5N0FISFFMd1hpSjBpRUx0NnVOUGFuQU4wUW5XTVlPXC8wQ0RFaklrQlFvYnc4WUtxan\
+R4SkhWU0dUajlLT295Y3dKVEFUQmdOVkhTVUVEREFLQmdnckJnRUZCUWNESERBT0JnTl\
+ZIUThCQWY4RUJBTUNCNEF3Q2dZSUtvWkl6ajBFQXdJRFJ3QXdSQUlnWXIyTGZxb2FDS0\
+RGNFJBY01tSmkrTkNacWRTaXVWdWdJU0E3T2hLUnEzWUNJRHhuUE1NbnBYQU1UclBKdV\
+BXeWNlRVIxMVB4SE9uKzBDcFNIaTJxZ3BXWCIsIk1JSUJwRENDQVVtZ0F3SUJBZ0lHQV\
+cwZUx1SCtNQW9HQ0NxR1NNNDlCQU1DTURVeEV6QVJCZ05WQkFvTUNrMTVRblZ6YVc1bG\
+MzTXhEVEFMQmdOVkJBY01CRk5wZEdVeER6QU5CZ05WQkFNTUJsUmxjM1JEUVRBZUZ3MH\
+hPVEE1TVRFd01qTTNNekphRncweU9UQTVNVEV3TWpNM016SmFNRFV4RXpBUkJnTlZCQW\
+9NQ2sxNVFuVnphVzVsYzNNeERUQUxCZ05WQkFjTUJGTnBkR1V4RHpBTkJnTlZCQU1NQm\
+xSbGMzUkRRVEJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSUFCT2t2a1RIdT\
+hRbFQzRkhKMVVhSTcrV3NIT2IwVVMzU0FMdEc1d3VLUURqaWV4MDZcL1NjWTVQSmlidm\
+dIVEIrRlwvUVRqZ2VsSEd5MVlLcHdjTk1jc1N5YWpSVEJETUJJR0ExVWRFd0VCXC93UU\
+lNQVlCQWY4Q0FRRXdEZ1lEVlIwUEFRSFwvQkFRREFnSUVNQjBHQTFVZERnUVdCQlRvWk\
+lNelFkc0RcL2pcLytnWFwvN2NCSnVjSFwvWG1qQUtCZ2dxaGtqT1BRUURBZ05KQURCR0\
+FpRUF0eFEzK0lMR0JQSXRTaDRiOVdYaFhOdWhxU1A2SCtiXC9MQ1wvZlZZRGpRNm9DSV\
+FERzJ1UkNIbFZxM3loQjU4VFhNVWJ6SDgrT2xoV1V2T2xSRDNWRXFEZGNRdz09Il0sIn\
+R5cCI6InZvdWNoZXItandzK2pzb24iLCJhbGciOiJFUzI1NiJ9",
+    "signature": "ZUUUwtjvbYfIteRb_9OUuh4WibxwpZLAHAlVAXNMSY1De6ub2U\
+aOJrCam-OIrZ7-QguUJwm5VEHJ14NEdAWGOQ"
+    }]
+}
+~~~~
+{: #ExampleRegistrarVoucherRequestfigure title='Example Registrar Voucher Request - RVR' artwork-align="left"}
+
+
+## Example Voucher Response (from MASA to Pledge, via Registrar and Registrar-agent)  
+
+The following is an example voucher response from MASA to Pledge via Registrar and Registrar-agent, in "General JWS JSON Serialization".
+
+~~~~
+=============== NOTE: '\' line wrapping per RFC 8792 ================
+
+{
+  "payload": "eyJpZXRmLXZvdWNoZXI6dm91Y2hlciI6eyJhc3NlcnRpb24iOiJhZ2\
+VudC1wcm94aW1pdHkiLCJzZXJpYWwtbnVtYmVyIjoiMDEyMzQ1Njc4OSIsIm5vbmNlIj\
+oiNW9Cb3UvUndqNCtkTUo3QlErVWp0Zz09IiwiY3JlYXRlZC1vbiI6IjIwMjItMDctMT\
+JUMDQ6NDk6MDcuNjAyWiIsInBpbm5lZC1kb21haW4tY2VydCI6Ik1JSUJwRENDQVVtZ0\
+F3SUJBZ0lHQVcwZUx1SCtNQW9HQ0NxR1NNNDlCQU1DTURVeEV6QVJCZ05WQkFvTUNrMT\
+VRblZ6YVc1bGMzTXhEVEFMQmdOVkJBY01CRk5wZEdVeER6QU5CZ05WQkFNTUJsUmxjM1\
+JEUVRBZUZ3MHhPVEE1TVRFd01qTTNNekphRncweU9UQTVNVEV3TWpNM016SmFNRFV4RX\
+pBUkJnTlZCQW9NQ2sxNVFuVnphVzVsYzNNeERUQUxCZ05WQkFjTUJGTnBkR1V4RHpBTk\
+JnTlZCQU1NQmxSbGMzUkRRVEJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSU\
+FCT2t2a1RIdThRbFQzRkhKMVVhSTcrV3NIT2IwVVMzU0FMdEc1d3VLUURqaWV4MDYvU2\
+NZNVBKaWJ2Z0hUQitGL1FUamdlbEhHeTFZS3B3Y05NY3NTeWFqUlRCRE1CSUdBMVVkRX\
+dFQi93UUlNQVlCQWY4Q0FRRXdEZ1lEVlIwUEFRSC9CQVFEQWdJRU1CMEdBMVVkRGdRV0\
+JCVG9aSU16UWRzRC9qLytnWC83Y0JKdWNIL1htakFLQmdncWhrak9QUVFEQWdOSkFEQk\
+dBaUVBdHhRMytJTEdCUEl0U2g0YjlXWGhYTnVocVNQNkgrYi9MQy9mVllEalE2b0NJUU\
+RHMnVSQ0hsVnEzeWhCNThUWE1VYnpIOCtPbGhXVXZPbFJEM1ZFcURkY1F3PT0ifX0",
+  "signatures": [{
+    "protected": "eyJ4NWMiOlsiTUlJQmt6Q0NBVGlnQXdJQkFnSUdBV0ZCakNrWU\
+1Bb0dDQ3FHU000OUJBTUNNRDB4Q3pBSkJnTlZCQVlUQWtGUk1SVXdFd1lEVlFRS0RBeE\
+thVzVuU21sdVowTnZjbkF4RnpBVkJnTlZCQU1NRGtwcGJtZEthVzVuVkdWemRFTkJNQj\
+RYRFRFNE1ERXlPVEV3TlRJME1Gb1hEVEk0TURFeU9URXdOVEkwTUZvd1R6RUxNQWtHQT\
+FVRUJoTUNRVkV4RlRBVEJnTlZCQW9NREVwcGJtZEthVzVuUTI5eWNERXBNQ2NHQTFVRU\
+F3d2dTbWx1WjBwcGJtZERiM0p3SUZadmRXTm9aWElnVTJsbmJtbHVaeUJMWlhrd1dUQV\
+RCZ2NxaGtqT1BRSUJCZ2dxaGtqT1BRTUJCd05DQUFTQzZiZUxBbWVxMVZ3NmlRclJzOF\
+IwWlcrNGIxR1d5ZG1XczJHQU1GV3diaXRmMm5JWEgzT3FIS1Z1OHMyUnZpQkdOaXZPS0\
+dCSEh0QmRpRkVaWnZiN294SXdFREFPQmdOVkhROEJBZjhFQkFNQ0I0QXdDZ1lJS29aSX\
+pqMEVBd0lEU1FBd1JnSWhBSTRQWWJ4dHNzSFAyVkh4XC90elVvUVwvU3N5ZEwzMERRSU\
+5FdGNOOW1DVFhQQWlFQXZJYjNvK0ZPM0JUbmNMRnNhSlpSQWtkN3pPdXNuXC9cL1pLT2\
+FFS2JzVkRpVT0iXSwidHlwIjoidm91Y2hlci1qd3MranNvbiIsImFsZyI6IkVTMjU2In\
+0",
+    "signature": "HFqpWjVKYn_cSLleTohzSygHbv_dYxz6opknJK5w_ZaLGroGym\
+zBs2Ofk8DrX9zYiWZrVR7Y6HDcxY-aErEbiA"
+    }]
+}
+~~~~
+{: #ExampleVoucherResponsefigure title='Example Voucher Response' artwork-align="left"}  
+
+
+
 
 # History of Changes [RFC Editor: please delete] {#app_history}
 
 Proof of Concept Code available
 
 From IETF draft 04 -> IETF draft 05:
+
+* Included examples for several objects in section {{examples}}
+* Defined new endpoint for pledge bootstrapping status inquiry, issue #35 in section {{exchanges_uc2_5}}, IANA considerations and section {{pledge_ep}}
 * PoP for private key to registrar certificate included as mandatory, issues #32 and #49
 * Issue #50 addressed by referring to the utilized enrollment protocol
 * Issue #47 MASA verification of LDevID(RegAgt) to the same LDevID(Reg) domain CA
 * Issue #31, clarified that combined pledge may act as client/server for further (re)enrollment
 * Issue #42, clarified that Registrar needs to verify the status responses with and ensure that they match the audit log response from the MASA, otherwise it needs drop the pledge and revoke the certificate    
-* Issue #43, clarified that the pledge shall use the create time from the trigger message if the time nas not yet synchronized.
+* Issue #43, clarified that the pledge shall use the create time from the trigger message if the time has not been synchronized, yet.
 
 From IETF draft 03 -> IETF draft 04:
 
@@ -1866,7 +2299,7 @@ From IETF draft 01 -> IETF draft 02:
   the security considerations.
 
 * Introduction of reference to agent signing certificate using SKID
-  in agent signed data (issue #11).
+  in agent signed data (issue #37).
 
 * Enhanced objects in exchanges between pledge and registrar-agent
   to allow the registrar to verify agent-proximity to the pledge
