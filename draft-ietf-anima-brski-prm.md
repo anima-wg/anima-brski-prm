@@ -62,6 +62,7 @@ normative:
   RFC7515:
   RFC8040:
   RFC8366:
+  RFC8610:
   RFC8792:
   RFC8995:
   I-D.ietf-anima-jws-voucher:
@@ -1432,11 +1433,11 @@ Based on the failure case the registrar MAY decide that for security reasons the
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
 Within the server log the registrar SHOULD capture this telemetry information.
 
-### Request pledge bootstrapping-status {#exchanges_uc2_5}
+### Request pledge-status {#exchanges_uc2_5}
 
-The following assumes that a registrar-agent may need to query the bootstrapping-status of a pledge. 
-This information may be useful to solve errors, when the pledge was not able to connect to the target domain.
-The pledge MAY provide a dedicated endpoint to supply bootstrapping-status data.  
+The following assumes that a registrar-agent may need to query the status of a pledge. 
+This information may be useful to solve errors, when the pledge was not able to connect to the target domain during the bootstrapping.
+The pledge MAY provide a dedicated endpoint to supply status-requests.  
 
 Preconditions:
 
@@ -1445,56 +1446,111 @@ Preconditions:
 
 
 ~~~~
-+--------+                               +-----------+
-| Pledge |                               | Registrar-|
-|        |                               | Agent     |
-|        |                               | (RegAgt)  |
-+--------+                               +-----------+
-    |                                          |
-    |<----- bootstrapping-status request ------|
-    |                                          |
-    |------ bootstrapping-status response ---->| 
-    |                                          |
++--------+                     +-----------+
+| Pledge |                     | Registrar-|
+|        |                     | Agent     |
+|        |                     | (RegAgt)  |
++--------+                     +-----------+
+    |                                |
+    |<--- pledge-status request -----|
+    |                                |
+    |---- pledge-status response --->| 
+    |                                |
 ~~~~
-{: #exchangesfig_uc2_5 title='Bootstrapping-status handling between registrar-agent and pledge' artwork-align="left"}
+{: #exchangesfig_uc2_5 title='Pledge-status handling between registrar-agent and pledge' artwork-align="left"}
 
-The registrar-agent requests the pledge bootstrapping-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/pledge-bootstrap-status"
+The registrar-agent requests the pledge-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/pledge-status"
 
-The registrar-agent request Content-Type header for pledge bootstrapping-status is: `application/jose+json`. 
-It contains information on the type of request, the time and date the request is created, and the serial-number of the pledge contacted as shown in {{stat_req}}. 
-The bootstrapping-status request is signed using the LDevID(RegAgt) credential. 
+The registrar-agent Content-Type header for the pledge-status request is: `application/jose+json`. 
+It contains information on the requested status-type, the time and date the request is created, and the product serial-number of the pledge contacted as shown in {{stat_req_def}}. 
+The pledge-status request is signed by registrar-agent using the LDevID(RegAgt) credential. 
 
-TODO: JWS syntax check; potentially YANG or CDDL definition
+The following Concise Data Definition Language (CDDL) {{RFC8610}} explains the structure of the format for the pledge-status request. It is defined following the status telemetry definitions in BRSKI {{RFC8995}}.
+Consequently, format and semantics of pledge-status objects described below are for version 1.  
+The version field is included to permit significant changes to the pledge-status request and response objects in the future.  
+A pledge or a registrar-agent that receives a plegde-status request object with a version larger than it knows about SHOULD log the contents and alert a human. 
+
+
+~~~~
+<CODE BEGINS> 
+{
+  status-request = {
+      "version": uint,
+      "created-on": tdate ttime,
+      "serial-number": text,
+      "status-type": text
+  }
+<CODE ENDS>
+~~~~
+{: #stat_req_def title='CDDL for pledge-status request' artwork-align="left"}
+
+The status-type defined for BRSKI-PRM is "bootstraping".
+This indicates the pledge to provide current status information regarding the bootstrapping status (voucher processing and the enrollment of the pledge into the new domain). 
+As pledge-status request is defined generic, it may be used by other specifications to request further status information, e.g., for onboarding to get further information about enrollment of application specific LDevIDs or other parameters. 
+This is out of scope for this specification. 
+
+{{stat_req}} below shows an example for querying pledge-status using status-type bootstrapping.
+
 
 ~~~~
 {
   "payload": {
-      "reason": "bootstrapping-status",
+      "version": 1,
       "created-on": "2022-08-12T02:37:39.235Z",
       "serial-number": "pledge-callee4711"
+      "status-type": "bootstrapping"
   },
   "signatures": [{
       "protected": {
         "alg": "ES256",
         "x5c": [ "base64encodedvalue==" ],
-        "typ": "TODO?"
       },
       "signature": "base64encodedvalue=="
     }]
 }
 ~~~~
-{: #stat_req title='Representation of Registrar-agent request of pledge bootstrapping-status' artwork-align="left"}
+{: #stat_req title='Example of registrar-agent request of pledge-status using status-type bootstrapping' artwork-align="left"}
 
-If the pledge receives the bootstrapping-status request message it SHALL react with a status response message based on the telemetry information described in section {{exchanges_uc2_3}}. 
+If the pledge receives the plegde-status request with status-type "bootstrapping" it SHALL react with a status response message based on the telemetry information described in section {{exchanges_uc2_3}}.
 
-The pledge bootstrapping-status response Content-Type header is (TODO: may be more specific "typ"): `application/jose+json`. 
-It contains bootstrapping-status information as shown in {{stat_req_res}}. 
-The bootstrapping-status response is signed depending on the bootstrapping state of the pledge 
+The pledge-status response Content-Type header is `application/jose+json`. 
+
+The following CDDL explains the structure of the format for the status response, which is :
+
+~~~~
+<CODE BEGINS> 
+  status-response = {
+      "version": uint,
+      "status": "factory-default" / "vouchered" / "enrolled" / "error",
+      ? "reason" : text,
+      ? "reason-context" : { $$arbitrary-map }
+  }
+<CODE ENDS>
+~~~~
+{: #stat_res_def title='CDDL for pledge-status response' artwork-align="left"}
+
+Different cases for pledge bootstrapping status may occur, which SHOULD be reflected using the status enumeration. 
+The pledge-status response message is signed with IDevID or LDevID, depending on bootstrapping state of the pledge. 
+
+* "factory-default": Pledge has not been bootstrapped. 
+  The pledge signs the response message using its IDevID(Pledge).
+* "vouchered": Pledge processed the voucher exchange successfully.
+  The pledge signs the response message using its IDevID(Pledge).
+* "enrolled": Pledge has processed the enrollment exchange successfully.
+  The pledge signs the response message using its LDevID(Pledge).
+* "error": Error occured during bootstrapping. 
+  The reason and the reason-context SHOULD contain the telemetry information as described in section {{exchanges_uc2_3}}.  
+  The pledge signs the response message using its IDevID.
+
+{{stat_res}} provides an example for the bootstrapping-status information. 
+
 
 ~~~~
 {
   "payload": {
-    "enum": ['factory-default', 'vouchered', 'enrolled']
+    "version": 1,
+    "status": "enrolled",
+    "status-context": { "additional" : "JSON" }
   },
   "signatures": [{
       "protected": {
@@ -1506,20 +1562,11 @@ The bootstrapping-status response is signed depending on the bootstrapping state
     }]
 }
 ~~~~
-{: #stat_req_res title='Representation of pledge bootstrapping-status response' artwork-align="left"}
+{: #stat_res title='Example of pledge status response' artwork-align="left"}
 
-Different cases may occur, which can be reflected in the enum (TODO: check CDDL):
-
-* (0): pledge has not been bootstrapped: "factory-default", the pledge signs the response message using its IDevID(Pledge).
-* (1): pledge has processed the voucher exchange successfully: "vouchered", the pledge signs the response message using its IDevID(Pledge).
-* (2): pledge has processed the enrollment exchange successfully: "enrolled", the pledge signs the response message using its LDevID(Pledge).
-
-TODO: check handling of potentials errors of previous "voucher status" and "enroll status" objects/information.
-This could be handled by sending the previous "voucher status" or "enroll status" objects again, or embedding into the new "bootstrapping-status" object?
-
-In case (0) the pledge does not possess the domain certificate resp. the domain trust-anchor. 
+In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor. 
 It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.
-In cases (1) and (2) the pledge already possesses the domain certificate (has domain trust-anchore) and can therefore validate the signature of the registrar-agent. 
+In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchore) and can therefore validate the signature of the registrar-agent. 
 If validation of the JWS signature fails, the pledge SHOULD respond with the HTTP 403 error code.
 The HTTP 406 error code SHOULD be used, if the response is in an unknown format. 
 
@@ -1744,9 +1791,10 @@ IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with
  pledge-voucher             supply voucher response            [THISRFC] 
  pledge-enrollment          supply enrollment response         [THISRFC] 
  pledge-cacerts             supply CA certificates to pledge   [THISRFC] 
+ pledge-status              query pledge status                [THISRFC]
  requestenroll              supply PER to registrar            [THISRFC] 
  wrappedcacerts             request wrapped CA certificates    [THISRFC] 
- pledge-bootstrap-status    query pledge bootstrapping status  [THISRFC] 
+ 
 ~~~~
 {: artwork-align="left"}
 
