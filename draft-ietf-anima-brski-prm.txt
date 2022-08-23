@@ -5,11 +5,11 @@
 ANIMA WG                                                        S. Fries
 Internet-Draft                                                 T. Werner
 Intended status: Standards Track                                 Siemens
-Expires: 20 February 2023                                        E. Lear
+Expires: 24 February 2023                                        E. Lear
                                                            Cisco Systems
                                                            M. Richardson
                                                 Sandelman Software Works
-                                                          19 August 2022
+                                                          23 August 2022
 
 
             BRSKI with Pledge in Responder Mode (BRSKI-PRM)
@@ -32,10 +32,31 @@ Abstract
    regarding the utilized enrollment protocol, deployed by the domain
    registrar to communicate with the Domain CA.
 
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   Status information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-ietf-anima-brski-prm/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/anima-wg/anima-brski-prm.
+
 Status of This Memo
 
    This Internet-Draft is submitted in full conformance with the
    provisions of BCP 78 and BCP 79.
+
+
+
+
+
+
+
+Fries, et al.           Expires 24 February 2023                [Page 1]
+
+Internet-Draft                  BRSKI-PRM                    August 2022
+
 
    Internet-Drafts are working documents of the Internet Engineering
    Task Force (IETF).  Note that other groups may also distribute
@@ -47,16 +68,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 February 2023.
-
-
-
-
-
-Fries, et al.           Expires 20 February 2023                [Page 1]
-
-Internet-Draft                  BRSKI-PRM                    August 2022
-
+   This Internet-Draft will expire on 24 February 2023.
 
 Copyright Notice
 
@@ -94,6 +106,14 @@ Table of Contents
      5.5.  Bootstrapping Objects and Corresponding Exchanges . . . .  17
        5.5.1.  Request Objects Acquisition by Registrar-Agent from
                Pledge  . . . . . . . . . . . . . . . . . . . . . . .  20
+
+
+
+Fries, et al.           Expires 24 February 2023                [Page 2]
+
+Internet-Draft                  BRSKI-PRM                    August 2022
+
+
        5.5.2.  Request Processing by the Registrar-Agent . . . . . .  28
        5.5.3.  Response Object Supply by Registrar-Agent to
                Pledge  . . . . . . . . . . . . . . . . . . . . . . .  39
@@ -106,14 +126,6 @@ Table of Contents
        6.1.2.  YANG Module . . . . . . . . . . . . . . . . . . . . .  50
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  53
      7.1.  BRSKI .well-known Registry  . . . . . . . . . . . . . . .  54
-
-
-
-Fries, et al.           Expires 20 February 2023                [Page 2]
-
-Internet-Draft                  BRSKI-PRM                    August 2022
-
-
    8.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  54
    9.  Security Considerations . . . . . . . . . . . . . . . . . . .  54
      9.1.  Exhaustion Attack on Pledge . . . . . . . . . . . . . . .  54
@@ -150,6 +162,14 @@ Internet-Draft                  BRSKI-PRM                    August 2022
    provided via the domain registrar to the pledge and originate from a
    Manufacturer's Authorized Signing Authority (MASA).
 
+
+
+
+Fries, et al.           Expires 24 February 2023                [Page 3]
+
+Internet-Draft                  BRSKI-PRM                    August 2022
+
+
    BRSKI addresses scenarios in which the pledge acts as client for the
    bootstrapping and is the initiator of the bootstrapping (this
    document refers to the approach as pledge-initiator-mode).  In
@@ -162,13 +182,6 @@ Internet-Draft                  BRSKI-PRM                    August 2022
    agent for the domain registrar (registrar-agent) towards the pledge.
    This may be a functionality of a commissioning or configuration tool
    or it may be even co-located with the registrar.
-
-
-
-Fries, et al.           Expires 20 February 2023                [Page 3]
-
-Internet-Draft                  BRSKI-PRM                    August 2022
-
 
    In contrast to BRSKI the registrar-agent facilitates the object
    exchange with the pledge and provides/retrieves data objects to/from
@@ -205,6 +218,14 @@ Internet-Draft                  BRSKI-PRM                    August 2022
    For the enrollment of devices BRSKI relies on EST [RFC7030] to
    request and distribute customer site/domain specific device
    certificates.  EST in turn relies on a binding of the certification
+
+
+
+Fries, et al.           Expires 24 February 2023                [Page 4]
+
+Internet-Draft                  BRSKI-PRM                    August 2022
+
+
    request to an underlying TLS connection between the EST client and
    the EST server.  According to BRSKI the domain registrar acts as EST
    server and is also acting as registration authority (RA) for its
@@ -218,14 +239,6 @@ Internet-Draft                  BRSKI-PRM                    August 2022
    for the customer site/domain and does also not contain a TLS server
    flag.  This is one reason for relying on higher layer security by
    using signature wrapped objects for the exchange between the pledge
-
-
-
-Fries, et al.           Expires 20 February 2023                [Page 4]
-
-Internet-Draft                  BRSKI-PRM                    August 2022
-
-
    and the registrar agent.  A further reason is the application on
    different transports, for which TLS may not be available, like
    Bluetooth or NFC.  Instead of using TLS to provide secure transport
@@ -261,6 +274,14 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
    mTLS:  Mutual authenticated Transport Layer Security.
 
+
+
+
+Fries, et al.           Expires 24 February 2023                [Page 5]
+
+Internet-Draft                  BRSKI-PRM                    August 2022
+
+
    on-site:  Describes a component or service or functionality available
       in the customer site/domain.
 
@@ -273,14 +294,6 @@ Internet-Draft                  BRSKI-PRM                    August 2022
       pledge that requests to enroll in a domain
 
    POP:  Proof of possession (of a private key)
-
-
-
-
-Fries, et al.           Expires 20 February 2023                [Page 5]
-
-Internet-Draft                  BRSKI-PRM                    August 2022
-
 
    POI:  Proof of identity
 
@@ -318,25 +331,16 @@ Internet-Draft                  BRSKI-PRM                    August 2022
    to requests for PVR and PER objects and consumption of the result
    objects.
 
-   The following examples motivate support of BRSKI-PRM to support
-   pledges acting as server as well as pledges with limited connectivity
-   to the registrar.
 
 
-
-
-
-
-
-
-
-
-
-
-Fries, et al.           Expires 20 February 2023                [Page 6]
+Fries, et al.           Expires 24 February 2023                [Page 6]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
+
+   The following examples motivate support of BRSKI-PRM to support
+   pledges acting as server as well as pledges with limited connectivity
+   to the registrar.
 
    While BRSKI-PRM defines support for pledges in responder mode, there
    may be pledges, which can act in both modes, initiator and responder.
@@ -385,11 +389,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-
-
-
-
-Fries, et al.           Expires 20 February 2023                [Page 7]
+Fries, et al.           Expires 24 February 2023                [Page 7]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -445,7 +445,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023                [Page 8]
+Fries, et al.           Expires 24 February 2023                [Page 8]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -501,7 +501,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023                [Page 9]
+Fries, et al.           Expires 24 February 2023                [Page 9]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -557,7 +557,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 10]
+Fries, et al.           Expires 24 February 2023               [Page 10]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -613,7 +613,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 11]
+Fries, et al.           Expires 24 February 2023               [Page 11]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -669,7 +669,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 12]
+Fries, et al.           Expires 24 February 2023               [Page 12]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -725,7 +725,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 13]
+Fries, et al.           Expires 24 February 2023               [Page 13]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -781,7 +781,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 14]
+Fries, et al.           Expires 24 February 2023               [Page 14]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -837,7 +837,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 15]
+Fries, et al.           Expires 24 February 2023               [Page 15]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -893,7 +893,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 16]
+Fries, et al.           Expires 24 February 2023               [Page 16]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -949,7 +949,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 17]
+Fries, et al.           Expires 24 February 2023               [Page 17]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1005,7 +1005,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 18]
+Fries, et al.           Expires 24 February 2023               [Page 18]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1061,7 +1061,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 19]
+Fries, et al.           Expires 24 February 2023               [Page 19]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1117,7 +1117,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 20]
+Fries, et al.           Expires 24 February 2023               [Page 20]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1173,7 +1173,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 21]
+Fries, et al.           Expires 24 February 2023               [Page 21]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1229,7 +1229,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 22]
+Fries, et al.           Expires 24 February 2023               [Page 22]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1285,7 +1285,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 23]
+Fries, et al.           Expires 24 February 2023               [Page 23]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1341,7 +1341,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 24]
+Fries, et al.           Expires 24 February 2023               [Page 24]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1397,7 +1397,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 25]
+Fries, et al.           Expires 24 February 2023               [Page 25]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1453,7 +1453,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 26]
+Fries, et al.           Expires 24 February 2023               [Page 26]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1509,7 +1509,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 27]
+Fries, et al.           Expires 24 February 2023               [Page 27]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1565,7 +1565,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 28]
+Fries, et al.           Expires 24 February 2023               [Page 28]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1621,7 +1621,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 29]
+Fries, et al.           Expires 24 February 2023               [Page 29]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1677,7 +1677,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 30]
+Fries, et al.           Expires 24 February 2023               [Page 30]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1733,7 +1733,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 31]
+Fries, et al.           Expires 24 February 2023               [Page 31]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1789,7 +1789,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 32]
+Fries, et al.           Expires 24 February 2023               [Page 32]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1845,7 +1845,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 33]
+Fries, et al.           Expires 24 February 2023               [Page 33]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1901,7 +1901,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 34]
+Fries, et al.           Expires 24 February 2023               [Page 34]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -1957,7 +1957,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 35]
+Fries, et al.           Expires 24 February 2023               [Page 35]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2013,7 +2013,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 36]
+Fries, et al.           Expires 24 February 2023               [Page 36]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2069,7 +2069,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 37]
+Fries, et al.           Expires 24 February 2023               [Page 37]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2125,7 +2125,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 38]
+Fries, et al.           Expires 24 February 2023               [Page 38]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2181,7 +2181,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 39]
+Fries, et al.           Expires 24 February 2023               [Page 39]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2237,7 +2237,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 40]
+Fries, et al.           Expires 24 February 2023               [Page 40]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2293,7 +2293,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 41]
+Fries, et al.           Expires 24 February 2023               [Page 41]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2349,7 +2349,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 42]
+Fries, et al.           Expires 24 February 2023               [Page 42]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2405,7 +2405,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 43]
+Fries, et al.           Expires 24 February 2023               [Page 43]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2461,7 +2461,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 44]
+Fries, et al.           Expires 24 February 2023               [Page 44]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2517,7 +2517,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 45]
+Fries, et al.           Expires 24 February 2023               [Page 45]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2573,7 +2573,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 46]
+Fries, et al.           Expires 24 February 2023               [Page 46]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2607,7 +2607,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
          "version": 1,
          "created-on": "2022-08-12T02:37:39.235Z",
          "serial-number": "pledge-callee4711"
-         "status-type": "bootstrapping"
+         "status-type": "bootstrap"
      },
      "signatures": [{
          "protected": {
@@ -2622,14 +2622,14 @@ Internet-Draft                  BRSKI-PRM                    August 2022
                       using status-type bootstrapping
 
    If the pledge receives the plegde-status request with status-type
-   "bootstrapping" it SHALL react with a status response message based
-   on the telemetry information described in section Section 5.5.3.
+   "bootstrap" it SHALL react with a status response message based on
+   the telemetry information described in section Section 5.5.3.
 
 
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 47]
+Fries, et al.           Expires 24 February 2023               [Page 47]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2685,7 +2685,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 48]
+Fries, et al.           Expires 24 February 2023               [Page 48]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2741,7 +2741,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 49]
+Fries, et al.           Expires 24 February 2023               [Page 49]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2797,7 +2797,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 50]
+Fries, et al.           Expires 24 February 2023               [Page 50]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2853,7 +2853,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 51]
+Fries, et al.           Expires 24 February 2023               [Page 51]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2909,7 +2909,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 52]
+Fries, et al.           Expires 24 February 2023               [Page 52]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -2965,7 +2965,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 53]
+Fries, et al.           Expires 24 February 2023               [Page 53]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3021,7 +3021,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 54]
+Fries, et al.           Expires 24 February 2023               [Page 54]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3077,7 +3077,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 55]
+Fries, et al.           Expires 24 February 2023               [Page 55]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3133,7 +3133,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 56]
+Fries, et al.           Expires 24 February 2023               [Page 56]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3189,7 +3189,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 57]
+Fries, et al.           Expires 24 February 2023               [Page 57]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3245,7 +3245,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 58]
+Fries, et al.           Expires 24 February 2023               [Page 58]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3301,7 +3301,7 @@ A.1.  Example Pledge Voucher Request - PVR (from Pledge to Registrar-
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 59]
+Fries, et al.           Expires 24 February 2023               [Page 59]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3357,7 +3357,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 60]
+Fries, et al.           Expires 24 February 2023               [Page 60]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3413,7 +3413,7 @@ A.2.  Example Parboiled Registrar Voucher Request - RVR (from Registrar
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 61]
+Fries, et al.           Expires 24 February 2023               [Page 61]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3469,7 +3469,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 62]
+Fries, et al.           Expires 24 February 2023               [Page 62]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3525,7 +3525,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 63]
+Fries, et al.           Expires 24 February 2023               [Page 63]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3581,7 +3581,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 64]
+Fries, et al.           Expires 24 February 2023               [Page 64]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3637,7 +3637,7 @@ A.3.  Example Voucher Response (from MASA to Pledge, via Registrar and
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 65]
+Fries, et al.           Expires 24 February 2023               [Page 65]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3693,7 +3693,7 @@ Appendix B.  History of Changes [RFC Editor: please delete]
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 66]
+Fries, et al.           Expires 24 February 2023               [Page 66]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3749,7 +3749,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 67]
+Fries, et al.           Expires 24 February 2023               [Page 67]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3805,7 +3805,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 68]
+Fries, et al.           Expires 24 February 2023               [Page 68]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3861,7 +3861,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 69]
+Fries, et al.           Expires 24 February 2023               [Page 69]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3917,7 +3917,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 70]
+Fries, et al.           Expires 24 February 2023               [Page 70]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -3973,7 +3973,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 71]
+Fries, et al.           Expires 24 February 2023               [Page 71]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -4029,7 +4029,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 72]
+Fries, et al.           Expires 24 February 2023               [Page 72]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -4085,7 +4085,7 @@ Internet-Draft                  BRSKI-PRM                    August 2022
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 73]
+Fries, et al.           Expires 24 February 2023               [Page 73]
 
 Internet-Draft                  BRSKI-PRM                    August 2022
 
@@ -4141,4 +4141,4 @@ Authors' Addresses
 
 
 
-Fries, et al.           Expires 20 February 2023               [Page 74]
+Fries, et al.           Expires 24 February 2023               [Page 74]

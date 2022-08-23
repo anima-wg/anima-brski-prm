@@ -53,6 +53,10 @@ author:
 contributor:
   name: Esko Dijk
   email: esko.dijk@iotconsultancy.nl
+venue: 
+  group: 
+  anima mail: {anima@ietf.org}
+  github: anima-wg/anima-brski-prm
 normative:
   RFC2986:
   RFC5280:
@@ -1498,7 +1502,7 @@ This is out of scope for this specification.
       "version": 1,
       "created-on": "2022-08-12T02:37:39.235Z",
       "serial-number": "pledge-callee4711"
-      "status-type": "bootstrapping"
+      "status-type": "bootstrap"
   },
   "signatures": [{
       "protected": {
@@ -1511,7 +1515,7 @@ This is out of scope for this specification.
 ~~~~
 {: #stat_req title='Example of registrar-agent request of pledge-status using status-type bootstrapping' artwork-align="left"}
 
-If the pledge receives the plegde-status request with status-type "bootstrapping" it SHALL react with a status response message based on the telemetry information described in section {{exchanges_uc2_3}}.
+If the pledge receives the plegde-status request with status-type "bootstrap" it SHALL react with a status response message based on the telemetry information described in section {{exchanges_uc2_3}}.
 
 The pledge-status response Content-Type header is `application/jose+json`. 
 
