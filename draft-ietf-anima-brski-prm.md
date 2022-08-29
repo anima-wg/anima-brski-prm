@@ -97,6 +97,10 @@ informative:
     title: CA Browser Forum
     format:
       uri: https://cabforum.org/
+  onpath:
+    target: "https://mailarchive.ietf.org/arch/msg/saag/m1r9uo4xYznOcf85Eyk0Rhut598/"
+    title: "can an on-path attacker drop traffic?"
+    org: IETF
 
 --- abstract
 
@@ -113,16 +117,16 @@ The defined approach is agnostic regarding the utilized enrollment protocol, dep
 BRSKI as defined in {{RFC8995}} specifies a solution for secure zero-touch (automated) bootstrapping of devices (pledges) in a (customer) site domain.
 This includes the discovery of network elements in the customer site/domain and the exchange of security information necessary to establish trust between a pledge and the domain.  
 
-Security information about the customer site/domain, specifically the customer site/domain certificate, is exchanged utilizing voucher objects as defined in {{RFC8366}}.
+Security information about the customer site/domain, specifically the customer site/domain certificate, is exchanged utilizing voucher requests and voucher responses as defined in {{RFC8366}}.
 These vouchers are signed objects, provided via the domain registrar to the pledge and originate from a Manufacturer's Authorized Signing Authority (MASA).
 
 BRSKI addresses scenarios in which the pledge acts as client for the bootstrapping and is the initiator of the bootstrapping (this document refers to the approach as pledge-initiator-mode).
 In industrial environments the pledge may behave as a server and thus does not initiate the bootstrapping with the domain registrar.
-In this scenarios it is expected that the pledge will be triggered to generate request objects to be bootstrapped in the customer site/domain (this document refers to the approach as pledge-responder-mode).
+In this scenarios it is expected that the pledge will be triggered to generate requests to be bootstrapped in the customer site/domain (this document refers to the approach as pledge-responder-mode).
 For this, an additional component is introduced acting as an agent for the domain registrar (registrar-agent) towards the pledge.
 This may be a functionality of a commissioning or configuration tool or it may be even co-located with the registrar.  
 
-In contrast to BRSKI the registrar-agent facilitates the object exchange with the pledge and provides/retrieves data objects to/from the domain registrar.
+In contrast to BRSKI the registrar-agent facilitates the data exchange with the pledge and provides/retrieves data objects to/from the domain registrar.
 For the interaction with the domain registrar the registrar-agent will use existing BRSKI {{RFC8995}} endpoints.
 
 The term endpoint used in the context of this document is similar to resources in CoAP {{RFC7252}} and also in HTTP {{RFC9110}}. It is not used to describe a device. Endpoints are accessible via .well-known URIs.
@@ -168,6 +172,8 @@ CA:
 Commissioning tool:
 : Tool to interact with devices to provide configuration data 
 
+CSR:
+: Certificate Signing Request
 EE:
 : End entity
 
@@ -182,7 +188,7 @@ off-site:
   This may be a central site or a cloud service, to which only a temporary connection is available, or which is in a different administrative domain.
    
 PER:
-: Pledge-enrollment-request is an enrollment object signed by the pledge that requests to enroll in a domain
+: Pledge-enrollment-request is a signature wrapped CSR, signed by the pledge that requests to enroll in a domain
 
 POP:
 : Proof of possession (of a private key)
@@ -191,16 +197,16 @@ POI:
 : Proof of identity 
 
 PVR:
-: Pledge-voucher-request is a voucher request object signed by the pledge that requests to be part of a domain
+: Pledge-voucher-request is a voucher request signed by the pledge that requests to be part of a domain
 
 RA:
 : Registration authority, an optional system component to which a CA delegates certificate management functions such as authorization checks.
 
 RER:
-: Registrar-enrollment-request is a request object related to the PER send to the CA by the registrar 
+: Registrar-enrollment-request is the PER send to the CA by the registrar 
 
 RVR:
-: Registrar-voucher-request is a request object containing the PVR sent to the MASA 
+: Registrar-voucher-request is a request containing the PVR sent to the MASA 
 
 
 # Scope of Solution
@@ -210,7 +216,7 @@ RVR:
 BRSKI-PRM is applicable to environments where pledges may have different behavior: pledge-responder-mode, or pledges may have no direct connection to the domain registrar. Either way pledges are expected to be managed by the same registrar.
 This can be motivated by pledges deployed in environments not yet connected to the operational customer site/domain network, e.g., at construction time. 
 Another environment relates to the assembly of cabinets, which are prepared in advance to be installed on a customer site/domain. 
-As there is no direct connection to the registrar available in these environments the solution specified allows the pledges to act in a server role so they can be triggered for bootstrapping e.g., by a commissioning tool. As BRSKI focuses on the pledge in a client role, initiating the bootstrapping (pledge-initiator-mode), BRSKI-PRM defines pledges acting as a server (pledge-responder-mode) responding to requests for PVR and PER objects and consumption of the result objects.  
+As there is no direct connection to the registrar available in these environments the solution specified allows the pledges to act in a server role so they can be triggered for bootstrapping e.g., by a commissioning tool. As BRSKI focuses on the pledge in a client role, initiating the bootstrapping (pledge-initiator-mode), BRSKI-PRM defines pledges acting as a server (pledge-responder-mode) responding to PVR and PER and consumption of the results.  
 
 The following examples motivate support of BRSKI-PRM to support pledges acting as server as well as pledges with limited connectivity to the registrar.
 
@@ -257,7 +263,7 @@ This presents a rendezvous problem: the pledge is unavailable for certain period
 Based on the intended target environment described in {{sup-env}} and the application examples described in {{sup-env}} the following requirements are derived to support bootstrapping of pledges in responder mode (acting as server).
 
 * To facilitate the communication between a pledge in responder mode and registrar, additional functionality is needed either on the registrar (if the registrar needs to interact with pledge in responder mode directly) or as a stand-alone component. 
-  This component acts as an agent of the registrar to trigger the pledge to generate request objects for voucher and enrollment. These voucher an enrollment request objects are than to be provided by the so called registrar-agent to the registrar.
+  This component acts as an agent of the registrar to trigger the pledge to generate requests for voucher and enrollment. These requests are than to be provided by the so called registrar-agent to the registrar.
   This requires the definition of endpoints on the pledge.  
   
 * The communication between the registrar-agent and the pledge MUST not rely on transport layer security (TLS) to support also other technology stacks (e.g., BTLE). 
@@ -269,24 +275,24 @@ Based on the intended target environment described in {{sup-env}} and the applic
 * The pledge cannot get the assertion with value "proximity" in the voucher, as it was not in direct contact with the registrar for bootstrapping. 
   Therefore the "agent-proximity" assertion value is necessary for distinguishing assertions the MASA can state.
 
-At least the following properties are required for the voucher and enrollment objects:
+At least the following properties are required for the voucher request and response processing as well as the enrollment:
 
 * Proof of Identity (POI): provides data-origin authentication of a data object, e.g., a voucher request or an enrollment request, utilizing an existing IDevID.
   Certificate updates may utilize the certificate that is to be updated.
 
-* Proof of Possession (POP): proves that an entity possesses and controls the private key corresponding to the public key contained in the  certification request, typically by adding a signature using the private key to the enrollment request object.
+* Proof of Possession (POP): proves that an entity possesses and controls the private key corresponding to the public key contained in the  certification request, typically by adding a signature using the private key to the certification request.
 
 Solution examples based on existing technology are provided with the focus on existing IETF RFCs:
 
-* Voucher request and response objects as used in {{RFC8995}} already provide both, POP and POI, through a digital signature to protect the integrity of the voucher object, while the corresponding signing certificate contains the identity of the signer.
+* Voucher requests and responses as used in {{RFC8995}} already provide both, POP and POI, through a digital signature to protect the integrity of the voucher, while the corresponding signing certificate contains the identity of the signer.
 
-* Certification request objects: Certification requests are data structures containing the information from a requester for a CA to create a certificate. 
+* Certification requests are data structures containing the information from a requester for a CA to create a certificate. 
   The certification request format in BRSKI is PKCS#10 {{RFC2986}}.
   In PKCS#10, the structure is signed to ensure integrity protection and proof of possession of the private key of the requester that corresponds to the contained public key.
-  In the application examples, this POP alone is not sufficient. POI is also required for the certification request object and therefore needs to be additionally bound to the existing credential of the pledge (IDevID).
+  In the application examples, this POP alone is not sufficient. POI is also required for the certification request and therefore needs to be additionally bound to the existing credential of the pledge (IDevID).
   This binding supports the authorization decision for the certification request through a proof of identity (POI).
-  The binding of data origin authentication or POI to the certification request may be provided directly by the certification request object.
-  While BRSKI uses the binding to TLS, BRSKI-PRM aims at an additional signature of the PCKS#10 object using existing credentials on the pledge (IDevID). This ensures independence of the selected transport.
+  The binding of data origin authentication or POI to the certification request may be provided directly by with the certification request.
+  While BRSKI uses the binding to TLS, BRSKI-PRM aims at an additional signature of the PKCS#10  using existing credentials on the pledge (IDevID). This ensures independence of the selected transport.
 
 
 # Architectural Overview and Communication Exchanges {#architecture}
@@ -306,7 +312,7 @@ An abstract overview of the BRSKI-PRM protocol can be found in  {{BRSKI-PRM-abst
 
 ## Pledge-responder-mode (PRM): Registrar-agent Communication with Pledges {#uc2}
 
-To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer site/domain, this document specifies the exchange of authenticated self-contained objects (the voucher request/response objects as known from BRSKI and the enrollment request/response objects as introduced by BRSKI-PRM) with the help of a registrar-agent.
+To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer site/domain, this document specifies the exchange of authenticated self-contained objects (the voucher request/response as known from BRSKI and the enrollment request/response as introduced by BRSKI-PRM) with the help of a registrar-agent.
 This allows independence from protection provided by the utilized transport protocol.
 
 The registrar-agent may be implemented as an integrated functionality of a commissioning tool or be co-located with the registrar itself.
@@ -375,7 +381,7 @@ The following list describes the components in a (customer) site domain:
 
   * The registrar-agent may provide additional data to the pledge in the context of the voucher triggering request, to make itself visible to the domain registrar. 
 
-  * Order of exchanges in the call flow may be different as the registrar-agent collects both objects, PVR objects and PER objects, at once and provides them to the registrar.
+  * Order of exchanges in the call flow may be different as the registrar-agent collects both, PVR and PER, at once and provides them to the registrar.
     This approach may also be used to perform a bulk bootstrapping of several devices.
 
   * The data objects utilized for the data exchange between the pledge and the registrar are self-contained authenticated objects (signature-wrapped objects).
@@ -383,7 +389,7 @@ The following list describes the components in a (customer) site domain:
 
 * Registrar-agent: provides a communication path to exchange data objects between the pledge and the domain registrar.
   The registrar-agent brokers in situations, in which the domain registrar is not directly reachable by the pledge, either due to a different technology stack or due to missing connectivity.
-  The registrar-agent triggers a pledge to create bootstrapping artifacts such as voucher-request objects and enrollment-request objects on one or multiple pledges and performs a (bulk) bootstrapping based on the collected data.
+  The registrar-agent triggers a pledge to create bootstrapping artifacts such as voucher-request and enrollment-request on one or multiple pledges and performs a (bulk) bootstrapping based on the collected data.
   The registrar-agent is expected to possess information of the domain registrar (i.e., LDevID(Reg) certificate, LDevID(CA) certificate, address), either by configuration or by using the discovery mechanism defined in {{RFC8995}}.
   There is no trust assumption between the pledge and the registrar-agent as only authenticated self-contained objects are used, which are transported via the registrar-agent and provided either by the pledge or the registrar.
   The trust assumption between the registrar-agent and the registrar is based on the LDevID of the registrar-agent, provided by the PKI responsible for the domain.  
@@ -397,7 +403,7 @@ The following list describes the components in a (customer) site domain:
   In contrast to {{RFC8995}}, the domain registrar does not interact with a pledge directly but through the registrar-agent.
   The registrar detects if the bootstrapping is performed by the pledge directly or by the registrar-agent.
 The manufacturer provided components/services (MASA and Ownership tracker) are used as defined in {{RFC8995}}.
-For issuing a voucher, the MASA may perform additional checks on voucher-request objects, to issue a voucher indicating agent-proximity instead of (registrar-)proximity.
+For issuing a voucher, the MASA may perform additional checks on a voucher-request, to issue a voucher indicating agent-proximity instead of (registrar-)proximity.
 
 ## Agent-Proximity Assertion {#agt_prx}
 
@@ -417,7 +423,7 @@ As the returned voucher includes an additional signature by the registrar, the p
 ## Behavior of Pledge in Pledge-Responder-Mode {#pledge_ep}
 
 In contrast to BRSKI the pledge acts as server.
-It is triggered by the registrar-agent for the generation of the PVR and PER objects as well as for the processing of the response objects and the generation of status information.
+It is triggered by the registrar-agent for the generation of the PVR and PER as well as for the processing of the responses and the generation of status information.
 Due to the use of the registrar-agent, the interaction with the domain registrar is changed as shown in {{exchangesfig_uc2_1}}.
 To enable interaction with the registrar-agent, the pledge provides endpoints using the BRSKI defined endpoints based on the "/.well-known/brski" URI tree.
 
@@ -461,7 +467,7 @@ Operations and their corresponding URIs:
 
 The registrar-agent is a new component in the BRSKI context.
 It provides connectivity between the pledge and the domain registrar and reuses the endpoints of the domain registrar side already specified in {{RFC8995}}.
-It facilitates the exchange of data objects between the pledge and the domain registrar, which are the voucher request/response objects, the enrollment request/response objects, as well as related status objects.
+It facilitates the exchange of data between the pledge and the domain registrar, which are the voucher request/response, the enrollment request/response, as well as related status information.
 For the communication with the pledge the registrar-agent utilizes communication endpoints provided by the pledge.
 The transport in this specification is based on HTTP but may also be done using other transport mechanisms.
 This new component changes the general interaction between the pledge and the domain registrar as shown in {{uc2figure}}. 
@@ -474,8 +480,8 @@ In BRSKI-PRM, the SKID is used in favor of a certificate fingerprint to avoid ad
 
 Using an LDevID for TLS client authentication is a deviation from {{RFC8995}}, in which the pledge's IDevID credential is used to perform TLS client authentication.
 The use of the LDevID(RegAgt) allows the domain registrar to distinguish, if bootstrapping is initiated from a pledge or from a registrar-agent and adopt the internal handling accordingly.
-As BRSKI-PRM uses authenticated self-contained data objects between the pledge and the domain registrar, the binding of the pledge identity to the request object is provided by the data object signature employing the pledge's IDevID.
-The objects exchanged between the pledge and the domain registrar used in the context of this specifications are JOSE objects
+As BRSKI-PRM uses authenticated self-contained data objects between the pledge and the domain registrar, the binding of the pledge identity to the requests is provided by the data object signature employing the pledge's IDevID.
+The objects exchanged between the pledge and the domain registrar used in the context of this specifications are JOSE objects.
 
 In addition to the LDevID(RegAgt), the registrar-agent is provided with the product-serial-numbers of the pledges to be bootstrapped.
 This is necessary to allow the discovery of pledges by the registrar-agent using mDNS.
@@ -511,7 +517,7 @@ The registrar-agent MAY use
 To be able to detect the pledge using mDNS, network connectivity is required. For Ethernet it is provided by simply connecting the network cable. For WIFI networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping. The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN ID. How to gain network connectivity is out of scope of this document.
 
 
-## Bootstrapping Objects and Corresponding Exchanges {#exchanges_uc2}
+## Bootstrapping Data Objects and Corresponding Exchanges {#exchanges_uc2}
 
 The interaction of the pledge with the registrar-agent may be accomplished using different transport means (protocols and or network technologies).
 For this document the usage of HTTP is targeted as in BRSKI.
@@ -520,7 +526,7 @@ This requires independence of the exchanged data objects between the pledge and 
 These transport means may differ from, and are independent from, the ones used between the registrar-agent and the registrar.
 Therefore, authenticated self-contained objects (here: signature-wrapped objects) are applied in the data exchange between the pledge and the registrar.
 
-The registrar-agent provides the domain-registrar certificate (LDevID(Reg) certificate) to the pledge to be included into the "agent-provided-proximity-registrar-certificate" leaf of the PVR object.
+The registrar-agent provides the domain-registrar certificate (LDevID(Reg) certificate) to the pledge to be included into the "agent-provided-proximity-registrar-certificate" leaf of the PVR.
 This enables the registrar to verify, that it is the target registrar for handling the request.
 The registrar certificate may be configured at the registrar-agent or may be fetched by the registrar-agent based on a prior TLS connection establishment with the domain registrar.
 In addition, the registrar-agent provides agent-signed-data containing the product-serial-number in the body, signed with the LDevID(RegAgt).
@@ -604,11 +610,11 @@ The voucher can then be supplied via the registrar to the registrar-agent.
 
 The following sub sections split the interactions between the different components into:
 
-* {{exchanges_uc2_1}} describes objects exchanged between the registrar-agent and the pledge.
+* {{exchanges_uc2_1}} describes data exchanged between the registrar-agent and the pledge.
 
-* {{exchanges_uc2_2}} describes objects exchanged between the registrar-agent and the registrar and also the interaction of the registrar with the MASA and the domain CA.
+* {{exchanges_uc2_2}} describes data exchanged between the registrar-agent and the registrar and also the interaction of the registrar with the MASA and the domain CA.
 
-* {{exchanges_uc2_3}} describes objects exchanged between the registrar-agent and the pledge including the status objects.
+* {{exchanges_uc2_3}} describes data exchanged between the registrar-agent and the pledge including the status information.
 
 * {{exchanges_uc2_4}} describes the status handling addresses the exchanges between the registrar-agent and the registrar.
 
@@ -674,9 +680,12 @@ The the trigger for the pledge to create a PVR is depicted in the following figu
 
 ~~~~
 {
-   "agent-provided-proximity-registrar-cert": "base64encodedvalue==",
-   "agent-signed-data": "base64encodedvalue==",
-   "agent-sign-cert": ["base64encodedvalue==", "base64encodedvalue==", "..."]
+  "agent-provided-proximity-registrar-cert": "base64encodedvalue==",
+  "agent-signed-data": "base64encodedvalue==",
+  "agent-sign-cert": [
+    "base64encodedvalue==", 
+    "base64encodedvalue==", 
+    "..."]
 }
 ~~~~
 {: #pavrt title='Representation of trigger to create PVR' artwork-align="left"}
@@ -698,33 +707,37 @@ The header of the agent-signed-data contains:
 
 The body of the agent-signed-data contains an ietf-voucher-request-prm:agent-signed-data element (defined in {{voucher-request-prm-yang}}):
 
-
 * created-on: MUST contain the creation date and time in yang:date-and-time format.
 
 * serial-number: MUST contain the product-serial-number as type string as defined in {{RFC8995}}, section 2.3.1.
   The serial-number corresponds with the product-serial-number contained in the X520SerialNumber field of the IDevID certificate of the pledge.
 
-
 ~~~~
+# The agent-signed-data in general JWS serialization syntax
 {
-  "payload": {
-    "ietf-voucher-request-prm:agent-signed-data": {
-      "created-on": "2021-04-16T00:00:01.000Z",
-      "serial-number": "callee4711"
-    },
-    "signatures": [
-      {
-        "protected": {
-          "alg": "ES256",
-          "kid": "base64encodedvalue=="
-        },
-        "signature": "base64encodedvalue=="
-      }
-    ]
-  }
+  "payload": "BASE64URL(ietf-voucher-request-prm:agent-signed-data)",
+  "signatures": [
+    {
+      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "signature": "base64encodedvalue=="
+    }
+  ]
+}
+
+# Decoded payload "ietf-voucher-request-prm:agent-signed-data" representation
+in JSON syntax
+"ietf-voucher-request-prm:agent-signed-data": {
+  "created-on": "2021-04-16T00:00:01.000Z",
+  "serial-number": "callee4711"
+}
+
+# Decoded "JWS Protected Header" representation in JSON syntax
+{
+  "alg": "ES256",
+  "kid": "base64encodedvalue=="
 }
 ~~~~
-{: #asd title='Representation of agent-signed-data' artwork-align="left"}
+{: #asd title='Representation of agent-signed-data in general JWS serialization syntax' artwork-align="left"}
 
 Upon receiving the voucher-request trigger, the pledge SHALL construct the body of the PVR as defined in {{RFC8995}}. 
 It will contain additional information provided by the registrar-agent as specified in the following.
@@ -741,7 +754,7 @@ The header of the PVR SHALL contain the following parameters as defined in {{RFC
 * x5c: contains the base64-encoded pledge IDevID certificate.
   It may optionally contain the certificate chain for this certificate.
 
-The payload of the PVR object MUST contain the following parameters as part of the ietf-voucher-request-prm:voucher as defined in {{RFC8995}}:
+The payload of the PVR MUST contain the following parameters as part of the ietf-voucher-request-prm:voucher as defined in {{RFC8995}}:
 
 * created-on: SHALL contain the current date and time in yang:date-and-time format.
   If the pledge does not have synchronized the time, it SHALL use the created-on time from the agent-signed-data, received in the trigger to create a PVR.
@@ -767,32 +780,37 @@ The enhancements of the YANG module for the ietf-voucher-request with these new 
 The PVR is signed using the pledge's IDevID credential contained as x5c parameter of the JOSE header.
 
 ~~~~
+# The PVR in general JWS serialization syntax
 {
-  "payload": {
-    "ietf-voucher-request-prm:voucher": {
-      "created-on": "2021-04-16T00:00:02.000Z",
-      "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
-      "serial-number": "callee4711",
-      "assertion": "agent-proximity",
-      "agent-provided-proximity-registrar-cert": "base64encodedvalue==",
-      "agent-signed-data": "base64encodedvalue==",
-      "agent-sign-cert": [
-        "base64encodedvalue==",
-        "base64encodedvalue==",
-        "..."
-      ]
-    },
-    "signatures": [
-      {
-        "protected": {
-          "alg": "ES256",
-          "x5c": [ "MIIB2jCC...dA==" ],
-          "typ": "voucher-jws+json"
-        },
-        "signature": "base64encodedvalue=="
-      }
-    ]
-  }
+  "payload": "BASE64URL(ietf-voucher-request-prm:voucher)",
+  "signatures": [
+    {
+      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "signature": "base64encodedvalue=="
+    }
+  ]
+}
+
+# Decoded payload "ietf-voucher-request-prm:voucher" representation in JSON syntax
+"ietf-voucher-request-prm:voucher": {
+   "created-on": "2021-04-16T00:00:02.000Z",
+   "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
+   "serial-number": "callee4711",
+   "assertion": "agent-proximity",
+   "agent-provided-proximity-registrar-cert": "base64encodedvalue==",
+   "agent-signed-data": "base64encodedvalue==",
+   "agent-sign-cert": [
+     "base64encodedvalue==",
+     "base64encodedvalue==",
+     "..."
+   ]
+}
+
+# Decoded "JWS Protected Header" representation in JSON syntax
+{
+    "alg": "ES256",
+    "kid": "base64encodedvalue==", 
+    "typ": "voucher-jws+json"
 }
 ~~~~
 {: #pvr title='Representation of PVR' artwork-align="left"}
@@ -803,8 +821,8 @@ The pledge SHOULD include this Content-Type header field indicating the included
 Note that this is also an indication regarding the acceptable format of the voucher response.
 This format is included by the registrar as described in {{exchanges_uc2_2}}.
 
-Once the registrar-agent has received the PVR it can trigger the pledge to generate an enrollment-request object.
-As in BRSKI the enrollment request object is a PKCS#10, but additionally signed using the pledge's IDevID.
+Once the registrar-agent has received the PVR it can trigger the pledge to generate a PER.
+As in BRSKI the PER contains a PKCS#10, but additionally signed using the pledge's IDevID.
 Note, as the initial enrollment aims to request a generic certificate, no certificate attributes are provided to the pledge.
 
 Triggering the pledge to create the enrollment-request is done using HTTP POST on the defined pledge endpoint "/.well-known/brski/pledge-enrollment-request".
@@ -828,12 +846,12 @@ The CSR already assures proof of possession of the private key corresponding to 
 In addition, based on the additional signature using the IDevID, proof of identity is provided.
 Here, a JOSE object is being created in which the body utilizes the YANG module ietf-ztp-types with the grouping for csr-grouping for the CSR as defined in {{I-D.ietf-netconf-sztp-csr}}.
 
-Depending on the capability of the pledge, it constructs the enrollment request as plain PKCS#10.
+Depending on the capability of the pledge, it constructs the enrollment request (PER) as plain PKCS#10.
 Note that the focus in this use case is placed on PKCS#10 as PKCS#10 can be transmitted in different enrollment protocols in the infrastructure like EST, CMP, CMS, and SCEP. 
-If the pledge is already implementing an enrollment protocol, it may leverage that functionality for the creation of the enrollment request object.
-Note also that {{I-D.ietf-netconf-sztp-csr}} also allows for inclusion of certification request objects such as CMP or CMC.
+If the pledge is already implementing an enrollment protocol, it may leverage that functionality for the creation of the CSR.
+Note also that {{I-D.ietf-netconf-sztp-csr}} also allows for inclusion of certification requests in different formats such as CMP or CMC.
 
-The pledge SHOULD construct the PER as PKCS#10 object.
+The pledge SHOULD construct the PER as PKCS#10.
 In BRSKI-PRM it MUST sign it additionally with its IDevID credential to provide proof-of-identity bound to the PKCS#10 as described below.
 
 If the pledge is unable to construct the PER it SHOULD respond with HTTP 40 error code to the registrar-agent to indicate that it is not able to create the enrollment-request.
@@ -856,7 +874,7 @@ The header of the pledge enrollment-request SHALL contain the following paramete
 * x5c: contains the base64-encoded pledge IDevID certificate.
   It may optionally contain the certificate chain for this certificate. 
 
-The body of the pledge enrollment-request object SHOULD contain a P10 parameter (for PKCS#10) as defined for ietf-ztp-types:p10-csr in {{I-D.ietf-netconf-sztp-csr}}:
+The body of the pledge enrollment-request SHOULD contain a P10 parameter (for PKCS#10) as defined for ietf-ztp-types:p10-csr in {{I-D.ietf-netconf-sztp-csr}}:
 
 * P10: contains the base64-encoded PKCS#10 of the pledge.
 
@@ -864,26 +882,34 @@ The JOSE object is signed using the pledge's IDevID credential, which correspond
 
 
 ~~~~
+# The PER in general JWS serialization syntax
 {
-  "payload": {
-    "ietf-ztp-types": {
-      "p10-csr": "base64encodedvalue=="
-    },
-    "signatures": [
-      {
-        "protected": {
-          "alg": "ES256",
-          "x5c": [ "MIIB2jCC...dA==" ]
-        },
-        "signature": "base64encodedvalue=="
-      }
-    ]
-  }
+  "payload": "BASE64URL(ietf-ztp-types)",
+  "signatures": [
+    {
+      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "signature": "base64encodedvalue=="
+    }
+  ]
+}
+
+# Decoded payload "ietf-ztp-types" representation in JSON syntax
+"ietf-ztp-types": {
+  "p10-csr": "base64encodedvalue=="
+}
+ 
+# Decoded "JWS Protected Header" representation in JSON syntax
+{
+  "alg": "ES256",
+  "x5c": [ 
+    "base64encodedvalue==",
+    "base64encodedvalue==" 
+  ]
 }
 ~~~~
 {: #per title='Representation of PER' artwork-align="left"}
 
-With the collected PVR object and the PER object, the registrar-agent starts the interaction with the domain registrar.
+With the collected PVR and PER, the registrar-agent starts the interaction with the domain registrar.
 
 As the registrar-agent is intended to facilitate communication between the pledge and the domain registrar, a collection of requests from more than one pledge is possible, allowing a bulk bootstrapping of multiple pledges using the same connection between the registrar-agent and the domain registrar.
 
@@ -897,15 +923,13 @@ Preconditions:
 * Registrar-agent: possesses it's own LDevID(RegAgt) credentials of the site domain.
   In addition, it may possess the IDevID CA certificate of the pledge vendor/manufacturer to verify the pledge certificate in the received request messages.
   It has the address of the domain registrar through configuration or by discovery, e.g., mDNS/DNSSD.
-  The registrar-agent has acquired PVR and PER objects(s).
+  The registrar-agent has acquired one or multiple PVR and PER.
 
 * Registrar: possesses the IDevID CA certificate of the pledge vendor/manufacturer and an it's own LDevID(Reg) credentials of the site domain.
 
 * MASA: possesses it's own vendor/manufacturer credentials (voucher signing key, TLS server certificate) related to pledges IDevID and MAY possess the site-specific domain CA certificate. 
   The latter is necessary to ensure that the MASA is able to verify the RVR. 
   How the MASA will get the domain CA certificate is out of scope of this document.
-
-
 
 ~~~~
 +-----------+    +-----------+   +--------+   +---------+
@@ -915,7 +939,7 @@ Preconditions:
 +-----------+    +-----------+   +--------+   +---------+
     |                  |              |   Internet |
 [voucher + enrollment] |              |            |
-[objects available. ]  |              |            |
+[PVR, PER available ]  |              |            |
     |                  |              |            |
     |<----- mTLS ----->|              |            |
     |          [Reg-Agt authenticated |            |
@@ -961,7 +985,7 @@ If the connection form registrar-agent to registrar is established, the authoriz
 This ensures that the pledge has been triggered by an authorized registrar-agent. 
 
 The registrar can receive request objects in different formats as defined in {{RFC8995}}. 
-Specifically, the registrar will receive JSON-in-JWS objects generated by the pledge for voucher-request and enrollment-request (instead of BRSKI voucher-request as CMS-signed JSON and enrollment-request as PKCS#10 objects).
+Specifically, the registrar will receive JSON-in-JWS objects generated by the pledge for voucher-request and enrollment-request (instead of BRSKI voucher-request as CMS-signed JSON and enrollment-request as PKCS#10).
 
 The registrar-agent SHALL send the PVR by HTTP POST to the registrar endpoint: "/.well-known/brski/requestvoucher"
 
@@ -992,8 +1016,8 @@ HTTP 406 error code SHOULD be used if the format of PVR is unknown.
 If the validation succeeds, the registrar SHOULD accept the PVR to join the domain as defined in section 5.3 of {{RFC8995}}.
 The registrar then establishes a TLS connection to MASA as described in section 5.4 of {{RFC8995}} to obtain a voucher for the pledge.
 
-The registrar SHALL construct the payload of the RVR object as defined in {{RFC8995}}.
-The RVR object encoding SHALL be JSON-in-JWS as defined in {{I-D.ietf-anima-jws-voucher}}.
+The registrar SHALL construct the payload of the RVR as defined in {{RFC8995}}.
+The RVR encoding SHALL be JSON-in-JWS as defined in {{I-D.ietf-anima-jws-voucher}}.
 
 The header of the RVR SHALL contain the following parameter as defined in {{RFC7515}}:
 
@@ -1002,7 +1026,7 @@ The header of the RVR SHALL contain the following parameter as defined in {{RFC7
 * x5c: contains the base64-encoded registrar LDevID certificate(s).
   It may optionally contain the certificate chain for this certificate.
 
-The payload of the RVR object MUST contain the following parameter as part of the voucher request as defined in {{RFC8995}}:
+The payload of the RVR MUST contain the following parameter as part of the voucher request as defined in {{RFC8995}}:
 
 * created-on: contains the current date and time in yang:date-and-time format for the RVR creation time.
 
@@ -1031,33 +1055,40 @@ The object is signed using the registrar LDevID(Reg) credential, which correspon
 
 
 ~~~~
+# The RVR in general JWS serialization syntax
 {
-  "payload": {
-    "ietf-voucher-request-prm:voucher": {
-      "created-on": "2022-01-04T02:37:39.235Z",
-      "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
-      "serial-number": "callee4711",
-      "assertion": "agent-proximity",
-      "prior-signed-voucher-request": "base64encodedvalue==",
-      "agent-sign-cert": [
-        "base64encodedvalue==",
-        "base64encodedvalue==",
-        "..."
-      ]
-    },
-    "signatures": [
-      {
-        "protected": {
-          "alg": "ES256",
-          "x5c": [ "base64encodedvalue==" ],
-          "typ": "voucher-jws+json"
-        },
-        "signature": "base64encodedvalue=="
-      }
-    ]
-  }
+  "payload": "BASE64URL(ietf-voucher-request-prm:voucher)",
+  "signatures": [
+    {
+      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "signature": "base64encodedvalue=="
+    }
+  ]
 }
 
+# Decoded payload "ietf-voucher-request-prm:voucher" representation in JSON syntax
+"ietf-voucher-request-prm:voucher": {
+   "created-on": "2022-01-04T02:37:39.235Z",
+   "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
+   "serial-number": "callee4711",
+   "assertion": "agent-proximity",
+   "prior-signed-voucher-request": "base64encodedvalue==",
+   "agent-sign-cert": [
+     "base64encodedvalue==",
+     "base64encodedvalue==",
+     "..."
+   ]
+}
+
+# Decoded "JWS Protected Header" representation in JSON syntax
+{
+  "alg": "ES256",
+  "x5c": [ 
+    "base64encodedvalue==",
+    "base64encodedvalue==" 
+  ], 
+  "typ": "voucher-jws+json"
+}
 ~~~~
 {: #rvr title='Representation of RVR' artwork-align="left"}
 
@@ -1094,67 +1125,88 @@ If the MASA detects that the Accept header of the PVR does not match the `applic
 The voucher syntax is described in detail by {{RFC8366}}. {{MASA-vr}} shows an example of the contents of a voucher.
 
 ~~~~
+# The MASA issued voucher in general JWS serialization syntax
 {
-  "payload": {
-    "ietf-voucher:voucher": {
-      "assertion": "agent-proximity",
-      "serial-number": "callee4711",
-      "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
-      "created-on": "2022-01-04T00:00:02.000Z",
-      "pinned-domain-cert": "MIIBpDCCA...w=="
-    },
-    "signatures": [
-      {
-        "protected": {
-          "alg": "ES256",
-          "x5c": [ "base64encodedvalue==" ],
-          "typ": "voucher-jws+json"
-        },
-        "signature": "base64encodedvalue=="
-      }
-    ]
-  }
+  "payload": "BASE64URL(ietf-voucher:voucher)",
+  "signatures": [
+    {
+      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "signature": "base64encodedvalue=="
+    }
+  ]
 }
 
+# Decoded payload "ietf-voucher:voucher" representation in JSON syntax
+"ietf-voucher:voucher": {
+  "assertion": "agent-proximity",
+  "serial-number": "callee4711",
+  "nonce": "base64encodedvalue==",
+  "created-on": "2022-01-04T00:00:02.000Z",
+  "pinned-domain-cert": "base64encodedvalue=="
+}
+
+# Decoded "JWS Protected Header" representation in JSON syntax
+{
+  "alg": "ES256",
+  "x5c": [ 
+    "base64encodedvalue==",
+    "base64encodedvalue==" 
+  ], 
+  "typ": "voucher-jws+json"
+}
 ~~~~
 {: #MASA-vr title='Representation of MASA issued voucher' artwork-align="left"}
 
-The MASA returns the voucher-response object to the registrar.
+The MASA returns the voucher-response (voucher) to the registrar.
 
 After receiving the voucher the registrar SHOULD evaluate it for transparency and logging purposes as outlined in section 5.6 of {{RFC8995}}.
-The registrar MUST add an additional signature to the voucher-response object, by signing it using its registrar credentials (LDevID(Reg)). 
+The registrar MUST add an additional signature to the MASA provided voucher, by signing it using its registrar credentials (LDevID(Reg)). 
 This signature is done over the same content as the MASA signature of the voucher and provides a proof of possession of the private key corresponding to the LDevID(Reg) the pledge received in the trigger for the PVR (see {{pavrt}}). The registrar MUST use the same LDevID(Reg) credential that is used for authentication in the TLS handshake to authenticate towards the registrar-agent. This ensures that the same LDevID(Reg) certificate can be used to verify the signature as transmitted in the voucher request as is transferred in the PVR in the agent-provided-proximity-registrar-cert component. Figure {{MASA-REG-vr}} below provides an example of the voucher with two signatures. 
 
 ~~~~
+# The MASA issued voucher with additional registrar signature in general
+JWS serialization syntax
 {
-  "payload": {
-    "ietf-voucher:voucher": {
-      "assertion": "agent-proximity",
-      "serial-number": "callee4711",
-      "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
-      "created-on": "2022-01-04T00:00:02.000Z",
-      "pinned-domain-cert": "MIIBpDCCA...w=="
+  "payload": "BASE64URL(ietf-voucher:voucher)",
+  "signatures": [
+    {
+      "protected": "BASE64URL(UTF8(JWS Protected Header (MASA)))",
+      "signature": "base64encodedvalue=="
     },
-    "signatures": [
-      {
-        "protected": {
-          "alg": "ES256",
-          "x5c": [ "base64encodedvalue==" ]
-        },
-        "signature": "base64encodedvalue=="
-      },
-      {
-        "protected": {
-          "alg": "ES256",
-          "x5c": [ "base64encodedvalue==" ],
-          "typ": "voucher-jws+json"
-        },
-        "signature": "base64encodedvalue=="
-      }
-    ]
-  }
+    {
+      "protected": "BASE64URL(UTF8(JWS Protected Header (Reg)))",
+      "signature": "base64encodedvalue=="
+    }
+  ]
 }
 
+# Decoded payload "ietf-voucher:voucher" representation in JSON syntax
+"ietf-voucher:voucher": {
+   "assertion": "agent-proximity",
+   "serial-number": "callee4711",
+   "nonce": "base64encodedvalue==",
+   "created-on": "2022-01-04T00:00:02.000Z",
+   "pinned-domain-cert": "base64encodedvalue=="
+}
+
+# Decoded "JWS Protected Header (MASA)" representation in JSON syntax
+{
+  "alg": "ES256",
+  "x5c": [ 
+    "base64encodedvalue==",
+    "base64encodedvalue==" 
+  ], 
+  "typ": "voucher-jws+json"
+}
+
+# Decoded "JWS Protected Header (Reg)" representation in JSON syntax
+{
+  "alg": "ES256",
+  "x5c": [ 
+    "base64encodedvalue==",
+    "base64encodedvalue==" 
+  ]
+}
 ~~~~
 {: #MASA-REG-vr title='Representation of MASA issued voucher with additional registrar signature' artwork-align="left"}
 
@@ -1162,7 +1214,7 @@ Depending on the security policy of the operator, this signature can also be int
 The registrar sends the voucher to the registrar-agent. 
 
 After receiving the voucher, the registrar-agent sends the PER to the registrar.
-Deviating from BRSKI the PER is not a raw PKCS#10 object.
+Deviating from BRSKI the PER is not a raw PKCS#10.
 As the registrar-agent is involved in the exchange, the PKCS#10 is wrapped in a JWS object by the pledge and signed with pledge's IDevID to ensure proof-of-identity as outlined in {{per}}.
 
 {{RFC7030}} EST standard endpoints (/simpleenroll, /simplereenroll, /serverkeygen, /cacerts) on the registrar cannot be used for BRSKI-PRM. 
@@ -1196,7 +1248,7 @@ BRSKI-PRM requires a signature wrapped CA certificate response, to avoid that th
 The additional signature of the registrar will allow the pledge to verify the authorization to install CA certificates. 
 As the CA certificates are provided to the pledge after the voucher, the pledge has the necessary information to validate the provisioning object.
 
-To allow the registrar-agent to request a signature wrapped CA certificate object, a new endpoint for BRSKI-PRM on the registrar is defined as "/.well-known/brski/wrappedcacerts"
+To allow the registrar-agent to request signature wrapped CA certificates, a new endpoint for BRSKI-PRM on the registrar is defined as "/.well-known/brski/wrappedcacerts"
 
 The registrar-agent SHALL requests the EST CA trust anchor database information (in form of CA certificates) with an HTTPS GET message.
 
@@ -1206,32 +1258,46 @@ This is a deviation from the Content-Type header values used in {{RFC7030}} and 
 The additional processing is the signature of the CA certificate information using the LDevID(Reg) credential resulting in a signed JSON object. The CA certificates are provided as base64 encoded x5b. 
 
 ~~~~
+# The CA certificates data with additional registrar signaturer in general
+JWS serialization syntax
 {
-  "payload": {
-    "x5b": [ "base64encodedvalue==" ],
-    "signatures": [
-      {
-        "protected": {
-          "alg": "ES256",
-          "x5c": [ "base64encodedvalue==" ]
-        },
-        "signature": "base64encodedvalue=="
-      }
-    ]
-  }
+  "payload": "BASE64URL(certs)",
+  "signatures": [
+    {
+      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "signature": "base64encodedvalue=="
+    }
+  ]
 }
 
+# Decoded payload "certs" representation in JSON syntax
+{
+  "x5b": [ 
+    "base64encodedvalue==",
+    "base64encodedvalue==" 
+  ] TODO: check rename "x5b" to more explanatory e.g. "ca-certs-x5b"?
+}
+
+
+# Decoded "JWS Protected Header" representation in JSON syntax
+{
+  "alg": "ES256",
+  "x5c": [ 
+    "base64encodedvalue==",
+    "base64encodedvalue==" 
+  ]
+}
 ~~~~
 {: #PCAC title='Representation of CA certificates data with additional registrar signature' artwork-align="left"}
 
 The registrar-agent has now finished the exchanges with the domain registrar and can supply the voucher-response (from MASA via Registrar), the CA certificates, and the enrollment-response (LDevID certificate, from CA via Registrar) to the pledge.
-It can close the TLS connection to the domain registrar and provide the objects to the pledge(s).
-The content of the response objects is defined by the voucher {{RFC8366}} and the certificate {{RFC5280}}.
+It can close the TLS connection to the domain registrar and can provide the responses to the pledge(s).
+The content of the responses are defined by the voucher {{RFC8366}} and the certificate {{RFC5280}}.
 
 
 ### Response Object Supply by Registrar-Agent to Pledge {#exchanges_uc2_3}
 
-The following description assumes that the registrar-agent has obtained the response objects from the domain registrar.
+The following description assumes that the registrar-agent has obtained the responses from the domain registrar.
 It will re-start the interaction with the pledge.
 To contact the pledge, it may either discover the pledge as described in {{discovery_uc2_ppa}} or use stored information from the first contact with the pledge.
 
@@ -1287,34 +1353,44 @@ If multiple signatures are contained in the voucher, the pledge SHALL perform th
 If all verification steps stated above have been performed successfully, the pledge SHALL end the provisional accept state for the domain trust anchor and the LDevID(Reg). 
 If multiple signatures are contained in the voucher-response, the pledge MUST verify all successfully.
 
-If an error occurs during the verification it SHALL be signaled in the reason field of the pledge voucher status object.
+If an error occurs during the verification it SHALL be signaled in the reason field of the pledge voucher status.
 
 After verification the pledge MUST reply with a status telemetry message as defined in section 5.7 of {{RFC8995}}.  
-The pledge generates the voucher status object and provides it as JOSE object with the wrapping signature in the response message to the registrar-agent.
+The pledge generates the voucher status and provides it as JOSE object with the wrapping signature in the response message to the registrar-agent.
 
 The response has the Content-Type `application/jose+json` and is signed using the IDevID of the pledge as shown in {{vstat}}.
 As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of success.
 
 
 ~~~~
+# The "pledge-voucher-status" telemetry in general JWS serialization syntax
 {
-  "payload": {
-    "version": 1,
-    "status": true,
-    "reason": "Voucher successfully processed",
-    "reason-context": {
-      "additional": "JSON"
-    }
-  },
+  "payload": "BASE64URL(pledge-voucher-status)",
   "signatures": [
     {
-      "protected": {
-        "alg": "ES256",
-        "x5c": [ "base64encodedvalue==" ]
-      },
+      "protected": "BASE64URL(UTF8(JWS Protected Header))",
       "signature": "base64encodedvalue=="
     }
   ]
+}
+
+# Decoded payload "pledge-voucher-status" representation in JSON syntax
+{
+  "version": 1,
+  "status": true,
+  "reason": "Voucher successfully processed",
+  "reason-context": {
+    "additional": "JSON"
+  }
+}
+	
+# Decoded "JWS Protected Header" representation in JSON syntax
+{
+  "alg": "ES256",
+  "x5c": [ 
+    "base64encodedvalue==",
+    "base64encodedvalue==" 
+  ] 
 }
 ~~~~
 {: #vstat title='Representation of pledge voucher status telemetry' artwork-align="left"}
@@ -1336,10 +1412,10 @@ The registrar-agent SHALL send the enroll-response to the pledge by HTTP POST to
 The registrar-agent enroll-response Content-Type header, when using EST {{RFC7030}} as enrollment protocol between the registrar-agent and the infrastructure, is `application/pkcs7-mime`. Note that it only contains the LDevID certificate for the pledge, not the certificate chain.
 
 Upon reception, the pledge SHALL verify the received LDevID certificate. 
-The pledge SHALL generate the enroll status object and provide it in the response message to the registrar-agent. If the verification of the LDevID certificate succeeds, the status SHALL be set to true, otherwise to FALSE. 
+The pledge SHALL generate the enroll status and provide it in the response message to the registrar-agent. If the verification of the LDevID certificate succeeds, the status SHALL be set to true, otherwise to FALSE.
 
 The pledge MUST reply with a status telemetry message as defined in section 5.9.4 of {{RFC8995}}.
-As for the other objects, the enrollment status object is provided with an additional signature using JOSE.
+As for the other objects, the enroll status is provided with an additional signature using JOSE.
 If the pledge verified the received LDevID certificate successfully it SHALL sign the response using the LDevID of the pledge as shown in {{estat}}. 
 In the failure case, the pledge SHALL use the available IdevID credentials.
 As the reason field is optional, it MAY be omitted in case of success.
@@ -1348,24 +1424,35 @@ The response has the Content-Type `application/jose+json`.
 
 
 ~~~~
+# The "pledge-enroll-status" telemetry in general JWS serialization 
+  syntax
 {
-  "payload": {
-    "version": 1,
-    "status": true,
-    "reason": "Enrollment response successfully processed",
-    "reason-context": {
-      "additional": "JSON"
-    }
-  },
+  "payload": "BASE64URL(pledge-enroll-status)",
   "signatures": [
     {
-      "protected": {
-        "alg": "ES256",
-        "x5c": [ "base64encodedvalue==" ]
-      },
+      "protected": "BASE64URL(UTF8(JWS Protected Header))",
       "signature": "base64encodedvalue=="
     }
   ]
+}
+
+# Decoded payload "pledge-enroll-status" representation in JSON syntax
+{
+  "version": 1,
+  "status": true,
+  "reason": "Enrollment response  successfully processed",
+  "reason-context": {
+    "additional": "JSON"
+  }
+}
+	
+# Decoded "JWS Protected Header" representation in JSON syntax
+{
+  "alg": "ES256",
+  "x5c": [ 
+    "base64encodedvalue==",
+    "base64encodedvalue==" 
+  ] 
 }
 ~~~~
 {: #estat title='Representation of pledge enroll status telemetry' artwork-align="left"}
@@ -1375,12 +1462,12 @@ Once the registrar-agent has collected the information, it can connect to the re
 
 ### Telemetry status handling (registrar-agent - domain registrar) {#exchanges_uc2_4}
 
-The following description requires that the registrar-agent has collected the status objects from the pledge.
-It SHALL provide the status objects to the registrar for further processing.
+The following description requires that the registrar-agent has collected the status information from the pledge.
+It SHALL provide the status information to the registrar for further processing.
 
 Preconditions in addition to {{exchanges_uc2_2}}:
 
-* Registrar-agent: possesses voucher status and enroll status objects from pledge.
+* Registrar-agent: possesses voucher status and enroll status from pledge.
 
 ~~~~
 +-----------+    +-----------+   +--------+   +---------+
@@ -1390,7 +1477,7 @@ Preconditions in addition to {{exchanges_uc2_2}}:
 +-----------+    +-----------+   +--------+   +---------+
     |                  |              |   Internet |
 [voucher + enroll ]    |              |            |
-[status objects avail.]|              |            |
+[status info available]|              |            |
     |                  |              |            |
     |<----- mTLS ----->|              |            |
     |                  |              |            |
@@ -1405,14 +1492,14 @@ Preconditions in addition to {{exchanges_uc2_2}}:
 ~~~~
 {: #exchangesfig_uc2_4 title='Bootstrapping status handling' artwork-align="left"}
 
-The registrar-agent MUST provide the collected pledge voucher status object to the registrar. 
+The registrar-agent MUST provide the collected pledge voucher status to the registrar. 
 This status indicates if the pledge could process the voucher successfully or not.
 
 If the TLS connection to the registrar was closed, the registrar-agent establishes a TLS connection with the registrar as stated in {{exchanges_uc2_2}}.
 
-The registrar-agent sends the pledge voucher status object without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/voucher_status". The Content-Type header is kept as `application/jose+json` as described in {{exchangesfig_uc2_3}} and depicted in the example in {{vstat}}.
+The registrar-agent sends the pledge voucher status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/voucher_status". The Content-Type header is kept as `application/jose+json` as described in {{exchangesfig_uc2_3}} and depicted in the example in {{vstat}}.
 
-The registrar SHALL verify the signature of the pledge voucher status object and validate that it belongs to an accepted device in his domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher status object.
+The registrar SHALL verify the signature of the pledge voucher status and validate that it belongs to an accepted device in his domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher status.
 
 According to {{RFC8995}} section 5.7, the registrar SHOULD respond with an HTTP 200 in the success case or fail with HTTP 4xx/5xx codes as defined by the HTTP standard.
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
@@ -1420,17 +1507,17 @@ Within the server logs the server SHOULD capture this telemetry information.
 
 The registrar SHOULD proceed with collecting and logging status information by requesting the MASA audit-log from the MASA service as described in section 5.8 of {{RFC8995}}.
 
-The registrar-agent MUST provide the pledge's enroll status object to the registrar.
-The status indicates the pledge could process the enroll-response object and holds the corresponding private key.
+The registrar-agent MUST provide the pledge's enroll status to the registrar.
+The status indicates the pledge could process the enroll-response (certificate) and holds the corresponding private key.
 
-The registrar-agent sends the pledge enroll status object without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/enrollstatus".
+The registrar-agent sends the pledge enroll status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/enrollstatus".
 The Content-Type header is kept as `application/jose+json` as described in {{exchangesfig_uc2_3}} and depicted in the example in {{estat}}.
 
-The registrar MUST verify the signature of the pledge enroll status object.
-Also, the registrar SHALL validate that the pledge belongs to an accepted device in his domain based on the contained product-serial-number in the LDevID certificate referenced in the header of the enroll status object. 
+The registrar MUST verify the signature of the pledge enroll status.
+Also, the registrar SHALL validate that the pledge belongs to an accepted device in his domain based on the contained product-serial-number in the LDevID certificate referenced in the header of the enroll status. 
 The registrar SHOULD log this event.
-In case the enroll status object indicates a failure, the pledge was unable to verify the received LDevID certificate and therefore signed the enroll status objects with its IDevID credential.
-Note that the verification of a signature of the object is a deviation from the described handling in section 5.9.4 of {{RFC8995}}.
+In case the pledge enroll status indicates a failure, the pledge was unable to verify the received LDevID certificate and therefore signed the enroll status with its IDevID credential.
+Note that the verification of a signature of the status information is an addition to the described handling in section 5.9.4 of {{RFC8995}}.
 
 According to {{RFC8995}} section 5.9.4, the registrar SHOULD respond with an HTTP 200 in the success case or fail with HTTP 4xx/5xx codes as defined by the HTTP standard.
 Based on the failure case the registrar MAY decide that for security reasons the pledge is not allowed to reside in the domain. In this case the registrar MUST revoke the certificate.
@@ -1470,9 +1557,9 @@ It contains information on the requested status-type, the time and date the requ
 The pledge-status request is signed by registrar-agent using the LDevID(RegAgt) credential. 
 
 The following Concise Data Definition Language (CDDL) {{RFC8610}} explains the structure of the format for the pledge-status request. It is defined following the status telemetry definitions in BRSKI {{RFC8995}}.
-Consequently, format and semantics of pledge-status objects described below are for version 1.  
-The version field is included to permit significant changes to the pledge-status request and response objects in the future.  
-A pledge or a registrar-agent that receives a plegde-status request object with a version larger than it knows about SHOULD log the contents and alert a human. 
+Consequently, format and semantics of pledge-status requests below are for version 1.  
+The version field is included to permit significant changes to the pledge-status request and response in the future.  
+A pledge or a registrar-agent that receives a plegde-status request with a version larger than it knows about SHOULD log the contents and alert a human. 
 
 
 ~~~~
@@ -1488,32 +1575,45 @@ A pledge or a registrar-agent that receives a plegde-status request object with 
 ~~~~
 {: #stat_req_def title='CDDL for pledge-status request' artwork-align="left"}
 
-The status-type defined for BRSKI-PRM is "bootstraping".
+The status-type defined for BRSKI-PRM is "bootstrap".
 This indicates the pledge to provide current status information regarding the bootstrapping status (voucher processing and the enrollment of the pledge into the new domain). 
 As pledge-status request is defined generic, it may be used by other specifications to request further status information, e.g., for onboarding to get further information about enrollment of application specific LDevIDs or other parameters. 
 This is out of scope for this specification. 
 
-{{stat_req}} below shows an example for querying pledge-status using status-type bootstrapping.
+{{stat_req}} below shows an example for querying pledge-status using status-type bootstrap.
 
 
 ~~~~
+# The registrar-agent request of "pledge-status" in general JWS 
+  serialization syntax
 {
-  "payload": {
-      "version": 1,
-      "created-on": "2022-08-12T02:37:39.235Z",
-      "serial-number": "pledge-callee4711"
-      "status-type": "bootstrap"
-  },
-  "signatures": [{
-      "protected": {
-        "alg": "ES256",
-        "x5c": [ "base64encodedvalue==" ],
-      },
+  "payload": "BASE64URL(status-request)",
+  "signatures": [
+    {
+      "protected": "BASE64URL(UTF8(JWS Protected Header))",
       "signature": "base64encodedvalue=="
-    }]
+    }
+  ]
+}
+
+# Decoded payload "status-request" representation in JSON syntax
+{
+  "version": 1,
+  "created-on": "2022-08-12T02:37:39.235Z",
+  "serial-number": "pledge-callee4711",
+  "status-type": "bootstrap"
+}
+	
+# Decoded "JWS Protected Header" representation in JSON syntax
+{
+  "alg": "ES256",
+  "x5c": [ 
+    "base64encodedvalue==",
+    "base64encodedvalue==" 
+  ] 
 }
 ~~~~
-{: #stat_req title='Example of registrar-agent request of pledge-status using status-type bootstrapping' artwork-align="left"}
+{: #stat_req title='Example of registrar-agent request of pledge-status using status-type bootstrap' artwork-align="left"}
 
 If the pledge receives the plegde-status request with status-type "bootstrap" it SHALL react with a status response message based on the telemetry information described in section {{exchanges_uc2_3}}.
 
@@ -1524,10 +1624,14 @@ The following CDDL explains the structure of the format for the status response,
 ~~~~
 <CODE BEGINS> 
   status-response = {
-      "version": uint,
-      "status": "factory-default" / "vouchered" / "enrolled" / "error",
-      ? "reason" : text,
-      ? "reason-context" : { $$arbitrary-map }
+    "version": uint,
+    "status": 
+      "factory-default" / 
+      "vouchered" / 
+      "enrolled" / 
+      "error",
+    ?"reason" : text,
+    ?"reason-context" : { $$arbitrary-map }
   }
 <CODE ENDS>
 ~~~~
@@ -1550,23 +1654,37 @@ The pledge-status response message is signed with IDevID or LDevID, depending on
 
 
 ~~~~
+# The pledge "status-response" in general JWS serialization syntax
 {
-  "payload": {
-    "version": 1,
-    "status": "enrolled",
-    "status-context": { "additional" : "JSON" }
-  },
-  "signatures": [{
-      "protected": {
-        "alg": "ES256",
-        "x5c": [ "base64encodedvalue==" ],
-        "typ": "jose+json, TODO: may be more specific"
-      },
+  "payload": "BASE64URL(status-response)",
+  "signatures": [
+    {
+      "protected": "BASE64URL(UTF8(JWS Protected Header))",
       "signature": "base64encodedvalue=="
-    }]
+    }
+  ]
+}
+
+# Decoded payload "status-response" representation in JSON syntax
+{
+  "version": 1,
+  "status": "enrolled",
+  "status-context": {
+    "additional" : "JSON" 
+  }
+}
+
+# Decoded "JWS Protected Header" representation in JSON syntax
+{
+  "alg": "ES256",
+  "x5c": [ 
+    "base64encodedvalue==",
+    "base64encodedvalue==" 
+  ], 
+  "typ": "jose+json
 }
 ~~~~
-{: #stat_res title='Example of pledge status response' artwork-align="left"}
+{: #stat_res title='Example of pledge-status response' artwork-align="left"}
 
 In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor. 
 It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.
@@ -1805,47 +1923,81 @@ IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with
 
 # Privacy Considerations
 
-The credential used by the registrar-agent to sign the data for the pledge in case of the pledge-initiator-mode should not contain personal information.
-Therefore, it is recommended to use an LDevID certificate associated with the device instead of a potential service technician operating the device, to avoid revealing this information to the MASA.
+In general, the security considerations of {{RFC8995}} apply for BRSKI-PRM also. 
+Further privacy aspects need to be considered for:  
+
+* the introduction of the additional component registrar-agent 
+* no transport layer security between registrar-agent and pledge  
+
+The credential used by the registrar-agent to sign the data for the pledge should not contain any personal information.
+Therefore, it is recommended to use an LDevID certificate associated with the device instead of an LDevID certificate associated with a potential service technician operating the device. This avoids revealing personal information to Registrar and MASA.
+
+The communication between the pledge and the registrar-agent is performed over plain HTTP. 
+Therefore, it is subject to disclosure by a Dolev-Yao attacker (a "oppressive observer"){{onpath}}. 
+Depending on the requests and responses, the following information is disclosed.  
+
+* Pledge product-serial-number is contained in the trigger message for the PVR and in all responses from the pledge. 
+  This information reveals the identity of the devices being bootstrapped and allows deduction of products an operator is using in his environment. 
+  As the communication between the pledge and the registrar-agent may be realized over wireless link, this information could be easily be eavesdropped, if the wireless interface does not apply security measures.
+* Timestamp data could reveal the activation time of the device. 
+* Status data of the device could reveal information about the current state of the device in the domain network. 
 
 
 # Security Considerations {#sec_cons}
 
-## Exhaustion Attack on Pledge
+In general, the security considerations of {{RFC8995}} apply for BRSKI-PRM also. 
+Further security aspects need to be considered for:  
 
-Exhaustion attack on pledge based on DoS attack (connection establishment, etc.)
+* the introduction of the additional component registrar-agent 
+* the reversal of the pledge communication direction (push mode, compared to BRSKI) 
+* no transport layer security between registrar-agent and pledge  
+
+TODO: other threads?
+
+## Denial of Service (DoS) Attack on Pledge
+
+Disrupting the pledge behaviour by a DoS attack may prevent the bootstrapping of the pledge to a new domain. 
+
+TODO:
+- DoS attack with faked registrar-agent may block the bootstrapping of the pledge due to state creation on the pledge (only vouchered). Mitigation may be that the pledge does not create a state if the bootstrapping is not finished after certain time.
 
 
-## Misuse of acquired Voucher and Enrollment objects by Registrar-Agent
+## Misuse of acquired PVR and PER by Registrar-Agent
 
-A Registrar-agent that uses acquired voucher and enrollment objects for domain-A in domain-B can be avoided by the PVR processing on the domain registrar side.
-This requires the domain registrar to verify the "proximity-registrar-cert" field in the PVR against his own LDevID(Reg). 
-In addition, the domain registrar has to verify the association of the pledge to his domain based on the product-serial-number contained in the PVR and in the pledge IDevID certificate.
-Moreover, the registrar verifies if the registrar-agent is authorized to interact with the pledge for voucher-requests, based on the LDevID(RegAgt) certificate information contained in the PVR.
+A registrar-agent that uses formerly acquired PVR and PER for domain-A in domain-B can be detected by the domain registrar while PVR processing.
+This requires the domain registrar to verify the "proximity-registrar-cert" field in the PVR matches its own LDevID(Reg) certificate. 
+In addition, the domain registrar has to verify the association of the pledge to its domain based on the product-serial-number contained in the PVR and in the IDevID certificate of the pledge.
+Moreover, the domain registrar verifies if the registrar-agent is authorized to interact with the pledge for voucher-requests and enroll-requests, based on the LDevID(RegAgt) certificate data contained in the PVR.
 
-Misbinding of a pledge by a faked domain registrar is countered as described in BRSKI security considerations (section 11.4).
+Misbinding of a pledge by a faked domain registrar is countered as described in BRSKI security considerations {{RFC8995}} (section 11.4).
 
 ## Misuse of Registrar-Agent Credentials {#sec_cons_reg-agt}
 
-Concerns on opportunities to misuse the registrar-agent with a valid LDevID(RegAgt), may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the registrar-agent against the domain registrar.
+Concerns on misusage of an registrar-agent with a valid LDevID(RegAgt), may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the registrar-agent against the domain registrar.
 The LDevID(RegAgt) certificate may be acquired by a prior BRSKI run for the registrar-agent, if an IDevID is available on registrar-agent.
-Alternatively, the LDevID may be acquired by a service technician from the domain PKI system.
+Alternatively, the LDevID may be acquired by a service technician from the domain PKI system in an authenticated way.
 
 In addition it is required that the LDevID(RegAgt) certificate is valid for the complete bootstrapping phase. 
-This avoids a registrar-agent could be misused to create arbitrary "agent-signed-data" objects to perform an authorized bootstrapping of a rouge pledge. 
+This avoids a registrar-agent could be misused to create arbitrary "agent-signed-data" objects to perform an authorized bootstrapping of a rouge pledge at a later point in time. 
 As "agent-signed-data" could be dated after the validity time of the LDevID(RegAgt) certificate, due to missing trusted timestamp in the registrar-agents signature.     
 To address this, the registrar SHOULD verify the certificate used to create the signature on "agent-signed-data". 
-Furthermore the registrar also verifies the LDevID(RegAgt) certificate used in the TLS handshake. If both certificates are successfully verified, the registrar-agents signature can be considered as valid.  
+Furthermore the registrar also verifies the LDevID(RegAgt) certificate used in the TLS handshake with the registrar-agent. If both certificates are verified successfully, the registrar-agents signature can be considered as valid.  
+
+## Misuse of mDNS to obtain list of pledges {#sec_cons_mDNS}
+
+To discover a specific pledge a registrar-agent may request the service name in combination with the product-serial-number of a specific pledge. 
+If the registrar-agent performs DNS-based Service Discovery without a specific product-serial-number, all IP addresses of pledges in the domain will be returned. 
 
 ## YANG Module Security Considerations
 
 The enhanced voucher-request described in section {{voucher-request-prm-yang}} is bases on {{RFC8995}}, but uses a different encoding based on {{I-D.ietf-anima-jws-voucher}}.
-Therefore similar considerations as described in Section 11.7 (Security Considerations) of {{RFC8995}} apply.
+Therefore similar considerations as described in {{RFC8995}} section 11.7 (Security Considerations) apply.
 The YANG module specified in this document defines the schema for data that is subsequently encapsulated by a JOSE signed-data Content-type as described in {{I-D.ietf-anima-jws-voucher}}.
 As such, all of the YANG-modeled data is protected against modification.
 The use of YANG to define data structures via the "yang-data" statement, is relatively
 new and distinct from the traditional use of YANG to define an API accessed by network management protocols such as NETCONF {{RFC6241}} and RESTCONF {{RFC8040}}.
-For this reason these guidelines do not follow the template described by Section 3.7 of {{RFC8407}}.
+For this reason these guidelines do not follow the template described by {{RFC8407}} section 3.7 (Security Considerations Section
+).
 
 
 # Acknowledgments
@@ -2197,6 +2349,9 @@ Proof of Concept Code available
 
 From IETF draft 04 -> IETF draft 05:
 
+* Enhanced security considerations and privacy considerations, issue #59
+* Reworked terminology of "enrollment object", "certification object", "enrollment request object", etc., issue #27
+* Reworked all message representations to align with encoding
 * Included examples for several objects in section {{examples}}
 * Defined new endpoint for pledge bootstrapping status inquiry, issue #35 in section {{exchanges_uc2_5}}, IANA considerations and section {{pledge_ep}}
 * PoP for private key to registrar certificate included as mandatory, issues #32 and #49
