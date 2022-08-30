@@ -320,7 +320,8 @@ This leads to extensions of the logical components in the BRSKI architecture as 
 Note that the Join Proxy is neglected in the figure as not needed by the registrar-agent.
 The registrar-agent interacts with the pledge to transfer the required data objects for bootstrapping, which are then also exchanged between the registrar-agent and the domain registrar.
 The addition of the registrar-agent influences the sequences of the data exchange between the pledge and the domain registrar as described in {{RFC8995}}.
-To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM 
+To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
+ 
 * uses existing endpoints were the required functionality is provided
 * enhances existing with new supported media types, e.g., for JWS voucher 
 * defines new endpoints were additional functionality is required, e.g., for wrapped certification request.
@@ -744,6 +745,7 @@ It will contain additional information provided by the registrar-agent as specif
 This PVR becomes a JSON-in-JWS object as defined in {{I-D.ietf-anima-jws-voucher}}.
 If the pledge is unable to construct the PVR it SHOULD respond with a HTTP error code to the registrar-agent to indicate that it is not able to create the PVR.
 Error codes MAY be used:
+
 * 400: if the pledge detected an error in the format of the request, e.g. missing field, wrong data types, etc. or it's not valid JSON even though the PVR media type was set to `application/json`.
 * 403: if the pledge detected that parameter from the trigger message to create the PVR were not valid, e.g., the LDevID (Reg) certificate.
 
@@ -857,6 +859,7 @@ In BRSKI-PRM it MUST sign it additionally with its IDevID credential to provide 
 If the pledge is unable to construct the PER it SHOULD respond with HTTP 40 error code to the registrar-agent to indicate that it is not able to create the enrollment-request.
 If the pledge is unable to construct the PER it SHOULD respond with a HTTP error code to the registrar-agent to indicate that it is not able to create the PER.
 Error codes MAY be used:
+
 * 400: if the pledge detected an error in the format of the request or it's not valid JSON even though the PER media type was set to `application/json`.
 * 403: if the pledge detected that parameter (if provided) from the trigger message to create the PER were not valid.
 
@@ -1958,8 +1961,7 @@ TODO: other threads?
 
 Disrupting the pledge behaviour by a DoS attack may prevent the bootstrapping of the pledge to a new domain. 
 
-TODO:
-- DoS attack with faked registrar-agent may block the bootstrapping of the pledge due to state creation on the pledge (only vouchered). Mitigation may be that the pledge does not create a state if the bootstrapping is not finished after certain time.
+A DoS attack with a faked registrar-agent may block the bootstrapping of the pledge due to state creation on the pledge (only vouchered). Mitigation may be that the pledge does not create a state if the bootstrapping is not finished after certain time.
 
 
 ## Misuse of acquired PVR and PER by Registrar-Agent
@@ -1996,8 +1998,7 @@ The YANG module specified in this document defines the schema for data that is s
 As such, all of the YANG-modeled data is protected against modification.
 The use of YANG to define data structures via the "yang-data" statement, is relatively
 new and distinct from the traditional use of YANG to define an API accessed by network management protocols such as NETCONF {{RFC6241}} and RESTCONF {{RFC8040}}.
-For this reason these guidelines do not follow the template described by {{RFC8407}} section 3.7 (Security Considerations Section
-).
+For this reason these guidelines do not follow the template described by {{RFC8407}} section 3.7 (Security Considerations Section).
 
 
 # Acknowledgments
@@ -2349,6 +2350,7 @@ Proof of Concept Code available
 
 From IETF draft 04 -> IETF draft 05:
 
+* Enhanced error codes in section 5.5.1, issue #39
 * Enhanced security considerations and privacy considerations, issue #59
 * Reworked terminology of "enrollment object", "certification object", "enrollment request object", etc., issue #27
 * Reworked all message representations to align with encoding
