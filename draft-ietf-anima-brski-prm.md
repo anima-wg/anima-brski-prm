@@ -238,10 +238,14 @@ As BRSKI focuses on the pledge in a client role, initiating the bootstrapping (p
 
 The following examples motivate support of BRSKI-PRM to support pledges acting as server as well as pledges with limited connectivity to the registrar.
 
-While BRSKI-PRM defines support for pledges in responder mode, there may be pledges, which can act in both modes, initiator and responder.
+While BRSKI-PRM defines support for pledges in responder mode, there may be pledges, which can act as both initiator or responder.
 In these cases BRSKI-PRM can be combined with BRSKI as defined in {{RFC8995}} or BRSKI-AE {{I-D.ietf-anima-brski-ae}} to allow for more bootstrapping flexibility.
+
+A pledge which can initiate, SHOULD listen for BRSKI messages as describe in {{RFC8995, Section 4.1}}.  Upon discovery of a potential Registrar, it SHOULD initiate to that Registrar.
+At the same time (so as to avoid the Slowloris-attack described in {{RFC8995}}), it SHOULD also respond to the pledge-responder-mode connections described in this document.
+
 Once a pledge with such combined functionality has been bootstrapped, it may act as client for enrollment or re-enrollment of further certificates needed, e.g., using the enrollment protocol of choice.
-If it still acts as server, the defined endpoints can be used to trigger a PER for further certificates.
+If it still acts as server, the defined endpoints can be used to trigger a Pledge-Enrollment-Request (PER) for further certificates.
 
 
 ### Building Automation
