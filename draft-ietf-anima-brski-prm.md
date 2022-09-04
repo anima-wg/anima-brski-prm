@@ -53,8 +53,8 @@ author:
 contributor:
   name: Esko Dijk
   email: esko.dijk@iotconsultancy.nl
-venue: 
-  group: 
+venue:
+  group: ANIMA
   anima mail: {anima@ietf.org}
   github: anima-wg/anima-brski-prm
 normative:
