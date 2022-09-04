@@ -208,7 +208,7 @@ POI:
 : Proof of identity (see {{req-sol}})
 
 PVR:
-: Pledge-voucher-request is a voucher request signed by the pledge that requests to be part of a domain
+: Pledge-Voucher-Request is a voucher request signed by the pledge that requests to be part of a domain
 
 RA:
 : Registration authority, an optional system component to which a CA delegates certificate management functions such as authorization checks.
@@ -217,7 +217,8 @@ RER:
 : Registrar-enrollment-request is the PER send to the CA by the registrar
 
 RVR:
-: Registrar-voucher-request is a request containing the PVR sent to the MASA
+: Registrar-Voucher-Request is a request signed by the Registrar, on it's way to the MASA.
+It will contain the PVR sent by the pledge.
 
 
 # Scope of Solution
