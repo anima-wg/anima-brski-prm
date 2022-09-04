@@ -120,31 +120,37 @@ These vouchers are signed objects, provided via the domain registrar to the pled
 
 BRSKI addresses scenarios in which the pledge acts as client for the bootstrapping and is the initiator of the bootstrapping (this document refers to the approach as pledge-initiator-mode).
 In industrial environments the pledge may behave as a server and thus does not initiate the bootstrapping with the domain registrar.
-In this scenarios it is expected that the pledge will be triggered to generate requests to be bootstrapped in the customer site/domain (this document refers to the approach as pledge-responder-mode).
-For this, an additional component is introduced acting as an agent for the domain registrar (registrar-agent) towards the pledge.
-This may be a functionality of a commissioning or configuration tool or it may be even co-located with the registrar.
+In this scenarios it is expected that the pledge will be triggered to generate requests for bootstrapped in the customer site/domain. This document refers to the approach as pledge-responder-mode.
+For this, an additional component is introduced to act as an agent for the domain registrar.
+This new registrar-agent, initiates towards the pledge.
+This may be included in the functionality of a commissioning or configuration tool or it may be even co-located with the registrar.
 
 In contrast to BRSKI the registrar-agent facilitates the data exchange with the pledge and provides/retrieves data objects to/from the domain registrar.
 For the interaction with the domain registrar the registrar-agent will use existing BRSKI {{RFC8995}} endpoints.
 
-The term endpoint used in the context of this document is similar to resources in CoAP {{RFC7252}} and also in HTTP {{RFC9110}}. It is not used to describe a device. Endpoints are accessible via .well-known URIs.
+The term endpoint used in the context of this document is similar to resources in CoAP {{RFC7252}} and also in HTTP {{RFC9110}}.
+It is not used to describe a device.
+Endpoints are accessible via .well-known URIs.
 
 The goal is to enhance BRSKI to support pledges in responder mode.
-This is addressed by
 
-* introducing the registrar-agent as new component to facilitate the communication between the pledge and the registrar, if the pledge is in responder mode (acting as server).
+This is accomplished by
+
+* introducing the registrar-agent as new component to facilitate the communication between the pledge and the registrar, as the pledge is in responder mode, and acts as server.
 
 * handling the security on application layer only to enable application of arbitrary transport means between the pledge and the domain registrar, by keeping the registrar-agent in the communication path.
-  Examples may be connectivity via IP based networks (wired or wireless) but also connectivity via Bluetooth or NFC between the pledge and the registrar-agent.
+Examples may be connectivity via IP based networks (wired or wireless) but also connectivity via Bluetooth or NFC between the pledge and the registrar-agent.
 
-* allowing to utilize credentials different from the pledge's IDevID to establish a TLS connection to the domain registrar, which is necessary in case of using a registrar-agent.
+* having the registrar-agent utilize credentials different from the pledge's IDevID when establishing a TLS connection to the domain registrar.
 
 * defining the interaction (data exchange and data objects) between a pledge acting as server and a registrar-agent and the domain registrar.
 
-For the enrollment of devices BRSKI relies on EST {{RFC7030}} to request and distribute customer site/domain specific device certificates.
+For the enrollment of devices, BRSKI relies on EST {{RFC7030}} to request and distribute customer site/domain specific device certificates.
 EST in turn relies on a binding of the certification request to an underlying TLS connection between the EST client and the EST server.
-According to BRSKI the domain registrar acts as EST server and is also acting as registration authority (RA) for its domain.
+According to BRSKI the domain registrar, acting as an EST server, is therefore in the role of registration authority (RA) for its domain.
+
 To utilize the EST server endpoints on the domain-registrar, the registrar-agent defined in this document will act as client towards the domain registrar.
+
 The registrar-agent will also act as client when communicating with the pledge in responder mode.
 Here, TLS with server-side, certificate-based authentication is not directly applicable, as the pledge only possesses an IDevID certificate, which does not contain a subject alternative name (SAN) for the customer site/domain and does also not contain a TLS server flag.
 This is one reason for relying on higher layer security by using signature wrapped objects for the exchange between the pledge and the registrar agent.
