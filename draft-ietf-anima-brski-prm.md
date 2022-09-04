@@ -100,11 +100,12 @@ informative:
 
 --- abstract
 
-This document defines enhancements to bootstrapping a remote secure key infrastructure (BRSKI, {{RFC8995}}) to facilitate bootstrapping in domains featuring no or only timely limited connectivity between a pledge and the domain registrar.
-It specifically targets situations, in which the interaction model changes from a pledge-initiator-mode, as used in BRSKI, to a pledge-responder-mode as described in this document.
-To support both, BRSKI-PRM introduces a new registrar-agent component, which facilitates the communication between pledge and registrar during the bootstrapping phase.
-For the establishment of a trust relation between pledge and domain registrar, BRSKI-PRM relies on the exchange of authenticated self-contained objects (signature-wrapped objects).
-The defined approach is agnostic regarding the utilized enrollment protocol, deployed by the domain registrar to communicate with the Domain CA.
+This document defines enhancements to bootstrapping a remote secure key infrastructure (BRSKI, {{RFC8995}}) to facilitate bootstrapping in domains featuring no or only time limited connectivity between a pledge and the domain registrar.
+It specifically targets situations, in which the interaction model changes from a pledge-initiated-mode, as used in BRSKI, to a pledge-responding-mode as described in this document.
+To support both, BRSKI-PRM introduces a new component, the registrar-agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
+To establishment the trust relation between pledge and domain registrar, BRSKI-PRM relies on the exchange of authenticated self-contained objects --- object security rather than transport security.
+
+The approach defined here is agnostic with respect to the underlying enrollment protocol which connects the pledge, and domain registrar to the Domain CA.
 
 
 --- middle
