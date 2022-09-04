@@ -194,8 +194,9 @@ on-site:
 : Describes a component or service or functionality available in the customer site/domain.
 
 off-site:
-: Describes a component or service or functionality not available in the customer site/domain.
-  This may be a central site or a cloud service, to which only a temporary connection is available, or which is in a different administrative domain.
+: Describes a component or service or functionality not available within the customer site/domain.
+It may be at a central site or an internet resident "cloud" service.
+The connection may also be a temporary: available only at times when workers are present on a construction side, for instance.
 
 PER:
 : Pledge-enrollment-request is a signature wrapped CSR, signed by the pledge that requests to enroll in a domain
@@ -204,7 +205,7 @@ POP:
 : Proof of possession (of a private key)
 
 POI:
-: Proof of identity
+: Proof of identity (see {{req-sol}})
 
 PVR:
 : Pledge-voucher-request is a voucher request signed by the pledge that requests to be part of a domain
