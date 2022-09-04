@@ -252,7 +252,10 @@ If it still acts as server, the defined endpoints can be used to trigger a Pledg
 
 In building automation a typical use case exists where a detached building (or a cabinet) or the basement of a building is equipped with sensors, actuators and controllers, but with only limited or no connection to the central building management system.
 This limited connectivity may exist during installation time or also during operation time.
-During the installation in the basement, a service technician collects the device specific information from the basement network and provides them to the central building management system, e.g., using a laptop or a mobile device to transport the information.
+
+During the installation, for instance, in the basement, a service technician collects the device specific information from the basement network and provides them to the central building management system.  This could be done using a laptop, common mobile device, or dedicated commissioning tool to transport the information.
+The service technician may visit every new house in a subdivision collecting device specific information before connecting to the Registrar.
+
 A domain registrar may be part of the central building management system and already be operational in the installation network.
 The central building management system can then provide operational parameters for the specific devices in the basement.
 This operational parameters may comprise values and settings required in the operational phase of the sensors/actuators, among them a certificate issued by the operator to authenticate against other components and services.
