@@ -151,12 +151,18 @@ According to BRSKI the domain registrar, acting as an EST server, is therefore i
 
 To utilize the EST server endpoints on the domain-registrar, the registrar-agent defined in this document will act as client towards the domain registrar.
 
-The registrar-agent will also act as client when communicating with the pledge in responder mode.
-Here, TLS with server-side, certificate-based authentication is not directly applicable, as the pledge only possesses an IDevID certificate, which does not contain a subject alternative name (SAN) for the customer site/domain and does also not contain a TLS server flag.
-This is one reason for relying on higher layer security by using signature wrapped objects for the exchange between the pledge and the registrar agent.
-A further reason is the application on different transports, for which TLS may not be available, like Bluetooth or NFC.
-Instead of using TLS to provide secure transport between the pledge and the registrar-agent, BRSKI-PRM will rely on an additional wrapping signature of the enrollment request by the pledge. For EST {{RFC7030}} the registrar then needs to do additional pre-processing by verifying this signature, which is not present in EST.
+The registrar-agent  also acts as a client when communicating with a pledge in responder mode.
+Here, TLS with server-side, certificate-based authentication is not directly applicable, as the pledge only possesses an IDevID certificate.
+The IDevID does not contain any anchor for which any kind of {{?RFC6125}} validation can be done.
+Second, the registrar-agent may not even have a list of manufacturer trust anchors that would be able to validate the IDevID.
+Finally, IDevID are not typically given Exteded Key Usage (EKU) TLS WWW Server authentication usage.
 
+The inability to effectively do TLS in responder mode is one reason for relying on object security.
+
+A further reason is the application on different transports, for which TLS may not be available, such as Bluetooth and NFC.
+
+So, instead of using TLS to provide secure transport between the pledge and the registrar-agent, BRSKI-PRM relies on an addition wrapped signature of the enrollment request by the pledge.
+For EST {{RFC7030}} the registrar then needs to do additional pre-processing by verifying this signature, which is not present in EST.
 
 
 # Terminology
