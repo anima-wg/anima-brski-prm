@@ -225,10 +225,16 @@ It will contain the PVR sent by the pledge.
 
 ## Supported Environments and Use Case Examples {#sup-env}
 
-BRSKI-PRM is applicable to environments where pledges may have different behavior: pledge-responder-mode, or pledges may have no direct connection to the domain registrar. Either way pledges are expected to be managed by the same registrar.
-This can be motivated by pledges deployed in environments not yet connected to the operational customer site/domain network, e.g., at construction time.
+BRSKI-PRM is applicable to environments where pledges may have different behavior: pledge-responder-mode, or pledges may have no direct connection to the domain registrar.
+Either way pledges are expected to be managed by the same registrar.
+
+This can be motivated by pledges deployed in environments not yet connected to the operational customer site/domain network, e.g., at a construction site where a building is going up.
+
 Another environment relates to the assembly of cabinets, which are prepared in advance to be installed on a customer site/domain.
-As there is no direct connection to the registrar available in these environments the solution specified allows the pledges to act in a server role so they can be triggered for bootstrapping e.g., by a commissioning tool. As BRSKI focuses on the pledge in a client role, initiating the bootstrapping (pledge-initiator-mode), BRSKI-PRM defines pledges acting as a server (pledge-responder-mode) responding to PVR and PER and consumption of the results.
+
+As there is no direct connection to the registrar available in these environments the solution specified allows the pledges to act in a server role so they can be triggered for bootstrapping e.g., by a commissioning tool.
+
+As BRSKI focuses on the pledge in a client role, initiating the bootstrapping (pledge-initiated-mode), BRSKI-PRM defines pledges acting as a server (pledge-responder-mode) responding to PVR and PER and consumption of the results.
 
 The following examples motivate support of BRSKI-PRM to support pledges acting as server as well as pledges with limited connectivity to the registrar.
 
