@@ -530,7 +530,7 @@ The MASA in turn verifies the LDevID(Reg) certificate is included in the PVR (pr
 In addition, the MASA can provide the assertion "agent-proximity" as following.
 If the LDevID(RegAgt) certificate information is contained in the "agent-sign-cert" component of the RVR, the MASA can verify the signature of the agent-signed-data contained in the prior-signed-voucher-request.
 If both can be verified successfully, the MASA can assert "agent-proximity" in the voucher. Otherwise, it may assert "verified" or "logged". 
-Depending on the MASA verification policy, it may also respond with a suitable 4xx or 5xx error HTTP response code as described in section 5.6 of {{RFC8995}}.  
+Depending on the MASA verification policy, it may also respond with a suitable 4xx or 5xx status code as described in section 5.6 of {{RFC8995}}.  
 The voucher can then be supplied via the registrar to the registrar-agent.
 
 {{exchangesfig_uc2_all}} provides an overview of the exchanges detailed in the following sub sections.
@@ -725,10 +725,13 @@ The body of the agent-signed-data contains an ietf-voucher-request-prm:agent-sig
 Upon receiving the voucher-request trigger, the pledge SHALL construct the body of the PVR as defined in {{RFC8995}}. 
 It will contain additional information provided by the registrar-agent as specified in the following.
 This PVR becomes a JSON-in-JWS object as defined in {{I-D.ietf-anima-jws-voucher}}.
-If the pledge is unable to construct the PVR it SHOULD respond with a HTTP error code to the registrar-agent to indicate that it is not able to create the PVR.
-Error codes MAY be used:
-* 400: if the pledge detected an error in the format of the request, e.g. missing field, wrong data types, etc. or it's not valid JSON even though the PVR media type was set to `application/json`.
-* 403: if the pledge detected that parameter from the trigger message to create the PVR were not valid, e.g., the LDevID (Reg) certificate.
+If the pledge is unable to construct the PVR it SHOULD respond with a HTTP error status code to the registrar-agent to indicate that it is not able to create the PVR.
+
+The following client error status codes MAY be used:
+
+* 400 Bad Request: if the pledge detected an error in the format of the request, e.g. missing field, wrong data types, etc. or it's not valid JSON even though the PVR media type was set to `application/json`.
+
+* 403 Forbidden: if the pledge detected that one or more security parameters from the trigger message to create the PVR were not valid, e.g., the LDevID (Reg) certificate.
 
 The header of the PVR SHALL contain the following parameters as defined in {{RFC7515}}:
 
@@ -805,7 +808,7 @@ Note, as the initial enrollment aims to request a generic certificate, no certif
 
 Triggering the pledge to create the enrollment-request is done using HTTP POST on the defined pledge endpoint "/.well-known/brski/pledge-enrollment-request".
 
-The registrar-agent PER trigger Content-Type header is: `application/json` with an empty body.
+The registrar-agent PER trigger Content-Type header is: `application/json` with an empty body by default.
 Note that using HTTP POST allows for an empty body, but also to provide additional data, like CSR attributes or information about the enroll type: "enroll-generic-cert" or "reenroll-generic-cert". 
 The "enroll-generic-cert" case is shown in {{raer}}. 
 
@@ -832,11 +835,17 @@ Note also that {{I-D.ietf-netconf-sztp-csr}} also allows for inclusion of certif
 The pledge SHOULD construct the PER as PKCS#10 object.
 In BRSKI-PRM it MUST sign it additionally with its IDevID credential to provide proof-of-identity bound to the PKCS#10 as described below.
 
-If the pledge is unable to construct the PER it SHOULD respond with HTTP 40 error code to the registrar-agent to indicate that it is not able to create the enrollment-request.
-If the pledge is unable to construct the PER it SHOULD respond with a HTTP error code to the registrar-agent to indicate that it is not able to create the PER.
-Error codes MAY be used:
-* 400: if the pledge detected an error in the format of the request or it's not valid JSON even though the PER media type was set to `application/json`.
-* 403: if the pledge detected that parameter (if provided) from the trigger message to create the PER were not valid.
+If the pledge is unable to construct the PER it SHOULD respond with a HTTP 4xx/5xx status code to the registrar-agent to indicate that it is not able to create the PER.
+
+The following 4xx client error status codes MAY be used:
+
+* 400 Bad Request: if the pledge detected an error in the format of the request or detected invalid JSON even though the PER media type was set to `application/json`.
+
+* 403 Forbidden: if the pledge detected that one or more security parameters (if provided) from the trigger message to create the PER are not valid.
+
+* 406 Not Acceptable: if the request's Accept header indicates a type that is unknown or unsupported. For example, a type other than `application/jose+json`.
+
+* 415 Unsupported Media Type: if the request's Content-Type header indicates a type that is unknown or unsupported. For example, a type other than 'application/json'.
 
 A successful enrollment will result in a generic LDevID certificate for the pledge in the new domain, which can be used to request further (application specific) LDevID certificates if necessary for its operation. 
 The registrar-agent SHALL use the endpoints specified in this document. 
@@ -982,8 +991,8 @@ In addition, the registrar shall verify the following parameters from the PVR:
   This requires, that the registrar can fetch the LDevID(RegAgt) certificate data (including intermediate CA certificates if existent) based on the SKID.
 
 
-If the validation fails the registrar SHOULD respond with HTTP 404 error code to the registrar-agent.
-HTTP 406 error code SHOULD be used if the format of PVR is unknown.
+If the validation fails the registrar SHOULD respond with HTTP 404 Not Found status code to the registrar-agent.
+HTTP 406 Not Acceptable status code SHOULD be used if the Content-Type indicated by the Accept header is unknown or unsupported.
 
 If the validation succeeds, the registrar SHOULD accept the PVR to join the domain as defined in section 5.3 of {{RFC8995}}.
 The registrar then establishes a TLS connection to MASA as described in section 5.4 of {{RFC8995}} to obtain a voucher for the pledge.
@@ -1082,11 +1091,11 @@ In addition, the following processing SHALL be performed for PVR data contained 
   As the "agent-sign-cert" field is defined as array (x5c), it can handle multiple certificates. 
   
 
-If validation fails, the MASA SHOULD respond with an HTTP error code to the registrar.
-The HTTP error codes are kept the same as defined in section 5.6 of {{RFC8995}}, <!-- XXX -->and comprise the codes: 403, 404, 406, and 415.
+If validation fails, the MASA SHOULD respond with an HTTP 4xx client error status code to the registrar.
+The HTTP error status codes are kept the same as defined in section 5.6 of {{RFC8995}}, <!-- XXX -->and comprise the codes: 403, 404, 406, and 415.
 
 The expected voucher-response format for the pledge-responder-mode the `application/voucher-jws+json` as defined in {{I-D.ietf-anima-jws-voucher}} is applied.
-If the MASA detects that the Accept header of the PVR does not match the `application/voucher-jws+json` it SHOULD respond with the HTTP error code 406 as the pledge will not be able to parse the response.
+If the MASA detects that the Accept header of the PVR does not match the `application/voucher-jws+json` it SHOULD respond with the HTTP status code 406 Not Acceptable as the pledge will not be able to parse the response.
 The voucher syntax is described in detail by {{RFC8366}}. {{MASA-vr}} shows an example of the contents of a voucher.
 
 ~~~~
@@ -1182,7 +1191,7 @@ Note, the registrar is already aware that the bootstrapping is performed in a pl
   
 The registrar-agent SHALL send the PER to the registrar by HTTP POST to the endpoint: "/.well-known/brski/requestenroll"
 
-The registrar SHOULD respond with an HTTP 200 in the success case or fail with HTTP 4xx/5xx codes as defined by the HTTP standard.
+The registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
 
 A successful interaction with the domain CA will result in a pledge LDevID certificate, which is then forwarded by the registrar to the registrar-agent using the Content-Type header: `application/pkcs7-mime`.
 
@@ -1324,8 +1333,9 @@ The supply CA certificates message has the Content-Type `application/jose+json` 
 The CA certificates are provided as base64 encoded x5b.
 The pledge SHALL install the received CA certificates in its trust anchor database after successful verification of the registrar's signature.  
  
-If validation of the wrapping signature fails, the pledge SHOULD respond with the HTTP 403 error code.
-The HTTP 406 error code SHOULD be used, if the response is in an unknown format. 
+If validation of the wrapping signature or another security check fails, the pledge SHOULD respond with the HTTP 403 Forbidden status code.
+The HTTP 415 Unsupported Media Type status code SHOULD be used, if the Content-Type of the request is in an unknown or unsupported format. 
+The HTTP 400 Bad Request status code SHOULD be used, if the pledge detects errors in the encoding of the payload. 
 
 The registrar-agent SHALL send the enroll-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-enrollment".
 
@@ -1410,7 +1420,7 @@ The registrar-agent sends the pledge voucher status object without modification 
 
 The registrar SHALL verify the signature of the pledge voucher status object and validate that it belongs to an accepted device in his domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher status object.
 
-According to {{RFC8995}} section 5.7, the registrar SHOULD respond with an HTTP 200 in the success case or fail with HTTP 4xx/5xx codes as defined by the HTTP standard.
+According to {{RFC8995}} section 5.7, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
 Within the server logs the server SHOULD capture this telemetry information.
 
@@ -1428,7 +1438,7 @@ The registrar SHOULD log this event.
 In case the enroll status object indicates a failure, the pledge was unable to verify the received LDevID certificate and therefore signed the enroll status objects with its IDevID credential.
 Note that the verification of a signature of the object is a deviation from the described handling in section 5.9.4 of {{RFC8995}}.
 
-According to {{RFC8995}} section 5.9.4, the registrar SHOULD respond with an HTTP 200 in the success case or fail with HTTP 4xx/5xx codes as defined by the HTTP standard.
+According to {{RFC8995}} section 5.9.4, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
 Based on the failure case the registrar MAY decide that for security reasons the pledge is not allowed to reside in the domain. In this case the registrar MUST revoke the certificate.
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
 Within the server log the registrar SHOULD capture this telemetry information.
@@ -1437,12 +1447,12 @@ Within the server log the registrar SHOULD capture this telemetry information.
 
 The following assumes that a registrar-agent may need to query the status of a pledge. 
 This information may be useful to solve errors, when the pledge was not able to connect to the target domain during the bootstrapping.
-The pledge MAY provide a dedicated endpoint to supply status-requests.  
+The pledge MAY provide a dedicated endpoint to accept status-requests.  
 
 Preconditions:
 
 * Registrar-agent: possesses LDevID (RegAgt), list of serial numbers of pledges to be queried and a list of corresponding manufacturer trust anchors to be able to verify signatures with the IDevID credential.  
-* Pledge: may already possess domain credentials and LDevID(Pledge).
+* Pledge: may already possess domain credentials and LDevID(Pledge), or may not possess one or both of these.
 
 
 ~~~~
@@ -1465,10 +1475,10 @@ The registrar-agent Content-Type header for the pledge-status request is: `appli
 It contains information on the requested status-type, the time and date the request is created, and the product serial-number of the pledge contacted as shown in {{stat_req_def}}. 
 The pledge-status request is signed by registrar-agent using the LDevID(RegAgt) credential. 
 
-The following Concise Data Definition Language (CDDL) {{RFC8610}} explains the structure of the format for the pledge-status request. It is defined following the status telemetry definitions in BRSKI {{RFC8995}}.
+The following Concise Data Definition Language (CDDL) {{RFC8610}} explains the structure of the format for the pledge-status request. It is defined based on the status telemetry definitions in BRSKI {{RFC8995}}.
 Consequently, format and semantics of pledge-status objects described below are for version 1.  
 The version field is included to permit significant changes to the pledge-status request and response objects in the future.  
-A pledge or a registrar-agent that receives a plegde-status request object with a version larger than it knows about SHOULD log the contents and alert a human. 
+A pledge or a registrar-agent that receives a pledge-status request object with a version larger than it knows about SHOULD log the contents and alert a human. 
 
 
 ~~~~
@@ -1511,7 +1521,7 @@ This is out of scope for this specification.
 ~~~~
 {: #stat_req title='Example of registrar-agent request of pledge-status using status-type bootstrapping' artwork-align="left"}
 
-If the pledge receives the plegde-status request with status-type "bootstrapping" it SHALL react with a status response message based on the telemetry information described in section {{exchanges_uc2_3}}.
+If the pledge receives the pledge-status request with status-type "bootstrapping" it SHALL react with a status response message based on the telemetry information described in section {{exchanges_uc2_3}}.
 
 The pledge-status response Content-Type header is `application/jose+json`. 
 
@@ -1567,8 +1577,10 @@ The pledge-status response message is signed with IDevID or LDevID, depending on
 In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor. 
 It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.
 In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchore) and can therefore validate the signature of the registrar-agent. 
-If validation of the JWS signature fails, the pledge SHOULD respond with the HTTP 403 error code.
-The HTTP 406 error code SHOULD be used, if the response is in an unknown format. 
+If validation of the JWS signature fails, the pledge SHOULD respond with the HTTP 403 Forbidden status code.
+The HTTP 406 Not Acceptable status code SHOULD be used, if the Accept header in the request indicates an unknown or unsupported format. 
+The HTTP 415 Unsupported Media Type status code SHOULD be used, if the Content-Type of the request is an unknown or unsupported format. 
+The HTTP 400 Bad Request status code SHOULD be used, if the Accept/Content-Type headers are correct but nevertheless the status-request cannot be correctly parsed.
 
 
 # Artifacts
