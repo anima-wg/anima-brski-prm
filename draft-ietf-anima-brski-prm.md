@@ -288,17 +288,19 @@ This presents a rendezvous problem: the pledge is unavailable for certain period
 Based on the intended target environment described in {{sup-env}} and the application examples described in {{sup-env}} the following requirements are derived to support bootstrapping of pledges in responder mode (acting as server).
 
 * To facilitate the communication between a pledge in responder mode and registrar, additional functionality is needed either on the registrar (if the registrar needs to interact with pledge in responder mode directly) or as a stand-alone component.
-  This component acts as an agent of the registrar to trigger the pledge to generate requests for voucher and enrollment. These requests are than to be provided by the so called registrar-agent to the registrar.
-  This requires the definition of endpoints on the pledge.
+  This new component, the registrar-agent, acts as an agent of the registrar to trigger the pledge to generate requests for voucher and enrollment. These requests are than to be provided by the  registrar-agent to the registrar.
+  This requires the definition of endpoints on the pledge to interact with.
 
-* The communication between the registrar-agent and the pledge MUST not rely on transport layer security (TLS) to support also other technology stacks (e.g., BTLE).
-  Therefore authenticated self-contained objects are required.
+* The communication between the registrar-agent and the pledge MUST not rely on transport layer security (TLS) because the pledge does not have a that can easily be verified by {{RFC6125}} methods.
+It is also more difficult to use TLS over other technology stacks (e.g., BTLE).
 
-* The registrar-agent must be authenticated by the registrar as a component, acting on behalf of the registrar.
-  In addition the registrar must be able to verify, which registrar-agent was in direct contact with the pledge.
+* The use authenticated self-contained objects provides a work around for both the TLS challenges, and the technology stack challenge.
 
-* The pledge cannot get the assertion with value "proximity" in the voucher, as it was not in direct contact with the registrar for bootstrapping.
-  Therefore the "agent-proximity" assertion value is necessary for distinguishing assertions the MASA can state.
+* By contrast, the registrar-agent can be authenticated by the registrar as a component, acting on behalf of the registrar.
+  In addition the registrar must be able to verify which registrar-agent was in direct contact with the pledge.
+
+* It would be inaccurate for the voucher request and voucher response to use an assertion with  value "proximity" in the voucher, as the pledge was not in direct contact with the registrar for bootstrapping.
+  Therefore a new "agent-proximity" assertion value is necessary for distinguishing assertions the MASA can state.
 
 At least the following properties are required for the voucher request and response processing as well as the enrollment:
 
