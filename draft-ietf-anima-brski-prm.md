@@ -356,26 +356,26 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 
 
 
-~~~~
-                            +------------------------+
-   +---- Drop Ship ---------| Vendor Service         |
-   |                        +------------------------+
-   |                        | M anufacturer|         |
-   |                        | A uthorized  |Ownership|
-   |                        | S igning     |Tracker  |
-   |                        | A uthority   |         |
-   |                        +--------------+---------+
+~~~~ aasvg
+                             +------------------------+
+   +---- Drop Ship ----------| Vendor Service         |
+   |                         +------------------------+
+   |                         | M anufacturer|         |
+   |                         | A uthorized  |Ownership|
+   |                         | S igning     |Tracker  |
+   |                         | A uthority   |         |
+   |                         +--------------+---------+
    |                                       ^
    |                                       |  BRSKI-
    |    BRSKI-PRM                          |   MASA
    |          .............................|.........
-   V          .                            |        .
-+-------+     .  +-----------+       +-----v-----+  .
+   V          .                            v        .
++-------+     .  +-----------+       +-----------+  .
 |       |     .  |           |       |           |  .
-|Pledge |     .  | Registrar |       | Domain    |  .
-|       |     .  | Agent     |       | Registrar |  .
-|       <-------->...........<-------> (PKI RA)  |  .
-|       |     .  | LDevID    |       |           |  .
+|Pledge |     .  | Registrar | BRSKI | Domain    |  .
+|       |     .  | Agent     |  EST  | Registrar |  .
+|       |<------>|           |<=====>| (PKI RA)  |  .
+|       |     .  |     LDevID|       |           |  .
 |       |     .  +-----------+       +-----+-----+  .
 |IDevID |     .                            |        .
 |       |     .         +------------------+-----+  .
