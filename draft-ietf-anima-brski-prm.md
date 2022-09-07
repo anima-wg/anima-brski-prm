@@ -316,17 +316,18 @@ Solution examples based on existing technology are provided with the focus on ex
 * Certification requests are data structures containing the information from a requester for a CA to create a certificate.
   The certification request format in BRSKI is PKCS#10 {{RFC2986}}.
   In PKCS#10, the structure is signed to ensure integrity protection and proof of possession of the private key of the requester that corresponds to the contained public key.
-  In the application examples, this POP alone is not sufficient. POI is also required for the certification request and therefore needs to be additionally bound to the existing credential of the pledge (IDevID).
+  In the application examples, this POP alone is not sufficient.
+  A Proof of Identity (POI) is also required for the certification request and therefore needs to be additionally bound to the existing credential of the pledge (IDevID).
   This binding supports the authorization decision for the certification request through a proof of identity (POI).
   The binding of data origin authentication or POI to the certification request may be provided directly by with the certification request.
-  While BRSKI uses the binding to TLS, BRSKI-PRM aims at an additional signature of the PKCS#10  using existing credentials on the pledge (IDevID). This ensures independence of the selected transport.
+  While BRSKI uses the binding to TLS, BRSKI-PRM aims at an additional signature of the PKCS#10  using existing credentials on the pledge (IDevID). This allows the process to be independent of the selected transport.
 
 
 # Architectural Overview and Communication Exchanges {#architecture}
 
 For BRSKI with pledge in responder mode, the base system architecture defined in BRSKI {{RFC8995}} is enhanced to facilitate the new use cases.
 The pledge-responder-mode allows delegated bootstrapping using a registrar-agent instead of a direct connection between the pledge and the domain registrar.
-The communication model between registrar-agent and pledge in this document assumes that the pledge is acting as server and responds to requests.
+As indicated above, the communication model between registrar-agent and pledge assumes that the pledge acts as server and responds to requests.
 
 Necessary enhancements to support authenticated self-contained objects for certificate enrollment are kept at a minimum to enable reuse of already defined architecture elements and interactions.
 
