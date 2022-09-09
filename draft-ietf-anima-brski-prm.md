@@ -93,10 +93,6 @@ informative:
     date: April 2022
     format:
       PNG: https://raw.githubusercontent.com/anima-wg/anima-brski-prm/main/pics/brski_prm_overview.png
-  CABF:
-    title: CA Browser Forum
-    format:
-      uri: https://cabforum.org/
   onpath:
     target: "https://mailarchive.ietf.org/arch/msg/saag/m1r9uo4xYznOcf85Eyk0Rhut598/"
     title: "can an on-path attacker drop traffic?"
@@ -246,7 +242,7 @@ In such a case, limited access to a domain registrar may be allowed in carefully
 ### Less Operational Security in the Target-Domain
 
 The registration authority (RA) performing the authorization of a certificate request is a critical PKI component and therefore requires higher operational security than other components utilizing the issued certificates .
-CAs may also require higher security in the registration procedures. Especially the CA/Browser {{CABF}} forum increases the security requirements in the certificate issuance procedures for publicly trusted certificates.
+CAs may also require higher security in the registration procedures. 
 There may be situations in which the customer site/domain does not offer enough security to operate a RA/CA and therefore this service is transferred to a backend that offers a higher level of operational security.
 
 
@@ -938,8 +934,9 @@ Preconditions:
 * Registrar: possesses the IDevID CA certificate of the pledge vendor/manufacturer and an it's own LDevID(Reg) credentials of the site domain.
 
 * MASA: possesses it's own vendor/manufacturer credentials (voucher signing key, TLS server certificate) related to pledges IDevID and MAY possess the site-specific domain CA certificate. 
-  The latter is necessary to ensure that the MASA is able to verify the RVR. 
-  How the MASA will get the domain CA certificate is out of scope of this document.
+  The latter is only a necessary precondition if the MASA needs to verify that the domain of the Registrar is a-priori authorized to enroll a particular pledge, or a particular type of pledge. 
+  In such case, how the MASA will obtain the domain CA certificate is out of scope of this document. 
+  In other cases, a MASA may allow the pledge to enroll into an anonymous and/or yet-unknown domain and then the a-priori possession of the domain CA certificate is not needed.
 
 ~~~~
 +-----------+    +-----------+   +--------+   +---------+
@@ -1968,7 +1965,7 @@ TODO: other threads?
 
 ## Denial of Service (DoS) Attack on Pledge
 
-Disrupting the pledge behaviour by a DoS attack may prevent the bootstrapping of the pledge to a new domain. 
+Disrupting the pledge behavior by a DoS attack may prevent the bootstrapping of the pledge to a new domain. 
 
 A DoS attack with a faked registrar-agent may block the bootstrapping of the pledge due to state creation on the pledge (only vouchered). Mitigation may be that the pledge does not create a state if the bootstrapping is not finished after certain time.
 
@@ -2359,7 +2356,9 @@ Proof of Concept Code available
 
 From IETF draft 04 -> IETF draft 05:
 
-* Enhanced error codes in section 5.5.1, issue #39
+* Added explanation of MASA requiring domain CA cert in section 5.5.1 and section 5.5.2, issue #36
+* Removed reference to CAB Forum as not needed for BRSKI-PRM specifically, issue #65
+* Enhanced error codes in section 5.5.1, issue #39, #64
 * Enhanced security considerations and privacy considerations, issue #59
 * Reworked terminology of "enrollment object", "certification object", "enrollment request object", etc., issue #27
 * Reworked all message representations to align with encoding

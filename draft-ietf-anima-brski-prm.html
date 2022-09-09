@@ -1194,11 +1194,11 @@ li > p:last-of-type {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">BRSKI-PRM</td>
-<td class="right">August 2022</td>
+<td class="right">September 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 3 March 2023</td>
+<td class="center">Expires 13 March 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1211,12 +1211,12 @@ li > p:last-of-type {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-05</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-08-30" class="published">30 August 2022</time>
+<time datetime="2022-09-09" class="published">9 September 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-03-03">3 March 2023</time></dd>
+<dd class="expires"><time datetime="2023-03-13">13 March 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1276,7 +1276,7 @@ The defined approach is agnostic regarding the utilized enrollment protocol, dep
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 3 March 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 13 March 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1651,7 +1651,7 @@ In such a case, limited access to a domain registrar may be allowed in carefully
 <a href="#section-3.1.3" class="section-number selfRef">3.1.3. </a><a href="#name-less-operational-security-i" class="section-name selfRef">Less Operational Security in the Target-Domain</a>
           </h4>
 <p id="section-3.1.3-1">The registration authority (RA) performing the authorization of a certificate request is a critical PKI component and therefore requires higher operational security than other components utilizing the issued certificates .
-CAs may also require higher security in the registration procedures. Especially the CA/Browser <span>[<a href="#CABF" class="xref">CABF</a>]</span> forum increases the security requirements in the certificate issuance procedures for publicly trusted certificates.
+CAs may also require higher security in the registration procedures. 
 There may be situations in which the customer site/domain does not offer enough security to operate a RA/CA and therefore this service is transferred to a backend that offers a higher level of operational security.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1987,7 +1987,7 @@ The registrar includes the LDevID(RegAgt) certificate information into the RVR i
 In addition, the MASA can provide the assertion "agent-proximity" as following.
 If the LDevID(RegAgt) certificate information is contained in the "agent-sign-cert" component of the RVR, the MASA can verify the signature of the agent-signed-data contained in the prior-signed-voucher-request.
 If both can be verified successfully, the MASA can assert "agent-proximity" in the voucher. Otherwise, it may assert "verified" or "logged". 
-Depending on the MASA verification policy, it may also respond with a suitable 4xx or 5xx error HTTP response code as described in section 5.6 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.<br>
+Depending on the MASA verification policy, it may also respond with a suitable 4xx or 5xx status code as described in section 5.6 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.<br>
 The voucher can then be supplied via the registrar to the registrar-agent.<a href="#section-5.5-3" class="pilcrow">¶</a></p>
 <p id="section-5.5-4"><a href="#exchangesfig_uc2_all" class="xref">Figure 3</a> provides an overview of the exchanges detailed in the following sub sections.<a href="#section-5.5-4" class="pilcrow">¶</a></p>
 <span id="name-overview-pledge-responder-m"></span><div id="exchangesfig_uc2_all">
@@ -2218,49 +2218,49 @@ in JSON syntax
 <p id="section-5.5.1-19">Upon receiving the voucher-request trigger, the pledge <span class="bcp14">SHALL</span> construct the body of the PVR as defined in <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>. 
 It will contain additional information provided by the registrar-agent as specified in the following.
 This PVR becomes a JSON-in-JWS object as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="xref">I-D.ietf-anima-jws-voucher</a>]</span>.
-If the pledge is unable to construct the PVR it <span class="bcp14">SHOULD</span> respond with a HTTP error code to the registrar-agent to indicate that it is not able to create the PVR.
-Error codes <span class="bcp14">MAY</span> be used:<a href="#section-5.5.1-19" class="pilcrow">¶</a></p>
+If the pledge is unable to construct the PVR it <span class="bcp14">SHOULD</span> respond with a HTTP error status code to the registrar-agent to indicate that it is not able to create the PVR.<a href="#section-5.5.1-19" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-20">The following client error status codes <span class="bcp14">MAY</span> be used:<a href="#section-5.5.1-20" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.5.1-20.1">400: if the pledge detected an error in the format of the request, e.g. missing field, wrong data types, etc. or it's not valid JSON even though the PVR media type was set to <code>application/json</code>.<a href="#section-5.5.1-20.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.5.1-21.1">400 Bad Request: if the pledge detected an error in the format of the request, e.g. missing field, wrong data types, etc. or it's not valid JSON even though the PVR media type was set to <code>application/json</code>.<a href="#section-5.5.1-21.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.5.1-20.2">403: if the pledge detected that parameter from the trigger message to create the PVR were not valid, e.g., the LDevID (Reg) certificate.<a href="#section-5.5.1-20.2" class="pilcrow">¶</a>
+            <li class="normal" id="section-5.5.1-21.2">403 Forbidden: if the pledge detected that one or more security parameters from the trigger message to create the PVR were not valid, e.g., the LDevID (Reg) certificate.<a href="#section-5.5.1-21.2" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-5.5.1-21">The header of the PVR <span class="bcp14">SHALL</span> contain the following parameters as defined in <span>[<a href="#RFC7515" class="xref">RFC7515</a>]</span>:<a href="#section-5.5.1-21" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-22">The header of the PVR <span class="bcp14">SHALL</span> contain the following parameters as defined in <span>[<a href="#RFC7515" class="xref">RFC7515</a>]</span>:<a href="#section-5.5.1-22" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.5.1-22.1">alg: algorithm used for creating the object signature.<a href="#section-5.5.1-22.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.5.1-23.1">alg: algorithm used for creating the object signature.<a href="#section-5.5.1-23.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.5.1-22.2">x5c: contains the base64-encoded pledge IDevID certificate.
-It may optionally contain the certificate chain for this certificate.<a href="#section-5.5.1-22.2" class="pilcrow">¶</a>
+            <li class="normal" id="section-5.5.1-23.2">x5c: contains the base64-encoded pledge IDevID certificate.
+It may optionally contain the certificate chain for this certificate.<a href="#section-5.5.1-23.2" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-5.5.1-23">The payload of the PVR <span class="bcp14">MUST</span> contain the following parameters as part of the ietf-voucher-request-prm:voucher as defined in <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>:<a href="#section-5.5.1-23" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-24">The payload of the PVR <span class="bcp14">MUST</span> contain the following parameters as part of the ietf-voucher-request-prm:voucher as defined in <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>:<a href="#section-5.5.1-24" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.5.1-24.1">created-on: <span class="bcp14">SHALL</span> contain the current date and time in yang:date-and-time format.
-If the pledge does not have synchronized the time, it <span class="bcp14">SHALL</span> use the created-on time from the agent-signed-data, received in the trigger to create a PVR.<a href="#section-5.5.1-24.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.5.1-25.1">created-on: <span class="bcp14">SHALL</span> contain the current date and time in yang:date-and-time format.
+If the pledge does not have synchronized the time, it <span class="bcp14">SHALL</span> use the created-on time from the agent-signed-data, received in the trigger to create a PVR.<a href="#section-5.5.1-25.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.5.1-24.2">nonce: <span class="bcp14">SHALL</span> contain a cryptographically strong random or pseudo-random number.<a href="#section-5.5.1-24.2" class="pilcrow">¶</a>
+            <li class="normal" id="section-5.5.1-25.2">nonce: <span class="bcp14">SHALL</span> contain a cryptographically strong random or pseudo-random number.<a href="#section-5.5.1-25.2" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.5.1-24.3">serial-number: <span class="bcp14">SHALL</span> contain the pledge product-serial-number as X520SerialNumber.<a href="#section-5.5.1-24.3" class="pilcrow">¶</a>
+            <li class="normal" id="section-5.5.1-25.3">serial-number: <span class="bcp14">SHALL</span> contain the pledge product-serial-number as X520SerialNumber.<a href="#section-5.5.1-25.3" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.5.1-24.4">assertion: <span class="bcp14">SHALL</span> contain the requested voucher assertion "agent-proximity".<a href="#section-5.5.1-24.4" class="pilcrow">¶</a>
+            <li class="normal" id="section-5.5.1-25.4">assertion: <span class="bcp14">SHALL</span> contain the requested voucher assertion "agent-proximity".<a href="#section-5.5.1-25.4" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-5.5.1-25">The ietf-voucher-request:voucher is enhanced with additional parameters:<a href="#section-5.5.1-25" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-26">The ietf-voucher-request:voucher is enhanced with additional parameters:<a href="#section-5.5.1-26" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.5.1-26.1">agent-provided-proximity-registrar-cert: <span class="bcp14">MUST</span> be included and contains the base64-encoded LDevID(Reg) certificate (provided as trigger parameter by the registrar-agent).<a href="#section-5.5.1-26.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.5.1-27.1">agent-provided-proximity-registrar-cert: <span class="bcp14">MUST</span> be included and contains the base64-encoded LDevID(Reg) certificate (provided as trigger parameter by the registrar-agent).<a href="#section-5.5.1-27.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.5.1-26.2">agent-signed-data: <span class="bcp14">MUST</span> contain the base64-encoded agent-signed-data (as defined in <a href="#asd" class="xref">Figure 6</a>) and provided as trigger parameter.<a href="#section-5.5.1-26.2" class="pilcrow">¶</a>
+            <li class="normal" id="section-5.5.1-27.2">agent-signed-data: <span class="bcp14">MUST</span> contain the base64-encoded agent-signed-data (as defined in <a href="#asd" class="xref">Figure 6</a>) and provided as trigger parameter.<a href="#section-5.5.1-27.2" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.5.1-26.3">agent-sign-cert: <span class="bcp14">MAY</span> contain the certificate or certificate chain of the registrar-agent as array of base64encoded certificate information.
-It starts from the base64-encoded LDevID(RegAgt) certificate optionally followed by the issuing CA certificate and potential further certificates. If supported, it <span class="bcp14">MUST</span> at least contain the LDevID(RegAgt) certificate provided as trigger parameter.<a href="#section-5.5.1-26.3" class="pilcrow">¶</a>
+            <li class="normal" id="section-5.5.1-27.3">agent-sign-cert: <span class="bcp14">MAY</span> contain the certificate or certificate chain of the registrar-agent as array of base64encoded certificate information.
+It starts from the base64-encoded LDevID(RegAgt) certificate optionally followed by the issuing CA certificate and potential further certificates. If supported, it <span class="bcp14">MUST</span> at least contain the LDevID(RegAgt) certificate provided as trigger parameter.<a href="#section-5.5.1-27.3" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-5.5.1-27">The enhancements of the YANG module for the ietf-voucher-request with these new leafs are defined in <a href="#voucher-request-prm-yang" class="xref">Section 6.1</a>.<a href="#section-5.5.1-27" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-28">The PVR is signed using the pledge's IDevID credential contained as x5c parameter of the JOSE header.<a href="#section-5.5.1-28" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-28">The enhancements of the YANG module for the ietf-voucher-request with these new leafs are defined in <a href="#voucher-request-prm-yang" class="xref">Section 6.1</a>.<a href="#section-5.5.1-28" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-29">The PVR is signed using the pledge's IDevID credential contained as x5c parameter of the JOSE header.<a href="#section-5.5.1-29" class="pilcrow">¶</a></p>
 <span id="name-representation-of-pvr"></span><div id="pvr">
 <figure id="figure-7">
-            <div class="alignLeft art-text artwork" id="section-5.5.1-29.1">
+            <div class="alignLeft art-text artwork" id="section-5.5.1-30.1">
 <pre>
 # The PVR in general JWS serialization syntax
 {
@@ -2300,20 +2300,20 @@ It starts from the base64-encoded LDevID(RegAgt) certificate optionally followed
 <a href="#name-representation-of-pvr" class="selfRef">Representation of PVR</a>
             </figcaption></figure>
 </div>
-<p id="section-5.5.1-30">The PVR Content-Type is defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="xref">I-D.ietf-anima-jws-voucher</a>]</span> as <code>application/voucher-jws+json</code>.<a href="#section-5.5.1-30" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-31">The pledge <span class="bcp14">SHOULD</span> include this Content-Type header field indicating the included media type for the voucher response.
+<p id="section-5.5.1-31">The PVR Content-Type is defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="xref">I-D.ietf-anima-jws-voucher</a>]</span> as <code>application/voucher-jws+json</code>.<a href="#section-5.5.1-31" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-32">The pledge <span class="bcp14">SHOULD</span> include this Content-Type header field indicating the included media type for the voucher response.
 Note that this is also an indication regarding the acceptable format of the voucher response.
-This format is included by the registrar as described in <a href="#exchanges_uc2_2" class="xref">Section 5.5.2</a>.<a href="#section-5.5.1-31" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-32">Once the registrar-agent has received the PVR it can trigger the pledge to generate a PER.
+This format is included by the registrar as described in <a href="#exchanges_uc2_2" class="xref">Section 5.5.2</a>.<a href="#section-5.5.1-32" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-33">Once the registrar-agent has received the PVR it can trigger the pledge to generate a PER.
 As in BRSKI the PER contains a PKCS#10, but additionally signed using the pledge's IDevID.
-Note, as the initial enrollment aims to request a generic certificate, no certificate attributes are provided to the pledge.<a href="#section-5.5.1-32" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-33">Triggering the pledge to create the enrollment-request is done using HTTP POST on the defined pledge endpoint "/.well-known/brski/pledge-enrollment-request".<a href="#section-5.5.1-33" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-34">The registrar-agent PER trigger Content-Type header is: <code>application/json</code> with an empty body.
+Note, as the initial enrollment aims to request a generic certificate, no certificate attributes are provided to the pledge.<a href="#section-5.5.1-33" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-34">Triggering the pledge to create the enrollment-request is done using HTTP POST on the defined pledge endpoint "/.well-known/brski/pledge-enrollment-request".<a href="#section-5.5.1-34" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-35">The registrar-agent PER trigger Content-Type header is: <code>application/json</code> with an empty body by default.
 Note that using HTTP POST allows for an empty body, but also to provide additional data, like CSR attributes or information about the enroll type: "enroll-generic-cert" or "reenroll-generic-cert". 
-The "enroll-generic-cert" case is shown in <a href="#raer" class="xref">Figure 8</a>.<a href="#section-5.5.1-34" class="pilcrow">¶</a></p>
+The "enroll-generic-cert" case is shown in <a href="#raer" class="xref">Figure 8</a>.<a href="#section-5.5.1-35" class="pilcrow">¶</a></p>
 <span id="name-example-of-trigger-to-creat"></span><div id="raer">
 <figure id="figure-8">
-            <div class="alignLeft art-text artwork" id="section-5.5.1-35.1">
+            <div class="alignLeft art-text artwork" id="section-5.5.1-36.1">
 <pre>
 {
   "enroll-type" : "enroll-generic-cert"
@@ -2324,47 +2324,50 @@ The "enroll-generic-cert" case is shown in <a href="#raer" class="xref">Figure 8
 <a href="#name-example-of-trigger-to-creat" class="selfRef">Example of trigger to create a PER</a>
             </figcaption></figure>
 </div>
-<p id="section-5.5.1-36">In the following the enrollment is described as initial enrollment with an empty HTTP POST body.<a href="#section-5.5.1-36" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-37">Upon receiving the enrollment-trigger, the pledge <span class="bcp14">SHALL</span> construct the PER as authenticated self-contained object.
+<p id="section-5.5.1-37">In the following the enrollment is described as initial enrollment with an empty HTTP POST body.<a href="#section-5.5.1-37" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-38">Upon receiving the enrollment-trigger, the pledge <span class="bcp14">SHALL</span> construct the PER as authenticated self-contained object.
 The CSR already assures proof of possession of the private key corresponding to the contained public key.
 In addition, based on the additional signature using the IDevID, proof of identity is provided.
-Here, a JOSE object is being created in which the body utilizes the YANG module ietf-ztp-types with the grouping for csr-grouping for the CSR as defined in <span>[<a href="#I-D.ietf-netconf-sztp-csr" class="xref">I-D.ietf-netconf-sztp-csr</a>]</span>.<a href="#section-5.5.1-37" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-38">Depending on the capability of the pledge, it constructs the enrollment request (PER) as plain PKCS#10.
+Here, a JOSE object is being created in which the body utilizes the YANG module ietf-ztp-types with the grouping for csr-grouping for the CSR as defined in <span>[<a href="#I-D.ietf-netconf-sztp-csr" class="xref">I-D.ietf-netconf-sztp-csr</a>]</span>.<a href="#section-5.5.1-38" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-39">Depending on the capability of the pledge, it constructs the enrollment request (PER) as plain PKCS#10.
 Note that the focus in this use case is placed on PKCS#10 as PKCS#10 can be transmitted in different enrollment protocols in the infrastructure like EST, CMP, CMS, and SCEP. 
 If the pledge is already implementing an enrollment protocol, it may leverage that functionality for the creation of the CSR.
-Note also that <span>[<a href="#I-D.ietf-netconf-sztp-csr" class="xref">I-D.ietf-netconf-sztp-csr</a>]</span> also allows for inclusion of certification requests in different formats such as CMP or CMC.<a href="#section-5.5.1-38" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-39">The pledge <span class="bcp14">SHOULD</span> construct the PER as PKCS#10.
-In BRSKI-PRM it <span class="bcp14">MUST</span> sign it additionally with its IDevID credential to provide proof-of-identity bound to the PKCS#10 as described below.<a href="#section-5.5.1-39" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-40">If the pledge is unable to construct the PER it <span class="bcp14">SHOULD</span> respond with HTTP 40 error code to the registrar-agent to indicate that it is not able to create the enrollment-request.
-If the pledge is unable to construct the PER it <span class="bcp14">SHOULD</span> respond with a HTTP error code to the registrar-agent to indicate that it is not able to create the PER.
-Error codes <span class="bcp14">MAY</span> be used:<a href="#section-5.5.1-40" class="pilcrow">¶</a></p>
+Note also that <span>[<a href="#I-D.ietf-netconf-sztp-csr" class="xref">I-D.ietf-netconf-sztp-csr</a>]</span> also allows for inclusion of certification requests in different formats such as CMP or CMC.<a href="#section-5.5.1-39" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-40">The pledge <span class="bcp14">SHOULD</span> construct the PER as PKCS#10.
+In BRSKI-PRM it <span class="bcp14">MUST</span> sign it additionally with its IDevID credential to provide proof-of-identity bound to the PKCS#10 as described below.<a href="#section-5.5.1-40" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-41">If the pledge is unable to construct the PER it <span class="bcp14">SHOULD</span> respond with a HTTP 4xx/5xx status code to the registrar-agent to indicate that it is not able to create the PER.<a href="#section-5.5.1-41" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-42">The following 4xx client error status codes <span class="bcp14">MAY</span> be used:<a href="#section-5.5.1-42" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.5.1-41.1">400: if the pledge detected an error in the format of the request or it's not valid JSON even though the PER media type was set to <code>application/json</code>.<a href="#section-5.5.1-41.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.5.1-43.1">400 Bad Request: if the pledge detected an error in the format of the request or detected invalid JSON even though the PER media type was set to <code>application/json</code>.<a href="#section-5.5.1-43.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.5.1-41.2">403: if the pledge detected that parameter (if provided) from the trigger message to create the PER were not valid.<a href="#section-5.5.1-41.2" class="pilcrow">¶</a>
+            <li class="normal" id="section-5.5.1-43.2">403 Forbidden: if the pledge detected that one or more security parameters (if provided) from the trigger message to create the PER are not valid.<a href="#section-5.5.1-43.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-5.5.1-43.3">406 Not Acceptable: if the request's Accept header indicates a type that is unknown or unsupported. For example, a type other than <code>application/jose+json</code>.<a href="#section-5.5.1-43.3" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-5.5.1-43.4">415 Unsupported Media Type: if the request's Content-Type header indicates a type that is unknown or unsupported. For example, a type other than 'application/json'.<a href="#section-5.5.1-43.4" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-5.5.1-42">A successful enrollment will result in a generic LDevID certificate for the pledge in the new domain, which can be used to request further (application specific) LDevID certificates if necessary for its operation. 
-The registrar-agent <span class="bcp14">SHALL</span> use the endpoints specified in this document.<a href="#section-5.5.1-42" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-43"><span>[<a href="#I-D.ietf-netconf-sztp-csr" class="xref">I-D.ietf-netconf-sztp-csr</a>]</span> considers PKCS#10 but also CMP and CMC as certification request format. Note that the wrapping signature is only necessary for plain PKCS#10 as other request formats like CMP and CMS support the signature wrapping as part of their own certificate request format.<a href="#section-5.5.1-43" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-44">The registrar-agent enrollment-request Content-Type header for a wrapped PKCS#10 is: <code>application/jose+json</code><a href="#section-5.5.1-44" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-45">The header of the pledge enrollment-request <span class="bcp14">SHALL</span> contain the following parameter as defined in <span>[<a href="#RFC7515" class="xref">RFC7515</a>]</span>:<a href="#section-5.5.1-45" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-44">A successful enrollment will result in a generic LDevID certificate for the pledge in the new domain, which can be used to request further (application specific) LDevID certificates if necessary for its operation. 
+The registrar-agent <span class="bcp14">SHALL</span> use the endpoints specified in this document.<a href="#section-5.5.1-44" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-45"><span>[<a href="#I-D.ietf-netconf-sztp-csr" class="xref">I-D.ietf-netconf-sztp-csr</a>]</span> considers PKCS#10 but also CMP and CMC as certification request format. Note that the wrapping signature is only necessary for plain PKCS#10 as other request formats like CMP and CMS support the signature wrapping as part of their own certificate request format.<a href="#section-5.5.1-45" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-46">The registrar-agent enrollment-request Content-Type header for a wrapped PKCS#10 is: <code>application/jose+json</code><a href="#section-5.5.1-46" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-47">The header of the pledge enrollment-request <span class="bcp14">SHALL</span> contain the following parameter as defined in <span>[<a href="#RFC7515" class="xref">RFC7515</a>]</span>:<a href="#section-5.5.1-47" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.5.1-46.1">alg: algorithm used for creating the object signature.<a href="#section-5.5.1-46.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.5.1-48.1">alg: algorithm used for creating the object signature.<a href="#section-5.5.1-48.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.5.1-46.2">x5c: contains the base64-encoded pledge IDevID certificate.
-It may optionally contain the certificate chain for this certificate.<a href="#section-5.5.1-46.2" class="pilcrow">¶</a>
+            <li class="normal" id="section-5.5.1-48.2">x5c: contains the base64-encoded pledge IDevID certificate.
+It may optionally contain the certificate chain for this certificate.<a href="#section-5.5.1-48.2" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-5.5.1-47">The body of the pledge enrollment-request <span class="bcp14">SHOULD</span> contain a P10 parameter (for PKCS#10) as defined for ietf-ztp-types:p10-csr in <span>[<a href="#I-D.ietf-netconf-sztp-csr" class="xref">I-D.ietf-netconf-sztp-csr</a>]</span>:<a href="#section-5.5.1-47" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-49">The body of the pledge enrollment-request <span class="bcp14">SHOULD</span> contain a P10 parameter (for PKCS#10) as defined for ietf-ztp-types:p10-csr in <span>[<a href="#I-D.ietf-netconf-sztp-csr" class="xref">I-D.ietf-netconf-sztp-csr</a>]</span>:<a href="#section-5.5.1-49" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.5.1-48.1">P10: contains the base64-encoded PKCS#10 of the pledge.<a href="#section-5.5.1-48.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.5.1-50.1">P10: contains the base64-encoded PKCS#10 of the pledge.<a href="#section-5.5.1-50.1" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-5.5.1-49">The JOSE object is signed using the pledge's IDevID credential, which corresponds to the certificate signaled in the JOSE header.<a href="#section-5.5.1-49" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-51">The JOSE object is signed using the pledge's IDevID credential, which corresponds to the certificate signaled in the JOSE header.<a href="#section-5.5.1-51" class="pilcrow">¶</a></p>
 <span id="name-representation-of-per"></span><div id="per">
 <figure id="figure-9">
-            <div class="alignLeft art-text artwork" id="section-5.5.1-50.1">
+            <div class="alignLeft art-text artwork" id="section-5.5.1-52.1">
 <pre>
 # The PER in general JWS serialization syntax
 {
@@ -2396,8 +2399,8 @@ It may optionally contain the certificate chain for this certificate.<a href="#s
 <a href="#name-representation-of-per" class="selfRef">Representation of PER</a>
             </figcaption></figure>
 </div>
-<p id="section-5.5.1-51">With the collected PVR and PER, the registrar-agent starts the interaction with the domain registrar.<a href="#section-5.5.1-51" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-52">As the registrar-agent is intended to facilitate communication between the pledge and the domain registrar, a collection of requests from more than one pledge is possible, allowing a bulk bootstrapping of multiple pledges using the same connection between the registrar-agent and the domain registrar.<a href="#section-5.5.1-52" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-53">With the collected PVR and PER, the registrar-agent starts the interaction with the domain registrar.<a href="#section-5.5.1-53" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-54">As the registrar-agent is intended to facilitate communication between the pledge and the domain registrar, a collection of requests from more than one pledge is possible, allowing a bulk bootstrapping of multiple pledges using the same connection between the registrar-agent and the domain registrar.<a href="#section-5.5.1-54" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="exchanges_uc2_2">
@@ -2416,8 +2419,9 @@ The registrar-agent has acquired one or multiple PVR and PER.<a href="#section-5
             <li class="normal" id="section-5.5.2-3.2">Registrar: possesses the IDevID CA certificate of the pledge vendor/manufacturer and an it's own LDevID(Reg) credentials of the site domain.<a href="#section-5.5.2-3.2" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-5.5.2-3.3">MASA: possesses it's own vendor/manufacturer credentials (voucher signing key, TLS server certificate) related to pledges IDevID and <span class="bcp14">MAY</span> possess the site-specific domain CA certificate. 
-The latter is necessary to ensure that the MASA is able to verify the RVR. 
-How the MASA will get the domain CA certificate is out of scope of this document.<a href="#section-5.5.2-3.3" class="pilcrow">¶</a>
+The latter is only a necessary precondition if the MASA needs to verify that the domain of the Registrar is a-priori authorized to enroll a particular pledge, or a particular type of pledge. 
+In such case, how the MASA will obtain the domain CA certificate is out of scope of this document. 
+In other cases, a MASA may allow the pledge to enroll into an anonymous and/or yet-unknown domain and then the a-priori possession of the domain CA certificate is not needed.<a href="#section-5.5.2-3.3" class="pilcrow">¶</a>
 </li>
           </ul>
 <span id="name-request-processing-between-"></span><div id="exchangesfig_uc2_2">
@@ -2499,8 +2503,8 @@ If the agent-signed-cert is not provided, the registrar <span class="bcp14">MUST
 This requires, that the registrar can fetch the LDevID(RegAgt) certificate data (including intermediate CA certificates if existent) based on the SKID.<a href="#section-5.5.2-12.3" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-5.5.2-13">If the validation fails the registrar <span class="bcp14">SHOULD</span> respond with HTTP 404 error code to the registrar-agent.
-HTTP 406 error code <span class="bcp14">SHOULD</span> be used if the format of PVR is unknown.<a href="#section-5.5.2-13" class="pilcrow">¶</a></p>
+<p id="section-5.5.2-13">If the validation fails the registrar <span class="bcp14">SHOULD</span> respond with HTTP 404 Not Found status code to the registrar-agent.
+HTTP 406 Not Acceptable status code <span class="bcp14">SHOULD</span> be used if the Content-Type indicated by the Accept header is unknown or unsupported.<a href="#section-5.5.2-13" class="pilcrow">¶</a></p>
 <p id="section-5.5.2-14">If the validation succeeds, the registrar <span class="bcp14">SHOULD</span> accept the PVR to join the domain as defined in section 5.3 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.
 The registrar then establishes a TLS connection to MASA as described in section 5.4 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> to obtain a voucher for the pledge.<a href="#section-5.5.2-14" class="pilcrow">¶</a></p>
 <p id="section-5.5.2-15">The registrar <span class="bcp14">SHALL</span> construct the payload of the RVR as defined in <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.
@@ -2604,10 +2608,10 @@ Note: Sub-CA certificate(s) <span class="bcp14">MUST</span> also be carried by "
 As the "agent-sign-cert" field is defined as array (x5c), it can handle multiple certificates.<a href="#section-5.5.2-31.2" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-5.5.2-32">If validation fails, the MASA <span class="bcp14">SHOULD</span> respond with an HTTP error code to the registrar.
-The HTTP error codes are kept the same as defined in section 5.6 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>, and comprise the codes: 403, 404, 406, and 415.<a href="#section-5.5.2-32" class="pilcrow">¶</a></p>
+<p id="section-5.5.2-32">If validation fails, the MASA <span class="bcp14">SHOULD</span> respond with an HTTP 4xx client error status code to the registrar.
+The HTTP error status codes are kept the same as defined in section 5.6 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>, and comprise the codes: 403, 404, 406, and 415.<a href="#section-5.5.2-32" class="pilcrow">¶</a></p>
 <p id="section-5.5.2-33">The expected voucher-response format for the pledge-responder-mode the <code>application/voucher-jws+json</code> as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="xref">I-D.ietf-anima-jws-voucher</a>]</span> is applied.
-If the MASA detects that the Accept header of the PVR does not match the <code>application/voucher-jws+json</code> it <span class="bcp14">SHOULD</span> respond with the HTTP error code 406 as the pledge will not be able to parse the response.
+If the MASA detects that the Accept header of the PVR does not match the <code>application/voucher-jws+json</code> it <span class="bcp14">SHOULD</span> respond with the HTTP status code 406 Not Acceptable as the pledge will not be able to parse the response.
 The voucher syntax is described in detail by <span>[<a href="#RFC8366" class="xref">RFC8366</a>]</span>. <a href="#MASA-vr" class="xref">Figure 12</a> shows an example of the contents of a voucher.<a href="#section-5.5.2-33" class="pilcrow">¶</a></p>
 <span id="name-representation-of-masa-issu"></span><div id="MASA-vr">
 <figure id="figure-12">
@@ -2729,7 +2733,7 @@ The approach of sending this information to the CA depends on the utilized certi
 </li>
           </ul>
 <p id="section-5.5.2-44">The registrar-agent <span class="bcp14">SHALL</span> send the PER to the registrar by HTTP POST to the endpoint: "/.well-known/brski/requestenroll"<a href="#section-5.5.2-44" class="pilcrow">¶</a></p>
-<p id="section-5.5.2-45">The registrar <span class="bcp14">SHOULD</span> respond with an HTTP 200 in the success case or fail with HTTP 4xx/5xx codes as defined by the HTTP standard.<a href="#section-5.5.2-45" class="pilcrow">¶</a></p>
+<p id="section-5.5.2-45">The registrar <span class="bcp14">SHOULD</span> respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.<a href="#section-5.5.2-45" class="pilcrow">¶</a></p>
 <p id="section-5.5.2-46">A successful interaction with the domain CA will result in a pledge LDevID certificate, which is then forwarded by the registrar to the registrar-agent using the Content-Type header: <code>application/pkcs7-mime</code>.<a href="#section-5.5.2-46" class="pilcrow">¶</a></p>
 <p id="section-5.5.2-47">As the pledge will verify it own certificate LDevID certificate when received, it also needs the corresponding CA certificates. 
 This is done in EST using the /cacerts endpoint, which provides the CA certificates over a TLS protected connection. 
@@ -2897,8 +2901,9 @@ As the reason field is optional (see <span>[<a href="#RFC8995" class="xref">RFC8
 <p id="section-5.5.3-19">The supply CA certificates message has the Content-Type <code>application/jose+json</code> and is signed using the LDevID(Reg) of the registrar pledge as shown in <a href="#PCAC" class="xref">Figure 14</a>.<a href="#section-5.5.3-19" class="pilcrow">¶</a></p>
 <p id="section-5.5.3-20">The CA certificates are provided as base64 encoded x5b.
 The pledge <span class="bcp14">SHALL</span> install the received CA certificates in its trust anchor database after successful verification of the registrar's signature.<a href="#section-5.5.3-20" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-21">If validation of the wrapping signature fails, the pledge <span class="bcp14">SHOULD</span> respond with the HTTP 403 error code.
-The HTTP 406 error code <span class="bcp14">SHOULD</span> be used, if the response is in an unknown format.<a href="#section-5.5.3-21" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-21">If validation of the wrapping signature or another security check fails, the pledge <span class="bcp14">SHOULD</span> respond with the HTTP 403 Forbidden status code.
+The HTTP 415 Unsupported Media Type status code <span class="bcp14">SHOULD</span> be used, if the Content-Type of the request is in an unknown or unsupported format. 
+The HTTP 400 Bad Request status code <span class="bcp14">SHOULD</span> be used, if the pledge detects errors in the encoding of the payload.<a href="#section-5.5.3-21" class="pilcrow">¶</a></p>
 <p id="section-5.5.3-22">The registrar-agent <span class="bcp14">SHALL</span> send the enroll-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-enrollment".<a href="#section-5.5.3-22" class="pilcrow">¶</a></p>
 <p id="section-5.5.3-23">The registrar-agent enroll-response Content-Type header, when using EST <span>[<a href="#RFC7030" class="xref">RFC7030</a>]</span> as enrollment protocol between the registrar-agent and the infrastructure, is <code>application/pkcs7-mime</code>. Note that it only contains the LDevID certificate for the pledge, not the certificate chain.<a href="#section-5.5.3-23" class="pilcrow">¶</a></p>
 <p id="section-5.5.3-24">Upon reception, the pledge <span class="bcp14">SHALL</span> verify the received LDevID certificate. 
@@ -2998,7 +3003,7 @@ This status indicates if the pledge could process the voucher successfully or no
 <p id="section-5.5.4-6">If the TLS connection to the registrar was closed, the registrar-agent establishes a TLS connection with the registrar as stated in <a href="#exchanges_uc2_2" class="xref">Section 5.5.2</a>.<a href="#section-5.5.4-6" class="pilcrow">¶</a></p>
 <p id="section-5.5.4-7">The registrar-agent sends the pledge voucher status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/voucher_status". The Content-Type header is kept as <code>application/jose+json</code> as described in <a href="#exchangesfig_uc2_3" class="xref">Figure 15</a> and depicted in the example in <a href="#vstat" class="xref">Figure 16</a>.<a href="#section-5.5.4-7" class="pilcrow">¶</a></p>
 <p id="section-5.5.4-8">The registrar <span class="bcp14">SHALL</span> verify the signature of the pledge voucher status and validate that it belongs to an accepted device in his domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher status.<a href="#section-5.5.4-8" class="pilcrow">¶</a></p>
-<p id="section-5.5.4-9">According to <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> section 5.7, the registrar <span class="bcp14">SHOULD</span> respond with an HTTP 200 in the success case or fail with HTTP 4xx/5xx codes as defined by the HTTP standard.
+<p id="section-5.5.4-9">According to <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> section 5.7, the registrar <span class="bcp14">SHOULD</span> respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
 Within the server logs the server <span class="bcp14">SHOULD</span> capture this telemetry information.<a href="#section-5.5.4-9" class="pilcrow">¶</a></p>
 <p id="section-5.5.4-10">The registrar <span class="bcp14">SHOULD</span> proceed with collecting and logging status information by requesting the MASA audit-log from the MASA service as described in section 5.8 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.<a href="#section-5.5.4-10" class="pilcrow">¶</a></p>
@@ -3011,7 +3016,7 @@ Also, the registrar <span class="bcp14">SHALL</span> validate that the pledge be
 The registrar <span class="bcp14">SHOULD</span> log this event.
 In case the pledge enroll status indicates a failure, the pledge was unable to verify the received LDevID certificate and therefore signed the enroll status with its IDevID credential.
 Note that the verification of a signature of the status information is an addition to the described handling in section 5.9.4 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.<a href="#section-5.5.4-13" class="pilcrow">¶</a></p>
-<p id="section-5.5.4-14">According to <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> section 5.9.4, the registrar <span class="bcp14">SHOULD</span> respond with an HTTP 200 in the success case or fail with HTTP 4xx/5xx codes as defined by the HTTP standard.
+<p id="section-5.5.4-14">According to <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> section 5.9.4, the registrar <span class="bcp14">SHOULD</span> respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
 Based on the failure case the registrar <span class="bcp14">MAY</span> decide that for security reasons the pledge is not allowed to reside in the domain. In this case the registrar <span class="bcp14">MUST</span> revoke the certificate.
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
 Within the server log the registrar <span class="bcp14">SHOULD</span> capture this telemetry information.<a href="#section-5.5.4-14" class="pilcrow">¶</a></p>
@@ -3024,12 +3029,12 @@ Within the server log the registrar <span class="bcp14">SHOULD</span> capture th
           </h4>
 <p id="section-5.5.5-1">The following assumes that a registrar-agent may need to query the status of a pledge. 
 This information may be useful to solve errors, when the pledge was not able to connect to the target domain during the bootstrapping.
-The pledge <span class="bcp14">MAY</span> provide a dedicated endpoint to supply status-requests.<a href="#section-5.5.5-1" class="pilcrow">¶</a></p>
+The pledge <span class="bcp14">MAY</span> provide a dedicated endpoint to accept status-requests.<a href="#section-5.5.5-1" class="pilcrow">¶</a></p>
 <p id="section-5.5.5-2">Preconditions:<a href="#section-5.5.5-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.5.5-3.1">Registrar-agent: possesses LDevID (RegAgt), list of serial numbers of pledges to be queried and a list of corresponding manufacturer trust anchors to be able to verify signatures with the IDevID credential.<a href="#section-5.5.5-3.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.5.5-3.2">Pledge: may already possess domain credentials and LDevID(Pledge).<a href="#section-5.5.5-3.2" class="pilcrow">¶</a>
+            <li class="normal" id="section-5.5.5-3.2">Pledge: may already possess domain credentials and LDevID(Pledge), or may not possess one or both of these.<a href="#section-5.5.5-3.2" class="pilcrow">¶</a>
 </li>
           </ul>
 <span id="name-pledge-status-handling-betw"></span><div id="exchangesfig_uc2_5">
@@ -3205,8 +3210,10 @@ The pledge signs the response message using its IDevID.<a href="#section-5.5.5-1
 <p id="section-5.5.5-20">In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor. 
 It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.
 In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchore) and can therefore validate the signature of the registrar-agent. 
-If validation of the JWS signature fails, the pledge <span class="bcp14">SHOULD</span> respond with the HTTP 403 error code.
-The HTTP 406 error code <span class="bcp14">SHOULD</span> be used, if the response is in an unknown format.<a href="#section-5.5.5-20" class="pilcrow">¶</a></p>
+If validation of the JWS signature fails, the pledge <span class="bcp14">SHOULD</span> respond with the HTTP 403 Forbidden status code.
+The HTTP 406 Not Acceptable status code <span class="bcp14">SHOULD</span> be used, if the Accept header in the request indicates an unknown or unsupported format. 
+The HTTP 415 Unsupported Media Type status code <span class="bcp14">SHOULD</span> be used, if the Content-Type of the request is an unknown or unsupported format. 
+The HTTP 400 Bad Request status code <span class="bcp14">SHOULD</span> be used, if the Accept/Content-Type headers are correct but nevertheless the status-request cannot be correctly parsed.<a href="#section-5.5.5-20" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3514,7 +3521,7 @@ Further security aspects need to be considered for:<a href="#section-9-1" class=
         <h3 id="name-denial-of-service-dos-attac">
 <a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-denial-of-service-dos-attac" class="section-name selfRef">Denial of Service (DoS) Attack on Pledge</a>
         </h3>
-<p id="section-9.1-1">Disrupting the pledge behaviour by a DoS attack may prevent the bootstrapping of the pledge to a new domain.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<p id="section-9.1-1">Disrupting the pledge behavior by a DoS attack may prevent the bootstrapping of the pledge to a new domain.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
 <p id="section-9.1-2">A DoS attack with a faked registrar-agent may block the bootstrapping of the pledge due to state creation on the pledge (only vouchered). Mitigation may be that the pledge does not create a state if the bootstrapping is not finished after certain time.<a href="#section-9.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -3662,10 +3669,6 @@ Special thanks to Esko Dijk for the in deep review and the improving proposals.<
 <dt id="BRSKI-PRM-abstract">[BRSKI-PRM-abstract]</dt>
         <dd>
 <span class="refTitle">"Abstract BRSKI-PRM Protocol Overview"</span>, <time datetime="2022-04" class="refDate">April 2022</time>, <span>&lt;<a href="https://raw.githubusercontent.com/anima-wg/anima-brski-prm/main/pics/brski_prm_overview.png">https://raw.githubusercontent.com/anima-wg/anima-brski-prm/main/pics/brski_prm_overview.png</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="CABF">[CABF]</dt>
-        <dd>
-<span class="refTitle">"CA Browser Forum"</span>, <span>n.d.</span>, <span>&lt;<a href="https://cabforum.org/">https://cabforum.org/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-anima-brski-ae">[I-D.ietf-anima-brski-ae]</dt>
         <dd>
@@ -4083,29 +4086,33 @@ zBs2Ofk8DrX9zYiWZrVR7Y6HDcxY-aErEbiA"
 <p id="appendix-B-1">Proof of Concept Code available<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <p id="appendix-B-2">From IETF draft 04 -&gt; IETF draft 05:<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-3.1">Enhanced error codes in section 5.5.1, issue #39<a href="#appendix-B-3.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-3.1">Added explanation of MASA requiring domain CA cert in section 5.5.1 and section 5.5.2, issue #36<a href="#appendix-B-3.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.2">Enhanced security considerations and privacy considerations, issue #59<a href="#appendix-B-3.2" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.2">Removed reference to CAB Forum as not needed for BRSKI-PRM specifically, issue #65<a href="#appendix-B-3.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.3">Reworked terminology of "enrollment object", "certification object", "enrollment request object", etc., issue #27<a href="#appendix-B-3.3" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.3">Enhanced error codes in section 5.5.1, issue #39, #64<a href="#appendix-B-3.3" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.4">Reworked all message representations to align with encoding<a href="#appendix-B-3.4" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.4">Enhanced security considerations and privacy considerations, issue #59<a href="#appendix-B-3.4" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.5">Included examples for several objects in section <a href="#examples" class="xref">Appendix A</a><a href="#appendix-B-3.5" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.5">Reworked terminology of "enrollment object", "certification object", "enrollment request object", etc., issue #27<a href="#appendix-B-3.5" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.6">Defined new endpoint for pledge bootstrapping status inquiry, issue #35 in section <a href="#exchanges_uc2_5" class="xref">Section 5.5.5</a>, IANA considerations and section <a href="#pledge_ep" class="xref">Section 5.3</a><a href="#appendix-B-3.6" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.6">Reworked all message representations to align with encoding<a href="#appendix-B-3.6" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.7">PoP for private key to registrar certificate included as mandatory, issues #32 and #49<a href="#appendix-B-3.7" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.7">Included examples for several objects in section <a href="#examples" class="xref">Appendix A</a><a href="#appendix-B-3.7" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.8">Issue #50 addressed by referring to the utilized enrollment protocol<a href="#appendix-B-3.8" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.8">Defined new endpoint for pledge bootstrapping status inquiry, issue #35 in section <a href="#exchanges_uc2_5" class="xref">Section 5.5.5</a>, IANA considerations and section <a href="#pledge_ep" class="xref">Section 5.3</a><a href="#appendix-B-3.8" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.9">Issue #47 MASA verification of LDevID(RegAgt) to the same LDevID(Reg) domain CA<a href="#appendix-B-3.9" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.9">PoP for private key to registrar certificate included as mandatory, issues #32 and #49<a href="#appendix-B-3.9" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.10">Issue #31, clarified that combined pledge may act as client/server for further (re)enrollment<a href="#appendix-B-3.10" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.10">Issue #50 addressed by referring to the utilized enrollment protocol<a href="#appendix-B-3.10" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.11">Issue #42, clarified that Registrar needs to verify the status responses with and ensure that they match the audit log response from the MASA, otherwise it needs drop the pledge and revoke the certificate<a href="#appendix-B-3.11" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.11">Issue #47 MASA verification of LDevID(RegAgt) to the same LDevID(Reg) domain CA<a href="#appendix-B-3.11" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.12">Issue #43, clarified that the pledge shall use the create time from the trigger message if the time has not been synchronized, yet.<a href="#appendix-B-3.12" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.12">Issue #31, clarified that combined pledge may act as client/server for further (re)enrollment<a href="#appendix-B-3.12" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-3.13">Issue #42, clarified that Registrar needs to verify the status responses with and ensure that they match the audit log response from the MASA, otherwise it needs drop the pledge and revoke the certificate<a href="#appendix-B-3.13" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-3.14">Issue #43, clarified that the pledge shall use the create time from the trigger message if the time has not been synchronized, yet.<a href="#appendix-B-3.14" class="pilcrow">¶</a>
 </li>
       </ul>
 <p id="appendix-B-4">From IETF draft 03 -&gt; IETF draft 04:<a href="#appendix-B-4" class="pilcrow">¶</a></p>
