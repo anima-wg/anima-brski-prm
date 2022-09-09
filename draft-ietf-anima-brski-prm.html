@@ -3064,7 +3064,7 @@ The pledge-status request is signed by registrar-agent using the LDevID(RegAgt) 
 <p id="section-5.5.5-7">The following Concise Data Definition Language (CDDL) <span>[<a href="#RFC8610" class="xref">RFC8610</a>]</span> explains the structure of the format for the pledge-status request. It is defined following the status telemetry definitions in BRSKI <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.
 Consequently, format and semantics of pledge-status requests below are for version 1.<br>
 The version field is included to permit significant changes to the pledge-status request and response in the future.<br>
-A pledge or a registrar-agent that receives a plegde-status request with a version larger than it knows about <span class="bcp14">SHOULD</span> log the contents and alert a human.<a href="#section-5.5.5-7" class="pilcrow">¶</a></p>
+A pledge or a registrar-agent that receives a pledge-status request with a version larger than it knows about <span class="bcp14">SHOULD</span> log the contents and alert a human.<a href="#section-5.5.5-7" class="pilcrow">¶</a></p>
 <span id="name-cddl-for-pledge-status-requ"></span><div id="stat_req_def">
 <figure id="figure-20">
             <div id="section-5.5.5-8.1">
@@ -3126,7 +3126,7 @@ This is out of scope for this specification.<a href="#section-5.5.5-9" class="pi
 <a href="#name-example-of-registrar-agent-" class="selfRef">Example of registrar-agent request of pledge-status using status-type bootstrap</a>
             </figcaption></figure>
 </div>
-<p id="section-5.5.5-12">If the pledge receives the plegde-status request with status-type "bootstrap" it <span class="bcp14">SHALL</span> react with a status response message based on the telemetry information described in section <a href="#exchanges_uc2_3" class="xref">Section 5.5.3</a>.<a href="#section-5.5.5-12" class="pilcrow">¶</a></p>
+<p id="section-5.5.5-12">If the pledge receives the pledge-status request with status-type "bootstrap" it <span class="bcp14">SHALL</span> react with a status response message based on the telemetry information described in section <a href="#exchanges_uc2_3" class="xref">Section 5.5.3</a>.<a href="#section-5.5.5-12" class="pilcrow">¶</a></p>
 <p id="section-5.5.5-13">The pledge-status response Content-Type header is <code>application/jose+json</code>.<a href="#section-5.5.5-13" class="pilcrow">¶</a></p>
 <p id="section-5.5.5-14">The following CDDL explains the structure of the format for the status response, which is :<a href="#section-5.5.5-14" class="pilcrow">¶</a></p>
 <span id="name-cddl-for-pledge-status-resp"></span><div id="stat_res_def">
@@ -3154,15 +3154,18 @@ This is out of scope for this specification.<a href="#section-5.5.5-9" class="pi
 The pledge-status response message is signed with IDevID or LDevID, depending on bootstrapping state of the pledge.<a href="#section-5.5.5-16" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.5.5-17.1">"factory-default": Pledge has not been bootstrapped. 
+Additional information may be provided in the reason or reason-context.
 The pledge signs the response message using its IDevID(Pledge).<a href="#section-5.5.5-17.1" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-5.5.5-17.2">"vouchered": Pledge processed the voucher exchange successfully.
+Additional information may be provided in the reason or reason-context.
 The pledge signs the response message using its IDevID(Pledge).<a href="#section-5.5.5-17.2" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-5.5.5-17.3">"enrolled": Pledge has processed the enrollment exchange successfully.
+Additional information may be provided in the reason or reason-context.
 The pledge signs the response message using its LDevID(Pledge).<a href="#section-5.5.5-17.3" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.5.5-17.4">"error": Error occured during bootstrapping. 
+            <li class="normal" id="section-5.5.5-17.4">"error": Error occurred during bootstrapping. 
 The reason and the reason-context <span class="bcp14">SHOULD</span> contain the telemetry information as described in section <a href="#exchanges_uc2_3" class="xref">Section 5.5.3</a>.<br>
 The pledge signs the response message using its IDevID.<a href="#section-5.5.5-17.4" class="pilcrow">¶</a>
 </li>
@@ -3187,7 +3190,7 @@ The pledge signs the response message using its IDevID.<a href="#section-5.5.5-1
 {
   "version": 1,
   "status": "enrolled",
-  "status-context": {
+  "reason-context": {
     "additional" : "JSON"
   }
 }
@@ -3209,7 +3212,7 @@ The pledge signs the response message using its IDevID.<a href="#section-5.5.5-1
 </div>
 <p id="section-5.5.5-20">In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor. 
 It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.
-In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchore) and can therefore validate the signature of the registrar-agent. 
+In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchor) and can therefore validate the signature of the registrar-agent. 
 If validation of the JWS signature fails, the pledge <span class="bcp14">SHOULD</span> respond with the HTTP 403 Forbidden status code.
 The HTTP 406 Not Acceptable status code <span class="bcp14">SHOULD</span> be used, if the Accept header in the request indicates an unknown or unsupported format. 
 The HTTP 415 Unsupported Media Type status code <span class="bcp14">SHOULD</span> be used, if the Content-Type of the request is an unknown or unsupported format. 

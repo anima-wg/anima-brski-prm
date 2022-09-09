@@ -2784,7 +2784,7 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    requests below are for version 1.
    The version field is included to permit significant changes to the
    pledge-status request and response in the future.
-   A pledge or a registrar-agent that receives a plegde-status request
+   A pledge or a registrar-agent that receives a pledge-status request
    with a version larger than it knows about SHOULD log the contents and
    alert a human.
 
@@ -2890,7 +2890,7 @@ Internet-Draft                  BRSKI-PRM                 September 2022
        Figure 21: Example of registrar-agent request of pledge-status
                         using status-type bootstrap
 
-   If the pledge receives the plegde-status request with status-type
+   If the pledge receives the pledge-status request with status-type
    "bootstrap" it SHALL react with a status response message based on
    the telemetry information described in section Section 5.5.3.
 
@@ -2934,27 +2934,27 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    response message is signed with IDevID or LDevID, depending on
    bootstrapping state of the pledge.
 
-   *  "factory-default": Pledge has not been bootstrapped.  The pledge
-      signs the response message using its IDevID(Pledge).
+   *  "factory-default": Pledge has not been bootstrapped.  Additional
+      information may be provided in the reason or reason-context.  The
+      pledge signs the response message using its IDevID(Pledge).
 
    *  "vouchered": Pledge processed the voucher exchange successfully.
-      The pledge signs the response message using its IDevID(Pledge).
+      Additional information may be provided in the reason or reason-
+      context.  The pledge signs the response message using its
+      IDevID(Pledge).
 
    *  "enrolled": Pledge has processed the enrollment exchange
-      successfully.  The pledge signs the response message using its
-      LDevID(Pledge).
+      successfully.  Additional information may be provided in the
+      reason or reason-context.  The pledge signs the response message
+      using its LDevID(Pledge).
 
-   *  "error": Error occured during bootstrapping.  The reason and the
+   *  "error": Error occurred during bootstrapping.  The reason and the
       reason-context SHOULD contain the telemetry information as
       described in section Section 5.5.3.
       The pledge signs the response message using its IDevID.
 
    Figure 23 provides an example for the bootstrapping-status
    information.
-
-
-
-
 
 
 
@@ -2985,7 +2985,7 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    {
      "version": 1,
      "status": "enrolled",
-     "status-context": {
+     "reason-context": {
        "additional" : "JSON"
      }
    }
@@ -3006,7 +3006,7 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    certificate resp. the domain trust-anchor.  It will not be able to
    verify the signature of the registrar-agent in the bootstrapping-
    status request.  In cases "vouchered" and "enrolled" the pledge
-   already possesses the domain certificate (has domain trust-anchore)
+   already possesses the domain certificate (has domain trust-anchor)
    and can therefore validate the signature of the registrar-agent.  If
    validation of the JWS signature fails, the pledge SHOULD respond with
    the HTTP 403 Forbidden status code.  The HTTP 406 Not Acceptable

@@ -1567,7 +1567,7 @@ The pledge-status request is signed by registrar-agent using the LDevID(RegAgt) 
 The following Concise Data Definition Language (CDDL) {{RFC8610}} explains the structure of the format for the pledge-status request. It is defined following the status telemetry definitions in BRSKI {{RFC8995}}.
 Consequently, format and semantics of pledge-status requests below are for version 1.  
 The version field is included to permit significant changes to the pledge-status request and response in the future.  
-A pledge or a registrar-agent that receives a plegde-status request with a version larger than it knows about SHOULD log the contents and alert a human. 
+A pledge or a registrar-agent that receives a pledge-status request with a version larger than it knows about SHOULD log the contents and alert a human. 
 
 ~~~~
 <CODE BEGINS> 
@@ -1622,7 +1622,7 @@ This is out of scope for this specification.
 ~~~~
 {: #stat_req title='Example of registrar-agent request of pledge-status using status-type bootstrap' artwork-align="left"}
 
-If the pledge receives the plegde-status request with status-type "bootstrap" it SHALL react with a status response message based on the telemetry information described in section {{exchanges_uc2_3}}.
+If the pledge receives the pledge-status request with status-type "bootstrap" it SHALL react with a status response message based on the telemetry information described in section {{exchanges_uc2_3}}.
 
 The pledge-status response Content-Type header is `application/jose+json`. 
 
@@ -1648,12 +1648,15 @@ Different cases for pledge bootstrapping status may occur, which SHOULD be refle
 The pledge-status response message is signed with IDevID or LDevID, depending on bootstrapping state of the pledge. 
 
 * "factory-default": Pledge has not been bootstrapped. 
+  Additional information may be provided in the reason or reason-context.
   The pledge signs the response message using its IDevID(Pledge).
 * "vouchered": Pledge processed the voucher exchange successfully.
+  Additional information may be provided in the reason or reason-context.
   The pledge signs the response message using its IDevID(Pledge).
 * "enrolled": Pledge has processed the enrollment exchange successfully.
+  Additional information may be provided in the reason or reason-context.
   The pledge signs the response message using its LDevID(Pledge).
-* "error": Error occured during bootstrapping. 
+* "error": Error occurred during bootstrapping. 
   The reason and the reason-context SHOULD contain the telemetry information as described in section {{exchanges_uc2_3}}.  
   The pledge signs the response message using its IDevID.
 
@@ -1676,7 +1679,7 @@ The pledge-status response message is signed with IDevID or LDevID, depending on
 {
   "version": 1,
   "status": "enrolled",
-  "status-context": {
+  "reason-context": {
     "additional" : "JSON" 
   }
 }
@@ -1695,7 +1698,7 @@ The pledge-status response message is signed with IDevID or LDevID, depending on
 
 In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor. 
 It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.
-In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchore) and can therefore validate the signature of the registrar-agent. 
+In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchor) and can therefore validate the signature of the registrar-agent. 
 If validation of the JWS signature fails, the pledge SHOULD respond with the HTTP 403 Forbidden status code.
 The HTTP 406 Not Acceptable status code SHOULD be used, if the Accept header in the request indicates an unknown or unsupported format. 
 The HTTP 415 Unsupported Media Type status code SHOULD be used, if the Content-Type of the request is an unknown or unsupported format. 
