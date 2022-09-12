@@ -1198,7 +1198,7 @@ li > p:last-of-type {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 13 March 2023</td>
+<td class="center">Expires 16 March 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1211,12 +1211,12 @@ li > p:last-of-type {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-05</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-09-09" class="published">9 September 2022</time>
+<time datetime="2022-09-12" class="published">12 September 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-03-13">13 March 2023</time></dd>
+<dd class="expires"><time datetime="2023-03-16">16 March 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1276,7 +1276,7 @@ The defined approach is agnostic regarding the utilized enrollment protocol, dep
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 13 March 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 16 March 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -3137,9 +3137,12 @@ This is out of scope for this specification.<a href="#section-5.5.5-9" class="pi
     "version": uint,
     "status":
       "factory-default" /
-      "vouchered" /
-      "enrolled" /
-      "error",
+      "voucher-success" /
+      "voucher-error" /
+      "enroll-success" /
+      "enroll-error" /
+      "connect-success" /
+      "connect-error",
     ?"reason" : text,
     ?"reason-context" : { $$arbitrary-map }
   }
@@ -3151,29 +3154,47 @@ This is out of scope for this specification.<a href="#section-5.5.5-9" class="pi
             </figcaption></figure>
 </div>
 <p id="section-5.5.5-16">Different cases for pledge bootstrapping status may occur, which <span class="bcp14">SHOULD</span> be reflected using the status enumeration. 
-The pledge-status response message is signed with IDevID or LDevID, depending on bootstrapping state of the pledge.<a href="#section-5.5.5-16" class="pilcrow">¶</a></p>
+This document specifies the status values in the context of the bootstrapping process and credential application. 
+Other documents may enhance the above enumeration to reflect further status information.<a href="#section-5.5.5-16" class="pilcrow">¶</a></p>
+<p id="section-5.5.5-17">The pledge-status response message is signed with IDevID or LDevID, depending on bootstrapping state of the pledge.<a href="#section-5.5.5-17" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.5.5-17.1">"factory-default": Pledge has not been bootstrapped. 
+<li class="normal" id="section-5.5.5-18.1">"factory-default": Pledge has not been bootstrapped. 
 Additional information may be provided in the reason or reason-context.
-The pledge signs the response message using its IDevID(Pledge).<a href="#section-5.5.5-17.1" class="pilcrow">¶</a>
+The pledge signs the response message using its IDevID(Pledge).<a href="#section-5.5.5-18.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.5.5-17.2">"vouchered": Pledge processed the voucher exchange successfully.
+            <li class="normal" id="section-5.5.5-18.2">"voucher-success": Pledge processed the voucher exchange successfully.
 Additional information may be provided in the reason or reason-context.
-The pledge signs the response message using its IDevID(Pledge).<a href="#section-5.5.5-17.2" class="pilcrow">¶</a>
+The pledge signs the response message using its IDevID(Pledge).<a href="#section-5.5.5-18.2" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.5.5-17.3">"enrolled": Pledge has processed the enrollment exchange successfully.
+            <li class="normal" id="section-5.5.5-18.3">"voucher-error": Pledge voucher processing terminated with error.
 Additional information may be provided in the reason or reason-context.
-The pledge signs the response message using its LDevID(Pledge).<a href="#section-5.5.5-17.3" class="pilcrow">¶</a>
+The pledge signs the response message using its IDevID(Pledge).<a href="#section-5.5.5-18.3" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5.5.5-17.4">"error": Error occurred during bootstrapping. 
-The reason and the reason-context <span class="bcp14">SHOULD</span> contain the telemetry information as described in section <a href="#exchanges_uc2_3" class="xref">Section 5.5.3</a>.<br>
-The pledge signs the response message using its IDevID.<a href="#section-5.5.5-17.4" class="pilcrow">¶</a>
+            <li class="normal" id="section-5.5.5-18.4">"enroll-success": Pledge has processed the enrollment exchange successfully.
+Additional information may be provided in the reason or reason-context.
+The pledge signs the response message using its LDevID(Pledge).<a href="#section-5.5.5-18.4" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-5.5.5-18.5">"enroll-error": Pledge enrollment response processing terminated with error.
+Additional information may be provided in the reason or reason-context.
+The pledge signs the response message using its IDevID(Pledge).<a href="#section-5.5.5-18.5" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-5.5.5-18"><a href="#stat_res" class="xref">Figure 23</a> provides an example for the bootstrapping-status information.<a href="#section-5.5.5-18" class="pilcrow">¶</a></p>
+<p id="section-5.5.5-19">The reason and the reason-context <span class="bcp14">SHOULD</span> contain the telemetry information as described in section <a href="#exchanges_uc2_3" class="xref">Section 5.5.3</a>.<a href="#section-5.5.5-19" class="pilcrow">¶</a></p>
+<p id="section-5.5.5-20">As the pledge is assumed to utilize the bootstrapped credential information in communication with other peers, additional status information is provided for the connectivity to other peers, which may be helpful in analyzing potential error cases.<a href="#section-5.5.5-20" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.5.5-21.1">"connect-success": Pledge could successfully establish a connection to another peer.
+Additional information may be provided in the reason or reason-context.
+The pledge signs the response message using its LDevID(Pledge).<a href="#section-5.5.5-21.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-5.5.5-21.2">"connect-error": Pledge connection establishment terminated with error.
+Additional information may be provided in the reason or reason-context.
+The pledge signs the response message using its LDevID(Pledge).<a href="#section-5.5.5-21.2" class="pilcrow">¶</a>
+</li>
+          </ul>
+<p id="section-5.5.5-22"><a href="#stat_res" class="xref">Figure 23</a> provides an example for the bootstrapping-status information.<a href="#section-5.5.5-22" class="pilcrow">¶</a></p>
 <span id="name-example-of-pledge-status-re"></span><div id="stat_res">
 <figure id="figure-23">
-            <div class="alignLeft art-text artwork" id="section-5.5.5-19.1">
+            <div class="alignLeft art-text artwork" id="section-5.5.5-23.1">
 <pre>
 # The pledge "status-response" in general JWS serialization syntax
 {
@@ -3189,7 +3210,7 @@ The pledge signs the response message using its IDevID.<a href="#section-5.5.5-1
 # Decoded payload "status-response" representation in JSON syntax
 {
   "version": 1,
-  "status": "enrolled",
+  "status": "enroll-success",
   "reason-context": {
     "additional" : "JSON"
   }
@@ -3210,13 +3231,13 @@ The pledge signs the response message using its IDevID.<a href="#section-5.5.5-1
 <a href="#name-example-of-pledge-status-re" class="selfRef">Example of pledge-status response</a>
             </figcaption></figure>
 </div>
-<p id="section-5.5.5-20">In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor. 
+<p id="section-5.5.5-24">In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor. 
 It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.
 In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchor) and can therefore validate the signature of the registrar-agent. 
 If validation of the JWS signature fails, the pledge <span class="bcp14">SHOULD</span> respond with the HTTP 403 Forbidden status code.
 The HTTP 406 Not Acceptable status code <span class="bcp14">SHOULD</span> be used, if the Accept header in the request indicates an unknown or unsupported format. 
 The HTTP 415 Unsupported Media Type status code <span class="bcp14">SHOULD</span> be used, if the Content-Type of the request is an unknown or unsupported format. 
-The HTTP 400 Bad Request status code <span class="bcp14">SHOULD</span> be used, if the Accept/Content-Type headers are correct but nevertheless the status-request cannot be correctly parsed.<a href="#section-5.5.5-20" class="pilcrow">¶</a></p>
+The HTTP 400 Bad Request status code <span class="bcp14">SHOULD</span> be used, if the Accept/Content-Type headers are correct but nevertheless the status-request cannot be correctly parsed.<a href="#section-5.5.5-24" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>

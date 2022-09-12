@@ -1634,9 +1634,12 @@ The following CDDL explains the structure of the format for the status response,
     "version": uint,
     "status": 
       "factory-default" / 
-      "vouchered" / 
-      "enrolled" / 
-      "error",
+      "voucher-success" / 
+      "voucher-error" / 
+      "enroll-success" /
+      "enroll-error" /
+      "connect-success" /
+      "connect-error", 
     ?"reason" : text,
     ?"reason-context" : { $$arbitrary-map }
   }
@@ -1645,20 +1648,37 @@ The following CDDL explains the structure of the format for the status response,
 {: #stat_res_def title='CDDL for pledge-status response' artwork-align="left"}
 
 Different cases for pledge bootstrapping status may occur, which SHOULD be reflected using the status enumeration. 
+This document specifies the status values in the context of the bootstrapping process and credential application. 
+Other documents may enhance the above enumeration to reflect further status information.
+
 The pledge-status response message is signed with IDevID or LDevID, depending on bootstrapping state of the pledge. 
 
 * "factory-default": Pledge has not been bootstrapped. 
   Additional information may be provided in the reason or reason-context.
   The pledge signs the response message using its IDevID(Pledge).
-* "vouchered": Pledge processed the voucher exchange successfully.
+* "voucher-success": Pledge processed the voucher exchange successfully.
   Additional information may be provided in the reason or reason-context.
   The pledge signs the response message using its IDevID(Pledge).
-* "enrolled": Pledge has processed the enrollment exchange successfully.
+* "voucher-error": Pledge voucher processing terminated with error.
+  Additional information may be provided in the reason or reason-context.
+  The pledge signs the response message using its IDevID(Pledge).
+* "enroll-success": Pledge has processed the enrollment exchange successfully.
   Additional information may be provided in the reason or reason-context.
   The pledge signs the response message using its LDevID(Pledge).
-* "error": Error occurred during bootstrapping. 
-  The reason and the reason-context SHOULD contain the telemetry information as described in section {{exchanges_uc2_3}}.  
-  The pledge signs the response message using its IDevID.
+* "enroll-error": Pledge enrollment response processing terminated with error.
+  Additional information may be provided in the reason or reason-context.
+  The pledge signs the response message using its IDevID(Pledge).
+
+The reason and the reason-context SHOULD contain the telemetry information as described in section {{exchanges_uc2_3}}.  
+
+As the pledge is assumed to utilize the bootstrapped credential information in communication with other peers, additional status information is provided for the connectivity to other peers, which may be helpful in analyzing potential error cases. 
+
+* "connect-success": Pledge could successfully establish a connection to another peer.
+  Additional information may be provided in the reason or reason-context.
+  The pledge signs the response message using its LDevID(Pledge).
+* "connect-error": Pledge connection establishment terminated with error.
+  Additional information may be provided in the reason or reason-context.
+  The pledge signs the response message using its LDevID(Pledge).
 
 {{stat_res}} provides an example for the bootstrapping-status information. 
 
@@ -1678,7 +1698,7 @@ The pledge-status response message is signed with IDevID or LDevID, depending on
 # Decoded payload "status-response" representation in JSON syntax
 {
   "version": 1,
-  "status": "enrolled",
+  "status": "enroll-success",
   "reason-context": {
     "additional" : "JSON" 
   }
