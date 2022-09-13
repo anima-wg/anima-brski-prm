@@ -1198,7 +1198,7 @@ li > p:last-of-type {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 16 March 2023</td>
+<td class="center">Expires 17 March 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1211,12 +1211,12 @@ li > p:last-of-type {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-05</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-09-12" class="published">12 September 2022</time>
+<time datetime="2022-09-13" class="published">13 September 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-03-16">16 March 2023</time></dd>
+<dd class="expires"><time datetime="2023-03-17">17 March 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1276,7 +1276,7 @@ The defined approach is agnostic regarding the utilized enrollment protocol, dep
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 16 March 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 17 March 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2835,31 +2835,28 @@ To contact the pledge, it may either discover the pledge as described in <a href
 </div>
 <p id="section-5.5.3-5">The registrar-agent provides the information via distinct pledge endpoints as following.<a href="#section-5.5.3-5" class="pilcrow">¶</a></p>
 <p id="section-5.5.3-6">The registrar-agent <span class="bcp14">SHALL</span> send the voucher-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-voucher".<a href="#section-5.5.3-6" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-7">The registrar-agent voucher-response Content-Type header is <code>application/voucher-jws+json</code> and contains the voucher as provided by the MASA. An example if given in <a href="#MASA-vr" class="xref">Figure 12</a> for a MASA only signed voucher and in Figure <a href="#MASA-REG-vr" class="xref">Figure 13</a> for multiple signatures.<a href="#section-5.5.3-7" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-8">If a single signature is contained, the pledge receives the voucher and verifies it as described in section 5.6.1 in <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.<a href="#section-5.5.3-8" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-9">A nonceless voucher may be accepted as in <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> and may be allowed by a manufactures pledge implementation.
-It requires to perform the validation that the pledge is connected to an authorized registrar-agent by other means, as the registrar would be able to verify it using the agent-signed-data in the PER.<a href="#section-5.5.3-9" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-10">If multiple signatures are contained in the voucher, the pledge <span class="bcp14">SHALL</span> perform the signature verification in the following order:<a href="#section-5.5.3-10" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-5.5.3-11">
-<li id="section-5.5.3-11.1">Validate MASA signature as described in section 5.6.1 in <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> successfully.<a href="#section-5.5.3-11.1" class="pilcrow">¶</a>
+<p id="section-5.5.3-7">The registrar-agent voucher-response Content-Type header is <code>application/voucher-jws+json</code> and contains the voucher as provided by the MASA. An example if given in <a href="#MASA-vr" class="xref">Figure 12</a> for a MASA  signed voucher and in <a href="#MASA-REG-vr" class="xref">Figure 13</a> for the voucher with the additional signature of the registrar.<a href="#section-5.5.3-7" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-8">A nonceless voucher may be accepted as in <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> and may be allowed by a manufactures pledge implementation.<a href="#section-5.5.3-8" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-9">To perform the validation of multiple signatures in the voucher, the pledge <span class="bcp14">SHALL</span> perform the signature verification in the following order:<a href="#section-5.5.3-9" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-5.5.3-10">
+<li id="section-5.5.3-10.1">Validate MASA signature as described in section 5.6.1 in <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> successfully.<a href="#section-5.5.3-10.1" class="pilcrow">¶</a>
 </li>
-            <li id="section-5.5.3-11.2">Install contained trust anchor provisionally.<a href="#section-5.5.3-11.2" class="pilcrow">¶</a>
+            <li id="section-5.5.3-10.2">Install contained trust anchor provisionally.<a href="#section-5.5.3-10.2" class="pilcrow">¶</a>
 </li>
-            <li id="section-5.5.3-11.3">Verify registrar signature as described in section 5.6.1 in <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> successfully, but take the registrar certificate instead of the MASA certificate for verification.<a href="#section-5.5.3-11.3" class="pilcrow">¶</a>
+            <li id="section-5.5.3-10.3">Verify registrar signature as described in section 5.6.1 in <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> successfully, but take the registrar certificate instead of the MASA certificate for verification.<a href="#section-5.5.3-10.3" class="pilcrow">¶</a>
 </li>
-            <li id="section-5.5.3-11.4">Validate the registrar certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert") successfully, including validity and authorization to bootstrap the particular pledge.<a href="#section-5.5.3-11.4" class="pilcrow">¶</a>
+            <li id="section-5.5.3-10.4">Validate the registrar certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert") successfully, including validity and authorization to bootstrap the particular pledge.<a href="#section-5.5.3-10.4" class="pilcrow">¶</a>
 </li>
           </ol>
-<p id="section-5.5.3-12">If all verification steps stated above have been performed successfully, the pledge <span class="bcp14">SHALL</span> end the provisional accept state for the domain trust anchor and the LDevID(Reg). 
-If multiple signatures are contained in the voucher-response, the pledge <span class="bcp14">MUST</span> verify all successfully.<a href="#section-5.5.3-12" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-13">If an error occurs during the verification it <span class="bcp14">SHALL</span> be signaled in the reason field of the pledge voucher status.<a href="#section-5.5.3-13" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-14">After verification the pledge <span class="bcp14">MUST</span> reply with a status telemetry message as defined in section 5.7 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.<br>
-The pledge generates the voucher status and provides it as JOSE object with the wrapping signature in the response message to the registrar-agent.<a href="#section-5.5.3-14" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-15">The response has the Content-Type <code>application/jose+json</code> and is signed using the IDevID of the pledge as shown in <a href="#vstat" class="xref">Figure 16</a>.
-As the reason field is optional (see <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>), it <span class="bcp14">MAY</span> be omitted in case of success.<a href="#section-5.5.3-15" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-11">If all verification steps stated above have been performed successfully, the pledge <span class="bcp14">SHALL</span> end the provisional accept state for the domain trust anchor and the LDevID(Reg).<a href="#section-5.5.3-11" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-12">If an error occurs during the verification it <span class="bcp14">SHALL</span> be signaled in the reason field of the pledge voucher status.<a href="#section-5.5.3-12" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-13">After verification the pledge <span class="bcp14">MUST</span> reply with a status telemetry message as defined in section 5.7 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.<br>
+The pledge generates the voucher status and provides it as JOSE object with the wrapping signature in the response message to the registrar-agent.<a href="#section-5.5.3-13" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-14">The response has the Content-Type <code>application/jose+json</code> and is signed using the IDevID of the pledge as shown in <a href="#vstat" class="xref">Figure 16</a>.
+As the reason field is optional (see <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>), it <span class="bcp14">MAY</span> be omitted in case of success.<a href="#section-5.5.3-14" class="pilcrow">¶</a></p>
 <span id="name-representation-of-pledge-vo"></span><div id="vstat">
 <figure id="figure-16">
-            <div class="alignLeft art-text artwork" id="section-5.5.3-16.1">
+            <div class="alignLeft art-text artwork" id="section-5.5.3-15.1">
 <pre>
 # The "pledge-voucher-status" telemetry in general JWS serialization syntax
 {
@@ -2896,27 +2893,27 @@ As the reason field is optional (see <span>[<a href="#RFC8995" class="xref">RFC8
 <a href="#name-representation-of-pledge-vo" class="selfRef">Representation of pledge voucher status telemetry</a>
             </figcaption></figure>
 </div>
-<p id="section-5.5.3-17">The registrar-agent <span class="bcp14">SHALL</span> provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-CAcerts".<a href="#section-5.5.3-17" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-18">As the CA certificate provisioning is crucial from a security perspective, this provisioning <span class="bcp14">SHALL</span> only be done, if the voucher-response has been successfully provided to the pledge.<a href="#section-5.5.3-18" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-19">The supply CA certificates message has the Content-Type <code>application/jose+json</code> and is signed using the LDevID(Reg) of the registrar pledge as shown in <a href="#PCAC" class="xref">Figure 14</a>.<a href="#section-5.5.3-19" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-20">The CA certificates are provided as base64 encoded x5b.
-The pledge <span class="bcp14">SHALL</span> install the received CA certificates in its trust anchor database after successful verification of the registrar's signature.<a href="#section-5.5.3-20" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-21">If validation of the wrapping signature or another security check fails, the pledge <span class="bcp14">SHOULD</span> respond with the HTTP 403 Forbidden status code.
+<p id="section-5.5.3-16">The registrar-agent <span class="bcp14">SHALL</span> provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-CAcerts".<a href="#section-5.5.3-16" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-17">As the CA certificate provisioning is crucial from a security perspective, this provisioning <span class="bcp14">SHALL</span> only be done, if the voucher-response has been successfully provided to the pledge.<a href="#section-5.5.3-17" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-18">The supply CA certificates message has the Content-Type <code>application/jose+json</code> and is signed using the LDevID(Reg) of the registrar pledge as shown in <a href="#PCAC" class="xref">Figure 14</a>.<a href="#section-5.5.3-18" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-19">The CA certificates are provided as base64 encoded x5b.
+The pledge <span class="bcp14">SHALL</span> install the received CA certificates in its trust anchor database after successful verification of the registrar's signature.<a href="#section-5.5.3-19" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-20">If validation of the wrapping signature or another security check fails, the pledge <span class="bcp14">SHOULD</span> respond with the HTTP 403 Forbidden status code.
 The HTTP 415 Unsupported Media Type status code <span class="bcp14">SHOULD</span> be used, if the Content-Type of the request is in an unknown or unsupported format. 
-The HTTP 400 Bad Request status code <span class="bcp14">SHOULD</span> be used, if the pledge detects errors in the encoding of the payload.<a href="#section-5.5.3-21" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-22">The registrar-agent <span class="bcp14">SHALL</span> send the enroll-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-enrollment".<a href="#section-5.5.3-22" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-23">The registrar-agent enroll-response Content-Type header, when using EST <span>[<a href="#RFC7030" class="xref">RFC7030</a>]</span> as enrollment protocol between the registrar-agent and the infrastructure, is <code>application/pkcs7-mime</code>. Note that it only contains the LDevID certificate for the pledge, not the certificate chain.<a href="#section-5.5.3-23" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-24">Upon reception, the pledge <span class="bcp14">SHALL</span> verify the received LDevID certificate. 
-The pledge <span class="bcp14">SHALL</span> generate the enroll status and provide it in the response message to the registrar-agent. If the verification of the LDevID certificate succeeds, the status <span class="bcp14">SHALL</span> be set to true, otherwise to FALSE.<a href="#section-5.5.3-24" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-25">The pledge <span class="bcp14">MUST</span> reply with a status telemetry message as defined in section 5.9.4 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.
+The HTTP 400 Bad Request status code <span class="bcp14">SHOULD</span> be used, if the pledge detects errors in the encoding of the payload.<a href="#section-5.5.3-20" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-21">The registrar-agent <span class="bcp14">SHALL</span> send the enroll-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-enrollment".<a href="#section-5.5.3-21" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-22">The registrar-agent enroll-response Content-Type header, when using EST <span>[<a href="#RFC7030" class="xref">RFC7030</a>]</span> as enrollment protocol between the registrar-agent and the infrastructure, is <code>application/pkcs7-mime</code>. Note that it only contains the LDevID certificate for the pledge, not the certificate chain.<a href="#section-5.5.3-22" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-23">Upon reception, the pledge <span class="bcp14">SHALL</span> verify the received LDevID certificate. 
+The pledge <span class="bcp14">SHALL</span> generate the enroll status and provide it in the response message to the registrar-agent. If the verification of the LDevID certificate succeeds, the status <span class="bcp14">SHALL</span> be set to true, otherwise to FALSE.<a href="#section-5.5.3-23" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-24">The pledge <span class="bcp14">MUST</span> reply with a status telemetry message as defined in section 5.9.4 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.
 As for the other objects, the enroll status is provided with an additional signature using JOSE.
 If the pledge verified the received LDevID certificate successfully it <span class="bcp14">SHALL</span> sign the response using the LDevID of the pledge as shown in <a href="#estat" class="xref">Figure 17</a>. 
 In the failure case, the pledge <span class="bcp14">SHALL</span> use the available IdevID credentials.
-As the reason field is optional, it <span class="bcp14">MAY</span> be omitted in case of success.<a href="#section-5.5.3-25" class="pilcrow">¶</a></p>
-<p id="section-5.5.3-26">The response has the Content-Type <code>application/jose+json</code>.<a href="#section-5.5.3-26" class="pilcrow">¶</a></p>
+As the reason field is optional, it <span class="bcp14">MAY</span> be omitted in case of success.<a href="#section-5.5.3-24" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-25">The response has the Content-Type <code>application/jose+json</code>.<a href="#section-5.5.3-25" class="pilcrow">¶</a></p>
 <span id="name-representation-of-pledge-en"></span><div id="estat">
 <figure id="figure-17">
-            <div class="alignLeft art-text artwork" id="section-5.5.3-27.1">
+            <div class="alignLeft art-text artwork" id="section-5.5.3-26.1">
 <pre>
 # The "pledge-enroll-status" telemetry in general JWS serialization
   syntax
@@ -2954,7 +2951,7 @@ As the reason field is optional, it <span class="bcp14">MAY</span> be omitted in
 <a href="#name-representation-of-pledge-en" class="selfRef">Representation of pledge enroll status telemetry</a>
             </figcaption></figure>
 </div>
-<p id="section-5.5.3-28">Once the registrar-agent has collected the information, it can connect to the registrar-agent to provide the status responses to the registrar.<a href="#section-5.5.3-28" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-27">Once the registrar-agent has collected the information, it can connect to the registrar-agent to provide the status responses to the registrar.<a href="#section-5.5.3-27" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="exchanges_uc2_4">

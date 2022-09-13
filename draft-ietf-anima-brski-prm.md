@@ -1343,14 +1343,11 @@ The registrar-agent provides the information via distinct pledge endpoints as fo
 
 The registrar-agent SHALL send the voucher-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-voucher".
 
-The registrar-agent voucher-response Content-Type header is `application/voucher-jws+json` and contains the voucher as provided by the MASA. An example if given in {{MASA-vr}} for a MASA only signed voucher and in Figure {{MASA-REG-vr}} for multiple signatures. 
-
-If a single signature is contained, the pledge receives the voucher and verifies it as described in section 5.6.1 in {{RFC8995}}. 
+The registrar-agent voucher-response Content-Type header is `application/voucher-jws+json` and contains the voucher as provided by the MASA. An example if given in {{MASA-vr}} for a MASA  signed voucher and in {{MASA-REG-vr}} for the voucher with the additional signature of the registrar. 
 
 A nonceless voucher may be accepted as in {{RFC8995}} and may be allowed by a manufactures pledge implementation.
-It requires to perform the validation that the pledge is connected to an authorized registrar-agent by other means, as the registrar would be able to verify it using the agent-signed-data in the PER.
 
-If multiple signatures are contained in the voucher, the pledge SHALL perform the signature verification in the following order:
+To perform the validation of multiple signatures in the voucher, the pledge SHALL perform the signature verification in the following order:
 
   1. Validate MASA signature as described in section 5.6.1 in {{RFC8995}} successfully.
   2. Install contained trust anchor provisionally. 
@@ -1358,7 +1355,6 @@ If multiple signatures are contained in the voucher, the pledge SHALL perform th
   4. Validate the registrar certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert") successfully, including validity and authorization to bootstrap the particular pledge. 
   
 If all verification steps stated above have been performed successfully, the pledge SHALL end the provisional accept state for the domain trust anchor and the LDevID(Reg). 
-If multiple signatures are contained in the voucher-response, the pledge MUST verify all successfully.
 
 If an error occurs during the verification it SHALL be signaled in the reason field of the pledge voucher status.
 
