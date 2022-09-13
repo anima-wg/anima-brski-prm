@@ -1844,7 +1844,8 @@ It is defined as additional assertion type in <span>[<a href="#I-D.ietf-anima-rf
 "agent-proximity" is a statement, that the proximity registrar certificate was provided via the registrar-agent as defined in <a href="#exchanges_uc2" class="xref">Section 5.5</a> and not directly to the pledge.
 This can be verified by the registrar and also by the MASA during the voucher-request processing.
 Note that at the time of creating the voucher-request, the pledge cannot verify the registrar's LDevID(Reg) certificate and has no proof-of-possession of the corresponding private key for the certificate. 
-The pledge therefore accepts the LDevID(Reg) provisionally until it receives the voucher as described in  <a href="#exchanges_uc2_3" class="xref">Section 5.5.3</a>.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+The pledge therefore accepts the LDevID(Reg) provisionally until it receives the voucher as described in  <a href="#exchanges_uc2_3" class="xref">Section 5.5.3</a>.
+See also <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span> "PROVISIONAL accept of server cert".<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">Trust handover to the domain is established via the "pinned-domain-certificate" in the voucher.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2-3">In contrast, "proximity" provides a statement, that the pledge was in direct contact with the registrar and was able to verify proof-of-possession of the private key in the context of the TLS handshake.
 The provisionally accepted LDevID(Reg) certificate can be verified after the voucher has been processed by the pledge. 
@@ -2390,7 +2391,9 @@ It may optionally contain the certificate chain for this certificate.<a href="#s
   "alg": "ES256",
   "x5c": [
     "base64encodedvalue==",
-    "base64encodedvalue=="
+    "base64encodedvalue==",
+  "crit":["created-on"] ,
+  "created-on": "2022-09-13T00:00:02.000Z"
   ]
 }
 </pre>
@@ -2400,7 +2403,9 @@ It may optionally contain the certificate chain for this certificate.<a href="#s
             </figcaption></figure>
 </div>
 <p id="section-5.5.1-53">With the collected PVR and PER, the registrar-agent starts the interaction with the domain registrar.<a href="#section-5.5.1-53" class="pilcrow">¶</a></p>
-<p id="section-5.5.1-54">As the registrar-agent is intended to facilitate communication between the pledge and the domain registrar, a collection of requests from more than one pledge is possible, allowing a bulk bootstrapping of multiple pledges using the same connection between the registrar-agent and the domain registrar.<a href="#section-5.5.1-54" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-54">The new protected header field "created-on" is introduced to reflect freshness of the PER. 
+The field is marked critical "crit" to ensure that it must be understood and validated by the receiver (here the domain registrar) according to section 4.1.11 of <span>[<a href="#RFC7515" class="xref">RFC7515</a>]</span>.<a href="#section-5.5.1-54" class="pilcrow">¶</a></p>
+<p id="section-5.5.1-55">As the registrar-agent is intended to facilitate communication between the pledge and the domain registrar, a collection of requests from more than one pledge is possible, allowing a bulk bootstrapping of multiple pledges using the same connection between the registrar-agent and the domain registrar.<a href="#section-5.5.1-55" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="exchanges_uc2_2">
@@ -2848,7 +2853,7 @@ To contact the pledge, it may either discover the pledge as described in <a href
             <li id="section-5.5.3-10.4">Validate the registrar certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert") successfully, including validity and authorization to bootstrap the particular pledge.<a href="#section-5.5.3-10.4" class="pilcrow">¶</a>
 </li>
           </ol>
-<p id="section-5.5.3-11">If all verification steps stated above have been performed successfully, the pledge <span class="bcp14">SHALL</span> end the provisional accept state for the domain trust anchor and the LDevID(Reg).<a href="#section-5.5.3-11" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-11">If all verification steps stated above have been performed successfully, the pledge <span class="bcp14">SHALL</span> terminate the "PROVISIONAL accept" state for the domain trust anchor and the LDevID(Reg).<a href="#section-5.5.3-11" class="pilcrow">¶</a></p>
 <p id="section-5.5.3-12">If an error occurs during the verification it <span class="bcp14">SHALL</span> be signaled in the reason field of the pledge voucher status.<a href="#section-5.5.3-12" class="pilcrow">¶</a></p>
 <p id="section-5.5.3-13">After verification the pledge <span class="bcp14">MUST</span> reply with a status telemetry message as defined in section 5.7 of <span>[<a href="#RFC8995" class="xref">RFC8995</a>]</span>.<br>
 The pledge generates the voucher status and provides it as JOSE object with the wrapping signature in the response message to the registrar-agent.<a href="#section-5.5.3-13" class="pilcrow">¶</a></p>
@@ -4107,33 +4112,35 @@ zBs2Ofk8DrX9zYiWZrVR7Y6HDcxY-aErEbiA"
 <p id="appendix-B-1">Proof of Concept Code available<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <p id="appendix-B-2">From IETF draft 04 -&gt; IETF draft 05:<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-B-3.1">Added explanation of MASA requiring domain CA cert in section 5.5.1 and section 5.5.2, issue #36<a href="#appendix-B-3.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B-3.1">Added new protected header parameter (created-on) in PER to support freshness validation, issue #63<a href="#appendix-B-3.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.2">Removed reference to CAB Forum as not needed for BRSKI-PRM specifically, issue #65<a href="#appendix-B-3.2" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.2">Added explanation of MASA requiring domain CA cert in section 5.5.1 and section 5.5.2, issue #36<a href="#appendix-B-3.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.3">Enhanced error codes in section 5.5.1, issue #39, #64<a href="#appendix-B-3.3" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.3">Removed reference to CAB Forum as not needed for BRSKI-PRM specifically, issue #65<a href="#appendix-B-3.3" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.4">Enhanced security considerations and privacy considerations, issue #59<a href="#appendix-B-3.4" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.4">Enhanced error codes in section 5.5.1, issue #39, #64<a href="#appendix-B-3.4" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.5">Reworked terminology of "enrollment object", "certification object", "enrollment request object", etc., issue #27<a href="#appendix-B-3.5" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.5">Enhanced security considerations and privacy considerations, issue #59<a href="#appendix-B-3.5" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.6">Reworked all message representations to align with encoding<a href="#appendix-B-3.6" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.6">Reworked terminology of "enrollment object", "certification object", "enrollment request object", etc., issue #27<a href="#appendix-B-3.6" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.7">Included examples for several objects in section <a href="#examples" class="xref">Appendix A</a><a href="#appendix-B-3.7" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.7">Reworked all message representations to align with encoding<a href="#appendix-B-3.7" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.8">Defined new endpoint for pledge bootstrapping status inquiry, issue #35 in section <a href="#exchanges_uc2_5" class="xref">Section 5.5.5</a>, IANA considerations and section <a href="#pledge_ep" class="xref">Section 5.3</a><a href="#appendix-B-3.8" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.8">Included examples for several objects in section <a href="#examples" class="xref">Appendix A</a><a href="#appendix-B-3.8" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.9">PoP for private key to registrar certificate included as mandatory, issues #32 and #49<a href="#appendix-B-3.9" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.9">Defined new endpoint for pledge bootstrapping status inquiry, issue #35 in section <a href="#exchanges_uc2_5" class="xref">Section 5.5.5</a>, IANA considerations and section <a href="#pledge_ep" class="xref">Section 5.3</a><a href="#appendix-B-3.9" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.10">Issue #50 addressed by referring to the utilized enrollment protocol<a href="#appendix-B-3.10" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.10">PoP for private key to registrar certificate included as mandatory, issues #32 and #49<a href="#appendix-B-3.10" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.11">Issue #47 MASA verification of LDevID(RegAgt) to the same LDevID(Reg) domain CA<a href="#appendix-B-3.11" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.11">Issue #50 addressed by referring to the utilized enrollment protocol<a href="#appendix-B-3.11" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.12">Issue #31, clarified that combined pledge may act as client/server for further (re)enrollment<a href="#appendix-B-3.12" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.12">Issue #47 MASA verification of LDevID(RegAgt) to the same LDevID(Reg) domain CA<a href="#appendix-B-3.12" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.13">Issue #42, clarified that Registrar needs to verify the status responses with and ensure that they match the audit log response from the MASA, otherwise it needs drop the pledge and revoke the certificate<a href="#appendix-B-3.13" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.13">Issue #31, clarified that combined pledge may act as client/server for further (re)enrollment<a href="#appendix-B-3.13" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.14">Issue #43, clarified that the pledge shall use the create time from the trigger message if the time has not been synchronized, yet.<a href="#appendix-B-3.14" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.14">Issue #42, clarified that Registrar needs to verify the status responses with and ensure that they match the audit log response from the MASA, otherwise it needs drop the pledge and revoke the certificate<a href="#appendix-B-3.14" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-3.15">Issue #43, clarified that the pledge shall use the create time from the trigger message if the time has not been synchronized, yet.<a href="#appendix-B-3.15" class="pilcrow">¶</a>
 </li>
       </ul>
 <p id="appendix-B-4">From IETF draft 03 -&gt; IETF draft 04:<a href="#appendix-B-4" class="pilcrow">¶</a></p>

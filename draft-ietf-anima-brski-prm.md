@@ -410,6 +410,7 @@ It is defined as additional assertion type in {{I-D.ietf-anima-rfc8366bis}}
 This can be verified by the registrar and also by the MASA during the voucher-request processing.
 Note that at the time of creating the voucher-request, the pledge cannot verify the registrar's LDevID(Reg) certificate and has no proof-of-possession of the corresponding private key for the certificate. 
 The pledge therefore accepts the LDevID(Reg) provisionally until it receives the voucher as described in  {{exchanges_uc2_3}}.
+See also {{RFC8995}} "PROVISIONAL accept of server cert".
 
 Trust handover to the domain is established via the "pinned-domain-certificate" in the voucher.
 
@@ -909,13 +910,18 @@ The JOSE object is signed using the pledge's IDevID credential, which correspond
   "alg": "ES256",
   "x5c": [ 
     "base64encodedvalue==",
-    "base64encodedvalue==" 
+    "base64encodedvalue==",
+  "crit":["created-on"]	,
+  "created-on": "2022-09-13T00:00:02.000Z"
   ]
 }
 ~~~~
 {: #per title='Representation of PER' artwork-align="left"}
 
 With the collected PVR and PER, the registrar-agent starts the interaction with the domain registrar.
+
+The new protected header field "created-on" is introduced to reflect freshness of the PER. 
+The field is marked critical "crit" to ensure that it must be understood and validated by the receiver (here the domain registrar) according to section 4.1.11 of {{RFC7515}}.
 
 As the registrar-agent is intended to facilitate communication between the pledge and the domain registrar, a collection of requests from more than one pledge is possible, allowing a bulk bootstrapping of multiple pledges using the same connection between the registrar-agent and the domain registrar.
 
@@ -1354,7 +1360,7 @@ To perform the validation of multiple signatures in the voucher, the pledge SHAL
   3. Verify registrar signature as described in section 5.6.1 in {{RFC8995}} successfully, but take the registrar certificate instead of the MASA certificate for verification.
   4. Validate the registrar certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert") successfully, including validity and authorization to bootstrap the particular pledge. 
   
-If all verification steps stated above have been performed successfully, the pledge SHALL end the provisional accept state for the domain trust anchor and the LDevID(Reg). 
+If all verification steps stated above have been performed successfully, the pledge SHALL terminate the "PROVISIONAL accept" state for the domain trust anchor and the LDevID(Reg). 
 
 If an error occurs during the verification it SHALL be signaled in the reason field of the pledge voucher status.
 
@@ -2375,6 +2381,7 @@ Proof of Concept Code available
 
 From IETF draft 04 -> IETF draft 05:
 
+* Added new protected header parameter (created-on) in PER to support freshness validation, issue #63
 * Added explanation of MASA requiring domain CA cert in section 5.5.1 and section 5.5.2, issue #36
 * Removed reference to CAB Forum as not needed for BRSKI-PRM specifically, issue #65
 * Enhanced error codes in section 5.5.1, issue #39, #64

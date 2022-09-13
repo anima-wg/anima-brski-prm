@@ -114,7 +114,7 @@ Fries, et al.             Expires 17 March 2023                 [Page 2]
 Internet-Draft                  BRSKI-PRM                 September 2022
 
 
-       5.5.2.  Request Processing by the Registrar-Agent . . . . . .  29
+       5.5.2.  Request Processing by the Registrar-Agent . . . . . .  30
        5.5.3.  Response Object Supply by Registrar-Agent to
                Pledge  . . . . . . . . . . . . . . . . . . . . . . .  42
        5.5.4.  Telemetry status handling (registrar-agent - domain
@@ -769,7 +769,8 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    has no proof-of-possession of the corresponding private key for the
    certificate.  The pledge therefore accepts the LDevID(Reg)
    provisionally until it receives the voucher as described in
-   Section 5.5.3.
+   Section 5.5.3.  See also [RFC8995] "PROVISIONAL accept of server
+   cert".
 
    Trust handover to the domain is established via the "pinned-domain-
    certificate" in the voucher.
@@ -777,7 +778,6 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    In contrast, "proximity" provides a statement, that the pledge was in
    direct contact with the registrar and was able to verify proof-of-
    possession of the private key in the context of the TLS handshake.
-   The provisionally accepted LDevID(Reg) certificate can be verified
 
 
 
@@ -786,6 +786,7 @@ Fries, et al.             Expires 17 March 2023                [Page 14]
 Internet-Draft                  BRSKI-PRM                 September 2022
 
 
+   The provisionally accepted LDevID(Reg) certificate can be verified
    after the voucher has been processed by the pledge.  As the returned
    voucher includes an additional signature by the registrar, the pledge
    can also verify that the registrar possesses the corresponding
@@ -806,7 +807,6 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    document.  The URI path begins with "http://www.example.com/.well-
    known/brski" followed by a path-suffix that indicates the intended
    operation.
-
 
 
 
@@ -1596,7 +1596,9 @@ Internet-Draft                  BRSKI-PRM                 September 2022
      "alg": "ES256",
      "x5c": [
        "base64encodedvalue==",
-       "base64encodedvalue=="
+       "base64encodedvalue==",
+     "crit":["created-on"] ,
+     "created-on": "2022-09-13T00:00:02.000Z"
      ]
    }
 
@@ -1605,11 +1607,24 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    With the collected PVR and PER, the registrar-agent starts the
    interaction with the domain registrar.
 
+   The new protected header field "created-on" is introduced to reflect
+   freshness of the PER.  The field is marked critical "crit" to ensure
+   that it must be understood and validated by the receiver (here the
+   domain registrar) according to section 4.1.11 of [RFC7515].
+
    As the registrar-agent is intended to facilitate communication
    between the pledge and the domain registrar, a collection of requests
    from more than one pledge is possible, allowing a bulk bootstrapping
    of multiple pledges using the same connection between the registrar-
    agent and the domain registrar.
+
+
+
+
+Fries, et al.             Expires 17 March 2023                [Page 29]
+
+Internet-Draft                  BRSKI-PRM                 September 2022
+
 
 5.5.2.  Request Processing by the Registrar-Agent
 
@@ -1618,13 +1633,6 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    domain registrar (pledge-initiator-mode) with some deviations.
 
    Preconditions:
-
-
-
-Fries, et al.             Expires 17 March 2023                [Page 29]
-
-Internet-Draft                  BRSKI-PRM                 September 2022
-
 
    *  Registrar-agent: possesses it's own LDevID(RegAgt) credentials of
       the site domain.  In addition, it may possess the IDevID CA
@@ -1648,14 +1656,6 @@ Internet-Draft                  BRSKI-PRM                 September 2022
       of this document.  In other cases, a MASA may allow the pledge to
       enroll into an anonymous and/or yet-unknown domain and then the
       a-priori possession of the domain CA certificate is not needed.
-
-
-
-
-
-
-
-
 
 
 
@@ -2426,8 +2426,8 @@ Internet-Draft                  BRSKI-PRM                 September 2022
        authorization to bootstrap the particular pledge.
 
    If all verification steps stated above have been performed
-   successfully, the pledge SHALL end the provisional accept state for
-   the domain trust anchor and the LDevID(Reg).
+   successfully, the pledge SHALL terminate the "PROVISIONAL accept"
+   state for the domain trust anchor and the LDevID(Reg).
 
    If an error occurs during the verification it SHALL be signaled in
    the reason field of the pledge voucher status.
@@ -4079,8 +4079,8 @@ Appendix B.  History of Changes [RFC Editor: please delete]
 
    From IETF draft 04 -> IETF draft 05:
 
-   *  Added explanation of MASA requiring domain CA cert in section
-      5.5.1 and section 5.5.2, issue #36
+   *  Added new protected header parameter (created-on) in PER to
+      support freshness validation, issue #63
 
 
 
@@ -4089,6 +4089,9 @@ Fries, et al.             Expires 17 March 2023                [Page 73]
 
 Internet-Draft                  BRSKI-PRM                 September 2022
 
+
+   *  Added explanation of MASA requiring domain CA cert in section
+      5.5.1 and section 5.5.2, issue #36
 
    *  Removed reference to CAB Forum as not needed for BRSKI-PRM
       specifically, issue #65
@@ -4135,9 +4138,6 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    *  In deep Review by Esko Dijk lead to issues #22-#61, which are bein
       stepwise integrated
 
-   *  Simplified YANG definition by augmenting the voucher request from
-      RFC 8995 instead of redefining it.
-
 
 
 
@@ -4145,6 +4145,9 @@ Fries, et al.             Expires 17 March 2023                [Page 74]
 
 Internet-Draft                  BRSKI-PRM                 September 2022
 
+
+   *  Simplified YANG definition by augmenting the voucher request from
+      RFC 8995 instead of redefining it.
 
    *  Added explanation for terminology "endpoint" used in this
       document, issue #16
@@ -4189,9 +4192,6 @@ Internet-Draft                  BRSKI-PRM                 September 2022
 
    From IETF draft 01 -> IETF draft 02:
 
-   *  Issue #15 included additional signature on voucher from registrar
-      in section Section 5.5.2 and section Section 5.2 The verification
-      of multiple signatures is described in section Section 5.5.3
 
 
 
@@ -4201,6 +4201,10 @@ Fries, et al.             Expires 17 March 2023                [Page 75]
 
 Internet-Draft                  BRSKI-PRM                 September 2022
 
+
+   *  Issue #15 included additional signature on voucher from registrar
+      in section Section 5.5.2 and section Section 5.2 The verification
+      of multiple signatures is described in section Section 5.5.3
 
    *  Included representation for General JWS JSON Serialization for
       examples
@@ -4247,16 +4251,14 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    *  Reworked text in from introduction to section pledge-responder-
       mode
 
-   *  Fixed "serial-number" encoding in PVR/RVR
-
-
-
 
 
 Fries, et al.             Expires 17 March 2023                [Page 76]
 
 Internet-Draft                  BRSKI-PRM                 September 2022
 
+
+   *  Fixed "serial-number" encoding in PVR/RVR
 
    *  Added prior-signed-voucher-request in the parameter description of
       the registrar-voucher-request in Section 5.5.2.
@@ -4303,9 +4305,7 @@ Internet-Draft                  BRSKI-PRM                 September 2022
       required changes and adaptations in several sections to remove the
       description and references to UC1.
 
-   *  Addressed feedback for voucher-request enhancements from YANG
-      doctor early review in Section 6.1 as well as in the security
-      considerations (formerly named ietf-async-voucher-request).
+
 
 
 
@@ -4313,6 +4313,10 @@ Fries, et al.             Expires 17 March 2023                [Page 77]
 
 Internet-Draft                  BRSKI-PRM                 September 2022
 
+
+   *  Addressed feedback for voucher-request enhancements from YANG
+      doctor early review in Section 6.1 as well as in the security
+      considerations (formerly named ietf-async-voucher-request).
 
    *  Renamed ietf-async-voucher-request to IETF-voucher-request-prm to
       to allow better listing of voucher related extensions; aligned
@@ -4357,10 +4361,6 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    *  Details on trust relationship between registrar-agent and
       registrar (issue #4, #5, #9) included in Section 5.1.
 
-   *  Recommendation regarding short-lived certificates for registrar-
-      agent authentication towards registrar (issue #7) in the security
-      considerations.
-
 
 
 
@@ -4369,6 +4369,10 @@ Fries, et al.             Expires 17 March 2023                [Page 78]
 
 Internet-Draft                  BRSKI-PRM                 September 2022
 
+
+   *  Recommendation regarding short-lived certificates for registrar-
+      agent authentication towards registrar (issue #7) in the security
+      considerations.
 
    *  Introduction of reference to agent signing certificate using SKID
       in agent signed data (issue #37).
@@ -4412,12 +4416,8 @@ Internet-Draft                  BRSKI-PRM                 September 2022
       intended to support both use cases in the document.  An
       illustrative example is provided.
 
-   *  Missing details provided for the description and call flow in
-      pledge-agent use case Section 5.1, e.g. to accommodate
-      distribution of CA certificates.
 
-   *  Updated CMP example in to use lightweight CMP instead of CMP, as
-      the draft already provides the necessary /.well-known endpoints.
+
 
 
 
@@ -4425,6 +4425,13 @@ Fries, et al.             Expires 17 March 2023                [Page 79]
 
 Internet-Draft                  BRSKI-PRM                 September 2022
 
+
+   *  Missing details provided for the description and call flow in
+      pledge-agent use case Section 5.1, e.g. to accommodate
+      distribution of CA certificates.
+
+   *  Updated CMP example in to use lightweight CMP instead of CMP, as
+      the draft already provides the necessary /.well-known endpoints.
 
    *  Requirements discussion moved to separate section in Section 4.
       Shortened description of proof of identity binding and mapping to
@@ -4466,6 +4473,15 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    *  Update of description of architecture elements and changes to
       BRSKI in Section 5.
 
+
+
+
+
+Fries, et al.             Expires 17 March 2023                [Page 80]
+
+Internet-Draft                  BRSKI-PRM                 September 2022
+
+
    *  Enhanced consideration of existing enrollment protocols in the
       context of mapping the requirements to existing solutions in
       Section 4.
@@ -4474,13 +4490,6 @@ Internet-Draft                  BRSKI-PRM                 September 2022
 
    *  Update of examples, specifically for building automation as well
       as two new application use cases in Section 3.1.
-
-
-
-Fries, et al.             Expires 17 March 2023                [Page 80]
-
-Internet-Draft                  BRSKI-PRM                 September 2022
-
 
    *  Deletion of asynchronous interaction with MASA to not complicate
       the use case.  Note that the voucher exchange can already be
@@ -4523,6 +4532,12 @@ Authors' Addresses
    URI:   https://www.siemens.com/
 
 
+
+Fries, et al.             Expires 17 March 2023                [Page 81]
+
+Internet-Draft                  BRSKI-PRM                 September 2022
+
+
    Eliot Lear
    Cisco Systems
    Richtistrasse 7
@@ -4532,25 +4547,10 @@ Authors' Addresses
    Email: lear@cisco.com
 
 
-
-Fries, et al.             Expires 17 March 2023                [Page 81]
-
-Internet-Draft                  BRSKI-PRM                 September 2022
-
-
    Michael C. Richardson
    Sandelman Software Works
    Email: mcr+ietf@sandelman.ca
    URI:   http://www.sandelman.ca/
-
-
-
-
-
-
-
-
-
 
 
 
