@@ -634,6 +634,7 @@ Preconditions:
   * configured, e.g., as a list of pledges to be bootstrapped via QR code scanning
   * discovered by using standard approaches like mDNS as described in {{discovery_uc2_ppa}}
   * discovered by using a vendor specific approach, e.g., RF beacons
+  The registrar-agent SHOULD have a synchronized time.
 
 * Registrar: possesses/trusts IDevID CA certificate and an own LDevID(Reg) credential.
 
@@ -922,6 +923,7 @@ With the collected PVR and PER, the registrar-agent starts the interaction with 
 
 The new protected header field "created-on" is introduced to reflect freshness of the PER. 
 The field is marked critical "crit" to ensure that it must be understood and validated by the receiver (here the domain registrar) according to section 4.1.11 of {{RFC7515}}.
+It allows the registrar to verify the timely correlation between the PER and previously exchanged messages, i.e., created-on of PER >= created-on of PVR >= created-on of PVR trigger.
 
 As the registrar-agent is intended to facilitate communication between the pledge and the domain registrar, a collection of requests from more than one pledge is possible, allowing a bulk bootstrapping of multiple pledges using the same connection between the registrar-agent and the domain registrar.
 
@@ -1573,7 +1575,6 @@ A pledge or a registrar-agent that receives a pledge-status request with a versi
 
 ~~~~
 <CODE BEGINS> 
-{
   status-request = {
       "version": uint,
       "created-on": tdate ttime,
