@@ -454,7 +454,8 @@ As the returned voucher includes an additional signature by the registrar, the p
 ## Behavior of Pledge in Pledge-Responder-Mode {#pledge_ep}
 
 In contrast to BRSKI the pledge acts as server.
-It is triggered by the registrar-agent for the generation of the PVR and PER as well as for the processing of the responses and the generation of status information.
+
+This is triggered by the registrar-agent to generate the PVR and PER as well as for the processing of the responses and the generation of status information.
 Due to the use of the registrar-agent, the interaction with the domain registrar is changed as shown in {{exchangesfig_uc2_1}}.
 To enable interaction with the registrar-agent, the pledge provides endpoints using the BRSKI defined endpoints based on the "/.well-known/brski" URI tree.
 
