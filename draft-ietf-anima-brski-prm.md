@@ -394,7 +394,7 @@ It is recommended to use short lived registrar-agent LDevIDs in the range of day
 
 If a registrar detects a request that originates from a registrar-agent it is able to switch the operational mode from BRSKI to BRSKI-PRM.
 This may be supported by a specific naming in the SAN (subject alternative name) component of the LDevID(RegAgt) certificate.
-Alternatively, the domain may feature an own issuing CA for registrar-agent LDevID certificates.
+Alternatively, the domain may feature a CA specifically for issuing registrar-agent LDevID certificates.
 This allows the registrar to detect registrar-agents based on the issuing CA.
 
 The following list describes the components in a (customer) site domain:
