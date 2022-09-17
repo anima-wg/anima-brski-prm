@@ -417,9 +417,10 @@ The following list describes the components in a (customer) site domain:
 
 
 * Registrar-agent: provides a communication path to exchange data objects between the pledge and the domain registrar.
-  The registrar-agent brokers in situations, in which the domain registrar is not directly reachable by the pledge, either due to a different technology stack or due to missing connectivity.
-  The registrar-agent triggers a pledge to create bootstrapping artifacts such as voucher-request and enrollment-request on one or multiple pledges and performs a (bulk) bootstrapping based on the collected data.
-  The registrar-agent is expected to possess information of the domain registrar (i.e., LDevID(Reg) certificate, LDevID(CA) certificate, address), either by configuration or by using the discovery mechanism defined in {{RFC8995}}.
+  The registrar-agent brokers in situations in which the domain registrar is not directly reachable by the pledge.
+This may be due to a different technology stack or due to missing connectivity.
+  The registrar-agent triggers a pledge to create bootstrapping artifacts such as the voucher-request and the enrollment-request on one or multiple pledges and performs a (bulk) bootstrapping based on the collected data.
+  The registrar-agent is expected to possess information about the domain registrar: the LDevID(Reg) certificate, LDevID(CA) certificate, IP address, either by configuration or by using the discovery mechanism defined in {{RFC8995}}.
   There is no trust assumption between the pledge and the registrar-agent as only authenticated self-contained objects are used, which are transported via the registrar-agent and provided either by the pledge or the registrar.
   The trust assumption between the registrar-agent and the registrar is based on the LDevID of the registrar-agent, provided by the PKI responsible for the domain.
   This allows the registrar-agent to authenticate towards the registrar, e.g., in a TLS handshake.
@@ -446,7 +447,7 @@ See also {{RFC8995}} "PROVISIONAL accept of server cert".
 
 Trust handover to the domain is established via the "pinned-domain-certificate" in the voucher.
 
-In contrast, "proximity" provides a statement, that the pledge was in direct contact with the registrar and was able to verify proof-of-possession of the private key in the context of the TLS handshake.
+In contrast to the above, "proximity" provides a statement, that the pledge was in direct contact with the registrar and was able to verify proof-of-possession of the private key in the context of the TLS handshake.
 The provisionally accepted LDevID(Reg) certificate can be verified after the voucher has been processed by the pledge.
 As the returned voucher includes an additional signature by the registrar, the pledge can also verify that the registrar possesses the corresponding private key.
 
