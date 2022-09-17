@@ -411,7 +411,7 @@ The following list describes the components in a (customer) site domain:
   * The registrar-agent may provide additional data to the pledge in the context of the voucher triggering request, to make itself visible to the domain registrar.
 
   * Order of exchanges in the call flow may be different as the registrar-agent collects both, PVR and PER, at once and provides them to the registrar.
-    This approach may also be used to perform a bulk bootstrapping of several devices.
+    This approach is used in order to allow for bulk bootstrapping of several devices in a single pass through a new site by the commissioning personnel.
 
   * The data objects utilized for the data exchange between the pledge and the registrar are self-contained authenticated objects (signature-wrapped objects).
 
