@@ -508,6 +508,7 @@ The registrar-agent is expected to already possess an LDevID(RegAgt) to authenti
 The registrar-agent will use this LDevID(RegAgt) when establishing the TLS session with the domain registrar for TLS client authentication.
 The LDevID(RegAgt) certificate MUST include a SubjectKeyIdentifier (SKID), which is used as reference in the context of an agent-signed-data object as defined in {{exchanges_uc2_1}}.
 Note that this is an additional requirement for issuing the certificate, as {{IEEE-802.1AR}} only requires the SKID to be included for intermediate CA certificates.
+(Note that {{RFC8995}} makes a similar requirement)
 In BRSKI-PRM, the SKID is used in favor of a certificate fingerprint to avoid additional computations.
 
 Using an LDevID for TLS client authentication is a deviation from {{RFC8995}}, in which the pledge's IDevID credential is used to perform TLS client authentication.
