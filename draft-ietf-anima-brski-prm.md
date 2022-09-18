@@ -559,7 +559,7 @@ How to gain network connectivity is out of scope of this document.
 The interaction of the pledge with the registrar-agent may be accomplished using different transport means (protocols and or network technologies).
 For this document the usage of HTTP is targeted as in BRSKI.
 Alternatives may be CoAP, Bluetooth Low Energy (BLE), or Nearfield Communication (NFC).
-This requires independence of the exchanged data objects between the pledge and the registrar from transport security.
+This transport independence is enabled by the independence of the exchanged data objects from a specific transport security.
 These transport means may differ from, and are independent from, the ones used between the registrar-agent and the registrar.
 Therefore, authenticated self-contained objects (here: signature-wrapped objects) are applied in the data exchange between the pledge and the registrar.
 
