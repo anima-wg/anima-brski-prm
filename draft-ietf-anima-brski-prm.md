@@ -816,7 +816,7 @@ The payload of the PVR MUST contain the following parameters as part of the ietf
 * created-on: SHALL contain the current date and time in yang:date-and-time format.
   If the pledge does not have synchronized the time, it SHALL use the created-on time from the agent-signed-data, received in the trigger to create a PVR.
 
-* nonce: SHALL contain a cryptographically strong random or pseudo-random number.
+* nonce: SHALL contain a cryptographically strong pseudo-random number.
 
 * serial-number: SHALL contain the pledge product-serial-number as X520SerialNumber.
 
