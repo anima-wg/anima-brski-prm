@@ -225,6 +225,9 @@ In order to keep them readable the examples use the token "base64encodedvalue=="
 This token is in fact valid base64.
 The full examples are in appendix.
 
+This protocol unavoidably has a mix of both base64 encoded data (as is normal for many JSON encoded protocols), and also BASE64URL encoded data, as specified by JWS.
+The later is indicaded by a strong like "BASE64URL(THING)"
+
 # Scope of Solution
 
 ## Supported Environments and Use Case Examples {#sup-env}
