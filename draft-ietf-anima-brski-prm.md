@@ -548,7 +548,10 @@ The registrar-agent MAY use
 * "product-serial-number._brski-pledge._tcp.local", to discover a specific pledge, e.g., when connected to a local network.
 * "_brski-pledge._tcp.local" to get a list of pledges to be bootstrapped.
 
-To be able to detect the pledge using mDNS, network connectivity is required. For Ethernet it is provided by simply connecting the network cable. For WIFI networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping. The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN ID. How to gain network connectivity is out of scope of this document.
+To be able to detect the pledge using mDNS, network connectivity is required. For Ethernet it is provided by simply connecting the network cable.
+For WiFi networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping.
+The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN ID.
+How to gain network connectivity is out of scope of this document.
 
 
 ## Bootstrapping Data Objects and Corresponding Exchanges {#exchanges_uc2}
