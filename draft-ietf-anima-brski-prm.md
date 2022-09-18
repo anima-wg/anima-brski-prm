@@ -564,7 +564,8 @@ These transport means may differ from, and are independent from, the ones used b
 Therefore, authenticated self-contained objects (here: signature-wrapped objects) are applied in the data exchange between the pledge and the registrar.
 
 The registrar-agent provides the domain-registrar certificate (LDevID(Reg) certificate) to the pledge to be included into the "agent-provided-proximity-registrar-certificate" leaf of the PVR.
-This enables the registrar to verify, that it is the target registrar for handling the request.
+This enables the registrar to verify that it is the target registrar for handling the request.
+
 The registrar certificate may be configured at the registrar-agent or may be fetched by the registrar-agent based on a prior TLS connection establishment with the domain registrar.
 In addition, the registrar-agent provides agent-signed-data containing the product-serial-number in the body, signed with the LDevID(RegAgt).
 This enables the registrar to verify and log, which registrar-agent was in contact with the pledge, when verifying the PVR.
