@@ -577,7 +577,8 @@ If not included in the "agent-sign-cert", the registrar MUST fetch the LDevID(Re
 The registrar includes the LDevID(RegAgt) certificate information into the RVR if the PVRs contains the assertion of "agent-proximity".
 
 The MASA in turn verifies the LDevID(Reg) certificate is included in the PVR (prior-signed-voucher-request) in the "agent-provided-proximity-registrar-certificate" leaf and may assert in the voucher "verified" or "logged" instead of "proximity", as there is no direct connection between the pledge and the registrar.
-In addition, the MASA can provide the assertion "agent-proximity" as following.
+
+In addition, the MASA can provide the assertion "agent-proximity" as follows:
 If the LDevID(RegAgt) certificate information is contained in the "agent-sign-cert" component of the RVR, the MASA can verify the signature of the agent-signed-data contained in the prior-signed-voucher-request.
 If both can be verified successfully, the MASA can assert "agent-proximity" in the voucher. Otherwise, it may assert "verified" or "logged".
 Depending on the MASA verification policy, it may also respond with a suitable 4xx or 5xx status code as described in section 5.6 of {{RFC8995}}.
@@ -586,26 +587,29 @@ The voucher can then be supplied via the registrar to the registrar-agent.
 {{exchangesfig_uc2_all}} provides an overview of the exchanges detailed in the following sub sections.
 
 
-~~~~
+~~~~ aasvg
 +--------+  +-----------+    +-----------+   +--------+   +---------+
 | Pledge |  | Registrar |    | Domain    |   | Domain |   | Vendor  |
 |        |  | Agent     |    | Registrar |   | CA     |   | Service |
 |        |  | (RegAgt)  |    |  (JRC)    |   |        |   | (MASA)  |
 +--------+  +-----------+    +-----------+   +--------+   +---------+
      |              |                  |              |   Internet |
-/* discover pledge */
+     |   discover   |                  |              |            |
+     |    pledge    |                  |              |            |
      | mDNS query   |                  |              |            |
      |<-------------|                  |              |            |
      |------------->|                  |              |            |
      |              |                  |              |            |
-/* trigger PVR and PER generation */
+
+     trigger PVR and PER generation
      |<- vTrigger --|                  |              |            |
      |-Voucher-Req->|                  |              |            |
      |              |                  |              |            |
      |<- eTrigger --|                  |              |            |
      |- Enroll-Req->|                  |              |            |
      ~              ~                  ~              ~            ~
-/* provide PVR to infrastructure */
+
+     provide PVR to infrastructure
      |              |<------ TLS ----->|              |            |
      |              |          [Reg-Agt authenticated |            |
      |              |           and authorized?]      |            |
@@ -619,24 +623,26 @@ The voucher can then be supplied via the registrar to the registrar-agent.
      |              |                  |<-------- Voucher ---------|
      |              |<---- Voucher ----|              |            |
      |              |                  |              |            |
-/* provide PER to infrastructure */
+
+     provide PER to infrastructure
      |              |-- Enroll-Req --->|              |            |
      |              |                  |- Cert-Req -->|            |
      |              |                  |<-Certificate-|            |
      |              |<-- Enroll-Resp --|              |            |
      |              |                  |              |            |
-/* query cACerts from infrastructure */
+     query cACerts from infrastructure
      |              |-- cACerts-Req -->|              |            |
      |              |<- cACerts-Resp --|              |            |
      ~              ~                  ~              ~            ~
-/* provide voucher and certificate and collect status info */
+
+     provide voucher and certificate and collect status info
      |<-- Voucher --|                  |              |            |
      |-- vStatus -->|                  |              |            |
      |<-- cACerts --|                  |              |            |
      |<-Enroll-Resp-|                  |              |            |
      |-- eStatus -->|                  |              |            |
      ~              ~                  ~              ~            ~
-/* provide voucher status and enroll status to registrar */
+     provide voucher status and enroll status to registrar
      |              |<------ TLS ----->|              |            |
      |              |----  vStatus --->|              |            |
      |              |                  |-- req. device audit log ->|
