@@ -511,8 +511,8 @@ Note that this is an additional requirement for issuing the certificate, as {{IE
 (Note that {{RFC8995}} makes a similar requirement)
 In BRSKI-PRM, the SKID is used in favor of a certificate fingerprint to avoid additional computations.
 
-Using an LDevID for TLS client authentication is a deviation from {{RFC8995}}, in which the pledge's IDevID credential is used to perform TLS client authentication.
-The use of the LDevID(RegAgt) allows the domain registrar to distinguish, if bootstrapping is initiated from a pledge or from a registrar-agent and adopt the internal handling accordingly.
+Using an LDevID for TLS client authentication of the registrar-agent is a deviation from {{RFC8995}}, in which the pledge's IDevID credential is used to perform TLS client authentication.
+The use of the LDevID(RegAgt) allows the domain registrar to distinguish, if bootstrapping is initiated from a pledge or from a registrar-agent and adopt different internal handling accordingly.
 As BRSKI-PRM uses authenticated self-contained data objects between the pledge and the domain registrar, the binding of the pledge identity to the requests is provided by the data object signature employing the pledge's IDevID.
 The objects exchanged between the pledge and the domain registrar used in the context of this specifications are JOSE objects.
 
