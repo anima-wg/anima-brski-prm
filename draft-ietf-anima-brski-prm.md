@@ -220,6 +220,10 @@ RVR:
 : Registrar-Voucher-Request is a request signed by the Registrar, on it's way to the MASA.
 It will contain the PVR sent by the pledge.
 
+This document includes many examples that would contain many long sequences of base64 encoded objects with no content directly comprehendable to a human reader.
+In order to keep them readable the examples use the token "base64encodedvalue==" whenever such a thing occurs.
+This token is in fact valid base64.
+The full examples are in appendix.
 
 # Scope of Solution
 
