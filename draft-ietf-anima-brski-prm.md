@@ -694,7 +694,7 @@ Preconditions:
 * Registrar: possesses/trusts IDevID CA certificate and an own LDevID(Reg) credential.
 
 
-~~~~
+~~~~ aasvg
 +--------+                             +-----------+
 | Pledge |                             | Registrar |
 |        |                             | Agent     |
@@ -717,12 +717,14 @@ Preconditions:
 ~~~~
 {: #exchangesfig_uc2_1 title='Request collection (registrar-agent - pledge)' artwork-align="left"}
 
-Note that the registrar-agent may trigger the pledge for the PVR or the PER or both. It is expected that this will be aligned with a service technician workflow doing the pledge installation.
+Note that the registrar-agent may trigger the pledge for the PVR or the PER or both. It is expected that this will be aligned with a service technician workflow, visiting and installing each pledge.
+
+####  Voucher Request trigger and response
 
 Triggering the pledge to create the PVR is done using HTTP POST on the defined pledge endpoint "/.well-known/brski/pledge-voucher-request".
 
 The registrar-agent PVR trigger Content-Type header is: `application/json`.
-It defines a JSON document to provide three parameter:
+Three parameters are provided in the JSON document that is posted:
 
 * agent-provided-proximity-registrar-cert: base64-encoded LDevID(Reg) TLS certificate.
 
@@ -730,7 +732,7 @@ It defines a JSON document to provide three parameter:
 
 * agent-sign-cert: array of base64-encoded certificate data (optional).
 
-The the trigger for the pledge to create a PVR is depicted in the following figure:
+The trigger for the pledge to create a PVR is depicted in the following figure:
 
 ~~~~
 {
@@ -744,10 +746,10 @@ The the trigger for the pledge to create a PVR is depicted in the following figu
 ~~~~
 {: #pavrt title='Representation of trigger to create PVR' artwork-align="left"}
 
-The pledge provisionally accepts the agent-provided-proximity-registrar-cert and can verify it once it has received the voucher.
-If the optionally agent-sign-cert data is included the pledge MAY verify at least the signature of the agent-signed-data using the first contained certificate, which is the LDevID(RegAgt) certificate.
-If further certificates are contained in the agent-sign-cert, they enable also the certificate chain validation.
-The pledge may not verify the agent-sign-cert itself as the domain trust has not been established at this point of the communication.
+The pledge provisionally accepts the agent-provided-proximity-registrar-cert, as it can only verify it once it has received the voucher.
+If the agent-sign-cert (it is optional) data is included, the pledge MAY verify at least the signature of the agent-signed-data using the first contained certificate, which is the LDevID(RegAgt) certificate.
+If further certificates are contained in the agent-sign-cert, they enable also the certificate chain validation of the agent's certificate.
+The pledge will be unable to verify the agent-sign-cert chain itself as the domain trust has not been established at this point of the communication.
 It can be done, after the voucher has been received.
 
 The agent-signed-data is a JOSE object and contains the following information:
@@ -778,8 +780,8 @@ The body of the agent-signed-data contains an ietf-voucher-request-prm:agent-sig
   ]
 }
 
-# Decoded payload "ietf-voucher-request-prm:agent-signed-data" representation
-in JSON syntax
+# Decoded payload "ietf-voucher-request-prm:agent-signed-data" representation in JSON syntax
+
 "ietf-voucher-request-prm:agent-signed-data": {
   "created-on": "2021-04-16T00:00:01.000Z",
   "serial-number": "callee4711"
@@ -830,7 +832,7 @@ The ietf-voucher-request:voucher is enhanced with additional parameters:
 * agent-signed-data: MUST contain the base64-encoded agent-signed-data (as defined in {{asd}}) and provided as trigger parameter.
 
 * agent-sign-cert: MAY contain the certificate or certificate chain of the registrar-agent as array of base64encoded certificate information.
-  It starts from the base64-encoded LDevID(RegAgt) certificate optionally followed by the issuing CA certificate and potential further certificates. If supported, it MUST at least contain the LDevID(RegAgt) certificate provided as trigger parameter.
+  The first entry MUST be the base64-encoded LDevID(RegAgt) certificate, MAY be optionally followed by the issuing CA certificate and potential further certificates.
 
 The enhancements of the YANG module for the ietf-voucher-request with these new leafs are defined in {{voucher-request-prm-yang}}.
 
@@ -877,6 +879,8 @@ The PVR Content-Type is defined in {{I-D.ietf-anima-jws-voucher}} as `applicatio
 The pledge SHOULD include this Content-Type header field indicating the included media type for the voucher response.
 Note that this is also an indication regarding the acceptable format of the voucher response.
 This format is included by the registrar as described in {{exchanges_uc2_2}}.
+
+####  Enrollment Request trigger and response
 
 Once the registrar-agent has received the PVR it can trigger the pledge to generate a PER.
 As in BRSKI the PER contains a PKCS#10, but additionally signed using the pledge's IDevID.
