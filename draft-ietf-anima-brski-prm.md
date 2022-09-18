@@ -517,8 +517,9 @@ As BRSKI-PRM uses authenticated self-contained data objects between the pledge a
 The objects exchanged between the pledge and the domain registrar used in the context of this specifications are JOSE objects.
 
 In addition to the LDevID(RegAgt), the registrar-agent is provided with the product-serial-numbers of the pledges to be bootstrapped.
-This is necessary to allow the discovery of pledges by the registrar-agent using mDNS.
-The list may be provided by administrative means or the registrar agent may get the information via an interaction with the pledge. For instance, {{RFC9238}} describes scanning of a QR code, the product-serial-number would be initialized from the 12N B005 Product Serial Number.
+This is necessary to allow the discovery of pledges by the registrar-agent using mDNS (see {{discovery_uc2_ppa}})
+The list may be provided by administrative means or the registrar agent may get the information via an interaction with the pledge.
+For instance, {{RFC9238}} describes scanning of a QR code, the product-serial-number would be initialized from the 12N B005 Product Serial Number.
 
 According to {{RFC8995}} section 5.3, the domain registrar performs the pledge authorization for bootstrapping within his domain based on the pledge voucher-request object.
 
