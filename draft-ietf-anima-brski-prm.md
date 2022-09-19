@@ -2017,11 +2017,12 @@ The communication between the pledge and the registrar-agent is performed over p
 Therefore, it is subject to disclosure by a Dolev-Yao attacker (a "oppressive observer"){{onpath}}.
 Depending on the requests and responses, the following information is disclosed.
 
-* Pledge product-serial-number is contained in the trigger message for the PVR and in all responses from the pledge.
-  This information reveals the identity of the devices being bootstrapped and allows deduction of products an operator is using in his environment.
-  As the communication between the pledge and the registrar-agent may be realized over wireless link, this information could be easily be eavesdropped, if the wireless interface does not apply security measures.
-* Timestamp data could reveal the activation time of the device.
-* Status data of the device could reveal information about the current state of the device in the domain network.
+* the Pledge product-serial-number is contained in the trigger message for the PVR and in all responses from the pledge.
+  This information reveals the identity of the devices being bootstrapped and allows deduction of which products an operator is using in their environment.
+  As the communication between the pledge and the registrar-agent may be realized over wireless link, this information could be easily be eavesdropped, if the wireless network is unencrypted.
+Even if the wireless network is encrypted, if it uses a network-wide key, then layer-2 attacks (ARP/ND spoofing) could insert on-path observer into the path.
+* the Timestamp data could reveal the activation time of the device.
+* the Status data of the device could reveal information about the current state of the device in the domain network.
 
 
 # Security Considerations {#sec_cons}
