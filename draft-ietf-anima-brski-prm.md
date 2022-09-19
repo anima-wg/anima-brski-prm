@@ -2010,7 +2010,8 @@ Further privacy aspects need to be considered for:
 * no transport layer security between registrar-agent and pledge
 
 The credential used by the registrar-agent to sign the data for the pledge should not contain any personal information.
-Therefore, it is recommended to use an LDevID certificate associated with the device instead of an LDevID certificate associated with a potential service technician operating the device. This avoids revealing personal information to Registrar and MASA.
+Therefore, it is recommended to use an LDevID certificate associated with the commissioning device instead of an LDevID certificate associated with the service technician operating the device.
+This avoids revealing personal information to Registrar and MASA.
 
 The communication between the pledge and the registrar-agent is performed over plain HTTP.
 Therefore, it is subject to disclosure by a Dolev-Yao attacker (a "oppressive observer"){{onpath}}.
