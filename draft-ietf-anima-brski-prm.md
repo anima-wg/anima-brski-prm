@@ -2046,9 +2046,9 @@ One mitigation may be that the pledge does does not limited the number of vouche
 
 ## Misuse of acquired PVR and PER by Registrar-Agent
 
-A registrar-agent that uses formerly acquired PVR and PER for domain-A in domain-B can be detected by the domain registrar while PVR processing.
-This requires the domain registrar to verify the "proximity-registrar-cert" field in the PVR matches its own LDevID(Reg) certificate.
-In addition, the domain registrar has to verify the association of the pledge to its domain based on the product-serial-number contained in the PVR and in the IDevID certificate of the pledge.
+A registrar-agent that uses previously requested PVR and PER for domain-A, may attempt to onboard the device into domain-B.  This can be detected by the domain registrar while PVR processing.
+The domain registrar needs to verify that the "proximity-registrar-cert" field in the PVR matches its own LDevID(Reg) certificate.
+In addition, the domain registrar needs to verify the association of the pledge to its domain based on the product-serial-number contained in the PVR and in the IDevID certificate of the pledge. (This is just part of the supply chain integration)
 Moreover, the domain registrar verifies if the registrar-agent is authorized to interact with the pledge for voucher-requests and enroll-requests, based on the LDevID(RegAgt) certificate data contained in the PVR.
 
 Misbinding of a pledge by a faked domain registrar is countered as described in BRSKI security considerations {{RFC8995}} (section 11.4).
