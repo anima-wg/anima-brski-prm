@@ -2028,7 +2028,7 @@ Even if the wireless network is encrypted, if it uses a network-wide key, then l
 # Security Considerations {#sec_cons}
 
 In general, the security considerations of {{RFC8995}} apply for BRSKI-PRM also.
-Further security aspects need to be considered for:
+Further security aspects are considered here related to:
 
 * the introduction of the additional component registrar-agent
 * the reversal of the pledge communication direction (push mode, compared to BRSKI)
@@ -2040,7 +2040,8 @@ TODO: other threads?
 
 Disrupting the pledge behavior by a DoS attack may prevent the bootstrapping of the pledge to a new domain.
 
-A DoS attack with a faked registrar-agent may block the bootstrapping of the pledge due to state creation on the pledge (only vouchered). Mitigation may be that the pledge does not create a state if the bootstrapping is not finished after certain time.
+A DoS attack with a faked registrar-agent may block the bootstrapping of the pledge due to state creation on the pledge (the pledge may produce a voucher, and refuse to produce another one).
+One mitigation may be that the pledge does does not limited the number of voucher requests it creates until at least one has finished, or a single onboarding state may expire after a certain time.
 
 
 ## Misuse of acquired PVR and PER by Registrar-Agent
