@@ -469,37 +469,23 @@ To enable interaction with the registrar-agent, the pledge provides endpoints us
 The following endpoints are defined for the *pledge* in this document.
 The URI path begins with "http://www.example.com/.well-known/brski" followed by a path-suffix that indicates the intended operation.
 
-~~~~
 Operations and their corresponding URIs:
-+------------------------+----------------------------+---------+
-| Operation              |Operation path              | Details |
-+========================+============================+=========+
-| Trigger pledge-voucher-| /pledge-voucher-request    | Section |
-| request creation       |                            | 5.5.1   |
-| Returns PVR            |                            |         |
-+------------------------+----------------------------+---------+
-| Trigger pledge-        | /pledge-enrollment-request | Section |
-| enrollment-request     |                            | 5.5.1   |
-| Returns PER            |                            |         |
-+------------------------+----------------------------+---------+
-| Provide voucher to     | /pledge-voucher            | Section |
-| pledge                 |                            | 5.5.3   |
-| Returns                |                            |         |
-| pledge-voucher-status  |                            |         |
-+------------------------+----------------------------+---------+
-| Provide enrollment     | /pledge-enrollment         | Section |
-| response to pledge     |                            | 5.5.3   |
-| Returns pledge-        |                            |         |
-| enrollment-status      |                            |         |
-+------------------------+----------------------------+---------+
-| Provide CA certs to    | /pledge-CACerts            | Section |
-| pledge                 |                            | 5.5.3   |
-+------------------------+----------------------------+---------+
-| Query bootstrapping    | /pledge-bootstrap-status   | Section |
-| status of pledge       |                            | 5.5.5   |
-+------------------------+----------------------------+---------+
-~~~~
-{: #eppfigure title='Endpoints on the pledge' artwork-align="left"}
+
+| Operation                  |Operation path              | Details |
+|:---------------------------|:---------------------------|:--------|
+| Trigger pledge-voucher-request creation Returns PVR| /pledge-voucher-request    | Section 5.5.1   |
+|------------------------
+| Trigger pledge-enrollment-request Returns PER | /pledge-enrollment-request | Section 5.5.1   |
+|------------------------
+| Provide voucher to pledge Returns pledge-voucher-status | /pledge-voucher  | Section 5.5.3   |
+|------------------------
+| Provide enrollment response to pledge Returns pledge-enrollment-status | /pledge-enrollment         | Section 5.5.3   |
+|------------------------
+| Provide CA certs to pledge | /pledge-CACerts            | Section 5.5.3 |
+|------------------------
+| Query bootstrapping status of pledge       | /pledge-bootstrap-status   | Section 5.5.5 |
+|===============
+{: #eppfigure title='Endpoints on the pledge' }
 
 
 ## Behavior of Registrar-Agent
