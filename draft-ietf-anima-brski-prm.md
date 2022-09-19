@@ -473,17 +473,17 @@ Operations and their corresponding URIs:
 
 | Operation                  |Operation path              | Details |
 |:---------------------------|:---------------------------|:--------|
-| Trigger pledge-voucher-request creation Returns PVR| /pledge-voucher-request    | Section 5.5.1   |
+| Trigger pledge-voucher-request creation Returns PVR| /pledge-voucher-request    | {{exchanges_uc2_1}}  |
 |------------------------
-| Trigger pledge-enrollment-request Returns PER | /pledge-enrollment-request | Section 5.5.1   |
+| Trigger pledge-enrollment-request Returns PER | /pledge-enrollment-request | {{exchanges_uc2_1}} |
 |------------------------
-| Provide voucher to pledge Returns pledge-voucher-status | /pledge-voucher  | Section 5.5.3   |
+| Provide voucher to pledge Returns pledge-voucher-status | /pledge-voucher  | {{exchanges_uc2_3}}   |
 |------------------------
-| Provide enrollment response to pledge Returns pledge-enrollment-status | /pledge-enrollment         | Section 5.5.3   |
+| Provide enrollment response to pledge Returns pledge-enrollment-status | /pledge-enrollment         | {{exchanges_uc2_3}}   |
 |------------------------
-| Provide CA certs to pledge | /pledge-CACerts            | Section 5.5.3 |
+| Provide CA certs to pledge | /pledge-CACerts            | {{exchanges_uc2_3}} |
 |------------------------
-| Query bootstrapping status of pledge       | /pledge-bootstrap-status   | Section 5.5.5 |
+| Query bootstrapping status of pledge       | /pledge-bootstrap-status   | {{exchanges_uc2_5}} |
 |===============
 {: #eppfigure title='Endpoints on the pledge' }
 
