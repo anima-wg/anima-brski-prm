@@ -123,8 +123,8 @@ EST in turn relies on a binding of the certification request to an underlying TL
 
 BRSKI addresses scenarios in which the pledge acts as client for the bootstrapping and is the initiator of the bootstrapping (this document refers to the approach as pledge-initiator-mode).
 In industrial environments the pledge may behave as a server and thus does not initiate the bootstrapping with the domain registrar.
-In this scenarios it is expected that the pledge will be triggered to generate requests for bootstrapped in the customer site/domain. 
-This document refers to the approach as pledge-responder-mode and   
+In this scenarios it is expected that the pledge will be triggered to generate requests for bootstrapped in the customer site/domain.
+This document refers to the approach as pledge-responder-mode and
 
 * introduces the registrar-agent as new component to facilitate the communication between the pledge and the registrar, as the pledge is in responder mode, and acts as server.
 For the interaction with the domain registrar the registrar-agent will use existing BRSKI {{RFC8995}} endpoints.
@@ -533,7 +533,7 @@ The registrar-agent MAY use
 
 A manufacturer may allow the pledge to react on mDNS discovery without his product-serial-number contained. This allows a commissioning tool to discover pledges to be bootstrapped in the domain. The manufactuere may opt out of this functionality as outlined in {{sec_cons_mDNS}}.
 
-To be able to detect the pledge using mDNS, network connectivity is required. 
+To be able to detect the pledge using mDNS, network connectivity is required.
 For Ethernet it is provided by simply connecting the network cable.
 For WiFi networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping.
 The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN ID.
@@ -571,70 +571,70 @@ The voucher can then be supplied via the registrar to the registrar-agent.
 
 
 ~~~~ aasvg
-+--------+  +-----------+    +-----------+   +--------+   +---------+
-| Pledge |  | Registrar |    | Domain    |   | Domain |   | Vendor  |
-|        |  | Agent     |    | Registrar |   | CA     |   | Service |
-|        |  | (RegAgt)  |    |  (JRC)    |   |        |   | (MASA)  |
-+--------+  +-----------+    +-----------+   +--------+   +---------+
-     |              |                  |              |   Internet |
-     |   discover   |                  |              |            |
-     |    pledge    |                  |              |            |
-     | mDNS query   |                  |              |            |
-     |<-------------|                  |              |            |
-     |------------->|                  |              |            |
-     |              |                  |              |            |
++--------+    +-----------+    +-----------+    +--------+  +---------+
+| Pledge |    | Registrar |    | Domain    |    | Domain |  | Vendor  |
+|        |    | Agent     |    | Registrar |    | CA     |  | Service |
+|        |    | (RegAgt)  |    |  (JRC)    |    |        |  | (MASA)  |
++--------+    +-----------+    +-----------+    +--------+  +---------+
+   |                 |                  |              |   Internet |
+   |   discover      |                  |              |            |
+   |    pledge       |                  |              |            |
+   | mDNS query      |                  |              |            |
+   |<----------------|                  |              |            |
+   |---------------->|                  |              |            |
+   |                 |                  |              |            |
 
-     trigger PVR and PER generation
-     |<- vTrigger --|                  |              |            |
-     |-Voucher-Req->|                  |              |            |
-     |              |                  |              |            |
-     |<- eTrigger --|                  |              |            |
-     |- Enroll-Req->|                  |              |            |
-     ~              ~                  ~              ~            ~
+   trigger PVR (tPVR) and PER (tPER) generation on pledge
+   |<----- tPVR -----|                  |              |            |
+   |------ PVR ----->|                  |              |            |
+   |                 |                  |              |            |
+   |<----- tPER -----|                  |              |            |
+   |------ PER ----->|                  |              |            |
+   ~                 ~                  ~              ~            ~
 
-     provide PVR to infrastructure
-     |              |<------ TLS ----->|              |            |
-     |              |          [Reg-Agt authenticated |            |
-     |              |           and authorized?]      |            |
-     |              |-- Voucher-Req -->|              |            |
-     |              |          [Reg-Agt authorized?]  |            |
-     |              |          [accept device?]       |            |
-     |              |          [contact vendor]       |            |
-     |              |                  |------- Voucher-Req ------>|
-     |              |                  |           [extract DomainID]
-     |              |                  |           [update audit log]
-     |              |                  |<-------- Voucher ---------|
-     |              |<---- Voucher ----|              |            |
-     |              |                  |              |            |
+   provide PVR to infrastructure
+   |                 |<------ TLS ----->|              |            |
+   |                 |          [Reg-Agt authenticated |            |
+   |                 |           and authorized?]      |            |
+   |                 |------ PVR ------>|              |            |
+   |                 |          [Reg-Agt authorized?]  |            |
+   |                 |          [accept device?]       |            |
+   |                 |          [contact vendor]       |            |
+   |                 |                  |------------ RVR --------->|
+   |                 |                  |           [extract DomainID]
+   |                 |                  |           [update audit log]
+   |                 |                  |<--------- Voucher --------|
+   |                 |<---- Voucher ----|              |            |
+   |                 |                  |              |            |
 
-     provide PER to infrastructure
-     |              |-- Enroll-Req --->|              |            |
-     |              |                  |- Cert-Req -->|            |
-     |              |                  |<-Certificate-|            |
-     |              |<-- Enroll-Resp --|              |            |
-     |              |                  |              |            |
-     query cACerts from infrastructure
-     |              |-- cACerts-Req -->|              |            |
-     |              |<- cACerts-Resp --|              |            |
-     ~              ~                  ~              ~            ~
+   provide PER to infrastructure
+   |                 |------- PER ----->|              |            |
+   |                 |                  |---- CSR ---->|            |
+   |                 |                  |<--- Cert ----|            |
+   |                 |<-- Enroll-Resp---|              |            |
+   |                 |                  |              |            |
+   query cACerts from infrastructure
+   |                 |--- cACert-Req -->|              |            |
+   |                 |<-- cACert-Resp---|              |            |
+   ~                 ~                   ~              ~            ~
 
-     provide voucher and certificate and collect status info
-     |<-- Voucher --|                  |              |            |
-     |-- vStatus -->|                  |              |            |
-     |<-- cACerts --|                  |              |            |
-     |<-Enroll-Resp-|                  |              |            |
-     |-- eStatus -->|                  |              |            |
-     ~              ~                  ~              ~            ~
-	 
-     provide voucher status and enroll status to registrar
-     |              |<------ TLS ----->|              |            |
-     |              |----  vStatus --->|              |            |
-     |              |                  |--- req device audit log ->|
-     |              |                  |<---- device audit log ----|
-     |              |           [verify audit log]
-     |              |                  |              |            |
-     |              |----  eStatus --->|              |            |
-     |              |                  |              |            |
+   provide voucher and certificate and collect status info
+   |<--- Voucher ----|                  |              |            |
+   |---- vStatus --->|                  |              |            |
+   |<--- cACerts ----|                  |              |            |
+   |<--Enroll-Resp---|                  |              |            |
+   |--- eStatus ---->|                  |              |            |
+   ~                 ~                  ~              ~            ~
+
+   provide voucher status and enroll status to registrar
+   |                 |<------ TLS ----->|              |            |
+   |                 |----  vStatus --->|              |            |
+   |                 |                  |--- req device audit log-->|
+   |                 |                  |<---- device audit log ----|
+   |                 |           [verify audit log]
+   |                 |                  |              |            |
+   |                 |----  eStatus --->|              |            |
+   |                 |                  |              |            |
 ~~~~
 {: #exchangesfig_uc2_all title='Overview pledge-responder-mode exchanges' artwork-align="left"}
 
@@ -748,7 +748,7 @@ The body of the agent-signed-data contains an ietf-voucher-request-prm:agent-sig
   ]
 }
 
-# Decoded payload "ietf-voucher-request-prm:agent-signed-data" 
+# Decoded payload "ietf-voucher-request-prm:agent-signed-data"
   representation in JSON syntax
 
 "ietf-voucher-request-prm:agent-signed-data": {
@@ -816,7 +816,7 @@ The PVR is signed using the pledge's IDevID credential contained as x5c paramete
   ]
 }
 
-# Decoded payload "ietf-voucher-request-prm:voucher" representation 
+# Decoded payload "ietf-voucher-request-prm:voucher" representation
   in JSON syntax
 "ietf-voucher-request-prm:voucher": {
    "created-on": "2021-04-16T00:00:02.000Z",
@@ -1081,7 +1081,7 @@ The RVR can be enhanced optionally with the following parameter as defined in {{
 If only a single object is contained in the x5c it MUST be the base64-encoded LDevID(RegAgt) certificate.
 If multiple certificates are included in the x5c, the first MUST be the base64-encoded LDevID(RegAgt) certificate.
 
-The MASA uses this information for verification that the registrar-agent is in proximity to the registrar to state the corresponding assertion "agent-proximity". 
+The MASA uses this information for verification that the registrar-agent is in proximity to the registrar to state the corresponding assertion "agent-proximity".
 
 The object is signed using the registrar registrar EE credential, which corresponds to the certificate signaled in the JOSE header.
 
@@ -1098,7 +1098,7 @@ The object is signed using the registrar registrar EE credential, which correspo
   ]
 }
 
-# Decoded payload "ietf-voucher-request-prm:voucher" representation 
+# Decoded payload "ietf-voucher-request-prm:voucher" representation
   in JSON syntax
 "ietf-voucher-request-prm:voucher": {
    "created-on": "2022-01-04T02:37:39.235Z",
@@ -1169,7 +1169,7 @@ The voucher syntax is described in detail by {{RFC8366}}. {{MASA-vr}} shows an e
   ]
 }
 
-# Decoded payload "ietf-voucher:voucher" representation in 
+# Decoded payload "ietf-voucher:voucher" representation in
   JSON syntax
 "ietf-voucher:voucher": {
   "assertion": "agent-proximity",
@@ -1195,12 +1195,15 @@ The MASA returns the voucher-response (voucher) to the registrar.
 
 After receiving the voucher the registrar SHOULD evaluate it for transparency and logging purposes as outlined in section 5.6 of {{RFC8995}}.
 The registrar MUST add an additional signature to the MASA provided voucher, by signing it using its registrar credentials).
-The signature is created by signing the original "payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credential (see{{RFC7515}}, section 5.2 point 8. 
-This signature provides a proof of possession of the private key corresponding to the registrar EE certificate the pledge received in the trigger for the PVR (see {{pavrt}}).
-The registrar MUST use the same registrar EE credential used for authentication in the TLS handshake to authenticate towards the registrar-agent. This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher request as is transferred in the PVR in the agent-provided-proximity-registrar-cert component. Figure {{MASA-REG-vr}} below provides an example of the voucher with two signatures.
+The signature is created by signing the original "payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credential (see{{RFC7515}}, section 5.2 point 8. The x5c component of the "JWS Protected Header" MUST contain registrar EE certificate as well as potential intermediate CA certificates up to the pinned domain certificate. The pinned domain certificate is already contained in the payload.
 
-~~~~ 
-# The MASA issued voucher with additional registrar signature in 
+This signature provides a proof of possession of the private key corresponding to the registrar EE certificate the pledge received in the trigger for the PVR (see {{pavrt}}).
+The registrar MUST use the same registrar EE credential used for authentication in the TLS handshake to authenticate towards the registrar-agent. 
+This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher request as also transferred in the PVR in the agent-provided-proximity-registrar-cert component. 
+{{MASA-REG-vr}} below provides an example of the voucher with two signatures.
+
+~~~~
+# The MASA issued voucher with additional registrar signature in
   general JWS serialization syntax
 {
   "payload": "BASE64URL(ietf-voucher:voucher)",
@@ -1216,7 +1219,7 @@ The registrar MUST use the same registrar EE credential used for authentication 
   ]
 }
 
-# Decoded payload "ietf-voucher:voucher" representation in 
+# Decoded payload "ietf-voucher:voucher" representation in
   JSON syntax
 "ietf-voucher:voucher": {
    "assertion": "agent-proximity",
@@ -1295,7 +1298,7 @@ This is a deviation from the Content-Type header values used in {{RFC7030}} and 
 The additional processing is the signature of the CA certificate information using the registrar EE credential resulting in a signed JSON object. The CA certificates are provided as base64 encoded x5b.
 
 ~~~~
-# The CA certificates data with additional registrar signaturer in 
+# The CA certificates data with additional registrar signaturer in
   general JWS serialization syntax
 {
   "payload": "BASE64URL(certs)",
@@ -1396,7 +1399,7 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
 
 
 ~~~~
-# The "pledge-voucher-status" telemetry in general JWS 
+# The "pledge-voucher-status" telemetry in general JWS
   serialization syntax
 {
   "payload": "BASE64URL(pledge-voucher-status)",
@@ -1408,7 +1411,7 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
   ]
 }
 
-# Decoded payload "pledge-voucher-status" representation in JSON 
+# Decoded payload "pledge-voucher-status" representation in JSON
   syntax
 {
   "version": 1,
@@ -1472,7 +1475,7 @@ The response has the Content-Type `application/jose+json`.
   ]
 }
 
-# Decoded payload "pledge-enroll-status" representation in 
+# Decoded payload "pledge-enroll-status" representation in
   JSON syntax
 {
   "version": 1,
@@ -1706,7 +1709,7 @@ As the pledge is assumed to utilize the bootstrapped credential information in c
 * "connect-error": Pledge connection establishment terminated with error.
   Additional information may be provided in the reason or reason-context.
   The pledge signs the response message using its LDevID(Pledge).
-  
+
 The pledge-status responses are cumulativ in the sense that connect-success implies enroll-success implies voucher-success.
 
 {{stat_res}} provides an example for the bootstrapping-status information.
@@ -2049,12 +2052,12 @@ Furthermore the registrar also verifies the LDevID(RegAgt) certificate used in t
 
 ## Misuse of mDNS to obtain list of pledges {#sec_cons_mDNS}
 
-To discover a specific pledge a registrar-agent may request the service name in combination with the product-serial-number of a specific pledge. 
+To discover a specific pledge a registrar-agent may request the service name in combination with the product-serial-number of a specific pledge.
 The pledge reacts on this his product-serial-number is part of the request message.
 
 If the registrar-agent performs DNS-based Service Discovery without a specific product-serial-number, all  pledges in the domain may be returned if the functionality is supported.
-This functionality enumerates and reveals the information of devices available in the domain. 
-The information about this is provided here as a feature to support the comissioning of devices. 
+This functionality enumerates and reveals the information of devices available in the domain.
+The information about this is provided here as a feature to support the comissioning of devices.
 A manufacturer may decide to support this feature only for devices not possessing a LDevID or to not support this feature at all, to avoid an enumeration in an operative domain.
 
 ## YANG Module Security Considerations
@@ -2417,9 +2420,9 @@ Proof of Concept Code available
 
 From IETF draft 04 -> IETF draft 05:
 
-* Restructured document to have a distinct section for the object flow and handling and shortened introduction, issue #72  
-* Added security considerations for using mDNS without a specific product-serial-number, issue #75 
-* Clarified pledge-status responses are cumulative, issue #73 
+* Restructured document to have a distinct section for the object flow and handling and shortened introduction, issue #72
+* Added security considerations for using mDNS without a specific product-serial-number, issue #75
+* Clarified pledge-status responses are cumulative, issue #73
 * Removed agent-sign-cert from trigger data, issue #70
 * Changed terminology for LDevID(Reg) certificate to registrar EE certificate, as it does not need to be an LDevID, issue #66
 * Added new protected header parameter (created-on) in PER to support freshness validation, issue #63

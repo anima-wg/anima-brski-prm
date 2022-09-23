@@ -1036,28 +1036,28 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    Figure 2 provides an overview of the exchanges detailed in the
    following sub sections.
 
-   +--------+  +-----------+    +-----------+   +--------+   +---------+
-   | Pledge |  | Registrar |    | Domain    |   | Domain |   | Vendor  |
-   |        |  | Agent     |    | Registrar |   | CA     |   | Service |
-   |        |  | (RegAgt)  |    |  (JRC)    |   |        |   | (MASA)  |
-   +--------+  +-----------+    +-----------+   +--------+   +---------+
-        |              |                  |              |   Internet |
-        |   discover   |                  |              |            |
-        |    pledge    |                  |              |            |
-        | mDNS query   |                  |              |            |
-        |<-------------|                  |              |            |
-        |------------->|                  |              |            |
-        |              |                  |              |            |
+ +--------+    +-----------+    +-----------+    +--------+  +---------+
+ | Pledge |    | Registrar |    | Domain    |    | Domain |  | Vendor  |
+ |        |    | Agent     |    | Registrar |    | CA     |  | Service |
+ |        |    | (RegAgt)  |    |  (JRC)    |    |        |  | (MASA)  |
+ +--------+    +-----------+    +-----------+    +--------+  +---------+
+    |                 |                  |              |   Internet |
+    |   discover      |                  |              |            |
+    |    pledge       |                  |              |            |
+    | mDNS query      |                  |              |            |
+    |<----------------|                  |              |            |
+    |---------------->|                  |              |            |
+    |                 |                  |              |            |
 
-        trigger PVR and PER generation
-        |<- vTrigger --|                  |              |            |
-        |-Voucher-Req->|                  |              |            |
-        |              |                  |              |            |
-        |<- eTrigger --|                  |              |            |
-        |- Enroll-Req->|                  |              |            |
-        ~              ~                  ~              ~            ~
+    trigger PVR (tPVR) and PER (tPER) generation on pledge
+    |<----- tPVR -----|                  |              |            |
+    |------ PVR ----->|                  |              |            |
+    |                 |                  |              |            |
+    |<----- tPER -----|                  |              |            |
+    |------ PER ----->|                  |              |            |
+    ~                 ~                  ~              ~            ~
 
-        provide PVR to infrastructure
+    provide PVR to infrastructure
 
 
 
@@ -1066,50 +1066,50 @@ Fries, et al.             Expires 27 March 2023                [Page 19]
 Internet-Draft                  BRSKI-PRM                 September 2022
 
 
-        |              |<------ TLS ----->|              |            |
-        |              |          [Reg-Agt authenticated |            |
-        |              |           and authorized?]      |            |
-        |              |-- Voucher-Req -->|              |            |
-        |              |          [Reg-Agt authorized?]  |            |
-        |              |          [accept device?]       |            |
-        |              |          [contact vendor]       |            |
-        |              |                  |------- Voucher-Req ------>|
-        |              |                  |           [extract DomainID]
-        |              |                  |           [update audit log]
-        |              |                  |<-------- Voucher ---------|
-        |              |<---- Voucher ----|              |            |
-        |              |                  |              |            |
+    |                 |<------ TLS ----->|              |            |
+    |                 |          [Reg-Agt authenticated |            |
+    |                 |           and authorized?]      |            |
+    |                 |------ PVR ------>|              |            |
+    |                 |          [Reg-Agt authorized?]  |            |
+    |                 |          [accept device?]       |            |
+    |                 |          [contact vendor]       |            |
+    |                 |                  |------------ RVR --------->|
+    |                 |                  |           [extract DomainID]
+    |                 |                  |           [update audit log]
+    |                 |                  |<--------- Voucher --------|
+    |                 |<---- Voucher ----|              |            |
+    |                 |                  |              |            |
 
-        provide PER to infrastructure
-        |              |-- Enroll-Req --->|              |            |
-        |              |                  |- Cert-Req -->|            |
-        |              |                  |<-Certificate-|            |
-        |              |<-- Enroll-Resp --|              |            |
-        |              |                  |              |            |
-        query cACerts from infrastructure
-        |              |-- cACerts-Req -->|              |            |
-        |              |<- cACerts-Resp --|              |            |
-        ~              ~                  ~              ~            ~
+    provide PER to infrastructure
+    |                 |------- PER ----->|              |            |
+    |                 |                  |---- CSR ---->|            |
+    |                 |                  |<--- Cert ----|            |
+    |                 |<-- Enroll-Resp---|              |            |
+    |                 |                  |              |            |
+    query cACerts from infrastructure
+    |                 |--- cACert-Req -->|              |            |
+    |                 |<-- cACert-Resp---|              |            |
+    ~                 ~                   ~              ~            ~
 
-        provide voucher and certificate and collect status info
-        |<-- Voucher --|                  |              |            |
-        |-- vStatus -->|                  |              |            |
-        |<-- cACerts --|                  |              |            |
-        |<-Enroll-Resp-|                  |              |            |
-        |-- eStatus -->|                  |              |            |
-        ~              ~                  ~              ~            ~
+    provide voucher and certificate and collect status info
+    |<--- Voucher ----|                  |              |            |
+    |---- vStatus --->|                  |              |            |
+    |<--- cACerts ----|                  |              |            |
+    |<--Enroll-Resp---|                  |              |            |
+    |--- eStatus ---->|                  |              |            |
+    ~                 ~                  ~              ~            ~
 
-        provide voucher status and enroll status to registrar
-        |              |<------ TLS ----->|              |            |
-        |              |----  vStatus --->|              |            |
-        |              |                  |--- req device audit log ->|
-        |              |                  |<---- device audit log ----|
-        |              |           [verify audit log]
-        |              |                  |              |            |
-        |              |----  eStatus --->|              |            |
-        |              |                  |              |            |
+    provide voucher status and enroll status to registrar
+    |                 |<------ TLS ----->|              |            |
+    |                 |----  vStatus --->|              |            |
+    |                 |                  |--- req device audit log-->|
+    |                 |                  |<---- device audit log ----|
+    |                 |           [verify audit log]
+    |                 |                  |              |            |
+    |                 |----  eStatus --->|              |            |
+    |                 |                  |              |            |
 
-             Figure 2: Overview pledge-responder-mode exchanges
+           Figure 2: Overview pledge-responder-mode exchanges
 
    The following sub sections split the interactions between the
    different components into:
@@ -2060,12 +2060,12 @@ Internet-Draft                  BRSKI-PRM                 September 2022
    credentials).  The signature is created by signing the original
    "payload" produced by MASA and the registrar added "JWS Protected
    Header" using the registrar EE credential (see[RFC7515], section 5.2
-   point 8.  This signature provides a proof of possession of the
-   private key corresponding to the registrar EE certificate the pledge
-   received in the trigger for the PVR (see Figure 4).  The registrar
-   MUST use the same registrar EE credential used for authentication in
-   the TLS handshake to authenticate towards the registrar-agent.  This
-   ensures that the same registrar EE certificate can be used to verify
+   point 8.  The x5c component of the "JWS Protected Header" MUST
+   contain registrar EE certificate as well as potential intermediate CA
+   certificates up to the pinned domain certificate.  The pinned domain
+   certificate is already contained in the payload.
+
+
 
 
 
@@ -2074,16 +2074,16 @@ Fries, et al.             Expires 27 March 2023                [Page 37]
 Internet-Draft                  BRSKI-PRM                 September 2022
 
 
-   the signature as transmitted in the voucher request as is transferred
+   This signature provides a proof of possession of the private key
+   corresponding to the registrar EE certificate the pledge received in
+   the trigger for the PVR (see Figure 4).  The registrar MUST use the
+   same registrar EE credential used for authentication in the TLS
+   handshake to authenticate towards the registrar-agent.  This ensures
+   that the same registrar EE certificate can be used to verify the
+   signature as transmitted in the voucher request as also transferred
    in the PVR in the agent-provided-proximity-registrar-cert component.
-   Figure Figure 12 below provides an example of the voucher with two
+   Figure 12 below provides an example of the voucher with two
    signatures.
-
-
-
-
-
-
 
 
 
