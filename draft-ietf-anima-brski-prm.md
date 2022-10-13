@@ -1503,71 +1503,7 @@ The response has the Content-Type `application/jose+json`.
 
 Once the registrar-agent has collected the information, it can connect to the registrar-agent to provide the status responses to the registrar.
 
-
-## Telemetry Status Handling (Registrar-Agent - Domain Registrar) {#exchanges_uc2_4}
-
-The following description requires that the registrar-agent has collected the status information from the pledge.
-It SHALL provide the status information to the registrar for further processing.
-
-Preconditions in addition to {{exchanges_uc2_2}}:
-
-* Registrar-agent: possesses voucher status and enroll status from pledge.
-
-~~~~ aasvg
-+-----------+        +-----------+   +--------+   +---------+
-| Registrar |        | Domain    |   | Domain |   | Vendor  |
-| Agent     |        | Registrar |   | CA     |   | Service |
-| RegAgt)   |        |  (JRC)    |   |        |   | (MASA)  |
-+-----------+        +-----------+   +--------+   +---------+
-    |                      |              |   Internet |
-[voucher + enroll ]        |              |            |
-[status info available]    |              |            |
-    |                      |              |            |
-    |<------- mTLS ------->|              |            |
-    |                      |              |            |
-    |--- Voucher Status -->|              |            |
-    |                      |--- req-device audit log-->|
-    |                      |<---- device audit log ----|
-    |              [verify audit log ]
-    |                      |              |            |
-    |--- Enroll Status --->|              |            |
-    |                      |              |            |
-~~~~
-{: #exchangesfig_uc2_4 title='Bootstrapping status handling' artwork-align="left"}
-
-The registrar-agent MUST provide the collected pledge voucher status to the registrar.
-This status indicates if the pledge could process the voucher successfully or not.
-
-If the TLS connection to the registrar was closed, the registrar-agent establishes a TLS connection with the registrar as stated in {{exchanges_uc2_2}}.
-
-The registrar-agent sends the pledge voucher status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/voucher_status". The Content-Type header is kept as `application/jose+json` as described in {{exchangesfig_uc2_3}} and depicted in the example in {{vstat}}.
-
-The registrar SHALL verify the signature of the pledge voucher status and validate that it belongs to an accepted device in his domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher status.
-
-According to {{RFC8995}} section 5.7, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
-The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
-Within the server logs the server SHOULD capture this telemetry information.
-
-The registrar SHOULD proceed with collecting and logging status information by requesting the MASA audit-log from the MASA service as described in section 5.8 of {{RFC8995}}.
-
-The registrar-agent MUST provide the pledge's enroll status to the registrar.
-The status indicates the pledge could process the enroll-response (certificate) and holds the corresponding private key.
-
-The registrar-agent sends the pledge enroll status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/enrollstatus".
-The Content-Type header is kept as `application/jose+json` as described in {{exchangesfig_uc2_3}} and depicted in the example in {{estat}}.
-
-The registrar MUST verify the signature of the pledge enroll status.
-Also, the registrar SHALL validate that the pledge belongs to an accepted device in his domain based on the contained product-serial-number in the LDevID certificate referenced in the header of the enroll status.
-The registrar SHOULD log this event.
-In case the pledge enroll status indicates a failure, the pledge was unable to verify the received LDevID certificate and therefore signed the enroll status with its IDevID credential.
-Note that the verification of a signature of the status information is an addition to the described handling in section 5.9.4 of {{RFC8995}}.
-
-According to {{RFC8995}} section 5.9.4, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
-Based on the failure case the registrar MAY decide that for security reasons the pledge is not allowed to reside in the domain. In this case the registrar MUST revoke the certificate.
-The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
-Within the server log the registrar SHOULD capture this telemetry information.
-
-## Request Pledge Status by Registrar-Agent {#exchanges_uc2_5}
+## Telemetry Status: Request Pledge Status by Registrar-Agent {#exchanges_uc2_5}
 
 The following assumes that a registrar-agent may need to query the status of a pledge.
 This information may be useful to solve errors, when the pledge was not able to connect to the target domain during the bootstrapping.
@@ -1759,6 +1695,70 @@ If validation of the JWS signature fails, the pledge SHOULD respond with the HTT
 The HTTP 406 Not Acceptable status code SHOULD be used, if the Accept header in the request indicates an unknown or unsupported format.
 The HTTP 415 Unsupported Media Type status code SHOULD be used, if the Content-Type of the request is an unknown or unsupported format.
 The HTTP 400 Bad Request status code SHOULD be used, if the Accept/Content-Type headers are correct but nevertheless the status-request cannot be correctly parsed.
+
+
+## Telemetry Status: Handling Registrar-Agent to Domain Registrar {#exchanges_uc2_4}
+
+The following description requires that the registrar-agent has collected the status information from the pledge.
+It SHALL provide the status information to the registrar for further processing.
+
+Preconditions in addition to {{exchanges_uc2_2}}:
+
+* Registrar-agent: possesses voucher status and enroll status from pledge.
+
+~~~~ aasvg
++-----------+        +-----------+   +--------+   +---------+
+| Registrar |        | Domain    |   | Domain |   | Vendor  |
+| Agent     |        | Registrar |   | CA     |   | Service |
+| RegAgt)   |        |  (JRC)    |   |        |   | (MASA)  |
++-----------+        +-----------+   +--------+   +---------+
+    |                      |              |   Internet |
+[voucher + enroll ]        |              |            |
+[status info available]    |              |            |
+    |                      |              |            |
+    |<------- mTLS ------->|              |            |
+    |                      |              |            |
+    |--- Voucher Status -->|              |            |
+    |                      |--- req-device audit log-->|
+    |                      |<---- device audit log ----|
+    |              [verify audit log ]
+    |                      |              |            |
+    |--- Enroll Status --->|              |            |
+    |                      |              |            |
+~~~~
+{: #exchangesfig_uc2_4 title='Bootstrapping status handling' artwork-align="left"}
+
+The registrar-agent MUST provide the collected pledge voucher status to the registrar.
+This status indicates if the pledge could process the voucher successfully or not.
+
+If the TLS connection to the registrar was closed, the registrar-agent establishes a TLS connection with the registrar as stated in {{exchanges_uc2_2}}.
+
+The registrar-agent sends the pledge voucher status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/voucher_status". The Content-Type header is kept as `application/jose+json` as described in {{exchangesfig_uc2_3}} and depicted in the example in {{vstat}}.
+
+The registrar SHALL verify the signature of the pledge voucher status and validate that it belongs to an accepted device in his domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher status.
+
+According to {{RFC8995}} section 5.7, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
+The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
+Within the server logs the server SHOULD capture this telemetry information.
+
+The registrar SHOULD proceed with collecting and logging status information by requesting the MASA audit-log from the MASA service as described in section 5.8 of {{RFC8995}}.
+
+The registrar-agent MUST provide the pledge's enroll status to the registrar.
+The status indicates the pledge could process the enroll-response (certificate) and holds the corresponding private key.
+
+The registrar-agent sends the pledge enroll status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/enrollstatus".
+The Content-Type header is kept as `application/jose+json` as described in {{exchangesfig_uc2_3}} and depicted in the example in {{estat}}.
+
+The registrar MUST verify the signature of the pledge enroll status.
+Also, the registrar SHALL validate that the pledge belongs to an accepted device in his domain based on the contained product-serial-number in the LDevID certificate referenced in the header of the enroll status.
+The registrar SHOULD log this event.
+In case the pledge enroll status indicates a failure, the pledge was unable to verify the received LDevID certificate and therefore signed the enroll status with its IDevID credential.
+Note that the verification of a signature of the status information is an addition to the described handling in section 5.9.4 of {{RFC8995}}.
+
+According to {{RFC8995}} section 5.9.4, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
+Based on the failure case the registrar MAY decide that for security reasons the pledge is not allowed to reside in the domain. In this case the registrar MUST revoke the certificate.
+The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
+Within the server log the registrar SHOULD capture this telemetry information.
 
 
 # Artifacts
