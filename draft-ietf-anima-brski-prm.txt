@@ -91,13 +91,13 @@ Table of Contents
    3.  Scope of Solution . . . . . . . . . . . . . . . . . . . . . .   7
      3.1.  Supported Environments and Use Case Examples  . . . . . .   7
        3.1.1.  Building Automation . . . . . . . . . . . . . . . . .   8
-       3.1.2.  Infrastructure Isolation Policy . . . . . . . . . . .   8
+       3.1.2.  Infrastructure Isolation Policy . . . . . . . . . . .   9
        3.1.3.  Less Operational Security in the Target-Domain  . . .   9
      3.2.  Limitations . . . . . . . . . . . . . . . . . . . . . . .   9
    4.  Requirements Discussion and Mapping to Solution-Elements  . .   9
    5.  Architectural Overview  . . . . . . . . . . . . . . . . . . .  11
      5.1.  Pledge-Responder-Mode (PRM): Registrar-Agent Communication
-           with Pledges  . . . . . . . . . . . . . . . . . . . . . .  12
+           with Pledges  . . . . . . . . . . . . . . . . . . . . . .  11
      5.2.  Agent-Proximity Assertion . . . . . . . . . . . . . . . .  15
      5.3.  Behavior of Pledge in Pledge-Responder-Mode . . . . . . .  15
      5.4.  Behavior of Registrar-Agent . . . . . . . . . . . . . . .  17
@@ -118,7 +118,8 @@ Internet-Draft                  BRSKI-PRM                   October 2022
      6.3.  Voucher Request Response (PVR)  . . . . . . . . . . . . .  25
      6.4.  Enrollment Request Trigger  . . . . . . . . . . . . . . .  27
      6.5.  Enrollment Request Response (PER) . . . . . . . . . . . .  28
-     6.6.  Request Object Handling by the Registrar-Agent  . . . . .  31
+     6.6.  Request Object Handling initiated by the Registrar-Agent to
+           Registrar . . . . . . . . . . . . . . . . . . . . . . . .  31
        6.6.1.  TODO - PVR ...  . . . . . . . . . . . . . . . . . . .  33
        6.6.2.  TDOD - RVR ...  . . . . . . . . . . . . . . . . . . .  34
        6.6.3.  TODO: MASA Issued Voucher . . . . . . . . . . . . . .  37
@@ -161,7 +162,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
            Registrar and Registrar-agent)  . . . . . . . . . . . . .  74
    Appendix B.  History of Changes [RFC Editor: please delete] . . .  75
    Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  83
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  83
 
 
 
@@ -169,6 +169,8 @@ Fries, et al.             Expires 16 April 2023                 [Page 3]
 
 Internet-Draft                  BRSKI-PRM                   October 2022
 
+
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  83
 
 1.  Introduction
 
@@ -214,9 +216,7 @@ Internet-Draft                  BRSKI-PRM                   October 2022
       between the pledge and the registrar-agent may be via IP-based
       networks (wired or wireless) but also via Bluetooth or NFC.
 
-   *  allows the application of credentials different from the pledge's
-      IDevID for the registrar-agent when establishing a TLS connection
-      to the domain registrar.
+
 
 
 
@@ -225,6 +225,10 @@ Fries, et al.             Expires 16 April 2023                 [Page 4]
 
 Internet-Draft                  BRSKI-PRM                   October 2022
 
+
+   *  allows the application of credentials different from the pledge's
+      IDevID for the registrar-agent when establishing a TLS connection
+      to the domain registrar.
 
    The term endpoint used in the context of this document is similar to
    resources in CoAP [RFC7252] and also in HTTP [RFC9110].  It is not
@@ -269,10 +273,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    1.2.  The following terms are defined additionally:
 
    authenticated self-contained object:  Describes an object, which is
-      cryptographically bound to the end entity (EE) certificate (IDevID
-      certificate or LDEVID certificate).  The binding is assumed to be
-      provided through a digital signature of the actual object using
-      the corresponding private key of the EE certificate.
 
 
 
@@ -281,6 +281,11 @@ Fries, et al.             Expires 16 April 2023                 [Page 5]
 
 Internet-Draft                  BRSKI-PRM                   October 2022
 
+
+      cryptographically bound to the end entity (EE) certificate (IDevID
+      certificate or LDEVID certificate).  The binding is assumed to be
+      provided through a digital signature of the actual object using
+      the corresponding private key of the EE certificate.
 
    CA:  Certification authority, issues certificates.
 
@@ -323,12 +328,7 @@ Internet-Draft                  BRSKI-PRM                   October 2022
       on it's way to the MASA.  It will contain the PVR sent by the
       pledge.
 
-   This document includes many examples that would contain many long
-   sequences of base64 encoded objects with no content directly
-   comprehendable to a human reader.  In order to keep them readable the
-   examples use the token "base64encodedvalue==" whenever such a thing
-   occurs.  This token is in fact valid base64.  The full examples are
-   in appendix.
+
 
 
 
@@ -337,6 +337,13 @@ Fries, et al.             Expires 16 April 2023                 [Page 6]
 
 Internet-Draft                  BRSKI-PRM                   October 2022
 
+
+   This document includes many examples that would contain many long
+   sequences of base64 encoded objects with no content directly
+   comprehendable to a human reader.  In order to keep them readable the
+   examples use the token "base64encodedvalue==" whenever such a thing
+   occurs.  This token is in fact valid base64.  The full examples are
+   in appendix.
 
    This protocol unavoidably has a mix of both base64 encoded data (as
    is normal for many JSON encoded protocols), and also BASE64URL
@@ -379,13 +386,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    [RFC8995] or BRSKI-AE [I-D.ietf-anima-brski-ae] to allow for more
    bootstrapping flexibility.
 
-   A pledge which can initiate, SHOULD listen for BRSKI messages as
-   describe in [RFC8995], Section 4.1.  Upon discovery of a potential
-   Registrar, it SHOULD initiate to that Registrar.  At the same time
-   (so as to avoid the Slowloris-attack described in [RFC8995]), it
-   SHOULD also respond to the pledge-responder-mode connections
-   described in this document.
-
 
 
 
@@ -393,6 +393,13 @@ Fries, et al.             Expires 16 April 2023                 [Page 7]
 
 Internet-Draft                  BRSKI-PRM                   October 2022
 
+
+   A pledge which can initiate, SHOULD listen for BRSKI messages as
+   describe in [RFC8995], Section 4.1.  Upon discovery of a potential
+   Registrar, it SHOULD initiate to that Registrar.  At the same time
+   (so as to avoid the Slowloris-attack described in [RFC8995]), it
+   SHOULD also respond to the pledge-responder-mode connections
+   described in this document.
 
    Once a pledge with such combined functionality has been bootstrapped,
    it may act as client for enrollment or re-enrollment of further
@@ -428,14 +435,7 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    provided to the devices in the basement facilitated by the service
    technician's laptop.
 
-3.1.2.  Infrastructure Isolation Policy
 
-   This refers to any case in which the network infrastructure is
-   normally isolated from the Internet as a matter of policy, most
-   likely for security reasons.  In such a case, limited access to a
-   domain registrar may be allowed in carefully controlled short periods
-   of time, for example when a batch of new devices are deployed, but
-   prohibited at other times.
 
 
 
@@ -449,6 +449,15 @@ Fries, et al.             Expires 16 April 2023                 [Page 8]
 
 Internet-Draft                  BRSKI-PRM                   October 2022
 
+
+3.1.2.  Infrastructure Isolation Policy
+
+   This refers to any case in which the network infrastructure is
+   normally isolated from the Internet as a matter of policy, most
+   likely for security reasons.  In such a case, limited access to a
+   domain registrar may be allowed in carefully controlled short periods
+   of time, for example when a batch of new devices are deployed, but
+   prohibited at other times.
 
 3.1.3.  Less Operational Security in the Target-Domain
 
@@ -488,6 +497,15 @@ Internet-Draft                  BRSKI-PRM                   October 2022
       registrar-agent to the registrar.  This requires the definition of
       pledge endpoints to allow interaction with the registrar-agent.
 
+
+
+
+
+Fries, et al.             Expires 16 April 2023                 [Page 9]
+
+Internet-Draft                  BRSKI-PRM                   October 2022
+
+
    *  The communication between the registrar-agent and the pledge MUST
       NOT rely on transport layer security (TLS) because the pledge does
       not have certificate a that can easily be verified by [RFC6125]
@@ -497,14 +515,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    *  The use of authenticated self-contained objects provides a work
       around for both the TLS challenges, and the technology stack
       challenge.
-
-
-
-
-Fries, et al.             Expires 16 April 2023                 [Page 9]
-
-Internet-Draft                  BRSKI-PRM                   October 2022
-
 
    *  By contrast, the registrar-agent can be authenticated by the
       registrar as a component, acting on behalf of the registrar.  In
@@ -539,21 +549,11 @@ Internet-Draft                  BRSKI-PRM                   October 2022
       the integrity of the voucher, while the corresponding signing
       certificate contains the identity of the signer.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   *  Certification requests are data structures containing the
+      information from a requester for a CA to create a certificate.
+      The certification request format in BRSKI is PKCS#10 [RFC2986].
+      In PKCS#10, the structure is signed to ensure integrity protection
+      and proof of possession of the private key of the requester that
 
 
 
@@ -562,11 +562,6 @@ Fries, et al.             Expires 16 April 2023                [Page 10]
 Internet-Draft                  BRSKI-PRM                   October 2022
 
 
-   *  Certification requests are data structures containing the
-      information from a requester for a CA to create a certificate.
-      The certification request format in BRSKI is PKCS#10 [RFC2986].
-      In PKCS#10, the structure is signed to ensure integrity protection
-      and proof of possession of the private key of the requester that
       corresponds to the contained public key.  In the application
       examples, this POP alone is not sufficient.  A Proof of Identity
       (POI) is also required for the certification request and therefore
@@ -606,18 +601,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    An abstract overview of the BRSKI-PRM protocol can be found in
    [BRSKI-PRM-abstract].
 
-
-
-
-
-
-
-
-Fries, et al.             Expires 16 April 2023                [Page 11]
-
-Internet-Draft                  BRSKI-PRM                   October 2022
-
-
 5.1.  Pledge-Responder-Mode (PRM): Registrar-Agent Communication with
       Pledges
 
@@ -627,6 +610,14 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    objects (the voucher request/response as known from BRSKI and the
    enrollment request/response as introduced by BRSKI-PRM) with the help
    of a registrar-agent.  This allows independence from protection
+
+
+
+Fries, et al.             Expires 16 April 2023                [Page 11]
+
+Internet-Draft                  BRSKI-PRM                   October 2022
+
+
    provided by the utilized transport protocol.
 
    The registrar-agent may be implemented as an integrated functionality
@@ -650,6 +641,15 @@ Internet-Draft                  BRSKI-PRM                   October 2022
 
    *  defines new endpoints were additional functionality is required,
       e.g., for wrapped certification request or new status information.
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1682,7 +1682,8 @@ Fries, et al.             Expires 16 April 2023                [Page 30]
 Internet-Draft                  BRSKI-PRM                   October 2022
 
 
-6.6.  Request Object Handling by the Registrar-Agent
+6.6.  Request Object Handling initiated by the Registrar-Agent to
+      Registrar
 
    The BRSKI-PRM bootstrapping exchanges between registrar-agent and
    domain registrar resemble the BRSKI exchanges between pledge and
@@ -1712,7 +1713,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
       of this document.  In other cases, a MASA may allow the pledge to
       enroll into an anonymous and/or yet-unknown domain and then the
       a-priori possession of the domain CA certificate is not needed.
-
 
 
 

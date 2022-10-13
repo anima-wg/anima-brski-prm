@@ -958,7 +958,7 @@ It allows the registrar to verify the timely correlation between the PER and pre
 As the registrar-agent is intended to facilitate communication between the pledge and the domain registrar, a collection of requests from more than one pledge is possible, allowing a bulk bootstrapping of multiple pledges using the same connection between the registrar-agent and the domain registrar.
 
 
-## Request Object Handling by the Registrar-Agent {#exchanges_uc2_2}
+## Request Object Handling initiated by the Registrar-Agent to Registrar {#exchanges_uc2_2}
 
 The BRSKI-PRM bootstrapping exchanges between registrar-agent and domain registrar resemble the BRSKI exchanges between pledge and domain registrar (pledge-initiator-mode) with some deviations.
 
