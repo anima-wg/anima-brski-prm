@@ -699,7 +699,9 @@ Preconditions:
 
 Note that the registrar-agent may trigger the pledge for the PVR or the PER or both. It is expected that this will be aligned with a service technician workflow, visiting and installing each pledge.
 
-##  Voucher Request Trigger
+## Pledge Voucher Request (PVR) - Trigger and Response
+
+### Voucher Request Trigger (PVR)
 
 Triggering the pledge to create the PVR is done using HTTP POST on the defined pledge endpoint "/.well-known/brski/pledge-voucher-request".
 
@@ -769,7 +771,7 @@ The body of the agent-signed-data contains an ietf-voucher-request-prm:agent-sig
 {: #asd title='Representation of agent-signed-data in General JWS Serialization syntax' artwork-align="left"}
 
 
-##  Voucher Request Response (PVR)
+###  Voucher Request Response (PVR)
 
 Upon receiving the voucher-request trigger, the pledge SHALL construct the body of the PVR as defined in {{RFC8995}}.
 It will contain additional information provided by the registrar-agent as specified in the following.
@@ -849,7 +851,9 @@ The pledge SHOULD include this Content-Type header field indicating the included
 Note that this is also an indication regarding the acceptable format of the voucher response.
 This format is included by the registrar as described in {{exchanges_uc2_2}}.
 
-## Enrollment Request Trigger
+## Plegde Enrollment Request (PER) - Trigger and Response
+
+### Enrollment Request Trigger (PER)
 
 Once the registrar-agent has received the PVR it can trigger the pledge to generate a PER.
 As in BRSKI the PER contains a PKCS#10, but additionally signed using the pledge's IDevID.
@@ -869,7 +873,7 @@ The "enroll-generic-cert" case is shown in {{raer}}.
 {: #raer title='Example of trigger to create a PER' artwork-align="left"}
 
 
-## Enrollment Request Response (PER) 
+### Enrollment Request Response (PER) 
 
 In the following the enrollment is described as initial enrollment with an empty HTTP POST body.
 
@@ -1527,7 +1531,7 @@ The response has the Content-Type `application/jose+json`.
 
 Once the registrar-agent has collected the information, it can connect to the registrar-agent to provide the status responses to the registrar.
 
-## Telemetry Status: Request Pledge Status by Registrar-Agent {#exchanges_uc2_5}
+## Telemetry Status: Pledge Status by Registrar-Agent - Trigger and Response {#exchanges_uc2_5}
 
 The following assumes that a registrar-agent may need to query the status of a pledge.
 This information may be useful to solve errors, when the pledge was not able to connect to the target domain during the bootstrapping.
@@ -1552,6 +1556,8 @@ Preconditions:
     |                                |
 ~~~~
 {: #exchangesfig_uc2_5 title='Pledge-status handling between registrar-agent and pledge' artwork-align="left"}
+
+### TODO: registrar-agent requests the pledge-status - Trigger 
 
 The registrar-agent requests the pledge-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/pledge-status"
 
@@ -1615,6 +1621,8 @@ This is out of scope for this specification.
 }
 ~~~~
 {: #stat_req title='Example of registrar-agent request of pledge-status using status-type bootstrap' artwork-align="left"}
+
+### TODO: pledge-status response  
 
 If the pledge receives the pledge-status request with status-type "bootstrap" it SHALL react with a status response message based on the telemetry information described in section {{exchanges_uc2_3}}.
 
