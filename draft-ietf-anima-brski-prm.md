@@ -854,9 +854,9 @@ The pledge SHOULD include this Content-Type header field indicating the included
 Note that this is also an indication regarding the acceptable format of the voucher response.
 This format is included by the registrar as described in {{exchanges_uc2_2}}.
 
-## Plegde Enrollment Request (PER) - Trigger and Response
+## Plegde-Enrollment-Request (PER) - Trigger and Response
 
-### Enrollment Request Trigger (PER)
+### Plegde-Enrollment-Request Trigger (PER)
 
 Once the registrar-agent has received the PVR it can trigger the pledge to generate a PER.
 As in BRSKI the PER contains a PKCS#10, but additionally signed using the pledge's IDevID.
@@ -876,7 +876,7 @@ The "enroll-generic-cert" case is shown in {{raer}}.
 {: #raer title='Example of trigger to create a PER' artwork-align="left"}
 
 
-### Enrollment Request Response (PER) 
+### Plegde-Enrollment-Request Response (PER) 
 
 In the following the enrollment is described as initial enrollment with an empty HTTP POST body.
 
@@ -1031,7 +1031,7 @@ TLS 1.2 or newer is REQUIRED on the registrar-agent side.
 TLS 1.3 (or newer) SHOULD be available on the registrar, but TLS 1.2 MAY be used.
 TLS 1.3 (or newer) SHOULD be available on the MASA, but TLS 1.2 MAY be used.
 
-### TODO - Connection Establishment and Pledge Voucher Request Processing (Registrar Agent -Registrar)
+### TODO - Connection Establishment and Pledge-Voucher-Request Processing (Registrar-Agent to Registrar)
 
 In contrast to {{RFC8995}} TLS client authentication to the registrar is achieved by using registrar-agent LDevID(RegAgt) credentials instead of pledge IDevID credentials.
 Consequently BRSKI (pledge-initiator-mode) is distinguishable from BRSKI-PRM (pledge-responder-mode) by the registrar.
@@ -1067,7 +1067,7 @@ HTTP 406 Not Acceptable status code SHOULD be used if the Content-Type indicated
 If the validation succeeds, the registrar SHOULD accept the PVR to join the domain as defined in section 5.3 of {{RFC8995}}.
 The registrar then establishes a TLS connection to MASA as described in section 5.4 of {{RFC8995}} to obtain a voucher for the pledge.
 
-### TDOD - Registrar Voucher Request Processing (Registrar - MASA)   
+### TODO: Registrar-Voucher-Request (RVR) Processing (Registrar to MASA)   
 
 The registrar SHALL construct the payload of the RVR as defined in {{RFC8995}}.
 The RVR encoding SHALL be JSON-in-JWS as defined in {{I-D.ietf-anima-jws-voucher}}.
@@ -1174,7 +1174,7 @@ In addition, the following processing SHALL be performed for PVR data contained 
 If validation fails, the MASA SHOULD respond with an HTTP 4xx client error status code to the registrar.
 The HTTP error status codes are kept the same as defined in section 5.6 of {{RFC8995}}, <!-- XXX -->and comprise the codes: 403, 404, 406, and 415.
 
-### TODO: Voucher Creation by MASA
+### TODO: Voucher Issuance by MASA
 
 The expected voucher-response format for the pledge-responder-mode the `application/voucher-jws+json` as defined in {{I-D.ietf-anima-jws-voucher}} is applied.
 If the MASA detects that the Accept header of the PVR does not match the `application/voucher-jws+json` it SHOULD respond with the HTTP status code 406 Not Acceptable as the pledge will not be able to parse the response.
@@ -1216,7 +1216,7 @@ The voucher syntax is described in detail by {{RFC8366}}. {{MASA-vr}} shows an e
 
 The MASA returns the voucher-response (voucher) to the registrar.
 
-### TODO: Registrar Processing of MASA issued Voucher
+### TODO: MASA issued Voucher Processing by Registrar
 
 After receiving the voucher the registrar SHOULD evaluate it for transparency and logging purposes as outlined in section 5.6 of {{RFC8995}}.
 The registrar MUST add an additional signature to the MASA provided voucher, by signing it using its registrar credentials).
@@ -1278,7 +1278,7 @@ This ensures that the same registrar EE certificate can be used to verify the si
 Depending on the security policy of the operator, this signature can also be interpreted by the pledge explicit authorization of the registrar to install the contained trust anchor.
 The registrar sends the voucher to the registrar-agent.
 
-### TODO: Pledge Enrollment Request Processing (Registrar-Agent to Registrar)
+### TODO: Pledge-Enrollment-Request (PER) Processing (Registrar-Agent to Registrar)
 
 After receiving the voucher, the registrar-agent sends the PER to the registrar.
 Deviating from BRSKI the PER is not a raw PKCS#10.
@@ -1309,10 +1309,10 @@ The registrar SHOULD respond with an HTTP 200 OK in the success case or fail wit
 
 A successful interaction with the domain CA will result in a pledge LDevID certificate, which is then forwarded by the registrar to the registrar-agent using the Content-Type header: `application/pkcs7-mime`.
 
-### TODO: Provisioning of protected CA certificates to Registrar-Agent
+### TODO: Provisioning of wrapped CA certificates to Registrar-Agent
 
 As the pledge will verify it own certificate LDevID certificate when received, it also needs the corresponding CA certificates.
-This is done in EST using the /cacerts endpoint, which provides the CA certificates over a TLS protected connection.
+This is done in EST using the "/.well-known/est/cacerts" endpoint, which provides the CA certificates over a TLS protected connection.
 BRSKI-PRM requires a signature wrapped CA certificate response, to avoid that the pledge can be provided with arbitrary CA certificates in an authorized way.
 The additional signature of the registrar will allow the pledge to verify the authorization to install CA certificates.
 As the CA certificates are provided to the pledge after the voucher, the pledge has the necessary information to validate the provisioning object.
@@ -1403,6 +1403,8 @@ Preconditions in addition to {{exchanges_uc2_2}}:
 
 The registrar-agent provides the information via distinct pledge endpoints as following.
 
+### TODO: Voucher Response processing by Pledge
+
 The registrar-agent SHALL send the voucher-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-voucher".
 
 The registrar-agent voucher-response Content-Type header is `application/voucher-jws+json` and contains the voucher as provided by the MASA. An example if given in {{MASA-vr}} for a MASA  signed voucher and in {{MASA-REG-vr}} for the voucher with the additional signature of the registrar.
@@ -1465,7 +1467,7 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
 {: #vstat title='Representation of pledge voucher status telemetry' artwork-align="left"}
 
 
-### TODO: Protected CA certificate Provisioning to Pledge 
+### TODO: Provisioning wrapped CA certificates to Pledge 
 
 The registrar-agent SHALL provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-CAcerts".
 
@@ -1488,6 +1490,8 @@ The registrar-agent enroll-response Content-Type header, when using EST {{RFC703
 
 Upon reception, the pledge SHALL verify the received LDevID certificate.
 The pledge SHALL generate the enroll status and provide it in the response message to the registrar-agent. If the verification of the LDevID certificate succeeds, the status SHALL be set to true, otherwise to FALSE.
+
+### TODO: Pledge Enrollment Status Telemetry 
 
 The pledge MUST reply with a status telemetry message as defined in section 5.9.4 of {{RFC8995}}.
 As for the other objects, the enroll status is provided with an additional signature using JOSE.

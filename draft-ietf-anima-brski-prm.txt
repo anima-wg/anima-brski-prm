@@ -87,7 +87,7 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   4
-   2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   5
+   2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   6
    3.  Scope of Solution . . . . . . . . . . . . . . . . . . . . . .   7
      3.1.  Supported Environments and Use Case Examples  . . . . . .   7
        3.1.1.  Building Automation . . . . . . . . . . . . . . . . .   8
@@ -97,7 +97,7 @@ Table of Contents
    4.  Requirements Discussion and Mapping to Solution-Elements  . .   9
    5.  Architectural Overview  . . . . . . . . . . . . . . . . . . .  11
      5.1.  Pledge-Responder-Mode (PRM): Registrar-Agent Communication
-           with Pledges  . . . . . . . . . . . . . . . . . . . . . .  11
+           with Pledges  . . . . . . . . . . . . . . . . . . . . . .  12
      5.2.  Agent-Proximity Assertion . . . . . . . . . . . . . . . .  15
      5.3.  Behavior of Pledge in Pledge-Responder-Mode . . . . . . .  15
      5.4.  Behavior of Registrar-Agent . . . . . . . . . . . . . . .  17
@@ -117,26 +117,29 @@ Internet-Draft                  BRSKI-PRM                   October 2022
      6.2.  Pledge Voucher Request (PVR) - Trigger and Response . . .  23
        6.2.1.  Voucher Request Trigger (PVR) . . . . . . . . . . . .  23
        6.2.2.  Voucher Request Response (PVR)  . . . . . . . . . . .  25
-     6.3.  Plegde Enrollment Request (PER) - Trigger and Response  .  27
-       6.3.1.  Enrollment Request Trigger (PER)  . . . . . . . . . .  28
-       6.3.2.  Enrollment Request Response (PER) . . . . . . . . . .  28
+     6.3.  Plegde-Enrollment-Request (PER) - Trigger and Response  .  27
+       6.3.1.  Plegde-Enrollment-Request Trigger (PER) . . . . . . .  28
+       6.3.2.  Plegde-Enrollment-Request Response (PER)  . . . . . .  28
      6.4.  Request Object Handling initiated by the Registrar-Agent to
            Registrar . . . . . . . . . . . . . . . . . . . . . . . .  31
-       6.4.1.  TODO - Connection Establishment and Pledge Voucher
-               Request Processing (Registrar Agent -Registrar) . . .  33
-       6.4.2.  TDOD - Registrar Voucher Request Processing (Registrar
-               - MASA) . . . . . . . . . . . . . . . . . . . . . . .  34
-       6.4.3.  TODO: Voucher Creation by MASA  . . . . . . . . . . .  37
-       6.4.4.  TODO: Registrar Processing of MASA issued Voucher . .  38
-       6.4.5.  TODO: Pledge Enrollment Request Processing
+       6.4.1.  TODO - Connection Establishment and
+               Pledge-Voucher-Request Processing (Registrar-Agent to
+               Registrar)  . . . . . . . . . . . . . . . . . . . . .  33
+       6.4.2.  TODO: Registrar-Voucher-Request (RVR) Processing
+               (Registrar to MASA) . . . . . . . . . . . . . . . . .  34
+       6.4.3.  TODO: Voucher Issuance by MASA  . . . . . . . . . . .  37
+       6.4.4.  TODO: MASA issued Voucher Processing by Registrar . .  38
+       6.4.5.  TODO: Pledge-Enrollment-Request (PER) Processing
                (Registrar-Agent to Registrar)  . . . . . . . . . . .  41
-       6.4.6.  TODO: Provisioning of protected CA certificates to
+       6.4.6.  TODO: Provisioning of wrapped CA certificates to
                Registrar-Agent . . . . . . . . . . . . . . . . . . .  42
      6.5.  Response Object Supply by Registrar-Agent to Pledge . . .  44
-       6.5.1.  TODO: Pledge Voucher Status Telemetry . . . . . . . .  45
-       6.5.2.  TODO: Protected CA certificate Provisioning to
+       6.5.1.  TODO: Voucher Response processing by Pledge . . . . .  44
+       6.5.2.  TODO: Pledge Voucher Status Telemetry . . . . . . . .  45
+       6.5.3.  TODO: Provisioning wrapped CA certificates to
                Pledge  . . . . . . . . . . . . . . . . . . . . . . .  46
-       6.5.3.  TODO: Pledge Enrollment Response processing . . . . .  47
+       6.5.4.  TODO: Pledge Enrollment Response processing . . . . .  47
+       6.5.5.  TODO: Pledge Enrollment Status Telemetry  . . . . . .  47
      6.6.  Telemetry Status: Pledge Status by Registrar-Agent -
            Trigger and Response  . . . . . . . . . . . . . . . . . .  48
        6.6.1.  TODO: Pledge-Status Request Processing (Registrar-Agent
@@ -159,9 +162,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
      10.4.  Misuse of mDNS to obtain list of pledges . . . . . . . .  64
      10.5.  YANG Module Security Considerations  . . . . . . . . . .  64
    11. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  64
-   12. References  . . . . . . . . . . . . . . . . . . . . . . . . .  64
-     12.1.  Normative References . . . . . . . . . . . . . . . . . .  64
-     12.2.  Informative References . . . . . . . . . . . . . . . . .  66
 
 
 
@@ -170,6 +170,9 @@ Fries, et al.             Expires 21 April 2023                 [Page 3]
 Internet-Draft                  BRSKI-PRM                   October 2022
 
 
+   12. References  . . . . . . . . . . . . . . . . . . . . . . . . .  64
+     12.1.  Normative References . . . . . . . . . . . . . . . . . .  64
+     12.2.  Informative References . . . . . . . . . . . . . . . . .  66
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  68
      A.1.  Example Pledge Voucher Request - PVR (from Pledge to
            Registrar-agent)  . . . . . . . . . . . . . . . . . . . .  68
@@ -212,11 +215,8 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    requests in the customer site/domain.  This document refers to this
    approach as pledge-responder-mode and
 
-   *  introduces the registrar-agent as new component to facilitate the
-      communication between the pledge and the registrar, as the pledge
-      is in responder mode, and acts as server.  For the interaction
-      with the domain registrar the registrar-agent will use existing
-      BRSKI [RFC8995] endpoints.
+
+
 
 
 
@@ -225,6 +225,12 @@ Fries, et al.             Expires 21 April 2023                 [Page 4]
 
 Internet-Draft                  BRSKI-PRM                   October 2022
 
+
+   *  introduces the registrar-agent as new component to facilitate the
+      communication between the pledge and the registrar, as the pledge
+      is in responder mode, and acts as server.  For the interaction
+      with the domain registrar the registrar-agent will use existing
+      BRSKI [RFC8995] endpoints.
 
    *  specifies the interaction (data exchange and data objects) between
       a pledge acting as server and a registrar-agent and the domain
@@ -267,13 +273,7 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    the registrar then needs to do some pre-processing to verify this
    signature, which is not present in EST.
 
-2.  Terminology
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
 
 
 
@@ -281,6 +281,14 @@ Fries, et al.             Expires 21 April 2023                 [Page 5]
 
 Internet-Draft                  BRSKI-PRM                   October 2022
 
+
+2.  Terminology
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
 
    This document relies on the terminology defined in [RFC8995], section
    1.2.  The following terms are defined additionally:
@@ -322,14 +330,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
       Pledge to the Registrar.
 
    RA:  Registration authority, an optional system component to which a
-      CA delegates certificate management functions such as
-      authorization checks.
-
-   RER:  Registrar-enrollment-request is the CSR of PER send to the CA
-      by the registrar (RA/LRA)
-
-   RVR:  Registrar-Voucher-Request is a request for a voucher signed by
-
 
 
 
@@ -338,6 +338,13 @@ Fries, et al.             Expires 21 April 2023                 [Page 6]
 Internet-Draft                  BRSKI-PRM                   October 2022
 
 
+      CA delegates certificate management functions such as
+      authorization checks.
+
+   RER:  Registrar-enrollment-request is the CSR of PER send to the CA
+      by the registrar (RA/LRA)
+
+   RVR:  Registrar-Voucher-Request is a request for a voucher signed by
       the Registrar to the MASA.  It may contain the PVR received from
       the pledge.
 
@@ -379,13 +386,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    acting as a server (pledge-responder-mode) responding to PVR and PER
    and consumption of the results.
 
-   The following examples motivate support of BRSKI-PRM to support
-   pledges acting as server as well as pledges with limited connectivity
-   to the registrar.
-
-
-
-
 
 
 
@@ -393,6 +393,10 @@ Fries, et al.             Expires 21 April 2023                 [Page 7]
 
 Internet-Draft                  BRSKI-PRM                   October 2022
 
+
+   The following examples motivate support of BRSKI-PRM to support
+   pledges acting as server as well as pledges with limited connectivity
+   to the registrar.
 
    While BRSKI-PRM defines support for pledges in responder mode, there
    may be pledges, which can act as both initiator or responder.  In
@@ -430,6 +434,22 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    technician may visit every new house in a subdivision collecting
    device specific information before connecting to the Registrar.
 
+
+
+
+
+
+
+
+
+
+
+
+Fries, et al.             Expires 21 April 2023                 [Page 8]
+
+Internet-Draft                  BRSKI-PRM                   October 2022
+
+
    A domain registrar may be part of the central building management
    system and already be operational in the installation network.  The
    central building management system can then provide operational
@@ -440,15 +460,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    components and services.  These operational parameters are then
    provided to the devices in the basement facilitated by the service
    technician's laptop.
-
-
-
-
-
-Fries, et al.             Expires 21 April 2023                 [Page 8]
-
-Internet-Draft                  BRSKI-PRM                   October 2022
-
 
 3.1.2.  Infrastructure Isolation Policy
 
@@ -488,6 +499,13 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    requirements are derived to support bootstrapping of pledges in
    responder mode (acting as server).
 
+
+
+Fries, et al.             Expires 21 April 2023                 [Page 9]
+
+Internet-Draft                  BRSKI-PRM                   October 2022
+
+
    *  To facilitate the communication between a pledge in responder mode
       and registrar, additional functionality is needed either on the
       registrar or as a stand-alone component.  This new functionality
@@ -496,15 +514,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
       and enrollment.  These requests are than provided by the
       registrar-agent to the registrar.  This requires the definition of
       pledge endpoints to allow interaction with the registrar-agent.
-
-
-
-
-
-Fries, et al.             Expires 21 April 2023                 [Page 9]
-
-Internet-Draft                  BRSKI-PRM                   October 2022
-
 
    *  The communication between the registrar-agent and the pledge MUST
       NOT rely on transport layer security (TLS) because the pledge does
@@ -544,6 +553,15 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    Solution examples based on existing technology are provided with the
    focus on existing IETF RFCs:
 
+
+
+
+
+Fries, et al.             Expires 21 April 2023                [Page 10]
+
+Internet-Draft                  BRSKI-PRM                   October 2022
+
+
    *  Voucher requests and responses as used in [RFC8995] already
       provide both, POP and POI, through a digital signature to protect
       the integrity of the voucher, while the corresponding signing
@@ -554,14 +572,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
       The certification request format in BRSKI is PKCS#10 [RFC2986].
       In PKCS#10, the structure is signed to ensure integrity protection
       and proof of possession of the private key of the requester that
-
-
-
-Fries, et al.             Expires 21 April 2023                [Page 10]
-
-Internet-Draft                  BRSKI-PRM                   October 2022
-
-
       corresponds to the contained public key.  In the application
       examples, this POP alone is not sufficient.  A Proof of Identity
       (POI) is also required for the certification request and therefore
@@ -601,6 +611,13 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    An abstract overview of the BRSKI-PRM protocol can be found in
    [BRSKI-PRM-abstract].
 
+
+
+Fries, et al.             Expires 21 April 2023                [Page 11]
+
+Internet-Draft                  BRSKI-PRM                   October 2022
+
+
 5.1.  Pledge-Responder-Mode (PRM): Registrar-Agent Communication with
       Pledges
 
@@ -610,14 +627,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    objects (the voucher request/response as known from BRSKI and the
    enrollment request/response as introduced by BRSKI-PRM) with the help
    of a registrar-agent.  This allows independence from protection
-
-
-
-Fries, et al.             Expires 21 April 2023                [Page 11]
-
-Internet-Draft                  BRSKI-PRM                   October 2022
-
-
    provided by the utilized transport protocol.
 
    The registrar-agent may be implemented as an integrated functionality
@@ -641,15 +650,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
 
    *  defines new endpoints were additional functionality is required,
       e.g., for wrapped certification request or new status information.
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1498,7 +1498,7 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    response.  This format is included by the registrar as described in
    Section 6.4.
 
-6.3.  Plegde Enrollment Request (PER) - Trigger and Response
+6.3.  Plegde-Enrollment-Request (PER) - Trigger and Response
 
 
 
@@ -1514,7 +1514,7 @@ Fries, et al.             Expires 21 April 2023                [Page 27]
 Internet-Draft                  BRSKI-PRM                   October 2022
 
 
-6.3.1.  Enrollment Request Trigger (PER)
+6.3.1.  Plegde-Enrollment-Request Trigger (PER)
 
    Once the registrar-agent has received the PVR it can trigger the
    pledge to generate a PER.  As in BRSKI the PER contains a PKCS#10,
@@ -1539,7 +1539,7 @@ Internet-Draft                  BRSKI-PRM                   October 2022
 
                 Figure 7: Example of trigger to create a PER
 
-6.3.2.  Enrollment Request Response (PER)
+6.3.2.  Plegde-Enrollment-Request Response (PER)
 
    In the following the enrollment is described as initial enrollment
    with an empty HTTP POST body.
@@ -1794,8 +1794,8 @@ Fries, et al.             Expires 21 April 2023                [Page 32]
 Internet-Draft                  BRSKI-PRM                   October 2022
 
 
-6.4.1.  TODO - Connection Establishment and Pledge Voucher Request
-        Processing (Registrar Agent -Registrar)
+6.4.1.  TODO - Connection Establishment and Pledge-Voucher-Request
+        Processing (Registrar-Agent to Registrar)
 
    In contrast to [RFC8995] TLS client authentication to the registrar
    is achieved by using registrar-agent LDevID(RegAgt) credentials
@@ -1872,7 +1872,8 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    registrar then establishes a TLS connection to MASA as described in
    section 5.4 of [RFC8995] to obtain a voucher for the pledge.
 
-6.4.2.  TDOD - Registrar Voucher Request Processing (Registrar - MASA)
+6.4.2.  TODO: Registrar-Voucher-Request (RVR) Processing (Registrar to
+        MASA)
 
    The registrar SHALL construct the payload of the RVR as defined in
    [RFC8995].  The RVR encoding SHALL be JSON-in-JWS as defined in
@@ -1894,7 +1895,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
       time format for the RVR creation time.
 
    *  nonce: copied form the PVR
-
 
 
 
@@ -2054,7 +2054,7 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    kept the same as defined in section 5.6 of [RFC8995], and comprise
    the codes: 403, 404, 406, and 415.
 
-6.4.3.  TODO: Voucher Creation by MASA
+6.4.3.  TODO: Voucher Issuance by MASA
 
    The expected voucher-response format for the pledge-responder-mode
    the application/voucher-jws+json as defined in
@@ -2109,7 +2109,7 @@ Internet-Draft                  BRSKI-PRM                   October 2022
 
    The MASA returns the voucher-response (voucher) to the registrar.
 
-6.4.4.  TODO: Registrar Processing of MASA issued Voucher
+6.4.4.  TODO: MASA issued Voucher Processing by Registrar
 
    After receiving the voucher the registrar SHOULD evaluate it for
    transparency and logging purposes as outlined in section 5.6 of
@@ -2247,8 +2247,8 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    registrar to install the contained trust anchor.  The registrar sends
    the voucher to the registrar-agent.
 
-6.4.5.  TODO: Pledge Enrollment Request Processing (Registrar-Agent to
-        Registrar)
+6.4.5.  TODO: Pledge-Enrollment-Request (PER) Processing (Registrar-
+        Agent to Registrar)
 
    After receiving the voucher, the registrar-agent sends the PER to the
    registrar.  Deviating from BRSKI the PER is not a raw PKCS#10.  As
@@ -2314,19 +2314,19 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    registrar-agent using the Content-Type header: application/
    pkcs7-mime.
 
-6.4.6.  TODO: Provisioning of protected CA certificates to Registrar-
-        Agent
+6.4.6.  TODO: Provisioning of wrapped CA certificates to Registrar-Agent
 
    As the pledge will verify it own certificate LDevID certificate when
    received, it also needs the corresponding CA certificates.  This is
-   done in EST using the /cacerts endpoint, which provides the CA
-   certificates over a TLS protected connection.  BRSKI-PRM requires a
-   signature wrapped CA certificate response, to avoid that the pledge
-   can be provided with arbitrary CA certificates in an authorized way.
-   The additional signature of the registrar will allow the pledge to
-   verify the authorization to install CA certificates.  As the CA
-   certificates are provided to the pledge after the voucher, the pledge
-   has the necessary information to validate the provisioning object.
+   done in EST using the "/.well-known/est/cacerts" endpoint, which
+   provides the CA certificates over a TLS protected connection.  BRSKI-
+   PRM requires a signature wrapped CA certificate response, to avoid
+   that the pledge can be provided with arbitrary CA certificates in an
+   authorized way.  The additional signature of the registrar will allow
+   the pledge to verify the authorization to install CA certificates.
+   As the CA certificates are provided to the pledge after the voucher,
+   the pledge has the necessary information to validate the provisioning
+   object.
 
    To allow the registrar-agent to request signature wrapped CA
    certificates, a new endpoint for BRSKI-PRM on the registrar is
@@ -2451,10 +2451,10 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    The registrar-agent provides the information via distinct pledge
    endpoints as following.
 
+6.5.1.  TODO: Voucher Response processing by Pledge
+
    The registrar-agent SHALL send the voucher-response to the pledge by
    HTTP POST to the endpoint: "/.well-known/brski/pledge-voucher".
-
-
 
 
 
@@ -2501,7 +2501,7 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    If an error occurs during the verification it SHALL be signaled in
    the reason field of the pledge voucher status.
 
-6.5.1.  TODO: Pledge Voucher Status Telemetry
+6.5.2.  TODO: Pledge Voucher Status Telemetry
 
    After voucher verification the pledge MUST reply with a status
    telemetry message as defined in section 5.7 of [RFC8995].  The pledge
@@ -2556,7 +2556,7 @@ Internet-Draft                  BRSKI-PRM                   October 2022
 
         Figure 15: Representation of pledge voucher status telemetry
 
-6.5.2.  TODO: Protected CA certificate Provisioning to Pledge
+6.5.3.  TODO: Provisioning wrapped CA certificates to Pledge
 
    The registrar-agent SHALL provide the set of CA certificates
    requested from the registrar to the pledge by HTTP POST to the
@@ -2589,7 +2589,7 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    unsupported format.  The HTTP 400 Bad Request status code SHOULD be
    used, if the pledge detects errors in the encoding of the payload.
 
-6.5.3.  TODO: Pledge Enrollment Response processing
+6.5.4.  TODO: Pledge Enrollment Response processing
 
    The registrar-agent SHALL send the enroll-response to the pledge by
    HTTP POST to the endpoint: "/.well-known/brski/pledge-enrollment".
@@ -2606,6 +2606,8 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    verification of the LDevID certificate succeeds, the status SHALL be
    set to true, otherwise to FALSE.
 
+6.5.5.  TODO: Pledge Enrollment Status Telemetry
+
    The pledge MUST reply with a status telemetry message as defined in
    section 5.9.4 of [RFC8995].  As for the other objects, the enroll
    status is provided with an additional signature using JOSE.  If the
@@ -2616,8 +2618,6 @@ Internet-Draft                  BRSKI-PRM                   October 2022
    omitted in case of success.
 
    The response has the Content-Type application/jose+json.
-
-
 
 
 
