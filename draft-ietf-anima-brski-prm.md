@@ -142,8 +142,7 @@ The term endpoint used in the context of this document is similar to resources i
 It is not used to describe a device.
 Endpoints are accessible via .well-known URIs.
 
-TODO: double-check
-To utilize the EST server endpoints on the domain-registrar, the registrar-agent will act as client towards the domain registrar.
+To utilize the EST server endpoints on the domain registrar, the registrar-agent will act as client towards the domain registrar.
 
 The registrar-agent also acts as a client when communicating with a pledge in responder mode.
 Here, TLS with server-side, certificate-based authentication is not directly applicable, as the pledge only possesses an IDevID certificate.
@@ -553,7 +552,7 @@ These transport means may differ from, and are independent of, the ones used bet
 Transport channel independence is realized by data objects which are not bound to specific transport security.
 Therefore, authenticated self-contained objects (here: signature-wrapped objects) are applied for data exchanges between the pledge and the registrar.
 
-The registrar-agent provides the domain-registrar certificate (registrar EE certificate) to the pledge to be included in the PVR leaf "agent-provided-proximity-registrar-certificate".
+The registrar-agent provides the domain registrar certificate (registrar EE certificate) to the pledge to be included in the PVR leaf "agent-provided-proximity-registrar-certificate".
 This enables the registrar to verify that it is the desired registrar for handling the request.
 
 The registrar certificate may be configured at the registrar-agent or may be fetched by the registrar-agent based on a prior TLS connection with this domain registrar.
@@ -1032,7 +1031,7 @@ TLS 1.2 or newer is REQUIRED on the registrar-agent side.
 TLS 1.3 (or newer) SHOULD be available on the registrar, but TLS 1.2 MAY be used.
 TLS 1.3 (or newer) SHOULD be available on the MASA, but TLS 1.2 MAY be used.
 
-### TODO - PVR ...
+### TODO - Connection Establishment and Pledge Voucher Request Processing (Registrar Agent -Registrar)
 
 In contrast to {{RFC8995}} TLS client authentication to the registrar is achieved by using registrar-agent LDevID(RegAgt) credentials instead of pledge IDevID credentials.
 Consequently BRSKI (pledge-initiator-mode) is distinguishable from BRSKI-PRM (pledge-responder-mode) by the registrar.
@@ -1068,7 +1067,7 @@ HTTP 406 Not Acceptable status code SHOULD be used if the Content-Type indicated
 If the validation succeeds, the registrar SHOULD accept the PVR to join the domain as defined in section 5.3 of {{RFC8995}}.
 The registrar then establishes a TLS connection to MASA as described in section 5.4 of {{RFC8995}} to obtain a voucher for the pledge.
 
-### TDOD - RVR ...  
+### TDOD - Registrar Voucher Request Processing (Registrar - MASA)   
 
 The registrar SHALL construct the payload of the RVR as defined in {{RFC8995}}.
 The RVR encoding SHALL be JSON-in-JWS as defined in {{I-D.ietf-anima-jws-voucher}}.
@@ -1175,7 +1174,7 @@ In addition, the following processing SHALL be performed for PVR data contained 
 If validation fails, the MASA SHOULD respond with an HTTP 4xx client error status code to the registrar.
 The HTTP error status codes are kept the same as defined in section 5.6 of {{RFC8995}}, <!-- XXX -->and comprise the codes: 403, 404, 406, and 415.
 
-### TODO: MASA Issued Voucher
+### TODO: Voucher Creation by MASA
 
 The expected voucher-response format for the pledge-responder-mode the `application/voucher-jws+json` as defined in {{I-D.ietf-anima-jws-voucher}} is applied.
 If the MASA detects that the Accept header of the PVR does not match the `application/voucher-jws+json` it SHOULD respond with the HTTP status code 406 Not Acceptable as the pledge will not be able to parse the response.
@@ -1217,7 +1216,7 @@ The voucher syntax is described in detail by {{RFC8366}}. {{MASA-vr}} shows an e
 
 The MASA returns the voucher-response (voucher) to the registrar.
 
-### TODO: MASA Issued Voucher with Additional Registrar Signature
+### TODO: Registrar Processing of MASA issued Voucher
 
 After receiving the voucher the registrar SHOULD evaluate it for transparency and logging purposes as outlined in section 5.6 of {{RFC8995}}.
 The registrar MUST add an additional signature to the MASA provided voucher, by signing it using its registrar credentials).
@@ -1279,7 +1278,7 @@ This ensures that the same registrar EE certificate can be used to verify the si
 Depending on the security policy of the operator, this signature can also be interpreted by the pledge explicit authorization of the registrar to install the contained trust anchor.
 The registrar sends the voucher to the registrar-agent.
 
-### TODO: PER To Registrar ...
+### TODO: Pledge Enrollment Request Processing (Registrar-Agent to Registrar)
 
 After receiving the voucher, the registrar-agent sends the PER to the registrar.
 Deviating from BRSKI the PER is not a raw PKCS#10.
@@ -1310,7 +1309,7 @@ The registrar SHOULD respond with an HTTP 200 OK in the success case or fail wit
 
 A successful interaction with the domain CA will result in a pledge LDevID certificate, which is then forwarded by the registrar to the registrar-agent using the Content-Type header: `application/pkcs7-mime`.
 
-### TODO: signature wrapped CA certificates ....
+### TODO: Provisioning of protected CA certificates to Registrar-Agent
 
 As the pledge will verify it own certificate LDevID certificate when received, it also needs the corresponding CA certificates.
 This is done in EST using the /cacerts endpoint, which provides the CA certificates over a TLS protected connection.
@@ -1421,7 +1420,7 @@ If all verification steps stated above have been performed successfully, the ple
 
 If an error occurs during the verification it SHALL be signaled in the reason field of the pledge voucher status.
 
-### TODO: pledge voucher status telemetry ...
+### TODO: Pledge Voucher Status Telemetry 
 
 After voucher verification the pledge MUST reply with a status telemetry message as defined in section 5.7 of {{RFC8995}}.
 The pledge generates the voucher status and provides it as JOSE object with the wrapping signature in the response message to the registrar-agent.
@@ -1466,7 +1465,7 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
 {: #vstat title='Representation of pledge voucher status telemetry' artwork-align="left"}
 
 
-### TODO: Provide CA certificates ...
+### TODO: Protected CA certificate Provisioning to Pledge 
 
 The registrar-agent SHALL provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-CAcerts".
 
@@ -1481,7 +1480,7 @@ If validation of the wrapping signature or another security check fails, the ple
 The HTTP 415 Unsupported Media Type status code SHOULD be used, if the Content-Type of the request is in an unknown or unsupported format.
 The HTTP 400 Bad Request status code SHOULD be used, if the pledge detects errors in the encoding of the payload.
 
-### TODO: Supply enroll-response AND generate enroll status ...
+### TODO: Pledge Enrollment Response processing 
 
 The registrar-agent SHALL send the enroll-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-enrollment".
 
@@ -1562,7 +1561,7 @@ Preconditions:
 ~~~~
 {: #exchangesfig_uc2_5 title='Pledge-status handling between registrar-agent and pledge' artwork-align="left"}
 
-### TODO: registrar-agent requests the pledge-status - Trigger 
+### TODO: Pledge-Status Request Processing (Registrar-Agent - Pledge) 
 
 The registrar-agent requests the pledge-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/pledge-status"
 
@@ -1627,7 +1626,7 @@ This is out of scope for this specification.
 ~~~~
 {: #stat_req title='Example of registrar-agent request of pledge-status using status-type bootstrap' artwork-align="left"}
 
-### TODO: pledge-status response  
+### TODO: Pledge Status Response Processing (Pledge - Registrar-Agent)  
 
 If the pledge receives the pledge-status request with status-type "bootstrap" it SHALL react with a status response message based on the telemetry information described in section {{exchanges_uc2_3}}.
 
@@ -1687,7 +1686,7 @@ As the pledge is assumed to utilize the bootstrapped credential information in c
   Additional information may be provided in the reason or reason-context.
   The pledge signs the response message using its LDevID(Pledge).
 
-The pledge-status responses are cumulativ in the sense that connect-success implies enroll-success implies voucher-success.
+The pledge-status responses are cumulative in the sense that connect-success implies enroll-success implies voucher-success.
 
 {{stat_res}} provides an example for the bootstrapping-status information.
 
@@ -1734,7 +1733,7 @@ The HTTP 415 Unsupported Media Type status code SHOULD be used, if the Content-T
 The HTTP 400 Bad Request status code SHOULD be used, if the Accept/Content-Type headers are correct but nevertheless the status-request cannot be correctly parsed.
 
 
-## Telemetry Status: Handling Registrar-Agent to Domain Registrar {#exchanges_uc2_4}
+## Telemetry Status Handling Registrar-Agent to Domain Registrar {#exchanges_uc2_4}
 
 The following description requires that the registrar-agent has collected the status information from the pledge.
 It SHALL provide the status information to the registrar for further processing.
