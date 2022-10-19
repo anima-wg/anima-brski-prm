@@ -852,7 +852,7 @@ The pledge SHOULD include this Content-Type header field indicating the included
 Note that this is also an indication regarding the acceptable format of the voucher response.
 This format is included by the registrar as described in {{exchanges_uc2_2}}.
 
-### Plegde-Enrollment-Request (PER) - Trigger 
+### Pledge-Enrollment-Request (PER) - Trigger 
 
 Once the registrar-agent has received the PVR it can trigger the pledge to generate a PER.
 As in BRSKI the PER contains a PKCS#10, but additionally signed using the pledge's IDevID.
@@ -872,7 +872,7 @@ The "enroll-generic-cert" case is shown in {{raer}}.
 {: #raer title='Example of trigger to create a PER' artwork-align="left"}
 
 
-### Plegde-Enrollment-Request (PER) - Response 
+### Pledge-Enrollment-Request (PER) - Response 
 
 In the following the enrollment is described as initial enrollment with an empty HTTP POST body.
 
@@ -1540,7 +1540,7 @@ The response has the Content-Type `application/jose+json`.
 
 Once the registrar-agent has collected the information, it can connect to the registrar-agent to provide the status responses to the registrar.
 
-### Telemetry Voucher and Endroll Status Handling Registrar-Agent to Domain Registrar {#exchanges_uc2_4}
+### Telemetry Voucher Status and Enroll Status Handling (Registrar-Agent to Domain Registrar) {#exchanges_uc2_4}
 
 The following description requires that the registrar-agent has collected the status information from the pledge.
 It SHALL provide the status information to the registrar for further processing.
