@@ -1039,7 +1039,7 @@ TODO: final check and rework section overview</t>
   <t><xref target="exchanges_uc2_5"/> describes the general status handling and addresses the exchanges between the registrar-agent and the registrar. - TODO</t>
 </list></t>
 
-<section anchor="exchanges_uc2_1"><name>Request Objects Acquisition from Pledge by Registrar-Agent - Overview</name>
+<section anchor="exchanges_uc2_1"><name>Request Objects Acquisition by Registrar-Agent from Pledge</name>
 
 <t>The following description assumes that the registrar-agent has already discovered the pledge.
 This may be done as described in <xref target="discovery_uc2_ppa"/> based on mDNS or similar.</t>
@@ -1131,10 +1131,7 @@ The registrar-agent <bcp14>SHOULD</bcp14> have synchronized time.</t>
 
 <t>Note: The registrar-agent may trigger the pledge for the PVR or the PER or both. It is expected that this will be aligned with a service technician workflow, visiting and installing each pledge.</t>
 
-</section>
-<section anchor="pledge-voucher-request-pvr-trigger-and-response"><name>Pledge Voucher Request (PVR) - Trigger and Response</name>
-
-<section anchor="voucher-request-trigger-pvr"><name>Voucher Request Trigger (PVR)</name>
+<section anchor="pledge-voucher-request-pvr-trigger"><name>Pledge-Voucher-Request (PVR) - Trigger</name>
 
 <t>Triggering the pledge to create the PVR is done using HTTP POST on the defined pledge endpoint: "/.well-known/brski/pledge-voucher-request"</t>
 
@@ -1204,7 +1201,7 @@ The serial-number corresponds with the product-serial-number contained in the X5
 ]]></artwork></figure>
 
 </section>
-<section anchor="voucher-request-response-pvr"><name>Voucher Request Response (PVR)</name>
+<section anchor="pledge-voucher-request-pvr-response"><name>Pledge-Voucher-Request (PVR) - Response</name>
 
 <t>Upon receiving the voucher-request trigger, the pledge <bcp14>SHALL</bcp14> construct the body of the PVR as defined in <xref target="RFC8995"/>.
 It will contain additional information provided by the registrar-agent as specified in the following.
@@ -1285,10 +1282,7 @@ Note that this is also an indication regarding the acceptable format of the vouc
 This format is included by the registrar as described in <xref target="exchanges_uc2_2"/>.</t>
 
 </section>
-</section>
-<section anchor="plegde-enrollment-request-per-trigger-and-response"><name>Plegde-Enrollment-Request (PER) - Trigger and Response</name>
-
-<section anchor="plegde-enrollment-request-trigger-per"><name>Plegde-Enrollment-Request Trigger (PER)</name>
+<section anchor="plegde-enrollment-request-per-trigger"><name>Plegde-Enrollment-Request (PER) - Trigger</name>
 
 <t>Once the registrar-agent has received the PVR it can trigger the pledge to generate a PER.
 As in BRSKI the PER contains a PKCS#10, but additionally signed using the pledge's IDevID.
@@ -1307,7 +1301,7 @@ The "enroll-generic-cert" case is shown in <xref target="raer"/>.</t>
 ]]></artwork></figure>
 
 </section>
-<section anchor="plegde-enrollment-request-response-per"><name>Plegde-Enrollment-Request Response (PER)</name>
+<section anchor="plegde-enrollment-request-per-response"><name>Plegde-Enrollment-Request (PER) - Response</name>
 
 <t>In the following the enrollment is described as initial enrollment with an empty HTTP POST body.</t>
 
@@ -1416,7 +1410,7 @@ In such case, how the MASA will obtain the domain CA certificate is out of scope
 In other cases, a MASA may allow the pledge to enroll into an anonymous and/or yet-unknown domain and then the a-priori possession of the domain CA certificate is not needed.</t>
 </list></t>
 
-<figure title="Request processing between registrar-agent bootstrapping services" anchor="exchangesfig_uc2_2"><artset><artwork  type="svg" align="left"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="624" width="504" viewBox="0 0 504 624" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px">
+<figure title="Request processing between registrar-agent and bootstrapping services" anchor="exchangesfig_uc2_2"><artset><artwork  type="svg" align="left"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="624" width="504" viewBox="0 0 504 624" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px">
 <path d="M 8,32 L 8,96" fill="none" stroke="black"/>
 <path d="M 40,144 L 40,608" fill="none" stroke="black"/>
 <path d="M 104,32 L 104,96" fill="none" stroke="black"/>
@@ -1583,12 +1577,12 @@ TLS 1.2 or newer is <bcp14>REQUIRED</bcp14> on the registrar-agent side.
 TLS 1.3 (or newer) <bcp14>SHOULD</bcp14> be available on the registrar, but TLS 1.2 <bcp14>MAY</bcp14> be used.
 TLS 1.3 (or newer) <bcp14>SHOULD</bcp14> be available on the MASA, but TLS 1.2 <bcp14>MAY</bcp14> be used.</t>
 
-<section anchor="todo-connection-establishment-and-pledge-voucher-request-processing-registrar-agent-to-registrar"><name>TODO - Connection Establishment and Pledge-Voucher-Request Processing (Registrar-Agent to Registrar)</name>
+<section anchor="connection-establishment-registrar-agent-to-registrar"><name>Connection Establishment (Registrar-Agent to Registrar)</name>
 
-<t>In contrast to <xref target="RFC8995"/> TLS client authentication to the registrar is achieved by using registrar-agent LDevID(RegAgt) credentials instead of pledge IDevID credentials.
+<t>In contrast to BRSKI <xref target="RFC8995"/> TLS client authentication to the registrar is achieved by using registrar-agent LDevID(RegAgt) credentials instead of pledge IDevID credentials.
 Consequently BRSKI (pledge-initiator-mode) is distinguishable from BRSKI-PRM (pledge-responder-mode) by the registrar.
 The registrar <bcp14>SHOULD</bcp14> verify that the registrar-agent is authorized to establish a connection to the registrar by TLS client authentication using LDevID(RegAgt) credentials.
-If the connection form registrar-agent to registrar is established, the authorization <bcp14>SHALL</bcp14> be verified again based on the agent-signed-data contained in the PVR.
+If the connection form registrar-agent to registrar is established, the authorization <bcp14>SHALL</bcp14> be verified again based on agent-signed-data contained in the PVR.
 This ensures that the pledge has been triggered by an authorized registrar-agent.</t>
 
 <t>The registrar can receive request objects in different formats as defined in <xref target="RFC8995"/>.
@@ -1601,16 +1595,19 @@ Specifically, the registrar will receive JSON-in-JWS objects generated by the pl
 <t>The registrar-agent <bcp14>SHOULD</bcp14> set the Accept field in the request-header indicating the acceptable Content-Type for the voucher-response.
 The voucher-response Content-Type header field <bcp14>SHOULD</bcp14> be set to <spanx style="verb">application/voucher-jws+json</spanx> as defined in <xref target="I-D.ietf-anima-jws-voucher"/>.</t>
 
-<t>After receiving  the PVR from registrar-agent, the registrar <bcp14>SHALL</bcp14> perform the verification as defined in section 5.3 of <xref target="RFC8995"/>.
-In addition, the registrar shall verify the following parameters from the PVR:</t>
+</section>
+<section anchor="pledge-voucher-request-rvr-processing-by-registrar"><name>Pledge-Voucher-Request (RVR) Processing by Registrar</name>
+
+<t>After receiving the PVR from registrar-agent, the registrar <bcp14>SHALL</bcp14> perform the verification as defined in section 5.3 of <xref target="RFC8995"/>.
+In addition, the registrar <bcp14>SHALL</bcp14> verify the following parameters from the PVR:</t>
 
 <t><list style="symbols">
-  <t>agent-provided-proximity-registrar-cert: <bcp14>MUST</bcp14> contain registrar's own registrar EE certificate to ensure the registrar in proximity of the registrar-agent is the destination for this PVR.</t>
-  <t>agent-signed-data: The registrar <bcp14>MUST</bcp14> verify that the agent provided data has been signed with the LDevID(RegAgt) credential indicated in the "kid" JOSE header parameter.
-The registrar <bcp14>MUST</bcp14> verify that the LDevID(ReAgt) certificate, used to sign the data, is still valid.
+  <t>agent-provided-proximity-registrar-cert: <bcp14>MUST</bcp14> contain registrar's own registrar EE certificate to ensure the registrar in proximity of the registrar-agent is the desired registrar for this PVR.</t>
+  <t>agent-signed-data: The registrar <bcp14>MUST</bcp14> verify that the agent provided data has been signed with the LDevID(RegAgt) credentials indicated in the "kid" JOSE header parameter.
+The registrar <bcp14>MUST</bcp14> verify that the LDevID(ReAgt) certificate, corresponding to the signature, is still valid.
 If the certificate is already expired, the registrar <bcp14>SHALL</bcp14> reject the request.
 Validity of used signing certificates at the time of signing the agent-signed-data is necessary to avoid that a rogue registrar-agent generates agent-signed-data objects to onboard arbitrary pledges at a later point in time, see also <xref target="sec_cons_reg-agt"/>.
-The registrar <bcp14>MUST</bcp14> fetch the LDevID(RegAgt) certificate, based on the provided SubjectKeyIdentifier (SKID) contained in the kid header of the agent-signed-data, and perform this verification.
+The registrar <bcp14>MUST</bcp14> fetch the LDevID(RegAgt) certificate, based on the provided SubjectKeyIdentifier (SKID) contained in the "kid" header parameter of the agent-signed-data, and perform this verification.
 This requires, that the registrar can fetch the LDevID(RegAgt) certificate data (including intermediate CA certificates if existent) based on the SKID.</t>
 </list></t>
 
@@ -1621,36 +1618,36 @@ HTTP 406 Not Acceptable status code <bcp14>SHOULD</bcp14> be used if the Content
 The registrar then establishes a TLS connection to MASA as described in section 5.4 of <xref target="RFC8995"/> to obtain a voucher for the pledge.</t>
 
 </section>
-<section anchor="todo-registrar-voucher-request-rvr-processing-registrar-to-masa"><name>TODO: Registrar-Voucher-Request (RVR) Processing (Registrar to MASA)</name>
+<section anchor="registrar-voucher-request-rvr-processing-registrar-to-masa"><name>Registrar-Voucher-Request (RVR) Processing (Registrar to MASA)</name>
 
 <t>The registrar <bcp14>SHALL</bcp14> construct the payload of the RVR as defined in <xref target="RFC8995"/>.
 The RVR encoding <bcp14>SHALL</bcp14> be JSON-in-JWS as defined in <xref target="I-D.ietf-anima-jws-voucher"/>.</t>
 
-<t>The header of the RVR <bcp14>SHALL</bcp14> contain the following parameter as defined in <xref target="RFC7515"/>:</t>
+<t>The header of the RVR <bcp14>SHALL</bcp14> contain the following parameter as defined for JWS <xref target="RFC7515"/>:</t>
 
 <t><list style="symbols">
-  <t>alg: algorithm used to create the object signature.</t>
-  <t>x5c: contains the base64-encoded registrar LDevID certificate(s).
-It may optionally contain the certificate chain for this certificate.</t>
+  <t>alg: algorithm used to create the object signature</t>
+  <t>x5c: base64-encoded registrar LDevID certificate(s)
+(It optionally contains the certificate chain for this certificate)</t>
 </list></t>
 
-<t>The payload of the RVR <bcp14>MUST</bcp14> contain the following parameter as part of the voucher request as defined in <xref target="RFC8995"/>:</t>
+<t>The payload of the RVR <bcp14>MUST</bcp14> contain the following parameter as part of the voucher-request as defined in <xref target="RFC8995"/>:</t>
 
 <t><list style="symbols">
-  <t>created-on: contains the current date and time in yang:date-and-time format for the RVR creation time.</t>
+  <t>created-on: current date and time in yang:date-and-time format of RVR creation</t>
   <t>nonce: copied form the PVR</t>
-  <t>serial-number: contains the pledge product-serial-number.
+  <t>serial-number: product-serial-number of pledge
 The registrar <bcp14>MUST</bcp14> verify that the IDevID certificate subject serialNumber of the pledge (X520SerialNumber) matches the serial-number value in the PVR.
 In addition, it <bcp14>MUST</bcp14> be equal to the serial-number value contained in the agent-signed data of PVR.</t>
-  <t>assertion: contains the voucher assertion requested by the pledge (agent-proximity).
+  <t>assertion: voucher assertion requested by the pledge (agent-proximity).
 The registrar provides this information to assure successful verification of agent proximity based on the agent-signed-data.</t>
-  <t>prior-signed-voucher-request: contains the PVR provided by the registrar-agent.</t>
+  <t>prior-signed-voucher-request: PVR as in <xref target="RFC8995"/></t>
 </list></t>
 
 <t>The RVR can be enhanced optionally with the following parameter as defined in <xref target="voucher-request-prm-yang"/>:</t>
 
 <t><list style="symbols">
-  <t>agent-sign-cert: contains the LDevID(RegAgt) certificate or the LDevID(RegAgt) certificate including the certificate chain.
+  <t>agent-sign-cert: LDevID(RegAgt) certificate or the LDevID(RegAgt) certificate including certificate chain.
 In the context of this document it is a JSON array of base64encoded certificate information and handled in the same way as x5c header objects.</t>
 </list></t>
 
@@ -1659,7 +1656,7 @@ If multiple certificates are included in the x5c, the first <bcp14>MUST</bcp14> 
 
 <t>The MASA uses this information for verification that the registrar-agent is in proximity to the registrar to state the corresponding assertion "agent-proximity".</t>
 
-<t>The object is signed using the registrar registrar EE credential, which corresponds to the certificate signaled in the JOSE header.</t>
+<t>The object is signed using the registrar EE credentials, which corresponds to the certificate referenced in the JOSE header.</t>
 
 <figure title="Representation of RVR" anchor="rvr"><artwork align="left"><![CDATA[
 # The RVR in General JWS Serialization syntax
@@ -1708,18 +1705,18 @@ The media type is <spanx style="verb">application/voucher-jws+json</spanx> as de
 
 <t>Once the MASA receives the RVR it <bcp14>SHALL</bcp14> perform the verification as described in section 5.5 in <xref target="RFC8995"/>.</t>
 
-<t>In addition, the following processing <bcp14>SHALL</bcp14> be performed for PVR data contained in RVR "prior-signed-voucher-request" field:</t>
+<t>In addition, the following processing <bcp14>SHALL</bcp14> be performed for PVR contained in RVR "prior-signed-voucher-request" field:</t>
 
 <t><list style="symbols">
   <t>agent-provided-proximity-registrar-cert: The MASA <bcp14>MAY</bcp14> verify that this field contains the registrar EE certificate.
-If so, it <bcp14>MUST</bcp14> correspond to the registrar EE certificate used to sign the RVR.
+If so, it <bcp14>MUST</bcp14> correspond to the registrar EE credentials used to sign the RVR.
 Note: Correspond here relates to the case that a single registrar EE certificate is used or that different registrar EE certificates are used, which are issued by the same CA.</t>
-  <t>agent-signed-data: The MASA <bcp14>MAY</bcp14> verify this field to issue "agent-proximity" assertion.
+  <t>agent-signed-data: The MASA <bcp14>MAY</bcp14> verify this data to issue "agent-proximity" assertion.
 If so, the agent-signed-data <bcp14>MUST</bcp14> contain the pledge product-serial-number, contained in the "serial-number" field of the PVR (from "prior-signed-voucher-request" field) and also in "serial-number" field of the RVR.
-The LDevID(RegAgt) certificate used to generate the signature is identified by the "kid" parameter of the JOSE header (agent-signed-data).
+The LDevID(RegAgt) certificate to be used for signature verification is identified by the "kid" parameter of the JOSE header.
 If the assertion "agent-proximity" is requested, the RVR <bcp14>MUST</bcp14> contain the corresponding LDevID(RegAgt) certificate data in the "agent-sign-cert" field of the RVR.
 It <bcp14>MUST</bcp14> be verified by the MASA to the same domain CA as the registrar EE certificate.
-If the "agent-sign-cert" field is not provided, the MASA <bcp14>MAY</bcp14> state a lower level assertion value, e.g.: "logged" or "verified".
+If the "agent-sign-cert" field is not set, the MASA <bcp14>MAY</bcp14> state a lower level assertion value, e.g.: "logged" or "verified".
 Note: Sub-CA certificate(s) <bcp14>MUST</bcp14> also be carried by "agent-sign-cert", in case the LDevID(RegAgt) certificate is issued by a sub-CA and not the domain CA known to the MASA.
 As the "agent-sign-cert" field is defined as array (x5c), it can handle multiple certificates.</t>
 </list></t>
@@ -1728,9 +1725,9 @@ As the "agent-sign-cert" field is defined as array (x5c), it can handle multiple
 The HTTP error status codes are kept the same as defined in section 5.6 of <xref target="RFC8995"/>, <!-- XXX -->and comprise the codes: 403, 404, 406, and 415.</t>
 
 </section>
-<section anchor="todo-voucher-issuance-by-masa"><name>TODO: Voucher Issuance by MASA</name>
+<section anchor="voucher-issuance-by-masa"><name>Voucher Issuance by MASA</name>
 
-<t>The expected voucher-response format for the pledge-responder-mode the <spanx style="verb">application/voucher-jws+json</spanx> as defined in <xref target="I-D.ietf-anima-jws-voucher"/> is applied.
+<t>The expected voucher-response format for BRSKI-PRM (pledge-responder-mode) <spanx style="verb">application/voucher-jws+json</spanx> as defined in <xref target="I-D.ietf-anima-jws-voucher"/> <bcp14>SHOULD</bcp14> be applied.
 If the MASA detects that the Accept header of the PVR does not match the <spanx style="verb">application/voucher-jws+json</spanx> it <bcp14>SHOULD</bcp14> respond with the HTTP status code 406 Not Acceptable as the pledge will not be able to parse the response.
 The voucher syntax is described in detail by <xref target="RFC8366"/>. <xref target="MASA-vr"/> shows an example of the contents of a voucher.</t>
 
@@ -1770,15 +1767,17 @@ The voucher syntax is described in detail by <xref target="RFC8366"/>. <xref tar
 <t>The MASA returns the voucher-response (voucher) to the registrar.</t>
 
 </section>
-<section anchor="todo-masa-issued-voucher-processing-by-registrar"><name>TODO: MASA issued Voucher Processing by Registrar</name>
+<section anchor="masa-issued-voucher-processing-by-registrar"><name>MASA issued Voucher Processing by Registrar</name>
 
 <t>After receiving the voucher the registrar <bcp14>SHOULD</bcp14> evaluate it for transparency and logging purposes as outlined in section 5.6 of <xref target="RFC8995"/>.
-The registrar <bcp14>MUST</bcp14> add an additional signature to the MASA provided voucher, by signing it using its registrar credentials).
-The signature is created by signing the original "payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credential (see<xref target="RFC7515"/>, section 5.2 point 8. The x5c component of the "JWS Protected Header" <bcp14>MUST</bcp14> contain registrar EE certificate as well as potential intermediate CA certificates up to the pinned domain certificate. The pinned domain certificate is already contained in the payload.</t>
+The registrar <bcp14>MUST</bcp14> add an additional signature to the MASA provided voucher, by signing it using its registrar credentials.
+The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credentials (see<xref target="RFC7515"/>, section 5.2 point 8. 
+The x5c component of the "JWS Protected Header" <bcp14>MUST</bcp14> contain registrar EE certificate as well as potential intermediate CA certificates up to the pinned domain certificate. 
+The pinned domain certificate is already contained in the voucher payload ("pinned-domain-cert").</t>
 
 <t>This signature provides a proof of possession of the private key corresponding to the registrar EE certificate the pledge received in the trigger for the PVR (see <xref target="pavrt"/>).
-The registrar <bcp14>MUST</bcp14> use the same registrar EE credential used for authentication in the TLS handshake to authenticate towards the registrar-agent. 
-This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher request as also transferred in the PVR in the agent-provided-proximity-registrar-cert component. 
+The registrar <bcp14>MUST</bcp14> use the same registrar EE credentials used for authentication in the TLS handshake to authenticate towards the registrar-agent. 
+This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher request as also transferred in the PVR in the "agent-provided-proximity-registrar-cert". 
 <xref target="MASA-REG-vr"/> below provides an example of the voucher with two signatures.</t>
 
 <figure title="Representation of MASA issued voucher with additional registrar signature" anchor="MASA-REG-vr"><artwork align="left"><![CDATA[
@@ -1832,21 +1831,21 @@ This ensures that the same registrar EE certificate can be used to verify the si
 The registrar sends the voucher to the registrar-agent.</t>
 
 </section>
-<section anchor="todo-pledge-enrollment-request-per-processing-registrar-agent-to-registrar"><name>TODO: Pledge-Enrollment-Request (PER) Processing (Registrar-Agent to Registrar)</name>
+<section anchor="pledge-enrollment-request-per-processing-registrar-agent-to-registrar"><name>Pledge-Enrollment-Request (PER) Processing (Registrar-Agent to Registrar)</name>
 
 <t>After receiving the voucher, the registrar-agent sends the PER to the registrar.
 Deviating from BRSKI the PER is not a raw PKCS#10.
 As the registrar-agent is involved in the exchange, the PKCS#10 is wrapped in a JWS object by the pledge and signed with pledge's IDevID to ensure proof-of-identity as outlined in <xref target="per"/>.</t>
 
-<t><xref target="RFC7030"/> EST standard endpoints (/simpleenroll, /simplereenroll, /serverkeygen, /cacerts) on the registrar cannot be used for BRSKI-PRM.
+<t>EST <xref target="RFC7030"/> standard endpoints (/simpleenroll, /simplereenroll, /serverkeygen, /cacerts) on the registrar cannot be used for BRSKI-PRM.
 This is caused by the utilization of signature wrapped-objects in BRSKI-PRM.
-As EST requires to sent a raw PKCS#10 request to the /simpleenroll endpoint, this document makes an enhancement by utilizing EST but with the exception to transport a signature wrapped PKCS#10 request.
+As EST requires to sent a raw PKCS#10 request to e.g., "/.well-known/est/simpleenroll" endpoint, this document makes an enhancement by utilizing EST but with the exception to transport a signature wrapped PKCS#10 request.
 Therefore a new endpoint for BRSKI-PRM on the registrar is defined as "/.well-known/brski/requestenroll"</t>
 
 <t>The Content-Type header of PER is: <spanx style="verb">application/jose+json</spanx>.</t>
 
 <t>This is a deviation from the Content-Type header values used in <xref target="RFC7030"/> and results in additional processing at the domain registrar (as EST server).
-Note, the registrar is already aware that the bootstrapping is performed in a pledge-responder-mode due to the use of the LDevID(RegAgt) certificate in the TLS establishment and the provided PVR as JSON-in-JWS object.</t>
+Note, the registrar is already aware that the bootstrapping is performed in a pledge-responder-mode due to the use of the LDevID(RegAgt) certificate for TLS and the provided PVR as JSON-in-JWS object.</t>
 
 <t><list style="symbols">
   <t>If the registrar receives a PER with Content-Type header: <spanx style="verb">application/jose+json</spanx>, it <bcp14>MUST</bcp14> verify the wrapping signature using the certificate indicated in the JOSE header.</t>
@@ -1864,24 +1863,25 @@ The approach of sending this information to the CA depends on the utilized certi
 <t>A successful interaction with the domain CA will result in a pledge LDevID certificate, which is then forwarded by the registrar to the registrar-agent using the Content-Type header: <spanx style="verb">application/pkcs7-mime</spanx>.</t>
 
 </section>
-<section anchor="todo-provisioning-of-wrapped-ca-certificates-to-registrar-agent"><name>TODO: Provisioning of wrapped CA certificates to Registrar-Agent</name>
+<section anchor="request-wrapped-ca-certificates-registrar-agent-to-registrar"><name>Request Wrapped-CA-certificate(s) (Registrar-Agent to Registrar)</name>
 
 <t>As the pledge will verify it own certificate LDevID certificate when received, it also needs the corresponding CA certificates.
-This is done in EST using the "/.well-known/est/cacerts" endpoint, which provides the CA certificates over a TLS protected connection.
-BRSKI-PRM requires a signature wrapped CA certificate response, to avoid that the pledge can be provided with arbitrary CA certificates in an authorized way.
-The additional signature of the registrar will allow the pledge to verify the authorization to install CA certificates.
-As the CA certificates are provided to the pledge after the voucher, the pledge has the necessary information to validate the provisioning object.</t>
+This is done in EST <xref target="RFC7030"/> using the "/.well-known/est/cacerts" endpoint, which provides the CA certificates over a TLS protected connection.
+BRSKI-PRM requires a signature wrapped CA certificate object, to avoid that the pledge can be provided with arbitrary CA certificates in an authorized way.
+The registrar signed CA certificate object will allow the pledge to verify the authorization to install the received CA certificate(s).
+As the CA certificate(s) are provided to the pledge after the voucher, the pledge has the required information to verify the wrapped CA certificate object.</t>
 
-<t>To allow the registrar-agent to request signature wrapped CA certificates, a new endpoint for BRSKI-PRM on the registrar is defined as "/.well-known/brski/wrappedcacerts"</t>
+<t>To support registrar-agent requesting a signature wrapped CA certificate(s) object, a new endpoint for BRSKI-PRM is defined on the registrar: "/.well-known/brski/wrappedcacerts"</t>
 
-<t>The registrar-agent <bcp14>SHALL</bcp14> requests the EST CA trust anchor database information (in form of CA certificates) with an HTTPS GET message.</t>
+<t>The registrar-agent <bcp14>SHALL</bcp14> requests the EST CA trust anchor database information (in form of CA certificates) by HTTP GET.</t>
 
 <t>The Content-Type header of the response <bcp14>SHALL</bcp14> be: <spanx style="verb">application/jose+json</spanx>.</t>
 
-<t>This is a deviation from the Content-Type header values used in <xref target="RFC7030"/> and results in additional processing at the domain registrar (as EST server).
-The additional processing is the signature of the CA certificate information using the registrar EE credential resulting in a signed JSON object. The CA certificates are provided as base64 encoded x5b.</t>
+<t>This is a deviation from the Content-Type header values used in EST <xref target="RFC7030"/> and results in additional processing at the domain registrar (as EST server).
+The additional processing is to sign the CA certificate(s) information using the registrar EE credentials.
+This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certificates are provided as base64 encoded "x5b" in the JWS payload.</t>
 
-<figure title="Representation of CA certificates data with additional registrar signature" anchor="PCAC"><artwork align="left"><![CDATA[
+<figure title="Representation of CA certificate(s) data with additional registrar signature" anchor="PCAC"><artwork align="left"><![CDATA[
 # The CA certificates data with additional registrar signaturer in
   General JWS Serialization syntax
 {
@@ -1913,16 +1913,16 @@ The additional processing is the signature of the CA certificate information usi
 }
 ]]></artwork></figure>
 
-<t>The registrar-agent has now finished the exchanges with the domain registrar and can supply the voucher-response (from MASA via Registrar), the CA certificates, and the enrollment-response (LDevID certificate, from CA via Registrar) to the pledge.
-It can close the TLS connection to the domain registrar and can provide the responses to the pledge(s).
-The content of the responses are defined by the voucher <xref target="RFC8366"/> and the certificate <xref target="RFC5280"/>.</t>
-
 </section>
 </section>
 <section anchor="exchanges_uc2_3"><name>Response Object Supply by Registrar-Agent to Pledge</name>
 
-<t>The following description assumes that the registrar-agent has obtained the voucher and enrollment responses from the domain registrar.
-It will re-start the interaction with the pledge.
+<t>It is assumed that the registrar-agent already obtained the bootstrapping response objects from the domain registrar and can supply them to the pledge: 
+* voucher-response - Voucher (from MASA via Registrar)<br />
+* wrapped-CA-certificate(s)-response - CA certificates
+* enrollment-response - LDevID(Pledge) certificate (from CA via Registrar)</t>
+
+<t>It will re-start the interaction with the pledge.
 To contact the pledge, it may either discover the pledge as described in <xref target="discovery_uc2_ppa"/> or use stored information from the first contact with the pledge.</t>
 
 <t>Preconditions in addition to <xref target="exchanges_uc2_2"/>:</t>
@@ -2023,7 +2023,7 @@ To contact the pledge, it may either discover the pledge as described in <xref t
 
 <t>The registrar-agent provides the information via distinct pledge endpoints as following.</t>
 
-<section anchor="todo-voucher-response-processing-by-pledge"><name>TODO: Voucher Response processing by Pledge</name>
+<section anchor="pledge-voucher-response-processing"><name>Pledge: Voucher Response Processing</name>
 
 <t>The registrar-agent <bcp14>SHALL</bcp14> send the voucher-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-voucher".</t>
 
@@ -2031,24 +2031,24 @@ To contact the pledge, it may either discover the pledge as described in <xref t
 
 <t>A nonceless voucher may be accepted as in <xref target="RFC8995"/> and may be allowed by a manufactures pledge implementation.</t>
 
-<t>To perform the validation of multiple signatures in the voucher, the pledge <bcp14>SHALL</bcp14> perform the signature verification in the following order:</t>
+<t>To perform the validation of multiple signatures on the voucher object, the pledge <bcp14>SHALL</bcp14> perform the signature verification in the following order:</t>
 
 <t><list style="numbers">
-  <t>Validate MASA signature as described in section 5.6.1 in <xref target="RFC8995"/> successfully.</t>
-  <t>Install contained trust anchor provisionally.</t>
-  <t>Verify registrar signature as described in section 5.6.1 in <xref target="RFC8995"/> successfully, but take the registrar certificate instead of the MASA certificate for verification.</t>
-  <t>Validate the registrar certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert") successfully, including validity and authorization to bootstrap the particular pledge.</t>
+  <t>Verify MASA signature as described in section 5.6.1 in <xref target="RFC8995"/></t>
+  <t>Install trust anchor contained in the voucher ("pinned-domain-cert")  provisionally</t>
+  <t>Verify registrar signature as described in section 5.6.1 in <xref target="RFC8995"/>, but take the registrar certificate instead of the MASA certificate for the verification</t>
+  <t>Validate the registrar certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert"), including validity and authorization to bootstrap the particular pledge.</t>
 </list></t>
 
-<t>If all verification steps stated above have been performed successfully, the pledge <bcp14>SHALL</bcp14> terminate the "PROVISIONAL accept" state for the domain trust anchor and the registrar EE certificate.</t>
+<t>If all steps stated above have been performed successfully, the pledge <bcp14>SHALL</bcp14> terminate the "PROVISIONAL accept" state for the domain trust anchor and the registrar EE certificate.</t>
 
-<t>If an error occurs during the verification it <bcp14>SHALL</bcp14> be signaled in the reason field of the pledge voucher status.</t>
+<t>If an error occurs during the verification and validation of the voucher, this <bcp14>SHALL</bcp14> be reported in the reason field of the pledge voucher status.</t>
 
 </section>
-<section anchor="todo-pledge-voucher-status-telemetry"><name>TODO: Pledge Voucher Status Telemetry</name>
+<section anchor="pledge-voucher-status-telemetry"><name>Pledge: Voucher Status Telemetry</name>
 
-<t>After voucher verification the pledge <bcp14>MUST</bcp14> reply with a status telemetry message as defined in section 5.7 of <xref target="RFC8995"/>.
-The pledge generates the voucher status and provides it as JOSE object with the wrapping signature in the response message to the registrar-agent.</t>
+<t>After voucher verification and validation the pledge <bcp14>MUST</bcp14> reply with a status telemetry message as defined in section 5.7 of <xref target="RFC8995"/>.
+The pledge generates the voucher-status and provides it as signed JSON-in-JWS object in response to the registrar-agent.</t>
 
 <t>The response has the Content-Type <spanx style="verb">application/jose+json</spanx> and is signed using the IDevID of the pledge as shown in <xref target="vstat"/>.
 As the reason field is optional (see <xref target="RFC8995"/>), it <bcp14>MAY</bcp14> be omitted in case of success.</t>
@@ -2088,37 +2088,39 @@ As the reason field is optional (see <xref target="RFC8995"/>), it <bcp14>MAY</b
 ]]></artwork></figure>
 
 </section>
-<section anchor="todo-provisioning-wrapped-ca-certificates-to-pledge"><name>TODO: Provisioning wrapped CA certificates to Pledge</name>
+<section anchor="pledge-wrapped-ca-certificates-processing"><name>Pledge: Wrapped-CA-Certificate(s) Processing</name>
 
 <t>The registrar-agent <bcp14>SHALL</bcp14> provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-CAcerts".</t>
 
-<t>As the CA certificate provisioning is crucial from a security perspective, this provisioning <bcp14>SHALL</bcp14> only be done, if the voucher-response has been successfully provided to the pledge.</t>
+<t>As the CA certificate provisioning is crucial from a security perspective, this provisioning <bcp14>SHALL</bcp14> only be done, if the voucher-response has been successfully processed by pledge.</t>
 
 <t>The supply CA certificates message has the Content-Type <spanx style="verb">application/jose+json</spanx> and is signed using the credential of the registrar pledge as shown in <xref target="PCAC"/>.</t>
 
-<t>The CA certificates are provided as base64 encoded x5b.
-The pledge <bcp14>SHALL</bcp14> install the received CA certificates in its trust anchor database after successful verification of the registrar's signature.</t>
+<t>The CA certificates are provided as base64 encoded "x5b".
+The pledge <bcp14>SHALL</bcp14> install the received CA certificates as trust anchor after successful verification of the registrar's signature.</t>
 
 <t>If validation of the wrapping signature or another security check fails, the pledge <bcp14>SHOULD</bcp14> respond with the HTTP 403 Forbidden status code.
 The HTTP 415 Unsupported Media Type status code <bcp14>SHOULD</bcp14> be used, if the Content-Type of the request is in an unknown or unsupported format.
 The HTTP 400 Bad Request status code <bcp14>SHOULD</bcp14> be used, if the pledge detects errors in the encoding of the payload.</t>
 
 </section>
-<section anchor="todo-pledge-enrollment-response-processing"><name>TODO: Pledge Enrollment Response processing</name>
+<section anchor="pledge-enrollment-response-processing"><name>Pledge: Enrollment Response Processing</name>
 
 <t>The registrar-agent <bcp14>SHALL</bcp14> send the enroll-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-enrollment".</t>
 
-<t>The registrar-agent enroll-response Content-Type header, when using EST <xref target="RFC7030"/> as enrollment protocol between the registrar-agent and the infrastructure, is <spanx style="verb">application/pkcs7-mime</spanx>. Note that it only contains the LDevID certificate for the pledge, not the certificate chain.</t>
+<t>The registrar-agent enroll-response Content-Type header, when using EST <xref target="RFC7030"/> as enrollment protocol between the registrar-agent and the infrastructure is: <spanx style="verb">application/pkcs7-mime</spanx>. 
+Note: It only contains the LDevID certificate for the pledge, not the certificate chain.</t>
 
 <t>Upon reception, the pledge <bcp14>SHALL</bcp14> verify the received LDevID certificate.
-The pledge <bcp14>SHALL</bcp14> generate the enroll status and provide it in the response message to the registrar-agent. If the verification of the LDevID certificate succeeds, the status <bcp14>SHALL</bcp14> be set to true, otherwise to FALSE.</t>
+The pledge <bcp14>SHALL</bcp14> generate the enroll status and provide it in response to the registrar-agent. 
+If the verification of the LDevID certificate succeeds, the status <bcp14>SHALL</bcp14> be set to true, otherwise to FALSE.</t>
 
 </section>
-<section anchor="todo-pledge-enrollment-status-telemetry"><name>TODO: Pledge Enrollment Status Telemetry</name>
+<section anchor="pledge-enrollment-status-telemetry"><name>Pledge: Enrollment Status Telemetry</name>
 
 <t>The pledge <bcp14>MUST</bcp14> reply with a status telemetry message as defined in section 5.9.4 of <xref target="RFC8995"/>.
-As for the other objects, the enroll status is provided with an additional signature using JOSE.
-If the pledge verified the received LDevID certificate successfully it <bcp14>SHALL</bcp14> sign the response using the LDevID of the pledge as shown in <xref target="estat"/>.
+As for the other objects, the enroll-status is signed and results in a JSON-in-JWS object.
+If the pledge verified the received LDevID certificate successfully it <bcp14>SHALL</bcp14> sign the response using its new LDevID credentials as shown in <xref target="estat"/>.
 In the failure case, the pledge <bcp14>SHALL</bcp14> use the available IdevID credentials.
 As the reason field is optional, it <bcp14>MAY</bcp14> be omitted in case of success.</t>
 
@@ -2161,234 +2163,7 @@ As the reason field is optional, it <bcp14>MAY</bcp14> be omitted in case of suc
 <t>Once the registrar-agent has collected the information, it can connect to the registrar-agent to provide the status responses to the registrar.</t>
 
 </section>
-</section>
-<section anchor="exchanges_uc2_5"><name>Telemetry Status: Pledge Status by Registrar-Agent - Trigger and Response</name>
-
-<t>The following assumes that a registrar-agent may need to query the status of a pledge.
-This information may be useful to solve errors, when the pledge was not able to connect to the target domain during the bootstrapping.
-The pledge <bcp14>MAY</bcp14> provide a dedicated endpoint to accept status-requests.</t>
-
-<t>Preconditions:</t>
-
-<t><list style="symbols">
-  <t>Registrar-agent: possesses LDevID (RegAgt), list of serial numbers of pledges to be queried and a list of corresponding manufacturer trust anchors to be able to verify signatures with the IDevID credential.</t>
-  <t>Pledge: may already possess domain credentials and LDevID(Pledge), or may not possess one or both of these.</t>
-</list></t>
-
-<figure title="Pledge-status handling between registrar-agent and pledge" anchor="exchangesfig_uc2_5"><artset><artwork  type="svg" align="left"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="360" viewBox="0 0 360 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px">
-<path d="M 8,32 L 8,96" fill="none" stroke="black"/>
-<path d="M 40,104 L 40,176" fill="none" stroke="black"/>
-<path d="M 80,32 L 80,96" fill="none" stroke="black"/>
-<path d="M 256,32 L 256,96" fill="none" stroke="black"/>
-<path d="M 304,104 L 304,176" fill="none" stroke="black"/>
-<path d="M 352,32 L 352,96" fill="none" stroke="black"/>
-<path d="M 8,32 L 80,32" fill="none" stroke="black"/>
-<path d="M 256,32 L 352,32" fill="none" stroke="black"/>
-<path d="M 8,96 L 80,96" fill="none" stroke="black"/>
-<path d="M 256,96 L 352,96" fill="none" stroke="black"/>
-<path d="M 48,128 L 72,128" fill="none" stroke="black"/>
-<path d="M 264,128 L 296,128" fill="none" stroke="black"/>
-<path d="M 48,160 L 72,160" fill="none" stroke="black"/>
-<path d="M 272,160 L 296,160" fill="none" stroke="black"/>
-<polygon class="arrowhead" points="304,160 292,154.4 292,165.6" fill="black" transform="rotate(0,296,160)"/>
-<polygon class="arrowhead" points="56,128 44,122.4 44,133.6" fill="black" transform="rotate(180,48,128)"/>
-<g class="text">
-<text x="44" y="52">Pledge</text>
-<text x="308" y="52">Registrar-</text>
-<text x="288" y="68">Agent</text>
-<text x="300" y="84">(RegAgt)</text>
-<text x="136" y="132">pledge-status</text>
-<text x="224" y="132">request</text>
-<text x="136" y="164">pledge-status</text>
-<text x="228" y="164">response</text>
-</g>
-</svg>
-</artwork><artwork  type="ascii-art" align="left"><![CDATA[
-+--------+                     +-----------+
-| Pledge |                     | Registrar-|
-|        |                     | Agent     |
-|        |                     | (RegAgt)  |
-+--------+                     +-----------+
-    |                                |
-    |<--- pledge-status request -----|
-    |                                |
-    |---- pledge-status response --->|
-    |                                |
-]]></artwork></artset></figure>
-
-<section anchor="todo-pledge-status-request-processing-registrar-agent-pledge"><name>TODO: Pledge-Status Request Processing (Registrar-Agent - Pledge)</name>
-
-<t>The registrar-agent requests the pledge-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/pledge-status"</t>
-
-<t>The registrar-agent Content-Type header for the pledge-status request is: <spanx style="verb">application/jose+json</spanx>.
-It contains information on the requested status-type, the time and date the request is created, and the product serial-number of the pledge contacted as shown in <xref target="stat_req_def"/>.
-The pledge-status request is signed by registrar-agent using the LDevID(RegAgt) credential.</t>
-
-<t>The following Concise Data Definition Language (CDDL) <xref target="RFC8610"/> explains the structure of the format for the pledge-status request. It is defined following the status telemetry definitions in BRSKI <xref target="RFC8995"/>.
-Consequently, format and semantics of pledge-status requests below are for version 1.
-The version field is included to permit significant changes to the pledge-status request and response in the future.
-A pledge or a registrar-agent that receives a pledge-status request with a version larger than it knows about <bcp14>SHOULD</bcp14> log the contents and alert a human.</t>
-
-<figure title="CDDL for pledge-status request" anchor="stat_req_def"><artwork align="left"><![CDATA[
-<CODE BEGINS>
-  status-request = {
-      "version": uint,
-      "created-on": tdate ttime,
-      "serial-number": text,
-      "status-type": text
-  }
-<CODE ENDS>
-]]></artwork></figure>
-
-<t>The status-type defined for BRSKI-PRM is "bootstrap".
-This indicates the pledge to provide current status information regarding the bootstrapping status (voucher processing and the enrollment of the pledge into the new domain).
-As pledge-status request is defined generic, it may be used by other specifications to request further status information, e.g., for onboarding to get further information about enrollment of application specific LDevIDs or other parameters.
-This is out of scope for this specification.</t>
-
-<t><xref target="stat_req"/> below shows an example for querying pledge-status using status-type bootstrap.</t>
-
-<figure title="Example of registrar-agent request of pledge-status using status-type bootstrap" anchor="stat_req"><artwork align="left"><![CDATA[
-# The registrar-agent request of "pledge-status" in general JWS
-  serialization syntax
-{
-  "payload": "BASE64URL(status-request)",
-  "signatures": [
-    {
-      "protected": "BASE64URL(UTF8(JWS Protected Header))",
-      "signature": "base64encodedvalue=="
-    }
-  ]
-}
-
-# Decoded payload "status-request" representation in JSON syntax
-{
-  "version": 1,
-  "created-on": "2022-08-12T02:37:39.235Z",
-  "serial-number": "pledge-callee4711",
-  "status-type": "bootstrap"
-}
-
-# Decoded "JWS Protected Header" representation in JSON syntax
-{
-  "alg": "ES256",
-  "x5c": [
-    "base64encodedvalue==",
-    "base64encodedvalue=="
-  ]
-}
-]]></artwork></figure>
-
-</section>
-<section anchor="todo-pledge-status-response-processing-pledge-registrar-agent"><name>TODO: Pledge Status Response Processing (Pledge - Registrar-Agent)</name>
-
-<t>If the pledge receives the pledge-status request with status-type "bootstrap" it <bcp14>SHALL</bcp14> react with a status response message based on the telemetry information described in section <xref target="exchanges_uc2_3"/>.</t>
-
-<t>The pledge-status response Content-Type header is <spanx style="verb">application/jose+json</spanx>.</t>
-
-<t>The following CDDL explains the structure of the format for the status response, which is :</t>
-
-<figure title="CDDL for pledge-status response" anchor="stat_res_def"><artwork align="left"><![CDATA[
-<CODE BEGINS>
-  status-response = {
-    "version": uint,
-    "status":
-      "factory-default" /
-      "voucher-success" /
-      "voucher-error" /
-      "enroll-success" /
-      "enroll-error" /
-      "connect-success" /
-      "connect-error",
-    ?"reason" : text,
-    ?"reason-context" : { $$arbitrary-map }
-  }
-<CODE ENDS>
-]]></artwork></figure>
-
-<t>Different cases for pledge bootstrapping status may occur, which <bcp14>SHOULD</bcp14> be reflected using the status enumeration.
-This document specifies the status values in the context of the bootstrapping process and credential application.
-Other documents may enhance the above enumeration to reflect further status information.</t>
-
-<t>The pledge-status response message is signed with IDevID or LDevID, depending on bootstrapping state of the pledge.</t>
-
-<t><list style="symbols">
-  <t>"factory-default": Pledge has not been bootstrapped.
-Additional information may be provided in the reason or reason-context.
-The pledge signs the response message using its IDevID(Pledge).</t>
-  <t>"voucher-success": Pledge processed the voucher exchange successfully.
-Additional information may be provided in the reason or reason-context.
-The pledge signs the response message using its IDevID(Pledge).</t>
-  <t>"voucher-error": Pledge voucher processing terminated with error.
-Additional information may be provided in the reason or reason-context.
-The pledge signs the response message using its IDevID(Pledge).</t>
-  <t>"enroll-success": Pledge has processed the enrollment exchange successfully.
-Additional information may be provided in the reason or reason-context.
-The pledge signs the response message using its LDevID(Pledge).</t>
-  <t>"enroll-error": Pledge enrollment response processing terminated with error.
-Additional information may be provided in the reason or reason-context.
-The pledge signs the response message using its IDevID(Pledge).</t>
-</list></t>
-
-<t>The reason and the reason-context <bcp14>SHOULD</bcp14> contain the telemetry information as described in section <xref target="exchanges_uc2_3"/>.</t>
-
-<t>As the pledge is assumed to utilize the bootstrapped credential information in communication with other peers, additional status information is provided for the connectivity to other peers, which may be helpful in analyzing potential error cases.</t>
-
-<t><list style="symbols">
-  <t>"connect-success": Pledge could successfully establish a connection to another peer.
-Additional information may be provided in the reason or reason-context.
-The pledge signs the response message using its LDevID(Pledge).</t>
-  <t>"connect-error": Pledge connection establishment terminated with error.
-Additional information may be provided in the reason or reason-context.
-The pledge signs the response message using its LDevID(Pledge).</t>
-</list></t>
-
-<t>The pledge-status responses are cumulative in the sense that connect-success implies enroll-success implies voucher-success.</t>
-
-<t><xref target="stat_res"/> provides an example for the bootstrapping-status information.</t>
-
-<figure title="Example of pledge-status response" anchor="stat_res"><artwork align="left"><![CDATA[
-# The pledge "status-response" in General JWS Serialization syntax
-{
-  "payload": "BASE64URL(status-response)",
-  "signatures": [
-    {
-      "protected": "BASE64URL(UTF8(JWS Protected Header))",
-      "signature": "base64encodedvalue=="
-    }
-  ]
-}
-
-# Decoded payload "status-response" representation in JSON syntax
-{
-  "version": 1,
-  "status": "enroll-success",
-  "reason-context": {
-    "additional" : "JSON"
-  }
-}
-
-# Decoded "JWS Protected Header" representation in JSON syntax
-{
-  "alg": "ES256",
-  "x5c": [
-    "base64encodedvalue==",
-    "base64encodedvalue=="
-  ],
-  "typ": "jose+json
-}
-]]></artwork></figure>
-
-<t>In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor.
-It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.
-In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchor) and can therefore validate the signature of the registrar-agent.
-If validation of the JWS signature fails, the pledge <bcp14>SHOULD</bcp14> respond with the HTTP 403 Forbidden status code.
-The HTTP 406 Not Acceptable status code <bcp14>SHOULD</bcp14> be used, if the Accept header in the request indicates an unknown or unsupported format.
-The HTTP 415 Unsupported Media Type status code <bcp14>SHOULD</bcp14> be used, if the Content-Type of the request is an unknown or unsupported format.
-The HTTP 400 Bad Request status code <bcp14>SHOULD</bcp14> be used, if the Accept/Content-Type headers are correct but nevertheless the status-request cannot be correctly parsed.</t>
-
-</section>
-</section>
-<section anchor="exchanges_uc2_4"><name>Telemetry Status Handling Registrar-Agent to Domain Registrar</name>
+<section anchor="exchanges_uc2_4"><name>Telemetry Voucher and Endroll Status Handling Registrar-Agent to Domain Registrar</name>
 
 <t>The following description requires that the registrar-agent has collected the status information from the pledge.
 It <bcp14>SHALL</bcp14> provide the status information to the registrar for further processing.</t>
@@ -2530,6 +2305,233 @@ Based on the failure case the registrar <bcp14>MAY</bcp14> decide that for secur
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
 Within the server log the registrar <bcp14>SHOULD</bcp14> capture this telemetry information.</t>
 
+</section>
+</section>
+<section anchor="exchanges_uc2_5"><name>Request Pledge-Status by Registrar-Agent from Pledge</name>
+
+<t>The following assumes that a registrar-agent may need to query the status of a pledge.
+This information may be useful to solve errors, when the pledge was not able to connect to the target domain during the bootstrapping.
+The pledge <bcp14>MAY</bcp14> provide a dedicated endpoint to accept status-requests.</t>
+
+<t>Preconditions:</t>
+
+<t><list style="symbols">
+  <t>Registrar-agent: possesses LDevID (RegAgt), list of serial numbers of pledges to be queried and a list of corresponding manufacturer trust anchors to be able to verify signatures with the IDevID credential.</t>
+  <t>Pledge: may already possess domain credentials and LDevID(Pledge), or may not possess one or both of these.</t>
+</list></t>
+
+<figure title="Pledge-status handling between registrar-agent and pledge" anchor="exchangesfig_uc2_5"><artset><artwork  type="svg" align="left"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="360" viewBox="0 0 360 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px">
+<path d="M 8,32 L 8,96" fill="none" stroke="black"/>
+<path d="M 40,104 L 40,176" fill="none" stroke="black"/>
+<path d="M 80,32 L 80,96" fill="none" stroke="black"/>
+<path d="M 256,32 L 256,96" fill="none" stroke="black"/>
+<path d="M 304,104 L 304,176" fill="none" stroke="black"/>
+<path d="M 352,32 L 352,96" fill="none" stroke="black"/>
+<path d="M 8,32 L 80,32" fill="none" stroke="black"/>
+<path d="M 256,32 L 352,32" fill="none" stroke="black"/>
+<path d="M 8,96 L 80,96" fill="none" stroke="black"/>
+<path d="M 256,96 L 352,96" fill="none" stroke="black"/>
+<path d="M 48,128 L 72,128" fill="none" stroke="black"/>
+<path d="M 264,128 L 296,128" fill="none" stroke="black"/>
+<path d="M 48,160 L 72,160" fill="none" stroke="black"/>
+<path d="M 272,160 L 296,160" fill="none" stroke="black"/>
+<polygon class="arrowhead" points="304,160 292,154.4 292,165.6" fill="black" transform="rotate(0,296,160)"/>
+<polygon class="arrowhead" points="56,128 44,122.4 44,133.6" fill="black" transform="rotate(180,48,128)"/>
+<g class="text">
+<text x="44" y="52">Pledge</text>
+<text x="308" y="52">Registrar-</text>
+<text x="288" y="68">Agent</text>
+<text x="300" y="84">(RegAgt)</text>
+<text x="136" y="132">pledge-status</text>
+<text x="224" y="132">request</text>
+<text x="136" y="164">pledge-status</text>
+<text x="228" y="164">response</text>
+</g>
+</svg>
+</artwork><artwork  type="ascii-art" align="left"><![CDATA[
++--------+                     +-----------+
+| Pledge |                     | Registrar-|
+|        |                     | Agent     |
+|        |                     | (RegAgt)  |
++--------+                     +-----------+
+    |                                |
+    |<--- pledge-status request -----|
+    |                                |
+    |---- pledge-status response --->|
+    |                                |
+]]></artwork></artset></figure>
+
+<section anchor="pledge-status-trigger-registrar-agent-to-pledge"><name>Pledge-Status - Trigger (Registrar-Agent to Pledge)</name>
+
+<t>The registrar-agent requests the pledge-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/pledge-status"</t>
+
+<t>The registrar-agent Content-Type header for the pledge-status request is: <spanx style="verb">application/jose+json</spanx>.
+It contains information on the requested status-type, the time and date the request is created, and the product serial-number of the pledge contacted as shown in <xref target="stat_req_def"/>.
+The pledge-status request is signed by registrar-agent using the LDevID(RegAgt) credential.</t>
+
+<t>The following Concise Data Definition Language (CDDL) <xref target="RFC8610"/> explains the structure of the format for the pledge-status request. It is defined following the status telemetry definitions in BRSKI <xref target="RFC8995"/>.
+Consequently, format and semantics of pledge-status requests below are for version 1.
+The version field is included to permit significant changes to the pledge-status request and response in the future.
+A pledge or a registrar-agent that receives a pledge-status request with a version larger than it knows about <bcp14>SHOULD</bcp14> log the contents and alert a human.</t>
+
+<figure title="CDDL for pledge-status request" anchor="stat_req_def"><artwork align="left"><![CDATA[
+<CODE BEGINS>
+  status-request = {
+      "version": uint,
+      "created-on": tdate ttime,
+      "serial-number": text,
+      "status-type": text
+  }
+<CODE ENDS>
+]]></artwork></figure>
+
+<t>The status-type defined for BRSKI-PRM is "bootstrap".
+This indicates the pledge to provide current status information regarding the bootstrapping status (voucher processing and the enrollment of the pledge into the new domain).
+As pledge-status request is defined generic, it may be used by other specifications to request further status information, e.g., for onboarding to get further information about enrollment of application specific LDevIDs or other parameters.
+This is out of scope for this specification.</t>
+
+<t><xref target="stat_req"/> below shows an example for querying pledge-status using status-type bootstrap.</t>
+
+<figure title="Example of registrar-agent request of pledge-status using status-type bootstrap" anchor="stat_req"><artwork align="left"><![CDATA[
+# The registrar-agent request of "pledge-status" in general JWS
+  serialization syntax
+{
+  "payload": "BASE64URL(status-request)",
+  "signatures": [
+    {
+      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "signature": "base64encodedvalue=="
+    }
+  ]
+}
+
+# Decoded payload "status-request" representation in JSON syntax
+{
+  "version": 1,
+  "created-on": "2022-08-12T02:37:39.235Z",
+  "serial-number": "pledge-callee4711",
+  "status-type": "bootstrap"
+}
+
+# Decoded "JWS Protected Header" representation in JSON syntax
+{
+  "alg": "ES256",
+  "x5c": [
+    "base64encodedvalue==",
+    "base64encodedvalue=="
+  ]
+}
+]]></artwork></figure>
+
+</section>
+<section anchor="pledge-status-response-pledge-registrar-agent"><name>Pledge-Status - Response (Pledge - Registrar-Agent)</name>
+
+<t>If the pledge receives the pledge-status request with status-type "bootstrap" it <bcp14>SHALL</bcp14> react with a status response message based on the telemetry information described in section <xref target="exchanges_uc2_3"/>.</t>
+
+<t>The pledge-status response Content-Type header is <spanx style="verb">application/jose+json</spanx>.</t>
+
+<t>The following CDDL explains the structure of the format for the status response, which is :</t>
+
+<figure title="CDDL for pledge-status response" anchor="stat_res_def"><artwork align="left"><![CDATA[
+<CODE BEGINS>
+  status-response = {
+    "version": uint,
+    "status":
+      "factory-default" /
+      "voucher-success" /
+      "voucher-error" /
+      "enroll-success" /
+      "enroll-error" /
+      "connect-success" /
+      "connect-error",
+    ?"reason" : text,
+    ?"reason-context" : { $$arbitrary-map }
+  }
+<CODE ENDS>
+]]></artwork></figure>
+
+<t>Different cases for pledge bootstrapping status may occur, which <bcp14>SHOULD</bcp14> be reflected using the status enumeration.
+This document specifies the status values in the context of the bootstrapping process and credential application.
+Other documents may enhance the above enumeration to reflect further status information.</t>
+
+<t>The pledge-status response message is signed with IDevID or LDevID, depending on bootstrapping state of the pledge.</t>
+
+<t><list style="symbols">
+  <t>"factory-default": Pledge has not been bootstrapped.
+Additional information may be provided in the reason or reason-context.
+The pledge signs the response message using its IDevID(Pledge).</t>
+  <t>"voucher-success": Pledge processed the voucher exchange successfully.
+Additional information may be provided in the reason or reason-context.
+The pledge signs the response message using its IDevID(Pledge).</t>
+  <t>"voucher-error": Pledge voucher processing terminated with error.
+Additional information may be provided in the reason or reason-context.
+The pledge signs the response message using its IDevID(Pledge).</t>
+  <t>"enroll-success": Pledge has processed the enrollment exchange successfully.
+Additional information may be provided in the reason or reason-context.
+The pledge signs the response message using its LDevID(Pledge).</t>
+  <t>"enroll-error": Pledge enrollment response processing terminated with error.
+Additional information may be provided in the reason or reason-context.
+The pledge signs the response message using its IDevID(Pledge).</t>
+</list></t>
+
+<t>The reason and the reason-context <bcp14>SHOULD</bcp14> contain the telemetry information as described in section <xref target="exchanges_uc2_3"/>.</t>
+
+<t>As the pledge is assumed to utilize the bootstrapped credential information in communication with other peers, additional status information is provided for the connectivity to other peers, which may be helpful in analyzing potential error cases.</t>
+
+<t><list style="symbols">
+  <t>"connect-success": Pledge could successfully establish a connection to another peer.
+Additional information may be provided in the reason or reason-context.
+The pledge signs the response message using its LDevID(Pledge).</t>
+  <t>"connect-error": Pledge connection establishment terminated with error.
+Additional information may be provided in the reason or reason-context.
+The pledge signs the response message using its LDevID(Pledge).</t>
+</list></t>
+
+<t>The pledge-status responses are cumulative in the sense that connect-success implies enroll-success implies voucher-success.</t>
+
+<t><xref target="stat_res"/> provides an example for the bootstrapping-status information.</t>
+
+<figure title="Example of pledge-status response" anchor="stat_res"><artwork align="left"><![CDATA[
+# The pledge "status-response" in General JWS Serialization syntax
+{
+  "payload": "BASE64URL(status-response)",
+  "signatures": [
+    {
+      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "signature": "base64encodedvalue=="
+    }
+  ]
+}
+
+# Decoded payload "status-response" representation in JSON syntax
+{
+  "version": 1,
+  "status": "enroll-success",
+  "reason-context": {
+    "additional" : "JSON"
+  }
+}
+
+# Decoded "JWS Protected Header" representation in JSON syntax
+{
+  "alg": "ES256",
+  "x5c": [
+    "base64encodedvalue==",
+    "base64encodedvalue=="
+  ],
+  "typ": "jose+json
+}
+]]></artwork></figure>
+
+<t>In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor.
+It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.
+In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchor) and can therefore validate the signature of the registrar-agent.
+If validation of the JWS signature fails, the pledge <bcp14>SHOULD</bcp14> respond with the HTTP 403 Forbidden status code.
+The HTTP 406 Not Acceptable status code <bcp14>SHOULD</bcp14> be used, if the Accept header in the request indicates an unknown or unsupported format.
+The HTTP 415 Unsupported Media Type status code <bcp14>SHOULD</bcp14> be used, if the Content-Type of the request is an unknown or unsupported format.
+The HTTP 400 Bad Request status code <bcp14>SHOULD</bcp14> be used, if the Accept/Content-Type headers are correct but nevertheless the status-request cannot be correctly parsed.</t>
+
+</section>
 </section>
 </section>
 <section anchor="artifacts"><name>Artifacts</name>
@@ -3977,1037 +3979,1036 @@ boundary conditions.</t>
   </back>
 
 <!-- ##markdown-source:
-H4sIAAAAAAAAA+y9+XrbRrYv+j+fAoc532cxIWlJHhJrJ90tS0qitAe1JNsZ
-dt9siIQkxCTBBkDJiu39LOdZ7pPdNVXVqkKBpBynO3321dcdSyRQc615/dZg
-MOjUeT3JdpLHxyd/PUyu8/oyOZpk44ssyWfJcVbNi9k4K5OnxThLNuihwdHx
-014nPTsrsyt5Dz/qjIvRLJ1CU+MyPa8HeVafD9JZPk0HZ2X1Oh/My+lg80En
-LbN0J3k+z8q0zotZlaSzcfI0naUX2TSb1Z3ri51k99nh093k1TedcVpDg9ub
-29udqoYHf04nxQw+qctF1snnJf1W1dubm482tzujtN5Jqnrcmec7nSSpi9FO
-cucmq+7AH6NiOk9HtfugupmW2XmlPijK2v8EOpgVdX6eZ2P4cFbQU3WZu2bS
-RX1ZlDudAawWvHgyTL4u86yC53gpTurs/Dyb2U+LEmZ3kuNMq2T3G/jErKN8
-yD1kGfTwvK6Lwbfp5WxwnM8ukoc4iby+2UmeLmb56JLmNIY+7nyx9fm9RzzH
-xawu4YlvsnKazm7go2ya5hNcFBrH8BzH8ZeK+xrCmsAjizLfSS7rel7t3L17
-fX09VF/fNTM7HSavsnKWlXZqp5fFNK3cp/+qqdU0jsE1jeNDpnYwTJ5kqZvY
-wSQvavMRzWovr0ZFcnIDqzjV0ziGsdY5/JVWVZZ8bmfxKp1M8iqbTLKZncre
-t4Mv7m3e11M5gdv2a1ZO4FzDx/NLOtndz+5vJffvJ198/kXyCM511810AkP6
-ywjHQtOT4T8d0jjSclwVMzuJp/hRNkn2gm95l6DHbALLmJwU5/U13MjkVVG+
-rlxX01H5GV7gv1Tm0eEo1Qtq1lN9fbczKmBi+dmiVlcCVnc//+W1W93qdWE+
-ocEcFqfwXrWYwP0e3QxnEzeKDJ4djuHZv8COBA9dZbNFhrf8oiwWcyEZeOiQ
-4iT8/lv64y84kSH09R6fBgK3ONvhxwbXF3cDCtWZFXC+6vyK2j7+eu/B9heb
-8uvDzx9uu1/vya+fb94zD3z+YOuB/PrF5n3z6Rf3Hj40vz7csp8+ekTPHg72
-h4pU/nJdDa6KxegyK71vZxkuwPmg+rWeD0ZVGXm1PB9hV2d5tdPJZ+fBPLYf
-fWFG8XD7/pYZ8faDbTtMN+L7m5+bXz9/ZB54tGmffbRl5/Fo+94XkcHwgqbU
-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
-IvqBi+pMAO2/jgvP4xOvM9bbiP3pHVqpVQMhmCXqWEWKwwKidgLhbRHDY3fY
-34WlnjP7/ugv01cxP7JS9OgWn0ar8p4pAmc0K6c6PBpqMGIXHq37hjXxZC9I
-JDBh0Ye+YNvErmJ4MnQZwtmfV2ZHKDK7yHjpDRC9FoyLMD2mByFhbhlsb+jn
-lu7fsV18ZI535xghdN9U53voF5eZ3l1gb2U8RCBa3O+TSZT5mmcEky8H6W+D
-AE9J2ciOylTbHdzO6ijMQo4LKDOLAcP1u6l2UmJKhzGZDsaLbOJb031suwc2
-YdCnoO5QRe73VZD9u465Y3jiYNRqvUmKAdMHIbdsVlhunEMw3nBr98L13Qu8
-R4+BTTFGGKES0SJdSEmoojeRG04FG2pyAkemQTnyaJBqsJe7gJsa08y9kMwE
-Xg8mg9sO58qr7yPtTZa3DPKsz0zHGstikAaQ4x3oRneqIdrciWMQ/NFxzS9r
-vOMw4z3hlenjLN8/YV7smXD8wNjvpzyrIq1YStPb+vmez9AjsUnz8WFq3z56
-Jet65W6PtugzqXPoA4pOJXRlBvYbuoXzEmj89r7QNvdLRGnKjCwpa4S2qLwR
-NNwRrOiYGF3FdBN7Stkhix/vdW/u3L5Z6emEBz8t9fXDc2eVbpOvH9b3T8PC
-1H7v8w9f/M/ay4N1t53zx97YWPx+0Pvl3eRl0fWfeLiZLtL5MyjlPrR+84+b
-1BwMPldP88d/LB6T3Xhu6+OmatRVYeMmJVin6JqEYJMP/Dz/ohaXrise/Sh3
-+IMyxufcY7xOVnPK3Z93kH/7MHZKRJ4/tV2pbeZNApKu86CccPMwdUBN5WQ/
-r1bpxcVNlDWO6a7E6WqVz9KPVNDiekln2z7t/Iz4VfHK00rSz+jlL83Ts3jz
-Lql3UjYX2r4+4H86SLlUO+3Uh8+VI19/+v3PP9Vt/OmX+ovqttRdsyf782q9
-i9fNWYJtczbzmwrG18nY86O/6QejfpyTtNcNuXjDn0zPXl+6227bU/nkZqF8
-Q51vL/5sqpRhTH760d1+/2/zvv9qzhde3mZ9/42c76d3bda3yKNJVEUDvZp2
-PB1toKcOxkqF3vaFiPop146B/3svGGyDOIgQYb0nxGSeDD6927yMl9lqelSM
-/jkxeovIp0yweAF71B91pxMvxuvI1B88zWEPuvia2tPbJ3rzsn+I5e3hcYIe
-tRklI+mIRWwL/NYpphNRTDtjak8x41VHCmgjA6rjOhdiT61CJEBiyxNatHOL
-yo7M27k76Udcz/y4dKRcMMo6TSKp+5SviexqLkzzIPPpDmxGxh2w1072NQT1
-FWs8gTJXGdOgk229iydAH6VRnOe7UPDe1PK2sW15ibXay1x4M3t8CJbsSVjO
-CgrdThHnKiseOpmYZCY3evhWak2H6USU42Nkpg+piJ55oTJfOtfTXVpawuXC
-l/Z+FMm9NbPYdmrjKSOwUt7knbhYOJT5egpzsZlCfUGvgQftTSmrkSjZRixF
-7JvREw88f1pEtlhGngsWER15kT0IPTyCMUySEtxExxPQ6sSqPLCZo9CjFTcc
-e2oyT1pVFQoaBW8yNavcvbP2XKURg8IZQn9AMjmPIHaUO+Myv/WZ4R6Evfdl
-SaxKTOSwH+IJmxme4PJ0nuDnoGCDQBC78hcCI9nLQswVlMw2NfUJ4yudepEY
-3tAvsjni60ZMKmjgdBPZ24WaCdnbyCK1kjtEmYkwq0kkUh+aFm2oslkePYrA
-kj7iPls6PNYdX5R6N9XB8vIU49CT3Ng+hFwfzsxCCBDo6kUYG90rwOqsau6b
-zhOsfQF+a7NJiribBYHgijtyUlk8kgEkHD4j/SKlnNokKD+929tC99YBZfCt
-CN1ONWawDS8inuSYlzyKuV5sZ7Y1Suz9RKJXsbjfuUEkWZm94HMxQ1uctSuc
-udCdMVqt+bq1gbr0YGxBOKmkq6dryjEmArMqq5ieLnJGWnMvFpY9LZy1R7Yr
-xaR/A6/Ze7a1dodZEOuRFOX+YaynG4E2YjadMOewOngFxosVURBKnaVaL2SF
-Jxm4SPVE70oNy4Zmilz0Bm0A9xKbeOjxxKzuhY2eSSfEyGKkRVcU0Si1qA2e
-z+AlxDr3K+g12KQTJBi2MI92YNQyPAo8QfTCo7cK9GgtF5bE3zshj2KviJ6D
-oirio3iCFpdkdRG1sGC8lwXgzdKCijDTLLEcms0cbVj7SwfaCXORR06qizXm
-xmOTvg6V0A2FuafRjTwRiIDn4kFY1dDlW7DRSudS38QCvVhihJf9x/DogGGL
-dWKxOTT+XmIufb2QGO0gPmJ0g4CLF1fkexofVjhCkMQvwgPPU7TBecK/IwH8
-4Wg9y/keNrKCJW7QNvg2ODnaImKMw8SdVAX46gHjEMdWNAwCC14RPYbGfoRx
-2EwtQofKF0CPRI/gDVkAfPHwOYzTp3dMRoA7fCIMcyh2y+GwWTxhtYPF7Xzh
-rGdWWsCuNSmBYIbYsCVkrll9Rdt38MavDLa7FUBJTRh6V2j6Mw8sWFQ1AVo5
-KTzRRe9cI7uRebSCUtnCAgJhRutAVjItComfJOGL6Mg8s/Gt+3HOeGKJLg/+
-wLhXlp/3JNpwgAbqMmAO9BnZtBQFPBfoEeS3AcPccfKjmBvmLulUNOOPaMvL
-TFT3mGnyiqGQ5BWCvELExh4yVcQcWOPKLXdFdYD9PHALfiSmpjehvDcv941f
-QEXJbaeeiwh2nM4ZfJdQ1EW8S82tD5uO0Es70J3JbIinAF+KLvD2AVa9QY+y
-WKv2Uu5lSDiSpxnLexVf/LHHXMnYSrP4aGkRz0aydIZA25hGlz0BvPfSdoZ4
-CuZCPbGbUBsmaQbs42GRrWKLTdwA2n7Yt0MutNi633nAH6DsnaTFjhzvuo8s
-MRcdryvh20xPbbkUIuGI3HIfuUVkyXIbwLdttMEPdMq6wSv0aIj5slOMSzX0
-MGtumWHw0yMsR80BPuGjTRCQsNU89WE7BwGUhEWK5NiPYoMFPHBsZnj3MRR2
-zxdF0QPWyxQK2p14LCn3k4BzLdUrKfOehzYBofY7YYg18EUgymoRfd5yvsIi
-5rFGsRH40Qci2lD4iNyCIttqrKMXsAdX7jUJ34mlM+HLaCKO1iPHE73C2qaI
-V7CGe6HsJZRsnXaKmMlMhHJru0UBNb0dJWbvGC68HPr9OboTkRBOAA8cCcO6
-h0UK197fcB3jCJ3uwNOyEfQ2uAMiMaKFH1hztuybAbwf8cb2y1vgU98IRbSD
-srRSe+uJThZLuV0FBuL2hOwFWI9eeAO0QcolIr1GLCTdIaqu/RIYZ3udiGO0
-9coC+/CBUCtaFeO6sJOh5SdkL6EoN7osIqBDmsG3j+GyGkjb3E+HjiTPjMxI
-TgsBm858l1ddoaddrgPpJx7xm4yD1yH2W+LreAlPK+DLPBqBq9ywRT8WMpvA
-1x8wHpvYgp9xIDX93mBDlmdkZyN4zc4l3F3znMY60vCbPDa147gQUWJnL1JE
-EcZpndpqLnqwmVVimAe/iBa+zRAjI9gPPxAypIuE02wDSjVtB607oXiEcQAb
-ieBXUTYrohcaybEe7mlNA3M3oYg3A/bAQicJecARXGEgSnMPxge/qAKgpJwi
-6o6ENxf56igKZlPeHSwswEw80VyGgoG/AAPxdkkKG78DShYV4o2JfjsYyfQ5
-slIPkd4QwT38KsITCwbMCfnCAp6AnVjpwoWuB/t4IKsjjnQbgeHIQO7RXs+O
-KFpM+l1YPWaXVuZo5duJI7mlmyW2iDYY2WqPaKNJi6INPAD40jtysI+pnh+n
-GMlkku1F0Jeppm+mZkSzuQqL6MEX0dYN+gH8Sgv0bEBoEg8rMVNxGvbwMEWc
-hp1SL/D+CLM53kdDL0PcXsEv/SlGUuZbCaQnzxzBt9ceT4VLjBWRJH2QwnqW
-hVq7W4ErwK88tIHW+9gEsW+Hb6ANbA7PDPEEirrAuFRiLsHWrajmux6/lYjc
-EWbTD6hNS1awcg87Tr2Zsoc0B5uN4Msxou7zuOhPEBvIXmJ4hR2D7xY+eBxY
-PxtMEbGCAp4ZFF95SYl4BiZ4m4HHDYUBrLEdvBEaZMKOsIb1rMRMmMAfMI/M
-oSfEerjDO4EOjHDtgbwiKG8RXSotDLwcKLn3i0K4C8wuRhpR9B499eIiWqlx
-6U7JVocM0SSTmE3wuFRGd8x3JTsEiD94wgE4y0XpaujFuvYKeKa9gxcLQYws
-Ap8ViDeVCGGjwirWhA5MdxyMNKK7tZ2ZGXzbWQOXgZLRJrLAf8FoJa2Z5zrm
-lrY2xMcCvD96kBZ8dpJlUDoHbmg9tHwbWxkifzXEE3dAaluUWQZWz8GHF64t
-YLHZJAF6VwyccTC1KHMKdVPe9kTZwywSOkQRFMQaUaYroT1m0EeJSWvqTpfW
-1GEFcyCWH2J0t+Crgo/zWwb7cDA3OmxhyPOtEB02DMs9XAj8xS7ADUQHb7SB
-UJtgkhIPBKXuxyl6VHAoKoFIPwS+PMAzhVxmQuTdHaHFNNd5ADYa61UmMPKk
-JvDUHHHbF5qAZ6YbGpeUYl4orAw8zrNlmUkXkSygkdUdqLytxwJ2AxsFlwz3
-KuI13EHAC4DPE5rpCJEbOFwi3kwqxCNrLYz9A6LsBpgmRV7RDgkf1rAhv4IN
-E0rG+NsWcRpMoBLEX6oHIPUBsT+CDdvRnQW/qqyE7OFOjGGBeQp04BMwREHs
-Xeygwta07wHMPwyBTgk8AJ5FMc8Er7d1OS0dE5YGq68ehZUeZ+C9oiBrECug
-pIXI/xXjSNZBfoQn00xgXCRFD9IWU7BPv2AeWnkng75wpQOLiubw9QahKlvF
-q8LRqQ0YZcvHKAiK9tfjYGQ0DrEPr0ishgEpm055UG59t+ZU+JxjycIj9hFw
-2MtGFzoDKgKhTCC1nqHf/CCIhZV7Hgb9HTEgsAFPLAmhtiNJ8SpnxAPXYB+S
-WJCzJt9kptURd1AtBvUKKEkZVVgUUJJW5zDbYOtlNeLgdbHpgSBC+0rigZVJ
-c1QEsOKxMLR9WgpqE2XenyJaDbMi0iaZK1Z62MGYWOFhdudIZvY64aJ/nEnP
-mtrbgHU+vftCu1UwDt6GLwS0UraBgvJDUYBTVwWQGlxSSFkiTvMMUZdNwNp9
-jOMWCJq5dxTzwV+g+PWNn0P1k16GTfpWOsE75kLrIer2ZGBqe6Z0QS8gpUrc
-wZVA+aNicV3KYfeI15OSUBgHcUrsVBKXhE6kcRAJ7bgxlZ/ZZJHwf98tHJrL
-nPRRgh6llD/gXK2UwNMwm3jaROZTnZeOlXQK0iZ+xFOfdtzMzN4cn0Hkx2zr
-GEe8UdkLBxKsZpZ3AzUcuMO0B300gn1AF3gU+R+BDj7tyUHkhz4CYgHjYtIF
-BfiwDZ0Jb8ygCwWecLtw8x6UFIO3gxELKHLwBRVlKbqUGCcLmh9tBTrArypY
-Q7UGa+sqxYdWVrkL3yXVH2saNJqAuoE9GHuPrH5qOYSSAVBTJrpFnjnHbPuB
-mkvwYXCpfg6MO4Q5i8Gh1j5UHmZ7zZVXMChNh5AcjASsDBaZ3EEnFtFTWOor
-eCY818sTizQsN3ojYdPOITgQtLcgvg2uid4Bqe4PlBXgWo80rEQcl4j8L24B
-vZanHnx9GGqkG0Xh2dA/mE0oTTAgRLkNcWuKN9BHu6nW28ilxZMiIrwBhyq+
-+gtG+Rdi9VoIRqaHY1IsuTMJMNu+JTYckV+UO0MKAcWOdhVZoCwSGMfgmdOh
-JxLTgXxON7RvZYqZvhUueVbgKDbKCygsUcHSq4e4HUneU8qCNJssbycUr0Ke
-5Qrpc10I6GlrjZEib6e9iNmMUJt8WofXFdmC8YrIGPAlsmmPF2b/Cl9muaPw
-RR8BiSZQu1Icc43wxTdc4HC6AL6IsOwNAiAWzz0P8Yi07A5tAOv3MH4R5V9s
-Af7iIb6AGcqMg7+ImSXWIw5lISh7osOiyJ5SjENFCAWkd9poswPSY+istSQ9
-7TEDXFJnfWjnjSRObfYEMWKmA1PBIzAvpDQHxEXHC0GsnnZo+Yh4ISszz6Vc
-EKP8AlAA1g+1q8GqORAKLUWUnTCK/JTPA+MAFyVrmChWVogN7fFCzPQo/7IF
-So73fMlIgXPooxhMkJSmB18/hpz3EsLZAigpYdN5ymbgVAqXRRUQF6X8C2Vw
-MP8yC3lJ0SKywSXniQAOG5ouLcqFZRRtwAjRy4K8AfiTOzH05A6abhNQPJrE
-BewDludZ1XA2TAOwMKDg/iEogO/g+/DMgJgh2gN5VXmuVcEi2UOKT5EyjYFS
-4B+IFqlIvwZ5Ondz0VO6ABofupHYxyPh7LRQngklUVHOcDc2KK4DOIb9Ea1j
-VpupXkHlRwUsTYtMYhbhDlZOTJFyH5jd+yOeMEf7Qt6hfO79IZgUC9bpZ7DA
-aEb5F1gcOKkmOmiDHVsOT4YFokUFA9pvUorwULsMEA4VHKeGZ8Ge5rAOwpu1
-a8Ezib8U0Ki96M6LA8O5H0OvQe1mQAE2A0gEZTaPO30uoU0CPZ34iyiALwPj
-sgE4GFj9LXOlWmsGNxKWQ/ZQs7CC91T0LDyEhMqhuM10YGgn9cHCAqHYK2JF
-4VH+RdT5l1A4kmI/PO0hsnUGtrGWNcY9AskHfu2Zk1hrs3F8hzZQRlBSxOMK
-d/lSoA1ZAGTKwV/gZ3uyKMK4AS/BBJb9Jx/jBKTOgXFffeoF74F/6TthWTeE
-mBWUJuuQ6q/tQZAif4D9+OS7/pLFiB4TaNf1DMyQLz3wYahlDtaPwM2XlJ1F
-WyZAyXiKFiL2+SwPDxhJHUgtXMwVkFoIjfJQ6Ve29ILE1HsB7YaleLXMiDtM
-FL6w1CC/iNAMcCjwWR9YD22SAaEkX0JHW0zEdlXA+g/ChpIBk4zhmXhCJwgc
-NqO89zNpoUQ4GPVtPjW8oSB0KCrQhmxF+Vy2BH9bQleC+cSm/jUZIkZ2MrB6
-nfJY0EtAKSBNcSNsumhEO/g5phHzg4jVBYqb40UfDMiSIdoUU3Y2sKBdwA3u
-nAcg2dqTQBXKeyP2T/dTqH54FmG9j7lAxAoP6V0fnhlFNG5c8B3YSJzYaceX
-RSemHYx2b57wcBdhjrKHxPYQLqOJ2/GqUMseUrVPtcpJR1/sAB6hBeDo6Ybb
-zn2AHuINFIVtWuEAvlP0QBuhXSW8YEP6WWkNUgoUh8stKY17svGYYqhiAqIL
-Pe2kYERkdQ7hBam+PvSzNRKIwxrwtqDsPeJT7iFGiJsQykHYiGDgHRjZjAeW
-jWhCLZCU83DugV3g2HwvqQ0nNtFiv94h7FfZAejIZNmfAG8FPDUMKDcf5EcB
-rJvqobS2/tLxMTcBxR+g4DY1gZqWc0QcHqnZBmLFxhjRwxn5lvfMSwvcynmB
-ItsJg/K7cql2Sm8oC4ARHeIJlDnvwJY3ygvyLSwM44BxIV43EuTr6GOeUiZr
-S22BRUlW1b2oKOfsicLqUi4joYzxMlNrEFAaNuIP1C8kK/mVDYVueBJewVXe
-G7GIazOoPjA9KEnwNjAgeMQEUYPiTwcjCQ0PNQMeB/VjEvuIKS8lKEtQ+YHy
-ozp63OZMw1zBqsGPLH8BTnTsd8PAesA4hGCniC7Ok5oJ8F8fmg2YF1Beql4P
-EBgpxB/4KiMlVY9Dx92T2oHmXo+AN0LTu7TyQllrPlFtDknjU7yiXBBlOilL
-D+szdbS64IntUgYU2C9MYBzle4kJ5NygnTNgIxp6WwjKhSAe0UxATXS4URGO
-TFS+v4AWoR5aFfETsmmLVlgo54y/gyKQdgXe6Jxy9LlakSLOADUptir/b1Bc
-jmiXz5qw3zedPSI7OHY64Qv0xt4D86w40StwMkLu3gFqx6ajAo6NkaS8VEBZ
-JSY8xJeKVoOeiFuKUliuyBCPLKhfjr/Dcu/60s0j0LF9DEa9pnU1Rhk+hPrI
-S3UgcyEm4BA63jlyLepFRrg75gtrl1qEN14BnnATLrydoMy5BQWPOJ2tQz3a
-MdgDlDjZg0XYH+uOzSYVjw0omHJL9kJeAVZWhYgeGAVrG1uFgCd/jSh3aPsW
-CxPLo7WaA7ilHfIe5ca4MKMN6SUpoMCFF4liZQB3MPvOlud7Tl4QmVyXwBcx
-TC3Pn5Vpt/YLsRVLh9YgxuBW/liHn8FmMRfEysg+YOMMahh6aWE9QD2vKcKC
-nRakWUVMq2HgcbmrV6tAVuuZVUyADh5GUlMsHrMtKT4dxRq8LpeWRysQGeXr
-IorDmP+IerFAr4jB2xSHoTwxm6Ij7N6OA8FgP5LUDhg2A6IJsi+KqsTrqgEr
-BTR8RgobzBCR3UqtIBCeq9gqqR1a46ygdogh7z3KO3hoyJlTYVwUq4JfqGwI
-+MowtW8Z8VvopZjWtGYmelE4T7BMsHwP41B5ao20gNY0SDdQXkqYPeBZms/g
-ifDMQqE4PDEg1pXr8MyxJhqbJq1CfEbk7MGzxRCfy3z4kQM2ATUrQvjFLWWh
-DxG+kdjmXi6h6jrMj0Q68sFtZubtXND6oq3tXUPYscmeyBrEUkW1OtvasHRt
-D8UVxvYtrQ9MBJTNVPeeZSE8VtD6J7iQ4e6SoUAMjb7yoL8m7u1NMFI5ECjE
-O3q0bp/c9SOB2YzklrIA91O78IDsO2GKEfCF0CFyy/okBuY2JH1U0XrjDuiw
-jvn+zqfTWwbTJWXtpbcVsniKeaWDxz0ENuPBEr5tOVWou/uZ8OQ4B1Ok1dxO
-QBEr3yPOQIHm9wd+7BNLHSZkp8ATRP4XjCRs1pvD+iOwthfKgEHjTaTZ+0r5
-Ot2f2kxAB06EQIQKPMr5WJgD5hZVRyhV9+UwNfUoKRlp6QXUT+AvilDe/dGc
-88McvXXS79U5v/wGPz+7gatdn/Oj3R3dbYioVp/jk4d677fL673fU3m597vY
-Rnc0q2/v/X6gfXv/7t5vP6Kchx3p573fCCVq77fgmZyVluVOiDGTxj3vBY+/
-OUeBttw0u8FvfLX3ND+AGTNX7TUlDzR7/3wvOPDl9W7w13vBv9k5yqFhomGf
-zh32YFcPxA5XB7HEvJp/7UwfoxMHea+MF15F8ei+86g5LDHY5OEI2SBvn2bl
-F8xBoc0mls7z4ulRT288vXgRR69KNbZwtagbTVJXlNHNuHOvB/DGyHQDL0Yk
-mXsGlL/srtO74iW1IP21/QpK5it8e4C56HvNPk8GpB7PL/dfIh71o7zZqQ1U
-VGcbjXTAl9GLuLMorh6iReQyYa1EkN779mqd5quX6C51ZrmV12f+6NilZwrM
-tkUa8AbvfJzZ+904CLshxpEVkCiWMJK84F5hdTBX9bmcRX8zzulnbykRj4pH
-zM1gXFjCN60OZvvtveCa2gvOfJku3GVuzOzbJ0LWcbl/mMID4G3abi+W2T0z
-bo9iWOzYxPKj5WrHJ6GGODhOoTPHWsHAGnvhwrFHtP/D6PY8f/sCLl6qHRpL
-WbAJm6y0yPIytvBWs8JhiMNxyu8PI2HWO6zUeVnnhnb3jkU2vDgva0li8F/9
-Yd8c8y2dmNzH9vZroPfpzFGf9pX8uTMMxOu+b7dmF/ZxYbdgifUZBnVmwbeV
-53DS9uokxfU5ivpU0xo/czbJPCAC8JB5bpF+56QVHWi6OGv1L560Im+8OGt1
-edJqgjZwWNXihEpAsSuU4vpgvExHY9iu1QePHrp21BF37jExxI1cWEasZSws
-hRZJZxvPt4NED2kN4BiXXskn0wOmbu0X/VVgbJ8ijK41T4Nizo/WXpZ5dyYt
-Syyyl2jiPCaD3w3MwTxaZk8Jd75CIx5CPXtxi6IDldrnWuM5NEfA1rDLuIfZ
-Tvucf3khRBjz73rf3Th/7XvkjeR9AhEVMvyGS3Zkg9uvj4ftUg5+74Sa85Ai
-Pj7q2TY+ed/Z98JFZI0Qj5xnOWTPD0aB9hQy6GRdb3B7mIEDRZPCq72teATH
-dWblakcnInzOAo5/MV9ObFrjBD2636VHazTuiAO0ctdfpp2orG48IzVjWXRj
-HRLQ6gdyURTBolgnRjYCLfw6loU1nkw1GaSbdIiZnsSi3/E74z3i3XO8LEpm
-9jYe13WmcgnQ1QvvTlKPtZRNC9p1rd9+Hn97xOL9/6qrxFwesXjjZEV5e0Mn
-K8TEujpZAQVUBEPhkG+3ZytenayA4v0Tp8Obs+Gf3n3ndPiw6gcXJyuASvWZ
-ZrAB2Hahzqebt3wMNkkZfTAQsD5XQ3QrLTs99kl19TE+tNuITlIcEeVoT53N
-J5kFzPXbU/OJpt/FR8QpzHiPIip41R6RQu8yi/UDs+2F543zaASGMgSrdmE3
-x/YJAdfBfdoT67C++sQ6dybAORmX1lAsAXr4BKxeql7IVACZnsOSzpNUvXG+
-j6W9bc9GLYnH/JmzUWNjZkXGeBLtxXC1B2OsUt6bxFYGjPbWtEe03/M0694H
-TUj1rPIX/YrxPSwXKsa2nse8u+OyNwlE8TQZ/L4ba8xC/FwjdryEy2lX8u0+
-RoxkXXBHybWUx4viMTBue2EnfWgwhnyHdsaYp1NwaC/j0YBLzySUDZR/I9Le
-8yBr/FvZysADUr46Adic/3M6dP4P0mcpJ/eHwI72iWHd+eTbtmepuw62fpmv
-MQ7xVLIgngiZgpVxzewERvbIl+ZRcs9hw+yZm7qXLPsh7IhPi/5DSuMyAUMu
-mLjfu6LfBWN/fjj276aWdx8Hzj7q9CdycIpLuzouie31PQ6f3k13Ed/r/mB7
-eZPDX7zH4dO7N29y+Iv3OAAhEJdMMHVoLA2cLoCH5VV9jwNv/eTKS97w1E/v
-fuSrf9ZT4dMXvvrXOB6iiRHr7J7Oq2QsscZHlmcPLh2qD6Zr0fHuA+N+JwSe
-rsGmzSnUkXhETPwKkd1176Lpo+4tZCDGflnMU7QlvRfm/ZoVuxeM1tcIetA3
-054risfpMKWovoDa6oWy8tFWE211mnM21vmcDTiVNxaFsl3oAAZMMaPmdCs3
-wSWs3QvGRZ268bnwxot+exp3yUU6qM/70VPqE39s+mhUUxWP8E3P8Oozf/j/
-0ta/vsVzMPIPYyA9RTd1+k6bWebxQStcjOzYn8AD7th8JNIQ3j9KZbbn+h8G
-LHOOHrhjffcSFVHE7Ip55e2dD9sFyzk6YMnePTTa3u0Uq/GCd4UF/iKdG//u
-yzow9iuhCwP/+uyOTsVbZmR7LKVbVdSZHnjjxamev3Sm5/JEz/ufIs75brt4
-ScLP99sZS/5xO+LPWVfOk/2uih7/GP5RiD8mnuuH+t3s5jkxMCXxyFkP4vLD
-6H4d/fZh/OUZjlr2hDl09C7Iwh/SHv3oJM/pFMefOczzT47gfPc8z+WBnvM3
-m5Iv9bmdtnRYfZDmV3Wv1nXNiL92sdA3RWreeMs/f8n//9uG3jx18qObhZoz
-JuAC/87NQs29QtCo/87NQk2+ARzyKuPgLf44qIzDsl8lZX0zSWLoWSy7r+4O
-uow58NWLqPOvxhzKgf2T24P+RMxBjy6izr8ac6AL/yQ//FHMQVu+ww//SszB
-6F5EnX8l5oQvdDLYizzRf4ilY0Raxsfzrf2oWzwu0yIxs+EssCK/0+9Qdibs
-eAH0Ee2pGDBTH/i8UTYTOnVSa5t/Em8Gt4OxyjOBK13cNsTslAnYi/Nntc8b
-mat05Od0jw/a0o9JYw0z5h62TmCmA24WGje+aOGimEg7C4OlWE0R7rz8yzqc
-I84cbktRFGZcmEaibl9AhBi6S+GPtWwjwMlmMht4QcalqYtwWd2PBtunxM4m
-YhI9JZZjunpkTTnLQ93q0O0Lb54S/7MSZltLGLu4ljBaNIhzb02pku9ImL90
-OPzTu/Z4+L9xOHxBm6ohOOiSLbp060k5TsEc19TtRCdXzTU4t0WOxWhrnpnv
-Ag5g1NkNKD3AYAvKAWMWINcr9IKJHI5S1IKidTRmiqs28OC+ByKMN/bhhJ4i
-LYxcopMaaXvYu/kGm7taBSCK4rRkk6C8jaVZLEWgLgZSx81n3HEh9Gl7KSd6
-zEBjvBON8esLr04/0wVYqda7G3MrGB+jOWCtn0gBQh51vLKAiHWOI4sEtCym
-a8+mbc9pL7L1yfToDDGituik8xgBwi17jjS/HIMOpI4e6aOhe+DLqBrn6SiG
-YZFsSAe+mWnjklUsF7FcUrrvtutjNv/JpVsXyTPA1ptXKfgBG0vpdNOhd/St
-Pw54Uhe0ixYiQTpBPDteLzJ3R9dkjACnZ6W2NxpJ/Q50a1xL/ciBWHx50KIn
-V3M4gpDLll7mF5WPmc29TvWUTrxnPBUEt4IEwxxZvuEc4fSVgKNM/N08HRY7
-CmvnIKl/TTvuOl56FJwo0b2JDhRiROAuuEEETnuTjw2tr5VciIdw+Y+p/1jM
-glV29A9fhsnLP9Jwf7xZVfnSeejt/hHFj/Z6ZR9AtI/9jTH6nP9+t57cHsO5
-jNaC/RbeDO+m+/BDbK7NZP7HD/jYiYbVtOVtHvaaQ32feNFdmkMwmtVa1W4a
-1DUaVTXz92Y6x+//g647phLtdEPqdva/3//n38BT/pHVX8IzntYrfJO+TNfz
-V1v8m87OtxK/e2cRs7o3A+t9uo4/b99r3fcf/ufVL3qq8A1a296bmp4vkQUb
-UwVI4/OtqO19oe0lmU2RdbpWU5E0ur5bFRujH9R1/rO6KMK5qM6vqsLp7P3f
-fjPw5j9SOgj9vYoG9Jq6/pS6evvPXxbdvqKHVwyKuLkW/LrQ4LnmlioN9Fw+
-17fBnr/dUUNTrl7UbbRXhYybw9ZNdS+6XPb8NY1eqqYzVcfR500FVerN+Sr0
-63vQr6oSXhcFURWE59tzwZiLon2n4nGnt9/cnEaV7rQ9X6ebzeKUbreP13E5
-o8vqf67ve08/rJa/EJluiiO2tz5/xvhkS7pRXt2FHl/N3U3n9JbZviri5elu
-bMXj6woCqt5dfUN3Uyfx8tbm3sfeR722k4vfGKdXdG4uRv9UtZZaOPij/95a
-rZ9LGph2QJryuOdyUK2JxOoO+LbdZBBme7v0bL1e0X3NaX2j+FXLzu24/RXf
-615+73vmWpdmryssXv/p9LTereoVIcIr68DY/XRRd7P2rJ9+ff/T2RTUEJ9+
-f1Wks9Z6pz/OttOPp3cav12+k67BbavRrWdNMfqmA3RhAsFUfbn8qdLvf3t/
-T5WP69m+qDm7oWJXVESqqb5wdSf36e7b/8L375qaymSSbcFW9Yi2IspVeYbG
-QedLsqLz5HV6r99wWdhW3QChas2+MSvnL9Uv/MesUu16Wj3VzaBZ26pabteu
-eFXqoh0EmF2Jp1KFvLZ1GzTPUK/6W5em+L6Zbu261omy43Vz1y8BaF38ZJZe
-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
-KSSo74PfKWJ8evsv3wDSVW47PmXpvq8d2gagFyq1srxmLOpv32bsPlxUSUzW
-m3z+IaY834emAvlFPu/yM9RHTVOk2VWhjw+MFoPU3cgNCWx5wjmhcopXNIZ1
-FhIN/pNNUQh+kVNrJ+ybuapzS3G1Pec42iRD43+bOrNOgRtPURH5wvvrxGuz
-yqM+ygf6x+uJ/IxYQEX23qri3npwLcNVHK+zk6spdDp5eLwuDq0s/6EZESXf
-vKcbx9TK27IJfN9b9fmZvG9GD6cyvWnNgupxfPWGXxrS8c8+R70nA3j9e2oh
-/kaj1+JDEy4KtUCrZN9Z8RRNJmY7W5KJb/77VXxToXxJ/kwiov3Wz38zNOUZ
-vE1hqWa+bohq9mX69q1PvVMxpn3yCQuo8U2CrGHsbxd7vY577ZfVzF4Y73K2
-JQL+YUO8c7pZf9BuLhhqPXOv09RoL32yZqno/epb5dDYVNPmt9Lu30mAXfLU
-M1l4MzOgmvXmmL2RZ1A8+pWZQPldhq56keSspyCpP18P4iU5xmtaYJ0Vp1wx
-XnRuYNyyIyLulLBrohall4m8HerCmpv1RfnYuSq8Sd/2o+CJqGQD3b+8NYjf
-SYG1y4Wnmp3qRe0yI3k/rUis4+kJa4CGH9+Pmt0IKhpeUoP64fS9i6q2J8uk
-i+U/q2LYCsQaH2lJNq2WKddq3t5QAApaFQYinmZvzBiGUY18cLFcUf/5P065
-2jaY1MEU4/BtzoH6UDv4MwG42qxa/60uXUsFcX/8ls77J/74+Pcn7g/pFc0r
-a2EKXKwlTB2+3pQ3NfNWTTgXmD9Fl6bMc9OMwaosn5etHjyNDr6+U/flX66w
-vWZx04YWqTXSsi6wCs744cl/aAH2xOOIS8L8wajnm6xUG46bALzZrKbzeDt7
-HUrUwl9tBcpaPscvq3VNOIuDmlwy8Wz+hT5WxIcLuFKp5NoiFJ9szEAl0Daz
-q99RK9aXy8REauaXKbVvgJ5a3Wa+YmrDCa0viyS35KflcN/UALhkVMp9tlA8
-dW339fPmbC2bbF6d5uO1uaEtl6ry9NTur1D9+O/tL+euneGiCWl1nrveJXKB
-IGoL0IdCZd4uswvUlSsJ2zThmUosbE/LcyvKym3eaNNv1JaGRXwnLjfIdyHl
-1Xxf7COp30mTS0295MENgD3c39V4fP5kawZtQzq//XKtaC72Qpwj3p9ygVNM
-/yaB16yMvwbfq6UzPOBMbd9EpH/bNE7JwCYT9H178CsIVxrvtgTze+MCy1XE
-pcBwIobfae6fTiPXq07KVdWa1/xqoVQtkDULSspq6mXuy1V/Bf5UCr7e1dAk
-AOcbtdSr9kuc14TwgHpfWtu1i1TSqz5fRFVSEY19NqEF47vcqGRfO+yv9iFc
-4Iaaho8XVHi+aayfwJDGbYkgfgWKbzz1PJtNE9qXndluTYSazPIlZbp8zsc6
-6bXebF8L+HYOWz94X3Osn+ssTkm5dhqmX96d9+VNTwtt57XNOuG/afIlJ1p2
-Tp2o8F6voarZObvLKeZTjz5QqfLlxffqGukKecBWVKbsgjD9/ePFlzi7B8qf
-LUuJ6gJqcbtW2wRbuUga9rpoShM4MON/V6LqNW6fqXnbLgo+bVmZbZzjf2kc
-2tih9rTVVtjKsI+Xa63nWHfN9oIMg7N5L2frJYXvzWVX6/zFqWUXz62dbr5M
-5y/z9BkfRUtUQPp2o4n2H99o6G/nkKzi/+YUKg+mBZCWDsQUIKoinp5Wpc4b
-+fSPnRrB63T8qU+qA2cvJza5bBKWbQZebfaALxM5UUXkX63awxuXbxqEKlbU
-ZEDVhLgATLUXssHeU3r0NPqvdPAlVJ68tHHeE7o0wPLr+9nHLx9rrkhbAkpw
-BbXNiwZznjy3ntnkga7S+60BDdync+NVypveAh6cAUHof9UnLtQefvy1RYva
-FtpEfNO3Fp2WMyqRFMMcrnzrNJsNdF6sv5MBPW+UOdUpfpWAp1T4dnaaWDUs
-F+vyH9/7p73Gr7et0FID5eagUdVqDgJnMq+T12qtv1lapXWyfaOi2w14bfPQ
-ENpsANW4quaXsmRzmYk4U8ar+E65lpNTqElVEvaicFWtX3RFAF5Wc9qB/ZzU
-S8brZuPHWlnxaZ/IdD7bXEQdtcGEXjatwf31AkYyq6EX47KpzuysmaN6FZk2
-hawKZS4fT5sc2i0VtFPkOid3kQ86bxNvhEK7W1ztCDsxivMc/3oyYhqb83TV
-tbLaVlx7xeYbI9gQ8LYb6E+mQkuamNz9D4FMSferDSsK4C+3atNXN7NCrVDR
-imHz9DM/VZn/V59oY54a8fOmnnbMds1+HRV/yV/Poq5Zv9/OTkz1Ynd9s/nx
-ZJ+ESKelyY+vgs8yLptEkNKozSOaPWeNcxEuvSf4igt0elmjFyWlTnvTMI+b
-7eWG45rWNZvTzit+KhW+nmZzajnlzU+qr8W2dg30jKRkLfUw4AmfN/jq+6eH
-+zfper3SfYK8OmukvvuDiThRcBJ+y2QFYz9lbhtmH6t9OfNNs1tCGfGqaFeH
-609cM6/LpOdVIG384hxl6mh9hvANiTRSHLXWU3Z07Uzqu5cHJNSoVhjqZqAb
-bP61Tk+cRKWiMTWTOG97P7344w8cQKVdmlzL2QGuYYNwR20maxOnRXNOQW1b
-Vku7Cljv65Vmalu9tvDx+qmv8PjKWmbFedfVKQmgJq4eRcWfL7/R6IuT2rqS
-fDUBbTD8jf3UF+NNM62A9fM5ACjVdRGJLiNCC0qbb0PPj4BGyZVvNEq7zvDr
-1RmFevWP9hk0Br5qlnRUku/Ez3cr5ROX5tH6x+aV7mkEXzE7jX27n3j1vLnM
-oNUI057ArgkyHKR+w6yZ8Podr+Hmm9g3VWmMlg4ks3r/Uy0RaXnrsgklyZZ1
-WyGRcjRqOw7xu9X2NLdElOp1r5MbEnevH7k+B+d6Zi8hrYqb1TrVNXzaqhf3
-9JO8OmeMrkPRP7O8lmn+vzDuwb9i061F10znL9v0K4v+b++9C4KNSLBW32hX
-P/GSt2jTm81LTpupa6BNVoh6RAintIOgCeT/By/18YygXQIA
+H4sIAAAAAAAAA+y9+3rbRpYv+j+fApvZ32cpIWlJviTWpC+0pCRK25Zaku1c
+pk8GIiEJMUlwAFCyYnueZT/LebKzblW1qlAgKSfpSe85+rpjiQTqXuu+fqvf
+73fqvJ5ku8nTk9O/HSY3eX2VHE+y8WWW5LPkJKvmxWyclcnzYpwlG/RQ//jk
++WYnPT8vs2t5Dz/qjIvRLJ1CU+Myvaj7eVZf9NNZPk3752X1Ju/Py2l/61En
+LbN0NzmaZ2Va58WsStLZOHmeztLLbJrN6s7N5W4yfHH4fJi8/rozTmtocGdr
+Z6dT1fDgT+mkmMEndbnIOvm8pN+qemdr68nWTmeU1rtJVY8783y3kyR1MdpN
+7t1m1T34Y1RM5+modh9Ut9Myu6jUB0VZ+59AB7Oizi/ybAwfzgp6qi5z10y6
+qK+KcrfTh9WCF08HyVdlnlXwHC/FaZ1dXGQz+2lRwuxOc5xplQy/hk/MOsqH
+3EOWQQ9HdV30v0mvZv2TfHaZPMZJ5PXtbvJ8MctHVzSnMfRx74vtzx884Tku
+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
+Fa3R5VrOo//7fUfaI71ssYxoIE6OY9gKt0ob2IHs0KZeM5JXPPl2d769hXdk
+pbTKOSLbW8uXyRyLMHrl7CoLBfQ72K0tSVIBOEbnUItLW6rwe3xbtmfMPvhN
+jNl2Ff9FTNd2vK320lNtpnaPS3CLnJXfxVJ7ujRoBe6nXdKlttr2iFWQVevu
+7o/asP6PXjRkZ6e/9aS//SCwtMviOotvtsziu8QA8dpolBK0jtvkSjfGs5uq
+Oi1rV6xvZVlFuXLI1e3B8w27etpsPq3JnWm4/QWl1F/AvK5mCmKb5GcSn9k8
+jKlwJULs4fKif1UWGhvJZhWVIROhfIqRqhQli4y4Lgr2H5KImNbacEu205Kh
+PaPT23RlQQhQVGL3Hg62B9vbFmKMOQOF7rRVsFBxuuiLnohlY5I2IO9IqiXv
+YHadF4sKHnXZoyIIV6CBDrJBT7u4+TAkf/5T+OGrlg9FuOZiGbGzwJtlSzCp
+avN+Aa871ctIdQoFjMSqriT0k4JAYilqDE6/QyNRTujIGlz6fDF506y9XpFS
+PrHpbY7wE+5xC9Lg+kjykUzS5BuTuOqq08ghC3NKYSFdrlaYVGpwjJ2m7c+u
+mQQbG3YDIBZpxpRUVNN2pCW1c40GNsSYLbMrOHd9k8lCVUwzV2WoiuZ8tud1
+cojTirxNoQmYpGngwMNUTbHI6OD2eOqeL/NwduF9Dxzdv64GwL6JyWh9L0Za
+MrdTRLUr8X6sKh5QX5WkhHt10KRYms2VNAFTmFN5H/5/ut+WPkq2rBEjknuK
+t67b66q4xNMff9UCUv6Q2da29MjopsJoMN8+ej5iPen2Niy0B3BBvC1vMlg1
+rsJmS3dbNGRb8LCwhEKmi6NHk4w+SjjIvk1BtSgAoXyO2wHN1hwWE+hnot0T
+nsAsy1i0DMtGS9MG11NXL077BC2aK9QtZn7kW0lJQ8tHCyxZZmy5pEmpz1n3
+v7DiMt0hMg+icbaXXElWM42RdP3i3KoX0Vk3UN6bGjN1wnoo9lIhD6AO2ooQ
+yIwIaRdBSmfF7HZaLCzY+m1W942xQwYl1FrM/Wahmq6F1jmgDQk3hfJNYlm7
+Nsm1+YmPJRmAbTrKxwmJDXxN/dl7+kNjbKY+qmbSgNWkzxyyZuJDawZgmvhf
+H01T/SuvRxA1P27uXtvqpwVmRYFn/mhu8mdKJw0B5iKNwZtA43osQtniPf9o
+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
+wAdLzp8JitmUROYROniRDnP0c+c1hqmiMDTJ30gJgnT2RmShEpV+CkLObgge
+Bs4KcpN8RJGkT0uUWw8GyV5azjEoDgj9UfUGvtkDljcDrUBgnr/JZuMyfwMv
+FKM3V+nCOr1zNJvOF7XZvdGiqsS8g7vFWAKc4g8n7wKt34MOhSmQ/RRGSlLj
+QfWmALb08xsrxyJof5bNZeyuqPWUyDcnAgH9pAK8nQ6imJ+nozewQNYtj7UM
++FfOxqtswZdKEI8nVJC+WWbj8yc7sDmnbMB5irbkSVpdUZAFU1KDGSH+iDBx
+r09a+4YurKAdPcygN8MUwdwDTTEkt7IlGlLVlvLbK30HZEUNjEJ4Gx46Stck
+7v3J/8GkjYPd5N6/30Obv6p5P8dZYcQaLEkSvPSnToCyQpEU3ez22/kP351M
+n333w/X49Yvih+8O69H01dvx61e/jPe2b0bTrcfj6ZPt73euJqP88DE8fzV6
+8GIymp3Mz3ce/nsnP8q/vfph59WCn37yMH29PR9/8yZ/tvftLz989+38+9c3
+9fnsVf399NXt4c9F/nz/4Pb5L3/ffvHz6OHR6WF1OH30753r8+mLCX774vWT
+vfMHL69fzsb/+WKvfnP2snjw98lB+er1fOuHX7aeHOY3+fcPvp18/93J5Ie9
+7etzGNPhz4c3z38+/PdO/Xx/VD8/+/bl8/2/P36xf/n4xdn3C/j/L69z7Oer
+2Q+vH209++7p7fmDH+Y/fP3qDf9+NT9/PdnKTrdvf3g9/vfOfPTg5PZ7WIfv
+d17djveg/Tfb356+PNxK37zY//uryfyHra8enL789ukPW5Nv/v7/FfetzY1i
+2Zbf81dkVH+pmqjMBiS5yndiJqIkAzI2yDpwzhFMTnSAUCYSIJGSbD1u3P8+
+ax9AD6czu6p7Jiaiu7NtS3Aee6+91j6PLbLIOzrzsKi8sbwdjjVvz3Tv0zvP
+uysGY67fBZyJmSluxsIZRFpPjnPrJeDe2g0ES4roJhRTPbHdYzDJTGFa7rhM
+RyJ3+qGmf3o3YHlvF5kpnsBuxrzXPsELuLPh5X7h6o7JBetHPOq4w8Jjpujh
+jYtU631lAfOEWX16l7HldDfLdZNN8Anb6wRlZXmmzv3S8tgd67JJ1ee5swww
+puiFNzY2e09Yz2JZZeIoNuGReoQ28DHft21YoA12sOznTBddprG+0JoncB1P
+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
+5/bNe3ZPePDTUl8/PHdW6Tb5+mF9/zQsTO33Pv/wxf+svTxYd9s5f+yNjcXv
+B71f3k1eFl3/iYeb6SKdP4NS7kPrN/+4Sc3B4HP1NH/8x+Ix2Y3ntj5u7uy9
+qiPTpATrFF2TEGzygZ/nX9Ti0vV9sz/KHf6gasw59xivk9WccvfnHeTfPoyd
+EpHnT21Xapt5k4Ck6zwoJ9w8TB1QUznZz6tVenFxE2WNY7orcbpa5bP043uq
+tXu1pLNtn3Z+RvyqdMBpJeln9PKX5ulZvHmX1Dspm/rOrw/4nw5SLtVOO/Xh
+8739rz/9/uef6jb+9Ev9RVU8eNfsyf68Wu/idXOWYNuczfymfsx1Mvb86G/6
+wagf5yTtdUMu3vAn07PXNajbbXsqn9wslG+o8+3Fn80d0RiTn350t9//27zv
+v5rzhZe3Wd9/I+f76V2b9S3yaBJV0UCvph1PRxvoqYOxUqG3fSGifsq1Y+D/
+3gsG2yAOIkRY7wkxmSeDT+82L+NltpoeFaN/TozeIvIpEyxewB71R93pxIvx
+OjL1B09z2IMuvqb29PaJ3rzsH2J5e3icoEdtRslIOmIR2wK/dYrpRBTTzpja
+U8x41ZEC2siA6rjOhdhTqxAJkNjyhBbt3KKyI/N27k76EdczPy4dKReMsk6T
+SOo+5Wsiu5oL0zzIfLoDm5FxB+y1k30NQX3FGk+gzFXGNOhkW+/iCdBHaRTn
++S4UvDe1vG1sW15irfYyF97MHh+CJXsSlrOCQrdTxLnKiodOJiaZyY0evpVa
+02E6EeX4GJnpQyqiZ16ozJfO9XSXlpZwufClvR9Fcm/NLLad2njKCKyUN3kn
+LhYOZb6ewlxsplBf0GvgQXtTymokSrYRSxH7ZvTEA8+fFpEtlpHngkVER15k
+D0IPj2AMk6QEN9HxBLQ6sSoPbOYo9GjFDceemsyTVlWFgkbBm0zNKnfvrD1X
+acSgcIbQH5BMziOIHeXOuMxvfWa4B2HvfVkSqxITOeyHeMJmhie4PJ0n+Dko
+2CAQxK78hcBI9rIQcwUls01NfcL4SqdeJIY39Itsjvi6EZMKGjjdRPZ2oWZC
+9jaySK3kDlFmIsxqEonUh6ZFG6pslkePIrCkj7jPlg6PdccXpd5NdbC8PMU4
+9CQ3tg8h14czsxACBLp6EcZG9wqwOqua+6bzBGtfgN/abJIi7mZBILjijpxU
+Fo9kAAmHz0i/SCmnNgnKT+/2ttC9dUAZfCtCt1ONGWzDi4gnOeYlj2KuF9uZ
+bY0Sez+R6FUs7nduEElWZi/4XMzQFmftCmcudGeMVmu+bm2gLj0YWxBOKunq
+6ZpyjInArMoqpqeLnJHW3IuFZU8LZ+2R7Uox6d/Aa/aeba3dYRbEeiRFuX8Y
+6+lGoI2YTSfMOawOXoHxYkUUhFJnqdYLWeFJBi5SPdG7UsOyoZkiF71BG8C9
+xCYeejwxq3tho2fSCTGyGGnRFUU0Si1qg+czeAmxzv0Keg026QQJhi3Mox0Y
+tQyPAk8QvfDorQI9WsuFJfH3Tsij2Cui56CoivgonqDFJVldRC0sGO9lAXiz
+tKAizDRLLIdmM0cb1v7SgXbCXOSRk+pijbnx2KSvQyV0Q2HuaXQjTwQi4Ll4
+EFY1dPkWbLTSudQ3sUAvlhjhZf8xPDpg2GKdWGwOjb+XmEtfLyRGO4iPGN0g
+4OLFFfmexocVjhAk8YvwwPMUbXCe8O9IAH84Ws9yvoeNrGCJG7QNvg1OjraI
+GOMwcSdVAb56wDjEsRUNg8CCV0SPobEfYRw2U4vQofIF0CPRI3hDFgBfPHwO
+4/TpHZMR4A6fCMMcit1yOGwWT1jtYHE7XzjrmZUWsGtNSiCYITZsCZlrVl/R
+9h288SuD7W4FUFITht4Vmv7MAwsWVU2AVk4KT3TRO9fIbmQeraBUtrCAQJjR
+OpCVTItC4idJ+CI6Ms9sfOt+nDOeWKLLgz8w7pXl5z2JNhyggboMmAN9RjYt
+RQHPBXoE+W3AMHec/CjmhrlLOhXN+CPa8jIT1T1mmrxiKCR5hSCvELGxh0wV
+MQfWuHLLXVEdYD8P3IIfianpTSjvzct94xdQUXLbqecigh2ncwbfJRR1Ee9S
+c+vDpiP00g50ZzIb4inAl6ILvH2AVW/QoyzWqr2UexkSjuRpxvJexRd/7DFX
+MrbSLD5aWsSzkSydIdA2ptFlTwDvvbSdIZ6CuVBP7CbUhkmaAft4WGSr2GIT
+N4C2H/btkAsttu53HvAHKHsnabEjx7vuI0vMRcfrSvg201NbLoVIOCK33Edu
+EVmy3AbwbRtt8AOdsm7wCj0aYr7sFONSDT3MmltmGPz0CMtRc4BP+GgTBCRs
+NU992M5BACVhkSI59qPYYAEPHJsZ3n0Mhd3zRVH0gPUyhYJ2Jx5Lyv0k4FxL
+9UrKvOehTUCo/U4YYg18EYiyWkSft5yvsIh5rFFsBH70gYg2FD4it6DIthrr
+6AXswZV7TcJ3YulM+DKaiKP1yPFEr7C2KeIVrOFeKHsJJVunnSJmMhOh3Npu
+UUBNb0eJ2TuGCy+Hfn+O7kQkhBPAA0fCsO5hkcK19zdcxzhCpzvwtGwEvQ3u
+gEiMaOEH1pwt+2YA70e8sf3yFvjUN0IR7aAsrdTeeqKTxVJuV4GBuD0hewHW
+oxfeAG2QcolIrxELSXeIqmu/BMbZXifiGG29ssA+fCDUilbFuC7sZGj5CdlL
+KMqNLosI6JBm8O1juKwG0jb306EjyTMjM5LTQsCmM9/lVVfoaZfrQPqJR/wm
+4+B1iP2W+DpewtMK+DKPRuAqN2zRj4XMJvD1B4zHJrbgZxxITb832JDlGdnZ
+CF6zcwl31zynsY40/CaPTe04LkSU2NmLFFGEcVqntpqLHmxmlRjmwS+ihW8z
+xMgI9sMPhAzpIuE024BSTdtB604oHmEcwEYi+FWUzYrohUZyrId7WtPA3E0o
+4s2APbDQSUIecARXGIjS3IPxwS+qACgpp4i6I+HNRb46ioLZlHcHCwswE080
+l6Fg4C/AQLxdksLG74CSRYV4Y6LfDkYyfY6s1EOkN0RwD7+K8MSCAXNCvrCA
+J2AnVrpwoevBPh7I6ogj3UZgODKQe7TXsyOKFpN+F1aP2aWVOVr5duJIbulm
+iS2iDUa22iPaaNKiaAMPAL70jhzsY6rnxylGMplkexH0Zarpm6kZ0WyuwiJ6
+8EW0dYN+AL/SAj0bEJrEw0rMVJyGPTxMEadhp9QLvD/CbI730dDLELdX8Et/
+ipGU+VYC6ckzR/DttcdT4RJjRSRJH6SwnmWh1u5W4ArwKw9toPU+NkHs2+Eb
+aAObwzNDPIGiLjAulZhLsHUrqvmux28lIneE2fQDatOSFazcw45Tb6bsIc3B
+ZiP4coyo+zwu+hPEBrKXGF5hx+C7hQ8eB9bPBlNErKCAZwbFV15SIp6BCd5m
+4HFDYQBrbAdvhAaZsCOsYT0rMRMm8AfMI3PoCbEe7vBOoAMjXHsgrwjKW0SX
+SgsDLwdK7v2iEO4Cs4uRRhS9R0+9uIhWaly6U7LVIUM0ySRmEzwuldEd813J
+DgHiD55wAM5yUboaerGuvQKeae/gxUIQI4vAZwXiTSVC2KiwijWhA9MdByON
+6G5tZ2YG33bWwGWgZLSJLPBfMFpJa+a5jrmlrQ3xsQDvjx6kBZ+dZBmUzoEb
+Wg8t38ZWhshfDfHEHZDaFmWWgdVz8OGFawtYbDZJgN4VA2ccTC3KnELdlLc9
+UfYwi4QOUQQFsUaU6Upojxn0UWLSmrrTpTV1WMEciOWHGN0t+Krg4/yWwT4c
+zI0OWxjyfCtEhw3Dcg8XAn+xC3AD0cEbbSDUJpikxANBqftxih4VHIpKINIP
+gS8P8Ewhl5kQeXdHaDHNdR6AjcZ6lQmMPKkJPDVH3PaFJuCZ6YbGJaWYFwor
+A4/zbFlm0kUkC2hkdQcqb+uxgN3ARsElw72KeA13EPAC4POEZjpC5AYOl4g3
+kwrxyFoLY/+AKLsBpkmRV7RDwoc1bMivYMOEkjH+tkWcBhOoBPGX6gFIfUDs
+j2DDdnRnwa8qKyF7uBNjWGCeAh34BAxREHsXO6iwNe17APMPQ6BTAg+AZ1HM
+M8HrbV1OS8eEpcHqq0dhpccZeK8oyBrECihpIfJ/xTiSdZAf4ck0ExgXSdGD
+tMUU7NMvmIdW3smgL1zpwKKiOXy9QajKVvGqcHRqA0bZ8jEKgqL99TgYGY1D
+7MMrEqthQMqmUx6UW9+tORU+51iy8Ih9BBz2stGFzoCKQCgTSK1n6Dc/CGJh
+5Z6HQX9HDAhswBNLQqjtSFK8yhnxwDXYhyQW5KzJN5lpdcQdVItBvQJKUkYV
+FgWUpNU5zDbYelmNOHhdbHogiNC+knhgZdIcFQGseCwMbZ+WgtpEmfeniFbD
+rIi0SeaKlR52MCZWeJjdOZKZvU646B9n0rOm9jZgnU/vvtBuFYyDt+ELAa2U
+baCg/FAU4NRVAaQGlxRSlojTPEPUZROwdh/juAWCZu4dxXzwFyh+fePnUP2k
+l2GTvpVO8I650HqIuj0ZmNqeKV3QC0ipEndwJVD+qFhcl3LYPeL1pCQUxkGc
+EjuVxCWhE2kcREI7bkzlZzZZJPzfdwuH5jInfZSgRynlDzhXKyXwNMwmnjaR
++VTnpWMlnYK0iR/x1KcdNzOzN8dnEPkx2zrGEW9U9sKBBKuZ5d1ADQfuMO1B
+H41gH9AFHkX+R6CDT3tyEPmhj4BYwLiYdEEBPmxDZ8IbM+hCgSfcLty8ByXF
+4O1gxAKKHHxBRVmKLiXGyYLmR1uBDvCrCtZQrcHaukrxoZVV7sJ3SfXHmgaN
+JqBuYA/G3iOrn1oOoWQA1JSJbpFnzjHbfqDmEnwYXKqfA+MOYc5icKi1D5WH
+2V5z5RUMStMhJAcjASuDRSZ30IlF9BSW+gqeCc/18sQiDcuN3kjYtHMIDgTt
+LYhvg2uid0Cq+wNlBbjWIw0rEcclIv+LW0Cv5akHXx+GGulGUXg29A9mE0oT
+DAhRbkPcmuIN9NFuqvU2cmnxpIgIb8Chiq/+glH+hVi9FoKR6eGYFEvuTALM
+tm+JDUfkF+XOkEJAsaNdRRYoiwTGMXjmdOiJxHQgn9MN7VuZYqZvhUueFTiK
+jfICCktUsPTqIW5HkveUsiDNJsvbCcWrkGe5QvpcFwJ62lpjpMjbaS9iNiPU
+Jp/W4XVFtmC8IjIGfIls2uOF2b/Cl1nuKHzRR0CiCdSuFMdcI3zxDRc4nC6A
+LyIse4MAiMVzz0M8Ii27QxvA+j2MX0T5F1uAv3iIL2CGMuPgL2JmifWIQ1kI
+yp7osCiypxTjUBFCAemdNtrsgPQYOmstSU97zACX1Fkf2nkjiVObPUGMmOnA
+VPAIzAspzQFx0fFCEKunHVo+Il7IysxzKRfEKL8AFID1Q+1qsGoOhEJLEWUn
+jCI/5fPAOMBFyRomipUVYkN7vBAzPcq/bIGS4z1fMlLgHPooBhMkpenB148h
+572EcLYASkrYdJ6yGTiVwmVRBcRFKf9CGRzMv8xCXlK0iGxwyXkigMOGpkuL
+cmEZRRswQvSyIG8A/uRODD25g6bbBBSPJnEB+4DleVY1nA3TACwMKLh/CArg
+O/g+PDMgZoj2QF5VnmtVsEj2kOJTpExjoBT4B6JFKtKvQZ7O3Vz0lC6Axodu
+JPbxSDg7LZRnQklUlDPcjQ2K6wCOYX9E65jVZqpXUPlRAUvTIpOYRbiDlRNT
+pNwHZvf+iCfM0b6Qdyife38IJsWCdfoZLDCaUf4FFgdOqokO2mDHlsOTYYFo
+UcGA9puUIjzULgOEQwXHqeFZsKc5rIPwZu1a8EziLwU0ai+68+LAcO7H0GtQ
+uxlQgM0AEkGZzeNOn0tok0BPJ/4iCuDLwLhsAA4GVn/LXKnWmsGNhOWQPdQs
+rOA9FT0LDyGhcihuMx0Y2kl9sLBAKPaKWFF4lH8Rdf4lFI6k2A9Pe4hsnYFt
+rGWNcY9A8oFfe+Yk1tpsHN+hDZQRlBTxuMJdvhRoQxYAmXLwF/jZniyKMG7A
+SzCBZf/JxzgBqXNg3FefesF74F/6TljWDSFmBaXJOqT6a3sQpMgfYD8++a6/
+ZDGixwTadT0DM+RLD3wYapmD9SNw8yVlZ9GWCVAynqKFiH0+y8MDRlIHUgsX
+cwWkFkKjPFT6lS29IDH1XkC7YSleLTPiDhOFLyw1yC8iNAMcCnzWB9ZDm2RA
+KMmX0NEWE7FdFbD+g7ChZMAkY3gmntAJAofNKO/9TFooEQ5GfZtPDW8oCB2K
+CrQhW1E+ly3B35bQlWA+sal/TYaIkZ0MrF6nPBb0ElAKSFPcCJsuGtEOfo5p
+xPwgYnWB4uZ40QcDsmSINsWUnQ0saBdwgzvnAUi29iRQhfLeiP3T/RSqH55F
+WO9jLhCxwkN614dnRhGNGxd8BzYSJ3ba8WXRiWkHo92bJzzcRZij7CGxPYTL
+aOJ2vCrUsodU7VOtctLRFzuAR2gBOHq64bZzH6CHeANFYZtWOIDvFD3QRmhX
+CS/YkH5WWoOUAsXhcktK455sPKYYqpiA6EJPOykYEVmdQ3hBqq8P/WyNBOKw
+BrwtKHuP+JR7iBHiJoRyEDYiGHgHRjbjgWUjmlALJOU8nHtgFzg230tqw4lN
+tNivdwj7VXYAOjJZ9ifAWwFPDQPKzQf5UQDrpnoora2/dHzMTUDxByi4TU2g
+puUcEYdHaraBWLExRvRwRr7lPfPSArdyXqDIdsKg/K5cqp3SG8oCYESHeAJl
+zjuw5Y3ygnwLC8M4YFyI140E+Tr6mKeUydpSW2BRklV1LyrKOXuisLqUy0go
+Y7zM1BoElIaN+AP1C8lKfmVDoRuehFdwlfdGLOLaDKoPTA9KErwNDAgeMUHU
+oPjTwUhCw0PNgMdB/ZjEPmLKSwnKElR+oPyojh63OdMwV7Bq8CPLX4ATHfvd
+MLAeMA4h2Cmii/OkZgL814dmA+YFlJeq1wMERgrxB77KSEnV49Bx96R2oLnX
+I+CN0PQurbxQ1ppPVJtD0vgUrygXRJlOytLD+kwdrS54YruUAQX2CxMYR/le
+YgI5N2jnDNiIht4WgnIhiEc0E1ATHW5UhCMTle8voEWoh1ZF/IRs2qIVFso5
+4++gCKRdgTc6pxx9rlakiDNATYqtyv8bFJcj2uWzJuz3TWePyA6OnU74Ar2x
+98A8K070CpyMkLt3gNqx6aiAY2MkKS8VUFaJCQ/xpaLVoCfilqIUlisyxCML
+6pfj77Dcu7508wh0bB+DUa9pXY1Rhg+hPvJSHchciAk4hI53jlyLepER7o75
+wtqlFuGNV4An3IQLbycoc25BwSNOZ+tQj3YM9gAlTvZgEfbHumOzScVjAwqm
+3JK9kFeAlVUhogdGwdrGViHgyV8jyh3avsXCxPJoreYAbmmHvEe5MS7MaEN6
+SQoocOFFolgZwB3MvrPl+Z6TF0Qm1yXwRQxTy/NnZdqt/UJsxdKhNYgxuJU/
+1uFnsFnMBbEysg/YOIMahl5aWA9Qz2uKsGCnBWlWEdNqGHhc7urVKpDVemYV
+E6CDh5HUFIvHbEuKT0exBq/LpeXRCkRG+bqI4jDmP6JeLNArYvA2xWEoT8ym
+6Ai7t+NAMNiPJLUDhs2AaILsi6Iq8bpqwEoBDZ+RwgYzRGS3UisIhOcqtkpq
+h9Y4K6gdYsh7j/IOHhpy5lQYF8Wq4BcqGwK+MkztW0b8FnoppjWtmYleFM4T
+LBMs38M4VJ5aIy2gNQ3SDZSXEmYPeJbmM3giPLNQKA5PDIh15To8c6yJxqZJ
+qxCfETl78GwxxOcyH37kgE1AzYoQfnFLWehDhG8ktrmXS6i6DvMjkY58cJuZ
+eTsXtL5oa3vXEHZssieyBrFUUa3OtjYsXdtDcYWxfUvrAxMBZTPVvWdZCI8V
+tP4JLmS4u2QoEEOjrzzor4l7exOMVA4ECvGOHq3bJ3f9SGA2I7mlLMD91C48
+IPtOmGIEfCF0iNyyPomBuQ1JH1W03rgDOqxjvr/z6fSWwXRJWXvpbYUsnmJe
+6eBxD4HNeLCEb1tOFerufiY8Oc7BFGk1txNQxMr3iDNQoPn9gR/7xFKHCdkp
+8ASR/wUjCZv15rD+CKzthTJg0HgTafa+Ur5O96c2E9CBEyEQoQKPcj4W5oC5
+RdURStV9OUxNPUpKRlp6AfUT+IsilHd/NOf8MEdvnfR7dc4vv8HPz27gatfn
+/Gh3R3cbIqrV5/jkod777fJ67/dUXu79LrbRHc3q23u/H2jf3r+799uPKOdh
+R/p57zdCidr7LXgmZ6VluRNizKRxz3vB42/OUaAtN81u8Btf7T3ND2DGzFV7
+TckDzd4/3wsOfHm9G/z1XvBvdo5yaJho2Kdzhz3Y1QOxw9VBLDGv5l8708fo
+xEHeK+OFV1E8uu88ag5LDDZ5OEI2yNunWfkFc1Bos4ml87x4etTTG08vXsTR
+q1KNLVwt6kaT1BVldDPu3OsBvDEy3cCLEUnmngHlL7vr9K54SS1If22/gpL5
+Ct8eYC76XrPPkwGpx/PL/ZeIR/0ob3ZqAxXV2UYjHfBl9CLuLIqrh2gRuUxY
+KxGk9769Wqf56iW6S51ZbuX1mT86dumZArNtkQa8wTsfZ/Z+Nw7CbohxZAUk
+iiWMJC+4V1gdzFV9LmfR34xz+tlbSsSj4hFzMxgXlvBNq4PZfnsvuKb2gjNf
+pgt3mRsz+/aJkHVc7h+m8AB4m7bbi2V2z4zboxgWOzax/Gi52vFJqCEOjlPo
+zLFWMLDGXrhw7BHt/zC6Pc/fvoCLl2qHxlIWbMImKy2yvIwtvNWscBjicJzy
++8NImPUOK3Ve1rmh3b1jkQ0vzstakhj8V3/YN8d8Sycm97G9/RrofTpz1Kd9
+JX/uDAPxuu/brdmFfVzYLVhifYZBnVnwbeU5nLS9OklxfY6iPtW0xs+cTTIP
+iAA8ZJ5bpN85aUUHmi7OWv2LJ63IGy/OWl2etJqgDRxWtTihElDsCqW4Phgv
+09EYtmv1waOHrh11xJ17TAxxIxeWEWsZC0uhRdLZxvPtINFDWgM4xqVX8sn0
+gKlb+0V/FRjbpwija83ToJjzo7WXZd6dScsSi+wlmjiPyeB3A3Mwj5bZU8Kd
+r9CIh1DPXtyi6ECl9rnWeA7NEbA17DLuYbbTPudfXggRxvy73nc3zl/7Hnkj
+eZ9ARIUMv+GSHdng9uvjYbuUg987oeY8pIiPj3q2jU/ed/a9cBFZI8Qj51kO
+2fODUaA9hQw6Wdcb3B5m4EDRpPBqbysewXGdWbna0YkIn7OA41/MlxOb1jhB
+j+536dEajTviAK3c9ZdpJyqrG89IzVgW3ViHBLT6gVwURbAo1omRjUALv45l
+YY0nU00G6SYdYqYnseh3/M54j3j3HC+Lkpm9jcd1nalcAnT1wruT1GMtZdOC
+dl3rt5/H3x6xeP+/6ioxl0cs3jhZUd7e0MkKMbGuTlZAARXBUDjk2+3Zilcn
+K6B4/8Tp8OZs+Kd33zkdPqz6wcXJCqBSfaYZbAC2Xajz6eYtH4NNUkYfDASs
+z9UQ3UrLTo99Ul19jA/tNqKTFEdEOdpTZ/NJZgFz/fbUfKLpd/ERcQoz3qOI
+Cl61R6TQu8xi/cBse+F54zwagaEMwapd2M2xfULAdXCf9sQ6rK8+sc6dCXBO
+xqU1FEuAHj4Bq5eqFzIVQKbnsKTzJFVvnO9jaW/bs1FL4jF/5mzU2JhZkTGe
+RHsxXO3BGKuU9yaxlQGjvTXtEe33PM2690ETUj2r/EW/YnwPy4WKsa3nMe/u
+uOxNAlE8TQa/78YasxA/14gdL+Fy2pV8u48RI1kX3FFyLeXxongMjNte2Ekf
+Gowh36GdMebpFBzay3g04NIzCWUD5d+ItPc8yBr/VrYy8ICUr04ANuf/nA6d
+/4P0WcrJ/SGwo31iWHc++bbtWequg61f5muMQzyVLIgnQqZgZVwzO4GRPfKl
+eZTcc9gwe+am7iXLfgg74tOi/5DSuEzAkAsm7veu6HfB2J8fjv27qeXdx4Gz
+jzr9iRyc4tKujktie32Pw6d3013E97o/2F7e5PAX73H49O7Nmxz+4j0OQAjE
+JRNMHRpLA6cL4GF5Vd/jwFs/ufKSNzz107sf+eqf9VT49IWv/jWOh2hixDq7
+p/MqGUus8ZHl2YNLh+qD6Vp0vPvAuN8JgadrsGlzCnUkHhETv0Jkd927aPqo
+ewsZiLFfFvMUbUnvhXm/ZsXuBaP1NYIe9M2054ricTpMKaovoLZ6oax8tNVE
+W53mnI11PmcDTuWNRaFsFzqAAVPMqDndyk1wCWv3gnFRp258Lrzxot+exl1y
+kQ7q8370lPrEH5s+GtVUxSN80zO8+swf/r+09a9v8RyM/MMYSE/RTZ2+02aW
+eXzQChcjO/Yn8IA7Nh+JNIT3j1KZ7bn+hwHLnKMH7ljfvURFFDG7Yl55e+fD
+dsFyjg5YsncPjbZ3O8VqvOBdYYG/SOfGv/uyDoz9SujCwL8+u6NT8ZYZ2R5L
+6VYVdaYH3nhxqucvnem5PNHz/qeIc77bLl6S8PP9dsaSf9yO+HPWlfNkv6ui
+xz+GfxTij4nn+qF+N7t5TgxMSTxy1oO4/DC6X0e/fRh/eYajlj1hDh29C7Lw
+h7RHPzrJczrF8WcO8/yTIzjfPc9zeaDn/M2m5Et9bqctHVYfpPlV3at1XTPi
+r10s9E2Rmjfe8s9f8v//tqE3T5386Gah5owJuMC/c7NQc68QNOq/c7NQk28A
+h7zKOHiLPw4q47DsV0lZ30ySGHoWy+6ru4MuYw589SLq/Ksxh3Jg/+T2oD8R
+c9Cji6jzr8Yc6MI/yQ9/FHPQlu/ww78SczC6F1HnX4k54QudDPYiT/QfYukY
+kZbx8XxrP+oWj8u0SMxsOAusyO/0O5SdCTteAH1EeyoGzNQHPm+UzYROndTa
+5p/Em8HtYKzyTOBKF7cNMTtlAvbi/Fnt80bmKh35Od3jg7b0Y9JYw4y5h60T
+mOmAm4XGjS9auCgm0s7CYClWU4Q7L/+yDueIM4fbUhSFGRemkajbFxAhhu5S
++GMt2whwspnMBl6QcWnqIlxW96PB9imxs4mYRE+J5ZiuHllTzvJQtzp0+8Kb
+p8T/rITZ1hLGLq4ljBYN4txbU6rkOxLmLx0O//SuPR7+bxwOX9CmaggOumSL
+Lt16Uo5TMMc1dTvRyVVzDc5tkWMx2ppn5ruAAxh1dgNKDzDYgnLAmAXI9Qq9
+YCKHoxS1oGgdjZniqg08uO+BCOONfTihp0gLI5fopEbaHvZuvsHmrlYBiKI4
+LdkkKG9jaRZLEaiLgdRx8xl3XAh92l7KiR4z0BjvRGP8+sKr0890AVaq9e7G
+3ArGx2gOWOsnUoCQRx2vLCBinePIIgEti+nas2nbc9qLbH0yPTpDjKgtOuk8
+RoBwy54jzS/HoAOpo0f6aOge+DKqxnk6imFYJBvSgW9m2rhkFctFLJeU7rvt
++pjNf3Lp1kXyDLD15lUKfsDGUjrddOgdfeuPA57UBe2ihUiQThDPjteLzN3R
+NRkjwOlZqe2NRlK/A90a11I/ciAWXx606MnVHI4g5LKll/lF5WNmc69TPaUT
+7xlPBcGtIMEwR5ZvOEc4fSXgKBN/N0+HxY7C2jlI6l/TjruOlx4FJ0p0b6ID
+hRgRuAtuEIHT3uRjQ+trJRfiIVz+Y+o/FrNglR39w5dh8vKPNNwfb1ZVvnQe
+ert/RPGjvV7ZBxDtY39jjD7nv9+tJ7fHcC6jtWC/hTfDu+k+/BCbazOZ//ED
+PnaiYTVteZuHveZQ3ydedJfmEIxmtVa1mwZ1jUZVzfy9mc7x+/+g646pRDvd
+kLqd/e/3//k38JR/ZPWX8Iyn9QrfpC/T9fzVFv+ms/OtxO/eWcSs7s3Aep+u
+48/b91r3/Yf/efWLnip8g9a296am50tkwcZUAdL4fCtqe19oe0lmU2SdrtVU
+JI2u71bFxugHdZ3/rC6KcC6q86uqcDp7/7ffDLz5j5QOQn+vogG9pq4/pa7e
+/vOXRbev6OEVgyJurgW/LjR4rrmlSgM9l8/1bbDnb3fU0JSrF3Ub7VUh4+aw
+dVPdiy6XPX9No5eq6UzVcfR5U0GVenO+Cv36HvSrqoTXRUFUBeH59lww5qJo
+36l43OntNzenUaU7bc/X6WazOKXb7eN1XM7osvqf6/ve0w+r5S9EppviiO2t
+z58xPtmSbpRXd6HHV3N30zm9Zbavinh5uhtb8fi6goCqd1ff0N3USby8tbn3
+sfdRr+3k4jfG6RWdm4vRP1WtpRYO/ui/t1br55IGph2QpjzuuRxUayKxugO+
+bTcZhNneLj1br1d0X3Na3yh+1bJzO25/xfe6l9/7nrnWpdnrCovXfzo9rXer
+ekWI8Mo6MHY/XdTdrD3rp1/f/3Q2BTXEp99fFemstd7pj7Pt9OPpncZvl++k
+a3DbanTrWVOMvukAXZhAMFVfLn+q9Pvf3t9T5eN6ti9qzm6o2BUVkWqqL1zd
+yX26+/a/8P27pqYymWRbsFU9oq2IclWeoXHQ+ZKs6Dx5nd7rN1wWtlU3QKha
+s2/MyvlL9Qv/MatUu55WT3UzaNa2qpbbtStelbpoBwFmV+KpVCGvbd0GzTPU
+q/7WpSm+b6Zbu651oux43dz1SwBaFz+ZpZclV9ubos+P6f5W+1Vd4OBcXflV
+YYXmmRuqFvA9NDl75PnxHVj79ISS6vKHutLACTPrgkxAenR9WszRyr83Neto
+9JpS2O9/Xs9+OffjovnGN88/a/u36hl9g9B1URlVpkcVh2wvqDjUpZXqIkjP
+iJrv4UuvMgvnCzBUpa7dHH+Yb5v3UsnA13UK17OXVT57XSbjojudb7pz8YRN
+Rh6mqoRls1NNDaoFcnGl+HVRyKZegfpQ1mCaumJkc1hOs/VqSRby6/vDbPvx
+jZjeeR3Tuyqm3zf3V7P6/moY3/mO64Jqj1KZpMZ0DePD325gBPV1KBQO6aoS
+TMOsqoerqdU0S/Fgfw6/rvuuLkJXt6DX9WPo4vhndS94Wy3uVRmzegxUiuX2
+tndZBpUqENFzKF20/fhmdFGk4wIxf2qR5KeLMiIXt+CfgEM/x8Rm3hoXUnP3
+VhEOeF9BxIauPcFbKTRSqTuqOjJfqoJr6+dzNNR/Oz0/Pl8xXz99SdRM1ZVs
+h+JUzYcomyot2Tzl9+vBPVGya9RDfP4wW74Q2rVfvL2IlGDX6mqa/aG+lh/Q
+WDPV5nL5+GpYiXxuZ/vzUBnaqSvpRa3sU5WTD4M/6qrIJxSvCrqMvUGAE/+j
+L6gyF3VtiVf1ks+u3WJW4zw/wPfOf/3Xf69ry8QndnOqVHRGu1O7fv7eg4xm
+JN6IFb98W8upqfVHBTt+1I/zAOoYwBOqp03ci5OEbtJpItKpWkhDtFUjqHD1
+9oKqGMY1U9hTob9TOZnD9bXx7Xc6qo6PsvHDe3yyml3R8gvCXUfuK3fYnKte
+NJfe12WP6ZL/b1DHeI06HYU6vKrrIZ14wqnw4k/08JuuIhWzFJzyefY//sdP
+asD3ven71bQuMzqdbc58QxWApUf4wn4PAKqATxSCmpKhqlosNfRKwjTmd2Jz
+6iqpgqoJLt9nc3xvPc0Ol3SusSLVUzVc5epUUlX5ED7wYbMqFGPwm5GbKYlG
+RQTqigDN178/gt8Oof56CI0auBuv7l0QjnMB0qvKTC2kKFS9qCH3fS9qjf/8
+9/jL9h/Veo/OURHF2TccA7JoOydpe05wqdrIb1di+cZn312yx2u+qeb+xxl8
+9ZHWlq4eVXP3V3WTWxT53FQyo0Cq6vNc1BFrgex1ZKKqcsv3b5DqH/RPr/vX
+Yi/cbdm4IiajKbp5CYmnsRz47LLsYPO+ti9pbcTf1jWN23JEc1URfRuvv8y2
+1NemDtTL/KJYUFy7CTzm2/riH9VUt+h0wszrmqiK8xHgJk2dLpqMi4omeEeL
++5eluD6+Zevaa1vXX9l6S0nq/mGSN439qWpCJ1uIl99xhlc1qNqunGe5udnt
+ihKiZ6p0T3Ml2wUvf6vAfCOMXzvI0+jpm9dvrhTFn/DHNzxHFR3vt3jSxnqw
+tPhaRu1ULZ56Jt8MX7Ol8gGqE6MiR9PYNpa9YfKvipC//1nVHlvigRs1FHU5
+96eHgf83XVPdm6vsV/2oX1TL7yC/20osTeN/bytLnQLq92aznrxzyz6c+EKT
+cWqu3DtXcmwrkb/hUFAPVHRoqa4OXNaFbvHJH3sH1eE8VcV8nzzPi7R+ASH8
+lerBMxXDagziebtRdbgu/PTcpu+NzG+va25dI8X3AEGlhq4KlX6/U689u27U
+dU+uvZhSZ6vNNa79rXcBba89QZV/Om4rVSKKKseTuKFiek1dPkQYWtelCpqr
+1ecP+M+0SVxeesjfXmOsaspwBQjKIWjw4v84Z+UKKml9uBDZ57ZuauJxKi9Y
+A09de5vKaX1Dr+ZNBc2rEuDk+E3LmsBRmxU4o6pdRY+x5ns846erHORP51pi
+5CqC/Z0J9u5EwH50WeL5csU2VfeKiuOPGMozRL3x/TdwRvVYXe9YE+i3P0XB
+c/OcgOfXeVEC/l9PIhevBetsRqDu27nK3XzTZCVPBe6uL7hsoncL7Krudf3N
+doR/bjV0gYmuA+QpPYDn7qhkLprwXH1s9wnQ1gL6tSrn9kZZYMUA2oT4L+9/
+bgOOVoPUH7CZNb26qWpWqAmp0w1t6MA40R2jnZubhCpr1sn4tK0dj+ZcmNzH
+0xu6v1zRla2CYMVmGtze1BNwkY9Sf05m262KV3EaJ3MqTPjxFYU6bYpoqpvW
+Q4imTuviVa9HoQYPYndX9TX/SVQCoFLoP1Xiq0UknnLxWfzuZDancpTXzaIU
+AmETvbsAdS5Ub07U+5Vh/+XOoT1X8PdNpdI/1Us85VU//4VekiEsX5HLk0ee
+u94uDFy1VOXGKfmKeLhex4c6EUuLKnVyshXSDVCTF17lJc8+WNdgo9gDM6Sv
+tJn3lhlcpwy/eZIqmPa6oGtT+uy1YanFoVPtRDzq/M7NK3S5HMOfWypjwAeb
+wu2KZp7UfPOlFgcvax7Of1Tu8UP9oZqU/3EKCer74HeKGJ/e/ss3gHSV245P
+Wbrva4e2AeiFSq0srxmL+tu3GbsPF1USk/Umn3+IKc/3oalAfpHPu/wM9VHT
+FGl2VejjA6PFIHU3ckMCW55wTqic4hWNYZ2FRIP/ZFMUgl/k1NoJ+2au6txS
+XG3POY42ydD436bOrFPgxlNURL7w/jrx2qzyqI/ygf7xeiI/IxZQkb23qri3
+HlzLcBXH6+zkagqdTh4er4tDK8t/aEZEyTfv6cYxtfK2bALf91Z9fibvm9HD
+qUxvWrOgehxfveGXhnT8s89R78kAXv+eWoi/0ei1+NCEi0It0CrZd1Y8RZOJ
+2c6WZOKb/34V31QoX5I/k4hov/Xz3wxNeQZvU1iqma8bopp9mb5961PvVIxp
+n3zCAmp8kyBrGPvbxV6v4177ZTWzF8a7nG2JgH/YEO+cbtYftJsLhlrP3Os0
+NdpLn6xZKnq/+lY5NDbVtPmttPt3EmCXPPVMFt7MDKhmvTlmb+QZFI9+ZSZQ
+fpehq14kOespSOrP14N4SY7xmhZYZ8UpV4wXnRsYt+yIiDsl7JqoRellIm+H
+urDmZn1RPnauCm/St/0oeCIq2UD3L28N4ndSYO1y4almp3pRu8xI3k8rEut4
+esIaoOHH96NmN4KKhpfUoH44fe+iqu3JMuli+c+qGLYCscZHWpJNq2XKtZq3
+NxSAglaFgYin2RszhmFUIx9cLFfUf/6PU662DSZ1MMU4fJtzoD7UDv5MAK42
+q9Z/q0vXUkHcH7+l8/6JPz7+/Yn7Q3pF88pamAIXawlTh6835U3NvFUTzgXm
+T9GlKfPcNGOwKsvnZasHT6ODr+/UffmXK2yvWdy0oUVqjbSsC6yCM3548h9a
+gD3xOOKSMH8w6vkmK9WG4yYAbzar6Tzezl6HErXwV1uBspbP8ctqXRPO4qAm
+l0w8m3+hjxXx4QKuVCq5tgjFJxszUAm0zezqd9SK9eUyMZGa+WVK7Rugp1a3
+ma+Y2nBC68siyS35aTncNzUALhmVcp8tFE9d2339vDlbyyabV6f5eG1uaMul
+qjw9tfsrVD/+e/vLuWtnuGhCWp3nrneJXCCI2gL0oVCZt8vsAnXlSsI2TXim
+Egvb0/LcirJymzfa9Bu1pWER34nLDfJdSHk13xf7SOp30uRSUy95cANgD/d3
+NR6fP9maQduQzm+/XCuai70Q54j3p1zgFNO/SeA1K+Ovwfdq6QwPOFPbNxHp
+3zaNUzKwyQR93x78CsKVxrstwfzeuMByFXEpMJyI4Xea+6fTyPWqk3JVteY1
+v1ooVQtkzYKSspp6mfty1V+BP5WCr3c1NAnA+UYt9ar9Euc1ITyg3pfWdu0i
+lfSqzxdRlVREY59NaMH4Ljcq2dcO+6t9CBe4oabh4wUVnm8a6ycwpHFbIohf
+geIbTz3PZtOE9mVntlsToSazfEmZLp/zsU56rTfb1wK+ncPWD97XHOvnOotT
+Uq6dhumXd+d9edPTQtt5bbNO+G+afMmJlp1TJyq812uoanbO7nKK+dSjD1Sq
+fHnxvbpGukIesBWVKbsgTH//ePElzu6B8mfLUqK6gFrcrtU2wVYukoa9LprS
+BA7M+N+VqHqN22dq3raLgk9bVmYb5/hfGoc2dqg9bbUVtjLs4+Va6znWXbO9
+IMPgbN7L2XpJ4Xtz2dU6f3Fq2cVza6ebL9P5yzx9xkfREhWQvt1oov3HNxr6
+2zkkq/i/OYXKg2kBpKUDMQWIqoinp1Wp80Y+/WOnRvA6HX/qk+rA2cuJTS6b
+hGWbgVebPeDLRE5UEflXq/bwxuWbBqGKFTUZUDUhLgBT7YVssPeUHj2N/isd
+fAmVJy9tnPeELg2w/Pp+9vHLx5or0paAElxBbfOiwZwnz61nNnmgq/R+a0AD
+9+nceJXypreAB2dAEPpf9YkLtYcff23RoraFNhHf9K1Fp+WMSiTFMIcr3zrN
+ZgOdF+vvZEDPG2VOdYpfJeApFb6dnSZWDcvFuvzH9/5pr/HrbSu01EC5OWhU
+tZqDwJnM6+S1WutvllZpnWzfqOh2A17bPDSENhtANa6q+aUs2VxmIs6U8Sq+
+U67l5BRqUpWEvShcVesXXRGAl9WcdmA/J/WS8brZ+LFWVnzaJzKdzzYXUUdt
+MKGXTWtwf72Akcxq6MW4bKozO2vmqF5Fpk0hq0KZy8fTJod2SwXtFLnOyV3k
+g87bxBuh0O4WVzvCToziPMe/noyYxuY8XXWtrLYV116x+cYINgS87Qb6k6nQ
+kiYmd/9DIFPS/WrDigL4y63a9NXNrFArVLRi2Dz9zE9V5v/VJ9qYp0b8vKmn
+HbNds19HxV/y17Ooa9bvt7MTU73YXd9sfjzZJyHSaWny46vgs4zLJhGkNGrz
+iGbPWeNchEvvCb7iAp1e1uhFSanT3jTM42Z7ueG4pnXN5rTzip9Kha+n2Zxa
+Tnnzk+prsa1dAz0jKVlLPQx4wucNvvr+6eH+Tbper3SfIK/OGqnv/mAiThSc
+hN8yWcHYT5nbhtnHal/OfNPsllBGvCra1eH6E9fM6zLpeRVIG784R5k6Wp8h
+fEMijRRHrfWUHV07k/ru5QEJNaoVhroZ6Aabf63TEydRqWhMzSTO295PL/74
+AwdQaZcm13J2gGvYINxRm8naxGnRnFNQ25bV0q4C1vt6pZnaVq8tfLx+6is8
+vrKWWXHedXVKAqiJq0dR8efLbzT64qS2riRfTUAbDH9jP/XFeNNMK2D9fA4A
+SnVdRKLLiNCC0ubb0PMjoFFy5RuN0q4z/Hp1RqFe/aN9Bo2Br5olHZXkO/Hz
+3Ur5xKV5tP6xeaV7GsFXzE5j3+4nXj1vLjNoNcK0J7BrggwHqd8waya8fsdr
+uPkm9k1VGqOlA8ms3v9US0Ra3rpsQkmyZd1WSKQcjdqOQ/xutT3NLRGlet3r
+5IbE3etHrs/BuZ7ZS0ir4ma1TnUNn7bqxT39JK/OGaPrUPTPLK9lmv8vjHvw
+r9h0a9E10/nLNv3Kov/be++CYCMSrNU32tVPvOQt2vRm85LTZuoaaJMVoh4R
+wintIGgC+f8BhnbUwABcAgA=
 
 -->
 
