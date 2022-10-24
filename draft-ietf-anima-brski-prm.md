@@ -104,10 +104,10 @@ informative:
 
 This document defines enhancements to bootstrapping a remote secure key infrastructure (BRSKI, RFC8995) to facilitate bootstrapping in domains featuring no or only time limited connectivity between a pledge and the domain registrar.
 It specifically targets situations, in which the interaction model changes from a pledge-initiated-mode, as used in BRSKI, to a pledge-responding-mode as described in this document.
-To support both, BRSKI-PRM introduces a new component, the registrar-agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
-To establishment the trust relation between pledge and domain registrar, BRSKI-PRM relies on the exchange of authenticated self-contained objects --- object security rather than transport security.
+To support the pledge-responding mode, BRSKI-PRM introduces a new component, the registrar-agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
+To establishment the trust relation between pledge and domain registrar, BRSKI-PRM relies on object security rather than transport security.
 
-The approach defined here is agnostic with respect to the underlying enrollment protocol which connects the pledge, and domain registrar to the Domain CA.
+The approach defined here is agnostic with respect to the underlying enrollment protocol which connects the pledge and the domain registrar to the Domain CA.
 
 
 --- middle
@@ -118,7 +118,7 @@ BRSKI as defined in {{RFC8995}} specifies a solution for secure zero-touch (auto
 This includes the discovery of network elements in the customer site/domain and the exchange of security information necessary to establish trust between a pledge and the domain.
 
 Security information about the customer site/domain, specifically the customer site/domain certificate, is exchanged utilizing voucher request objects and voucher response objects as defined in {{RFC8995}}.
-Voucher objects are specified in {{RFC8366}}. Vouchers are signed objects from the Manufacturer's Authorized Signing Authority (MASA). 
+Voucher objects are specified in {{RFC8366}}. Vouchers are signed objects from the Manufacturer's Authorized Signing Authority (MASA).
 The MASA issues the voucher object and provides it via the domain registrar to the pledge.
 
 For the certificate enrollment of devices, BRSKI relies on EST {{RFC7030}} to request and distribute customer site/domain specific device certificates.
@@ -130,7 +130,7 @@ In this scenarios it is expected that the pledge will be triggered to generate b
 This document refers to this approach as pledge-responder-mode and
 
 * introduces the registrar-agent as new component to facilitate the communication between the pledge and the registrar, as the pledge is in responder mode, and acts as server.
-For the interaction with the domain registrar the registrar-agent will use existing BRSKI {{RFC8995}} endpoints.
+For the interaction with the domain registrar the registrar-agent will use existing BRSKI {{RFC8995}} endpoints as well as additional endpoints defined i this document.
 
 * specifies the interaction (data exchange and data objects) between a pledge acting as server and a registrar-agent and the domain registrar.
 The security is addressed on application layer only to enable usage of arbitrary transport means between the pledge and the domain registrar via the registrar-agent.
@@ -151,10 +151,9 @@ Second, the registrar-agent may not be aware of manufacturer trust anchors to va
 Finally, IDevID do not typically set Extended Key Usage (EKU) for TLS WWW Server authentication.
 
 The inability to effectively do TLS in responder mode is one reason for relying on object security.
-
 Another reason is the application on different transports channels, for which TLS may not be available, such as Bluetooth and NFC.
 
-So, instead of using TLS to provide secure transport between the pledge and the registrar-agent, BRSKI-PRM relies on an additional signature wrapping the pledge enrollment request.
+Therefore, BRSKI-PRM relies on an additional signature wrapping of the exchanged data objects .
 For EST {{RFC7030}} the registrar then needs to do some pre-processing to verify this signature, which is not present in EST.
 
 
@@ -177,6 +176,7 @@ Commissioning tool:
 
 CSR:
 : Certificate Signing Request
+
 EE:
 : End entity
 
@@ -189,7 +189,7 @@ on-site:
 off-site:
 : Describes a component or service or functionality not available within the customer site/domain.
 It may be at a central site or an internet resident "cloud" service.
-The connection may also be a temporary: available only at times when workers are present on a construction side, for instance.
+The connection may also be a temporary and, e.g., only available at times when workers are present on a construction side, for instance.
 
 PER:
 : Pledge-enrollment-request is a signature wrapped CSR, signed by the pledge that requests enrollment to a domain
@@ -213,7 +213,7 @@ RVR:
 : Registrar-Voucher-Request is a request for a voucher signed by the Registrar to the MASA.
 It may contain the PVR received from the pledge.
 
-This document includes many examples that would contain many long sequences of base64 encoded objects with no content directly comprehendable to a human reader.
+This document includes many examples that would contain many long sequences of base64 encoded objects with no content directly comprehensible to a human reader.
 In order to keep them readable the examples use the token "base64encodedvalue==" whenever such a thing occurs.
 This token is in fact valid base64.
 The full examples are in appendix.
@@ -270,7 +270,7 @@ In such a case, limited access to a domain registrar may be allowed in carefully
 
 ### Less Operational Security in the Target-Domain
 
-The registration authority (RA) performing the authorization of a certificate request is a critical PKI component and therefore requires higher operational security than other components utilizing the issued certificates .
+The registration authority (RA) performing the authorization of a certificate request is a critical PKI component and therefore requires higher operational security than other components utilizing the issued certificates.
 CAs may also require higher security in the registration procedures.
 There may be situations in which the customer site/domain does not offer enough security to operate a RA/CA and therefore this service is transferred to a backend that offers a higher level of operational security.
 
@@ -285,7 +285,7 @@ This presents a rendezvous problem: the pledge is unavailable for certain period
 
 # Requirements Discussion and Mapping to Solution-Elements {#req-sol}
 
-Based on the intended target environment described in {{sup-env}} and the application examples described in {{sup-env}} the following requirements are derived to support bootstrapping of pledges in responder mode (acting as server).
+Based on the intended target environment described in {{sup-env}} the following requirements are derived to support bootstrapping of pledges in responder mode (acting as server).
 
 * To facilitate the communication between a pledge in responder mode and registrar, additional functionality is needed either on the registrar or as a stand-alone component.
   This new functionality is defined as registrar-agent and acts as an agent of the registrar to trigger the pledge to generate requests for voucher and enrollment. These requests are than provided by the  registrar-agent to the registrar.
@@ -307,7 +307,7 @@ At least the following properties are required for the voucher and enrollment pr
 * Proof of Identity (POI): provides data-origin authentication of a data object, e.g., a voucher request or an enrollment request, utilizing an existing IDevID.
   Certificate updates may utilize the certificate that is to be updated.
 
-* Proof of Possession (POP): proves that an entity possesses and controls the private key corresponding to the public key contained in the  certification request, typically by adding a signature using the private key to the certification request.
+* Proof of Possession (POP): proves that an entity possesses and controls the private key corresponding to the public key contained in the certification request, typically by adding a signature using the private key to the certification request.
 
 Solution examples based on existing technology are provided with the focus on existing IETF RFCs:
 
@@ -317,17 +317,15 @@ Solution examples based on existing technology are provided with the focus on ex
   The certification request format in BRSKI is PKCS#10 {{RFC2986}}.
   In PKCS#10, the structure is signed to ensure integrity protection and proof of possession of the private key of the requester that corresponds to the contained public key.
   In the application examples, this POP alone is not sufficient.
-  A Proof of Identity (POI) is also required for the certification request and therefore needs to be additionally bound to the existing credential of the pledge (IDevID).
-  This binding supports the authorization decision for the certification request through a proof of identity (POI).
-  The binding of data origin authentication or POI to the certification request may be provided directly by with the certification request.
-  While BRSKI uses the binding to TLS, BRSKI-PRM aims at an additional signature of the PKCS#10  using existing credentials on the pledge (IDevID). This allows the process to be independent of the selected transport.
+  A POI is also required for the certification request and therefore needs to be additionally bound to the existing credential of the pledge (IDevID).
+  This binding supports the authorization decision for the certification request may be provided directly with the certification request.
+  While BRSKI uses the binding to TLS, BRSKI-PRM aims at an additional signature of the PKCS#10 using existing credentials on the pledge (IDevID). This allows the process to be independent of the selected transport.
 
 
 # Architectural Overview {#architecture}
 
-For BRSKI with pledge in responder mode, the base system architecture defined in BRSKI {{RFC8995}} is enhanced to facilitate the new use cases.
+For BRSKI with pledge in responder mode, the base system architecture defined in BRSKI {{RFC8995}} is enhanced to facilitate the new use cases in which the pledge acts as server.
 The pledge-responder-mode allows delegated bootstrapping using a registrar-agent instead of a direct connection between the pledge and the domain registrar.
-As indicated before, the communication model between registrar-agent and pledge assumes that the pledge acts as server and responds to requests.
 
 Necessary enhancements to support authenticated self-contained objects for certificate enrollment are kept at a minimum to enable reuse of already defined architecture elements and interactions.
 
@@ -341,9 +339,7 @@ An abstract overview of the BRSKI-PRM protocol can be found in  {{BRSKI-PRM-abst
 ## Pledge-Responder-Mode (PRM): Registrar-Agent Communication with Pledges {#uc2}
 
 To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer site/domain, this document specifies the exchange of authenticated self-contained objects (the voucher request/response as known from BRSKI and the enrollment request/response as introduced by BRSKI-PRM) with the help of a registrar-agent.
-This allows independence from protection provided by the utilized transport protocol.
 
-The registrar-agent may be implemented as an integrated functionality of a commissioning tool or be co-located with the registrar itself.
 This leads to extensions of the logical components in the BRSKI architecture as shown in {{uc2figure}}.
 Note that the Join Proxy is neglected in the figure as not needed by the registrar-agent.
 The registrar-agent interacts with the pledge to transfer the required data objects for bootstrapping, which are then also exchanged between the registrar-agent and the domain registrar.
@@ -352,7 +348,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 
 * uses existing endpoints were the required functionality is provided
 * enhances existing with new supported media types, e.g., for JWS voucher
-* defines new endpoints were additional functionality is required, e.g., for wrapped certification request or new status information.
+* defines new endpoints were additional functionality is required, e.g., for wrapped certification request, CA certificates, or new status information.
 
 
 ~~~~ aasvg
@@ -408,13 +404,14 @@ The following list describes the components in a (customer) site domain:
 
 * Registrar-agent: provides a communication path to exchange data objects between the pledge and the domain registrar.
   The registrar-agent brokers in situations in which the domain registrar is not directly reachable by the pledge.
-This may be due to a different technology stack or due to missing connectivity.
+  This may be due to a different technology stack or due to missing connectivity.
   The registrar-agent triggers a pledge to create bootstrapping artifacts such as the voucher-request and the enrollment-request on one or multiple pledges and performs a (bulk) bootstrapping based on the collected data.
   The registrar-agent is expected to possess information about the domain registrar: the registrar EE certificate, LDevID(CA) certificate, IP address, either by configuration or by using the discovery mechanism defined in {{RFC8995}}.
   There is no trust assumption between the pledge and the registrar-agent as only authenticated self-contained objects are used, which are transported via the registrar-agent and provided either by the pledge or the registrar.
   The trust assumption between the registrar-agent and the registrar is based on the LDevID of the registrar-agent, provided by the PKI responsible for the domain.
   This allows the registrar-agent to authenticate towards the registrar, e.g., in a TLS handshake.
-  Based on this, the registrar is able to distinguish a pledge from a registrar-agent during the session establishment and also to verify that the registrar-agent is authorized to perform the bootstrapping of the distinct pledge.
+  Based on this, the registrar is able to distinguish a pledge from a registrar-agent during the TLS session establishment and also to verify that the registrar-agent is authorized to perform the bootstrapping of the distinct pledge.
+  The registrar-agent may be implemented as an integrated functionality of a commissioning tool or be co-located with the registrar itself.
 
 * Join Proxy (not shown): same functionality as described in {{RFC8995}} if needed.
   Note that a registrar-agent may use a join proxy to facilitate the TLS connection to the registrar, in the same way that a BRSKI pledge would use a join proxy. This is useful in cases where the registrar-agent does not have full IP connectivity via the domain network, or cases where it has no other means to locate the registrar on the network.
@@ -426,28 +423,27 @@ This may be due to a different technology stack or due to missing connectivity.
 * The manufacturer provided components/services (MASA and Ownership tracker) are used as defined in {{RFC8995}}.
 For issuing a voucher, the MASA may perform additional checks on a voucher-request, to issue a voucher indicating agent-proximity instead of (registrar-)proximity.
 
+
 ## Agent-Proximity Assertion {#agt_prx}
 
-
 "Agent-proximity" is a statement, that the proximity registrar certificate was provided via the registrar-agent as defined in {{exchanges_uc2}} and not directly to the pledge.
-"Agent-proximity" is a weaker assertion then "proximity".
+"Agent-proximity" is therefore a weaker assertion then "proximity".
 It is defined as additional assertion type in {{I-D.ietf-anima-rfc8366bis}}.
 This can be verified by the registrar and also by the MASA during the voucher-request processing.
 Note that at the time of creating the voucher-request, the pledge cannot verify the registrar's registrar EE  certificate and has no proof-of-possession of the corresponding private key for the certificate.
-The pledge therefore accepts the registrar EE certificate provisionally until it receives the voucher as described in  {{exchanges_uc2_3}}.
+The pledge therefore accepts the registrar EE certificate provisionally until it receives the voucher as described in {{exchanges_uc2_3}}.
 See also {{RFC8995}} "PROVISIONAL accept of server cert".
 
 Trust handover to the domain is established via the "pinned-domain-certificate" in the voucher.
 
 In contrast to the above, "proximity" provides a statement, that the pledge was in direct contact with the registrar and was able to verify proof-of-possession of the private key in the context of the TLS handshake.
 The provisionally accepted registrar EE certificate can be verified after the voucher has been processed by the pledge.
-As the returned voucher includes an additional signature by the registrar, the pledge can also verify that the registrar possesses the corresponding private key.
+As the returned voucher includes an additional signature by the registrar as defined in {{exchanges_uc2_2_vs}}, the pledge can also verify that the registrar possesses the corresponding private key.
+
 
 ## Behavior of Pledge in Pledge-Responder-Mode {#pledge_ep}
 
-In contrast to BRSKI the pledge acts as server.
-
-This is triggered by the registrar-agent to generate the PVR and PER as well as for the processing of the responses and the generation of status information.
+The pledge is triggered by the registrar-agent to generate the PVR and PER as well as for the processing of the responses and the generation of status information.
 Due to the use of the registrar-agent, the interaction with the domain registrar is changed as shown in {{exchangesfig_uc2_1}}.
 To enable interaction with the registrar-agent, the pledge provides endpoints using the BRSKI defined endpoints based on the "/.well-known/brski" URI tree.
 
@@ -458,25 +454,24 @@ Operations and their corresponding URIs:
 
 | Operation                  |Operation path              | Details |
 |:---------------------------|:---------------------------|:--------|
-| Trigger pledge-voucher-request creation Returns PVR| /pledge-voucher-request    | {{exchanges_uc2_1}}  |
+| Trigger pledge-voucher-request creation - Returns PVR| /pledge-voucher-request | {{exchanges_uc2_1}}  |
 |------------------------
-| Trigger pledge-enrollment-request Returns PER | /pledge-enrollment-request | {{exchanges_uc2_1}} |
+| Trigger pledge-enrollment-request - Returns PER | /pledge-enrollment-request | {{exchanges_uc2_1}} |
 |------------------------
-| Provide voucher to pledge Returns pledge-voucher-status | /pledge-voucher  | {{exchanges_uc2_3}}   |
+| Provide voucher to pledge - Returns pledge-voucher-status | /pledge-voucher | {{exchanges_uc2_3}} |
 |------------------------
-| Provide enrollment response to pledge Returns pledge-enrollment-status | /pledge-enrollment         | {{exchanges_uc2_3}}   |
+| Provide enrollment response to pledge - Returns pledge-enrollment-status | /pledge-enrollment | {{exchanges_uc2_3}}   |
 |------------------------
-| Provide CA certs to pledge | /pledge-CACerts            | {{exchanges_uc2_3}} |
+| Provide CA certs to pledge | /pledge-CACerts | {{exchanges_uc2_3}} |
 |------------------------
-| Query bootstrapping status of pledge       | /pledge-bootstrap-status   | {{exchanges_uc2_5}} |
+| Query bootstrapping status of pledge - Returns pledge-status  | /pledge-bootstrap-status   | {{exchanges_uc2_5}} |
 |===============
 {: #eppfigure title='Endpoints on the pledge' }
 
 
 ## Behavior of Registrar-Agent
 
-The registrar-agent is a new component in the BRSKI context.
-It provides connectivity between the pledge and the domain registrar and reuses the endpoints of the domain registrar side already specified in {{RFC8995}}.
+The registrar-agent as a new component provides connectivity between the pledge and the domain registrar and reuses the endpoints of the domain registrar side already specified in {{RFC8995}}.
 It facilitates the exchange of data between the pledge and the domain registrar, which are the voucher request/response, the enrollment request/response, as well as related telemetry and status information.
 For the communication with the pledge the registrar-agent utilizes communication endpoints provided by the pledge.
 The transport in this specification is based on HTTP but may also be done using other transport mechanisms.
@@ -486,14 +481,14 @@ For authentication to the domain registrar, the registrar-agent uses its LDevID(
 The provisioning of the registrar-agent LDevID is out of scope for this document, but may be done in advance using a separate BRSKI run or by other means like configuration.
 It is recommended to use short lived registrar-agent LDevIDs in the range of days or weeks as outlined in {{sec_cons_reg-agt}}.
 
-The registrar-agent will use this LDevID(RegAgt) when establishing the TLS session with the domain registrar for TLS client authentication.
+The registrar-agent will use its LDevID(RegAgt) when establishing a TLS session with the domain registrar for TLS client authentication.
 The LDevID(RegAgt) certificate MUST include a SubjectKeyIdentifier (SKID), which is used as reference in the context of an agent-signed-data object as defined in {{exchanges_uc2_1}}.
 Note that this is an additional requirement for issuing the certificate, as {{IEEE-802.1AR}} only requires the SKID to be included for intermediate CA certificates.
-(Note that {{RFC8995}} makes a similar requirement)
+{{RFC8995}} makes a similar requirement.
 In BRSKI-PRM, the SKID is used in favor of a certificate fingerprint to avoid additional computations.
 
 Using an LDevID for TLS client authentication of the registrar-agent is a deviation from {{RFC8995}}, in which the pledge's IDevID credential is used to perform TLS client authentication.
-The use of the LDevID(RegAgt) allows the domain registrar to distinguish, if bootstrapping is initiated from a pledge or from a registrar-agent and adopt different internal handling accordingly.
+The use of the LDevID(RegAgt) allows the domain registrar to distinguish, if bootstrapping is initiated from a pledge or from a registrar-agent and to adopt different internal handling accordingly.
 If a registrar detects a request that originates from a registrar-agent it is able to switch the operational mode from BRSKI to BRSKI-PRM.
 This may be supported by a specific naming in the SAN (subject alternative name) component of the LDevID(RegAgt) certificate.
 Alternatively, the domain may feature a CA specifically for issuing registrar-agent LDevID certificates.
@@ -502,8 +497,8 @@ This allows the registrar to detect registrar-agents based on the issuing CA.
 As BRSKI-PRM uses authenticated self-contained data objects between the pledge and the domain registrar, the binding of the pledge identity to the requests is provided by the data object signature employing the pledge's IDevID.
 The objects exchanged between the pledge and the domain registrar used in the context of this specifications are JOSE objects.
 
-In addition to the LDevID(RegAgt), the registrar-agent is provided with the product-serial-numbers of the pledges to be bootstrapped.
-This is necessary to allow the discovery of pledges by the registrar-agent using mDNS (see {{discovery_uc2_ppa}})
+In addition to the LDevID(RegAgt), the registrar-agent is provided with the product-serial-number(s) of the pledge(s) to be bootstrapped.
+This is necessary to allow the discovery of pledge(s) by the registrar-agent using mDNS (see {{discovery_uc2_ppa}})
 The list may be provided by administrative means or the registrar agent may get the information via an interaction with the pledge.
 For instance, {{RFC9238}} describes scanning of a QR code, the product-serial-number would be initialized from the 12N B005 Product Serial Number.
 
@@ -534,7 +529,7 @@ The registrar-agent MAY use
 * "product-serial-number._brski-pledge._tcp.local", to discover a specific pledge, e.g., when connected to a local network.
 * "_brski-pledge._tcp.local" to get a list of pledges to be bootstrapped.
 
-A manufacturer may allow the pledge to react on mDNS discovery without his product-serial-number contained. This allows a commissioning tool to discover pledges to be bootstrapped in the domain. The manufactuere may opt out of this functionality as outlined in {{sec_cons_mDNS}}.
+A manufacturer may allow the pledge to react on mDNS discovery without his product-serial-number contained. This allows a commissioning tool to discover pledges to be bootstrapped in the domain. The manufacturer may opt out of this functionality as outlined in {{sec_cons_mDNS}}.
 
 To be able to detect the pledge using mDNS, network connectivity is required.
 For Ethernet it is provided by simply connecting the network cable.
@@ -562,12 +557,13 @@ This enables the registrar to verify and log, which registrar-agent was in conta
 The registrar MUST fetch the LDevID(RegAgt) certificate based on the SubjectKeyIdentifier (SKID) in the header of the agent-signed-data from the PVR.
 The registrar includes the LDevID(RegAgt) certificate information into the RVR if the PVR asked for the assertion "agent-proximity".
 
-The MASA in turn verifies the registrar EE certificate is included in the PVR ("prior-signed-voucher-request" of RVR) in the "agent-provided-proximity-registrar-certificate" leaf 
+The MASA in turn verifies the registrar EE certificate is included in the PVR ("prior-signed-voucher-request" of RVR) in the "agent-provided-proximity-registrar-certificate" leaf
 and may assert the PVR as "verified" or "logged" instead of "proximity", as there is no direct connection between the pledge and the registrar.
 
 In addition, the MASA can state the assertion "agent-proximity" as follows:
 The MASA can verify the signature of the agent-signed-data contained in the prior-signed-voucher-request, based on the provided LDevID(RegAgt) certificate in the "agent-sign-cert" leaf of the RVR.
-If both can be verified successfully, the MASA can assert "agent-proximity" in the voucher. Otherwise, it may assert "verified" or "logged".
+If both can be verified successfully, the MASA can assert "agent-proximity" in the voucher.
+
 Depending on the MASA verification policy, it may also respond with a suitable 4xx or 5xx status code as described in section 5.6 of {{RFC8995}}.
 The voucher then can be supplied via the registrar to the registrar-agent.
 
@@ -642,18 +638,15 @@ The voucher then can be supplied via the registrar to the registrar-agent.
 ~~~~
 {: #exchangesfig_uc2_all title='Overview pledge-responder-mode exchanges' artwork-align="left"}
 
-The following sub sections split the interactions between the different components into:  
-TODO: final check and rework section overview  
+The following sub sections split the interactions between the different components into:
 
-* {{exchanges_uc2_1}} describes data exchanged between the registrar-agent and the pledge. - TODO
+* {{exchanges_uc2_1}} describes the request object acquisition by the registrar-agent from pledge.
 
-* {{exchanges_uc2_2}} describes data exchanged between the registrar-agent and the registrar and also the interaction of the registrar with the MASA and the domain CA. - TODO
+* {{exchanges_uc2_2}} describes the request object processing initiated by the registrar-agent to the registrar and also the interaction of the registrar with the MASA and the domain CA including the response object processing by these entities.
 
-* {{exchanges_uc2_3}} describes data exchanged between the registrar-agent and the pledge including the status information. - TODO
+* {{exchanges_uc2_3}} describes the supply of response objects between the registrar-agent and the pledge including the status information.
 
-* {{exchanges_uc2_4}} describes the telemetry and status handling and addresses the exchanges between the registrar-agent and the registrar. - TODO
-
-* {{exchanges_uc2_5}} describes the general status handling and addresses the exchanges between the registrar-agent and the registrar. - TODO
+* {{exchanges_uc2_5}} describes the general status handling and addresses corresponding exchanges between the registrar-agent and the registrar.
 
 
 ## Request Objects Acquisition by Registrar-Agent from Pledge {#exchanges_uc2_1}
@@ -702,7 +695,7 @@ Preconditions:
 
 Note: The registrar-agent may trigger the pledge for the PVR or the PER or both. It is expected that this will be aligned with a service technician workflow, visiting and installing each pledge.
 
-### Pledge-Voucher-Request (PVR) - Trigger 
+### Pledge-Voucher-Request (PVR) - Trigger
 
 Triggering the pledge to create the PVR is done using HTTP POST on the defined pledge endpoint: "/.well-known/brski/pledge-voucher-request"
 
@@ -810,7 +803,7 @@ The ietf-voucher-request:voucher is enhanced with additional parameters:
 
 * agent-signed-data: MUST contain the base64-encoded agent-signed-data (as defined in {{asd}}) and provided as trigger parameter.
 
-The enhancements of the YANG module for the ietf-voucher-request with these new leafs are defined in {{voucher-request-prm-yang}}.
+The enhancements of the YANG module for the ietf-voucher-request with these new leaves are defined in {{voucher-request-prm-yang}}.
 
 The PVR is signed using the pledge's IDevID credential contained as x5c parameter of the JOSE header.
 
@@ -840,7 +833,10 @@ The PVR is signed using the pledge's IDevID credential contained as x5c paramete
 # Decoded "JWS Protected Header" Representation in JSON syntax
 {
     "alg": "ES256",
-    "kid": "base64encodedvalue==",
+    "x5c": [
+      "base64encodedvalue==",
+      "base64encodedvalue=="
+    ],
     "typ": "voucher-jws+json"
 }
 ~~~~
@@ -848,11 +844,11 @@ The PVR is signed using the pledge's IDevID credential contained as x5c paramete
 
 The PVR Content-Type is defined in {{I-D.ietf-anima-jws-voucher}} as `application/voucher-jws+json`.
 
-The pledge SHOULD include this Content-Type header field indicating the included media type for the voucher response.
+The pledge SHOULD include this Content-Type header field indicating the included media type for the PVR.
 Note that this is also an indication regarding the acceptable format of the voucher response.
 This format is included by the registrar as described in {{exchanges_uc2_2}}.
 
-### Pledge-Enrollment-Request (PER) - Trigger 
+### Pledge-Enrollment-Request (PER) - Trigger
 
 Once the registrar-agent has received the PVR it can trigger the pledge to generate a PER.
 As in BRSKI the PER contains a PKCS#10, but additionally signed using the pledge's IDevID.
@@ -861,7 +857,7 @@ Note, as the initial enrollment aims to request a generic certificate, no certif
 Triggering the pledge to create the enrollment-request is done using HTTP POST on the defined pledge endpoint: "/.well-known/brski/pledge-enrollment-request"
 
 The registrar-agent PER trigger Content-Type header is: `application/json` with an empty body by default.
-Note that using HTTP POST allows for an empty body, but also to provide additional data, like CSR attributes or information about the enroll type "enroll-generic-cert" or "reenroll-generic-cert".
+Note that using HTTP POST allows for an empty body, but also to provide additional data, like CSR attributes or information about the enroll type "enroll-generic-cert" or "re-enroll-generic-cert".
 The "enroll-generic-cert" case is shown in {{raer}}.
 
 ~~~~
@@ -872,7 +868,7 @@ The "enroll-generic-cert" case is shown in {{raer}}.
 {: #raer title='Example of trigger to create a PER' artwork-align="left"}
 
 
-### Pledge-Enrollment-Request (PER) - Response 
+### Pledge-Enrollment-Request (PER) - Response
 
 In the following the enrollment is described as initial enrollment with an empty HTTP POST body.
 
@@ -884,7 +880,7 @@ Here, a JOSE object is being created in which the body utilizes the YANG module 
 Depending on the capability of the pledge, it constructs the enrollment request (PER) as plain PKCS#10.
 Note, the focus in this use case is placed on PKCS#10 as PKCS#10 can be transmitted in different enrollment protocols in the infrastructure like EST, CMP, CMS, and SCEP.
 If the pledge has already implemented an enrollment protocol, it may leverage that functionality for the creation of the CSR.
-Note, {{I-D.ietf-netconf-sztp-csr}} also allows for inclusion of certification requests in different formats such as CMP or CMC.
+Note, {{I-D.ietf-netconf-sztp-csr}} also allows for inclusion of certification requests in different formats used by CMP or CMC.
 
 The pledge SHOULD construct the PER as PKCS#10.
 In BRSKI-PRM it MUST sign it additionally with its IDevID credentials to provide proof-of-identity bound to the PKCS#10 as described below.
@@ -906,7 +902,7 @@ The registrar-agent SHALL use the endpoints specified in this document.
 
 {{I-D.ietf-netconf-sztp-csr}} considers PKCS#10 but also CMP and CMC as certification request format. Note that the wrapping signature is only necessary for plain PKCS#10 as other request formats like CMP and CMS support the signature wrapping as part of their own certificate request format.
 
-The registrar-agent enrollment-request Content-Type header for a wrapped PKCS#10 is: `application/jose+json`
+The registrar-agent enrollment-request Content-Type header for a signature-wrapped PKCS#10 is: `application/jose+json`
 
 The header of the pledge enrollment-request SHALL contain the following parameter as defined in {{RFC7515}}:
 
@@ -944,10 +940,10 @@ The JOSE object is signed using the pledge's IDevID credential, which correspond
   "alg": "ES256",
   "x5c": [
     "base64encodedvalue==",
-    "base64encodedvalue==",
+    "base64encodedvalue=="
+  ],
   "crit":["created-on"],
   "created-on": "2022-09-13T00:00:02.000Z"
-  ]
 }
 ~~~~
 {: #per title='Representation of PER' artwork-align="left"}
@@ -962,7 +958,7 @@ As the registrar-agent is intended to facilitate communication between the pledg
 This allows bulk bootstrapping of several pledges using the same connection between the registrar-agent and the domain registrar.
 
 
-## Request Object Handling initiated by the Registrar-Agent to Registrar {#exchanges_uc2_2}
+## Request Object Handling initiated by the Registrar-Agent on Registrar, MASA and Domain CA {#exchanges_uc2_2}
 
 The BRSKI-PRM bootstrapping exchanges between registrar-agent and domain registrar resemble the BRSKI exchanges between pledge and domain registrar (pledge-initiator-mode) with some deviations.
 
@@ -977,7 +973,7 @@ Preconditions:
 
 * MASA: possesses it's own vendor/manufacturer credentials (voucher signing key, TLS server certificate) related to pledges IDevID and MAY possess the site-specific domain CA certificate.
   The latter is only necessary if the MASA needs to verify that the domain of the Registrar is a-priori authorized to enroll a particular pledge, or a particular type of pledge.
-  In such case, how the MASA will obtain the domain CA certificate is out of scope in this document.
+  In such case is out of scope of this document how the MASA will obtain the domain CA certificate.
   In other cases, a MASA may allow the pledge to enroll into an anonymous and/or yet-unknown domain and then the a-priori possession of the domain CA certificate is not needed.
 
 ~~~~ aasvg
@@ -1027,12 +1023,13 @@ TLS 1.2 or newer is REQUIRED on the registrar-agent side.
 TLS 1.3 (or newer) SHOULD be available on the registrar, but TLS 1.2 MAY be used.
 TLS 1.3 (or newer) SHOULD be available on the MASA, but TLS 1.2 MAY be used.
 
-### Connection Establishment (Registrar-Agent to Registrar) 
+
+### Connection Establishment (Registrar-Agent to Registrar)
 
 In contrast to BRSKI {{RFC8995}} TLS client authentication to the registrar is achieved by using registrar-agent LDevID(RegAgt) credentials instead of pledge IDevID credentials.
 Consequently BRSKI (pledge-initiator-mode) is distinguishable from BRSKI-PRM (pledge-responder-mode) by the registrar.
 The registrar SHOULD verify that the registrar-agent is authorized to establish a connection to the registrar by TLS client authentication using LDevID(RegAgt) credentials.
-If the connection form registrar-agent to registrar is established, the authorization SHALL be verified again based on agent-signed-data contained in the PVR.
+If the connection from registrar-agent to registrar is established, the authorization SHALL be verified again based on agent-signed-data contained in the PVR.
 This ensures that the pledge has been triggered by an authorized registrar-agent.
 
 The registrar can receive request objects in different formats as defined in {{RFC8995}}.
@@ -1045,7 +1042,8 @@ The Content-Type header field for JSON-in-JWS PVR is: `application/voucher-jws+j
 The registrar-agent SHOULD set the Accept field in the request-header indicating the acceptable Content-Type for the voucher-response.
 The voucher-response Content-Type header field SHOULD be set to `application/voucher-jws+json` as defined in {{I-D.ietf-anima-jws-voucher}}.
 
-### Pledge-Voucher-Request (RVR) Processing by Registrar  
+
+### Pledge-Voucher-Request (RVR) Processing by Registrar
 
 After receiving the PVR from registrar-agent, the registrar SHALL perform the verification as defined in section 5.3 of {{RFC8995}}.
 In addition, the registrar SHALL verify the following parameters from the PVR:
@@ -1065,7 +1063,8 @@ HTTP 406 Not Acceptable status code SHOULD be used if the Content-Type indicated
 If the validation succeeds, the registrar SHOULD accept the PVR to join the domain as defined in section 5.3 of {{RFC8995}}.
 The registrar then establishes a TLS connection to MASA as described in section 5.4 of {{RFC8995}} to obtain a voucher for the pledge.
 
-### Registrar-Voucher-Request (RVR) Processing (Registrar to MASA)   
+
+### Registrar-Voucher-Request (RVR) Processing (Registrar to MASA)
 
 The registrar SHALL construct the payload of the RVR as defined in {{RFC8995}}.
 The RVR encoding SHALL be JSON-in-JWS as defined in {{I-D.ietf-anima-jws-voucher}}.
@@ -1092,7 +1091,7 @@ The payload of the RVR MUST contain the following parameter as part of the vouch
 
 * prior-signed-voucher-request: PVR as in {{RFC8995}}
 
-The RVR can be enhanced optionally with the following parameter as defined in {{voucher-request-prm-yang}}:
+The RVR MUST be enhanced with the following parameter, when the assertion "agent-proximity" is requested, as defined in {{voucher-request-prm-yang}}:
 
 * agent-sign-cert: LDevID(RegAgt) certificate or the LDevID(RegAgt) certificate including certificate chain.
   In the context of this document it is a JSON array of base64encoded certificate information and handled in the same way as x5c header objects.
@@ -1168,9 +1167,8 @@ In addition, the following processing SHALL be performed for PVR contained in RV
   Note: Sub-CA certificate(s) MUST also be carried by "agent-sign-cert", in case the LDevID(RegAgt) certificate is issued by a sub-CA and not the domain CA known to the MASA.
   As the "agent-sign-cert" field is defined as array (x5c), it can handle multiple certificates.
 
-
 If validation fails, the MASA SHOULD respond with an HTTP 4xx client error status code to the registrar.
-The HTTP error status codes are kept the same as defined in section 5.6 of {{RFC8995}}, <!-- XXX -->and comprise the codes: 403, 404, 406, and 415.
+The HTTP error status codes are kept the same as defined in section 5.6 of {{RFC8995}} and comprise the codes: 403, 404, 406, and 415.
 
 ### Voucher Issuance by MASA
 
@@ -1214,17 +1212,17 @@ The voucher syntax is described in detail by {{RFC8366}}. {{MASA-vr}} shows an e
 
 The MASA returns the voucher-response (voucher) to the registrar.
 
-### MASA issued Voucher Processing by Registrar
+### MASA issued Voucher Processing by Registrar {#exchanges_uc2_2_vs}
 
 After receiving the voucher the registrar SHOULD evaluate it for transparency and logging purposes as outlined in section 5.6 of {{RFC8995}}.
-The registrar MUST add an additional signature to the MASA provided voucher, by signing it using its registrar credentials.
-The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credentials (see{{RFC7515}}, section 5.2 point 8. 
-The x5c component of the "JWS Protected Header" MUST contain registrar EE certificate as well as potential intermediate CA certificates up to the pinned domain certificate. 
+The registrar MUST add an additional signature to the MASA provided voucher using its registrar credentials.
+The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credentials (see{{RFC7515}}, section 5.2 point 8.
+The x5c component of the "JWS Protected Header" MUST contain registrar EE certificate as well as potential intermediate CA certificates up to the pinned domain certificate.
 The pinned domain certificate is already contained in the voucher payload ("pinned-domain-cert").
 
 This signature provides a proof of possession of the private key corresponding to the registrar EE certificate the pledge received in the trigger for the PVR (see {{pavrt}}).
-The registrar MUST use the same registrar EE credentials used for authentication in the TLS handshake to authenticate towards the registrar-agent. 
-This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher request as also transferred in the PVR in the "agent-provided-proximity-registrar-cert". 
+The registrar MUST use the same registrar EE credentials used for authentication in the TLS handshake to authenticate towards the registrar-agent.
+This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher request as also transferred in the PVR in the "agent-provided-proximity-registrar-cert".
 {{MASA-REG-vr}} below provides an example of the voucher with two signatures.
 
 ~~~~
@@ -1275,7 +1273,7 @@ This ensures that the same registrar EE certificate can be used to verify the si
 ~~~~
 {: #MASA-REG-vr title='Representation of MASA issued voucher with additional registrar signature' artwork-align="left"}
 
-Depending on the security policy of the operator, this signature can also be interpreted by the pledge explicit authorization of the registrar to install the contained trust anchor.
+Depending on the security policy of the operator, this signature can also be interpreted by the pledge as explicit authorization of the registrar to install the contained trust anchor.
 The registrar sends the voucher to the registrar-agent.
 
 ### Pledge-Enrollment-Request (PER) Processing (Registrar-Agent to Registrar)
@@ -1315,9 +1313,9 @@ As the pledge will verify it own certificate LDevID certificate when received, i
 This is done in EST {{RFC7030}} using the "/.well-known/est/cacerts" endpoint, which provides the CA certificates over a TLS protected connection.
 BRSKI-PRM requires a signature wrapped CA certificate object, to avoid that the pledge can be provided with arbitrary CA certificates in an authorized way.
 The registrar signed CA certificate object will allow the pledge to verify the authorization to install the received CA certificate(s).
-As the CA certificate(s) are provided to the pledge after the voucher, the pledge has the required information to verify the wrapped CA certificate object.
+As the CA certificate(s) are provided to the pledge after the voucher, the pledge has the required information (the domain certificate) to verify the wrapped CA certificate object.
 
-To support registrar-agent requesting a signature wrapped CA certificate(s) object, a new endpoint for BRSKI-PRM is defined on the registrar: "/.well-known/brski/wrappedcacerts"
+To support registrar-agents requesting a signature wrapped CA certificate(s) object, a new endpoint for BRSKI-PRM is defined on the registrar: "/.well-known/brski/wrappedcacerts"
 
 The registrar-agent SHALL requests the EST CA trust anchor database information (in form of CA certificates) by HTTP GET.
 
@@ -1328,7 +1326,7 @@ The additional processing is to sign the CA certificate(s) information using the
 This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certificates are provided as base64 encoded "x5b" in the JWS payload.
 
 ~~~~
-# The CA certificates data with additional registrar signaturer in
+# The CA certificates data with additional registrar signature in
   General JWS Serialization syntax
 {
   "payload": "BASE64URL(certs)",
@@ -1345,7 +1343,7 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
   "x5b": [
     "base64encodedvalue==",
     "base64encodedvalue=="
-  ] TODO: check rename "x5b" to more explanatory e.g. "ca-certs-x5b"?
+  ]
 }
 
 
@@ -1362,12 +1360,12 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
 
 ## Response Object Supply by Registrar-Agent to Pledge {#exchanges_uc2_3}
 
-It is assumed that the registrar-agent already obtained the bootstrapping response objects from the domain registrar and can supply them to the pledge: 
-* voucher-response - Voucher (from MASA via Registrar)  
+It is assumed that the registrar-agent already obtained the bootstrapping response objects from the domain registrar and can supply them to the pledge:
+* voucher-response - Voucher (from MASA via Registrar)
 * wrapped-CA-certificate(s)-response - CA certificates
 * enrollment-response - LDevID(Pledge) certificate (from CA via Registrar)
 
-It will re-start the interaction with the pledge.
+The registrar-agent will re-connect to the pledge.
 To contact the pledge, it may either discover the pledge as described in {{discovery_uc2_ppa}} or use stored information from the first contact with the pledge.
 
 Preconditions in addition to {{exchanges_uc2_2}}:
@@ -1403,7 +1401,7 @@ Preconditions in addition to {{exchanges_uc2_2}}:
 
 The registrar-agent provides the information via distinct pledge endpoints as following.
 
-### Pledge: Voucher Response Processing 
+### Pledge: Voucher Response Processing
 
 The registrar-agent SHALL send the voucher-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-voucher".
 
@@ -1413,16 +1411,16 @@ A nonceless voucher may be accepted as in {{RFC8995}} and may be allowed by a ma
 
 To perform the validation of multiple signatures on the voucher object, the pledge SHALL perform the signature verification in the following order:
 
-  1. Verify MASA signature as described in section 5.6.1 in {{RFC8995}} 
+  1. Verify MASA signature as described in section 5.6.1 in {{RFC8995}}
   2. Install trust anchor contained in the voucher ("pinned-domain-cert")  provisionally
   3. Verify registrar signature as described in section 5.6.1 in {{RFC8995}}, but take the registrar certificate instead of the MASA certificate for the verification
-  4. Validate the registrar certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert"), including validity and authorization to bootstrap the particular pledge.
+  4. Validate the registrar certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert").
 
 If all steps stated above have been performed successfully, the pledge SHALL terminate the "PROVISIONAL accept" state for the domain trust anchor and the registrar EE certificate.
 
 If an error occurs during the verification and validation of the voucher, this SHALL be reported in the reason field of the pledge voucher status.
 
-### Pledge: Voucher Status Telemetry 
+### Pledge: Voucher Status Telemetry
 
 After voucher verification and validation the pledge MUST reply with a status telemetry message as defined in section 5.7 of {{RFC8995}}.
 The pledge generates the voucher-status and provides it as signed JSON-in-JWS object in response to the registrar-agent.
@@ -1466,7 +1464,7 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
 {: #vstat title='Representation of pledge voucher status telemetry' artwork-align="left"}
 
 
-### Pledge: Wrapped-CA-Certificate(s) Processing 
+### Pledge: Wrapped-CA-Certificate(s) Processing
 
 The registrar-agent SHALL provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-CAcerts".
 
@@ -1481,23 +1479,23 @@ If validation of the wrapping signature or another security check fails, the ple
 The HTTP 415 Unsupported Media Type status code SHOULD be used, if the Content-Type of the request is in an unknown or unsupported format.
 The HTTP 400 Bad Request status code SHOULD be used, if the pledge detects errors in the encoding of the payload.
 
-### Pledge: Enrollment Response Processing 
+### Pledge: Enrollment Response Processing
 
 The registrar-agent SHALL send the enroll-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-enrollment".
 
-The registrar-agent enroll-response Content-Type header, when using EST {{RFC7030}} as enrollment protocol between the registrar-agent and the infrastructure is: `application/pkcs7-mime`. 
+The registrar-agent enroll-response Content-Type header, when using EST {{RFC7030}} as enrollment protocol between the registrar-agent and the infrastructure is: `application/pkcs7-mime`.
 Note: It only contains the LDevID certificate for the pledge, not the certificate chain.
 
 Upon reception, the pledge SHALL verify the received LDevID certificate.
-The pledge SHALL generate the enroll status and provide it in response to the registrar-agent. 
+The pledge SHALL generate the enroll status and provide it in the response to the registrar-agent.
 If the verification of the LDevID certificate succeeds, the status SHALL be set to true, otherwise to FALSE.
 
-### Pledge: Enrollment Status Telemetry 
+### Pledge: Enrollment Status Telemetry
 
 The pledge MUST reply with a status telemetry message as defined in section 5.9.4 of {{RFC8995}}.
 As for the other objects, the enroll-status is signed and results in a JSON-in-JWS object.
 If the pledge verified the received LDevID certificate successfully it SHALL sign the response using its new LDevID credentials as shown in {{estat}}.
-In the failure case, the pledge SHALL use the available IdevID credentials.
+In the failure case, the pledge SHALL use the available IDevID credentials.
 As the reason field is optional, it MAY be omitted in case of success.
 
 The response has the Content-Type `application/jose+json`.
@@ -1593,7 +1591,7 @@ The registrar-agent sends the pledge enroll status without modification to the r
 The Content-Type header is kept as `application/jose+json` as described in {{exchangesfig_uc2_3}} and depicted in the example in {{estat}}.
 
 The registrar MUST verify the signature of the pledge enroll status.
-Also, the registrar SHALL validate that the pledge belongs to an accepted device in his domain based on the contained product-serial-number in the LDevID certificate referenced in the header of the enroll status.
+Also, the registrar SHALL validate that the pledge is an accepted device in his domain based on the contained product-serial-number in the LDevID certificate referenced in the header of the enroll status.
 The registrar SHOULD log this event.
 In case the pledge enroll status indicates a failure, the pledge was unable to verify the received LDevID certificate and therefore signed the enroll status with its IDevID credential.
 Note that the verification of a signature of the status information is an addition to the described handling in section 5.9.4 of {{RFC8995}}.
@@ -1612,7 +1610,7 @@ The pledge MAY provide a dedicated endpoint to accept status-requests.
 
 Preconditions:
 
-* Registrar-agent: possesses LDevID (RegAgt), list of serial numbers of pledges to be queried and a list of corresponding manufacturer trust anchors to be able to verify signatures with the IDevID credential.
+* Registrar-agent: possesses LDevID (RegAgt), list of serial numbers of pledges to be queried and a list of corresponding manufacturer trust anchors to be able to verify signatures performed with the IDevID credential.
 * Pledge: may already possess domain credentials and LDevID(Pledge), or may not possess one or both of these.
 
 
@@ -1630,7 +1628,7 @@ Preconditions:
 ~~~~
 {: #exchangesfig_uc2_5 title='Pledge-status handling between registrar-agent and pledge' artwork-align="left"}
 
-### Pledge-Status - Trigger (Registrar-Agent to Pledge) 
+### Pledge-Status - Trigger (Registrar-Agent to Pledge)
 
 The registrar-agent requests the pledge-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/pledge-status"
 
@@ -1656,8 +1654,8 @@ A pledge or a registrar-agent that receives a pledge-status request with a versi
 {: #stat_req_def title='CDDL for pledge-status request' artwork-align="left"}
 
 The status-type defined for BRSKI-PRM is "bootstrap".
-This indicates the pledge to provide current status information regarding the bootstrapping status (voucher processing and the enrollment of the pledge into the new domain).
-As pledge-status request is defined generic, it may be used by other specifications to request further status information, e.g., for onboarding to get further information about enrollment of application specific LDevIDs or other parameters.
+This indicates the pledge to provide current status information regarding the bootstrapping status (voucher processing and enrollment of the pledge into the new domain).
+As the pledge-status request is defined generic, it may be used by other specifications to request further status information, e.g., for onboarding to get further information about enrollment of application specific LDevIDs or other parameters.
 This is out of scope for this specification.
 
 {{stat_req}} below shows an example for querying pledge-status using status-type bootstrap.
@@ -1695,7 +1693,7 @@ This is out of scope for this specification.
 ~~~~
 {: #stat_req title='Example of registrar-agent request of pledge-status using status-type bootstrap' artwork-align="left"}
 
-### Pledge-Status - Response (Pledge - Registrar-Agent)  
+### Pledge-Status - Response (Pledge - Registrar-Agent)
 
 If the pledge receives the pledge-status request with status-type "bootstrap" it SHALL react with a status response message based on the telemetry information described in section {{exchanges_uc2_3}}.
 
@@ -2033,7 +2031,7 @@ IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with
 
 # Privacy Considerations
 
-In general, the security considerations of {{RFC8995}} apply for BRSKI-PRM also.
+In general, the privacy considerations of {{RFC8995}} apply for BRSKI-PRM also.
 Further privacy aspects need to be considered for:
 
 * the introduction of the additional component registrar-agent
@@ -2041,7 +2039,7 @@ Further privacy aspects need to be considered for:
 
 The credential used by the registrar-agent to sign the data for the pledge should not contain any personal information.
 Therefore, it is recommended to use an LDevID certificate associated with the commissioning device instead of an LDevID certificate associated with the service technician operating the device.
-This avoids revealing personal information to Registrar and MASA.
+This avoids revealing potentially included personal information to Registrar and MASA.
 
 The communication between the pledge and the registrar-agent is performed over plain HTTP.
 Therefore, it is subject to disclosure by a Dolev-Yao attacker (a "oppressive observer"){{onpath}}.
@@ -2050,7 +2048,7 @@ Depending on the requests and responses, the following information is disclosed.
 * the Pledge product-serial-number is contained in the trigger message for the PVR and in all responses from the pledge.
   This information reveals the identity of the devices being bootstrapped and allows deduction of which products an operator is using in their environment.
   As the communication between the pledge and the registrar-agent may be realized over wireless link, this information could be easily be eavesdropped, if the wireless network is unencrypted.
-Even if the wireless network is encrypted, if it uses a network-wide key, then layer-2 attacks (ARP/ND spoofing) could insert on-path observer into the path.
+  Even if the wireless network is encrypted, if it uses a network-wide key, then layer-2 attacks (ARP/ND spoofing) could insert on-path observer into the path.
 * the Timestamp data could reveal the activation time of the device.
 * the Status data of the device could reveal information about the current state of the device in the domain network.
 
@@ -2064,7 +2062,6 @@ Further security aspects are considered here related to:
 * the reversal of the pledge communication direction (push mode, compared to BRSKI)
 * no transport layer security between registrar-agent and pledge
 
-TODO: other threads?
 
 ## Denial of Service (DoS) Attack on Pledge
 
@@ -2090,20 +2087,21 @@ The LDevID(RegAgt) certificate may be acquired by a prior BRSKI run for the regi
 Alternatively, the LDevID may be acquired by a service technician from the domain PKI system in an authenticated way.
 
 In addition it is required that the LDevID(RegAgt) certificate is valid for the complete bootstrapping phase.
-This avoids a registrar-agent could be misused to create arbitrary "agent-signed-data" objects to perform an authorized bootstrapping of a rouge pledge at a later point in time.
-As "agent-signed-data" could be dated after the validity time of the LDevID(RegAgt) certificate, due to missing trusted timestamp in the registrar-agents signature.
+This avoids that a registrar-agent could be misused to create arbitrary "agent-signed-data" objects to perform an authorized bootstrapping of a rouge pledge at a later point in time.
+In this misuse "agent-signed-data" could be dated after the validity time of the LDevID(RegAgt) certificate, due to missing trusted timestamp in the registrar-agents signature.
 To address this, the registrar SHOULD verify the certificate used to create the signature on "agent-signed-data".
-Furthermore the registrar also verifies the LDevID(RegAgt) certificate used in the TLS handshake with the registrar-agent. If both certificates are verified successfully, the registrar-agents signature can be considered as valid.
+Furthermore the registrar also verifies the LDevID(RegAgt) certificate used in the TLS handshake with the registrar-agent. If both certificates are verified successfully, the registrar-agent's signature can be considered as valid.
 
 ## Misuse of mDNS to obtain list of pledges {#sec_cons_mDNS}
 
 To discover a specific pledge a registrar-agent may request the service name in combination with the product-serial-number of a specific pledge.
-The pledge reacts on this his product-serial-number is part of the request message.
+The pledge reacts on this if his product-serial-number is part of the request message.
 
-If the registrar-agent performs DNS-based Service Discovery without a specific product-serial-number, all  pledges in the domain may be returned if the functionality is supported.
+If the registrar-agent performs DNS-based Service Discovery without a specific product-serial-number, all  pledges in the domain react if the functionality is supported.
 This functionality enumerates and reveals the information of devices available in the domain.
-The information about this is provided here as a feature to support the comissioning of devices.
+The information about this is provided here as a feature to support the commissioning of devices.
 A manufacturer may decide to support this feature only for devices not possessing a LDevID or to not support this feature at all, to avoid an enumeration in an operative domain.
+
 
 ## YANG Module Security Considerations
 
@@ -2129,7 +2127,8 @@ These examples are folded according to {{RFC8792}} Single Backslash rule.
 
 ## Example Pledge Voucher Request - PVR (from Pledge to Registrar-agent)
 
-The following is an example request sent from a Pledge to the Registrar-agent, in "General JWS JSON Serialization".
+The following is an example request sent from a Pledge to the Registrar-agent, in "General JWS JSON Serialization".  
+The message size of this PVR is: 4649 bytes
 
 ~~~~
 =============== NOTE: '\' line wrapping per RFC 8792 ================
@@ -2138,8 +2137,8 @@ The following is an example request sent from a Pledge to the Registrar-agent, i
   "payload":
     "eyJpZXRmLXZvdWNoZXItcmVxdWVzdC1wcm06dm91Y2hlciI6eyJhc3NlcnRpb24\
 iOiJhZ2VudC1wcm94aW1pdHkiLCJzZXJpYWwtbnVtYmVyIjoiMDEyMzQ1Njc4OSIsIm5\
-vbmNlIjoiNW9Cb3UvUndqNCtkTUo3QlErVWp0Zz09IiwiY3JlYXRlZC1vbiI6IjIwMjI\
-tMDctMTJUMDQ6NDg6NTYuNTYzWiIsImFnZW50LXByb3ZpZGVkLXByb3hpbWl0eS1yZWd\
+vbmNlIjoiTDNJSjZocHRIQ0lRb054YWFiOUhXQT09IiwiY3JlYXRlZC1vbiI6IjIwMjI\
+tMDQtMjZUMDU6MTY6MTcuNzA5WiIsImFnZW50LXByb3ZpZGVkLXByb3hpbWl0eS1yZWd\
 pc3RyYXItY2VydCI6Ik1JSUI0akNDQVlpZ0F3SUJBZ0lHQVhZNzJiYlpNQW9HQ0NxR1N\
 NNDlCQU1DTURVeEV6QVJCZ05WQkFvTUNrMTVRblZ6YVc1bGMzTXhEVEFMQmdOVkJBY01\
 CRk5wZEdVeER6QU5CZ05WQkFNTUJsUmxjM1JEUVRBZUZ3MHlNREV5TURjd05qRTRNVEp\
@@ -2189,27 +2188,25 @@ CSnVjSC9YbWpBZEJnTlZIUTRFRmdRVWI2RTliblh0bitpeEVJVk94eDQvcnlmM2V5TXd\
 DZ1lJS29aSXpqMEVBd0lEU1FBd1JnSWhBUG5CMHcxTkN1cmhNeEp3d2ZqejdnRGlpeGt\
 VWUxQU1o5ZU45a29oTlFVakFpRUF3NFk3bHR4V2lQd0t0MUo5bmp5ZkRObDVNdUVEQml\
 teFIzQ1hvWktHUXJVPSJdfX0",
-  "signatures":
-    [{ "protected":
-         "eyJ4NWMiOlsiTUlJQitUQ0NBYUNnQXdJQkFnSUdBWG5WanNVNU1Bb0dDQ3\
-FHU000OUJBTUNNRDB4Q3pBSkJnTlZCQVlUQWtGUk1SVXdFd1lEVlFRS0RBeEthVzVuU2\
-1sdVowTnZjbkF4RnpBVkJnTlZCQU1NRGtwcGJtZEthVzVuVkdWemRFTkJNQ0FYRFRJeE\
-1EWXdOREExTkRZeE5Gb1lEems1T1RreE1qTXhNak0xT1RVNVdqQlNNUXN3Q1FZRFZRUU\
-dFd0pCVVRFVk1CTUdBMVVFQ2d3TVNtbHVaMHBwYm1kRGIzSndNUk13RVFZRFZRUUZFd2\
-93TVRJek5EVTJOemc1TVJjd0ZRWURWUVFEREE1S2FXNW5TbWx1WjBSbGRtbGpaVEJaTU\
-JNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSUFCQzc5bGlhUmNCalpjRUVYdzdyVW\
-VhdnRHSkF1SDRwazRJNDJ2YUJNc1UxMWlMRENDTGtWaHRVVjIxbXZhS0N2TXgyWStTTW\
-dROGZmd0wyM3ozVElWQldqZFRCek1Dc0dDQ3NHQVFVRkJ3RWdCQjhXSFcxaGMyRXRkR1\
-Z6ZEM1emFXVnRaVzV6TFdKMExtNWxkRG81TkRRek1COEdBMVVkSXdRWU1CYUFGRlFMak\
-56UFwvU1wva291alF3amc1RTVmdndjWWJNQk1HQTFVZEpRUU1NQW9HQ0NzR0FRVUZCd0\
-1DTUE0R0ExVWREd0VCXC93UUVBd0lIZ0RBS0JnZ3Foa2pPUFFRREFnTkhBREJFQWlCdT\
-N3UkJMc0pNUDVzTTA3MEgrVUZyeU5VNmdLekxPUmNGeVJST2xxcUhpZ0lnWENtSkxUek\
-VsdkQycG9LNmR4NmwxXC91eW1UbmJRRERmSmxhdHVYMlJvT0U9Il0sInR5cCI6InZvdW\
-NoZXItandzK2pzb24iLCJhbGciOiJFUzI1NiJ9",
-      "signature":
-        "n1rKu3odtbq-rIPHlE08BU-gSf0vKFDtiUL5Q2j8y1BmDXvj4SPUYscjdiu\
-BxYF7SzsdECCfpPiL_jLbwQiG1Q"
-    }]
+    "signatures":[{
+      "protected":"eyJ4NWMiOlsiTUlJQitUQ0NBYUNnQXdJQkFnSUdBWG5WanNVN\
+U1Bb0dDQ3FHU000OUJBTUNNRDB4Q3pBSkJnTlZCQVlUQWtGUk1SVXdFd1lEVlFRS0RBe\
+EthVzVuU21sdVowTnZjbkF4RnpBVkJnTlZCQU1NRGtwcGJtZEthVzVuVkdWemRFTkJNQ\
+0FYRFRJeE1EWXdOREExTkRZeE5Gb1lEems1T1RreE1qTXhNak0xT1RVNVdqQlNNUXN3Q\
+1FZRFZRUUdFd0pCVVRFVk1CTUdBMVVFQ2d3TVNtbHVaMHBwYm1kRGIzSndNUk13RVFZR\
+FZRUUZFd293TVRJek5EVTJOemc1TVJjd0ZRWURWUVFEREE1S2FXNW5TbWx1WjBSbGRtb\
+GpaVEJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSUFCQzc5bGlhUmNCalpjR\
+UVYdzdyVWVhdnRHSkF1SDRwazRJNDJ2YUJNc1UxMWlMRENDTGtWaHRVVjIxbXZhS0N2T\
+XgyWStTTWdROGZmd0wyM3ozVElWQldqZFRCek1Dc0dDQ3NHQVFVRkJ3RWdCQjhXSFcxa\
+GMyRXRkR1Z6ZEM1emFXVnRaVzV6TFdKMExtNWxkRG81TkRRek1COEdBMVVkSXdRWU1CY\
+UFGRlFMak56UFwvU1wva291alF3amc1RTVmdndjWWJNQk1HQTFVZEpRUU1NQW9HQ0NzR\
+0FRVUZCd01DTUE0R0ExVWREd0VCXC93UUVBd0lIZ0RBS0JnZ3Foa2pPUFFRREFnTkhBR\
+EJFQWlCdTN3UkJMc0pNUDVzTTA3MEgrVUZyeU5VNmdLekxPUmNGeVJST2xxcUhpZ0lnW\
+ENtSkxUekVsdkQycG9LNmR4NmwxXC91eW1UbmJRRERmSmxhdHVYMlJvT0U9Il0sImFsZ\
+yI6IkVTMjU2In0",
+      "signature":"Y_ohapnmvbwjLuUicOB7NAmbGM7igBfpUlkKUuSNdG-eDI4BQ\
+yuXZ2aw93zZId45R7XxAK-12YKIx6qLjiPjMw"
+  }]
 }
 ~~~~
 {: #ExamplePledgeVoucherRequestfigure title='Example Pledge Voucher Request - PVR' artwork-align="left"}
@@ -2221,192 +2218,211 @@ been received by the Registrar, and then has been processed by the Registrar ("c
 
 The following is an example Registrar voucher-request (RVR) sent from the Registrar to the MASA, in "General JWS JSON Serialization".
 Note that the previous PVR can be seen in the payload as "prior-signed-voucher-request".
+The message size of this RVR is: 13257 bytes
 
 ~~~~
 =============== NOTE: '\' line wrapping per RFC 8792 ================
 
 {
-  "payload": "eyJpZXRmLXZvdWNoZXItcmVxdWVzdC1wcm06dm91Y2hlciI6eyJhc3\
-NlcnRpb24iOiJhZ2VudC1wcm94aW1pdHkiLCJzZXJpYWwtbnVtYmVyIjoiMDEyMzQ1Nj\
-c4OSIsImlkZXZpZC1pc3N1ZXIiOiJCQmd3Rm9BVVZBdU0zTS85TCtTaTZORENPRGtUbC\
-svQnhocz0iLCJub25jZSI6IjVvQm91L1J3ajQrZE1KN0JRK1VqdGc9PSIsInByaW9yLX\
-NpZ25lZC12b3VjaGVyLXJlcXVlc3QiOiJleUp3WVhsc2IyRmtJam9pWlhsS2NGcFlVbT\
-FNV0ZwMlpGZE9iMXBZU1hSamJWWjRaRmRXZW1SRE1YZGpiVEEyWkcwNU1Wa3lhR3hqYV\
-VrMlpYbEthR016VG14amJsSndZakkwYVU5cFNtaGFNbFoxWkVNeGQyTnRPVFJoVnpGd1\
-pFaHJhVXhEU25wYVdFcHdXVmQzZEdKdVZuUlpiVlo1U1dwdmFVMUVSWGxOZWxFeFRtcG\
-pORTlUU1hOSmJUVjJZbTFPYkVscWIybE9WemxEWWpOVmRsVnVaSEZPUTNSclZGVnZNMU\
-ZzUlhKV1YzQXdXbm93T1VscGQybFpNMHBzV1ZoU2JGcERNWFppYVVrMlNXcEpkMDFxU1\
-hSTlJHTjBUVlJLVlUxRVVUWk9SR2MyVGxSWmRVNVVXWHBYYVVselNXMUdibHBYTlRCTV\
-dFSjVZak5hY0ZwSFZtdE1XRUo1WWpOb2NHSlhiREJsVXpGNVdsZGtjR016VW5sWldFbD\
-BXVEpXZVdSRFNUWkphekZLVTFWSk1HRnJUa1JSVm14d1dqQkdNMU5WU2tKYU1HeElVVl\
-pvV2s1NlNtbFpiSEJPVVZjNVNGRXdUbmhTTVU1T1RrUnNRMUZWTVVSVVZWSldaVVZXTm\
-xGV1NrTmFNRFZYVVd0R2RsUlZUbkpOVkZaU1lteGFObGxXWXpGaVIwMTZWRmhvUlZaRl\
-JrMVJiV1JQVm10S1Fsa3dNVU5TYXpWM1drVmtWbVZGVWpaUlZUVkRXakExVjFGclJrNV\
-VWVXB6VlcxNGFrMHhTa1ZWVmxKQ1dsVmFNMDFJYkU1U1JWWTFWRlZTYW1Rd05YRlNWRk\
-pPVmtWd2FGSnVZM2RsYXpGRlVsaHNUbEpIVGpOVWJYQkdUa1V4VlZOdFJrNVNSRkkwVW\
-xod1FsVnJTbTVVYkZwRFVWYzVUbEV5YzNoT1ZrWjFWbTV3YUZaNlZuTlplazVPWlVWU1\
-ZWRlZlRU5hTURWWFVXdEdhbFJWU2tkVWJrSnJVakZXTkZJd1VrSldNRXB1Vkd4YVExRl\
-ZNVTVTUkVKVFpHMUtXRkp1UW1saVJYQnpWMnBLYzJWdFVrbFRiV2hxWVd0S1lWUlZTaz\
-VTTUVvMVkxVmtWRlJVVVRWUlYyUkdVakJPUkdOVlpGUlVWRkUxVVZoa1JsTkZSWGRUVl\
-VaRFVXMXplRTVyYzNaaFZHTTFZakZLY2xONlZscFpiVlpSV25wb1ZsVXhTVFJNTTFaNl\
-RWZFNVVlpYYkdGVFJURXdZakowVkZwSVJreFdlbFp0WW14a2VsRnRVWEpqVmtwTlRqRm\
-tVMXB0V214V01uUTFXakpXYVdJd2NHMVRWM2h6WkZoS2FtRlVTVEZrTWpWdllWVTVWMU\
-V3WkhGYVdIQkRUbFV4UTAxRlpFSk5WbFpyVTJ4R1VsWXdNVU5WVldSRVVUTk9TRkZXUm\
-xaU2Ewb3pWRlZLUTFveVpIbFJiV1JHVW10S1Vsa3dVa2xTUlVaUVVXMWtUMVpyYUZKUF\
-JVcENXbXBvUmxGclJrNVJNRWt3VVZoa1ZGRldiRVZXYkVsM1ZXdEtSbEpZWkZGT1JXeH\
-JXVEl4VjJKdFJsbFVha0pxWWxWYU5WUkdhRk5pUjAxNlZWaFdhazF0ZUhOWmJHUlhaRm\
-RPTlUxWGJHdFJlbFl4VjJ4b1ZGRXdhSFZUYlhoaFRXMTRObHBGYUV0aFIwNXdUVlJDWV\
-ZkRk5IZFViV3N4WlcxR1dGWnVVbUZXZWxZMlZFWmtTMDFGZUhST1YzaHJVa1ZHVEZGdF\
-pHNWpWMmh5WVdzNVVWVldSa1ZSVjJSUFUxVkdSVkZyV2tKaFZVbzBZa2RTUTJGR2NIaE\
-5SVll5VGxWd1RVMXNRbmxXTUU0d1pWWk5NbUZGVWxwV2VrWTFVVEE0ZGxWdFJqRlpia0\
-pFVGpBeGFGTlZVbTVUVjJoQ1ZFWk9TMWx0WkUxaWJXUnZXVzFLUWxwNlFtdFpNV1JIVm\
-xaYWRrd3laRWhVYWtGMllXNWtObE5zYjNkVk1uZDVZVVJTTkZOV2FISk5VMGx6U1cxR2\
-JscFhOVEJNV0U1d1dqSTFiRnBETVd0WldGSm9TV3B2YVZwWWJFdGtNV3haWWtoT2FVMX\
-JXbkpUVjNCMllWWndXV0pGZEdwU2JrSmFWbGN3ZUZSV1pFZGpSRXBoVW0xU1VGbHFSbm\
-RYVms1WlZXMXdhVlpzYnpCWGExcHJWakpXZEZWclVrNVhSMUp4V1d4U1FrMXNaRmRhUj\
-NScFVqQndNVlpXYUZOaGF6RjBaVWhXV21KVVJsaFpWRUkwVjBaV2RHRkhkRk5OUmxwM1\
-ZrUkpNV1Z0UmxkaE0zQlVZbGhvWVZZd1drdGpNV1J5VkZob2EySlZjSGRWTVZKaFUyMU\
-djbUpFVGxWV00wSkxXa1ZWZUZKV1ZsbFZhelZvWWtoQ1YxWkdWbE5XYXpWeVRWVldXbV\
-ZzY0ZCVmExWlhUVlpTY2xWc1NrOVNiVkozVlRGb1QxTnRTbkpPV0U1YVRXcEdlbGxWWk\
-V0U1JURlpWbTEwVjJWclduZFdNbmh2VTIxR1ZrOVlRbFJYUjFKUFZtdFdjMDVzVW5KVm\
-JGcE9ZWHBWTWxkdWNGZFRiVXB4VWxSV1NtRllaSEJaZWtwelltMUtkRkpxUW10WFJYQn\
-pXVE5zU2s1c1kzcGpNbXhxVTBWd01scEZaRmRoYlZKSVZtMTBTbUZ0T1hCWGJHaHpVek\
-pPZEZKc2FGWldNbmhSV1ZaV2QxZHNhM2RoU0dScVRWWktWMXBGVWxOaFZrNUdVMnRPVl\
-dKWVFuWlpWM2hoVmxaYWNscEdXbGRXUlZwaFZtMTRiMWxYVWxkVWJHUldWa1Z3VjFZd1\
-pFNU9WazVZWWtST2FGWnRlRmxhVldNeFUyMUdkRTlZUWxaaVJuQlBXbFpWTVZaV1pGaG\
-lSekZXVlRCc2VsTlhOVTlqUm05NVRsZG9hMU5HV2pWWGJFNUtUbXRzY2xremNGZE5NbW\
-hJVlRCa1YwMUdaRWRSVkZKcFVqTm9WRlp0YTNkT1YxSllVMjVzVlZKdGVIaFZNalZoVl\
-d4c1ZWZHRXbXhWZWtaU1dWZDRSMWRyTlVaT1YyaHJUVmM0TVZrd1drdGhSMGw1WlVVNV\
-ZHSlViRVpVYlRGVFlrWndXR1JJVmxSV2FteEhWakJrWVdWdFZsZFhiRkphWW0xTk1GWl\
-VRazlPYkZKWFkwVXhhV0ZyU205VlZtaFhZakpHVmxwR2NGVmhhMHBUVTFjMGVGcEhXbE\
-pRVkRCcFRFTkthRm95Vm5Wa1F6RjZZVmRrZFV4WFRteGpibEZwVDJ4emFWUlZiRXBSYW\
-taRlVUQk9RbGRJUm01UldHUktVV3RHYmxOVlZscGlWMUV3VkRGU1FsTXdTbTVhTTBadl\
-lUSndVRlZHUmxKU1JVWnhVVk4wVGxWck1UTlNWa1phVWtaYVVsVlZkRVZSV0VKUFdsWl\
-dTMDFYVFhsaVNGWmhWMFUxTmxSV1JYZGtNRTR6VjFWU1YxVldSa2xTUlVaVFZrZEdXVl\
-Z0ZUU1VmJXUXpVbTFrV2xKR1dsSlZWVkpGVVZSc1ZsZHNhRTlOUmxaSlZtNXdhRkpVUm\
-pKWGEyUlhZekZGZDFKWVpFbGhSMDVQVkZkd1NtUXdOVVZUVkVwT1VrWkZkMVJYY0U1bG\
-JHUnZXVEExVG1WcmJETlVhMUpLVFdzeFJWVlVRazVoYXpFMlZqSndRazlWTVZOVVdHUk\
-dWVlpzUlZac1JsSlRNRkpDWTBVMWJGWlZiM2haZWtwelpGWndXVlJ1Y0U1VlZFSXpVVE\
-5rV2xKR1dsSlZWV2hGVVZaS1ZWbFdhRk5pUlRGVFdUTmtSMVZXYkVWV2JFWlNVa1ZTUW\
-s1V1RtRldNbEozV1hwT1UyVldiRmxUYTBwaFRXeGFNVnBGVWtOWGF6RkRWRlZrUTJWWV\
-JraFZNREF3VDFWR2JsSlZaRVJSTTBaSVZUQXdNRTlWUmpOU1ZXaENUVVZzUWxGclpEUm\
-lTRXBQV20xdmVtRldTbWxPZVRsRFZWYzVhMVo1Y3pGWFYyeDJWRE53YjBzeWNFcGtTR3\
-g0WkZaS1NsUjVPVmhsYW1SYVlqRmplbUZZWkVWWmVrNUhaVWRXTTFSR1dtMWxhMDU1VG\
-xVMU1sSkVSWHBYYlVaSFdXcGtiV050Um5WTE0xRTFZak5TV2s1V1pFMWhSVzh5WVd4d0\
-5sRnRlRTVSVkZKSVVWUkdWbHBGVWpOU1ZVbDJaREZHUmxGWVpFcFRSMlJGVVZkYVExb3\
-dOVmRUUms1T1VsVmtSVkZXWkc1UmJFb3lZakZSZUdSWFVteE5iVmt5VkVWV1VtRkdWVE\
-5UUldoeFN6TmFTMHd5VVROVFdIQkNXa1ZLYmxSc1drbFZWRkpHVW0xa1VsWldhSGRsYl\
-hoT1V6Tm9jMk5GUlRKUFIwNVdUbFZhVWxSV2FGWmtiVFZLVmtSYVVtUXpaRVprTVd4Rl\
-ZteEpkMkpGU2tKa00yUkVXakZzU2xNelpGcFJhMHBTVmxWb1FtUXdiRE5STW1SYVUxVj\
-BkbGRyYkRaaGFrSkdVVmhrU2xKR1RrSlJXR1JUVlZWc2JsbDZTalZPYm1oMlZETlNkbF\
-ZWU25OVGJrNXVZa1U1VFUxV1dqUlRSV1IyWXpGU05XTkZWbmhWYlZvMlRVWkdNazVHY0\
-VaVlNGa3daREJPU2xWVlRsZGxWMGw1VW1wc05sWnFUblZQVkZWeVlqSjRibHByV2t0YU\
-1YQlZWakJXTms1SFVsUlpWVmw2WVVod1UxVlhTWHBYYmxaRFRXcHNVbEJVTUdsTVEwcE\
-9VMVZzUTJWclVrUlJNRVpaVWpKa1FtUXdiRU5SVjJSS1VsWm9XV0ZyYUhkU1JVWk1VVz\
-FrYm1OWGFISmhhemxSVlZaR1JWRlhjRUpOVlRGVFZGaGtSbFZXYkVWV2JFWlNVekJTUW\
-1ORk5XeFdWVzk0V1hwS2MyUldjRmxVYm5CT1ZWUkNNMUV6WkZwU1JscFNWVlZvUlZGV1\
-NsVlpWbWhUWWtVeFVrOUlaRVZWVm14RlZteEdVbEpGVWtKWGJGWmhWMFUwZDFWVVFrWm\
-tNR2h2V1RBMVRsWkhkRE5VTVZKR1pVVXhWVkZZWkZCU1JUQjVWakpvYWxSck1YRmhNMl\
-JRVmtWV05GUldVa0prTURsRlZGUktXR0ZyUlhKVVZrcE9aREJXVWxkVlVsZFZWa1pNVW\
-tWR2QxUnRWbFpUYWtacVRXMTRNVmRzYUU5bGF6RlNUVWhrUkdReGJFVldiRVpTVTBWU1\
-FsVnNVbWhYUmtwelZGWktibVF3V201WFZWSlhWVlpHUlZKRlJUVldWbkJaVkdwQ1ZsTk\
-dXalpaVlZWNFpHeHdTRlp1VGxKTlJWWXpWakZTUWxaRlNtNVpNMFp2WVRKd1VGVkdSa3\
-BSYTBwdVdqTkdiMkV5Y0ZCVlJrWk9VV3RLTTFSclRrSlJWbEp6VW5wQ2JXUXhVWHBOTW\
-psc1pXeHZlR1J0ZEVsVlYwcHNaRWRXYVdKWGIzSlJiVGxYU3pGd1IyTXljR3BhYkVZel\
-RXeFNVR0V3Y0ZGaFJUbHlWREphUWxsdVZUVlpiRTE0WTFad2NFOUliR2hTVmxrMFlqSl\
-dlVk15ZDNaT2JIQlpXVzFhTkZReU1VTmhia3BUWTIxT1dXSjZTbHBrTVhCRlVWWk9RMW\
-93TlZkVFJrcE9VV3RHYlU5RlZrUlNSVVpJVVZaR1NVd3dSbTVTVlVaT1VWUlNTRkZVUm\
-xaYVJWSXpVbFZKZG1ReFJrWlJXR1JLVVRCS1JWRlhXa05hTURWWFUwWk9UbEpWWkVWUl\
-ZtUnVVV3hTZGxkcmJFNWxiRVpyWXpCUmRtRnBPSEphTVdkMlRqSk9RMU51Vm1wVFF6bF\
-pZbGR3UWxwRlNtNVViRnBKVlZSU1JsSnRaRkpXVjBreVVsUnNhV0pzYURCaWFYUndaVV\
-ZXU2xack9UUmxSRkYyWTI1c2JVMHlWalZVV0dSRVdqRnNTbE15T1dGVFdIQnhUVVZXUW\
-1Rd2JFVlZNVVpDWkRGS2JsTlhhRUpWUnpWRFRVaGplRlJyVGpGamJXaE9aVVZ3TTJReV\
-duRmxhbVJ1VWtkc2NHVkhkRlpYVlhoUlZURnZOVnBWTkRWaE1qbHZWR3hHVm1GclJuQl\
-NWVVl6VGtack0ySklValJXTW14UlpEQjBNRTFWYnpWaWJYQTFXbXRTVDJKRVZrNWtWVl\
-pGVVcxc2RHVkdTWHBSTVdoMlYydDBTRlZZU2xaUVUwcGtabGd3SWl3aWMybG5ibUYwZF\
-hKbGN5STZXM3NpY0hKdmRHVmpkR1ZrSWpvaVpYbEtORTVYVFdsUGJITnBWRlZzU2xGcG\
-RGVlJNRTVDV1ZWT2JsRllaRXBSYTBadVUxVmtRbGRITlZkaGJrNVdUbFV4UW1Jd1pFUl\
-JNMFpJVlRBd01FOVZTa0pVVlU1T1VrUkNORkV6Y0VKVGEwcHVWR3hhUTFGV2JGVlJWM1\
-JIVldzeFUxWllaRVprTVd4RlZteEdVbE13VWtKbFJYUm9WbnBXZFZVeU1YTmtWbTkzVk\
-c1YWFtSnJSalJTYm5CQ1ZtdEtibFJzV2tOUlZURk9Va2QwZDJOSFNuUmFSWFJvVm5wV2\
-RWWnJaRmRsYlZKR1ZHdEtUbEV3UmxsU1JsSktaVVV4UlZkWVpFOVNSVVY0Vkd0U1dtVk\
-ZOVWRpTVd4RlpXMXpNVlF4VW5KbFJURnhWRmhvVG1Gck1IaFVNVkpXVGxaa2NWRnNUaz\
-VWV0U0elVURkdXbEpHV2xKVlZXUkdaREJ3UTFaV1VrWldhekZEVkZWa1FrMVdWa1pSTW\
-1RelZGWk9kR0pJVm1GTlNFSjNXVzB4YTFKSFNYcFRibVJPVldzeE0xSldSbHBTUmxwU1\
-ZWVmFSbVF5T1ROVVZsSktaV3MxUlZaVVNrOWxiV014VkZaS2FtUXdXbEpYVlZKWFZWWk\
-dSVkpGUlRGVE1rWllUbGMxVkdKWGVERlhha0pUWWtkU2RHSkhjR0ZXUlVwaFZGVktUbE\
-l3U2pWalZXUlVWRlJSTlZGWFpFWlNNRTVFWTFWa1ZGUlVVVFZSV0dSR1UwVkZkMU5WUm\
-tOUmVtTTFZa2RzYUZWdFRrTmhiSEJxVWxWV1dXUjZaSGxXVjFab1pHNVNTRk5yUmpGVF\
-JGSjNZWHBTU2s1RVNqSlpWVXBPWXpGVmVFMVhiRTFTUlU1RVZFZDBWMkZJVWxaV2FrbD\
-RZbGhhYUZNd1RqSlVXR2Q1VjFOMFZGUlhaRkpQUjFwdFpEQjNlVTB6YjNwV1JXeFhVV3\
-hrY1ZwR1VrTmxhekZFWXpCa1JGRXpUa2hSVmtaV1VtdEtNMUpYWkVOUmFtaFlVMFpqZU\
-dGSFRYbFNXRkpyVWpGYU5scEZUVEZsYlVaWVZtNVNZVlo2VmpaVVJtUkxUVVY0ZEU1WG\
-VHdFNSemd4Vkd0U1VtVnJNVU5QUldSQ1RWWldhMU5ZWkZKWFZURkRXVlZHUjFKc1JrMW\
-hhelUyVlVaM2RsVXhkM1poTWpreFlXeEdNMkZ0WXpGU1ZGWnRaRzVrYWxkWFNrNVJhek\
-ZJVVZSR1ZscEZjRkpWVlRGT1VWYzVTRkV3VG5wU01FWlNWbFZhUTJRd01VUlVWVVV3VW\
-pCRmVGWlhVa1ZrTUZaRFdFTTVNMVZWVmtKa01HeEpXakJTUWxNd1NtNWFNMFp2WVRKd1\
-VGVkdSbEpTUlVadVZHdG9RbEpGU2taUlYyeERaRlJPTTFWclNrMWpNSEJPVlVSV2VsUl\
-VRVE5OUldkeVZsVmFlV1ZWTlZaT2JXUk1aV3Q0VUZWdFRrZGxWa3BUVkRKNGVHTlZhSE\
-JhTUd4dVYwVk9kRk5yZUZWbGExWnpaR3RSZVdOSE9VeE9iVkkwVG0xM2VGaERPVEZsVn\
-pGVlltMUtVbEpGVW0xVGJYaG9aRWhXV1Uxc1NuWlVNRlU1U1d3d2MwbHVValZqUTBrMl\
-NXNWFkbVJYVG05YVdFbDBZVzVrZWtzeWNIcGlNalJwVEVOS2FHSkhZMmxQYVVwR1ZYcE\
-pNVTVwU2praUxDSnphV2R1WVhSMWNtVWlPaUp1TVhKTGRUTnZaSFJpY1MxeVNWQkliRV\
-V3T0VKVkxXZFRaakIyUzBaRWRHbFZURFZSTW1vNGVURkNiVVJZZG1vMFUxQlZXWE5qYW\
-1ScGRVSjRXVVkzVTNwelpFVkRRMlp3VUdsTVgycE1ZbmRSYVVjeFVTSjlYWDA9IiwiY3\
-JlYXRlZC1vbiI6IjIwMjItMDctMTJUMDQ6NDk6MDcuMTM0WiIsImFnZW50LXNpZ24tY2\
-VydCI6WyJNSUlCMURDQ0FYcWdBd0lCQWdJRVltZDRPVEFLQmdncWhrak9QUVFEQWpBK0\
-1STXdFUVlEVlFRS0RBcE5lVUoxYzJsdVpYTnpNUTB3Q3dZRFZRUUhEQVJUYVhSbE1SZ3\
-dGZ1lEVlFRRERBOVVaWE4wVUhWemFFMXZaR1ZzUTBFd0hoY05Nakl3TkRJMk1EUTBNak\
-16V2hjTk16SXdOREkyTURRME1qTXpXakE5TVJNd0VRWURWUVFLREFwTmVVSjFjMmx1Wl\
-hOek1RMHdDd1lEVlFRSERBUlRhWFJsTVJjd0ZRWURWUVFEREE1U1pXZHBjM1J5WVhKQl\
-oyVnVkREJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSUFCR3hsck5majNpUm\
-I3L0JRb2RXKzVZaW9Pemgrakl0eXF1UklPL1d6N1lvVzNpd0RjM0Z4ZXdMVmZ6Q3I1Tn\
-ZEMTNaYUZiN2ZyYW4rdDlvdFk1V0xoSjZqWnpCbE1BNEdBMVVkRHdFQi93UUVBd0lIZ0\
-RBZkJnTlZIU01FR0RBV2dCUnZvVDF1ZGUyZjZMRVFoVTdISGordkovZDdJekFkQmdOVk\
-hRNEVGZ1FVWHB6bE1LeGxwQTY4Y1U1RlFNWFV2bklUNlF3d0V3WURWUjBsQkF3d0NnWU\
-lLd1lCQlFVSEF3SXdDZ1lJS29aSXpqMEVBd0lEU0FBd1JRSWdjMnk2eG9PdG9RQmxKc2\
-dsT0wxVnhIR29zVHlwRXFSZnowUXY0WkVQdjR3Q0lRQ1Z5YjJGOXpWM245NStvbGdmRk\
-pnWlRXRXo0ZFNhRjNoelJRYjNadUIyOVE9PSIsIk1JSUJ6RENDQVhHZ0F3SUJBZ0lFWF\
-hqSHBEQUtCZ2dxaGtqT1BRUURBakExTVJNd0VRWURWUVFLREFwTmVVSjFjMmx1WlhOek\
-1RMHdDd1lEVlFRSERBUlRhWFJsTVE4d0RRWURWUVFEREFaVVpYTjBRMEV3SGhjTk1Ua3\
-dPVEV4TVRBd09ETTJXaGNOTWprd09URXhNVEF3T0RNMldqQStNUk13RVFZRFZRUUtEQX\
-BOZVVKMWMybHVaWE56TVEwd0N3WURWUVFIREFSVGFYUmxNUmd3RmdZRFZRUUREQTlVWl\
-hOMFVIVnphRTF2WkdWc1EwRXdXVEFUQmdjcWhrak9QUUlCQmdncWhrak9QUU1CQndOQ0\
-FBVGxHMGZ3VDMzb2V6WjF2a0hRYmV0ZWJtaitCb1YrWkZzamNmUXcyVE9rSlBoT2tPZk\
-FidTliUzFxWmk4eWFFVjhvZXJLbC82WlhiZnhPbUJqclJyY1hvMll3WkRBU0JnTlZIUk\
-1CQWY4RUNEQUdBUUgvQWdFQU1BNEdBMVVkRHdFQi93UUVBd0lDQkRBZkJnTlZIU01FR0\
-RBV2dCVG9aSU16UWRzRC9qLytnWC83Y0JKdWNIL1htakFkQmdOVkhRNEVGZ1FVYjZFOW\
-JuWHRuK2l4RUlWT3h4NC9yeWYzZXlNd0NnWUlLb1pJemowRUF3SURTUUF3UmdJaEFQbk\
-IwdzFOQ3VyaE14Snd3Zmp6N2dEaWl4a1VZTFBTWjllTjlrb2hOUVVqQWlFQXc0WTdsdH\
-hXaVB3S3QxSjluanlmRE5sNU11RURCaW14UjNDWG9aS0dRclU9Il19fQ",
-  "signatures": [{
-    "protected": "eyJ4NWMiOlsiTUlJQm96Q0NBVXFnQXdJQkFnSUdBVzBlTHVJRk\
-1Bb0dDQ3FHU000OUJBTUNNRFV4RXpBUkJnTlZCQW9NQ2sxNVFuVnphVzVsYzNNeERUQU\
-xCZ05WQkFjTUJGTnBkR1V4RHpBTkJnTlZCQU1NQmxSbGMzUkRRVEFlRncweE9UQTVNVE\
-V3TWpNM016SmFGdzB5T1RBNU1URXdNak0zTXpKYU1GUXhFekFSQmdOVkJBb01DazE1UW\
-5WemFXNWxjM014RFRBTEJnTlZCQWNNQkZOcGRHVXhMakFzQmdOVkJBTU1KVkpsWjJsem\
-RISmhjaUJXYjNWamFHVnlJRkpsY1hWbGMzUWdVMmxuYm1sdVp5QkxaWGt3V1RBVEJnY3\
-Foa2pPUFFJQkJnZ3Foa2pPUFFNQkJ3TkNBQVQ2eFZ2QXZxVHoxWlVpdU5XaFhwUXNrYV\
-B5N0FISFFMd1hpSjBpRUx0NnVOUGFuQU4wUW5XTVlPXC8wQ0RFaklrQlFvYnc4WUtxan\
-R4SkhWU0dUajlLT295Y3dKVEFUQmdOVkhTVUVEREFLQmdnckJnRUZCUWNESERBT0JnTl\
-ZIUThCQWY4RUJBTUNCNEF3Q2dZSUtvWkl6ajBFQXdJRFJ3QXdSQUlnWXIyTGZxb2FDS0\
-RGNFJBY01tSmkrTkNacWRTaXVWdWdJU0E3T2hLUnEzWUNJRHhuUE1NbnBYQU1UclBKdV\
-BXeWNlRVIxMVB4SE9uKzBDcFNIaTJxZ3BXWCIsIk1JSUJwRENDQVVtZ0F3SUJBZ0lHQV\
-cwZUx1SCtNQW9HQ0NxR1NNNDlCQU1DTURVeEV6QVJCZ05WQkFvTUNrMTVRblZ6YVc1bG\
-MzTXhEVEFMQmdOVkJBY01CRk5wZEdVeER6QU5CZ05WQkFNTUJsUmxjM1JEUVRBZUZ3MH\
-hPVEE1TVRFd01qTTNNekphRncweU9UQTVNVEV3TWpNM016SmFNRFV4RXpBUkJnTlZCQW\
-9NQ2sxNVFuVnphVzVsYzNNeERUQUxCZ05WQkFjTUJGTnBkR1V4RHpBTkJnTlZCQU1NQm\
-xSbGMzUkRRVEJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSUFCT2t2a1RIdT\
-hRbFQzRkhKMVVhSTcrV3NIT2IwVVMzU0FMdEc1d3VLUURqaWV4MDZcL1NjWTVQSmlidm\
-dIVEIrRlwvUVRqZ2VsSEd5MVlLcHdjTk1jc1N5YWpSVEJETUJJR0ExVWRFd0VCXC93UU\
-lNQVlCQWY4Q0FRRXdEZ1lEVlIwUEFRSFwvQkFRREFnSUVNQjBHQTFVZERnUVdCQlRvWk\
-lNelFkc0RcL2pcLytnWFwvN2NCSnVjSFwvWG1qQUtCZ2dxaGtqT1BRUURBZ05KQURCR0\
-FpRUF0eFEzK0lMR0JQSXRTaDRiOVdYaFhOdWhxU1A2SCtiXC9MQ1wvZlZZRGpRNm9DSV\
-FERzJ1UkNIbFZxM3loQjU4VFhNVWJ6SDgrT2xoV1V2T2xSRDNWRXFEZGNRdz09Il0sIn\
-R5cCI6InZvdWNoZXItandzK2pzb24iLCJhbGciOiJFUzI1NiJ9",
-    "signature": "ZUUUwtjvbYfIteRb_9OUuh4WibxwpZLAHAlVAXNMSY1De6ub2U\
-aOJrCam-OIrZ7-QguUJwm5VEHJ14NEdAWGOQ"
-    }]
+  "payload":
+    "eyJpZXRmLXZvdWNoZXItcmVxdWVzdC1wcm06dm91Y2hlciI6eyJhc3NlcnRpb24\
+iOiJhZ2VudC1wcm94aW1pdHkiLCJzZXJpYWwtbnVtYmVyIjoiY2FmZmUtOTg3NDUiLCJ\
+ub25jZSI6ImM1VEVPb29NTE5hNEN4L1UrVExoQ3c9PSIsInByaW9yLXNpZ25lZC12b3V\
+jaGVyLXJlcXVlc3QiOiJleUp3WVhsc2IyRmtJam9pWlhsS2NGcFlVbTFNV0ZwMlpGZE9\
+iMXBZU1hSamJWWjRaRmRXZW1SRE1YZGpiVEEyWkcwNU1Wa3lhR3hqYVVrMlpYbEthR01\
+6VG14amJsSndZakkwYVU5cFNtaGFNbFoxWkVNeGQyTnRPVFJoVnpGd1pFaHJhVXhEU25\
+wYVdFcHdXVmQzZEdKdVZuUlpiVlo1U1dwdmFWa3lSbTFhYlZWMFQxUm5NMDVFVldsTVE\
+wcDFZakkxYWxwVFNUWkpiVTB4VmtWV1VHSXlPVTVVUlRWb1RrVk9ORXd4VlhKV1JYaHZ\
+VVE5qT1ZCVFNYTkpiVTU1V2xkR01GcFhVWFJpTWpScFQybEplVTFFU1hsTVZFRjVURlJ\
+KZVZaRVFUTlBhazE2VDJwQk5FeHFSVFZPYkc5cFRFTkthRm95Vm5Wa1F6RjNZMjA1TW1\
+GWFVteGFRekYzWTIwNU5HRlhNWEJrU0d0MFkyMVdibUZZVGpCamJVWjVURmRPYkdOdVV\
+XbFBhVXBPVTFWc1JGSkdVa1JSTUVacFZESmtRbVF3YkVOUlYyUktVakJHV1ZkWVRuZFR\
+WMVoyVkZWR2RsSXdUa1JqVldSVVZGUlJOVkZyUms1Uk1ERkhaRE5vUkdWclJrdFJiV1J\
+QVm10S1FsZFdVa0poTUZwVFZGWktTbVF3VmtKWFZWSlhWVlpHVEZKRlJuTlViVlpXVkc\
+1YWFWZEZTbTlaYlRWeVpVVmFWVkZXVWtOYU1EVlhVV3RHZWxSVlVrWk5WRlpXVFRGYWN\
+GbDZTbk5oTWtaWVVtNXNiRlpGVmxGVVZVVjNVakJGZUZaVlZrTmtNMlJJVmtab2MxWkh\
+SbGxWYlhoT1ZXdFdNMUpJWkZwU1JscFNWVlZTUlZGWGFFOWFWbHBQWTBkU1NGWnJVbEp\
+XUlVac1VtNWpkMlZWTVVWU1dHeE9Va1pHTTFSdWNFcE5WVFZGWVVkR1IyUjZRalpVVlZ\
+KR1pWVXhSVlZZWkU5bGEydDRWR3RTYjFsVk1VaFRXR2hFWld0R1MxRnRaRTlXYTBwQ1Y\
+xWlNRbUV3V2xOVVZrcEtaREJXUWxkVlVsZFZWa1pNVWtWR2MxUnRWbFpVYmxwcFYwVkt\
+iMWx0TlhKbFJWcEZVVlpPUTFvd05WZFJhMFo2VkZWTmQwMVVWbFpOTVZwd1dYcEtjMkV\
+4YkZsVGFsWk9WVlJvTTFKR1JscFNSbHBTVlZWb1JWRldjRTlhVmxwUFkwZFNTRlpZYUV\
+oU1JVWllVVzFrVDFaclNrSlVWVEZGVFVSRk1WWlVTbk5OUm5CWFUyMTRZVTF0ZURaYVJ\
+XaExZVWRPY1ZGc2NFNVJhekZJVVc1c2VGSXhUazVPUkd4Q1dqQldTRkV3VG5oU01VNU9\
+Ua1JzUW1Rd1ZrbFJWRUpLVVZWS1NsVklhRmhrVlRGSlVucG9TMVJIV2taVlJVVTFUMWh\
+hZDAxdVZrbFNWVFZxVlROc2JWa3pWVE5VUjJSYVRraEJlRTVGUmtOT01GSk9XbFJGTkU\
+xSVRrWmxSV1J4VkZOME0yTnJOVFJPTURVMVdWaE9lRXQ2Um5CTlJXUlVVVEZKTlU1VVV\
+UTk5SRVp0VWpKV1dGUldSbWxqVjNCWVpXdEtZVlJWU1hkU01FVjRWbGRTUzFWV1JsaFV\
+WVXBTVWpCT1JHTXdaRUpWVmxaSFVXNWtUbEZyU201YU0wcERXakJXUjFGc1JtcFNSV2h\
+GVVZVNVExb3dOVmRUUmtVMFVXdEdiVTlGVmtOUlZURkVVV3BTUW1Rd2RFSlhWVkpYVld\
+wQ1UxRnJUa1prTUdjd1UxZFNhVmRIZURaWlZtaFRZa2RPZEZadE5XaFhSVFIzV1RJeFI\
+yVlZlSFJOVkZaYVRXcHNNRmt3WkVka1YxWlVUbGR3YVUxcVFqTlJNbVJhVTFWMGRsZHJ\
+iRFpoYWtKR1VWaGtTbEpHVGtKUldHUlRWVlZzYjFGV1FqVlBXRnBOVTFkR01WVnJWbEp\
+qYlhnMVlteGtNRlI2VmxOaVZYQXdZVmhTVW1GNlpFOVhSRkpMVlVoV2RWVklRazlVYXp\
+BeFZWUnNRbUZWUm5sa1JVNTBWRVprWVZSVmJFMVdiRTEyVFZWc1JWbFhjR2xqTVU1Sll\
+tNXdkbUpYYjNkV1F6a3paVmhKY21Nd2RFdGpRM1IxVFhwU1VsQlVNR2xNUTBwb1dqSld\
+kV1JETVhwaFYyUjFXbGRSZEZwSFJqQlpVMGsyU1cxV05WTnVaRnBYUjNoNldXcEtSMkV\
+3YkhGaU1teGhWMGQ0VEZrd1duZFhWbFowVFZVeFdGSnVRWGxYYTFwclZESkplR05HYkZ\
+SWFJrcHhXV3hhWVU1R2NFZGFSbVJzWWxaS1JWUldhR3RoYlVwVlVWUktXRlp0VW5KWmE\
+yUkxaRlpXV1ZWdGNFNWlXR2d4VjFjd2VGWXlSWGRsUm1oV1lsZG9jbFZxUWxkalJsRjV\
+UbGh3YUZadGREWlZNakUwVjJ4a1IxTnVUbGhoTURFMFdrY3hTMk5HVGxWWGEzQm9ZVEo\
+zZWxaR1pIZFNiVkpHVFZaV1UxZEdTazlXYTFwM1ZteFNWbFZyY0U5aGVrVXlWVlpTWVZ\
+Sc1NrWlNha1pWVmxaS1ExcEVSbXRqUms1WlZHdHdhV0Y2Vm5wWFZFbDRZekpHU0ZOclV\
+rNVhSbHB5Vm01d1IyTkdaSE5oUlhCb1ZsUnNkMVV5TVhkWGJGbDRZMGhTV0dKRk1UTlV\
+iRlUxVWxac05sRnJPVlpOUnpneFYyMTRSbUZWZUVSVGJuQm9WakpTTVZkV2FGTk5WMDU\
+wVm01d1NtRnVRbWxhV0d4TFpESk9kRTlVUW1GV01EUjNWMnhrVW1GVk9YQlRiWGhzVmx\
+oQ2RsZFhkR3RoYlVaV1QxaENWR0V4Y0ZkYVYzUnlaVVpTZEdKRmNHcE5SM2d3V2tWb1E\
+xbFdSWGRoZWtwVVZqTm9kbFZ0ZEhwbFZsWlpVMnhTYVdKclNrcFdhMVpUVVcxV2MxSnV\
+VbFJpVlZwVlZXdGFjbVZzVFhwalJ6bFhUVlpHTmxkWWNFTmhiRWw1V1ROa1ZVMUdSak5\
+aVm1SaFZXdHNjR1F5YkdwTmJYaDFXVzB4UjAxSFVsbFRiWGhLWVcwNWNGZEVRazlsYXp\
+sV1QxWm9VMkpyY0dGWmJHTTFaV3hOZDA5WVZsSlhSMUpUVjFSR1YyRXhiM2RqUlZaWVV\
+qRndUVmxzVWt0WFZUbFhVMnhXVjFJd05URlVSazE0WXpGUmQwNVdRbWxTZWxaMlZqSjB\
+SazFGT1VaWGJYUlhZa2hCZDFReFVrOWhNbEY0Vld0d1YxWlVWbGRYUkVwaFYyczVWMWR\
+1UWxkaVJHdzFWWHBPVDFaV1JuSmhSa3BRVmpOQ2Vsa3haSHBsVjBsNldUSnNiVlpxUlR\
+WSmFYZHBXVmRrYkdKdVVYUmpNbXh1WW1reGFscFlTakJKYW5CaVNXc3hTbE5WVGt0U1J\
+VNUVVVmRPZUZvd1JqTlRWVXBDV2pCc1JsZEhlSEZSTURGRlVWVjBRMW95WkhoaFIzUnh\
+WREZDVWxWVlVrSmhhMHB6VkZaR2VtUXdUbEpYVlZKWFZWWkdTRkpZWkV0UmJGWlZVbFp\
+PVGxGclJraFJWRVpXVWxWT2JtUXdjRlZYUjNoRldXcEplR1F4YkZoT1ZGWk9WV3hXTTF\
+KWVpGcFNSbHBTVlZWNFJWRllhRTlhVmxwUFRWWnNkVlJ1UW1GU01uaHZXVEkxY21WRlV\
+qWlJWVFZEV2pBMVYxRnJSbXBVVlVweVRWUldWazF0ZDNkWGJGSkdXVlV4UTFvd1pFSk5\
+WbFpHVVZoa00xVnNVbGxpUmxKb1YwWktjMVpWYUZkbGJVWkdUVmhhWVZJeFducFZWRUp\
+HWkRCb2Ixa3dOVTVoYTBZelZGZHdTazVGTVVWWk0zQk9aV3RGZDFZeWFHcFVhekUyVVZ\
+oa1RtRnJhekJVVlZKcVpXc3hObEZVUWxoaGEwcDBWRlpHZW1Rd1RsSlhWVkpYVlZaR1N\
+GSllaRXRSYkZaVlVsWk9UbEZyUmtoUlZFWldVbFZPYm1Rd2NGVlhSM2hGV1dwSmVHUXh\
+iRmhPVkZaT1ZXeFdNMUpZWkZwU1JscFNWVlY0UlZGWWFFOWFWbHBQVFZac2RWUnVRbUZ\
+TTW5odldUSTFjbVZGVWpaUlZUVkRXakExVjFGclJtcFVWVXB5VFZSV1ZrMXRkM2RYYkZ\
+KR1dXc3hRMkV3WkVKTlZsWkdVVmhrTTFVeFVsbGlSbEpvVjBaS2MxWlZhRmRsYlVaR1R\
+WaGFZVkl4V25wVlZtaERaREF4UjJFelpFWmtNV3hKVXpJNVlWTlljSEZOUlU1Q1ZWWnN\
+TbE15T1dGVFdIQnhUVVZTUWxWWFRrVlZWMlJDVWxSWmQwMVZPSEppTW5CRVlUTktSVlZ\
+1WXpOYU1Hd3lWMnRWTUdGVVRUQmFSMHB2VVROR2NGSjZaSEZpTWprelYyNUJNR1ZJV2p\
+aU2JsSk5XbnBhVlZaNlFtOVViVkpKWkd4Q1JWVXhVbnBrVm1oVVpWWmpOV1JJU1hwUld\
+HUkVZa2RhUkdJd1VsZFVia1pRWkhwc05WUldaekpVYlRWT1VqRldNMUpIWkZwU1JscFR\
+UVVpDUWxWVlozWlJhMFpTVWtWR2JscFZSazVSYW1oSVVWUkdWbHBGYkROVlZteE9VVzF\
+HUWxKcmJ6TlRTRkpVWkROQ1RWUklWbEJYYW1ScVlUQkdjMVZWYUZaTk1tUkNWRmRqZGx\
+Ock1VTk5SV1JDVFZaV2ExSkhaRkpXTUVwRFZXMU9WVTVVVFRCaWF6RmFaR3hTYWxKdVV\
+uSmFia295VGpOb1ZrNHdVbkJpVldoeFpXdEdWVkZ0WkU5V2EyaFVWbFZXUlZKRlJreFJ\
+iV1J1WTJ0S2JsSlZXa05WVjA1RlVWZHdRbE13U201YU0wWnZZVEp3VUZWR1JsSlNSVVp\
+1Vkd0c1FsSkZTa2RSVjJ4R1VWaENTMDR6YUhkVWJGWXlWVlZ3U0UxRk5XOVVSMGwyV2x\
+oU2FVMXFRazFTUmxWNFRtMTRkMVV3YUZCT01rWnNZbnBDVjFkWVozZGxTR1JFVTFWRmN\
+sUjZWWFpYVkZwRllVTjBhVkZxU1RSTmFsSXhZVmRHVUZWWFJsWlNSRnB1VVZVMWIxZFV\
+iRmRTYlZGeVlXNUtlVmt3VmpKVGJsRnBURU5LVGxOVmJFUlNNVkpFVVRCR2FVc3laRUp\
+rTUd4RFVWZGtTbEpXYUhOaGEwVjJaV3RHVEZGdFpHNWpWMmh5WVdzNVVWVldSa1ZSVjN\
+CRFdUQXhVbU16WkVSVlZteEZWbXhHVWxJd1ZqTlRhMHBXVmtWV1ZGUlZTa0pTTUVWNFZ\
+sVldSRm96WkV0V1JtaHpVa2RKZVUxWVpGcFdlbFV4VkZaS1ZtUXdWak5YVlZKWFZWWkd\
+UVkpGUmpSVWJWWlhWR3BHV21Kck5YZFhhMlJ6WVVkT2RXRXphRVZsYTBaUFVXMWtUMVp\
+yU2tKWk1ERkRZWHBGTVZaVVNuTk5SbkJWVWxaS1RsRlVhRWhSVkVaV1VsVkdNMlF3YkZ\
+WWFIzaFZXVlpvVTJKR1JYZFNXR1JKWVVkT1QxUlhjRUprTURGeFUxUlNUbEpIVGpWVWJ\
+uQldUbFprYjFrd05VNWxhMFl6VkZkd1NrNUZNVVZaTTJ4UFpXeFZNVll5Y0VOaVJURlN\
+Zek5rUkZWV2JFVldiRVpTVWpCV00xTnJTbFpXUlZaVVZGVktRbEl3UlhoV1ZWWkVXak5\
+rUzFaR2FITlNSMGw1VFZoa1dsWjZWVEZVVmtwV1pEQldNMWRWVWxkVlZrWk5Va1ZHTkZ\
+SdFZsZFVha1phWW1zMWQxZHJaSE5oUjA1MVlUTm9SV1ZyUms5UmJXUlBWbXRLUWxrd01\
+VTmhla1V4VmxSS2MwMUdjRlZTVjBaT1VXMWtTRkZVUmxaU1ZVWXpaREZLVlZkSGVGVlp\
+WbWhUWWtaV1NWWnVjR2hTVkVZeVYydGtWMk14UlhkU1dHUllWa1ZHVlZGdFpHcGpWMmh\
+5WVdzNVVWVlZiRU5SYldSdVkxZG9jbUZyT1ZGVlZURkRVVzVrVDFFd1JrSlZhM0JEVm0\
+wNWVscEZkRE5YVlRVMFlWWkNORk5JV25CU2JrWk1aV3RTYzA5WFdqQlVTRlpPV1ZjeGQ\
+xSnNSbXBYU0dONFRXcGthRlJ0T1ZOWmJrNUpUREJhVG1OdE1UWlJNRVpKVFhwak0wMTZ\
+UbXBOYlRscFZVZE9jMlJzVG5sWFZVb3lUVVZPTUZZeFJqQlpWRnBvU3pKT2RrMXNiRE5\
+YYTFKQ1ZUQktibFJzV2tsVmF6RkRVVmRaTkZKVlRrVlJWV1JDVlZWbmRsRlhaRVpSVlR\
+GQ1RrVmtRazFXVm10U1NHUkdVV2s1TTFWVlZrSmtNR3hFVVd0U1FscHJTbTVVYkZwSlZ\
+UQXhSbEl3VWtKV01tUkRWVmh3TkdWdVpIZFZia0pOWlZNNWVWUldWbHBsYlVadlRXNU5\
+lRTB5VmxaUFYyUkhaV3RHYTFGdFpFOVdhMmhTVGtWV1Ixb3hSbFppYms1c1RWVjRSR0V\
+6VGpGT1JGWjFaRWhzVWxFeFdrSmFSbEpzVVZWR05WSkVhSEprTUU1dVYxVnNUR0l4Y0V\
+wbGJXOTNVbFZHTTFOVlVsUlJWVVl6Vld4R1NtRkZSa3BqTVd4eldsWndUR015Y0VkVWE\
+wNTZVMnQwYkZWSGVFaFVWVVpOV2xoQ1YxcFViRVpVUkdSUFlqTlJNVTFVVmpObFJ6Rlh\
+aRlZ3UTFGWGJFSlpNRlpPVmxaV2IxSldUbnBVUm1SUlRsaG9WRlZXVlhkWFNFWTJWbTV\
+GTkZkWVduQlNha1pwVm0wNU5sSXpjRFJPV0hCUFdqSk9lbVI2TURsSmJERTVabEVpTEN\
+KemFXZHVZWFIxY21WeklqcGJleUp3Y205MFpXTjBaV1FpT2lKbGVVbzBUbGROYVU5c2M\
+ybFVWV3hLVVRCb2NWRXdUa0paTVU1dVVWaGtTbEZyUm01VFZXUkNWMGRvTUUxVVVucGl\
+NREZDWWpCa1JGRXpSa2hWTURBd1QxVktRbFJWVGs1U1ZtdzBVVE53UWxOclNtNVViRnB\
+EVVZac1ZWRlhkRTlUVlRGVFZGaGtSbFZXYkVWV2JFWlNVekJTUW1OR1VtaFdNVm93VjJ\
+4ak1XVnJiRVpTYTJoT1ZWUm9NMUpHUmxwU1JscFNWVlY0UlZGV2NFUldhMDVEVWtaV1I\
+xUllhRVpXUlVaUlVXMWtUMVpyU2tKVVZURkVVbXh3YzFsdE1WTmtiVTV5Vkd0S1RsRXd\
+SbGxTUmxKS1pVVXhSVlJZYkU5aGEwVXhWRmR3U21WVk5WZGlNV3hGWlcxek1WUXhVbkp\
+sUlRGeFZGaG9UbUZyTUhoVU1WSldUbFprY1ZGdGFFNVZXRTR6VVRGR1dsSkdXbEpWVld\
+SR1pEQndSVlV3VWtaV1JURkRVbFZrUWsxV1ZrWlJNbVF6VXpGVmVXSkhlR2xXTVZveFd\
+UTnNRMUZzU2paU1ZrSk9VVlJDU0ZGVVJsWlNWVTR6WkRCa1VtSkdSbTVWVkVaRFZrVXh\
+VMVZZWkVaYU1XeEZWbXhHVWxKclZqTmtSM0JhVmpGd2RGZHNUWGRPVlRsRldYcENUMVp\
+GVmxoVVZVcFNVakJGZUZaVlZrSmtNMlJQVmxWYWIxSkZNVFZPVlZwUFpXeFdNRlJXVWt\
+Ka01VWlZVV3h3VGxGck1VaFJibXg0VWpGT1RrNUViRUphTUZaSVVUQk9lRkl4VGs1T1J\
+HeENaREJXU1ZGVVFrcFJWVXBQVFVSb2NWWXdlSHBOUjBadlV6Qm9XbGR1Vm05aVZ6Rmp\
+UREpqTkdScVVsaFRNR2d5VVZoU2FGcHNSazFSVTNSS1pGVXhUMkZITVc1aFZ6RllUakJ\
+HVG1OdVJtOWlWMHBWVFRCc2FGVkZUalZoUnpGaFUxWk9kMVI2V20xaVUzTXlVMWhhWTB\
+3eldrcGphM1J2VlZaU01WWnRPVXhoYldSYVVWaGtiV0ZyUm5aUmJXUnVZMnRLYmxKVld\
+rTlZWMDVEVTFWR1Vsa3dVa05qU0ZKYVYwVTFiMVJHYUZOaVIwMTZWVmhXYWsxdGVITlp\
+iR1JYWkZkT05VNVhjR2xOYWtFeVZERlNVazFGTVRaUlZsSkRXakExVjFOR1RsWlNWVkp\
+GVVZWMFExb3laSGxSYldSR1VtdEtVbGt3VWtKV1JVWlFVVzFrVDFacmFGSlBSVXBDV21\
+wb1JsRnJSazVSTUVrd1VWaGtUVlZXYkVWV2JFbDNWV3RLUkZkWVpFdFRWV3h3V2tWa2I\
+ySkZlSFZYYlhocFlsWktNbGt5YXpGaGJHeFlUa2hXYVdKVWEzZFVSekV3WkZkSmVsa3p\
+WbXRTTW1oM1dUTnJNVTFzYkZobFJFWmhWa1ZHVEZGdFpHNWpWMmh5WVdzNVVWVldSa1Z\
+SVjJSUFUxVkdSVkZyV2tKaFZVazFVVzB4ZUZRemNIRlZWR2hzV1ZkamVWTnVVblprVmx\
+KdlVsWm9lVm93T1VOWFZsRjNVWHBvWVdSRGREVlBWemxKVWtad1JWbHNVbEpUVjJoQ1Z\
+HMXpNbVJIT1ZOaU1sWkVXVmMxYUZSWGNFNVdSWGgwWWxaV2RXSlhTbkphYWtKNldsaGF\
+jbEV3YnpSTmJXc3hWbGhHY1ZWcldsZFZVMHBrVEVOS2FHSkhZMmxQYVVwR1ZYcEpNVTV\
+wU2praUxDSnphV2R1WVhSMWNtVWlPaUphWTFwa1dYbzBiMUl3UjJKc09UWnFNWGxZWm5\
+kdlRYZGxVVGt6VGpCdFNVUmxjVFkyVTBacWRFdG9lR1pSWjNJMGRUWkpOVEJKWldNMmE\
+xWTJhSEV3YVcxdlptTlBhVGs0VW1OSVpXUmpNVzFuZHpCWVp5SjlYWDA9IiwiY3JlYXR\
+lZC1vbiI6IjIwMjItMDItMjJUMDc6MzM6MjUuMDIwWiIsImFnZW50LXNpZ24tY2VydCI\
+6WyJNSUlDSkRDQ0FjcWdBd0lCQWdJRVhsakNNREFLQmdncWhrak9QUVFEQWpCbE1Rc3d\
+DUVlEVlFRR0V3SkJVVEVTTUJBR0ExVUVDZ3dKVFhsRGIyMXdZVzU1TVJVd0V3WURWUVF\
+MREF4TmVWTjFZbk5wWkdsaGNua3hEekFOQmdOVkJBY01CazE1VTJsMFpURWFNQmdHQTF\
+VRUF3d1JUWGxUYVhSbFVIVnphRTF2WkdWc1EwRXdIaGNOTWpBd01qSTRNRGN6TXpBMFd\
+oY05NekF3TWpJNE1EY3pNekEwV2pCbU1Rc3dDUVlEVlFRR0V3SkJVVEVTTUJBR0ExVUV\
+DZ3dKVFhsRGIyMXdZVzU1TVJVd0V3WURWUVFMREF4TmVWTjFZbk5wWkdsaGNua3hEekF\
+OQmdOVkJBY01CazE1VTJsMFpURWJNQmtHQTFVRUF3d1NUWGxUYVhSbFVIVnphRTF2Wkd\
+Wc1FYQndNRmt3RXdZSEtvWkl6ajBDQVFZSUtvWkl6ajBEQVFjRFFnQUU2MDFPK29qQ2t\
+yRFJ3N2dJdlpFNGkzNGRiaENxaUc3am9vd1pwNHh2ekZ0TGc2VFcwaE5kSHZQRFNUc3V\
+YU3lXOXRyM0F3Q2xmQ29EVk5xT3c5eU1YNk5uTUdVd0RnWURWUjBQQVFIL0JBUURBZ2V\
+BTUI4R0ExVWRJd1FZTUJhQUZKN0h0U3dwTEx1T1o3Y2tBbFFIVTNnQU1nL0pNQjBHQTF\
+VZERnUVdCQlJjVDUzNG5NWXZUY0Z0a2Zydjd4VTdEaW1IanpBVEJnTlZIU1VFRERBS0J\
+nZ3JCZ0VGQlFjREFqQUtCZ2dxaGtqT1BRUURBZ05JQURCRkFpRUFwSjd4cE5VdlFKRzB\
+OaExiL2V0YjIwTERVMTZscFNITzdhZW8wVll4MHh3Q0lBK081L1k2RGgrYkIyODI0dWl\
+hT1FhVUQ2Z0FOaFk5VkZkK2pycmNFdkp0IiwiTUlJQ0dUQ0NBYitnQXdJQkFnSUVYbGp\
+BL3pBS0JnZ3Foa2pPUFFRREFqQmNNUXN3Q1FZRFZRUUdFd0pCVVRFU01CQUdBMVVFQ2d\
+3SlRYbERiMjF3WVc1NU1SVXdFd1lEVlFRTERBeE5lVk4xWW5OcFpHbGhjbmt4RHpBTkJ\
+nTlZCQWNNQmsxNVUybDBaVEVSTUE4R0ExVUVBd3dJVFhsVGFYUmxRMEV3SGhjTk1qQXd\
+Nakk0TURjeU56VTVXaGNOTXpBd01qSTRNRGN5TnpVNVdqQmxNUXN3Q1FZRFZRUUdFd0p\
+CVVRFU01CQUdBMVVFQ2d3SlRYbERiMjF3WVc1NU1SVXdFd1lEVlFRTERBeE5lVk4xWW5\
+OcFpHbGhjbmt4RHpBTkJnTlZCQWNNQmsxNVUybDBaVEVhTUJnR0ExVUVBd3dSVFhsVGF\
+YUmxVSFZ6YUUxdlpHVnNRMEV3V1RBVEJnY3Foa2pPUFFJQkJnZ3Foa2pPUFFNQkJ3TkN\
+BQVJKQlZvc2RLd1lOeGlQeEh2aUZxS3pEbDlmdEx1TWFtcEZRY1h3MTI3YU5vUmJzSC9\
+GTXJtekNBSDM3NzMzYzJvYlBjbHZTcllCdjBDdFdRdGE2YStjbzJZd1pEQVNCZ05WSFJ\
+NQkFmOEVDREFHQVFIL0FnRUFNQTRHQTFVZER3RUIvd1FFQXdJQ0JEQWZCZ05WSFNNRUd\
+EQVdnQlF6eHp3cFJwTHkvck1VWXphaDJzMTNlVTlnRnpBZEJnTlZIUTRFRmdRVW5zZTF\
+MQ2tzdTQ1bnR5UUNWQWRUZUFBeUQ4a3dDZ1lJS29aSXpqMEVBd0lEU0FBd1JRSWhBSXN\
+ZbGVaS3NqRk5Dc0pLZVBsR01BTGVwVmU5RUw3Tm90NTE1d3htVnVKQkFpQWNFTVVVaEV\
+Tc0xXUDV4U1FVMFhxelZxOFl2aUYxYlZvekd6eDV6Tmdjc3c9PSJdfX0",
+  "signatures":[{
+    "protected":"eyJ4NWMiOlsiTUlJQjhEQ0NBWmFnQXdJQkFnSUdBWEJoTUtZSU1\
+Bb0dDQ3FHU000OUJBTUNNRnd4Q3pBSkJnTlZCQVlUQWtGUk1SSXdFQVlEVlFRS0RBbE5\
+lVU52YlhCaGJua3hGVEFUQmdOVkJBc01ERTE1VTNWaWMybGthV0Z5ZVRFUE1BMEdBMVV\
+FQnd3R1RYbFRhWFJsTVJFd0R3WURWUVFEREFoTmVWTnBkR1ZEUVRBZUZ3MHlNREF5TWp\
+Bd05qQXlNak5hRncwek1EQXlNakF3TmpBeU1qTmFNSGt4Q3pBSkJnTlZCQVlUQWtGUk1\
+SSXdFQVlEVlFRS0RBbE5lVU52YlhCaGJua3hGVEFUQmdOVkJBc01ERTE1VTNWaWMybGt\
+hV0Z5ZVRFUE1BMEdBMVVFQnd3R1RYbFRhWFJsTVM0d0xBWURWUVFERENWU1pXZHBjM1J\
+5WVhJZ1ZtOTFZMmhsY2lCU1pYRjFaWE4wSUZOcFoyNXBibWNnUzJWNU1Ga3dFd1lIS29\
+aSXpqMENBUVlJS29aSXpqMERBUWNEUWdBRUJUVFwvc1JmTDlsSnVGbVwvY24zU2pHcWp\
+QXC9xdnBrNytoSTIwOE5oVkRvR2hcLzdLUCt2TXpYeVFRQStqUjZrNnJhTTI4ZlwvbHV\
+FK1h1aHVwN1Vmem05Q3FNbk1DVXdFd1lEVlIwbEJBd3dDZ1lJS3dZQkJRVUhBeHd3RGd\
+ZRFZSMFBBUUhcL0JBUURBZ2VBTUFvR0NDcUdTTTQ5QkFNQ0EwZ0FNRVVDSUhOK3VBbUp\
+ldVhlc1wveWQxd1M0Mlo0RFhKNEptMWErZzNYa1pnZjhUaGxuQWlFQXBVdTZzZnljRWt\
+veDdSWlhtZitLOHc0cDZzUldyamExUVJwWTAyNjQxSFk9IiwiTUlJQjhEQ0NBWmVnQXd\
+JQkFnSUdBWEJoTUtZQk1Bb0dDQ3FHU000OUJBTUNNRnd4Q3pBSkJnTlZCQVlUQWtGUk1\
+SSXdFQVlEVlFRS0RBbE5lVU52YlhCaGJua3hGVEFUQmdOVkJBc01ERTE1VTNWaWMybGt\
+hV0Z5ZVRFUE1BMEdBMVVFQnd3R1RYbFRhWFJsTVJFd0R3WURWUVFEREFoTmVWTnBkR1Z\
+EUVRBZUZ3MHlNREF5TWpBd05qQXlNak5hRncwek1EQXlNakF3TmpBeU1qTmFNRnd4Q3p\
+BSkJnTlZCQVlUQWtGUk1SSXdFQVlEVlFRS0RBbE5lVU52YlhCaGJua3hGVEFUQmdOVkJ\
+Bc01ERTE1VTNWaWMybGthV0Z5ZVRFUE1BMEdBMVVFQnd3R1RYbFRhWFJsTVJFd0R3WUR\
+WUVFEREFoTmVWTnBkR1ZEUVRCWk1CTUdCeXFHU000OUFnRUdDQ3FHU000OUF3RUhBMEl\
+BQkluQ3VoV1ZzZ2NONzFvWmVzMUZHXC9xZFZnTVBva01wZlMyNzFcL2V5SWNcL29EVmJ\
+NRkhDYmV2SjVMTTgxOTVOYVpLTlNvSFAzS3dMeXVCaDh2MncwOVp1alJUQkRNQklHQTF\
+VZEV3RUJcL3dRSU1BWUJBZjhDQVFFd0RnWURWUjBQQVFIXC9CQVFEQWdJRU1CMEdBMVV\
+kRGdRV0JCUXp4endwUnBMeVwvck1VWXphaDJzMTNlVTlnRnpBS0JnZ3Foa2pPUFFRREF\
+nTkhBREJFQWlCZGJIU212YW9qaDBpZWtaSUtOVzhRMGxTbGI1K0RLTlFcL05LY1I3dWx\
+6dGdJZ2RwejZiUkYyREZtcGlKb3JCMkd5VmE4YVdkd2xIc0RvRVdZY0k0UEdKYmc9Il0\
+sImFsZyI6IkVTMjU2In0",
+    "signature":"67t3n8zyEek4IM2Ko3Y_UvE1hzp794QFNTqG-HzTrBQtE4_4-yS\
+yyFd3kP6YCn35YYJ7yK35d3styo_yoiPfKA"
+  }]
 }
 ~~~~
 {: #ExampleRegistrarVoucherRequestfigure title='Example Registrar Voucher Request - RVR' artwork-align="left"}
@@ -2414,50 +2430,108 @@ aOJrCam-OIrZ7-QguUJwm5VEHJ14NEdAWGOQ"
 
 ## Example Voucher Response (from MASA to Pledge, via Registrar and Registrar-agent)
 
-The following is an example voucher response from MASA to Pledge via Registrar and Registrar-agent, in "General JWS JSON Serialization".
+The following is an example voucher response from MASA to Pledge via Registrar and Registrar-agent, in "General JWS JSON Serialization". The message size of this Voucher is: 1916 bytes
 
 ~~~~
 =============== NOTE: '\' line wrapping per RFC 8792 ================
 
 {
-  "payload": "eyJpZXRmLXZvdWNoZXI6dm91Y2hlciI6eyJhc3NlcnRpb24iOiJhZ2\
-VudC1wcm94aW1pdHkiLCJzZXJpYWwtbnVtYmVyIjoiMDEyMzQ1Njc4OSIsIm5vbmNlIj\
-oiNW9Cb3UvUndqNCtkTUo3QlErVWp0Zz09IiwiY3JlYXRlZC1vbiI6IjIwMjItMDctMT\
-JUMDQ6NDk6MDcuNjAyWiIsInBpbm5lZC1kb21haW4tY2VydCI6Ik1JSUJwRENDQVVtZ0\
-F3SUJBZ0lHQVcwZUx1SCtNQW9HQ0NxR1NNNDlCQU1DTURVeEV6QVJCZ05WQkFvTUNrMT\
-VRblZ6YVc1bGMzTXhEVEFMQmdOVkJBY01CRk5wZEdVeER6QU5CZ05WQkFNTUJsUmxjM1\
-JEUVRBZUZ3MHhPVEE1TVRFd01qTTNNekphRncweU9UQTVNVEV3TWpNM016SmFNRFV4RX\
-pBUkJnTlZCQW9NQ2sxNVFuVnphVzVsYzNNeERUQUxCZ05WQkFjTUJGTnBkR1V4RHpBTk\
-JnTlZCQU1NQmxSbGMzUkRRVEJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSU\
-FCT2t2a1RIdThRbFQzRkhKMVVhSTcrV3NIT2IwVVMzU0FMdEc1d3VLUURqaWV4MDYvU2\
-NZNVBKaWJ2Z0hUQitGL1FUamdlbEhHeTFZS3B3Y05NY3NTeWFqUlRCRE1CSUdBMVVkRX\
-dFQi93UUlNQVlCQWY4Q0FRRXdEZ1lEVlIwUEFRSC9CQVFEQWdJRU1CMEdBMVVkRGdRV0\
-JCVG9aSU16UWRzRC9qLytnWC83Y0JKdWNIL1htakFLQmdncWhrak9QUVFEQWdOSkFEQk\
-dBaUVBdHhRMytJTEdCUEl0U2g0YjlXWGhYTnVocVNQNkgrYi9MQy9mVllEalE2b0NJUU\
-RHMnVSQ0hsVnEzeWhCNThUWE1VYnpIOCtPbGhXVXZPbFJEM1ZFcURkY1F3PT0ifX0",
-  "signatures": [{
-    "protected": "eyJ4NWMiOlsiTUlJQmt6Q0NBVGlnQXdJQkFnSUdBV0ZCakNrWU\
-1Bb0dDQ3FHU000OUJBTUNNRDB4Q3pBSkJnTlZCQVlUQWtGUk1SVXdFd1lEVlFRS0RBeE\
-thVzVuU21sdVowTnZjbkF4RnpBVkJnTlZCQU1NRGtwcGJtZEthVzVuVkdWemRFTkJNQj\
-RYRFRFNE1ERXlPVEV3TlRJME1Gb1hEVEk0TURFeU9URXdOVEkwTUZvd1R6RUxNQWtHQT\
-FVRUJoTUNRVkV4RlRBVEJnTlZCQW9NREVwcGJtZEthVzVuUTI5eWNERXBNQ2NHQTFVRU\
-F3d2dTbWx1WjBwcGJtZERiM0p3SUZadmRXTm9aWElnVTJsbmJtbHVaeUJMWlhrd1dUQV\
-RCZ2NxaGtqT1BRSUJCZ2dxaGtqT1BRTUJCd05DQUFTQzZiZUxBbWVxMVZ3NmlRclJzOF\
-IwWlcrNGIxR1d5ZG1XczJHQU1GV3diaXRmMm5JWEgzT3FIS1Z1OHMyUnZpQkdOaXZPS0\
-dCSEh0QmRpRkVaWnZiN294SXdFREFPQmdOVkhROEJBZjhFQkFNQ0I0QXdDZ1lJS29aSX\
-pqMEVBd0lEU1FBd1JnSWhBSTRQWWJ4dHNzSFAyVkh4XC90elVvUVwvU3N5ZEwzMERRSU\
-5FdGNOOW1DVFhQQWlFQXZJYjNvK0ZPM0JUbmNMRnNhSlpSQWtkN3pPdXNuXC9cL1pLT2\
-FFS2JzVkRpVT0iXSwidHlwIjoidm91Y2hlci1qd3MranNvbiIsImFsZyI6IkVTMjU2In\
-0",
-    "signature": "HFqpWjVKYn_cSLleTohzSygHbv_dYxz6opknJK5w_ZaLGroGym\
-zBs2Ofk8DrX9zYiWZrVR7Y6HDcxY-aErEbiA"
-    }]
+  "payload":"eyJpZXRmLXZvdWNoZXI6dm91Y2hlciI6eyJhc3NlcnRpb24iOiJhZ2V\
+udC1wcm94aW1pdHkiLCJzZXJpYWwtbnVtYmVyIjoiMDEyMzQ1Njc4OSIsIm5vbmNlIjo\
+iTDNJSjZocHRIQ0lRb054YWFiOUhXQT09IiwiY3JlYXRlZC1vbiI6IjIwMjItMDQtMjZ\
+UMDU6MTY6MjguNzI2WiIsInBpbm5lZC1kb21haW4tY2VydCI6Ik1JSUJwRENDQVVtZ0F\
+3SUJBZ0lHQVcwZUx1SCtNQW9HQ0NxR1NNNDlCQU1DTURVeEV6QVJCZ05WQkFvTUNrMTV\
+RblZ6YVc1bGMzTXhEVEFMQmdOVkJBY01CRk5wZEdVeER6QU5CZ05WQkFNTUJsUmxjM1J\
+EUVRBZUZ3MHhPVEE1TVRFd01qTTNNekphRncweU9UQTVNVEV3TWpNM016SmFNRFV4RXp\
+BUkJnTlZCQW9NQ2sxNVFuVnphVzVsYzNNeERUQUxCZ05WQkFjTUJGTnBkR1V4RHpBTkJ\
+nTlZCQU1NQmxSbGMzUkRRVEJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSUF\
+CT2t2a1RIdThRbFQzRkhKMVVhSTcrV3NIT2IwVVMzU0FMdEc1d3VLUURqaWV4MDYvU2N\
+ZNVBKaWJ2Z0hUQitGL1FUamdlbEhHeTFZS3B3Y05NY3NTeWFqUlRCRE1CSUdBMVVkRXd\
+FQi93UUlNQVlCQWY4Q0FRRXdEZ1lEVlIwUEFRSC9CQVFEQWdJRU1CMEdBMVVkRGdRV0J\
+CVG9aSU16UWRzRC9qLytnWC83Y0JKdWNIL1htakFLQmdncWhrak9QUVFEQWdOSkFEQkd\
+BaUVBdHhRMytJTEdCUEl0U2g0YjlXWGhYTnVocVNQNkgrYi9MQy9mVllEalE2b0NJUUR\
+HMnVSQ0hsVnEzeWhCNThUWE1VYnpIOCtPbGhXVXZPbFJEM1ZFcURkY1F3PT0ifX0",
+  "signatures":[{
+    "protected":"eyJ4NWMiOlsiTUlJQmt6Q0NBVGlnQXdJQkFnSUdBV0ZCakNrWU1\
+Bb0dDQ3FHU000OUJBTUNNRDB4Q3pBSkJnTlZCQVlUQWtGUk1SVXdFd1lEVlFRS0RBeEt\
+hVzVuU21sdVowTnZjbkF4RnpBVkJnTlZCQU1NRGtwcGJtZEthVzVuVkdWemRFTkJNQjR\
+YRFRFNE1ERXlPVEV3TlRJME1Gb1hEVEk0TURFeU9URXdOVEkwTUZvd1R6RUxNQWtHQTF\
+VRUJoTUNRVkV4RlRBVEJnTlZCQW9NREVwcGJtZEthVzVuUTI5eWNERXBNQ2NHQTFVRUF\
+3d2dTbWx1WjBwcGJtZERiM0p3SUZadmRXTm9aWElnVTJsbmJtbHVaeUJMWlhrd1dUQVR\
+CZ2NxaGtqT1BRSUJCZ2dxaGtqT1BRTUJCd05DQUFTQzZiZUxBbWVxMVZ3NmlRclJzOFI\
+wWlcrNGIxR1d5ZG1XczJHQU1GV3diaXRmMm5JWEgzT3FIS1Z1OHMyUnZpQkdOaXZPS0d\
+CSEh0QmRpRkVaWnZiN294SXdFREFPQmdOVkhROEJBZjhFQkFNQ0I0QXdDZ1lJS29aSXp\
+qMEVBd0lEU1FBd1JnSWhBSTRQWWJ4dHNzSFAyVkh4XC90elVvUVwvU3N5ZEwzMERRSU5\
+FdGNOOW1DVFhQQWlFQXZJYjNvK0ZPM0JUbmNMRnNhSlpSQWtkN3pPdXNuXC9cL1pLT2F\
+FS2JzVkRpVT0iXSwiYWxnIjoiRVMyNTYifQ",
+    "signature":"0TB5lr-cs1jqka2vNbQm3bBYWfLJd8zdVKIoV53eo2YgSITnKKY\
+TvHMUw0wx9wdyuNVjNoAgLysNIgEvlcltBw"
+  }]
 }
 ~~~~
-{: #ExampleVoucherResponsefigure title='Example Voucher Response' artwork-align="left"}
+{: #ExampleVoucherResponsefigure title='Example Voucher Response from MASA' artwork-align="left"}
 
+## Example Voucher Response, MASA issued Voucher with additional Registrar signature (from MASA to Pledge, via Registrar and Registrar-agent)
 
+The following is an example voucher response from MASA to Pledge via Registrar and Registrar-agent, in "General JWS JSON Serialization".
+The message size of this Voucher is: 3006 bytes
 
+~~~~
+=============== NOTE: '\' line wrapping per RFC 8792 ================
+
+{
+  "payload":"eyJpZXRmLXZvdWNoZXI6dm91Y2hlciI6eyJhc3NlcnRpb24iOiJhZ2V\
+udC1wcm94aW1pdHkiLCJzZXJpYWwtbnVtYmVyIjoiMDEyMzQ1Njc4OSIsIm5vbmNlIjo\
+iUUJiSXMxNTJzbkFvVzdSeVFMWENvZz09IiwiY3JlYXRlZC1vbiI6IjIwMjItMDktMjl\
+UMDM6Mzc6MjYuMzgyWiIsInBpbm5lZC1kb21haW4tY2VydCI6Ik1JSUJwRENDQVVtZ0F\
+3SUJBZ0lHQVcwZUx1SCtNQW9HQ0NxR1NNNDlCQU1DTURVeEV6QVJCZ05WQkFvTUNrMTV\
+RblZ6YVc1bGMzTXhEVEFMQmdOVkJBY01CRk5wZEdVeER6QU5CZ05WQkFNTUJsUmxjM1J\
+EUVRBZUZ3MHhPVEE1TVRFd01qTTNNekphRncweU9UQTVNVEV3TWpNM016SmFNRFV4RXp\
+BUkJnTlZCQW9NQ2sxNVFuVnphVzVsYzNNeERUQUxCZ05WQkFjTUJGTnBkR1V4RHpBTkJ\
+nTlZCQU1NQmxSbGMzUkRRVEJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSUF\
+CT2t2a1RIdThRbFQzRkhKMVVhSTcrV3NIT2IwVVMzU0FMdEc1d3VLUURqaWV4MDYvU2N\
+ZNVBKaWJ2Z0hUQitGL1FUamdlbEhHeTFZS3B3Y05NY3NTeWFqUlRCRE1CSUdBMVVkRXd\
+FQi93UUlNQVlCQWY4Q0FRRXdEZ1lEVlIwUEFRSC9CQVFEQWdJRU1CMEdBMVVkRGdRV0J\
+CVG9aSU16UWRzRC9qLytnWC83Y0JKdWNIL1htakFLQmdncWhrak9QUVFEQWdOSkFEQkd\
+BaUVBdHhRMytJTEdCUEl0U2g0YjlXWGhYTnVocVNQNkgrYi9MQy9mVllEalE2b0NJUUR\
+HMnVSQ0hsVnEzeWhCNThUWE1VYnpIOCtPbGhXVXZPbFJEM1ZFcURkY1F3PT0ifX0",
+  "signatures":[{
+    "protected":"eyJ4NWMiOlsiTUlJQmt6Q0NBVGlnQXdJQkFnSUdBV0ZCakNrWU1\
+Bb0dDQ3FHU000OUJBTUNNRDB4Q3pBSkJnTlZCQVlUQWtGUk1SVXdFd1lEVlFRS0RBeEt\
+hVzVuU21sdVowTnZjbkF4RnpBVkJnTlZCQU1NRGtwcGJtZEthVzVuVkdWemRFTkJNQjR\
+YRFRFNE1ERXlPVEV3TlRJME1Gb1hEVEk0TURFeU9URXdOVEkwTUZvd1R6RUxNQWtHQTF\
+VRUJoTUNRVkV4RlRBVEJnTlZCQW9NREVwcGJtZEthVzVuUTI5eWNERXBNQ2NHQTFVRUF\
+3d2dTbWx1WjBwcGJtZERiM0p3SUZadmRXTm9aWElnVTJsbmJtbHVaeUJMWlhrd1dUQVR\
+CZ2NxaGtqT1BRSUJCZ2dxaGtqT1BRTUJCd05DQUFTQzZiZUxBbWVxMVZ3NmlRclJzOFI\
+wWlcrNGIxR1d5ZG1XczJHQU1GV3diaXRmMm5JWEgzT3FIS1Z1OHMyUnZpQkdOaXZPS0d\
+CSEh0QmRpRkVaWnZiN294SXdFREFPQmdOVkhROEJBZjhFQkFNQ0I0QXdDZ1lJS29aSXp\
+qMEVBd0lEU1FBd1JnSWhBSTRQWWJ4dHNzSFAyVkh4XC90elVvUVwvU3N5ZEwzMERRSU5\
+FdGNOOW1DVFhQQWlFQXZJYjNvK0ZPM0JUbmNMRnNhSlpSQWtkN3pPdXNuXC9cL1pLT2F\
+FS2JzVkRpVT0iXSwidHlwIjoidm91Y2hlci1qd3MranNvbiIsImFsZyI6IkVTMjU2In0\
+",
+    "signature":"ShqW8uFRkuAXIzjAhB4bolMMndcY7GYq3Kbo94yvGtjCaxEX3Hp\
+6QXZUTEJ_kulQ1G7DnaU4igDPdUGtcV9Lkw"},{
+    "protected":"eyJ4NWMiOlsiTUlJQjRqQ0NBWWlnQXdJQkFnSUdBWFk3MmJiWk1\
+Bb0dDQ3FHU000OUJBTUNNRFV4RXpBUkJnTlZCQW9NQ2sxNVFuVnphVzVsYzNNeERUQUx\
+CZ05WQkFjTUJGTnBkR1V4RHpBTkJnTlZCQU1NQmxSbGMzUkRRVEFlRncweU1ERXlNRGN\
+3TmpFNE1USmFGdzB6TURFeU1EY3dOakU0TVRKYU1ENHhFekFSQmdOVkJBb01DazE1UW5\
+WemFXNWxjM014RFRBTEJnTlZCQWNNQkZOcGRHVXhHREFXQmdOVkJBTU1EMFJ2YldGcGJ\
+sSmxaMmx6ZEhKaGNqQlpNQk1HQnlxR1NNNDlBZ0VHQ0NxR1NNNDlBd0VIQTBJQUJCazE\
+2S1wvaTc5b1JrSzVZYmVQZzhVU1I4XC91czFkUFVpWkhNdG9rU2RxS1c1Zm5Xc0JkK3F\
+STDdXUmZmZVdreWdlYm9KZklsbHVyY2kyNXduaGlPVkNHamV6QjVNQjBHQTFVZEpRUVd\
+NQlFHQ0NzR0FRVUZCd01CQmdnckJnRUZCUWNESERBT0JnTlZIUThCQWY4RUJBTUNCNEF\
+3U0FZRFZSMFJCRUV3UDRJZGNtVm5hWE4wY21GeUxYUmxjM1F1YzJsbGJXVnVjeTFpZEM\
+1dVpYU0NIbkpsWjJsemRISmhjaTEwWlhOME5pNXphV1Z0Wlc1ekxXSjBMbTVsZERBS0J\
+nZ3Foa2pPUFFRREFnTklBREJGQWlCeGxkQmhacTBFdjVKTDJQcldDdHlTNmhEWVcxeUN\
+PXC9SYXVicEM3TWFJRGdJaEFMU0piZ0xuZ2hiYkFnMGRjV0ZVVm9cL2dHTjBcL2p3ekp\
+aMFNsMmg0eElYazEiXSwidHlwIjoidm91Y2hlci1qd3MranNvbiIsImFsZyI6IkVTMjU\
+2In0",
+    "signature":"N4oXV48V6umsHMKkhdSSmJYFtVb6agjD32uXpIlGx6qVE7Dh0-b\
+qhRRyjnxp80IV_Fy1RAOXIIzs3Q8CnMgBgg"
+  }]
+}
+~~~~
+{: #ExampleVoucherResponseWithRegSignfigure title='Example Voucher Response from MASA, with additional Registrar signature' artwork-align="left"}
 
 # History of Changes [RFC Editor: please delete] {#app_history}
 
@@ -2468,23 +2542,24 @@ From IETF draft 04 -> IETF draft 05:
 * Restructured document to have a distinct section for the object flow and handling and shortened introduction, issue #72
 * Added security considerations for using mDNS without a specific product-serial-number, issue #75
 * Clarified pledge-status responses are cumulative, issue #73
-* Removed agent-sign-cert from trigger data, issue #70
+* Removed agent-sign-cert from trigger data to save bandwidth and remove complexity through options, issue #70
 * Changed terminology for LDevID(Reg) certificate to registrar EE certificate, as it does not need to be an LDevID, issue #66
 * Added new protected header parameter (created-on) in PER to support freshness validation, issue #63
-* Added explanation of MASA requiring domain CA cert in section 5.5.1 and section 5.5.2, issue #36
 * Removed reference to CAB Forum as not needed for BRSKI-PRM specifically, issue #65
 * Enhanced error codes in section 5.5.1, issue #39, #64
 * Enhanced security considerations and privacy considerations, issue #59
-* Reworked terminology of "enrollment object", "certification object", "enrollment request object", etc., issue #27
-* Reworked all message representations to align with encoding
-* Included examples for several objects in section {{examples}}
-* Defined new endpoint for pledge bootstrapping status inquiry, issue #35 in section {{exchanges_uc2_5}}, IANA considerations and section {{pledge_ep}}
-* PoP for private key to registrar certificate included as mandatory, issues #32 and #49
 * Issue #50 addressed by referring to the utilized enrollment protocol
 * Issue #47 MASA verification of LDevID(RegAgt) to the same registrar EE certificate domain CA
+* Reworked terminology of "enrollment object", "certification object", "enrollment request object", etc., issue #27
+* Reworked all message representations to align with encoding
+* Added explanation of MASA requiring domain CA cert in section 5.5.1 and section 5.5.2, issue #36
+* Defined new endpoint for pledge bootstrapping status inquiry, issue #35 in section {{exchanges_uc2_5}}, IANA considerations and section {{pledge_ep}}
+* Included examples for several objects in section {{examples}} including message example sizes, issue #33
+* PoP for private key to registrar certificate included as mandatory, issues #32 and #49
 * Issue #31, clarified that combined pledge may act as client/server for further (re)enrollment
 * Issue #42, clarified that Registrar needs to verify the status responses with and ensure that they match the audit log response from the MASA, otherwise it needs drop the pledge and revoke the certificate
 * Issue #43, clarified that the pledge shall use the create time from the trigger message if the time has not been synchronized, yet.
+* Several editorial changes and enhancements to increasing readability. 
 
 From IETF draft 03 -> IETF draft 04:
 
