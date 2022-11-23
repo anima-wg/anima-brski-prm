@@ -1,12 +1,15 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-05
+docname: draft-ietf-anima-brski-prm-06
 area: Operations and Management
 wg: ANIMA WG
 date: 2022
 stand_alone: true
 ipr: trust200902
+submissionType: IETF
+area: Operations and Management
+wg: ANIMA WG
 cat: std
 pi:
   toc: 'yes'
@@ -130,7 +133,7 @@ In this scenarios it is expected that the pledge will be triggered to generate b
 This document refers to this approach as pledge-responder-mode and
 
 * introduces the registrar-agent as new component to facilitate the communication between the pledge and the registrar, as the pledge is in responder mode, and acts as server.
-For the interaction with the domain registrar the registrar-agent will use existing BRSKI {{RFC8995}} endpoints as well as additional endpoints defined i this document.
+For the interaction with the domain registrar the registrar-agent will use existing BRSKI {{RFC8995}} endpoints as well as additional endpoints defined in this document.
 
 * specifies the interaction (data exchange and data objects) between a pledge acting as server and a registrar-agent and the domain registrar.
 The security is addressed on application layer only to enable usage of arbitrary transport means between the pledge and the domain registrar via the registrar-agent.
@@ -448,34 +451,50 @@ Due to the use of the registrar-agent, the interaction with the domain registrar
 To enable interaction with the registrar-agent, the pledge provides endpoints using the BRSKI defined endpoints based on the "/.well-known/brski" URI tree.
 
 The following endpoints are defined for the *pledge* in this document.
+The endpoints are defined with short names to also accommodate for the constraint case.
 The URI path begins with "http://www.example.com/.well-known/brski" followed by a path-suffix that indicates the intended operation.
 
 Operations and their corresponding URIs:
 
 | Operation                  |Operation path              | Details |
 |:---------------------------|:---------------------------|:--------|
-| Trigger pledge-voucher-request creation - Returns PVR| /pledge-voucher-request | {{exchanges_uc2_1}}  |
+| Trigger pledge-voucher-request creation - Returns PVR| /tv | {{exchanges_uc2_1}}  |
 |------------------------
-| Trigger pledge-enrollment-request - Returns PER | /pledge-enrollment-request | {{exchanges_uc2_1}} |
+| Trigger pledge-enrollment-request - Returns PER | /te | {{exchanges_uc2_1}} |
 |------------------------
-| Provide voucher to pledge - Returns pledge-voucher-status | /pledge-voucher | {{exchanges_uc2_3}} |
+| Provide voucher to pledge - Returns pledge-voucher-status | /sv | {{exchanges_uc2_3}} |
 |------------------------
-| Provide enrollment response to pledge - Returns pledge-enrollment-status | /pledge-enrollment | {{exchanges_uc2_3}}   |
+| Provide enrollment response to pledge - Returns pledge-enrollment-status | /se | {{exchanges_uc2_3}}   |
 |------------------------
-| Provide CA certs to pledge | /pledge-CACerts | {{exchanges_uc2_3}} |
+| Provide CA certs to pledge | /cc | {{exchanges_uc2_3}} |
 |------------------------
-| Query bootstrapping status of pledge - Returns pledge-status  | /pledge-bootstrap-status   | {{exchanges_uc2_5}} |
+| Query bootstrapping status of pledge - Returns pledge-status  | /ps   | {{exchanges_uc2_5}} |
 |===============
-{: #eppfigure title='Endpoints on the pledge' }
+{: #eppfigure1 title='Endpoints on the pledge' }
 
 
 ## Behavior of Registrar-Agent
 
-The registrar-agent as a new component provides connectivity between the pledge and the domain registrar and reuses the endpoints of the domain registrar side already specified in {{RFC8995}}.
+The registrar-agent as a new component provides connectivity between the pledge and the domain registrar. 
 It facilitates the exchange of data between the pledge and the domain registrar, which are the voucher request/response, the enrollment request/response, as well as related telemetry and status information.
+
 For the communication with the pledge the registrar-agent utilizes communication endpoints provided by the pledge.
 The transport in this specification is based on HTTP but may also be done using other transport mechanisms.
 This new component changes the general interaction between the pledge and the domain registrar as shown in {{uc2figure}}.
+
+For the communication with the registrar, the registrar-agent uses the endpoints of the domain registrar side already specified in {{RFC8995}} if suitable.
+The EST {{RFC7030}} standard endpoints used by BRSKI do not expect signature wrapped-objects, which are used b BRSKI-PRM.
+This specifically applies for the enrollment request and the provisioning of CA certificates. 
+To accommodate the use of signature-wrapped object, the following additional endpoints are defined for the *registrar*.
+Operations and their corresponding URIs:
+
+| Operation                  |Operation path              | Details |
+|:---------------------------|:---------------------------|:--------|
+| Supply PER to registrar | /requestenroll | {{exchanges_uc2_2_per}}  |
+|------------------------
+| Request (wrapped) CA certificates - Returns wrapped CA Certificates | /wrappedcacerts | {{exchanges_uc2_2_wca}} |
+|===============
+{: #eppfigure2 title='Additional endpoints on the registrar' }
 
 For authentication to the domain registrar, the registrar-agent uses its LDevID(RegAgt).
 The provisioning of the registrar-agent LDevID is out of scope for this document, but may be done in advance using a separate BRSKI run or by other means like configuration.
@@ -697,7 +716,7 @@ Note: The registrar-agent may trigger the pledge for the PVR or the PER or both.
 
 ### Pledge-Voucher-Request (PVR) - Trigger
 
-Triggering the pledge to create the PVR is done using HTTP POST on the defined pledge endpoint: "/.well-known/brski/pledge-voucher-request"
+Triggering the pledge to create the PVR is done using HTTP POST on the defined pledge endpoint: "/.well-known/brski/tv"
 
 The registrar-agent PVR trigger Content-Type header is: `application/json`.
 Following parameters are provided in the JSON object:
@@ -854,7 +873,7 @@ Once the registrar-agent has received the PVR it can trigger the pledge to gener
 As in BRSKI the PER contains a PKCS#10, but additionally signed using the pledge's IDevID.
 Note, as the initial enrollment aims to request a generic certificate, no certificate attributes are provided to the pledge.
 
-Triggering the pledge to create the enrollment-request is done using HTTP POST on the defined pledge endpoint: "/.well-known/brski/pledge-enrollment-request"
+Triggering the pledge to create the enrollment-request is done using HTTP POST on the defined pledge endpoint: "/.well-known/brski/te"
 
 The registrar-agent PER trigger Content-Type header is: `application/json` with an empty body by default.
 Note that using HTTP POST allows for an empty body, but also to provide additional data, like CSR attributes or information about the enroll type "enroll-generic-cert" or "re-enroll-generic-cert".
@@ -1276,7 +1295,7 @@ This ensures that the same registrar EE certificate can be used to verify the si
 Depending on the security policy of the operator, this signature can also be interpreted by the pledge as explicit authorization of the registrar to install the contained trust anchor.
 The registrar sends the voucher to the registrar-agent.
 
-### Pledge-Enrollment-Request (PER) Processing (Registrar-Agent to Registrar)
+### Pledge-Enrollment-Request (PER) Processing (Registrar-Agent to Registrar) {#exchanges_uc2_2_per}
 
 After receiving the voucher, the registrar-agent sends the PER to the registrar.
 Deviating from BRSKI the PER is not a raw PKCS#10.
@@ -1307,7 +1326,7 @@ The registrar SHOULD respond with an HTTP 200 OK in the success case or fail wit
 
 A successful interaction with the domain CA will result in a pledge LDevID certificate, which is then forwarded by the registrar to the registrar-agent using the Content-Type header: `application/pkcs7-mime`.
 
-### Request Wrapped-CA-certificate(s) (Registrar-Agent to Registrar)
+### Request Wrapped-CA-certificate(s) (Registrar-Agent to Registrar) {#exchanges_uc2_2_wca}
 
 As the pledge will verify it own certificate LDevID certificate when received, it also needs the corresponding CA certificates.
 This is done in EST {{RFC7030}} using the "/.well-known/est/cacerts" endpoint, which provides the CA certificates over a TLS protected connection.
@@ -1397,13 +1416,13 @@ Preconditions in addition to {{exchanges_uc2_2}}:
 
 ~~~~
 {: #exchangesfig_uc2_3 title='Responses and status handling between pledge and registrar-agent' artwork-align="left"}
-
+The content of the response objects is defined by the voucher {{RFC8366}} and the certificate {{RFC5280}}.
 
 The registrar-agent provides the information via distinct pledge endpoints as following.
 
 ### Pledge: Voucher Response Processing
 
-The registrar-agent SHALL send the voucher-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-voucher".
+The registrar-agent SHALL send the voucher-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/sv".
 
 The registrar-agent voucher-response Content-Type header is `application/voucher-jws+json` and contains the voucher as provided by the MASA. An example if given in {{MASA-vr}} for a MASA  signed voucher and in {{MASA-REG-vr}} for the voucher with the additional signature of the registrar.
 
@@ -1466,7 +1485,7 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
 
 ### Pledge: Wrapped-CA-Certificate(s) Processing
 
-The registrar-agent SHALL provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-CAcerts".
+The registrar-agent SHALL provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/cc".
 
 As the CA certificate provisioning is crucial from a security perspective, this provisioning SHALL only be done, if the voucher-response has been successfully processed by pledge.
 
@@ -1481,7 +1500,7 @@ The HTTP 400 Bad Request status code SHOULD be used, if the pledge detects error
 
 ### Pledge: Enrollment Response Processing
 
-The registrar-agent SHALL send the enroll-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/pledge-enrollment".
+The registrar-agent SHALL send the enroll-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/se".
 
 The registrar-agent enroll-response Content-Type header, when using EST {{RFC7030}} as enrollment protocol between the registrar-agent and the infrastructure is: `application/pkcs7-mime`.
 Note: It only contains the LDevID certificate for the pledge, not the certificate chain.
@@ -1630,7 +1649,7 @@ Preconditions:
 
 ### Pledge-Status - Trigger (Registrar-Agent to Pledge)
 
-The registrar-agent requests the pledge-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/pledge-status"
+The registrar-agent requests the pledge-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/ps"
 
 The registrar-agent Content-Type header for the pledge-status request is: `application/jose+json`.
 It contains information on the requested status-type, the time and date the request is created, and the product serial-number of the pledge contacted as shown in {{stat_req_def}}.
@@ -2016,12 +2035,12 @@ IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with
 
 ~~~~
  URI                        Description                       Reference
- pledge-voucher-request     create pledge-voucher-request     [THISRFC]
- pledge-enrollment-request  create pledge-enrollment-request  [THISRFC]
- pledge-voucher             supply voucher response           [THISRFC]
- pledge-enrollment          supply enrollment response        [THISRFC]
- pledge-cacerts             supply CA certificates to pledge  [THISRFC]
- pledge-status              query pledge status               [THISRFC]
+ tv                         create pledge-voucher-request     [THISRFC]
+ te                         create pledge-enrollment-request  [THISRFC]
+ sv                         supply voucher response           [THISRFC]
+ se                         supply enrollment response        [THISRFC]
+ cc                         supply CA certificates to pledge  [THISRFC]
+ ps                         query pledge status               [THISRFC]
  requestenroll              supply PER to registrar           [THISRFC]
  wrappedcacerts             request wrapped CA certificates   [THISRFC]
 
@@ -2116,8 +2135,10 @@ For this reason these guidelines do not follow the template described by {{RFC84
 
 # Acknowledgments
 
-We would like to thank the various reviewers, in particular Brian E. Carpenter, Oskar Camenzind, and Hendrik Brockhaus for their input and discussion on use cases and call flows.
+We would like to thank the various reviewers, in particular Brian E. Carpenter, Oskar Camenzind, Hendrik Brockhaus, and Ingo Wenda for their input and discussion on use cases and call flows. 
+Further review input was provided by Jesser Bouzid, Dominik Tacke, and Christian Spindler.
 Special thanks to Esko Dijk for the in deep review and the improving proposals.
+Support in PoC implementations and comments resulting from the implementation was provided by Hong Rui Li and He Peng Jia. 
 
 
 --- back
@@ -2536,6 +2557,12 @@ qhRRyjnxp80IV_Fy1RAOXIIzs3Q8CnMgBgg"
 # History of Changes [RFC Editor: please delete] {#app_history}
 
 Proof of Concept Code available
+
+From IETF draft 05 -> IETF draft 06:
+
+* Update of list of reviewers
+* Issue #67, shortened the pledge endpoints to prepare for constraint deployments
+* Included table for new endpoints on the registrar in the overview of the registrar-agent
 
 From IETF draft 04 -> IETF draft 05:
 
