@@ -13,13 +13,13 @@
        This document defines enhancements to bootstrapping a remote secure key infrastructure (BRSKI, RFC8995) to facilitate bootstrapping in domains featuring no or only time limited connectivity between a pledge and the domain registrar.
 It specifically targets situations, in which the interaction model changes from a pledge-initiated-mode, as used in BRSKI, to a pledge-responding-mode as described in this document.
 To support the pledge-responding mode, BRSKI-PRM introduces a new component, the registrar-agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
-To establishment the trust relation between pledge and domain registrar, BRSKI-PRM relies on object security rather than transport security. 
+To establish the trust relation between pledge and domain registrar, BRSKI-PRM relies on object security rather than transport security. 
        The approach defined here is agnostic with respect to the underlying enrollment protocol which connects the pledge and the domain registrar to the Domain CA. 
     " name="description">
-<meta content="xml2rfc 3.15.2" name="generator">
+<meta content="xml2rfc 3.15.3" name="generator">
 <meta content="draft-ietf-anima-brski-prm-06" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.15.2
+  xml2rfc 3.15.3
     Python 3.9.2
     appdirs 1.4.4
     ConfigArgParse 1.5.3
@@ -56,6 +56,12 @@ To establishment the trust relation between pledge and domain registrar, BRSKI-P
 @import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
 
+:root {
+  --font-sans: 'Noto Sans', Arial, Helvetica, sans-serif;
+  --font-serif: 'Noto Serif', 'Times', 'Times New Roman', serif;
+  --font-mono: 'Roboto Mono', Courier, 'Courier New', monospace;
+}
+
 @viewport {
   zoom: 1.0;
   width: extend-to-zoom;
@@ -73,7 +79,7 @@ body {
   color: #222;
   background-color: #fff;
   font-size: 14px;
-  font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.6;
   scroll-behavior: smooth;
 }
@@ -161,6 +167,15 @@ div {
 }
 svg {
   display: block;
+}
+svg[font-family~="serif" i], svg [font-family~="serif" i] {
+  font-family: var(--font-serif);
+}
+svg[font-family~="sans-serif" i], svg [font-family~="sans-serif" i] {
+  font-family: var(--font-sans);
+}
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
 }
 .alignCenter.art-text {
   background-color: #f9f9f9;
@@ -257,7 +272,7 @@ a.selfRef:hover {
 /* Figures */
 tt, code, pre {
   background-color: #f9f9f9;
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-mono);
 }
 pre {
   border: 1px solid #eee;
@@ -494,7 +509,7 @@ address.vcard .nameRole {
   margin-left: 0;
 }
 address.vcard .label {
-  font-family: "Noto Sans",Arial,Helvetica,sans-serif;
+  font-family: var(--font-sans);
   margin: 0.5em 0;
 }
 address.vcard .type {
@@ -657,7 +672,7 @@ hr.addr {
   figure {
     overflow: scroll;
   }
-  pre.breakable {
+  .breakable pre {
     break-inside: auto;
   }
   h1, h2, h3, h4, h5, h6 {
@@ -832,7 +847,7 @@ tt, code, pre {
 }
 
 /* Fix the height/width aspect for ascii art*/
-pre.sourcecode,
+.sourcecode pre,
 .art-text pre {
   line-height: 1.12;
 }
@@ -1168,7 +1183,7 @@ dd > div.artwork:first-child,
 dd > aside:first-child,
 dd > figure:first-child,
 dd > ol:first-child,
-dd > div:first-child > pre.sourcecode,
+dd > div.sourcecode:first-child,
 dd > table:first-child,
 dd > ul:first-child {
   clear: left;
@@ -1182,7 +1197,7 @@ li > p {
   margin-bottom: 0.5em
 }
 /* Don't let p margin spill out from inside list items */
-li > p:last-of-type {
+li > p:last-of-type:only-child {
   margin-bottom: 0;
 }
 </style>
@@ -1195,11 +1210,11 @@ li > p:last-of-type {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">BRSKI-PRM</td>
-<td class="right">November 2022</td>
+<td class="right">December 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 27 May 2023</td>
+<td class="center">Expires 15 June 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1212,12 +1227,12 @@ li > p:last-of-type {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-06</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-11-23" class="published">23 November 2022</time>
+<time datetime="2022-12-12" class="published">12 December 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-05-27">27 May 2023</time></dd>
+<dd class="expires"><time datetime="2023-06-15">15 June 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1245,7 +1260,7 @@ li > p:last-of-type {
 <p id="section-abstract-1">This document defines enhancements to bootstrapping a remote secure key infrastructure (BRSKI, RFC8995) to facilitate bootstrapping in domains featuring no or only time limited connectivity between a pledge and the domain registrar.
 It specifically targets situations, in which the interaction model changes from a pledge-initiated-mode, as used in BRSKI, to a pledge-responding-mode as described in this document.
 To support the pledge-responding mode, BRSKI-PRM introduces a new component, the registrar-agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
-To establishment the trust relation between pledge and domain registrar, BRSKI-PRM relies on object security rather than transport security.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+To establish the trust relation between pledge and domain registrar, BRSKI-PRM relies on object security rather than transport security.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">The approach defined here is agnostic with respect to the underlying enrollment protocol which connects the pledge and the domain registrar to the Domain CA.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
@@ -1277,7 +1292,7 @@ To establishment the trust relation between pledge and domain registrar, BRSKI-P
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 27 May 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 15 June 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1549,7 +1564,7 @@ The MASA issues the voucher object and provides it via the domain registrar to t
 EST in turn relies on a binding of the certification request to an underlying TLS connection between the EST client and the EST server.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">BRSKI addresses scenarios in which the pledge initiates the bootstrapping acting as a client (this document refers to this approach as pledge-initiator-mode).
 In industrial environments the pledge may behave as a server and thus does not initiate the bootstrapping with the domain registrar.
-In this scenarios it is expected that the pledge will be triggered to generate bootstrapping requests in the customer site/domain.
+In this scenario it is expected that the pledge will be triggered to generate bootstrapping requests in the customer site/domain.
 This document refers to this approach as pledge-responder-mode and<a href="#section-1-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1-5.1">introduces the registrar-agent as new component to facilitate the communication between the pledge and the registrar, as the pledge is in responder mode, and acts as server.
@@ -1696,7 +1711,7 @@ Either way pledges are expected to be managed by the same registrar.<a href="#se
 <p id="section-3.1-6">The following examples motivate support of BRSKI-PRM to support pledges acting as server as well as pledges with limited connectivity to the registrar.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
 <p id="section-3.1-7">While BRSKI-PRM defines support for pledges in responder mode, there may be pledges, which can act as both initiator or responder.
 In these cases BRSKI-PRM can be combined with BRSKI as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> or BRSKI-AE <span>[<a href="#I-D.ietf-anima-brski-ae" class="cite xref">I-D.ietf-anima-brski-ae</a>]</span> to allow for more bootstrapping flexibility.<a href="#section-3.1-7" class="pilcrow">¶</a></p>
-<p id="section-3.1-8">A pledge which can initiate, <span class="bcp14">SHOULD</span> listen for BRSKI messages as describe in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>], <a href="https://rfc-editor.org/rfc/rfc8995#section-4.1" class="relref">Section 4.1</a></span>.  Upon discovery of a potential Registrar, it <span class="bcp14">SHOULD</span> initiate to that Registrar.
+<p id="section-3.1-8">A pledge which can initiate, <span class="bcp14">SHOULD</span> listen for BRSKI messages as described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>], <a href="https://rfc-editor.org/rfc/rfc8995#section-4.1" class="relref">Section 4.1</a></span>.  Upon discovery of a potential Registrar, it <span class="bcp14">SHOULD</span> initiate the bootstrapping to that Registrar.
 At the same time (so as to avoid the Slowloris-attack described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>), it <span class="bcp14">SHOULD</span> also respond to the pledge-responder-mode connections described in this document.<a href="#section-3.1-8" class="pilcrow">¶</a></p>
 <p id="section-3.1-9">Once a pledge with such combined functionality has been bootstrapped, it may act as client for enrollment or re-enrollment of further certificates needed, e.g., using the enrollment protocol of choice.
 If it still acts as server, the defined endpoints can be used to trigger a Pledge-Enrollment-Request (PER) for further certificates.<a href="#section-3.1-9" class="pilcrow">¶</a></p>
@@ -1711,7 +1726,7 @@ This limited connectivity may exist during installation time or also during oper
 The service technician may visit every new house in a subdivision collecting device specific information before connecting to the Registrar.<a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1.1-3">A domain registrar may be part of the central building management system and already be operational in the installation network.
 The central building management system can then provide operational parameters for the specific devices in the basement.
-This operational parameters may comprise values and settings required in the operational phase of the sensors/actuators, among them a certificate issued by the operator to authenticate against other components and services.
+These operational parameters may comprise values and settings required in the operational phase of the sensors/actuators, among them a certificate issued by the operator to authenticate against other components and services.
 These operational parameters are then provided to the devices in the basement facilitated by the service technician's laptop.<a href="#section-3.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1741,7 +1756,7 @@ There may be situations in which the customer site/domain does not offer enough 
         <h3 id="name-limitations">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-limitations" class="section-name selfRef">Limitations</a>
         </h3>
-<p id="section-3.2-1">The mechanism described in this document presume the availability of the pledge to communicate with the registrar-agent.
+<p id="section-3.2-1">The mechanism described in this document presumes the availability of the pledge to communicate with the registrar-agent.
 This may not be possible in constrained environments where, in particular, power must be conserved.
 In these situations, it is anticipated that the transceiver will be powered down most of the time.
 This presents a rendezvous problem: the pledge is unavailable for certain periods of time, and the registrar-agent is similarly presumed to be unavailable for certain periods of time.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
@@ -1804,7 +1819,7 @@ While BRSKI uses the binding to TLS, BRSKI-PRM aims at an additional signature o
 The pledge-responder-mode allows delegated bootstrapping using a registrar-agent instead of a direct connection between the pledge and the domain registrar.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">Necessary enhancements to support authenticated self-contained objects for certificate enrollment are kept at a minimum to enable reuse of already defined architecture elements and interactions.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <p id="section-5-3">For the authenticated self-contained objects used for the certification request, BRSKI-PRM relies on the defined message wrapping mechanisms of the enrollment protocols stated in <a href="#req-sol" class="auto internal xref">Section 4</a> above.<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">The security used within the document for bootstrapping objects produced or consumed by the pledge bases on JOSE <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>. In constraint environments it may provided based on COSE <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>]</span>.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-4">The security used within the document for bootstrapping objects produced or consumed by the pledge bases on JOSE <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>. In constrained environments it may provided based on COSE <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>]</span>.<a href="#section-5-4" class="pilcrow">¶</a></p>
 <p id="section-5-5">An abstract overview of the BRSKI-PRM protocol can be found in  <span>[<a href="#BRSKI-PRM-abstract" class="cite xref">BRSKI-PRM-abstract</a>]</span>.<a href="#section-5-5" class="pilcrow">¶</a></p>
 <div id="uc2">
 <section id="section-5.1">
@@ -1818,18 +1833,18 @@ The registrar-agent interacts with the pledge to transfer the required data obje
 The addition of the registrar-agent influences the sequences of the data exchange between the pledge and the domain registrar as described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.1-3.1">uses existing endpoints were the required functionality is provided<a href="#section-5.1-3.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.1-3.1">uses existing endpoints where the required functionality is provided<a href="#section-5.1-3.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-5.1-3.2">enhances existing with new supported media types, e.g., for JWS voucher<a href="#section-5.1-3.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-5.1-3.3">defines new endpoints were additional functionality is required, e.g., for wrapped certification request, CA certificates, or new status information.<a href="#section-5.1-3.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-5.1-3.3">defines new endpoints where additional functionality is required, e.g., for wrapped certification request, CA certificates, or new status information.<a href="#section-5.1-3.3" class="pilcrow">¶</a>
 </li>
         </ul>
 <span id="name-architecture-overview-using"></span><div id="uc2figure">
 <figure id="figure-1">
           <div id="section-5.1-4.1">
             <div class="alignLeft art-svg artwork" id="section-5.1-4.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="480" width="448" viewBox="0 0 448 480" class="diagram" text-anchor="middle" font-family="Roboto Mono" font-size="13px">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="480" width="448" viewBox="0 0 448 480" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px">
                 <path d="M 8,240 L 8,384" fill="none" stroke="black"></path>
                 <path d="M 32,48 L 32,232" fill="none" stroke="black"></path>
                 <path d="M 72,240 L 72,384" fill="none" stroke="black"></path>
@@ -2218,7 +2233,7 @@ The voucher then can be supplied via the registrar to the registrar-agent.<a hre
 <figure id="figure-2">
         <div id="section-6-9.1">
           <div class="alignLeft art-svg artwork" id="section-6-9.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1056" width="576" viewBox="0 0 576 1056" class="diagram" text-anchor="middle" font-family="Roboto Mono" font-size="13px">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1056" width="576" viewBox="0 0 576 1056" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px">
               <path d="M 8,32 L 8,96" fill="none" stroke="black"></path>
               <path d="M 32,104 L 32,208" fill="none" stroke="black"></path>
               <path d="M 32,256 L 32,320" fill="none" stroke="black"></path>
@@ -2536,7 +2551,7 @@ The registrar-agent <span class="bcp14">SHOULD</span> have synchronized time.<a 
 <figure id="figure-3">
           <div id="section-6.1-5.1">
             <div class="alignLeft art-svg artwork" id="section-6.1-5.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="320" width="520" viewBox="0 0 520 320" class="diagram" text-anchor="middle" font-family="Roboto Mono" font-size="13px">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="320" width="520" viewBox="0 0 520 320" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px">
                 <path d="M 8,32 L 8,96" fill="none" stroke="black"></path>
                 <path d="M 40,104 L 40,304" fill="none" stroke="black"></path>
                 <path d="M 80,32 L 80,96" fill="none" stroke="black"></path>
@@ -2909,7 +2924,7 @@ In other cases, a MASA may allow the pledge to enroll into an anonymous and/or y
 <figure id="figure-9">
           <div id="section-6.2-4.1">
             <div class="alignLeft art-svg artwork" id="section-6.2-4.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="624" width="504" viewBox="0 0 504 624" class="diagram" text-anchor="middle" font-family="Roboto Mono" font-size="13px">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="624" width="504" viewBox="0 0 504 624" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px">
                 <path d="M 8,32 L 8,96" fill="none" stroke="black"></path>
                 <path d="M 40,144 L 40,608" fill="none" stroke="black"></path>
                 <path d="M 104,32 L 104,96" fill="none" stroke="black"></path>
@@ -3427,7 +3442,7 @@ To contact the pledge, it may either discover the pledge as described in <a href
 <figure id="figure-14">
           <div id="section-6.3-5.1">
             <div class="alignLeft art-svg artwork" id="section-6.3-5.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="368" width="528" viewBox="0 0 528 368" class="diagram" text-anchor="middle" font-family="Roboto Mono" font-size="13px">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="368" width="528" viewBox="0 0 528 368" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px">
                 <path d="M 8,32 L 8,96" fill="none" stroke="black"></path>
                 <path d="M 40,104 L 40,336" fill="none" stroke="black"></path>
                 <path d="M 80,32 L 80,96" fill="none" stroke="black"></path>
@@ -3508,7 +3523,7 @@ To contact the pledge, it may either discover the pledge as described in <a href
           </h4>
 <p id="section-6.3.1-1">The registrar-agent <span class="bcp14">SHALL</span> send the voucher-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/sv".<a href="#section-6.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-2">The registrar-agent voucher-response Content-Type header is <code>application/voucher-jws+json</code> and contains the voucher as provided by the MASA. An example if given in <a href="#MASA-vr" class="auto internal xref">Figure 11</a> for a MASA  signed voucher and in <a href="#MASA-REG-vr" class="auto internal xref">Figure 12</a> for the voucher with the additional signature of the registrar.<a href="#section-6.3.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.3.1-3">A nonceless voucher may be accepted as in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> and may be allowed by a manufactures pledge implementation.<a href="#section-6.3.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-3">A nonceless voucher may be accepted as in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> and may be allowed by a manufacture's pledge implementation.<a href="#section-6.3.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-4">To perform the validation of multiple signatures on the voucher object, the pledge <span class="bcp14">SHALL</span> perform the signature verification in the following order:<a href="#section-6.3.1-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.3.1-5">
 <li id="section-6.3.1-5.1">Verify MASA signature as described in section 5.6.1 in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span><a href="#section-6.3.1-5.1" class="pilcrow">¶</a>
@@ -3675,7 +3690,7 @@ It <span class="bcp14">SHALL</span> provide the status information to the regist
 <figure id="figure-17">
             <div id="section-6.3.6-4.1">
               <div class="alignLeft art-svg artwork" id="section-6.3.6-4.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="320" width="496" viewBox="0 0 496 320" class="diagram" text-anchor="middle" font-family="Roboto Mono" font-size="13px">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="320" width="496" viewBox="0 0 496 320" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px">
                   <path d="M 8,32 L 8,96" fill="none" stroke="black"></path>
                   <path d="M 40,160 L 40,304" fill="none" stroke="black"></path>
                   <path d="M 104,32 L 104,96" fill="none" stroke="black"></path>
@@ -3804,7 +3819,7 @@ The pledge <span class="bcp14">MAY</span> provide a dedicated endpoint to accept
 <figure id="figure-18">
           <div id="section-6.4-4.1">
             <div class="alignLeft art-svg artwork" id="section-6.4-4.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="360" viewBox="0 0 360 192" class="diagram" text-anchor="middle" font-family="Roboto Mono" font-size="13px">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="360" viewBox="0 0 360 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px">
                 <path d="M 8,32 L 8,96" fill="none" stroke="black"></path>
                 <path d="M 40,104 L 40,176" fill="none" stroke="black"></path>
                 <path d="M 80,32 L 80,96" fill="none" stroke="black"></path>
@@ -3853,8 +3868,8 @@ The version field is included to permit significant changes to the pledge-status
 A pledge or a registrar-agent that receives a pledge-status request with a version larger than it knows about <span class="bcp14">SHOULD</span> log the contents and alert a human.<a href="#section-6.4.1-3" class="pilcrow">¶</a></p>
 <span id="name-cddl-for-pledge-status-requ"></span><div id="stat_req_def">
 <figure id="figure-19">
-            <div id="section-6.4.1-4.1">
-<pre class="sourcecode">&lt;CODE BEGINS&gt;
+            <div class="sourcecode" id="section-6.4.1-4.1">
+<pre>&lt;CODE BEGINS&gt;
   status-request = {
       "version": uint,
       "created-on": tdate ttime,
@@ -3923,8 +3938,8 @@ This is out of scope for this specification.<a href="#section-6.4.1-5" class="pi
 <p id="section-6.4.2-3">The following CDDL explains the structure of the format for the status response, which is :<a href="#section-6.4.2-3" class="pilcrow">¶</a></p>
 <span id="name-cddl-for-pledge-status-resp"></span><div id="stat_res_def">
 <figure id="figure-21">
-            <div id="section-6.4.2-4.1">
-<pre class="sourcecode">&lt;CODE BEGINS&gt;
+            <div class="sourcecode" id="section-6.4.2-4.1">
+<pre>&lt;CODE BEGINS&gt;
   status-response = {
     "version": uint,
     "status":
@@ -4087,8 +4102,8 @@ module: ietf-voucher-request-prm
           </h4>
 <p id="section-7.1.2-1">The following YANG module extends the <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> Voucher Request to include a signed artifact from the registrar-agent (agent-signed-data) as well as the registrar-proximity-certificate and the
 agent-signing certificate.<a href="#section-7.1.2-1" class="pilcrow">¶</a></p>
-<div id="section-7.1.2-2">
-<pre class="breakable sourcecode">&lt;CODE BEGINS&gt; file "ietf-voucher-request-prm@2022-07-05.yang"
+<div class="breakable sourcecode" id="section-7.1.2-2">
+<pre>&lt;CODE BEGINS&gt; file "ietf-voucher-request-prm@2022-07-05.yang"
 
 
 module ietf-voucher-request-prm {
@@ -4362,11 +4377,11 @@ Moreover, the domain registrar verifies if the registrar-agent is authorized to 
         <h3 id="name-misuse-of-registrar-agent-c">
 <a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-misuse-of-registrar-agent-c" class="section-name selfRef">Misuse of Registrar-Agent Credentials</a>
         </h3>
-<p id="section-10.3-1">Concerns on misusage of an registrar-agent with a valid LDevID(RegAgt), may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the registrar-agent against the domain registrar.
+<p id="section-10.3-1">Concerns of misusage of a registrar-agent with a valid LDevID(RegAgt), may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the registrar-agent against the domain registrar.
 The LDevID(RegAgt) certificate may be acquired by a prior BRSKI run for the registrar-agent, if an IDevID is available on registrar-agent.
 Alternatively, the LDevID may be acquired by a service technician from the domain PKI system in an authenticated way.<a href="#section-10.3-1" class="pilcrow">¶</a></p>
 <p id="section-10.3-2">In addition it is required that the LDevID(RegAgt) certificate is valid for the complete bootstrapping phase.
-This avoids that a registrar-agent could be misused to create arbitrary "agent-signed-data" objects to perform an authorized bootstrapping of a rouge pledge at a later point in time.
+This avoids that a registrar-agent could be misused to create arbitrary "agent-signed-data" objects to perform an authorized bootstrapping of a rogue pledge at a later point in time.
 In this misuse "agent-signed-data" could be dated after the validity time of the LDevID(RegAgt) certificate, due to missing trusted timestamp in the registrar-agents signature.
 To address this, the registrar <span class="bcp14">SHOULD</span> verify the certificate used to create the signature on "agent-signed-data".
 Furthermore the registrar also verifies the LDevID(RegAgt) certificate used in the TLS handshake with the registrar-agent. If both certificates are verified successfully, the registrar-agent's signature can be considered as valid.<a href="#section-10.3-2" class="pilcrow">¶</a></p>
@@ -5010,6 +5025,8 @@ qhRRyjnxp80IV_Fy1RAOXIIzs3Q8CnMgBgg"
         <li class="normal" id="appendix-B-3.2">Issue #67, shortened the pledge endpoints to prepare for constraint deployments<a href="#appendix-B-3.2" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="appendix-B-3.3">Included table for new endpoints on the registrar in the overview of the registrar-agent<a href="#appendix-B-3.3" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-3.4">addressed nits discovered in SECDIR review<a href="#appendix-B-3.4" class="pilcrow">¶</a>
 </li>
       </ul>
 <p id="appendix-B-4">From IETF draft 04 -&gt; IETF draft 05:<a href="#appendix-B-4" class="pilcrow">¶</a></p>

@@ -5,11 +5,11 @@
 ANIMA WG                                                        S. Fries
 Internet-Draft                                                 T. Werner
 Intended status: Standards Track                                 Siemens
-Expires: 27 May 2023                                             E. Lear
+Expires: 15 June 2023                                            E. Lear
                                                            Cisco Systems
                                                            M. Richardson
                                                 Sandelman Software Works
-                                                        23 November 2022
+                                                        12 December 2022
 
 
             BRSKI with Pledge in Responder Mode (BRSKI-PRM)
@@ -26,9 +26,9 @@ Abstract
    document.  To support the pledge-responding mode, BRSKI-PRM
    introduces a new component, the registrar-agent, which facilitates
    the communication between pledge and registrar during the
-   bootstrapping phase.  To establishment the trust relation between
-   pledge and domain registrar, BRSKI-PRM relies on object security
-   rather than transport security.
+   bootstrapping phase.  To establish the trust relation between pledge
+   and domain registrar, BRSKI-PRM relies on object security rather than
+   transport security.
 
    The approach defined here is agnostic with respect to the underlying
    enrollment protocol which connects the pledge and the domain
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Fries, et al.              Expires 27 May 2023                  [Page 1]
+Fries, et al.             Expires 15 June 2023                  [Page 1]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    Internet-Drafts are working documents of the Internet Engineering
@@ -68,7 +68,7 @@ Internet-Draft                  BRSKI-PRM                  November 2022
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 May 2023.
+   This Internet-Draft will expire on 15 June 2023.
 
 Copyright Notice
 
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Fries, et al.              Expires 27 May 2023                  [Page 2]
+Fries, et al.             Expires 15 June 2023                  [Page 2]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
        6.1.1.  Pledge-Voucher-Request (PVR) - Trigger  . . . . . . .  24
@@ -165,9 +165,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                  [Page 3]
+Fries, et al.             Expires 15 June 2023                  [Page 3]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  69
@@ -210,7 +210,7 @@ Internet-Draft                  BRSKI-PRM                  November 2022
    bootstrapping acting as a client (this document refers to this
    approach as pledge-initiator-mode).  In industrial environments the
    pledge may behave as a server and thus does not initiate the
-   bootstrapping with the domain registrar.  In this scenarios it is
+   bootstrapping with the domain registrar.  In this scenario it is
    expected that the pledge will be triggered to generate bootstrapping
    requests in the customer site/domain.  This document refers to this
    approach as pledge-responder-mode and
@@ -221,9 +221,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                  [Page 4]
+Fries, et al.             Expires 15 June 2023                  [Page 4]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
       with the domain registrar the registrar-agent will use existing
@@ -277,9 +277,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                  [Page 5]
+Fries, et al.             Expires 15 June 2023                  [Page 5]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
 2.  Terminology
@@ -333,9 +333,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                  [Page 6]
+Fries, et al.             Expires 15 June 2023                  [Page 6]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
       CA delegates certificate management functions such as
@@ -389,9 +389,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                  [Page 7]
+Fries, et al.             Expires 15 June 2023                  [Page 7]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    The following examples motivate support of BRSKI-PRM to support
@@ -405,11 +405,11 @@ Internet-Draft                  BRSKI-PRM                  November 2022
    bootstrapping flexibility.
 
    A pledge which can initiate, SHOULD listen for BRSKI messages as
-   describe in [RFC8995], Section 4.1.  Upon discovery of a potential
-   Registrar, it SHOULD initiate to that Registrar.  At the same time
-   (so as to avoid the Slowloris-attack described in [RFC8995]), it
-   SHOULD also respond to the pledge-responder-mode connections
-   described in this document.
+   described in [RFC8995], Section 4.1.  Upon discovery of a potential
+   Registrar, it SHOULD initiate the bootstrapping to that Registrar.
+   At the same time (so as to avoid the Slowloris-attack described in
+   [RFC8995]), it SHOULD also respond to the pledge-responder-mode
+   connections described in this document.
 
    Once a pledge with such combined functionality has been bootstrapped,
    it may act as client for enrollment or re-enrollment of further
@@ -445,15 +445,15 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                  [Page 8]
+Fries, et al.             Expires 15 June 2023                  [Page 8]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    A domain registrar may be part of the central building management
    system and already be operational in the installation network.  The
    central building management system can then provide operational
-   parameters for the specific devices in the basement.  This
+   parameters for the specific devices in the basement.  These
    operational parameters may comprise values and settings required in
    the operational phase of the sensors/actuators, among them a
    certificate issued by the operator to authenticate against other
@@ -483,7 +483,7 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 3.2.  Limitations
 
-   The mechanism described in this document presume the availability of
+   The mechanism described in this document presumes the availability of
    the pledge to communicate with the registrar-agent.  This may not be
    possible in constrained environments where, in particular, power must
    be conserved.  In these situations, it is anticipated that the
@@ -501,9 +501,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                  [Page 9]
+Fries, et al.             Expires 15 June 2023                  [Page 9]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  To facilitate the communication between a pledge in responder mode
@@ -557,9 +557,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 10]
+Fries, et al.             Expires 15 June 2023                 [Page 10]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  Voucher requests and responses as used in [RFC8995] already
@@ -602,7 +602,7 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
    The security used within the document for bootstrapping objects
    produced or consumed by the pledge bases on JOSE [RFC7515].  In
-   constraint environments it may provided based on COSE [RFC9052].
+   constrained environments it may provided based on COSE [RFC9052].
 
    An abstract overview of the BRSKI-PRM protocol can be found in
    [BRSKI-PRM-abstract].
@@ -613,9 +613,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 11]
+Fries, et al.             Expires 15 June 2023                 [Page 11]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
 5.1.  Pledge-Responder-Mode (PRM): Registrar-Agent Communication with
@@ -639,13 +639,13 @@ Internet-Draft                  BRSKI-PRM                  November 2022
    enable reuse of BRSKI defined functionality as much as possible,
    BRSKI-PRM:
 
-   *  uses existing endpoints were the required functionality is
+   *  uses existing endpoints where the required functionality is
       provided
 
    *  enhances existing with new supported media types, e.g., for JWS
       voucher
 
-   *  defines new endpoints were additional functionality is required,
+   *  defines new endpoints where additional functionality is required,
       e.g., for wrapped certification request, CA certificates, or new
       status information.
 
@@ -669,9 +669,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 12]
+Fries, et al.             Expires 15 June 2023                 [Page 12]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
                                 +------------------------+
@@ -725,9 +725,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 13]
+Fries, et al.             Expires 15 June 2023                 [Page 13]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
       -  The registrar-agent may provide additional data to the pledge
@@ -781,9 +781,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 14]
+Fries, et al.             Expires 15 June 2023                 [Page 14]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  Join Proxy (not shown): same functionality as described in
@@ -837,9 +837,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 15]
+Fries, et al.             Expires 15 June 2023                 [Page 15]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    In contrast to the above, "proximity" provides a statement, that the
@@ -893,9 +893,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 16]
+Fries, et al.             Expires 15 June 2023                 [Page 16]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    +=======================================+================+=========+
@@ -949,9 +949,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 17]
+Fries, et al.             Expires 15 June 2023                 [Page 17]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
      +===================================+=================+=========+
@@ -1005,9 +1005,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 18]
+Fries, et al.             Expires 15 June 2023                 [Page 18]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    As BRSKI-PRM uses authenticated self-contained data objects between
@@ -1061,9 +1061,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 19]
+Fries, et al.             Expires 15 June 2023                 [Page 19]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  "product-serial-number._brski-pledge._tcp.local", to discover a
@@ -1117,9 +1117,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 20]
+Fries, et al.             Expires 15 June 2023                 [Page 20]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    The registrar MUST fetch the LDevID(RegAgt) certificate based on the
@@ -1173,9 +1173,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 21]
+Fries, et al.             Expires 15 June 2023                 [Page 21]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
     provide PVR to infrastructure
@@ -1229,9 +1229,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 22]
+Fries, et al.             Expires 15 June 2023                 [Page 22]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  Section 6.1 describes the request object acquisition by the
@@ -1285,9 +1285,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 23]
+Fries, et al.             Expires 15 June 2023                 [Page 23]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    +--------+                             +-----------+
@@ -1341,9 +1341,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 24]
+Fries, et al.             Expires 15 June 2023                 [Page 24]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    The pledge provisionally accepts the agent-provided-proximity-
@@ -1397,9 +1397,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 25]
+Fries, et al.             Expires 15 June 2023                 [Page 25]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    # The agent-signed-data in General JWS Serialization syntax
@@ -1453,9 +1453,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 26]
+Fries, et al.             Expires 15 June 2023                 [Page 26]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    The header of the PVR SHALL contain the following parameters as
@@ -1509,9 +1509,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 27]
+Fries, et al.             Expires 15 June 2023                 [Page 27]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    # The PVR in General JWS Serialization syntax
@@ -1565,9 +1565,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 28]
+Fries, et al.             Expires 15 June 2023                 [Page 28]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
 6.1.3.  Pledge-Enrollment-Request (PER) - Trigger
@@ -1621,9 +1621,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 29]
+Fries, et al.             Expires 15 June 2023                 [Page 29]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    The pledge SHOULD construct the PER as PKCS#10.  In BRSKI-PRM it MUST
@@ -1677,9 +1677,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 30]
+Fries, et al.             Expires 15 June 2023                 [Page 30]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    The body of the pledge enrollment-request SHOULD contain a P10
@@ -1733,9 +1733,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 31]
+Fries, et al.             Expires 15 June 2023                 [Page 31]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    As the registrar-agent is intended to facilitate communication
@@ -1789,9 +1789,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 32]
+Fries, et al.             Expires 15 June 2023                 [Page 32]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    +-----------+     +-----------+       +--------+   +---------+
@@ -1845,9 +1845,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 33]
+Fries, et al.             Expires 15 June 2023                 [Page 33]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
 6.2.1.  Connection Establishment (Registrar-Agent to Registrar)
@@ -1901,9 +1901,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 34]
+Fries, et al.             Expires 15 June 2023                 [Page 34]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
       signature, is still valid.  If the certificate is already expired,
@@ -1957,9 +1957,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 35]
+Fries, et al.             Expires 15 June 2023                 [Page 35]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  serial-number: product-serial-number of pledge The registrar MUST
@@ -2013,9 +2013,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 36]
+Fries, et al.             Expires 15 June 2023                 [Page 36]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    # The RVR in General JWS Serialization syntax
@@ -2069,9 +2069,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 37]
+Fries, et al.             Expires 15 June 2023                 [Page 37]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    Once the MASA receives the RVR it SHALL perform the verification as
@@ -2125,9 +2125,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 38]
+Fries, et al.             Expires 15 June 2023                 [Page 38]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    # The MASA issued voucher in General JWS Serialization syntax
@@ -2181,9 +2181,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 39]
+Fries, et al.             Expires 15 June 2023                 [Page 39]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    This signature provides a proof of possession of the private key
@@ -2237,9 +2237,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 40]
+Fries, et al.             Expires 15 June 2023                 [Page 40]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    # The MASA issued voucher with additional registrar signature in
@@ -2293,9 +2293,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 41]
+Fries, et al.             Expires 15 June 2023                 [Page 41]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    Depending on the security policy of the operator, this signature can
@@ -2349,9 +2349,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 42]
+Fries, et al.             Expires 15 June 2023                 [Page 42]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
       attributes to be included by the CA into the requested LDevID
@@ -2405,9 +2405,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 43]
+Fries, et al.             Expires 15 June 2023                 [Page 43]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    # The CA certificates data with additional registrar signature in
@@ -2461,9 +2461,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 44]
+Fries, et al.             Expires 15 June 2023                 [Page 44]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  Registrar-agent: possesses voucher and LDevID certificate and
@@ -2511,15 +2511,15 @@ Internet-Draft                  BRSKI-PRM                  November 2022
    registrar.
 
    A nonceless voucher may be accepted as in [RFC8995] and may be
-   allowed by a manufactures pledge implementation.
+   allowed by a manufacture's pledge implementation.
 
 
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 45]
+Fries, et al.             Expires 15 June 2023                 [Page 45]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    To perform the validation of multiple signatures on the voucher
@@ -2573,9 +2573,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 46]
+Fries, et al.             Expires 15 June 2023                 [Page 46]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    # The "pledge-voucher-status" telemetry in general JWS
@@ -2629,9 +2629,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 47]
+Fries, et al.             Expires 15 June 2023                 [Page 47]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    The CA certificates are provided as base64 encoded "x5b".  The pledge
@@ -2685,9 +2685,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 48]
+Fries, et al.             Expires 15 June 2023                 [Page 48]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    # The "pledge-enroll-status" telemetry in General JWS Serialization
@@ -2741,9 +2741,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 49]
+Fries, et al.             Expires 15 June 2023                 [Page 49]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  Registrar-agent: possesses voucher status and enroll status from
@@ -2797,9 +2797,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 50]
+Fries, et al.             Expires 15 June 2023                 [Page 50]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    According to [RFC8995] section 5.7, the registrar SHOULD respond with
@@ -2853,9 +2853,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 51]
+Fries, et al.             Expires 15 June 2023                 [Page 51]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
 6.4.  Request Pledge-Status by Registrar-Agent from Pledge
@@ -2909,9 +2909,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 52]
+Fries, et al.             Expires 15 June 2023                 [Page 52]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    permit significant changes to the pledge-status request and response
@@ -2965,9 +2965,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 53]
+Fries, et al.             Expires 15 June 2023                 [Page 53]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    # The registrar-agent request of "pledge-status" in general JWS
@@ -3021,9 +3021,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 54]
+Fries, et al.             Expires 15 June 2023                 [Page 54]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    <CODE BEGINS>
@@ -3077,9 +3077,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 55]
+Fries, et al.             Expires 15 June 2023                 [Page 55]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  "enroll-error": Pledge enrollment response processing terminated
@@ -3133,9 +3133,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 56]
+Fries, et al.             Expires 15 June 2023                 [Page 56]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    # The pledge "status-response" in General JWS Serialization syntax
@@ -3189,9 +3189,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 57]
+Fries, et al.             Expires 15 June 2023                 [Page 57]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
 7.  Artifacts
@@ -3245,9 +3245,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 58]
+Fries, et al.             Expires 15 June 2023                 [Page 58]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
      import ietf-restconf {
@@ -3301,9 +3301,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 59]
+Fries, et al.             Expires 15 June 2023                 [Page 59]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
        Redistribution and use in source and binary forms, with or
@@ -3357,9 +3357,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 60]
+Fries, et al.             Expires 15 June 2023                 [Page 60]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
                 distinguished encoding rules (DER), as specified
@@ -3413,9 +3413,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 61]
+Fries, et al.             Expires 15 June 2023                 [Page 61]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
            }
@@ -3469,9 +3469,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 62]
+Fries, et al.             Expires 15 June 2023                 [Page 62]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  the Pledge product-serial-number is contained in the trigger
@@ -3525,9 +3525,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 63]
+Fries, et al.             Expires 15 June 2023                 [Page 63]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    its domain based on the product-serial-number contained in the PVR
@@ -3542,7 +3542,7 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 10.3.  Misuse of Registrar-Agent Credentials
 
-   Concerns on misusage of an registrar-agent with a valid
+   Concerns of misusage of a registrar-agent with a valid
    LDevID(RegAgt), may be addressed by utilizing short-lived
    certificates (e.g., valid for a day) to authenticate the registrar-
    agent against the domain registrar.  The LDevID(RegAgt) certificate
@@ -3554,7 +3554,7 @@ Internet-Draft                  BRSKI-PRM                  November 2022
    In addition it is required that the LDevID(RegAgt) certificate is
    valid for the complete bootstrapping phase.  This avoids that a
    registrar-agent could be misused to create arbitrary "agent-signed-
-   data" objects to perform an authorized bootstrapping of a rouge
+   data" objects to perform an authorized bootstrapping of a rogue
    pledge at a later point in time.  In this misuse "agent-signed-data"
    could be dated after the validity time of the LDevID(RegAgt)
    certificate, due to missing trusted timestamp in the registrar-agents
@@ -3581,9 +3581,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 64]
+Fries, et al.             Expires 15 June 2023                 [Page 64]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    If the registrar-agent performs DNS-based Service Discovery without a
@@ -3637,9 +3637,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 65]
+Fries, et al.             Expires 15 June 2023                 [Page 65]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    [I-D.ietf-anima-rfc8366bis]
@@ -3693,9 +3693,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 66]
+Fries, et al.             Expires 15 June 2023                 [Page 66]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
@@ -3749,9 +3749,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 67]
+Fries, et al.             Expires 15 June 2023                 [Page 67]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    [RFC6125]  Saint-Andre, P. and J. Hodges, "Representation and
@@ -3805,9 +3805,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 68]
+Fries, et al.             Expires 15 June 2023                 [Page 68]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
 Appendix A.  Examples
@@ -3861,9 +3861,9 @@ A.1.  Example Pledge Voucher Request - PVR (from Pledge to Registrar-
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 69]
+Fries, et al.             Expires 15 June 2023                 [Page 69]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    SY3dGUVlEVlFRRERBNVNaV2RwYzNSeVlYSkJaMlZ1ZERCWk1CTUdCeXFHU000OUFnRUd\
@@ -3917,9 +3917,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 70]
+Fries, et al.             Expires 15 June 2023                 [Page 70]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
 A.2.  Example Parboiled Registrar Voucher Request - RVR (from Registrar
@@ -3973,9 +3973,9 @@ A.2.  Example Parboiled Registrar Voucher Request - RVR (from Registrar
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 71]
+Fries, et al.             Expires 15 June 2023                 [Page 71]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    yVlZlSFJOVkZaYVRXcHNNRmt3WkVka1YxWlVUbGR3YVUxcVFqTlJNbVJhVTFWMGRsZHJ\
@@ -4029,9 +4029,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 72]
+Fries, et al.             Expires 15 June 2023                 [Page 72]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    sUjZWWFpYVkZwRllVTjBhVkZxU1RSTmFsSXhZVmRHVUZWWFJsWlNSRnB1VVZVMWIxZFV\
@@ -4085,9 +4085,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 73]
+Fries, et al.             Expires 15 June 2023                 [Page 73]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    ySkZlSFZYYlhocFlsWktNbGt5YXpGaGJHeFlUa2hXYVdKVWEzZFVSekV3WkZkSmVsa3p\
@@ -4141,9 +4141,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 74]
+Fries, et al.             Expires 15 June 2023                 [Page 74]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    aSXpqMENBUVlJS29aSXpqMERBUWNEUWdBRUJUVFwvc1JmTDlsSnVGbVwvY24zU2pHcWp\
@@ -4197,9 +4197,9 @@ A.3.  Example Voucher Response (from MASA to Pledge, via Registrar and
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 75]
+Fries, et al.             Expires 15 June 2023                 [Page 75]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
@@ -4253,9 +4253,9 @@ A.4.  Example Voucher Response, MASA issued Voucher with additional
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 76]
+Fries, et al.             Expires 15 June 2023                 [Page 76]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
@@ -4309,9 +4309,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 77]
+Fries, et al.             Expires 15 June 2023                 [Page 77]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    2In0",
@@ -4336,6 +4336,8 @@ Appendix B.  History of Changes [RFC Editor: please delete]
 
    *  Included table for new endpoints on the registrar in the overview
       of the registrar-agent
+
+   *  addressed nits discovered in SECDIR review
 
    From IETF draft 04 -> IETF draft 05:
 
@@ -4363,11 +4365,9 @@ Appendix B.  History of Changes [RFC Editor: please delete]
 
 
 
-
-
-Fries, et al.              Expires 27 May 2023                 [Page 78]
+Fries, et al.             Expires 15 June 2023                 [Page 78]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  Enhanced security considerations and privacy considerations, issue
@@ -4421,9 +4421,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 79]
+Fries, et al.             Expires 15 June 2023                 [Page 79]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  Simplified YANG definition by augmenting the voucher request from
@@ -4477,9 +4477,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 80]
+Fries, et al.             Expires 15 June 2023                 [Page 80]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  Issue #15 included additional signature on voucher from registrar
@@ -4533,9 +4533,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 81]
+Fries, et al.             Expires 15 June 2023                 [Page 81]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  Fixed "serial-number" encoding in PVR/RVR
@@ -4589,9 +4589,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 82]
+Fries, et al.             Expires 15 June 2023                 [Page 82]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  Addressed feedback for voucher-request enhancements from YANG
@@ -4645,9 +4645,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 83]
+Fries, et al.             Expires 15 June 2023                 [Page 83]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  Recommendation regarding short-lived certificates for registrar-
@@ -4701,9 +4701,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 84]
+Fries, et al.             Expires 15 June 2023                 [Page 84]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  Missing details provided for the description and call flow in
@@ -4757,9 +4757,9 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 85]
+Fries, et al.             Expires 15 June 2023                 [Page 85]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    *  Enhanced consideration of existing enrollment protocols in the
@@ -4813,9 +4813,9 @@ Authors' Addresses
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 86]
+Fries, et al.             Expires 15 June 2023                 [Page 86]
 
-Internet-Draft                  BRSKI-PRM                  November 2022
+Internet-Draft                  BRSKI-PRM                  December 2022
 
 
    URI:   https://www.siemens.com/
@@ -4869,4 +4869,4 @@ Internet-Draft                  BRSKI-PRM                  November 2022
 
 
 
-Fries, et al.              Expires 27 May 2023                 [Page 87]
+Fries, et al.             Expires 15 June 2023                 [Page 87]

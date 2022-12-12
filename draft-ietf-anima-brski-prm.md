@@ -8,8 +8,8 @@ date: 2022
 stand_alone: true
 ipr: trust200902
 submissionType: IETF
-area: Operations and Management
 wg: ANIMA WG
+area: Operations and Management
 cat: std
 pi:
   toc: 'yes'
@@ -108,7 +108,7 @@ informative:
 This document defines enhancements to bootstrapping a remote secure key infrastructure (BRSKI, RFC8995) to facilitate bootstrapping in domains featuring no or only time limited connectivity between a pledge and the domain registrar.
 It specifically targets situations, in which the interaction model changes from a pledge-initiated-mode, as used in BRSKI, to a pledge-responding-mode as described in this document.
 To support the pledge-responding mode, BRSKI-PRM introduces a new component, the registrar-agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
-To establishment the trust relation between pledge and domain registrar, BRSKI-PRM relies on object security rather than transport security.
+To establish the trust relation between pledge and domain registrar, BRSKI-PRM relies on object security rather than transport security.
 
 The approach defined here is agnostic with respect to the underlying enrollment protocol which connects the pledge and the domain registrar to the Domain CA.
 
@@ -129,7 +129,7 @@ EST in turn relies on a binding of the certification request to an underlying TL
 
 BRSKI addresses scenarios in which the pledge initiates the bootstrapping acting as a client (this document refers to this approach as pledge-initiator-mode).
 In industrial environments the pledge may behave as a server and thus does not initiate the bootstrapping with the domain registrar.
-In this scenarios it is expected that the pledge will be triggered to generate bootstrapping requests in the customer site/domain.
+In this scenario it is expected that the pledge will be triggered to generate bootstrapping requests in the customer site/domain.
 This document refers to this approach as pledge-responder-mode and
 
 * introduces the registrar-agent as new component to facilitate the communication between the pledge and the registrar, as the pledge is in responder mode, and acts as server.
@@ -244,7 +244,7 @@ The following examples motivate support of BRSKI-PRM to support pledges acting a
 While BRSKI-PRM defines support for pledges in responder mode, there may be pledges, which can act as both initiator or responder.
 In these cases BRSKI-PRM can be combined with BRSKI as defined in {{RFC8995}} or BRSKI-AE {{I-D.ietf-anima-brski-ae}} to allow for more bootstrapping flexibility.
 
-A pledge which can initiate, SHOULD listen for BRSKI messages as describe in {{RFC8995, Section 4.1}}.  Upon discovery of a potential Registrar, it SHOULD initiate to that Registrar.
+A pledge which can initiate, SHOULD listen for BRSKI messages as described in {{RFC8995, Section 4.1}}.  Upon discovery of a potential Registrar, it SHOULD initiate the bootstrapping to that Registrar.
 At the same time (so as to avoid the Slowloris-attack described in {{RFC8995}}), it SHOULD also respond to the pledge-responder-mode connections described in this document.
 
 Once a pledge with such combined functionality has been bootstrapped, it may act as client for enrollment or re-enrollment of further certificates needed, e.g., using the enrollment protocol of choice.
@@ -261,7 +261,7 @@ The service technician may visit every new house in a subdivision collecting dev
 
 A domain registrar may be part of the central building management system and already be operational in the installation network.
 The central building management system can then provide operational parameters for the specific devices in the basement.
-This operational parameters may comprise values and settings required in the operational phase of the sensors/actuators, among them a certificate issued by the operator to authenticate against other components and services.
+These operational parameters may comprise values and settings required in the operational phase of the sensors/actuators, among them a certificate issued by the operator to authenticate against other components and services.
 These operational parameters are then provided to the devices in the basement facilitated by the service technician's laptop.
 
 
@@ -280,7 +280,7 @@ There may be situations in which the customer site/domain does not offer enough 
 
 ## Limitations
 
-The mechanism described in this document presume the availability of the pledge to communicate with the registrar-agent.
+The mechanism described in this document presumes the availability of the pledge to communicate with the registrar-agent.
 This may not be possible in constrained environments where, in particular, power must be conserved.
 In these situations, it is anticipated that the transceiver will be powered down most of the time.
 This presents a rendezvous problem: the pledge is unavailable for certain periods of time, and the registrar-agent is similarly presumed to be unavailable for certain periods of time.
@@ -334,7 +334,7 @@ Necessary enhancements to support authenticated self-contained objects for certi
 
 For the authenticated self-contained objects used for the certification request, BRSKI-PRM relies on the defined message wrapping mechanisms of the enrollment protocols stated in {{req-sol}} above.
 
-The security used within the document for bootstrapping objects produced or consumed by the pledge bases on JOSE {{RFC7515}}. In constraint environments it may provided based on COSE {{RFC9052}}.
+The security used within the document for bootstrapping objects produced or consumed by the pledge bases on JOSE {{RFC7515}}. In constrained environments it may provided based on COSE {{RFC9052}}.
 
 An abstract overview of the BRSKI-PRM protocol can be found in  {{BRSKI-PRM-abstract}}.
 
@@ -349,9 +349,9 @@ The registrar-agent interacts with the pledge to transfer the required data obje
 The addition of the registrar-agent influences the sequences of the data exchange between the pledge and the domain registrar as described in {{RFC8995}}.
 To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 
-* uses existing endpoints were the required functionality is provided
+* uses existing endpoints where the required functionality is provided
 * enhances existing with new supported media types, e.g., for JWS voucher
-* defines new endpoints were additional functionality is required, e.g., for wrapped certification request, CA certificates, or new status information.
+* defines new endpoints where additional functionality is required, e.g., for wrapped certification request, CA certificates, or new status information.
 
 
 ~~~~ aasvg
@@ -1426,7 +1426,7 @@ The registrar-agent SHALL send the voucher-response to the pledge by HTTP POST t
 
 The registrar-agent voucher-response Content-Type header is `application/voucher-jws+json` and contains the voucher as provided by the MASA. An example if given in {{MASA-vr}} for a MASA  signed voucher and in {{MASA-REG-vr}} for the voucher with the additional signature of the registrar.
 
-A nonceless voucher may be accepted as in {{RFC8995}} and may be allowed by a manufactures pledge implementation.
+A nonceless voucher may be accepted as in {{RFC8995}} and may be allowed by a manufacture's pledge implementation.
 
 To perform the validation of multiple signatures on the voucher object, the pledge SHALL perform the signature verification in the following order:
 
@@ -2101,12 +2101,12 @@ Misbinding of a pledge by a faked domain registrar is countered as described in 
 
 ## Misuse of Registrar-Agent Credentials {#sec_cons_reg-agt}
 
-Concerns on misusage of an registrar-agent with a valid LDevID(RegAgt), may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the registrar-agent against the domain registrar.
+Concerns of misusage of a registrar-agent with a valid LDevID(RegAgt), may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the registrar-agent against the domain registrar.
 The LDevID(RegAgt) certificate may be acquired by a prior BRSKI run for the registrar-agent, if an IDevID is available on registrar-agent.
 Alternatively, the LDevID may be acquired by a service technician from the domain PKI system in an authenticated way.
 
 In addition it is required that the LDevID(RegAgt) certificate is valid for the complete bootstrapping phase.
-This avoids that a registrar-agent could be misused to create arbitrary "agent-signed-data" objects to perform an authorized bootstrapping of a rouge pledge at a later point in time.
+This avoids that a registrar-agent could be misused to create arbitrary "agent-signed-data" objects to perform an authorized bootstrapping of a rogue pledge at a later point in time.
 In this misuse "agent-signed-data" could be dated after the validity time of the LDevID(RegAgt) certificate, due to missing trusted timestamp in the registrar-agents signature.
 To address this, the registrar SHOULD verify the certificate used to create the signature on "agent-signed-data".
 Furthermore the registrar also verifies the LDevID(RegAgt) certificate used in the TLS handshake with the registrar-agent. If both certificates are verified successfully, the registrar-agent's signature can be considered as valid.
@@ -2563,6 +2563,7 @@ From IETF draft 05 -> IETF draft 06:
 * Update of list of reviewers
 * Issue #67, shortened the pledge endpoints to prepare for constraint deployments
 * Included table for new endpoints on the registrar in the overview of the registrar-agent
+* addressed nits discovered in SECDIR review
 
 From IETF draft 04 -> IETF draft 05:
 
