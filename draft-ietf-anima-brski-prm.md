@@ -70,6 +70,7 @@ normative:
   RFC7515:
   RFC8040:
   RFC8366:
+  RFC8366bis: I-D.ietf-anima-rfc8366bis
   RFC8610:
   RFC8995:
   I-D.ietf-anima-jws-voucher:
@@ -751,7 +752,7 @@ The header of the agent-signed-data contains:
 * kid: MUST contain the base64-encoded bytes of the SubjectKeyIdentifier (the "KeyIdentifier" OCTET STRING value), excluding the ASN.1 encoding of "OCTET STRING" of the LDevID(RegAgt) certificate.
 
 
-The body of the agent-signed-data contains an "ietf-voucher-request-prm:agent-signed-data" element (defined in {{voucher-request-prm-yang}}):
+The body of the agent-signed-data contains an "ietf-voucher-request:agent-signed-data" element (defined in {{RFC8366bis}}):
 
 * created-on: MUST contain the creation date and time in yang:date-and-time format.
 
@@ -825,7 +826,7 @@ The ietf-voucher-request:voucher is enhanced with additional parameters:
 
 * agent-signed-data: MUST contain the base64-encoded agent-signed-data (as defined in {{asd}}) and provided as trigger parameter.
 
-The enhancements of the YANG module for the ietf-voucher-request with these new leaves are defined in {{voucher-request-prm-yang}}.
+The enhancements of the YANG module for the ietf-voucher-request with these new leaves are defined in {{RFC8366bis}}.
 
 The PVR is signed using the pledge's IDevID credential contained as x5c parameter of the JOSE header.
 
@@ -1120,7 +1121,7 @@ The payload of the RVR MUST contain the following parameter as part of the vouch
 
 * prior-signed-voucher-request: PVR as in {{RFC8995}}
 
-The RVR MUST be enhanced with the following parameter, when the assertion "agent-proximity" is requested, as defined in {{voucher-request-prm-yang}}:
+The RVR MUST be enhanced with the following parameter, when the assertion "agent-proximity" is requested, as defined in {{RFC8366bis}}:
 
 * agent-sign-cert: LDevID(RegAgt) certificate or the LDevID(RegAgt) certificate including certificate chain.
   In the context of this document it is a JSON array of base64encoded certificate information and handled in the same way as x5c header objects.
@@ -1842,204 +1843,8 @@ The HTTP 400 Bad Request status code SHOULD be used, if the Accept/Content-Type 
 
 ## Voucher Request Artifact {#voucher-request-prm-yang}
 
-The following enhancement extends the voucher-request as defined in {{RFC8995}} to include additional fields necessary for handling bootstrapping in the pledge-responder-mode.
-
-### Tree Diagram
-
-The following tree diagram is mostly a duplicate of the contents of {{RFC8995}}, with the addition of the fields agent-signed-data, registrar-proximity-certificate, and agent-signing certificate.
-The tree diagram is described in {{RFC8340}}.
-Each node in the diagram is fully described by the YANG module in Section {{voucher-request-prm-yang-module}}.
-
-~~~~
-module: ietf-voucher-request-prm
-
- grouping voucher-request-prm-grouping
-  +-- voucher
-     +-- created-on?                               yang:date-and-time
-     +-- expires-on?                               yang:date-and-time
-     +-- assertion?                                enumeration
-     +-- serial-number                             string
-     +-- idevid-issuer?                            binary
-     +-- pinned-domain-cert?                       binary
-     +-- domain-cert-revocation-checks?            boolean
-     +-- nonce?                                    binary
-     +-- last-renewal-date?                        yang:date-and-time
-     +-- prior-signed-voucher-request?             binary
-     +-- proximity-registrar-cert?                 binary
-     +-- agent-signed-data?                        binary
-     +-- agent-provided-proximity-registrar-cert?  binary
-     +-- agent-sign-cert?                          binary
-~~~~
-{: artwork-align="left"}
-
-### YANG Module {#voucher-request-prm-yang-module}
-
-The following YANG module extends the {{RFC8995}} Voucher Request to include a signed artifact from the registrar-agent (agent-signed-data) as well as the registrar-proximity-certificate and the
-agent-signing certificate.
-
-~~~~
-<CODE BEGINS> file "ietf-voucher-request-prm@2022-07-05.yang"
-
-module ietf-voucher-request-prm {
-  yang-version 1.1;
-
-  namespace "urn:ietf:params:xml:ns:yang:ietf-voucher-request-prm";
-  prefix vrprm;
-
-  import ietf-restconf {
-    prefix rc;
-    description
-      "This import statement is only present to access
-       the yang-data extension defined in RFC 8040.";
-    reference "RFC 8040: RESTCONF Protocol";
-  }
-
-  import ietf-voucher-request {
-    prefix vcr;
-    description
-      "This module defines the format for a voucher request,
-          which is produced by a pledge as part of the RFC8995
-          onboarding process.";
-    reference
-      "RFC 8995: Bootstrapping Remote Secure Key Infrastructure";
-  }
-
-  organization
-   "IETF ANIMA Working Group";
-
-  contact
-   "WG Web:   <http://tools.ietf.org/wg/anima/>
-    WG List:  <mailto:anima@ietf.org>
-    Author:   Steffen Fries
-              <mailto:steffen.fries@siemens.com>
-    Author:   Eliot Lear
-              <mailto: lear@cisco.com>
-    Author:   Thomas Werner
-              <mailto: thomas-werner@siemens.com>
-    Author:   Michael Richardson
-              <mailto: mcr+ietf@sandelman.ca>";
-
-  description
-   "This module defines the format for a voucher-request form the
-    pledge in responder mode. It bases on the voucher-request
-    defined in RFC 8995, which is a superset of the voucher itself.
-    It provides content to the MASA for consideration
-    during a voucher-request.
-
-    The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL
-    NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'NOT RECOMMENDED',
-    'MAY', and 'OPTIONAL' in this document are to be interpreted as
-    described in BCP 14 (RFC 2119) (RFC 8174) when, and only when,
-    they appear in all capitals, as shown here.
-
-    Copyright (c) 2021 IETF Trust and the persons identified as
-    authors of the code. All rights reserved.
-
-    Redistribution and use in source and binary forms, with or
-    without modification, is permitted pursuant to, and subject
-    to the license terms contained in, the Simplified BSD License
-    set forth in Section 4.c of the IETF Trust's Legal Provisions
-    Relating to IETF Documents
-    (https://trustee.ietf.org/license-info).
-
-    This version of this YANG module is part of RFC xxxx; see the
-    RFC itself for full legal notices.";
-
-
-  revision 2022-07-05 {
-    description
-     "Initial version";
-    reference
-     "RFC XXXX: BRSKI for Pledge in Responder Mode";
-  }
-
-  // Top-level statement
-  rc:yang-data voucher-request-prm-artifact {
-    // YANG data template for a voucher-request.
-    uses voucher-request-prm-grouping;
-  }
-  // Grouping defined for future usage
-  grouping voucher-request-prm-grouping {
-    description
-      "Grouping to allow reuse/extensions in future work.";
-    uses vcr:voucher-request-grouping {
-
-      augment voucher {
-        description "Base the voucher-request-prm upon the
-          regular one";
-
-        leaf agent-signed-data {
-          type binary;
-          description
-            "The agent-signed-data field contains a JOSE [RFC7515]
-             object provided by the Registrar-Agent to the Pledge.
-
-             This artifact is signed by the Registrar-Agent
-             and contains a copy of the pledge's serial-number.";
-        }
-
-        leaf agent-provided-proximity-registrar-cert {
-          type binary;
-          description
-            "An X.509 v3 certificate structure, as specified by
-             RFC 5280, Section 4, encoded using the ASN.1
-             distinguished encoding rules (DER), as specified
-             in ITU X.690.
-             The first certificate in the registrar TLS server
-             certificate_list sequence (the end-entity TLS
-             certificate; see RFC 8446) presented by the
-             registrar to the registrar-agent and provided to
-             the pledge.
-             This MUST be populated in a pledge's voucher-request
-             when an agent-proximity assertion is requested.";
-          reference
-            "ITU X.690: Information Technology - ASN.1 encoding
-             rules: Specification of Basic Encoding Rules (BER),
-             Canonical Encoding Rules (CER) and Distinguished
-             Encoding Rules (DER)
-             RFC 5280: Internet X.509 Public Key Infrastructure
-             Certificate and Certificate Revocation List (CRL)
-             Profile
-             RFC 8446: The Transport Layer Security (TLS)
-             Protocol Version 1.3";
-        }
-
-        leaf-list agent-sign-cert{
-          type binary;
-          min-elements 1;
-          description
-            "An X.509 v3 certificate structure, as specified by
-             RFC 5280, Section 4, encoded using the ASN.1
-             distinguished encoding rules (DER), as specified
-             in ITU X.690.
-             This certificate can be used by the pledge,
-             the registrar, and the MASA to verify the signature
-             of agent-signed-data. It is an optional component
-             for the pledge-voucher request.
-             This MUST be populated in a registrar's
-             voucher-request when an agent-proximity assertion
-             is requested.
-             It is defined as list to enable inclusion of further
-             certificates along the certificate chain if different
-             issuing CAs have been used for the registrar-agent
-             and the registrar.";
-          reference
-            "ITU X.690: Information Technology - ASN.1 encoding
-             rules: Specification of Basic Encoding Rules (BER),
-             Canonical Encoding Rules (CER) and Distinguished
-             Encoding Rules (DER)
-             RFC 5280: Internet X.509 Public Key Infrastructure
-             Certificate and Certificate Revocation List (CRL)
-             Profile";
-        }
-      }
-    }
-  }
-}
-
-<CODE ENDS>
-~~~~
-{: artwork-align="left"}
+{{RFC8366bis}} extends the voucher-request as defined in {{RFC8995}} to include additional fields necessary for handling bootstrapping in the pledge-responder-mode.
+They are: agent-signed-data, registrar-proximity-certificate, and agent-signing certificate.
 
 Examples for the PVR are provided in {{exchanges_uc2_2}}.
 
@@ -2143,11 +1948,13 @@ A manufacturer may decide to support this feature only for devices not possessin
 
 ## YANG Module Security Considerations
 
-The enhanced voucher-request described in section {{voucher-request-prm-yang}} is bases on {{RFC8995}}, but uses a different encoding based on {{I-D.ietf-anima-jws-voucher}}.
-Therefore similar considerations as described in {{RFC8995}} section 11.7 (Security Considerations) apply.
-The YANG module specified in this document defines the schema for data that is subsequently encapsulated by a JOSE signed-data Content-type as described in {{I-D.ietf-anima-jws-voucher}}.
+The enhanced voucher-request described in {{RFC8366bis}} is based on {{RFC8995}}, but uses a different encoding based on {{I-D.ietf-anima-jws-voucher}}.
+The security considerations as described in {{RFC8995}} section 11.7 (Security Considerations) apply.
+
+The YANG module specified in {{RFC8366bis}} defines the schema for data that is subsequently encapsulated by a JOSE signed-data Content-type as described in {{I-D.ietf-anima-jws-voucher}}.
 As such, all of the YANG-modeled data is protected against modification.
-The use of YANG to define data structures via the "yang-data" statement, is relatively
+
+The use of YANG to define data structures via the {{?RFC8971}} "structure" statement, is relatively
 new and distinct from the traditional use of YANG to define an API accessed by network management protocols such as NETCONF {{RFC6241}} and RESTCONF {{RFC8040}}.
 For this reason these guidelines do not follow the template described by {{RFC8407}} section 3.7 (Security Considerations Section).
 
@@ -2690,7 +2497,7 @@ From IETF draft 00 -> IETF draft 01:
   certificate information like the issuing CA cert for the LDevID(RegAgt)
   certificate in case the registrar and the registrar-agent have different
   issuing CAs in {{exchangesfig_uc2_2}} (issue #12).
-  This also required changes in the YANG module in {{voucher-request-prm-yang-module}}
+  This also required changes in the YANG module in {{RFC8366bis}}
 
 * Addressed YANG warning (issue #1)
 
