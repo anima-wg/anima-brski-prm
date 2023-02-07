@@ -399,7 +399,7 @@ The following list describes the components in a (customer) site domain:
 
   * As the registrar-agent must be able to request data objects for bootstrapping of the pledge, the pledge must offer corresponding endpoints.
 
-  * The registrar-agent MAY provide additional data to the pledge in the context of the voucher triggering request, that the pledge includes into the PVR. 
+  * The registrar-agent MAY provide additional data to the pledge in the context of the voucher triggering request, that the pledge includes into the PVR.
     This allows the registrar to identify, with which registrar-agent the pledge was in contact.
 
   * Order of exchanges in the call flow may be different as the registrar-agent collects both, PVR and PER, at once and provides them to the registrar.
@@ -417,7 +417,7 @@ The following list describes the components in a (customer) site domain:
   The trust assumption between the registrar-agent and the registrar is based on the LDevID of the registrar-agent, provided by the PKI responsible for the domain.
   This allows the registrar-agent to authenticate towards the registrar, e.g., in a TLS handshake.
   Based on this, the registrar is able to distinguish a pledge from a registrar-agent during the TLS session establishment and also to verify that the registrar-agent is authorized to perform the bootstrapping of the distinct pledge.
-  
+
 
 * Join Proxy (not shown): same functionality as described in {{RFC8995}} if needed.
   Note that a registrar-agent may use a join proxy to facilitate the TLS connection to the registrar, in the same way that a BRSKI pledge would use a join proxy. This is useful in cases where the registrar-agent does not have full IP connectivity via the domain network, or cases where it has no other means to locate the registrar on the network.
@@ -478,7 +478,7 @@ Operations and their corresponding URIs:
 
 ## Behavior of Registrar-Agent
 
-The registrar-agent as a new component provides connectivity between the pledge and the domain registrar. 
+The registrar-agent as a new component provides connectivity between the pledge and the domain registrar.
 It facilitates the exchange of data between the pledge and the domain registrar, which are the voucher request/response, the enrollment request/response, as well as related telemetry and status information.
 
 For the communication with the pledge the registrar-agent utilizes communication endpoints provided by the pledge.
@@ -487,7 +487,7 @@ This new component changes the general interaction between the pledge and the do
 
 For the communication with the registrar, the registrar-agent uses the endpoints of the domain registrar side already specified in {{RFC8995}} if suitable.
 The EST {{RFC7030}} standard endpoints used by BRSKI do not expect signature wrapped-objects, which are used b BRSKI-PRM.
-This specifically applies for the enrollment request and the provisioning of CA certificates. 
+This specifically applies for the enrollment request and the provisioning of CA certificates.
 To accommodate the use of signature-wrapped object, the following additional endpoints are defined for the *registrar*.
 Operations and their corresponding URIs:
 
@@ -1792,7 +1792,7 @@ As the pledge is assumed to utilize the bootstrapped credential information in c
   The pledge signs the response message using its LDevID(Pledge).
 
 The pledge-status responses are cumulative in the sense that connect-success implies enroll-success, which in turn implies voucher-success.
- 
+
 {{stat_res}} provides an example for the bootstrapping-status information.
 
 
@@ -2154,10 +2154,10 @@ For this reason these guidelines do not follow the template described by {{RFC84
 
 # Acknowledgments
 
-We would like to thank the various reviewers, in particular Brian E. Carpenter, Oskar Camenzind, Hendrik Brockhaus, and Ingo Wenda for their input and discussion on use cases and call flows. 
+We would like to thank the various reviewers, in particular Brian E. Carpenter, Oskar Camenzind, Hendrik Brockhaus, and Ingo Wenda for their input and discussion on use cases and call flows.
 Further review input was provided by Jesser Bouzid, Dominik Tacke, and Christian Spindler.
 Special thanks to Esko Dijk for the in deep review and the improving proposals.
-Support in PoC implementations and comments resulting from the implementation was provided by Hong Rui Li and He Peng Jia. 
+Support in PoC implementations and comments resulting from the implementation was provided by Hong Rui Li and He Peng Jia.
 
 
 --- back
@@ -2167,7 +2167,7 @@ These examples are folded according to {{RFC8792}} Single Backslash rule.
 
 ## Example Pledge Voucher Request - PVR (from Pledge to Registrar-agent)
 
-The following is an example request sent from a Pledge to the Registrar-agent, in "General JWS JSON Serialization".  
+The following is an example request sent from a Pledge to the Registrar-agent, in "General JWS JSON Serialization".
 The message size of this PVR is: 4649 bytes
 
 ~~~~
@@ -2607,7 +2607,7 @@ From IETF draft 04 -> IETF draft 05:
 * Issue #31, clarified that combined pledge may act as client/server for further (re)enrollment
 * Issue #42, clarified that Registrar needs to verify the status responses with and ensure that they match the audit log response from the MASA, otherwise it needs drop the pledge and revoke the certificate
 * Issue #43, clarified that the pledge shall use the create time from the trigger message if the time has not been synchronized, yet.
-* Several editorial changes and enhancements to increasing readability. 
+* Several editorial changes and enhancements to increasing readability.
 
 From IETF draft 03 -> IETF draft 04:
 
