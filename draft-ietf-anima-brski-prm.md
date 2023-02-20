@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-06
+docname: draft-ietf-anima-brski-prm-07
 area: Operations and Management
 wg: ANIMA WG
 date: 2023
@@ -80,7 +80,6 @@ informative:
   RFC2986:
   RFC6241:
   RFC7252:
-  RFC8340:
   RFC8407:
   RFC8792:
   RFC9052:
@@ -594,70 +593,70 @@ The voucher then can be supplied via the registrar to the registrar-agent.
 
 
 ~~~~ aasvg
-+--------+    +-----------+    +-----------+    +--------+  +---------+
-| Pledge |    | Registrar |    | Domain    |    | Domain |  | Vendor  |
-|        |    | Agent     |    | Registrar |    | CA     |  | Service |
-|        |    | (RegAgt)  |    |  (JRC)    |    |        |  | (MASA)  |
-+--------+    +-----------+    +-----------+    +--------+  +---------+
-   |                 |                  |              |   Internet |
-   |   discover      |                  |              |            |
-   |    pledge       |                  |              |            |
-   | mDNS query      |                  |              |            |
-   |<----------------|                  |              |            |
-   |---------------->|                  |              |            |
-   |                 |                  |              |            |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+| Pledge |   | Registrar |   | Domain    |    | Domain |  | Vendor  |
+|        |   | Agent     |   | Registrar |    | CA     |  | Service |
+|        |   | (RegAgt)  |   |  (JRC)    |    |        |  | (MASA)  |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+   |                |                 |              |   Internet |
+   |   discover     |                 |              |            |
+   |    pledge      |                 |              |            |
+   | mDNS query     |                 |              |            |
+   |<---------------|                 |              |            |
+   |--------------->|                 |              |            |
+   |                |                 |              |            |
 
    trigger PVR (tPVR) and PER (tPER) generation on pledge
-   |<----- tPVR -----|                  |              |            |
-   |------ PVR ----->|                  |              |            |
-   |                 |                  |              |            |
-   |<----- tPER -----|                  |              |            |
-   |------ PER ----->|                  |              |            |
-   ~                 ~                  ~              ~            ~
+   |<----- tPVR ----|                 |              |            |
+   |------ PVR ---->|                 |              |            |
+   |                |                 |              |            |
+   |<----- tPER ----|                 |              |            |
+   |------ PER ---->|                 |              |            |
+   ~                ~                 ~              ~            ~
 
    provide PVR to infrastructure
-   |                 |<------ TLS ----->|              |            |
-   |                 |          [Reg-Agt authenticated |            |
-   |                 |           and authorized?]      |            |
-   |                 |------ PVR ------>|              |            |
-   |                 |          [Reg-Agt authorized?]  |            |
-   |                 |          [accept device?]       |            |
-   |                 |          [contact vendor]       |            |
-   |                 |                  |------------ RVR --------->|
-   |                 |                  |           [extract DomainID]
-   |                 |                  |           [update audit log]
-   |                 |                  |<--------- Voucher --------|
-   |                 |<---- Voucher ----|              |            |
-   |                 |                  |              |            |
+   |                |<----- TLS ----->|              |            |
+   |                |         [Reg-Agt authenticated |            |
+   |                |          and authorized?]      |            |
+   |                |----- PVR ------>|              |            |
+   |                |         [Reg-Agt authorized?]  |            |
+   |                |         [accept device?]       |            |
+   |                |         [contact vendor]       |            |
+   |                |                 |------------ RVR --------->|
+   |                |                 |           [extract DomainID]
+   |                |                 |           [update audit log]
+   |                |                 |<--------- Voucher --------|
+   |                |<--- Voucher ----|              |            |
+   |                |                 |              |            |
 
    provide PER to infrastructure
-   |                 |------- PER ----->|              |            |
-   |                 |                  |---- CSR ---->|            |
-   |                 |                  |<--- Cert ----|            |
-   |                 |<-- Enroll-Resp---|              |            |
-   |                 |                  |              |            |
+   |                |------ PER ----->|              |            |
+   |                |                 |---- CSR ---->|            |
+   |                |                 |<--- Cert ----|            |
+   |                |<--Enroll-Resp---|              |            |
+   |                |                 |              |            |
    query cACerts from infrastructure
-   |                 |--- cACert-Req -->|              |            |
-   |                 |<-- cACert-Resp---|              |            |
-   ~                 ~                   ~              ~            ~
+   |                |-- cACert-Req -->|              |            |
+   |                |<-- cACert-Resp--|              |            |
+   ~                ~                 ~              ~            ~
 
    provide voucher and certificate and collect status info
-   |<--- Voucher ----|                  |              |            |
-   |---- vStatus --->|                  |              |            |
-   |<--- cACerts ----|                  |              |            |
-   |<--Enroll-Resp---|                  |              |            |
-   |--- eStatus ---->|                  |              |            |
-   ~                 ~                  ~              ~            ~
+   |<--- Voucher ---|                 |              |            |
+   |---- vStatus -->|                 |              |            |
+   |<--- cACerts ---|                 |              |            |
+   |<--Enroll-Resp--|                 |              |            |
+   |--- eStatus --->|                 |              |            |
+   ~                ~                 ~              ~            ~
 
    provide voucher status and enroll status to registrar
-   |                 |<------ TLS ----->|              |            |
-   |                 |----  vStatus --->|              |            |
-   |                 |                  |--- req device audit log-->|
-   |                 |                  |<---- device audit log ----|
-   |                 |           [verify audit log]
-   |                 |                  |              |            |
-   |                 |----  eStatus --->|              |            |
-   |                 |                  |              |            |
+   |                |<------ TLS ---->|              |            |
+   |                |----  vStatus -->|              |            |
+   |                |                 |--- req device audit log-->|
+   |                |                 |<---- device audit log ----|
+   |                |           [verify audit log]
+   |                |                 |              |            |
+   |                |---- eStatus --->|              |            |
+   |                |                 |              |            |
 ~~~~
 {: #exchangesfig_uc2_all title='Overview pledge-responder-mode exchanges' artwork-align="left"}
 
@@ -1844,9 +1843,12 @@ The HTTP 400 Bad Request status code SHOULD be used, if the Accept/Content-Type 
 ## Voucher Request Artifact {#voucher-request-prm-yang}
 
 {{RFC8366bis}} extends the voucher-request as defined in {{RFC8995}} to include additional fields necessary for handling bootstrapping in the pledge-responder-mode.
-They are: agent-signed-data, registrar-proximity-certificate, and agent-signing certificate.
+These additional fields are defined in {{exchanges_uc2_1}} as:
+- agent-signed-data to provide a JSON encoded artifact from the involved registrar-agent, which allows the registrar to verify the agent's involvement
+- agent-provided-proximity-registrar-cert to provide the registrar certificate visible to the registrar-agent, comparable to the registrar-proximity-certificate used in {{RFC8995}}
+- agent-signing certificate to optionally provide the registrar agent signing certificate.
 
-Examples for the PVR are provided in {{exchanges_uc2_2}}.
+Examples for the application of these fields in the context of a PVR are provided in {{exchanges_uc2_2}}.
 
 
 # IANA Considerations
@@ -1858,15 +1860,15 @@ This document requires the following IANA actions.
 IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with the following endpoints:
 
 ~~~~
- URI                        Description                       Reference
- tv                         create pledge-voucher-request     [THISRFC]
- te                         create pledge-enrollment-request  [THISRFC]
- sv                         supply voucher response           [THISRFC]
- se                         supply enrollment response        [THISRFC]
- cc                         supply CA certificates to pledge  [THISRFC]
- ps                         query pledge status               [THISRFC]
- requestenroll              supply PER to registrar           [THISRFC]
- wrappedcacerts             request wrapped CA certificates   [THISRFC]
+ URI                Description                       Reference
+ tv                 create pledge-voucher-request     [THISRFC]
+ te                 create pledge-enrollment-request  [THISRFC]
+ sv                 supply voucher response           [THISRFC]
+ se                 supply enrollment response        [THISRFC]
+ cc                 supply CA certificates to pledge  [THISRFC]
+ ps                 query pledge status               [THISRFC]
+ requestenroll      supply PER to registrar           [THISRFC]
+ wrappedcacerts     request wrapped CA certificates   [THISRFC]
 
 ~~~~
 {: artwork-align="left"}
@@ -2384,13 +2386,19 @@ qhRRyjnxp80IV_Fy1RAOXIIzs3Q8CnMgBgg"
 
 Proof of Concept Code available
 
+From IETF draft 06 -> IETF draft 07:
+
+* WGLC resulted in a removal of the voucher enhancements completely from this document to RFC 8366bis, containing all enhancements and augmentations of the voucher, including the voucher-request as well as the tree diagrams
+* smaller editorial corrections
+ 
+
 From IETF draft 05 -> IETF draft 06:
 
 * Update of list of reviewers
 * Issue #67, shortened the pledge endpoints to prepare for constraint deployments
 * Included table for new endpoints on the registrar in the overview of the registrar-agent
-* addressed review comments from SECDIR early review
-* addressed review comments from IOTDIR early review
+* addressed review comments from SECDIR early review (terminology clarifications, editorial improvements)
+* addressed review comments from IOTDIR early review (terminology clarifications, editorial improvements)
 
 From IETF draft 04 -> IETF draft 05:
 
