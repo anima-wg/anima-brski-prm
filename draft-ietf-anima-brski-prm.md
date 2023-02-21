@@ -158,7 +158,7 @@ Finally, IDevIDs do not typically set Extended Key Usage (EKU) for TLS WWW Serve
 The inability to effectively do TLS in responder mode is one reason for relying on object security.
 Another reason is the application on different transports channels, for which TLS may not be available, such as Bluetooth and NFC.
 
-Therefore, BRSKI-PRM relies on an additional signature wrapping of the exchanged data objects .
+Therefore, BRSKI-PRM relies on an additional signature wrapping of the exchanged data objects.
 For EST {{RFC7030}} the registrar then needs to do some pre-processing to verify this signature, which is not present in EST.
 
 
@@ -224,7 +224,7 @@ This token is in fact valid base64.
 The full examples are in appendix.
 
 This protocol unavoidably has a mix of both base64 encoded data (as is normal for many JSON encoded protocols), and also BASE64URL encoded data, as specified by JWS.
-The later is indicated by a string like "BASE64URL(THING)"
+The latter is indicated by a string like "BASE64URL(THING)"
 
 # Scope of Solution
 
@@ -305,7 +305,7 @@ It is also more difficult to use TLS over other technology stacks (e.g., BTLE).
   In addition the registrar must be able to verify, which registrar-agent was in direct contact with the pledge.
 
 * It would be inaccurate for the voucher request and voucher response to use an assertion with value "proximity" in the voucher, as the pledge was not in direct contact with the registrar for bootstrapping.
-  Therefore a new "agent-proximity" assertion value is necessary for distinguishing assertions the MASA can state.
+  Therefore, a new "agent-proximity" assertion value is necessary for distinguishing assertions the MASA can state.
 
 At least the following properties are required for the voucher and enrollment processing:
 
@@ -336,7 +336,7 @@ Necessary enhancements to support authenticated self-contained objects for certi
 
 For the authenticated self-contained objects used for the certification request, BRSKI-PRM relies on the defined message wrapping mechanisms of the enrollment protocols stated in {{req-sol}} above.
 
-The security used within the document for bootstrapping objects produced or consumed by the pledge bases on JOSE {{RFC7515}}. In constrained environments it may provided based on COSE {{RFC9052}} and {{RFC9053}}.
+The security used within the document for bootstrapping objects produced or consumed by the pledge bases on JOSE {{RFC7515}}. In constrained environments it may be provided based on COSE {{RFC9052}} and {{RFC9053}}.
 
 An abstract overview of the BRSKI-PRM protocol can be found in  {{BRSKI-PRM-abstract}}.
 
@@ -386,7 +386,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
               .......................................
                        "Domain" components
 ~~~~
-{: #uc2figure title='Architecture overview using registrar-agent' artwork-align="left"}
+{: #uc2figure title='BRSKI-PRM Architecture overview using registrar-agent' artwork-align="left"}
 
 The following list describes the components in a (customer) site domain:
 
@@ -422,7 +422,7 @@ The following list describes the components in a (customer) site domain:
 * Join Proxy (not shown): same functionality as described in {{RFC8995}} if needed.
   Note that a registrar-agent may use a join proxy to facilitate the TLS connection to the registrar, in the same way that a BRSKI pledge would use a join proxy. This is useful in cases where the registrar-agent does not have full IP connectivity via the domain network, or cases where it has no other means to locate the registrar on the network.
 
-* Domain Registrar: In general the domain registrar fulfills the same functionality regarding the bootstrapping of the pledge in a (customer) site domain by facilitating the communication of the pledge with the MASA service and the domain PKI service.
+* Domain Registrar: In general, the domain registrar fulfills the same functionality regarding the bootstrapping of the pledge in a (customer) site domain by facilitating the communication of the pledge with the MASA service and the domain PKI service.
   In contrast to {{RFC8995}}, the domain registrar does not interact with a pledge directly but through the registrar-agent.
   The registrar detects if the bootstrapping is performed by the pledge directly or by the registrar-agent.
 
@@ -563,7 +563,7 @@ How to gain network connectivity is out of scope of this document.
 # Bootstrapping Data Objects and Corresponding Exchanges {#exchanges_uc2}
 
 The interaction of the pledge with the registrar-agent may be accomplished using different transport means (protocols and/or network technologies).
-This specification descibes the usage of HTTP as in BRSKI {{RFC8995}}.
+This specification describes the usage of HTTP as in BRSKI {{RFC8995}}.
 Alternative transport channels may be CoAP, Bluetooth Low Energy (BLE), or Nearfield Communication (NFC).
 These transport means may differ from, and are independent of, the ones used between the registrar-agent and the registrar.
 Transport channel independence is realized by data objects which are not bound to specific transport security.
@@ -1245,7 +1245,7 @@ The MASA returns the voucher-response (voucher) to the registrar.
 
 After receiving the voucher the registrar SHOULD evaluate it for transparency and logging purposes as outlined in section 5.6 of {{RFC8995}}.
 The registrar MUST add an additional signature to the MASA provided voucher using its registrar credentials.
-The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credentials (see{{RFC7515}}, section 5.2 point 8.
+The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credentials (see {{RFC7515}}, section 5.2 point 8.
 The x5c component of the "JWS Protected Header" MUST contain the registrar EE certificate as well as potential intermediate CA certificates up to the pinned domain certificate.
 The pinned domain certificate is already contained in the voucher payload ("pinned-domain-cert").
 
@@ -1733,11 +1733,11 @@ This is out of scope for this specification.
 
 ### Pledge-Status - Response (Pledge - Registrar-Agent)
 
-If the pledge receives the pledge-status request with status-type "bootstrap" it SHALL react with a status response message based on the telemetry information described in section {{exchanges_uc2_3}}.
+If the pledge receives the pledge-status request with status-type "bootstrap" it SHALL react with a status response message based on the telemetry information described in {{exchanges_uc2_3}}.
 
 The pledge-status response Content-Type header is `application/jose+json`.
 
-The following CDDL explains the structure of the format for the status response, which is :
+The following CDDL explains the structure of the format for the status response, which is:
 
 ~~~~
 <CODE BEGINS>
@@ -1752,7 +1752,7 @@ The following CDDL explains the structure of the format for the status response,
       "connect-success" /
       "connect-error",
     ?"reason" : text,
-    ?"reason-context" : { $$arbitrary-map }
+    ?"reason-context": { $$arbitrary-map }
   }
 <CODE ENDS>
 ~~~~
@@ -1844,9 +1844,10 @@ The HTTP 400 Bad Request status code SHOULD be used, if the Accept/Content-Type 
 
 {{RFC8366bis}} extends the voucher-request as defined in {{RFC8995}} to include additional fields necessary for handling bootstrapping in the pledge-responder-mode.
 These additional fields are defined in {{exchanges_uc2_1}} as:
-- agent-signed-data to provide a JSON encoded artifact from the involved registrar-agent, which allows the registrar to verify the agent's involvement
-- agent-provided-proximity-registrar-cert to provide the registrar certificate visible to the registrar-agent, comparable to the registrar-proximity-certificate used in {{RFC8995}}
-- agent-signing certificate to optionally provide the registrar agent signing certificate.
+
+* agent-signed-data to provide a JSON encoded artifact from the involved registrar-agent, which allows the registrar to verify the agent's involvement
+* agent-provided-proximity-registrar-cert to provide the registrar certificate visible to the registrar-agent, comparable to the registrar-proximity-certificate used in {{RFC8995}}
+* agent-signing certificate to optionally provide the registrar agent signing certificate.
 
 Examples for the application of these fields in the context of a PVR are provided in {{exchanges_uc2_2}}.
 
@@ -1913,7 +1914,7 @@ Further security aspects are considered here related to:
 Disrupting the pledge behavior by a DoS attack may prevent the bootstrapping of the pledge to a new domain.
 
 A DoS attack with a faked registrar-agent may block the bootstrapping of the pledge due to state creation on the pledge (the pledge may produce a voucher-request, and refuse to produce another one).
-One mitigation may be that the pledge does does not limited the number of voucher requests it creates until at least one has finished, or a single onboarding state may expire after a certain time.
+One mitigation may be that the pledge does not limited the number of voucher requests it creates until at least one has finished, or a single onboarding state may expire after a certain time.
 
 
 ## Misuse of acquired PVR and PER by Registrar-Agent
@@ -1958,7 +1959,7 @@ As such, all of the YANG-modeled data is protected against modification.
 
 The use of YANG to define data structures via the {{?RFC8971}} "structure" statement, is relatively
 new and distinct from the traditional use of YANG to define an API accessed by network management protocols such as NETCONF {{RFC6241}} and RESTCONF {{RFC8040}}.
-For this reason these guidelines do not follow the template described by {{RFC8407}} section 3.7 (Security Considerations Section).
+For this reason, these guidelines do not follow the template described by {{RFC8407}} section 3.7 (Security Considerations Section).
 
 
 # Acknowledgments
@@ -2546,7 +2547,7 @@ From IETF draft 01 -> IETF draft 02:
 
 * Defined call flow and objects for interactions in UC2. Object format
   based on draft for JOSE signed voucher artifacts and aligned the
-  remaining objects with this approach in {{exchanges_uc2}} .
+  remaining objects with this approach in {{exchanges_uc2}}.
 
 * Terminology change: issue #2 pledge-agent -> registrar-agent to
   better underline agent relation.
