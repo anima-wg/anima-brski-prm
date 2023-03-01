@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-07
+docname: draft-ietf-anima-brski-prm-08
 area: Operations and Management
 wg: ANIMA WG
 date: 2023
@@ -121,12 +121,12 @@ The approach defined here is agnostic with respect to the underlying enrollment 
 BRSKI as defined in {{RFC8995}} specifies a solution for secure zero-touch (automated) bootstrapping of devices (pledges) in a (customer) site domain.
 This includes the discovery of network elements in the customer site/domain and the exchange of security information necessary to establish trust between a pledge and the domain.
 
-Security information about the customer site/domain, specifically the customer site/domain certificate, is exchanged utilizing voucher request objects and voucher response objects as defined in {{RFC8995}}.
+Security information about the customer site/domain, specifically the customer site/domain certificate,are exchanged and authenticated utilizing voucher request objects and voucher response objects as defined in {{RFC8995}}.
 Voucher objects are specified in {{RFC8366}}. Vouchers are signed objects from the Manufacturer's Authorized Signing Authority (MASA).
 The MASA issues the voucher object and provides it via the domain registrar to the pledge.
 
 For the certificate enrollment of devices, BRSKI relies on EST {{RFC7030}} to request and distribute customer site/domain specific device certificates.
-EST in turn relies on a binding of the certification request to an underlying TLS connection between the EST client and the EST server.
+EST in turn relies relies for authentication and authorization of the certification request on the credentials used by for underlying TLS between the EST client and the EST server.
 
 BRSKI addresses scenarios in which the pledge initiates the bootstrapping acting as a client (this document refers to this approach as pledge-initiator-mode).
 In industrial environments the pledge may behave as a server and thus does not initiate the bootstrapping with the domain registrar.
@@ -139,7 +139,7 @@ The registrar-agent may be implemented as an integrated functionality of a commi
 
 * specifies the interaction (data exchange and data objects) between a pledge acting as server and a registrar-agent and the domain registrar.
 The security is addressed on the application layer only to enable usage of arbitrary transport means between the pledge and the domain registrar via the registrar-agent.
-Connectivity between the pledge and the registrar-agent may be via IP-based networks (wired or wireless) but also via Bluetooth or NFC.
+Connectivity between the pledge and the registrar-agent may be via IP-based networks (wired or wireless) but also others like Bluetooth or NFC.
 
 * allows the application of registrar-agent credentials to establish TLS connections to the domain registrar. These registrar-agent credentials are different from the pledge's IDevID.
 
@@ -158,7 +158,7 @@ Finally, IDevIDs do not typically set Extended Key Usage (EKU) for TLS WWW Serve
 The inability to effectively do TLS in responder mode is one reason for relying on object security.
 Another reason is the application on different transports channels, for which TLS may not be available, such as Bluetooth and NFC.
 
-Therefore, BRSKI-PRM relies on an additional signature wrapping of the exchanged data objects.
+Therefore, BRSKI-PRM relies on an additional signature wrapping of the exchanged data objects involving the registrar-agent for transport.
 For EST {{RFC7030}} the registrar then needs to do some pre-processing to verify this signature, which is not present in EST.
 
 
@@ -184,6 +184,9 @@ CSR:
 
 EE:
 : End entity
+
+endpoint:
+: Used in the context of this document similar to resources in CoAP {{RFC7252}} and also in HTTP {{RFC9110}}. Endpoints are accessible via .well-known URIs.
 
 mTLS:
 : Mutual authenticated Transport Layer Security.
