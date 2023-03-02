@@ -17,7 +17,7 @@ To establish the trust relation between pledge and domain registrar, BRSKI-PRM r
        The approach defined here is agnostic with respect to the underlying enrollment protocol which connects the pledge and the domain registrar to the Domain CA. 
     " name="description">
 <meta content="xml2rfc 3.16.0" name="generator">
-<meta content="draft-ietf-anima-brski-prm-07" name="ietf.draft">
+<meta content="draft-ietf-anima-brski-prm-08" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.16.0
     Python 3.9.2
@@ -1210,11 +1210,11 @@ li > p:last-of-type:only-child {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">BRSKI-PRM</td>
-<td class="right">February 2023</td>
+<td class="right">March 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 25 August 2023</td>
+<td class="center">Expires 3 September 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1224,15 +1224,15 @@ li > p:last-of-type:only-child {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">ANIMA WG</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-ietf-anima-brski-prm-07</dd>
+<dd class="internet-draft">draft-ietf-anima-brski-prm-08</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-02-21" class="published">21 February 2023</time>
+<time datetime="2023-03-02" class="published">2 March 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-08-25">25 August 2023</time></dd>
+<dd class="expires"><time datetime="2023-09-03">3 September 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1292,7 +1292,7 @@ To establish the trust relation between pledge and domain registrar, BRSKI-PRM r
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 25 August 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 3 September 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1549,11 +1549,11 @@ To establish the trust relation between pledge and domain registrar, BRSKI-PRM r
       </h2>
 <p id="section-1-1">BRSKI as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> specifies a solution for secure zero-touch (automated) bootstrapping of devices (pledges) in a (customer) site domain.
 This includes the discovery of network elements in the customer site/domain and the exchange of security information necessary to establish trust between a pledge and the domain.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">Security information about the customer site/domain, specifically the customer site/domain certificate, is exchanged utilizing voucher request objects and voucher response objects as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
+<p id="section-1-2">Security information about the customer site/domain, specifically the customer site/domain certificate,are exchanged and authenticated utilizing voucher request objects and voucher response objects as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 Voucher objects are specified in <span>[<a href="#RFC8366" class="cite xref">RFC8366</a>]</span>. Vouchers are signed objects from the Manufacturer's Authorized Signing Authority (MASA).
 The MASA issues the voucher object and provides it via the domain registrar to the pledge.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">For the certificate enrollment of devices, BRSKI relies on EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> to request and distribute customer site/domain specific device certificates.
-EST in turn relies on a binding of the certification request to an underlying TLS connection between the EST client and the EST server.<a href="#section-1-3" class="pilcrow">¶</a></p>
+EST in turn relies relies for authentication and authorization of the certification request on the credentials used by for underlying TLS between the EST client and the EST server.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">BRSKI addresses scenarios in which the pledge initiates the bootstrapping acting as a client (this document refers to this approach as pledge-initiator-mode).
 In industrial environments the pledge may behave as a server and thus does not initiate the bootstrapping with the domain registrar.
 In this scenario, it is expected that the pledge will be triggered to generate bootstrapping requests in the customer site/domain.
@@ -1565,7 +1565,7 @@ The registrar-agent may be implemented as an integrated functionality of a commi
 </li>
         <li class="normal" id="section-1-5.2">specifies the interaction (data exchange and data objects) between a pledge acting as server and a registrar-agent and the domain registrar.
 The security is addressed on the application layer only to enable usage of arbitrary transport means between the pledge and the domain registrar via the registrar-agent.
-Connectivity between the pledge and the registrar-agent may be via IP-based networks (wired or wireless) but also via Bluetooth or NFC.<a href="#section-1-5.2" class="pilcrow">¶</a>
+Connectivity between the pledge and the registrar-agent may be via IP-based networks (wired or wireless) but also others like Bluetooth or NFC.<a href="#section-1-5.2" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-1-5.3">allows the application of registrar-agent credentials to establish TLS connections to the domain registrar. These registrar-agent credentials are different from the pledge's IDevID.<a href="#section-1-5.3" class="pilcrow">¶</a>
 </li>
@@ -1581,7 +1581,7 @@ Second, the registrar-agent may not be aware of manufacturer trust anchors to va
 Finally, IDevIDs do not typically set Extended Key Usage (EKU) for TLS WWW Server authentication.<a href="#section-1-8" class="pilcrow">¶</a></p>
 <p id="section-1-9">The inability to effectively do TLS in responder mode is one reason for relying on object security.
 Another reason is the application on different transports channels, for which TLS may not be available, such as Bluetooth and NFC.<a href="#section-1-9" class="pilcrow">¶</a></p>
-<p id="section-1-10">Therefore, BRSKI-PRM relies on an additional signature wrapping of the exchanged data objects.
+<p id="section-1-10">Therefore, BRSKI-PRM relies on an additional signature wrapping of the exchanged data objects involving the registrar-agent for transport.
 For EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> the registrar then needs to do some pre-processing to verify this signature, which is not present in EST.<a href="#section-1-10" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1623,64 +1623,70 @@ The binding is assumed to be provided through a digital signature of the actual 
           <p id="section-2-3.10.1">End entity<a href="#section-2-3.10.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.11">mTLS:</dt>
+<dt id="section-2-3.11">endpoint:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.12">
-          <p id="section-2-3.12.1">Mutual authenticated Transport Layer Security.<a href="#section-2-3.12.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.12.1">Used in the context of this document similar to resources in CoAP <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> and also in HTTP <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>. Endpoints are accessible via .well-known URIs.<a href="#section-2-3.12.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.13">on-site:</dt>
+<dt id="section-2-3.13">mTLS:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.14">
-          <p id="section-2-3.14.1">Describes a component or service or functionality available in the customer site/domain.<a href="#section-2-3.14.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.14.1">Mutual authenticated Transport Layer Security.<a href="#section-2-3.14.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.15">off-site:</dt>
+<dt id="section-2-3.15">on-site:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.16">
-          <p id="section-2-3.16.1">Describes a component or service or functionality not available within the customer site/domain.
-It may be at a central site or an internet resident "cloud" service.
-The connection may also be temporary and, e.g., only available at times when workers are present on a construction side, for instance.<a href="#section-2-3.16.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.16.1">Describes a component or service or functionality available in the customer site/domain.<a href="#section-2-3.16.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.17">PER:</dt>
+<dt id="section-2-3.17">off-site:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.18">
-          <p id="section-2-3.18.1">Pledge-enrollment-request is a signature wrapped CSR, signed by the pledge that requests enrollment to a domain<a href="#section-2-3.18.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.18.1">Describes a component or service or functionality not available on-site.
+It may be at a central site or an internet resident "cloud" service.
+The on-site to off-site connection may also be temporary and, e.g., only available at times when workers are present on a construction side, for instance.<a href="#section-2-3.18.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.19">POP:</dt>
+<dt id="section-2-3.19">PER:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.20">
-          <p id="section-2-3.20.1">Proof of possession (of a private key)<a href="#section-2-3.20.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.20.1">Pledge-enrollment-request is a signature wrapped CSR, signed by the pledge that requests enrollment to a domain<a href="#section-2-3.20.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.21">POI:</dt>
+<dt id="section-2-3.21">POP:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.22">
-          <p id="section-2-3.22.1">Proof of identity (see <a href="#req-sol" class="auto internal xref">Section 4</a>)<a href="#section-2-3.22.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.22.1">Proof-of-possession (of a private key), as defined in <span>[<a href="#RFC5272" class="cite xref">RFC5272</a>]</span><a href="#section-2-3.22.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.23">PVR:</dt>
+<dt id="section-2-3.23">POI:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.24">
-          <p id="section-2-3.24.1">Pledge-Voucher-Request is a request for a voucher signed by the Pledge to the Registrar.<a href="#section-2-3.24.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.24.1">Proof-of-identity, as defined in <span>[<a href="#RFC5272" class="cite xref">RFC5272</a>]</span>
+PVR:<a href="#section-2-3.24.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.25">RA:</dt>
+<dt id="section-2-3.25"></dt>
         <dd style="margin-left: 1.5em" id="section-2-3.26">
-          <p id="section-2-3.26.1">Registration authority, an optional system component to which a CA delegates certificate management functions such as authorization checks.<a href="#section-2-3.26.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.26.1">Pledge-Voucher-Request is a request for a voucher sent to the Registrar.
+The PVR is signed by the Pledge.<a href="#section-2-3.26.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.27">RER:</dt>
+<dt id="section-2-3.27">RA:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.28">
-          <p id="section-2-3.28.1">Registrar-enrollment-request is the CSR of PER sent to the CA by the registrar (RA/LRA)<a href="#section-2-3.28.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.28.1">Registration authority, an optional system component to which a CA delegates certificate management functions such as authorization checks.<a href="#section-2-3.28.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.29">RVR:</dt>
+<dt id="section-2-3.29">RER:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.30">
-          <p id="section-2-3.30.1">Registrar-Voucher-Request is a request for a voucher signed by the Registrar to the MASA.
-It may contain the PVR received from the pledge.<a href="#section-2-3.30.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.30.1">Registrar-enrollment-request is the CSR of a PER sent to the CA by the registrar (RA/LRA)<a href="#section-2-3.30.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-3.31">RVR:</dt>
+        <dd style="margin-left: 1.5em" id="section-2-3.32">
+          <p id="section-2-3.32.1">Registrar-Voucher-Request is a request for a voucher signed by the Registrar to the MASA.
+It may contain the PVR received from the pledge.<a href="#section-2-3.32.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
 <p id="section-2-4">This document includes many examples that would contain many long sequences of base64 encoded objects with no content directly comprehensible to a human reader.
-In order to keep them readable the examples use the token "base64encodedvalue==" whenever such a thing occurs.
-This token is in fact valid base64.
-The full examples are in appendix.<a href="#section-2-4" class="pilcrow">¶</a></p>
+In order to keep those examples short, they use the token "base64encodedvalue==" as a placeholder for base64 data. 
+The full base64 data is included in the appendices of this document.<a href="#section-2-4" class="pilcrow">¶</a></p>
 <p id="section-2-5">This protocol unavoidably has a mix of both base64 encoded data (as is normal for many JSON encoded protocols), and also BASE64URL encoded data, as specified by JWS.
 The latter is indicated by a string like "BASE64URL(THING)"<a href="#section-2-5" class="pilcrow">¶</a></p>
 </section>
@@ -1695,19 +1701,19 @@ The latter is indicated by a string like "BASE64URL(THING)"<a href="#section-2-5
         <h3 id="name-supported-environments-and-">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-supported-environments-and-" class="section-name selfRef">Supported Environments and Use Case Examples</a>
         </h3>
-<p id="section-3.1-1">BRSKI-PRM is applicable to environments where pledges may have different behavior: pledge-responder-mode, or pledges may have no direct connection to the domain registrar.
+<p id="section-3.1-1">BRSKI-PRM is applicable to environments where pledges are in pledge-responder-mode and may have no continuous connection to a domain registrar.
 Either way pledges are expected to be managed by the same registrar.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1-2">This can be motivated by pledges deployed in environments not yet connected to the operational customer site/domain network, e.g., at a construction site where a building is going up.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1-3">Another environment relates to the assembly of cabinets, which are prepared in advance to be installed on a customer site/domain.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.1-4">As there is no direct connection to the registrar available in these environments the solution specified allows the pledges to act in a server role so they can be triggered for bootstrapping e.g., by a commissioning tool.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.1-5">As BRSKI focuses on the pledge in a client role, initiating the bootstrapping (pledge-initiated-mode), BRSKI-PRM defines pledges acting as a server (pledge-responder-mode) responding to PVR and PER and consumption of the results.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">As BRSKI defines the pledge in a client role, initiating the bootstrapping (pledge-initiated-mode), BRSKI-PRM in contrast defines pledges acting as a server (pledge-responder-mode) responding to PVR and PER and consumption of the results.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
 <p id="section-3.1-6">The following examples motivate support of BRSKI-PRM to support pledges acting as server as well as pledges with limited connectivity to the registrar.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
 <p id="section-3.1-7">While BRSKI-PRM defines support for pledges in responder mode, there may be pledges which can act as both initiator or responder.
 In these cases BRSKI-PRM can be combined with BRSKI as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> or BRSKI-AE <span>[<a href="#I-D.ietf-anima-brski-ae" class="cite xref">I-D.ietf-anima-brski-ae</a>]</span> to allow for more bootstrapping flexibility.<a href="#section-3.1-7" class="pilcrow">¶</a></p>
-<p id="section-3.1-8">A pledge which can initiate, <span class="bcp14">SHOULD</span> listen for BRSKI messages as described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>], <a href="https://rfc-editor.org/rfc/rfc8995#section-4.1" class="relref">Section 4.1</a></span>.  Upon discovery of a potential Registrar, it <span class="bcp14">SHOULD</span> initiate the bootstrapping to that Registrar.
+<p id="section-3.1-8">A pledge in pledge-initiator-mode should listen for announcement messages as described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>], <a href="https://rfc-editor.org/rfc/rfc8995#section-4.1" class="relref">Section 4.1</a></span>.  Upon discovery of a potential Registrar, it initiates the bootstrapping to that Registrar.
 At the same time (so as to avoid the Slowloris-attack described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>), it <span class="bcp14">SHOULD</span> also respond to the pledge-responder-mode connections described in this document.<a href="#section-3.1-8" class="pilcrow">¶</a></p>
-<p id="section-3.1-9">Once a pledge with such combined functionality has been bootstrapped, it <span class="bcp14">MAY</span> act as client for enrollment or re-enrollment of further certificates needed, e.g., using the enrollment protocol of choice.
-If it still acts as server, the defined endpoints can be used to trigger a Pledge-Enrollment-Request (PER) for further certificates.<a href="#section-3.1-9" class="pilcrow">¶</a></p>
+<p id="section-3.1-9">Once a pledge with such combined functionality has been bootstrapped, it <span class="bcp14">MAY</span> act as client for enrollment of further certificates needed, e.g., using the enrollment protocol of choice.
+If it still acts as server, the defined BRSKI-PRM endpoints to trigger a Pledge-Enrollment-Request (PER) or to provide a enrollment response can be used for further certificates.<a href="#section-3.1-9" class="pilcrow">¶</a></p>
 <div id="building-automation">
 <section id="section-3.1.1">
           <h4 id="name-building-automation">
@@ -1716,11 +1722,12 @@ If it still acts as server, the defined endpoints can be used to trigger a Pledg
 <p id="section-3.1.1-1">In building automation a typical use case exists where a detached building (or a cabinet) or the basement of a building is equipped with sensors, actuators and controllers, but with only limited or no connection to the central building management system.
 This limited connectivity may exist during installation time or also during operation time.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1.1-2">During the installation, for instance, in the basement, a service technician collects the device specific information from the basement network and provides them to the central building management system.  This could be done using a laptop, common mobile device, or dedicated commissioning tool to transport the information.
-The service technician may visit every new house in a subdivision collecting device specific information before connecting to the Registrar.<a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
+The service technician may visit every new building in a subdivision collecting device specific information before connecting to the Registrar.<a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1.1-3">A domain registrar may be part of the central building management system and already be operational in the installation network.
 The central building management system can then provide operational parameters for the specific devices in the basement.
 These operational parameters may comprise values and settings required in the operational phase of the sensors/actuators, among them a certificate issued by the operator to authenticate against other components and services.
-These operational parameters are then provided to the devices in the basement facilitated by the service technician's laptop.<a href="#section-3.1.1-3" class="pilcrow">¶</a></p>
+These operational parameters are then provided to the devices in the basement facilitated by the service technician's laptop.
+The registrar-agent, defined in this document, may be run on the technician's laptop to interact with pledges.<a href="#section-3.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="infrastructure-isolation-policy">
@@ -1752,7 +1759,8 @@ There may be situations in which the customer site/domain does not offer enough 
 <p id="section-3.2-1">The mechanism described in this document presumes the availability of the pledge and the registrar-agent to communicate with another.
 This may not be possible in constrained environments where, in particular, power must be conserved.
 In these situations, it is anticipated that the transceiver will be powered down most of the time.
-This presents a rendezvous problem: the pledge is unavailable for certain periods of time, and the registrar-agent is similarly presumed to be unavailable for certain periods of time.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+This presents a rendezvous problem: the pledge is unavailable for certain periods of time, and the registrar-agent is similarly presumed to be unavailable for certain periods of time.
+To overcome this situation, the pledges may need to be powered on, either manually or by sending a trigger signal.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1782,10 +1790,10 @@ Therefore, a new "agent-proximity" assertion value is necessary for distinguishi
       </ul>
 <p id="section-4-3">At least the following properties are required for the voucher and enrollment processing:<a href="#section-4-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4-4.1">Proof of Identity (POI): provides data-origin authentication of a data object, e.g., a voucher request or an enrollment request, utilizing an existing IDevID.
+<li class="normal" id="section-4-4.1">POI: provides data-origin authentication of a data object, e.g., a voucher request or an enrollment request, utilizing an existing IDevID.
 Certificate updates may utilize the certificate that is to be updated.<a href="#section-4-4.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-4-4.2">Proof of Possession (POP): proves that an entity possesses and controls the private key corresponding to the public key contained in the certification request, typically by adding a signature computed using the private key to the certification request.<a href="#section-4-4.2" class="pilcrow">¶</a>
+        <li class="normal" id="section-4-4.2">POP: proves that an entity possesses and controls the private key corresponding to the public key contained in the certification request, typically by adding a signature computed using the private key to the certification request.<a href="#section-4-4.2" class="pilcrow">¶</a>
 </li>
       </ul>
 <p id="section-4-5">Solution examples based on existing technology are provided with the focus on existing IETF RFCs:<a href="#section-4-5" class="pilcrow">¶</a></p>
@@ -1794,7 +1802,7 @@ Certificate updates may utilize the certificate that is to be updated.<a href="#
 </li>
         <li class="normal" id="section-4-6.2">Certification requests are data structures containing the information from a requester for a CA to create a certificate.
 The certification request format in BRSKI is PKCS#10 <span>[<a href="#RFC2986" class="cite xref">RFC2986</a>]</span>.
-In PKCS#10, the structure is signed to ensure integrity protection and proof of possession of the private key of the requester that corresponds to the contained public key.
+In PKCS#10, the structure is signed to ensure integrity protection and POP of the private key of the requester that corresponds to the contained public key.
 In the application examples, this POP alone is not sufficient.
 A POI is also required for the certification request and therefore the certification request needs to be additionally bound to the existing credential of the pledge (IDevID).
 This binding supports the authorization decision for the certification request and may be provided directly with the certification request.
@@ -2805,8 +2813,8 @@ The "enroll-generic-cert" case is shown in <a href="#raer" class="auto internal 
           </h4>
 <p id="section-6.1.4-1">In the following the enrollment is described as initial enrollment with an empty HTTP POST body.<a href="#section-6.1.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.4-2">Upon receiving the enrollment-trigger, the pledge <span class="bcp14">SHALL</span> construct the PER as authenticated self-contained object.
-The CSR already assures proof of possession of the private key corresponding to the contained public key.
-In addition, based on the additional signature using the IDevID, proof of identity is provided.
+The CSR already assures POP of the private key corresponding to the contained public key.
+In addition, based on the additional signature using the IDevID, POI is provided.
 Here, a JOSE object is being created in which the body utilizes the YANG module ietf-ztp-types with the grouping for csr-grouping for the CSR as defined in <span>[<a href="#I-D.ietf-netconf-sztp-csr" class="cite xref">I-D.ietf-netconf-sztp-csr</a>]</span>.<a href="#section-6.1.4-2" class="pilcrow">¶</a></p>
 <p id="section-6.1.4-3">Depending on the capability of the pledge, it constructs the enrollment request (PER) as plain PKCS#10.
 Note, the focus in this use case is placed on PKCS#10 as PKCS#10 can be transmitted in different enrollment protocols in the infrastructure like EST, CMP, CMS, and SCEP.
@@ -3269,7 +3277,7 @@ The registrar <span class="bcp14">MUST</span> add an additional signature to the
 The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credentials (see <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>, section 5.2 point 8.
 The x5c component of the "JWS Protected Header" <span class="bcp14">MUST</span> contain the registrar EE certificate as well as potential intermediate CA certificates up to the pinned domain certificate.
 The pinned domain certificate is already contained in the voucher payload ("pinned-domain-cert").<a href="#section-6.2.5-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.5-2">This signature provides a proof of possession of the private key corresponding to the registrar EE certificate the pledge received in the trigger for the PVR (see <a href="#pavrt" class="auto internal xref">Figure 4</a>).
+<p id="section-6.2.5-2">This signature provides POP of the private key corresponding to the registrar EE certificate the pledge received in the trigger for the PVR (see <a href="#pavrt" class="auto internal xref">Figure 4</a>).
 The registrar <span class="bcp14">MUST</span> use the same registrar EE credentials used for authentication in the TLS handshake to authenticate towards the registrar-agent.
 This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher request as also transferred in the PVR in the "agent-provided-proximity-registrar-cert".
 <a href="#MASA-REG-vr" class="auto internal xref">Figure 12</a> below provides an example of the voucher with two signatures.<a href="#section-6.2.5-2" class="pilcrow">¶</a></p>
@@ -4252,7 +4260,7 @@ Support in PoC implementations and comments resulting from the implementation wa
 <dl class="references">
 <dt id="I-D.ietf-anima-jws-voucher">[I-D.ietf-anima-jws-voucher]</dt>
         <dd>
-<span class="refAuthor">Werner, T.</span> and <span class="refAuthor">M. Richardson</span>, <span class="refTitle">"JWS signed Voucher Artifacts for Bootstrapping Protocols"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-jws-voucher-05</span>, <time datetime="2022-10-24" class="refDate">24 October 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-jws-voucher-05">https://datatracker.ietf.org/doc/html/draft-ietf-anima-jws-voucher-05</a>&gt;</span>. </dd>
+<span class="refAuthor">Werner, T.</span> and <span class="refAuthor">M. Richardson</span>, <span class="refTitle">"JWS signed Voucher Artifacts for Bootstrapping Protocols"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-jws-voucher-06</span>, <time datetime="2023-02-22" class="refDate">22 February 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-jws-voucher-06">https://datatracker.ietf.org/doc/html/draft-ietf-anima-jws-voucher-06</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-anima-rfc8366bis">[I-D.ietf-anima-rfc8366bis]</dt>
         <dd>
@@ -4336,6 +4344,10 @@ Support in PoC implementations and comments resulting from the implementation wa
 <dt id="RFC2986">[RFC2986]</dt>
         <dd>
 <span class="refAuthor">Nystrom, M.</span> and <span class="refAuthor">B. Kaliski</span>, <span class="refTitle">"PKCS #10: Certification Request Syntax Specification Version 1.7"</span>, <span class="seriesInfo">RFC 2986</span>, <span class="seriesInfo">DOI 10.17487/RFC2986</span>, <time datetime="2000-11" class="refDate">November 2000</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2986">https://www.rfc-editor.org/rfc/rfc2986</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5272">[RFC5272]</dt>
+        <dd>
+<span class="refAuthor">Schaad, J.</span> and <span class="refAuthor">M. Myers</span>, <span class="refTitle">"Certificate Management over CMS (CMC)"</span>, <span class="seriesInfo">RFC 5272</span>, <span class="seriesInfo">DOI 10.17487/RFC5272</span>, <time datetime="2008-06" class="refDate">June 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5272">https://www.rfc-editor.org/rfc/rfc5272</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6125">[RFC6125]</dt>
         <dd>

@@ -78,6 +78,7 @@ normative:
   I-D.ietf-anima-rfc8366bis:
 informative:
   RFC2986:
+  RFC5272:
   RFC6241:
   RFC7252:
   RFC8407:
@@ -195,36 +196,35 @@ on-site:
 : Describes a component or service or functionality available in the customer site/domain.
 
 off-site:
-: Describes a component or service or functionality not available within the customer site/domain.
+: Describes a component or service or functionality not available on-site.
 It may be at a central site or an internet resident "cloud" service.
-The connection may also be temporary and, e.g., only available at times when workers are present on a construction side, for instance.
+The on-site to off-site connection may also be temporary and, e.g., only available at times when workers are present on a construction side, for instance.
 
 PER:
 : Pledge-enrollment-request is a signature wrapped CSR, signed by the pledge that requests enrollment to a domain
 
 POP:
-: Proof of possession (of a private key)
+: Proof-of-possession (of a private key), as defined in {{RFC5272}}
 
 POI:
-: Proof of identity (see {{req-sol}})
-
+: Proof-of-identity, as defined in {{RFC5272}}
 PVR:
-: Pledge-Voucher-Request is a request for a voucher signed by the Pledge to the Registrar.
+: Pledge-Voucher-Request is a request for a voucher sent to the Registrar.
+The PVR is signed by the Pledge.
 
 RA:
 : Registration authority, an optional system component to which a CA delegates certificate management functions such as authorization checks.
 
 RER:
-: Registrar-enrollment-request is the CSR of PER sent to the CA by the registrar (RA/LRA)
+: Registrar-enrollment-request is the CSR of a PER sent to the CA by the registrar (RA/LRA)
 
 RVR:
 : Registrar-Voucher-Request is a request for a voucher signed by the Registrar to the MASA.
 It may contain the PVR received from the pledge.
 
 This document includes many examples that would contain many long sequences of base64 encoded objects with no content directly comprehensible to a human reader.
-In order to keep them readable the examples use the token "base64encodedvalue==" whenever such a thing occurs.
-This token is in fact valid base64.
-The full examples are in appendix.
+In order to keep those examples short, they use the token "base64encodedvalue==" as a placeholder for base64 data. 
+The full base64 data is included in the appendices of this document.
 
 This protocol unavoidably has a mix of both base64 encoded data (as is normal for many JSON encoded protocols), and also BASE64URL encoded data, as specified by JWS.
 The latter is indicated by a string like "BASE64URL(THING)"
@@ -233,7 +233,7 @@ The latter is indicated by a string like "BASE64URL(THING)"
 
 ## Supported Environments and Use Case Examples {#sup-env}
 
-BRSKI-PRM is applicable to environments where pledges may have different behavior: pledge-responder-mode, or pledges may have no direct connection to the domain registrar.
+BRSKI-PRM is applicable to environments where pledges are in pledge-responder-mode and may have no continuous connection to a domain registrar.
 Either way pledges are expected to be managed by the same registrar.
 
 This can be motivated by pledges deployed in environments not yet connected to the operational customer site/domain network, e.g., at a construction site where a building is going up.
@@ -242,18 +242,18 @@ Another environment relates to the assembly of cabinets, which are prepared in a
 
 As there is no direct connection to the registrar available in these environments the solution specified allows the pledges to act in a server role so they can be triggered for bootstrapping e.g., by a commissioning tool.
 
-As BRSKI focuses on the pledge in a client role, initiating the bootstrapping (pledge-initiated-mode), BRSKI-PRM defines pledges acting as a server (pledge-responder-mode) responding to PVR and PER and consumption of the results.
+As BRSKI defines the pledge in a client role, initiating the bootstrapping (pledge-initiated-mode), BRSKI-PRM in contrast defines pledges acting as a server (pledge-responder-mode) responding to PVR and PER and consumption of the results.
 
 The following examples motivate support of BRSKI-PRM to support pledges acting as server as well as pledges with limited connectivity to the registrar.
 
 While BRSKI-PRM defines support for pledges in responder mode, there may be pledges which can act as both initiator or responder.
 In these cases BRSKI-PRM can be combined with BRSKI as defined in {{RFC8995}} or BRSKI-AE {{I-D.ietf-anima-brski-ae}} to allow for more bootstrapping flexibility.
 
-A pledge which can initiate, SHOULD listen for BRSKI messages as described in {{RFC8995, Section 4.1}}.  Upon discovery of a potential Registrar, it SHOULD initiate the bootstrapping to that Registrar.
+A pledge in pledge-initiator-mode should listen for announcement messages as described in {{RFC8995, Section 4.1}}.  Upon discovery of a potential Registrar, it initiates the bootstrapping to that Registrar.
 At the same time (so as to avoid the Slowloris-attack described in {{RFC8995}}), it SHOULD also respond to the pledge-responder-mode connections described in this document.
 
-Once a pledge with such combined functionality has been bootstrapped, it MAY act as client for enrollment or re-enrollment of further certificates needed, e.g., using the enrollment protocol of choice.
-If it still acts as server, the defined endpoints can be used to trigger a Pledge-Enrollment-Request (PER) for further certificates.
+Once a pledge with such combined functionality has been bootstrapped, it MAY act as client for enrollment of further certificates needed, e.g., using the enrollment protocol of choice.
+If it still acts as server, the defined BRSKI-PRM endpoints to trigger a Pledge-Enrollment-Request (PER) or to provide a enrollment response can be used for further certificates.
 
 
 ### Building Automation
@@ -262,12 +262,13 @@ In building automation a typical use case exists where a detached building (or a
 This limited connectivity may exist during installation time or also during operation time.
 
 During the installation, for instance, in the basement, a service technician collects the device specific information from the basement network and provides them to the central building management system.  This could be done using a laptop, common mobile device, or dedicated commissioning tool to transport the information.
-The service technician may visit every new house in a subdivision collecting device specific information before connecting to the Registrar.
+The service technician may visit every new building in a subdivision collecting device specific information before connecting to the Registrar.
 
 A domain registrar may be part of the central building management system and already be operational in the installation network.
 The central building management system can then provide operational parameters for the specific devices in the basement.
 These operational parameters may comprise values and settings required in the operational phase of the sensors/actuators, among them a certificate issued by the operator to authenticate against other components and services.
 These operational parameters are then provided to the devices in the basement facilitated by the service technician's laptop.
+The registrar-agent, defined in this document, may be run on the technician's laptop to interact with pledges.
 
 
 ### Infrastructure Isolation Policy
@@ -289,6 +290,8 @@ The mechanism described in this document presumes the availability of the pledge
 This may not be possible in constrained environments where, in particular, power must be conserved.
 In these situations, it is anticipated that the transceiver will be powered down most of the time.
 This presents a rendezvous problem: the pledge is unavailable for certain periods of time, and the registrar-agent is similarly presumed to be unavailable for certain periods of time.
+To overcome this situation, the pledges may need to be powered on, either manually or by sending a trigger signal. 
+
 
 
 # Requirements Discussion and Mapping to Solution-Elements {#req-sol}
@@ -312,10 +315,10 @@ It is also more difficult to use TLS over other technology stacks (e.g., BTLE).
 
 At least the following properties are required for the voucher and enrollment processing:
 
-* Proof of Identity (POI): provides data-origin authentication of a data object, e.g., a voucher request or an enrollment request, utilizing an existing IDevID.
+* POI: provides data-origin authentication of a data object, e.g., a voucher request or an enrollment request, utilizing an existing IDevID.
   Certificate updates may utilize the certificate that is to be updated.
 
-* Proof of Possession (POP): proves that an entity possesses and controls the private key corresponding to the public key contained in the certification request, typically by adding a signature computed using the private key to the certification request.
+* POP: proves that an entity possesses and controls the private key corresponding to the public key contained in the certification request, typically by adding a signature computed using the private key to the certification request.
 
 Solution examples based on existing technology are provided with the focus on existing IETF RFCs:
 
@@ -323,7 +326,7 @@ Solution examples based on existing technology are provided with the focus on ex
 
 * Certification requests are data structures containing the information from a requester for a CA to create a certificate.
   The certification request format in BRSKI is PKCS#10 {{RFC2986}}.
-  In PKCS#10, the structure is signed to ensure integrity protection and proof of possession of the private key of the requester that corresponds to the contained public key.
+  In PKCS#10, the structure is signed to ensure integrity protection and POP of the private key of the requester that corresponds to the contained public key.
   In the application examples, this POP alone is not sufficient.
   A POI is also required for the certification request and therefore the certification request needs to be additionally bound to the existing credential of the pledge (IDevID).
   This binding supports the authorization decision for the certification request and may be provided directly with the certification request.
@@ -898,8 +901,8 @@ The "enroll-generic-cert" case is shown in {{raer}}.
 In the following the enrollment is described as initial enrollment with an empty HTTP POST body.
 
 Upon receiving the enrollment-trigger, the pledge SHALL construct the PER as authenticated self-contained object.
-The CSR already assures proof of possession of the private key corresponding to the contained public key.
-In addition, based on the additional signature using the IDevID, proof of identity is provided.
+The CSR already assures POP of the private key corresponding to the contained public key.
+In addition, based on the additional signature using the IDevID, POI is provided.
 Here, a JOSE object is being created in which the body utilizes the YANG module ietf-ztp-types with the grouping for csr-grouping for the CSR as defined in {{I-D.ietf-netconf-sztp-csr}}.
 
 Depending on the capability of the pledge, it constructs the enrollment request (PER) as plain PKCS#10.
@@ -1252,7 +1255,7 @@ The signature is created by signing the original "JWS Payload" produced by MASA 
 The x5c component of the "JWS Protected Header" MUST contain the registrar EE certificate as well as potential intermediate CA certificates up to the pinned domain certificate.
 The pinned domain certificate is already contained in the voucher payload ("pinned-domain-cert").
 
-This signature provides a proof of possession of the private key corresponding to the registrar EE certificate the pledge received in the trigger for the PVR (see {{pavrt}}).
+This signature provides POP of the private key corresponding to the registrar EE certificate the pledge received in the trigger for the PVR (see {{pavrt}}).
 The registrar MUST use the same registrar EE credentials used for authentication in the TLS handshake to authenticate towards the registrar-agent.
 This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher request as also transferred in the PVR in the "agent-provided-proximity-registrar-cert".
 {{MASA-REG-vr}} below provides an example of the voucher with two signatures.
