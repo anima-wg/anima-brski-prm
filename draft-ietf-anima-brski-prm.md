@@ -58,6 +58,11 @@ contributor:
   name: Esko Dijk
   org: IoTconsultancy.nl
   email: esko.dijk@iotconsultancy.nl
+- name: Toerless Eckert 
+  org: Futurewei
+  email: tte@cs.fau.de
+- name: Matthias Kovatsch
+  email: ietf@kovatsch.net
 venue:
   group: ANIMA
   anima mail: {anima@ietf.org}
@@ -70,8 +75,8 @@ normative:
   RFC7515:
   RFC8040:
   RFC8366:
-  RFC8366bis: I-D.ietf-anima-rfc8366bis
   RFC8610:
+  RFC8615:
   RFC8995:
   I-D.ietf-anima-jws-voucher:
   I-D.ietf-netconf-sztp-csr:
@@ -124,9 +129,10 @@ Security information about the customer site/domain, specifically the customer s
 Vouchers are signed objects from the Manufacturer's Authorized Signing Authority (MASA).
 The MASA issues the voucher and provides it via the domain registrar to the pledge.
 {{RFC8366}} specifies the format of the voucher artifacts.
+{{I-D.ietf-anima-rfc8366bis}} further enhances the format of the voucher artifacts and also the voucher-request.
 
 For the certificate enrollment of devices, BRSKI relies on EST {{RFC7030}} to request and distribute customer site/domain specific device certificates.
-EST in turn relies relies for authentication and authorization of the certification request on the credentials used by for underlying TLS between the EST client and the EST server.
+EST in turn relies relies for authentication and authorization of the certification request on the credentials used by the underlying TLS between the EST client and the EST server.
 
 BRSKI addresses scenarios in which the pledge initiates the bootstrapping acting as client (referred to as initiator mode by this document).
 BRSKI with pledge in responder mode (BRSKI-PRM) defined in this document allows the pledge to act as server, so that it can be triggered to generate bootstrapping requests in the customer site/domain.
@@ -212,9 +218,10 @@ The PVR is signed by the Pledge.
 
 RA:
 : Registration Authority, an optional system component to which a CA delegates certificate management functions such as authorization checks.
+This component is co-located with the domain registrar, as in BRSKI {{RFC8995}}
 
 RER:
-: Registrar Enrollment-Request is the CSR of a PER sent to the CA by the domain registrar (RA/LRA).
+: Registrar Enrollment-Request is the CSR of a PER sent to the CA by the domain registrar (RA).
 
 RVR:
 : Registrar Voucher-Request is a request for a voucher signed by the domain registrar to the MASA.
@@ -232,10 +239,9 @@ The latter is indicated by a string like "BASE64URL(content-name)".
 
 ## Supported Environments and Use Case Examples {#sup-env}
 
-BRSKI-PRM is applicable to scenarios where pledges have no direct connection to the domain registrar, have no continuous connection, or require coordination of the pledge requests (e.g., to work in constrained environments).
-Either way, such pledges are expected to be managed by the same domain registrar as other BRSKI pledges.
+BRSKI-PRM is applicable to scenarios where pledges may have no direct connection to the domain registrar, may have no continuous connection, or require coordination of the pledge requests to be provided to a domain registrar.
 
-This can be motivated by pledges deployed in environments not yet connected to the operational customer site/domain network, e.g., at a building construction site, or environments intentionally disconnected from the Internet, e.g., critical idustrial facilities.
+This can be motivated by pledges deployed in environments not yet connected to the operational customer site/domain network, e.g., at a building construction site, or environments intentionally disconnected from the Internet, e.g., critical industrial facilities.
 Another example is the assembly of electrical cabinets, which are prepared in advance before the installation at a customer site/domain.
 
 
@@ -319,25 +325,22 @@ Solution examples based on existing technology are provided with the focus on ex
 
 # Architectural Overview {#architecture}
 
-For BRSKI with pledge in responder mode, the base system architecture defined in BRSKI {{RFC8995}} is enhanced to facilitate the new use cases in which the pledge acts as server.
+For BRSKI with pledge in responder mode, the base system architecture defined in BRSKI {{RFC8995}} is enhanced to facilitate new use cases in which the pledge acts as server.
 The responder mode allows delegated bootstrapping using a registrar-agent instead of a direct connection between the pledge and the domain registrar.
 
 Necessary enhancements to support authenticated self-contained objects for certificate enrollment are kept at a minimum to enable reuse of already defined architecture elements and interactions.
 
-For the authenticated self-contained objects used for the certification request, BRSKI-PRM relies on the defined message wrapping mechanisms of the enrollment protocols stated in {{req-sol}} above.
-
-The security used within the document for bootstrapping objects produced or consumed by the pledge bases on JOSE {{RFC7515}}.
+In general, the format of the bootstrapping objects produced or consumed by the pledge bases on JOSE {{RFC7515}} to address the requirements stated in {{req-sol}} above. 
+ 
 In constrained environments it may be provided based on COSE {{RFC9052}} and {{RFC9053}}.
 
 An abstract overview of the BRSKI-PRM protocol can be found in  {{BRSKI-PRM-abstract}}.
 
-
-## Registrar-Agent Communication with Pledges {#uc2}
-
 To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer site/domain, this document specifies the exchange of authenticated self-contained objects (the voucher-request/response as known from BRSKI and the enrollment-request/response as introduced by BRSKI-PRM) with the help of a registrar-agent.
 
 This leads to extensions of the logical components in the BRSKI architecture as shown in {{uc2figure}}.
-Note that the Join Proxy is neglected in the figure as not needed by the registrar-agent.
+Note that the Join Proxy is neglected in the figure. 
+It may be used as specified in BRSKI {{RFC8995}} by the registrar-agent to connect to the registrar.
 The registrar-agent interacts with the pledge to transfer the required data objects for bootstrapping, which are then also exchanged between the registrar-agent and the domain registrar.
 The addition of the registrar-agent influences the sequences of the data exchange between the pledge and the domain registrar described in {{RFC8995}}.
 To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
@@ -386,14 +389,14 @@ The following list describes the components in a (customer) site domain:
   Other protocols such as CoAP, NFC, or Bluetooth may be used, but are out of scope of this document.
   A pledge acting as a server during bootstrapping leads to some differences for BRSKI:
 
-  * Discovery of the pledge by the registrar-agent must be possible.
+  * Discovery of the pledge by the registrar-agent MUST be possible.
 
-  * As the registrar-agent must be able to request data objects for bootstrapping of the pledge, the pledge must offer corresponding endpoints.
+  * As the registrar-agent MUST be able to request data objects for bootstrapping of the pledge, the pledge must offer corresponding endpoints.
 
-  * The registrar-agent MAY provide additional data to the pledge in the context of the voucher-request trigger, which the pledge includes into the PVR.
+  * The registrar-agent MUST provide additional data to the pledge in the context of the voucher-request trigger, which the pledge includes into the PVR.
     This allows the registrar to identify, with which registrar-agent the pledge was in contact.
 
-  * Order of exchanges in the call flow may be different as the registrar-agent collects both, PVR and PER, at once and provides them to the registrar.
+  * Order of exchanges in the BRSKI-PRM call flow is different those in BRSKI {{RFC8995}}, as the PVR and PER are collected at once and provided to the registrar.
     This enables bulk bootstrapping of several devices.
 
   * The data objects utilized for the data exchange between the pledge and the registrar are self-contained authenticated objects (signature-wrapped objects).
@@ -749,7 +752,7 @@ The header of the agent-signed-data contains:
 
 * kid: MUST contain the base64-encoded bytes of the SubjectKeyIdentifier (the "KeyIdentifier" OCTET STRING value), excluding the ASN.1 encoding of "OCTET STRING" of the LDevID(RegAgt) certificate.
 
-The body of the agent-signed-data contains an "ietf-voucher-request:agent-signed-data" element (defined in {{RFC8366bis}}):
+The body of the agent-signed-data contains an "ietf-voucher-request:agent-signed-data" element (defined in {{I-D.ietf-anima-rfc8366bis}}):
 
 * created-on: MUST contain the creation date and time in yang:date-and-time format.
 
@@ -823,7 +826,7 @@ The ietf-voucher-request:voucher is enhanced with additional parameters:
 
 * agent-signed-data: MUST contain the base64-encoded agent-signed-data (as defined in {{asd}}) and provided as trigger parameter.
 
-The enhancements of the YANG module for the ietf-voucher-request with these new leaves are defined in {{RFC8366bis}}.
+The enhancements of the YANG module for the ietf-voucher-request with these new leaves are defined in {{I-D.ietf-anima-rfc8366bis}}.
 
 The PVR is signed using the pledge's IDevID credential contained as x5c parameter of the JOSE header.
 
@@ -889,7 +892,7 @@ The "enroll-generic-cert" case is shown in {{raer}}.
 {: #raer title='Example of trigger to create a PER' artwork-align="left"}
 
 
-### Pledge Enrollment-Request (PER) - Response
+### Pledge Enrollment-Request (PER) - Response {#PER-response}
 
 In the following the enrollment is described as initial enrollment with an empty HTTP POST body.
 
@@ -1118,7 +1121,7 @@ The payload of the RVR MUST contain the following parameter as part of the vouch
 
 * prior-signed-voucher-request: PVR as in {{RFC8995}}
 
-The RVR MUST be enhanced with the following parameter, when the assertion "agent-proximity" is requested, as defined in {{RFC8366bis}}:
+The RVR MUST be enhanced with the following parameter, when the assertion "agent-proximity" is requested, as defined in {{I-D.ietf-anima-rfc8366bis}}:
 
 * agent-sign-cert: LDevID(RegAgt) certificate or the LDevID(RegAgt) certificate including certificate chain.
   In the context of this document it is a JSON array of base64encoded certificate information and handled in the same way as x5c header objects.
@@ -1843,7 +1846,7 @@ The HTTP 400 Bad Request status code SHOULD be used, if the Accept/Content-Type 
 
 ## Voucher-Request Artifact {#voucher-request-prm-yang}
 
-{{RFC8366bis}} extends the voucher-request as defined in {{RFC8995}} to include additional fields necessary for handling bootstrapping in the pledge-responder-mode.
+{{I-D.ietf-anima-rfc8366bis}} extends the voucher-request as defined in {{RFC8995}} to include additional fields necessary for handling bootstrapping in the pledge-responder-mode.
 These additional fields are defined in {{exchanges_uc2_1}} as:
 
 * agent-signed-data to provide a JSON encoded artifact from the involved registrar-agent, which allows the registrar to verify the agent's involvement
@@ -1954,10 +1957,10 @@ A manufacturer may decide to support this feature only for devices not possessin
 
 ## YANG Module Security Considerations
 
-The enhanced voucher-request described in {{RFC8366bis}} is based on {{RFC8995}}, but uses a different encoding based on {{I-D.ietf-anima-jws-voucher}}.
+The enhanced voucher-request described in {{I-D.ietf-anima-rfc8366bis}} is based on {{RFC8995}}, but uses a different encoding based on {{I-D.ietf-anima-jws-voucher}}.
 The security considerations as described in {{RFC8995}} section 11.7 (Security Considerations) apply.
 
-The YANG module specified in {{RFC8366bis}} defines the schema for data that is subsequently encapsulated by a JOSE signed-data Content-type as described in {{I-D.ietf-anima-jws-voucher}}.
+The YANG module specified in {{I-D.ietf-anima-rfc8366bis}} defines the schema for data that is subsequently encapsulated by a JOSE signed-data Content-type as described in {{I-D.ietf-anima-jws-voucher}}.
 As such, all of the YANG-modeled data is protected against modification.
 
 The use of YANG to define data structures via the {{?RFC8971}} "structure" statement, is relatively
@@ -2394,6 +2397,11 @@ qhRRyjnxp80IV_Fy1RAOXIIzs3Q8CnMgBgg"
 
 Proof of Concept Code available
 
+From IETF draft 07 -> IETF draft 08:
+
+* resolved editorial issues discovered after WGLC (still open issues remaining)
+* resolved issues from the Shepherd review as discussed in PR #85 on the ANIMA github
+
 From IETF draft 06 -> IETF draft 07:
 
 * WGLC resulted in a removal of the voucher enhancements completely from this document to RFC 8366bis, containing all enhancements and augmentations of the voucher, including the voucher-request as well as the tree diagrams
@@ -2510,7 +2518,7 @@ From IETF draft 00 -> IETF draft 01:
   certificate information like the issuing CA cert for the LDevID(RegAgt)
   certificate in case the registrar and the registrar-agent have different
   issuing CAs in {{exchangesfig_uc2_2}} (issue #12).
-  This also required changes in the YANG module in {{RFC8366bis}}
+  This also required changes in the YANG module in {{I-D.ietf-anima-rfc8366bis}}
 
 * Addressed YANG warning (issue #1)
 
@@ -2544,7 +2552,7 @@ From IETF draft 02 -> IETF draft 03:
   in {{exchanges_uc2_1}} as voucher-request was
   enhanced with additional leaf.
 
-* Included open issues in YANG model in {{uc2}} regarding assertion
+* Included open issues in YANG model in {{architecture}} regarding assertion
   value agent-proximity and csr encapsulation using SZTP sub module).
 
 From IETF draft 01 -> IETF draft 02:
@@ -2567,7 +2575,7 @@ From IETF draft 01 -> IETF draft 02:
   extension of the YANG module for the voucher-request (issue #12).
 
 * Details on trust relationship between registrar-agent and
-  registrar (issue #4, #5, #9) included in {{uc2}}.
+  registrar (issue #4, #5, #9) included in {{architecture}}.
 
 * Recommendation regarding short-lived certificates for
   registrar-agent authentication towards registrar (issue #7) in
@@ -2581,7 +2589,7 @@ From IETF draft 01 -> IETF draft 02:
   (issue #1) in {{exchanges_uc2}}.
 
 * Details on trust relationship between registrar-agent and
-  pledge (issue #5) included in {{uc2}}.
+  pledge (issue #5) included in {{architecture}}.
 
 * Split of use case 2 call flow into sub sections in {{exchanges_uc2}}.
 
@@ -2591,7 +2599,7 @@ From IETF draft 00 -> IETF draft 01:
   which the pledge acts as a server. This is one main motivation
   for use case 2.
 
-* Rework of use case 2 in {{uc2}} to consider the
+* Rework of use case 2 in {{architecture}} to consider the
   transport between the pledge and the pledge-agent. Addressed is
   the TLS channel establishment between the pledge-agent and the
   pledge as well as the endpoint definition on the pledge.
@@ -2617,7 +2625,7 @@ From individual version 03 -> IETF draft 00:
   cases in the document. An illustrative example is provided.
 
 * Missing details provided for the description and call flow in
-  pledge-agent use case {{uc2}}, e.g. to
+  pledge-agent use case {{architecture}}, e.g. to
   accommodate distribution of CA certificates.
 
 * Updated CMP example in to use lightweight CMP instead of CMP, as the draft already provides
