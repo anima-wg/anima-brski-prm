@@ -14,7 +14,7 @@
 It specifically changes the interaction model from a pledge-initiated mode, as used in BRSKI, to a pledge-responding mode, where the pledge is in server role.
 For this, BRSKI with Pledge in Responder Mode (BRSKI-PRM) introduces a new component, the registrar-agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
 To establish the trust relation between pledge and registrar, BRSKI-PRM relies on object security rather than transport security.
-The approach defined here is agnostic to the underlying enrollment protocol that connects the pledge and the domain registrar to the domain CA. 
+The approach defined here is agnostic to the enrollment protocol that connects the domain registrar to the domain CA. 
     " name="description">
 <meta content="xml2rfc 3.16.0" name="generator">
 <meta content="draft-ietf-anima-brski-prm-08" name="ietf.draft">
@@ -1214,7 +1214,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 10 September 2023</td>
+<td class="center">Expires 11 September 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1227,12 +1227,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-08</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-03-09" class="published">9 March 2023</time>
+<time datetime="2023-03-10" class="published">10 March 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-09-10">10 September 2023</time></dd>
+<dd class="expires"><time datetime="2023-09-11">11 September 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1261,7 +1261,7 @@ li > p:last-of-type:only-child {
 It specifically changes the interaction model from a pledge-initiated mode, as used in BRSKI, to a pledge-responding mode, where the pledge is in server role.
 For this, BRSKI with Pledge in Responder Mode (BRSKI-PRM) introduces a new component, the registrar-agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
 To establish the trust relation between pledge and registrar, BRSKI-PRM relies on object security rather than transport security.
-The approach defined here is agnostic to the underlying enrollment protocol that connects the pledge and the domain registrar to the domain CA.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+The approach defined here is agnostic to the enrollment protocol that connects the domain registrar to the domain CA.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1292,7 +1292,7 @@ The approach defined here is agnostic to the underlying enrollment protocol that
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 10 September 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 11 September 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1581,7 +1581,7 @@ Finally, IDevIDs do not typically set Extended Key Usage (EKU) for TLS WWW Serve
 <p id="section-1-8">The inability to effectively do TLS in responder mode is one reason for relying on object security at the application layer.
 Another reason is the support for alternative transports for which TLS may not be available, e.g., Bluetooth or NFC.
 Therefore, BRSKI-PRM relies on an additional signature wrapping of the exchanged data objects involving the registrar-agent for transport.
-For EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> the domain registrar then needs to do some pre-processing to verify this signature, which is not present in EST.<a href="#section-1-8" class="pilcrow">¶</a></p>
+To utilize EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> for enrollment, the domain registrar must perform the pre-processing of this wrapping signature before actually using EST as defined in <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span>.<a href="#section-1-8" class="pilcrow">¶</a></p>
 <p id="section-1-9">There may be pledges which can support both modes, initiator and responder mode.
 In these cases BRSKI-PRM can be combined with BRSKI as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> or BRSKI-AE <span>[<a href="#I-D.ietf-anima-brski-ae" class="cite xref">I-D.ietf-anima-brski-ae</a>]</span> to allow for more bootstrapping flexibility.<a href="#section-1-9" class="pilcrow">¶</a></p>
 </section>
@@ -1670,7 +1670,7 @@ The PVR is signed by the Pledge.<a href="#section-2-3.26.1" class="pilcrow">¶</
 <dt id="section-2-3.27">RA:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.28">
           <p id="section-2-3.28.1">Registration Authority, an optional system component to which a CA delegates certificate management functions such as authorization checks.
-This component is co-located with the domain registrar, as in BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span><a href="#section-2-3.28.1" class="pilcrow">¶</a></p>
+In BRSKI-PRM this is a functionality of the domain registrar, as in BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-2-3.28.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-2-3.29">RER:</dt>
@@ -1811,29 +1811,29 @@ While BRSKI uses the binding to TLS, BRSKI-PRM aims at an additional signature o
       </h2>
 <p id="section-5-1">For BRSKI with pledge in responder mode, the base system architecture defined in BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> is enhanced to facilitate new use cases in which the pledge acts as server.
 The responder mode allows delegated bootstrapping using a registrar-agent instead of a direct connection between the pledge and the domain registrar.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">Necessary enhancements to support authenticated self-contained objects for certificate enrollment are kept at a minimum to enable reuse of already defined architecture elements and interactions.<a href="#section-5-2" class="pilcrow">¶</a></p>
-<p id="section-5-3">In general, the format of the bootstrapping objects produced or consumed by the pledge bases on JOSE <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span> to address the requirements stated in <a href="#req-sol" class="auto internal xref">Section 4</a> above.<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">In constrained environments it may be provided based on COSE <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>]</span> and <span>[<a href="#RFC9053" class="cite xref">RFC9053</a>]</span>.<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">An abstract overview of the BRSKI-PRM protocol can be found in  <span>[<a href="#BRSKI-PRM-abstract" class="cite xref">BRSKI-PRM-abstract</a>]</span>.<a href="#section-5-5" class="pilcrow">¶</a></p>
-<p id="section-5-6">To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer site/domain, this document specifies the exchange of authenticated self-contained objects (the voucher-request/response as known from BRSKI and the enrollment-request/response as introduced by BRSKI-PRM) with the help of a registrar-agent.<a href="#section-5-6" class="pilcrow">¶</a></p>
-<p id="section-5-7">This leads to extensions of the logical components in the BRSKI architecture as shown in <a href="#uc2figure" class="auto internal xref">Figure 1</a>.
+<p id="section-5-2">Necessary enhancements to support authenticated self-contained objects for certificate enrollment are kept at a minimum to enable reuse of already defined architecture elements and interactions.
+The format of the bootstrapping objects produced or consumed by the pledge is based on JOSE <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span> and further specified in <a href="#exchanges_uc2" class="auto internal xref">Section 6</a> to address the requirements stated in <a href="#req-sol" class="auto internal xref">Section 4</a> above.<br>
+In constrained environments it may be provided based on COSE <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>]</span> and <span>[<a href="#RFC9053" class="cite xref">RFC9053</a>]</span>.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">An abstract overview of the BRSKI-PRM protocol can be found in  <span>[<a href="#BRSKI-PRM-abstract" class="cite xref">BRSKI-PRM-abstract</a>]</span>.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer site/domain, this document specifies the exchange of authenticated self-contained objects (the voucher-request/response as known from BRSKI and the enrollment-request/response as introduced by BRSKI-PRM) with the help of a registrar-agent.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">This leads to extensions of the logical components in the BRSKI architecture as shown in <a href="#uc2figure" class="auto internal xref">Figure 1</a>.
 Note that the Join Proxy is neglected in the figure. 
-It may be used as specified in BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> by the registrar-agent to connect to the registrar.
+It <span class="bcp14">MAY</span>  be used as specified in BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> by the registrar-agent to connect to the registrar.
 The registrar-agent interacts with the pledge to transfer the required data objects for bootstrapping, which are then also exchanged between the registrar-agent and the domain registrar.
 The addition of the registrar-agent influences the sequences of the data exchange between the pledge and the domain registrar described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
-To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:<a href="#section-5-7" class="pilcrow">¶</a></p>
+To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:<a href="#section-5-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5-8.1">uses existing endpoints where the required functionality is provided.<a href="#section-5-8.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5-6.1">uses existing endpoints where the required functionality is provided.<a href="#section-5-6.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-5-8.2">enhances existing endpoints with new supported media types, e.g., for JWS voucher.<a href="#section-5-8.2" class="pilcrow">¶</a>
+        <li class="normal" id="section-5-6.2">enhances existing endpoints with new supported media types, e.g., for JWS voucher.<a href="#section-5-6.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-5-8.3">defines new endpoints where additional functionality is required, e.g., for wrapped certification request, CA certificates, or new status information.<a href="#section-5-8.3" class="pilcrow">¶</a>
+        <li class="normal" id="section-5-6.3">defines new endpoints where additional functionality is required, e.g., for wrapped certification request, CA certificates, or new status information.<a href="#section-5-6.3" class="pilcrow">¶</a>
 </li>
       </ul>
 <span id="name-brski-prm-architecture-over"></span><div id="uc2figure">
 <figure id="figure-1">
-        <div id="section-5-9.1">
-          <div class="alignLeft art-svg artwork" id="section-5-9.1.1">
+        <div id="section-5-7.1">
+          <div class="alignLeft art-svg artwork" id="section-5-7.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="480" width="456" viewBox="0 0 456 480" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px">
               <path d="M 8,240 L 8,384" fill="none" stroke="black"></path>
               <path d="M 40,48 L 40,232" fill="none" stroke="black"></path>
@@ -1938,36 +1938,36 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:<a
                 <text x="236" y="468">"Domain"</text>
                 <text x="316" y="468">Components</text>
               </g>
-            </svg><a href="#section-5-9.1.1" class="pilcrow">¶</a>
+            </svg><a href="#section-5-7.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
 <a href="#name-brski-prm-architecture-over" class="selfRef">BRSKI-PRM architecture overview using registrar-agent</a>
         </figcaption></figure>
 </div>
-<p id="section-5-10">The following list describes the components in a (customer) site domain:<a href="#section-5-10" class="pilcrow">¶</a></p>
+<p id="section-5-8"><a href="#uc2figure" class="auto internal xref">Figure 1</a> shows the relations between the following main components:<a href="#section-5-8" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5-11.1">
-          <p id="section-5-11.1.1">Pledge: The pledge is expected to respond with the necessary data objects for bootstrapping to the registrar-agent.
+<li class="normal" id="section-5-9.1">
+          <p id="section-5-9.1.1">Pledge: The pledge is expected to respond with the necessary data objects for bootstrapping to the registrar-agent.
 The protocol used between the pledge and the registrar-agent is assumed to be HTTP in the context of this document.
 Other protocols such as CoAP, NFC, or Bluetooth may be used, but are out of scope of this document.
-A pledge acting as a server during bootstrapping leads to some differences for BRSKI:<a href="#section-5-11.1.1" class="pilcrow">¶</a></p>
+A pledge acting as a server during bootstrapping leads to some differences for BRSKI:<a href="#section-5-9.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5-11.1.2.1">Discovery of the pledge by the registrar-agent <span class="bcp14">MUST</span> be possible.<a href="#section-5-11.1.2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5-9.1.2.1">Discovery of the pledge by the registrar-agent <span class="bcp14">MUST</span> be possible.<a href="#section-5-9.1.2.1" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5-11.1.2.2">As the registrar-agent <span class="bcp14">MUST</span> be able to request data objects for bootstrapping of the pledge, the pledge must offer corresponding endpoints.<a href="#section-5-11.1.2.2" class="pilcrow">¶</a>
+            <li class="normal" id="section-5-9.1.2.2">As the registrar-agent <span class="bcp14">MUST</span> be able to request data objects for bootstrapping of the pledge, the pledge <span class="bcp14">MUST</span> offer corresponding endpoints as defined in <a href="#pledge_ep" class="auto internal xref">Section 5.2</a>.<a href="#section-5-9.1.2.2" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5-11.1.2.3">The registrar-agent <span class="bcp14">MUST</span> provide additional data to the pledge in the context of the voucher-request trigger, which the pledge includes into the PVR.
-This allows the registrar to identify, with which registrar-agent the pledge was in contact.<a href="#section-5-11.1.2.3" class="pilcrow">¶</a>
+            <li class="normal" id="section-5-9.1.2.3">The registrar-agent <span class="bcp14">MUST</span> provide additional data to the pledge in the context of the voucher-request trigger, which the pledge <span class="bcp14">MUST</span> include into the PVR as defined in <a href="#pvrt" class="auto internal xref">Section 6.1.1</a> and <a href="#pvrr" class="auto internal xref">Section 6.1.2</a>.
+This allows the registrar to identify, with which registrar-agent the pledge was in contact.<a href="#section-5-9.1.2.3" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5-11.1.2.4">Order of exchanges in the BRSKI-PRM call flow is different those in BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, as the PVR and PER are collected at once and provided to the registrar.
-This enables bulk bootstrapping of several devices.<a href="#section-5-11.1.2.4" class="pilcrow">¶</a>
+            <li class="normal" id="section-5-9.1.2.4">Order of exchanges in the BRSKI-PRM call flow is different those in BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, as the PVR and PER are collected at once and provided to the registrar.
+This enables bulk bootstrapping of several devices.<a href="#section-5-9.1.2.4" class="pilcrow">¶</a>
 </li>
-            <li class="normal" id="section-5-11.1.2.5">The data objects utilized for the data exchange between the pledge and the registrar are self-contained authenticated objects (signature-wrapped objects).<a href="#section-5-11.1.2.5" class="pilcrow">¶</a>
+            <li class="normal" id="section-5-9.1.2.5">The data objects utilized for the data exchange between the pledge and the registrar are self-contained authenticated objects (signature-wrapped objects).<a href="#section-5-9.1.2.5" class="pilcrow">¶</a>
 </li>
           </ul>
 </li>
-        <li class="normal" id="section-5-11.2">Registrar-agent: provides a communication path to exchange data objects between the pledge and the domain registrar.
+        <li class="normal" id="section-5-9.2">Registrar-agent: provides a communication path to exchange data objects between the pledge and the domain registrar.
 The registrar-agent brokers in situations in which the domain registrar is not directly reachable by the pledge.
 This may be due to a different technology stack or due to missing connectivity.
 The registrar-agent triggers a pledge to create bootstrapping artifacts such as the voucher-request and the enrollment-request on one or multiple pledges and performs a (bulk) bootstrapping based on the collected data.
@@ -1975,17 +1975,17 @@ The registrar-agent is expected to possess information about the domain registra
 There is no trust assumption between the pledge and the registrar-agent as only authenticated self-contained objects are used, which are transported via the registrar-agent and provided either by the pledge or the registrar.
 The trust assumption between the registrar-agent and the registrar is based on the LDevID of the registrar-agent, provided by the PKI responsible for the domain.
 This allows the registrar-agent to authenticate towards the registrar, e.g., in a TLS handshake.
-Based on this, the registrar is able to distinguish a pledge from a registrar-agent during the TLS session establishment and also to verify that the registrar-agent is authorized to perform the bootstrapping of the distinct pledge.<a href="#section-5-11.2" class="pilcrow">¶</a>
+Based on this, the registrar is able to distinguish a pledge from a registrar-agent during the TLS session establishment and also to verify that the registrar-agent is authorized to perform the bootstrapping of the distinct pledge.<a href="#section-5-9.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-5-11.3">Join Proxy (not shown): same functionality as described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> if needed.
-Note that a registrar-agent may use a join proxy to facilitate the TLS connection to the registrar, in the same way that a BRSKI pledge would use a join proxy. This is useful in cases where the registrar-agent does not have full IP connectivity via the domain network, or cases where it has no other means to locate the registrar on the network.<a href="#section-5-11.3" class="pilcrow">¶</a>
+        <li class="normal" id="section-5-9.3">Join Proxy (not shown): same functionality as described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> if needed.
+Note that a registrar-agent may use a join proxy to facilitate the TLS connection to the registrar, in the same way that a BRSKI pledge would use a join proxy. This is useful in cases where the registrar-agent does not have full IP connectivity via the domain network, or cases where it has no other means to locate the registrar on the network.<a href="#section-5-9.3" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-5-11.4">Domain Registrar: In general, the domain registrar fulfills the same functionality regarding the bootstrapping of the pledge in a (customer) site domain by facilitating the communication of the pledge with the MASA service and the domain PKI service.
+        <li class="normal" id="section-5-9.4">Domain Registrar: In general, the domain registrar fulfills the same functionality regarding the bootstrapping of the pledge in a (customer) site domain by facilitating the communication of the pledge with the MASA service and the domain PKI service.
 In contrast to <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the domain registrar does not interact with a pledge directly but through the registrar-agent.
-The registrar detects if the bootstrapping is performed by the pledge directly or by the registrar-agent.<a href="#section-5-11.4" class="pilcrow">¶</a>
+The registrar detects if the bootstrapping is performed by the pledge directly or by the registrar-agent.<a href="#section-5-9.4" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-5-11.5">The manufacturer provided components/services (MASA and Ownership tracker) are used as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
-For issuing a voucher, the MASA may perform additional checks on a voucher-request, to issue a voucher indicating agent-proximity instead of (registrar-)proximity.<a href="#section-5-11.5" class="pilcrow">¶</a>
+        <li class="normal" id="section-5-9.5">The manufacturer provided components/services (MASA and Ownership tracker) are used as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
+For issuing a voucher, the MASA may perform additional checks on a voucher-request, to issue a voucher indicating agent-proximity instead of (registrar-)proximity.<a href="#section-5-9.5" class="pilcrow">¶</a>
 </li>
       </ul>
 <div id="agt_prx">
@@ -2604,7 +2604,7 @@ The registrar-agent <span class="bcp14">SHOULD</span> have synchronized time.<a 
           </figcaption></figure>
 </div>
 <p id="section-6.1-6">Note: The registrar-agent may trigger the pledge for the PVR or the PER or both. It is expected that this will be aligned with a service technician workflow, visiting and installing each pledge.<a href="#section-6.1-6" class="pilcrow">¶</a></p>
-<div id="pledge-voucher-request-pvr-trigger">
+<div id="pvrt">
 <section id="section-6.1.1">
           <h4 id="name-pledge-voucher-request-pvr-">
 <a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-pledge-voucher-request-pvr-" class="section-name selfRef">Pledge-Voucher-Request (PVR) - Trigger</a>
@@ -2688,7 +2688,7 @@ The serial-number corresponds with the product-serial-number contained in the X5
 </div>
 </section>
 </div>
-<div id="pledge-voucher-request-pvr-response">
+<div id="pvrr">
 <section id="section-6.1.2">
           <h4 id="name-pledge-voucher-request-pvr-r">
 <a href="#section-6.1.2" class="section-number selfRef">6.1.2. </a><a href="#name-pledge-voucher-request-pvr-r" class="section-name selfRef">Pledge-Voucher-Request (PVR) - Response</a>
@@ -4856,7 +4856,7 @@ qhRRyjnxp80IV_Fy1RAOXIIzs3Q8CnMgBgg"
 <ul class="normal">
 <li class="normal" id="appendix-B-3.1">resolved editorial issues discovered after WGLC (still open issues remaining)<a href="#appendix-B-3.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.2">resolved issues from the Shepherd review as discussed in PR #85 on the ANIMA github<a href="#appendix-B-3.2" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.2">resolved first comments from the Shepherd review as discussed in PR #85 on the ANIMA github<a href="#appendix-B-3.2" class="pilcrow">¶</a>
 </li>
       </ul>
 <p id="appendix-B-4">From IETF draft 06 -&gt; IETF draft 07:<a href="#appendix-B-4" class="pilcrow">¶</a></p>
