@@ -116,7 +116,7 @@ This document defines enhancements to Bootstrapping a Remote Secure Key Infrastr
 It specifically changes the interaction model from a pledge-initiated mode, as used in BRSKI, to a pledge-responding mode, where the pledge is in server role.
 For this, BRSKI with Pledge in Responder Mode (BRSKI-PRM) introduces a new component, the registrar-agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
 To establish the trust relation between pledge and registrar, BRSKI-PRM relies on object security rather than transport security.
-The approach defined here is agnostic to the underlying enrollment protocol that connects the pledge and the domain registrar to the domain CA.
+The approach defined here is agnostic to the enrollment protocol that connects the domain registrar to the domain CA.
 
 --- middle
 
@@ -160,7 +160,7 @@ Finally, IDevIDs do not typically set Extended Key Usage (EKU) for TLS WWW Serve
 The inability to effectively do TLS in responder mode is one reason for relying on object security at the application layer.
 Another reason is the support for alternative transports for which TLS may not be available, e.g., Bluetooth or NFC.
 Therefore, BRSKI-PRM relies on an additional signature wrapping of the exchanged data objects involving the registrar-agent for transport.
-For EST {{RFC7030}} the domain registrar then needs to do some pre-processing to verify this signature, which is not present in EST.
+To utilize EST {{RFC7030}} for enrollment, the domain registrar must perform the pre-processing of this wrapping signature before actually using EST as defined in {{RFC7030}}.
 
 There may be pledges which can support both modes, initiator and responder mode.
 In these cases BRSKI-PRM can be combined with BRSKI as defined in {{RFC8995}} or BRSKI-AE {{I-D.ietf-anima-brski-ae}} to allow for more bootstrapping flexibility.
@@ -218,7 +218,7 @@ The PVR is signed by the Pledge.
 
 RA:
 : Registration Authority, an optional system component to which a CA delegates certificate management functions such as authorization checks.
-This component is co-located with the domain registrar, as in BRSKI {{RFC8995}}
+In BRSKI-PRM this is a functionality of the domain registrar, as in BRSKI {{RFC8995}}.
 
 RER:
 : Registrar Enrollment-Request is the CSR of a PER sent to the CA by the domain registrar (RA).
@@ -329,9 +329,7 @@ For BRSKI with pledge in responder mode, the base system architecture defined in
 The responder mode allows delegated bootstrapping using a registrar-agent instead of a direct connection between the pledge and the domain registrar.
 
 Necessary enhancements to support authenticated self-contained objects for certificate enrollment are kept at a minimum to enable reuse of already defined architecture elements and interactions.
-
-In general, the format of the bootstrapping objects produced or consumed by the pledge bases on JOSE {{RFC7515}} to address the requirements stated in {{req-sol}} above. 
- 
+The format of the bootstrapping objects produced or consumed by the pledge is based on JOSE {{RFC7515}} and further specified in {{exchanges_uc2}} to address the requirements stated in {{req-sol}} above.  
 In constrained environments it may be provided based on COSE {{RFC9052}} and {{RFC9053}}.
 
 An abstract overview of the BRSKI-PRM protocol can be found in  {{BRSKI-PRM-abstract}}.
@@ -340,7 +338,7 @@ To support mutual trust establishment between the domain registrar and pledges n
 
 This leads to extensions of the logical components in the BRSKI architecture as shown in {{uc2figure}}.
 Note that the Join Proxy is neglected in the figure. 
-It may be used as specified in BRSKI {{RFC8995}} by the registrar-agent to connect to the registrar.
+It MAY  be used as specified in BRSKI {{RFC8995}} by the registrar-agent to connect to the registrar.
 The registrar-agent interacts with the pledge to transfer the required data objects for bootstrapping, which are then also exchanged between the registrar-agent and the domain registrar.
 The addition of the registrar-agent influences the sequences of the data exchange between the pledge and the domain registrar described in {{RFC8995}}.
 To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
@@ -382,7 +380,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 ~~~~
 {: #uc2figure title='BRSKI-PRM architecture overview using registrar-agent' artwork-align="left"}
 
-The following list describes the components in a (customer) site domain:
+{{uc2figure}} shows the relations between the following main components:
 
 * Pledge: The pledge is expected to respond with the necessary data objects for bootstrapping to the registrar-agent.
   The protocol used between the pledge and the registrar-agent is assumed to be HTTP in the context of this document.
@@ -391,9 +389,9 @@ The following list describes the components in a (customer) site domain:
 
   * Discovery of the pledge by the registrar-agent MUST be possible.
 
-  * As the registrar-agent MUST be able to request data objects for bootstrapping of the pledge, the pledge must offer corresponding endpoints.
+  * As the registrar-agent MUST be able to request data objects for bootstrapping of the pledge, the pledge MUST offer corresponding endpoints as defined in {{pledge_ep}}.
 
-  * The registrar-agent MUST provide additional data to the pledge in the context of the voucher-request trigger, which the pledge includes into the PVR.
+  * The registrar-agent MUST provide additional data to the pledge in the context of the voucher-request trigger, which the pledge MUST include into the PVR as defined in {{pvrt}} and {{pvrr}}.
     This allows the registrar to identify, with which registrar-agent the pledge was in contact.
 
   * Order of exchanges in the BRSKI-PRM call flow is different those in BRSKI {{RFC8995}}, as the PVR and PER are collected at once and provided to the registrar.
@@ -719,7 +717,7 @@ Preconditions:
 
 Note: The registrar-agent may trigger the pledge for the PVR or the PER or both. It is expected that this will be aligned with a service technician workflow, visiting and installing each pledge.
 
-### Pledge-Voucher-Request (PVR) - Trigger
+### Pledge-Voucher-Request (PVR) - Trigger {#pvrt}
 
 Triggering the pledge to create the PVR is done using HTTP POST on the defined pledge endpoint: "/.well-known/brski/tv"
 
@@ -788,7 +786,7 @@ The body of the agent-signed-data contains an "ietf-voucher-request:agent-signed
 {: #asd title='Representation of agent-signed-data in General JWS Serialization syntax' artwork-align="left"}
 
 
-### Pledge-Voucher-Request (PVR) - Response
+### Pledge-Voucher-Request (PVR) - Response {#pvrr}
 
 Upon receiving the voucher-request trigger, the pledge SHALL construct the body of the PVR as defined in {{RFC8995}}.
 It will contain additional information provided by the registrar-agent as specified in the following.
@@ -2400,7 +2398,7 @@ Proof of Concept Code available
 From IETF draft 07 -> IETF draft 08:
 
 * resolved editorial issues discovered after WGLC (still open issues remaining)
-* resolved issues from the Shepherd review as discussed in PR #85 on the ANIMA github
+* resolved first comments from the Shepherd review as discussed in PR #85 on the ANIMA github
 
 From IETF draft 06 -> IETF draft 07:
 
