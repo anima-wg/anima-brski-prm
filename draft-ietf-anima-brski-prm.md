@@ -1378,8 +1378,7 @@ The additional processing is to sign the CA certificate(s) information using the
 This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certificates are provided as base64 encoded "x5b" in the JWS payload.
 
 ~~~~
-# The CA certificates data with additional registrar signature in
-  General JWS Serialization syntax
+# The CA certificates data with registrar signature in General JWS Serialization syntax
 {
   "payload": "BASE64URL(certs)",
   "signatures": [
@@ -1409,7 +1408,7 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
   ]
 }
 ~~~~
-{: #PCAC title='Representation of CA certificate(s) data with additional registrar signature' artwork-align="left"}
+{: #PCAC title='Representation of CA certificate(s) data with registrar signature' artwork-align="left"}
 
 
 ## Response Object Supply by Registrar-Agent to Pledge {#exchanges_uc2_3}
@@ -1422,7 +1421,7 @@ It is assumed that the registrar-agent already obtained the bootstrapping respon
 
 * enrollment-response - LDevID (Pledge) certificate (from CA via registrar)
 
-The registrar-agent will re-connect to the pledge.
+To deliver these response objects, the registrar-agent will re-connect to the pledge.
 To contact the pledge, it may either discover the pledge as described in {{discovery_uc2_ppa}} or use stored information from the first contact with the pledge.
 
 Preconditions in addition to {{exchanges_uc2_2}}:
@@ -1466,9 +1465,9 @@ The registrar-agent voucher-response Content-Type header is `application/voucher
 
 A nonceless voucher may be accepted as in {{RFC8995}} and may be allowed by a manufacture's pledge implementation.
 
-To perform the validation of multiple signatures on the voucher object, the pledge SHALL perform the signature verification in the following order:
+To perform the validation of several signatures on the voucher object, the pledge SHALL perform the signature verification in the following order:
 
-  1. Verify MASA signature as described in Section 5.6.1 in {{RFC8995}}
+  1. Verify MASA signature as described in Section 5.6.1 in {{RFC8995}}, against pre-installed manufacturer trust anchor (IDevID).
   2. Install trust anchor contained in the voucher ("pinned-domain-cert")  provisionally
   3. Verify registrar signature as described in Section 5.6.1 in {{RFC8995}}, but take the registrar certificate instead of the MASA certificate for the verification
   4. Validate the registrar certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert").
@@ -1529,7 +1528,7 @@ The registrar-agent SHALL provide the set of CA certificates requested from the 
 
 As the CA certificate provisioning is crucial from a security perspective, this provisioning SHALL only be done, if the voucher-response has been successfully processed by pledge.
 
-The supply CA certificates message has the Content-Type `application/jose+json` and is signed using the credential of the registrar pledge as shown in {{PCAC}}.
+The supply CA certificates message has the Content-Type `application/jose+json` and is signed using the credential of the registrar as shown in {{PCAC}}.
 
 The CA certificates are provided as base64 encoded "x5b".
 The pledge SHALL install the received CA certificates as trust anchor after successful verification of the registrar's signature.
@@ -1552,7 +1551,7 @@ Note: It only contains the LDevID certificate for the pledge, not the certificat
 
 Upon reception, the pledge SHALL verify the received LDevID certificate.
 The pledge SHALL generate the enroll status and provide it in the response to the registrar-agent.
-If the verification of the LDevID certificate succeeds, the status SHALL be set to true, otherwise to FALSE.
+If the verification of the LDevID certificate succeeds, the status property SHALL be set to "status": true, otherwise to "status": false
 
 
 ### Pledge: Enrollment-Status Telemetry
@@ -1638,11 +1637,11 @@ Preconditions in addition to {{exchanges_uc2_2}}:
 The registrar-agent MUST provide the collected pledge voucher status to the registrar.
 This status indicates if the pledge could process the voucher successfully or not.
 
-If the TLS connection to the registrar was closed, the registrar-agent establishes a TLS connection with the registrar as stated in {{exchanges_uc2_2}}.
+In case the TLS connection to the registrar is already closed, the registrar-agent opens a new TLS connection with the registrar as stated in {{exchanges_uc2_2}}.
 
 The registrar-agent sends the pledge voucher status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/voucher_status". The Content-Type header is kept as `application/jose+json` as described in {{exchangesfig_uc2_3}} and depicted in the example in {{vstat}}.
 
-The registrar SHALL verify the signature of the pledge voucher status and validate that it belongs to an accepted device in his domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher status.
+The registrar SHALL verify the signature of the pledge voucher status and validate that it belongs to an accepted device of the domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher status.
 
 According to {{RFC8995}} Section 5.7, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
@@ -1657,10 +1656,10 @@ The registrar-agent sends the pledge enroll status without modification to the r
 The Content-Type header is kept as `application/jose+json` as described in {{exchangesfig_uc2_3}} and depicted in the example in {{estat}}.
 
 The registrar MUST verify the signature of the pledge enroll status.
-Also, the registrar SHALL validate that the pledge is an accepted device in his domain based on the contained product-serial-number in the LDevID certificate referenced in the header of the enroll status.
+Also, the registrar SHALL validate that the pledge is an accepted device of the domain based on the contained product-serial-number in the LDevID certificate referenced in the header of the enroll status.
 The registrar SHOULD log this event.
 In case the pledge enroll status indicates a failure, the pledge was unable to verify the received LDevID certificate and therefore signed the enroll status with its IDevID credential.
-Note that the verification of a signature of the status information is an addition to the described handling in Section 5.9.4 of {{RFC8995}}.
+Note that the signature verification of the status information is an addition to the described handling in Section 5.9.4 of {{RFC8995}}, and is replacing the pledges TLS client authentication by DevID credentials in [RFC8995].
 
 According to {{RFC8995}} Section 5.9.4, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
 Based on the failure case the registrar MAY decide that for security reasons the pledge is not allowed to reside in the domain. In this case the registrar MUST revoke the certificate.
@@ -1811,7 +1810,7 @@ The pledge-status response message is signed with IDevID or LDevID, depending on
 
 The reason and the reason-context SHOULD contain the telemetry information as described in {{exchanges_uc2_3}}.
 
-As the pledge is assumed to utilize the bootstrapped credential information in communication with other peers, additional status information is provided for the connectivity to other peers, which may be helpful in analyzing potential error cases.
+As the pledge is assumed to utilize its bootstrapped credentials (LDevID) in communication with other peers, additional status information is provided for the connectivity to other peers, which may be helpful in analyzing potential error cases.
 
 * "connect-success": Pledge could successfully establish a connection to another peer.
   Additional information may be provided in the reason or reason-context.
@@ -1859,13 +1858,15 @@ The pledge-status responses are cumulative in the sense that connect-success imp
 ~~~~
 {: #stat_res title='Example of pledge-status response' artwork-align="left"}
 
-In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor.
-It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.
-In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchor) and can therefore validate the signature of the registrar-agent.
-If validation of the JWS signature fails, the pledge SHOULD respond with the HTTP 403 Forbidden status code.
-The HTTP 406 Not Acceptable status code SHOULD be used, if the Accept header in the request indicates an unknown or unsupported format.
-The HTTP 415 Unsupported Media Type status code SHOULD be used, if the Content-Type of the request is an unknown or unsupported format.
-The HTTP 400 Bad Request status code SHOULD be used, if the Accept/Content-Type headers are correct but nevertheless the status-request cannot be correctly parsed.
+* In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor.
+It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.  
+
+* In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchor) and can therefore validate the signature of the registrar-agent.
+If validation of the JWS signature fails, the pledge SHOULD respond with the HTTP 403 Forbidden status code.  
+
+* The HTTP 406 Not Acceptable status code SHOULD be used, if the Accept header in the request indicates an unknown or unsupported format.
+* The HTTP 415 Unsupported Media Type status code SHOULD be used, if the Content-Type of the request is an unknown or unsupported format.
+* The HTTP 400 Bad Request status code SHOULD be used, if the Accept/Content-Type headers are correct but nevertheless the status-request cannot be correctly parsed.
 
 
 # Artifacts
@@ -1913,7 +1914,7 @@ Further privacy aspects need to be considered for:
 * the introduction of the additional component registrar-agent
 * no transport layer security between registrar-agent and pledge
 
-The credential used by the registrar-agent to sign the data for the pledge should not contain any personal information.
+The credential used by the registrar-agent to sign the data for the pledge SHOULD NOT contain any personal information.
 Therefore, it is recommended to use an LDevID certificate associated with the commissioning device instead of an LDevID certificate associated with the service technician operating the device.
 This avoids revealing potentially included personal information to Registrar and MASA.
 

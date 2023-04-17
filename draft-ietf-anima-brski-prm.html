@@ -16,19 +16,17 @@ For this, BRSKI with Pledge in Responder Mode (BRSKI-PRM) introduces a new compo
 To establish the trust relation between pledge and registrar, BRSKI-PRM relies on object security rather than transport security.
 The approach defined here is agnostic to the enrollment protocol that connects the domain registrar to the domain CA. 
     " name="description">
-<meta content="xml2rfc 3.17.0" name="generator">
+<meta content="xml2rfc 3.17.1" name="generator">
 <meta content="draft-ietf-anima-brski-prm-09" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.17.0
+  xml2rfc 3.17.1
     Python 3.9.2
     appdirs 1.4.4
     ConfigArgParse 1.5.3
     google-i18n-address 2.5.2
-    html5lib 1.1
     intervaltree 3.1.0
     Jinja2 3.1.2
     lxml 4.9.2
-    MarkupSafe 2.1.2
     pycountry 22.3.5
     PyYAML 6.0
     requests 2.28.2
@@ -64,7 +62,6 @@ The approach defined here is agnostic to the enrollment protocol that connects t
 
 @viewport {
   zoom: 1.0;
-  width: extend-to-zoom;
 }
 @-ms-viewport {
   width: extend-to-zoom;
@@ -1211,11 +1208,11 @@ li > p:last-of-type:only-child {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">BRSKI-PRM</td>
-<td class="right">March 2023</td>
+<td class="right">April 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 2 October 2023</td>
+<td class="center">Expires 19 October 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1228,12 +1225,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-09</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-03-31" class="published">31 March 2023</time>
+<time datetime="2023-04-17" class="published">17 April 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-10-02">2 October 2023</time></dd>
+<dd class="expires"><time datetime="2023-10-19">19 October 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1293,7 +1290,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 2 October 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 19 October 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -3418,8 +3415,7 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
 <figure id="figure-13">
             <div class="alignLeft art-text artwork" id="section-6.2.7-6.1">
 <pre>
-# The CA certificates data with additional registrar signature in
-  General JWS Serialization syntax
+# The CA certificates data with registrar signature in General JWS Serialization syntax
 {
   "payload": "BASE64URL(certs)",
   "signatures": [
@@ -3451,7 +3447,7 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
 </pre>
 </div>
 <figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
-<a href="#name-representation-of-ca-certif" class="selfRef">Representation of CA certificate(s) data with additional registrar signature</a>
+<a href="#name-representation-of-ca-certif" class="selfRef">Representation of CA certificate(s) data with registrar signature</a>
             </figcaption></figure>
 </div>
 </section>
@@ -3472,7 +3468,7 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
           <li class="normal" id="section-6.3-2.3">enrollment-response - LDevID (Pledge) certificate (from CA via registrar)<a href="#section-6.3-2.3" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-6.3-3">The registrar-agent will re-connect to the pledge.
+<p id="section-6.3-3">To deliver these response objects, the registrar-agent will re-connect to the pledge.
 To contact the pledge, it may either discover the pledge as described in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.3.2</a> or use stored information from the first contact with the pledge.<a href="#section-6.3-3" class="pilcrow">¶</a></p>
 <p id="section-6.3-4">Preconditions in addition to <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>:<a href="#section-6.3-4" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -3564,9 +3560,9 @@ To contact the pledge, it may either discover the pledge as described in <a href
 <p id="section-6.3.1-1">The registrar-agent <span class="bcp14">SHALL</span> send the voucher-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/svr".<a href="#section-6.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-2">The registrar-agent voucher-response Content-Type header is <code>application/voucher-jws+json</code> and contains the voucher as provided by the MASA. An example is given in <a href="#MASA-vr" class="auto internal xref">Figure 11</a> for a MASA  signed voucher and in <a href="#MASA-REG-vr" class="auto internal xref">Figure 12</a> for the voucher with the additional signature of the registrar.<a href="#section-6.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-3">A nonceless voucher may be accepted as in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> and may be allowed by a manufacture's pledge implementation.<a href="#section-6.3.1-3" class="pilcrow">¶</a></p>
-<p id="section-6.3.1-4">To perform the validation of multiple signatures on the voucher object, the pledge <span class="bcp14">SHALL</span> perform the signature verification in the following order:<a href="#section-6.3.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-4">To perform the validation of several signatures on the voucher object, the pledge <span class="bcp14">SHALL</span> perform the signature verification in the following order:<a href="#section-6.3.1-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.3.1-5">
-<li id="section-6.3.1-5.1">Verify MASA signature as described in Section 5.6.1 in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span><a href="#section-6.3.1-5.1" class="pilcrow">¶</a>
+<li id="section-6.3.1-5.1">Verify MASA signature as described in Section 5.6.1 in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, against pre-installed manufacturer trust anchor (IDevID).<a href="#section-6.3.1-5.1" class="pilcrow">¶</a>
 </li>
             <li id="section-6.3.1-5.2">Install trust anchor contained in the voucher ("pinned-domain-cert")  provisionally<a href="#section-6.3.1-5.2" class="pilcrow">¶</a>
 </li>
@@ -3639,7 +3635,7 @@ As the reason field is optional (see <span>[<a href="#RFC8995" class="cite xref"
           </h4>
 <p id="section-6.3.3-1">The registrar-agent <span class="bcp14">SHALL</span> provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/scac".<a href="#section-6.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.3-2">As the CA certificate provisioning is crucial from a security perspective, this provisioning <span class="bcp14">SHALL</span> only be done, if the voucher-response has been successfully processed by pledge.<a href="#section-6.3.3-2" class="pilcrow">¶</a></p>
-<p id="section-6.3.3-3">The supply CA certificates message has the Content-Type <code>application/jose+json</code> and is signed using the credential of the registrar pledge as shown in <a href="#PCAC" class="auto internal xref">Figure 13</a>.<a href="#section-6.3.3-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.3-3">The supply CA certificates message has the Content-Type <code>application/jose+json</code> and is signed using the credential of the registrar as shown in <a href="#PCAC" class="auto internal xref">Figure 13</a>.<a href="#section-6.3.3-3" class="pilcrow">¶</a></p>
 <p id="section-6.3.3-4">The CA certificates are provided as base64 encoded "x5b".
 The pledge <span class="bcp14">SHALL</span> install the received CA certificates as trust anchor after successful verification of the registrar's signature.<a href="#section-6.3.3-4" class="pilcrow">¶</a></p>
 <p id="section-6.3.3-5">The following 4xx client error codes <span class="bcp14">SHOULD</span> be used by the pledge:<a href="#section-6.3.3-5" class="pilcrow">¶</a></p>
@@ -3663,7 +3659,7 @@ The pledge <span class="bcp14">SHALL</span> install the received CA certificates
 Note: It only contains the LDevID certificate for the pledge, not the certificate chain.<a href="#section-6.3.4-2" class="pilcrow">¶</a></p>
 <p id="section-6.3.4-3">Upon reception, the pledge <span class="bcp14">SHALL</span> verify the received LDevID certificate.
 The pledge <span class="bcp14">SHALL</span> generate the enroll status and provide it in the response to the registrar-agent.
-If the verification of the LDevID certificate succeeds, the status <span class="bcp14">SHALL</span> be set to true, otherwise to FALSE.<a href="#section-6.3.4-3" class="pilcrow">¶</a></p>
+If the verification of the LDevID certificate succeeds, the status property <span class="bcp14">SHALL</span> be set to "status": true, otherwise to "status": false<a href="#section-6.3.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="pledge-enrollment-status-telemetry">
@@ -3824,9 +3820,9 @@ It <span class="bcp14">SHALL</span> provide the status information to the regist
 </div>
 <p id="section-6.3.6-5">The registrar-agent <span class="bcp14">MUST</span> provide the collected pledge voucher status to the registrar.
 This status indicates if the pledge could process the voucher successfully or not.<a href="#section-6.3.6-5" class="pilcrow">¶</a></p>
-<p id="section-6.3.6-6">If the TLS connection to the registrar was closed, the registrar-agent establishes a TLS connection with the registrar as stated in <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>.<a href="#section-6.3.6-6" class="pilcrow">¶</a></p>
+<p id="section-6.3.6-6">In case the TLS connection to the registrar is already closed, the registrar-agent opens a new TLS connection with the registrar as stated in <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>.<a href="#section-6.3.6-6" class="pilcrow">¶</a></p>
 <p id="section-6.3.6-7">The registrar-agent sends the pledge voucher status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/voucher_status". The Content-Type header is kept as <code>application/jose+json</code> as described in <a href="#exchangesfig_uc2_3" class="auto internal xref">Figure 14</a> and depicted in the example in <a href="#vstat" class="auto internal xref">Figure 15</a>.<a href="#section-6.3.6-7" class="pilcrow">¶</a></p>
-<p id="section-6.3.6-8">The registrar <span class="bcp14">SHALL</span> verify the signature of the pledge voucher status and validate that it belongs to an accepted device in his domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher status.<a href="#section-6.3.6-8" class="pilcrow">¶</a></p>
+<p id="section-6.3.6-8">The registrar <span class="bcp14">SHALL</span> verify the signature of the pledge voucher status and validate that it belongs to an accepted device of the domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher status.<a href="#section-6.3.6-8" class="pilcrow">¶</a></p>
 <p id="section-6.3.6-9">According to <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> Section 5.7, the registrar <span class="bcp14">SHOULD</span> respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
 Within the server logs the server <span class="bcp14">SHOULD</span> capture this telemetry information.<a href="#section-6.3.6-9" class="pilcrow">¶</a></p>
@@ -3836,10 +3832,10 @@ The status indicates the pledge could process the enroll-response (certificate) 
 <p id="section-6.3.6-12">The registrar-agent sends the pledge enroll status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/enrollstatus".
 The Content-Type header is kept as <code>application/jose+json</code> as described in <a href="#exchangesfig_uc2_3" class="auto internal xref">Figure 14</a> and depicted in the example in <a href="#estat" class="auto internal xref">Figure 16</a>.<a href="#section-6.3.6-12" class="pilcrow">¶</a></p>
 <p id="section-6.3.6-13">The registrar <span class="bcp14">MUST</span> verify the signature of the pledge enroll status.
-Also, the registrar <span class="bcp14">SHALL</span> validate that the pledge is an accepted device in his domain based on the contained product-serial-number in the LDevID certificate referenced in the header of the enroll status.
+Also, the registrar <span class="bcp14">SHALL</span> validate that the pledge is an accepted device of the domain based on the contained product-serial-number in the LDevID certificate referenced in the header of the enroll status.
 The registrar <span class="bcp14">SHOULD</span> log this event.
 In case the pledge enroll status indicates a failure, the pledge was unable to verify the received LDevID certificate and therefore signed the enroll status with its IDevID credential.
-Note that the verification of a signature of the status information is an addition to the described handling in Section 5.9.4 of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-6.3.6-13" class="pilcrow">¶</a></p>
+Note that the signature verification of the status information is an addition to the described handling in Section 5.9.4 of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, and is replacing the pledges TLS client authentication by DevID credentials in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-6.3.6-13" class="pilcrow">¶</a></p>
 <p id="section-6.3.6-14">According to <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> Section 5.9.4, the registrar <span class="bcp14">SHOULD</span> respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
 Based on the failure case the registrar <span class="bcp14">MAY</span> decide that for security reasons the pledge is not allowed to reside in the domain. In this case the registrar <span class="bcp14">MUST</span> revoke the certificate.
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
@@ -4037,7 +4033,7 @@ The pledge signs the response message using its IDevID(Pledge).<a href="#section
 </li>
           </ul>
 <p id="section-6.4.2-8">The reason and the reason-context <span class="bcp14">SHOULD</span> contain the telemetry information as described in <a href="#exchanges_uc2_3" class="auto internal xref">Section 6.3</a>.<a href="#section-6.4.2-8" class="pilcrow">¶</a></p>
-<p id="section-6.4.2-9">As the pledge is assumed to utilize the bootstrapped credential information in communication with other peers, additional status information is provided for the connectivity to other peers, which may be helpful in analyzing potential error cases.<a href="#section-6.4.2-9" class="pilcrow">¶</a></p>
+<p id="section-6.4.2-9">As the pledge is assumed to utilize its bootstrapped credentials (LDevID) in communication with other peers, additional status information is provided for the connectivity to other peers, which may be helpful in analyzing potential error cases.<a href="#section-6.4.2-9" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.4.2-10.1">"connect-success": Pledge could successfully establish a connection to another peer.
 Additional information may be provided in the reason or reason-context.
@@ -4091,13 +4087,20 @@ The pledge signs the response message using its LDevID(Pledge).<a href="#section
 <a href="#name-example-of-pledge-status-re" class="selfRef">Example of pledge-status response</a>
             </figcaption></figure>
 </div>
-<p id="section-6.4.2-14">In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor.
-It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.
-In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchor) and can therefore validate the signature of the registrar-agent.
-If validation of the JWS signature fails, the pledge <span class="bcp14">SHOULD</span> respond with the HTTP 403 Forbidden status code.
-The HTTP 406 Not Acceptable status code <span class="bcp14">SHOULD</span> be used, if the Accept header in the request indicates an unknown or unsupported format.
-The HTTP 415 Unsupported Media Type status code <span class="bcp14">SHOULD</span> be used, if the Content-Type of the request is an unknown or unsupported format.
-The HTTP 400 Bad Request status code <span class="bcp14">SHOULD</span> be used, if the Accept/Content-Type headers are correct but nevertheless the status-request cannot be correctly parsed.<a href="#section-6.4.2-14" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.4.2-14.1">In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor.
+It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.<a href="#section-6.4.2-14.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-6.4.2-14.2">In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchor) and can therefore validate the signature of the registrar-agent.
+If validation of the JWS signature fails, the pledge <span class="bcp14">SHOULD</span> respond with the HTTP 403 Forbidden status code.<a href="#section-6.4.2-14.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-6.4.2-14.3">The HTTP 406 Not Acceptable status code <span class="bcp14">SHOULD</span> be used, if the Accept header in the request indicates an unknown or unsupported format.<a href="#section-6.4.2-14.3" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-6.4.2-14.4">The HTTP 415 Unsupported Media Type status code <span class="bcp14">SHOULD</span> be used, if the Content-Type of the request is an unknown or unsupported format.<a href="#section-6.4.2-14.4" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-6.4.2-14.5">The HTTP 400 Bad Request status code <span class="bcp14">SHOULD</span> be used, if the Accept/Content-Type headers are correct but nevertheless the status-request cannot be correctly parsed.<a href="#section-6.4.2-14.5" class="pilcrow">¶</a>
+</li>
+          </ul>
 </section>
 </div>
 </section>
@@ -4172,7 +4175,7 @@ Further privacy aspects need to be considered for:<a href="#section-9-1" class="
         <li class="normal" id="section-9-2.2">no transport layer security between registrar-agent and pledge<a href="#section-9-2.2" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="section-9-3">The credential used by the registrar-agent to sign the data for the pledge should not contain any personal information.
+<p id="section-9-3">The credential used by the registrar-agent to sign the data for the pledge <span class="bcp14">SHOULD NOT</span> contain any personal information.
 Therefore, it is recommended to use an LDevID certificate associated with the commissioning device instead of an LDevID certificate associated with the service technician operating the device.
 This avoids revealing potentially included personal information to Registrar and MASA.<a href="#section-9-3" class="pilcrow">¶</a></p>
 <p id="section-9-4">The communication between the pledge and the registrar-agent is performed over plain HTTP.
@@ -4369,7 +4372,7 @@ Support in PoC implementations and comments resulting from the implementation wa
 <dd class="break"></dd>
 <dt id="I-D.richardson-emu-eap-onboarding">[I-D.richardson-emu-eap-onboarding]</dt>
         <dd>
-<span class="refAuthor">DeKok, A.</span> and <span class="refAuthor">M. Richardson</span>, <span class="refTitle">"EAP defaults for devices that need to onboard"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-richardson-emu-eap-onboarding-02</span>, <time datetime="2023-02-04" class="refDate">4 February 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-richardson-emu-eap-onboarding-02">https://datatracker.ietf.org/doc/html/draft-richardson-emu-eap-onboarding-02</a>&gt;</span>. </dd>
+<span class="refAuthor">DeKok, A.</span> and <span class="refAuthor">M. Richardson</span>, <span class="refTitle">"EAP defaults for devices that need to onboard"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-richardson-emu-eap-onboarding-03</span>, <time datetime="2023-04-02" class="refDate">2 April 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-richardson-emu-eap-onboarding-03">https://datatracker.ietf.org/doc/html/draft-richardson-emu-eap-onboarding-03</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="IEEE-802.1AR">[IEEE-802.1AR]</dt>
         <dd>
