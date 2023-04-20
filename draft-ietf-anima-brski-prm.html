@@ -1212,7 +1212,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 19 October 2023</td>
+<td class="center">Expires 22 October 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1225,12 +1225,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-09</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-04-17" class="published">17 April 2023</time>
+<time datetime="2023-04-20" class="published">20 April 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-10-19">19 October 2023</time></dd>
+<dd class="expires"><time datetime="2023-10-22">22 October 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1290,7 +1290,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 19 October 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 22 October 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1422,7 +1422,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
-                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-response-object-supply-by-r" class="internal xref">Response Object Supply by Registrar-Agent to Pledge</a></p>
+                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-response-objects-supplied-b" class="internal xref">Response Objects supplied by the Registrar-Agent to the Pledge</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3.2.1">
                     <p id="section-toc.1-1.6.2.3.2.1.1"><a href="#section-6.3.1" class="auto internal xref">6.3.1</a>.  <a href="#name-pledge-voucher-response-pro" class="internal xref">Pledge: Voucher-Response Processing</a></p>
@@ -3456,8 +3456,8 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
 </div>
 <div id="exchanges_uc2_3">
 <section id="section-6.3">
-        <h3 id="name-response-object-supply-by-r">
-<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-response-object-supply-by-r" class="section-name selfRef">Response Object Supply by Registrar-Agent to Pledge</a>
+        <h3 id="name-response-objects-supplied-b">
+<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-response-objects-supplied-b" class="section-name selfRef">Response Objects supplied by the Registrar-Agent to the Pledge</a>
         </h3>
 <p id="section-6.3-1">It is assumed that the registrar-agent already obtained the bootstrapping response objects from the domain registrar and can supply them to the pledge:<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -3635,7 +3635,7 @@ As the reason field is optional (see <span>[<a href="#RFC8995" class="cite xref"
           </h4>
 <p id="section-6.3.3-1">The registrar-agent <span class="bcp14">SHALL</span> provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/scac".<a href="#section-6.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.3-2">As the CA certificate provisioning is crucial from a security perspective, this provisioning <span class="bcp14">SHALL</span> only be done, if the voucher-response has been successfully processed by pledge.<a href="#section-6.3.3-2" class="pilcrow">¶</a></p>
-<p id="section-6.3.3-3">The supply CA certificates message has the Content-Type <code>application/jose+json</code> and is signed using the credential of the registrar as shown in <a href="#PCAC" class="auto internal xref">Figure 13</a>.<a href="#section-6.3.3-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.3-3">The CA certificates message has the Content-Type <code>application/jose+json</code> and is signed using the credential of the registrar as shown in <a href="#PCAC" class="auto internal xref">Figure 13</a>.<a href="#section-6.3.3-3" class="pilcrow">¶</a></p>
 <p id="section-6.3.3-4">The CA certificates are provided as base64 encoded "x5b".
 The pledge <span class="bcp14">SHALL</span> install the received CA certificates as trust anchor after successful verification of the registrar's signature.<a href="#section-6.3.3-4" class="pilcrow">¶</a></p>
 <p id="section-6.3.3-5">The following 4xx client error codes <span class="bcp14">SHOULD</span> be used by the pledge:<a href="#section-6.3.3-5" class="pilcrow">¶</a></p>

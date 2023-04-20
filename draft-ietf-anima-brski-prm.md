@@ -1411,7 +1411,7 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
 {: #PCAC title='Representation of CA certificate(s) data with registrar signature' artwork-align="left"}
 
 
-## Response Object Supply by Registrar-Agent to Pledge {#exchanges_uc2_3}
+## Response Objects supplied by the Registrar-Agent to the Pledge {#exchanges_uc2_3}
 
 It is assumed that the registrar-agent already obtained the bootstrapping response objects from the domain registrar and can supply them to the pledge:
 
@@ -1528,7 +1528,7 @@ The registrar-agent SHALL provide the set of CA certificates requested from the 
 
 As the CA certificate provisioning is crucial from a security perspective, this provisioning SHALL only be done, if the voucher-response has been successfully processed by pledge.
 
-The supply CA certificates message has the Content-Type `application/jose+json` and is signed using the credential of the registrar as shown in {{PCAC}}.
+The CA certificates message has the Content-Type `application/jose+json` and is signed using the credential of the registrar as shown in {{PCAC}}.
 
 The CA certificates are provided as base64 encoded "x5b".
 The pledge SHALL install the received CA certificates as trust anchor after successful verification of the registrar's signature.
