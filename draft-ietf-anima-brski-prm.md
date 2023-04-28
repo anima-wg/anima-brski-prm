@@ -88,6 +88,7 @@ informative:
   RFC7252:
   RFC8407:
   RFC8792:
+  RFC8990:
   RFC9052:
   RFC9053:
   RFC9110:
@@ -139,7 +140,9 @@ BRSKI addresses scenarios in which the pledge initiates the bootstrapping acting
 BRSKI with pledge in responder mode (BRSKI-PRM) defined in this document allows the pledge to act as server, so that it can be triggered to generate bootstrapping requests in the customer site/domain.
 For this approach, this document:
 
-* introduces the registrar-agent as new component to facilitate the communication between the pledge and the domain registrar; the registrar-agent may be implemented as an integrated functionality of a commissioning tool or be co-located with the registrar itself.
+* introduces the registrar-agent as new component to facilitate the communication between the pledge and the domain registrar. 
+The registrar-agent may be implemented as an integrated functionality of a commissioning tool or be co-located with the registrar itself.
+BRSKI-PRM supports the identification of the registrar-agent that was performing the bootstrapping allowing for accountability of the pledges installation, when the registrar-agent is a component used by an installer and not co-located with the registrar.
 
 * specifies the interaction (data exchange and data objects) between a pledge acting as server, the registrar-agent acting as client, and the domain registrar.
 
@@ -537,7 +540,9 @@ Alternatively, the registrar-agent may be configured with the address of the dom
 
 ### Discovery of Pledge by Registrar-Agent {#discovery_uc2_ppa}
 
-The discovery of the pledge by registrar-agent should be done by using DNS-based Service Discovery {{RFC6763}} over Multicast DNS {{RFC6762}} to discover the pledge. The pledge constructs a local host name based on device local information (product-serial-number), which results in "product-serial-number._brski-pledge._tcp.local".
+The discovery of the pledge by registrar-agent should be done by using DNS-based Service Discovery {{RFC6763}} over Multicast DNS {{RFC6762}} to discover the pledge. 
+The pledge constructs a local host name based on device local information (product-serial-number), which results in "product-serial-number._brski-pledge._tcp.local".
+The product-serial-number composition is vendor dependent and may contain information regarding the vendor, the product type, and further information specific to the product instance. To allow distinction of pledges, the product-serial-number therfore needs to be sufficiently unique.
 
 The registrar-agent MAY use
 
@@ -551,6 +556,9 @@ For Ethernet it is provided by simply connecting the network cable.
 For WiFi networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping, e.g., as proposed in {{I-D.richardson-emu-eap-onboarding}}.
 The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN ID.
 How to gain network connectivity is out of scope of this document.
+
+As an alternative discovery mechanism GRASP M_DISCOVERY multicast with M_RESPONSE, based on {{RFC8990}}, may be used. 
+The specification of this approach to discover a pledge from the registrar-agent is left for further study.
 
 
 ## Behavior of Pledge with Combined Functionality
@@ -949,6 +957,7 @@ The body of the pledge enrollment-request SHOULD contain a P10 parameter (for PK
 * P10: contains the base64-encoded PKCS#10 of the pledge.
 
 The JOSE object is signed using the pledge's IDevID credential, which corresponds to the certificate signaled in the JOSE header.
+Note while BRSKI-PRM targets the initial enrollment, re-enrollment may be supported in a similar way with the exception that the current LDevID credential is used instead of the IDevID credential to create the signature of the PKCS#10 request.
 
 ~~~~
 # The PER in General JWS Serialization syntax
@@ -1351,6 +1360,8 @@ Note, the registrar is already aware that the bootstrapping is performed in a pl
   It creates a registrar enrollment-request (RER) by utilizing the protocol expected by the domain CA.
   The domain registrar may either directly forward the provided PKCS#10 request to the CA or provide additional information about attributes to be included by the CA into the requested LDevID certificate.
   The approach of sending this information to the CA depends on the utilized certificate management protocol between the RA and the CA and is out of scope for this document.
+  
+Note while BRSKI-PRM targets the initial enrollment, re-enrollment may be supported in a similar way with the exception that the current LDevID certificate is used instead of the IDevID certificate to verify the wrapping signature of the PKCS#10 request.
 
 The registrar-agent SHALL send the PER to the registrar by HTTP POST to the endpoint: "/.well-known/brski/requestenroll"
 
@@ -2426,6 +2437,9 @@ Proof of Concept Code available
 
 From IETF draft 08 -> IETF draft 09:
 
+* issue #80, enhanced {{discovery_uc2_ppa}} with clarification on the serial number and the inclusion of GRASP 
+* issue #81, enhanced introduction with motivation for agent_signed_data
+* issue #83, enhanced {{PER-response}} and {{exchanges_uc2_2_per}} with note to re-enrollment 
 * resolved remaining editorial issues discovered after WGLC (responded to on the mailing list in Reply 1 and Reply 2) resulting in more consistent descriptions
 * updated references 
 
