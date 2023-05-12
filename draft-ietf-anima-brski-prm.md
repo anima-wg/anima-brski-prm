@@ -698,14 +698,15 @@ Preconditions:
 * Pledge: possesses IDevID
 
 * Registrar-agent:
-  * MAY possess/trusts pledges IDevID CA certificate to use TLS for pledge communication
+  * MAY possess/trusts pledges IDevID CA certificate to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication
   * possesses own LDevID(RegAgt) credentials for the registrar domain (site).
-  In addition, the registrar-agent MUST know the product-serial-number(s) of the pledge(s) to be bootstrapped.
+  In addition, the registrar-agent SHOULD know the product-serial-number(s) of the pledge(s) to be bootstrapped.
   The registrar-agent MAY be provided with the product-serial-number(s) in different ways:
     * configured, e.g., as a list of pledges to be bootstrapped via QR code scanning
     * discovered by using standard approaches like mDNS as described in {{discovery_uc2_ppa}}
     * discovered by using a vendor specific approach, e.g., RF beacons.
-
+  If the serial numbers are not known in advance, the registrar-agent cannot perform a distinct triggering of pledges but and triggers  all pledges discovered . 
+  
   The registrar-agent SHOULD have synchronized time.
 
 * Registrar (same as in BRSKI): possesses/trusts IDevID CA certificate and has own registrar LDevID credentials.
@@ -830,7 +831,7 @@ The header of the PVR SHALL contain the following parameters as defined in {{RFC
 * alg: algorithm used for creating the object signature.
 
 * x5c: contains the base64-encoded pledge IDevID certificate.
-  It may optionally contain the certificate chain for this certificate.
+  It MAY optionally contain the certificate chain for this certificate. If the certificate chain is not included it MUST be available at the registrar for verification of the IDevID certificate.
 
 The payload of the PVR MUST contain the following parameters as part of the ietf-voucher-request-prm:voucher as defined in {{RFC8995}}:
 
@@ -962,8 +963,7 @@ The header of the pledge enrollment-request SHALL contain the following paramete
 * alg: algorithm used for creating the object signature.
 
 * x5c: contains the base64-encoded pledge IDevID certificate.
-  It may optionally contain the certificate chain for this certificate.
-
+  It MAY optionally contain the certificate chain for this certificate. If the certificate chain is not included it MUST be available at the registrar for verification of the IDevID certificate.
 The body of the pledge enrollment-request SHOULD contain a P10 parameter (for PKCS#10) as defined for ietf-ztp-types:p10-csr in {{I-D.ietf-netconf-sztp-csr}}:
 
 * P10: contains the base64-encoded PKCS#10 of the pledge.
@@ -1353,6 +1353,8 @@ The registrar sends the voucher to the registrar-agent.
 ### Pledge Enrollment-Request (PER) Processing (Registrar-Agent to Registrar) {#exchanges_uc2_2_per}
 
 After receiving the voucher, the registrar-agent sends the PER to the registrar in the same HTTPS connection similar as described for the PER processing in Section 5.2 of {{RFC8995}}.
+In case of inability to send the PER in the same HTTPS connection the registrar-agent may send the PER in a different HTTPS connection as the registrar is able to correlate the PVR and the PER based on the signatures and contained product-serial-number information. 
+Note that this also addresses situations in which a nonceless voucher is used and may be pre-provisioned to the pledge. 
 As specified in {{PER-response}} deviating from BRSKI the PER is not a raw PKCS#10.
 As the registrar-agent is involved in the exchange, the PKCS#10 is wrapped in a JWS object by the pledge and signed with pledge's IDevID to ensure proof-of-identity as outlined in {{per}}.
 
@@ -2462,6 +2464,9 @@ From IETF draft 08 -> IETF draft 09:
 * issue #81, enhanced introduction with motivation for agent_signed_data
 * issue #82, included optional TLS protection of the communication link between registrar-agent and pledge in the introduction {{req-sol}},  and {{exchanges_uc2_1}}
 * issue #83, enhanced {{PER-response}} and {{exchanges_uc2_2_per}} with note to re-enrollment
+* issue #87, clarified available information at the registrar-agent in {#exchanges_uc2_1} 
+* issue #88, clarified, that the PVR in {{pvrr}} and PER in {{PER-response}} may contain the certificate chain. If not contained it MUST be available at the registrar. 
+* issue #91, clarified that a separate HTTP connection may also be used to provide the PER in {{exchanges_uc2_2_per}}
 * resolved remaining editorial issues discovered after WGLC (responded to on the mailing list in Reply 1 and Reply 2) resulting in more consistent descriptions
 * updated references
 
