@@ -897,7 +897,7 @@ The pledge MUST include this Media-Type header field indicating the included med
 The PVR is included by the registrar in its RCR as described in {{exchanges_uc2_2}}.
 
 
-### Pledge Enrollment-Request (PER) - Trigger
+### Pledge-Enrollment-Request (PER) - Trigger
 
 Once the registrar-agent has received the PVR it can trigger the pledge to generate a PER.
 As in BRSKI the PER contains a PKCS#10, but additionally signed using the pledge's IDevID.
@@ -921,7 +921,7 @@ If specific attributes in the certificate are required, they have to be inserted
 How the HTTP POST can be used to provide CSR attributes is out of scope for this specification."
 
 
-### Pledge Enrollment-Request (PER) - Response {#PER-response}
+### Pledge-Enrollment-Request (PER) - Response {#PER-response}
 
 In the following the enrollment is described as initial enrollment with an empty HTTP POST body.
 
@@ -1350,11 +1350,11 @@ Depending on the security policy of the operator, this signature can also be int
 The registrar sends the voucher to the registrar-agent.
 
 
-### Pledge Enrollment-Request (PER) Processing (Registrar-Agent to Registrar) {#exchanges_uc2_2_per}
+### Pledge-Enrollment-Request (PER) Processing (Registrar-Agent to Registrar) {#exchanges_uc2_2_per}
 
-After receiving the voucher, the registrar-agent sends the PER to the registrar in the same HTTPS connection similar as described for the PER processing in Section 5.2 of {{RFC8995}}.
-In case of inability to send the PER in the same HTTPS connection the registrar-agent may send the PER in a different HTTPS connection as the registrar is able to correlate the PVR and the PER based on the signatures and contained product-serial-number information. 
-Note that this also addresses situations in which a nonceless voucher is used and may be pre-provisioned to the pledge. 
+After receiving the voucher, the registrar-agent sends the PER to the registrar in the same HTTP-over-TLS connection. Which is similar to the PER processing described in Section 5.2 of {{RFC8995}}.
+In case the PER cannot be send in the same HTTP-over-TLS connection the registrar-agent may send the PER in a new HTTP-over-TLS connection. The registrar is able to correlate the PVR and the PER based on the signatures and the contained product-serial-number information. 
+Note, this also addresses situations in which a nonceless voucher is used and may be pre-provisioned to the pledge. 
 As specified in {{PER-response}} deviating from BRSKI the PER is not a raw PKCS#10.
 As the registrar-agent is involved in the exchange, the PKCS#10 is wrapped in a JWS object by the pledge and signed with pledge's IDevID to ensure proof-of-identity as outlined in {{per}}.
 
