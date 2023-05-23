@@ -698,7 +698,8 @@ Preconditions:
 * Pledge: possesses IDevID
 
 * Registrar-agent:
-  * MAY possess/trusts pledges IDevID CA certificate to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication
+  * MAY handle/trusts pledges IDevID CA certificate to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication.
+  The distribution of IDevID CA certificates to the registrar-agent is out of scope of this document and may be done by a manual configuration.
   * possesses own LDevID(RegAgt) credentials for the registrar domain (site).
   In addition, the registrar-agent SHOULD know the product-serial-number(s) of the pledge(s) to be bootstrapped.
   The registrar-agent MAY be provided with the product-serial-number(s) in different ways:
@@ -1453,7 +1454,8 @@ To contact the pledge, it may either discover the pledge as described in {{disco
 
 Preconditions in addition to {{exchanges_uc2_2}}:
 
-* Registrar-agent: possesses voucher and LDevID certificate and optionally CA certificates.
+* Registrar-agent: obtained voucher and LDevID certificate and optionally IDevID CA certificates.
+  The IDevID CA certificate is necessary, when the connection between the Registrar-agent and the pledge is established using TLS to enable the registrar-agent to validate the pledges' IDevID certificate during the TLS handshake as described in {{exchanges_uc2_1}}.
 
 
 ~~~~ aasvg
@@ -1471,18 +1473,15 @@ Preconditions in addition to {{exchanges_uc2_2}}:
     |                                   |
     |--------- voucher status --------->| - store
     |                                   |   pledge voucher status
-    |<----- supply CA certificates  ----|
+    |<--- supply CAcerts (optional) ----|
     |                                   |
     |<--- supply enrollment-response ---|
     |                                   |
     |--------- enroll status ---------->| - store
     |                                   |   pledge enroll status
-    |<--- supply CAcerts (optional) ----|
-    |                                   |
 
 ~~~~
 {: #exchangesfig_uc2_3 title='Responses and status handling between pledge and registrar-agent' artwork-align="left"}
-The content of the response objects is defined by the voucher {{RFC8366}} and the certificate {{RFC5280}}.
 
 The registrar-agent MAY optionally use TLS to protect the communication as outlined in {{exchanges_uc2_1}}.
 
@@ -1500,9 +1499,10 @@ To perform the validation of several signatures on the voucher object, the pledg
 
   1. Verify MASA signature as described in Section 5.6.1 in {{RFC8995}}, against pre-installed manufacturer trust anchor (IDevID).
   2. Install trust anchor contained in the voucher ("pinned-domain-cert")  provisionally
-  3. Verify registrar signature as described in Section 5.6.1 in {{RFC8995}}, but take the registrar certificate instead of the MASA certificate for the verification
-  4. Validate the registrar certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert").
+  3. Validate the LDevID(Reg) certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert")
+  4. Verify registrar signature of the voucher similar as described in Section 5.6.1 in {{RFC8995}}, but take the registrar certificate instead of the MASA certificate for the verification
 
+Step3 and step 4 have been introduced in BRSKI-PRM to enable verification of LDevID(Reg) certificate and also the proof-of-possession of the corresponding private key by the registrar, which is done in BRSKI based on the established TLS channel.
 If all steps stated above have been performed successfully, the pledge SHALL terminate the "PROVISIONAL accept" state for the domain trust anchor and the registrar LDevID certificate.
 
 If an error occurs during the verification and validation of the voucher, this SHALL be reported in the reason field of the pledge voucher status.
@@ -1641,7 +1641,7 @@ It SHALL provide the status information to the registrar for further processing.
 
 Preconditions in addition to {{exchanges_uc2_2}}:
 
-* Registrar-agent: possesses voucher status and enroll status from pledge.
+* Registrar-agent: obtained voucher status and enroll status from pledge.
 
 ~~~~ aasvg
 +-----------+        +-----------+   +--------+   +---------+
@@ -1706,7 +1706,7 @@ The pledge MAY provide a dedicated endpoint to accept status-requests.
 
 Preconditions:
 
-* Registrar-agent: possesses LDevID (RegAgt), list of serial numbers of pledges to be queried and a list of corresponding manufacturer trust anchors to be able to verify signatures performed with the IDevID credential.
+* Registrar-agent: possesses LDevID (RegAgt), may have a list of serial numbers of pledges to be queried and a list of corresponding manufacturer trust anchors to be able to verify signatures performed with the IDevID credential.
 * Pledge: may already possess domain credentials and LDevID(Pledge), or may not possess one or both of these.
 
 ~~~~ aasvg
@@ -2468,6 +2468,13 @@ From IETF draft 08 -> IETF draft 09:
 * issue #88, clarified, that the PVR in {{pvrr}} and PER in {{PER-response}} may contain the certificate chain. If not contained it MUST be available at the registrar. 
 * issue #91, clarified that a separate HTTP connection may also be used to provide the PER in {{exchanges_uc2_2_per}}
 * resolved remaining editorial issues discovered after WGLC (responded to on the mailing list in Reply 1 and Reply 2) resulting in more consistent descriptions
+* issue #92: kept separate endpoint for wrapped CSR
+* issue #94: clarified terminology (possess vs. obtained)
+* issue #95: clarified optional IDevID CA certificates on registrar-agent
+* issue #96: updated {{exchangesfig_uc2_3}} to correct to just one CA certificate provisioning 
+* issue #97: deleted format explanation in {{exchanges_uc2_3}} as it may be misleading 
+* issue #99: motivated verification of second signature on voucher in {{exchanges_uc2_3}} 
+
 * updated references
 
 

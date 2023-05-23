@@ -29,7 +29,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
     lxml 4.9.2
     pycountry 22.3.5
     PyYAML 6.0
-    requests 2.30.0
+    requests 2.31.0
     setuptools 52.0.0
     six 1.16.0
     wcwidth 0.2.6
@@ -1212,7 +1212,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 17 November 2023</td>
+<td class="center">Expires 24 November 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1225,12 +1225,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-09</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-05-16" class="published">16 May 2023</time>
+<time datetime="2023-05-23" class="published">23 May 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-11-17">17 November 2023</time></dd>
+<dd class="expires"><time datetime="2023-11-24">24 November 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1290,7 +1290,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 17 November 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 24 November 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2559,7 +2559,8 @@ This may be done as described in <a href="#discovery_uc2_ppa" class="auto intern
             <p id="section-6.1-4.2.1">Registrar-agent:<a href="#section-6.1-4.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1-4.2.2.1">
-                <span class="bcp14">MAY</span> possess/trusts pledges IDevID CA certificate to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication<a href="#section-6.1-4.2.2.1" class="pilcrow">¶</a>
+                <span class="bcp14">MAY</span> handle/trusts pledges IDevID CA certificate to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication.
+The distribution of IDevID CA certificates to the registrar-agent is out of scope of this document and may be done by a manual configuration.<a href="#section-6.1-4.2.2.1" class="pilcrow">¶</a>
 </li>
               <li class="normal" id="section-6.1-4.2.2.2">
                 <p id="section-6.1-4.2.2.2.1">possesses own LDevID(RegAgt) credentials for the registrar domain (site).
@@ -3512,19 +3513,20 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
 To contact the pledge, it may either discover the pledge as described in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.3.2</a> or use stored information from the first contact with the pledge.<a href="#section-6.3-3" class="pilcrow">¶</a></p>
 <p id="section-6.3-4">Preconditions in addition to <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>:<a href="#section-6.3-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.3-5.1">Registrar-agent: possesses voucher and LDevID certificate and optionally CA certificates.<a href="#section-6.3-5.1" class="pilcrow">¶</a>
+<li class="normal" id="section-6.3-5.1">Registrar-agent: obtained voucher and LDevID certificate and optionally IDevID CA certificates.
+The IDevID CA certificate is necessary, when the connection between the Registrar-agent and the pledge is established using TLS to enable the registrar-agent to validate the pledges' IDevID certificate during the TLS handshake as described in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a>.<a href="#section-6.3-5.1" class="pilcrow">¶</a>
 </li>
         </ul>
 <span id="name-responses-and-status-handli"></span><div id="exchangesfig_uc2_3">
 <figure id="figure-14">
           <div id="section-6.3-6.1">
             <div class="alignLeft art-svg artwork" id="section-6.3-6.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="400" width="528" viewBox="0 0 528 400" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="368" width="528" viewBox="0 0 528 368" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px">
                 <path d="M 8,32 L 8,96" fill="none" stroke="black"></path>
-                <path d="M 40,104 L 40,368" fill="none" stroke="black"></path>
+                <path d="M 40,104 L 40,336" fill="none" stroke="black"></path>
                 <path d="M 80,32 L 80,96" fill="none" stroke="black"></path>
                 <path d="M 280,32 L 280,96" fill="none" stroke="black"></path>
-                <path d="M 328,144 L 328,368" fill="none" stroke="black"></path>
+                <path d="M 328,144 L 328,336" fill="none" stroke="black"></path>
                 <path d="M 376,32 L 376,96" fill="none" stroke="black"></path>
                 <path d="M 8,32 L 80,32" fill="none" stroke="black"></path>
                 <path d="M 280,32 L 376,32" fill="none" stroke="black"></path>
@@ -3536,17 +3538,14 @@ To contact the pledge, it may either discover the pledge as described in <a href
                 <path d="M 240,192 L 320,192" fill="none" stroke="black"></path>
                 <path d="M 48,224 L 112,224" fill="none" stroke="black"></path>
                 <path d="M 248,224 L 320,224" fill="none" stroke="black"></path>
-                <path d="M 48,256 L 88,256" fill="none" stroke="black"></path>
+                <path d="M 48,256 L 72,256" fill="none" stroke="black"></path>
                 <path d="M 296,256 L 320,256" fill="none" stroke="black"></path>
                 <path d="M 48,288 L 72,288" fill="none" stroke="black"></path>
                 <path d="M 304,288 L 320,288" fill="none" stroke="black"></path>
                 <path d="M 48,320 L 112,320" fill="none" stroke="black"></path>
                 <path d="M 240,320 L 320,320" fill="none" stroke="black"></path>
-                <path d="M 48,352 L 72,352" fill="none" stroke="black"></path>
-                <path d="M 296,352 L 320,352" fill="none" stroke="black"></path>
                 <polygon class="arrowhead" points="328,320 316,314.4 316,325.6" fill="black" transform="rotate(0,320,320)"></polygon>
                 <polygon class="arrowhead" points="328,224 316,218.4 316,229.6" fill="black" transform="rotate(0,320,224)"></polygon>
-                <polygon class="arrowhead" points="56,352 44,346.4 44,357.6" fill="black" transform="rotate(180,48,352)"></polygon>
                 <polygon class="arrowhead" points="56,288 44,282.4 44,293.6" fill="black" transform="rotate(180,48,288)"></polygon>
                 <polygon class="arrowhead" points="56,256 44,250.4 44,261.6" fill="black" transform="rotate(180,48,256)"></polygon>
                 <polygon class="arrowhead" points="56,192 44,186.4 44,197.6" fill="black" transform="rotate(180,48,192)"></polygon>
@@ -3573,9 +3572,9 @@ To contact the pledge, it may either discover the pledge as described in <a href
                   <text x="380" y="244">pledge</text>
                   <text x="440" y="244">voucher</text>
                   <text x="500" y="244">status</text>
-                  <text x="124" y="260">supply</text>
-                  <text x="164" y="260">CA</text>
-                  <text x="228" y="260">certificates</text>
+                  <text x="108" y="260">supply</text>
+                  <text x="168" y="260">CAcerts</text>
+                  <text x="244" y="260">(optional)</text>
                   <text x="108" y="292">supply</text>
                   <text x="216" y="292">enrollment-response</text>
                   <text x="148" y="324">enroll</text>
@@ -3585,9 +3584,6 @@ To contact the pledge, it may either discover the pledge as described in <a href
                   <text x="380" y="340">pledge</text>
                   <text x="436" y="340">enroll</text>
                   <text x="492" y="340">status</text>
-                  <text x="108" y="356">supply</text>
-                  <text x="168" y="356">CAcerts</text>
-                  <text x="244" y="356">(optional)</text>
                 </g>
               </svg><a href="#section-6.3-6.1.1" class="pilcrow">¶</a>
 </div>
@@ -3596,9 +3592,8 @@ To contact the pledge, it may either discover the pledge as described in <a href
 <a href="#name-responses-and-status-handli" class="selfRef">Responses and status handling between pledge and registrar-agent</a>
           </figcaption></figure>
 </div>
-<p id="section-6.3-7">The content of the response objects is defined by the voucher <span>[<a href="#RFC8366" class="cite xref">RFC8366</a>]</span> and the certificate <span>[<a href="#RFC5280" class="cite xref">RFC5280</a>]</span>.<a href="#section-6.3-7" class="pilcrow">¶</a></p>
-<p id="section-6.3-8">The registrar-agent <span class="bcp14">MAY</span> optionally use TLS to protect the communication as outlined in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a>.<a href="#section-6.3-8" class="pilcrow">¶</a></p>
-<p id="section-6.3-9">The registrar-agent provides the information via distinct pledge endpoints as following.<a href="#section-6.3-9" class="pilcrow">¶</a></p>
+<p id="section-6.3-7">The registrar-agent <span class="bcp14">MAY</span> optionally use TLS to protect the communication as outlined in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a>.<a href="#section-6.3-7" class="pilcrow">¶</a></p>
+<p id="section-6.3-8">The registrar-agent provides the information via distinct pledge endpoints as following.<a href="#section-6.3-8" class="pilcrow">¶</a></p>
 <div id="pledge-voucher-response-processing">
 <section id="section-6.3.1">
           <h4 id="name-pledge-voucher-response-pro">
@@ -3613,12 +3608,13 @@ To contact the pledge, it may either discover the pledge as described in <a href
 </li>
             <li id="section-6.3.1-5.2">Install trust anchor contained in the voucher ("pinned-domain-cert")  provisionally<a href="#section-6.3.1-5.2" class="pilcrow">¶</a>
 </li>
-            <li id="section-6.3.1-5.3">Verify registrar signature as described in Section 5.6.1 in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, but take the registrar certificate instead of the MASA certificate for the verification<a href="#section-6.3.1-5.3" class="pilcrow">¶</a>
+            <li id="section-6.3.1-5.3">Validate the LDevID(Reg) certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert")<a href="#section-6.3.1-5.3" class="pilcrow">¶</a>
 </li>
-            <li id="section-6.3.1-5.4">Validate the registrar certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert").<a href="#section-6.3.1-5.4" class="pilcrow">¶</a>
+            <li id="section-6.3.1-5.4">Verify registrar signature of the voucher similar as described in Section 5.6.1 in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, but take the registrar certificate instead of the MASA certificate for the verification<a href="#section-6.3.1-5.4" class="pilcrow">¶</a>
 </li>
           </ol>
-<p id="section-6.3.1-6">If all steps stated above have been performed successfully, the pledge <span class="bcp14">SHALL</span> terminate the "PROVISIONAL accept" state for the domain trust anchor and the registrar LDevID certificate.<a href="#section-6.3.1-6" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-6">Step3 and step 4 have been introduced in BRSKI-PRM to enable verification of LDevID(Reg) certificate and also the proof-of-possession of the corresponding private key by the registrar, which is done in BRSKI based on the established TLS channel.
+If all steps stated above have been performed successfully, the pledge <span class="bcp14">SHALL</span> terminate the "PROVISIONAL accept" state for the domain trust anchor and the registrar LDevID certificate.<a href="#section-6.3.1-6" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-7">If an error occurs during the verification and validation of the voucher, this <span class="bcp14">SHALL</span> be reported in the reason field of the pledge voucher status.<a href="#section-6.3.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -3774,7 +3770,7 @@ As the reason field is optional, it <span class="bcp14">MAY</span> be omitted in
 It <span class="bcp14">SHALL</span> provide the status information to the registrar for further processing.<a href="#section-6.3.6-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.6-2">Preconditions in addition to <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>:<a href="#section-6.3.6-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.3.6-3.1">Registrar-agent: possesses voucher status and enroll status from pledge.<a href="#section-6.3.6-3.1" class="pilcrow">¶</a>
+<li class="normal" id="section-6.3.6-3.1">Registrar-agent: obtained voucher status and enroll status from pledge.<a href="#section-6.3.6-3.1" class="pilcrow">¶</a>
 </li>
           </ul>
 <span id="name-bootstrapping-status-handli"></span><div id="exchangesfig_uc2_4">
@@ -3901,7 +3897,7 @@ This information may be useful to solve errors, when the pledge was not able to 
 The pledge <span class="bcp14">MAY</span> provide a dedicated endpoint to accept status-requests.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.4-2">Preconditions:<a href="#section-6.4-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.4-3.1">Registrar-agent: possesses LDevID (RegAgt), list of serial numbers of pledges to be queried and a list of corresponding manufacturer trust anchors to be able to verify signatures performed with the IDevID credential.<a href="#section-6.4-3.1" class="pilcrow">¶</a>
+<li class="normal" id="section-6.4-3.1">Registrar-agent: possesses LDevID (RegAgt), may have a list of serial numbers of pledges to be queried and a list of corresponding manufacturer trust anchors to be able to verify signatures performed with the IDevID credential.<a href="#section-6.4-3.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-6.4-3.2">Pledge: may already possess domain credentials and LDevID(Pledge), or may not possess one or both of these.<a href="#section-6.4-3.2" class="pilcrow">¶</a>
 </li>
@@ -4964,7 +4960,19 @@ qhRRyjnxp80IV_Fy1RAOXIIzs3Q8CnMgBgg"
 </li>
         <li class="normal" id="appendix-B-3.8">resolved remaining editorial issues discovered after WGLC (responded to on the mailing list in Reply 1 and Reply 2) resulting in more consistent descriptions<a href="#appendix-B-3.8" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-B-3.9">updated references<a href="#appendix-B-3.9" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-B-3.9">issue #92: kept separate endpoint for wrapped CSR<a href="#appendix-B-3.9" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-3.10">issue #94: clarified terminology (possess vs. obtained)<a href="#appendix-B-3.10" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-3.11">issue #95: clarified optional IDevID CA certificates on registrar-agent<a href="#appendix-B-3.11" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-3.12">issue #96: updated <a href="#exchangesfig_uc2_3" class="auto internal xref">Figure 14</a> to correct to just one CA certificate provisioning<a href="#appendix-B-3.12" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-3.13">issue #97: deleted format explanation in <a href="#exchanges_uc2_3" class="auto internal xref">Section 6.3</a> as it may be misleading<a href="#appendix-B-3.13" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-3.14">issue #99: motivated verification of second signature on voucher in <a href="#exchanges_uc2_3" class="auto internal xref">Section 6.3</a><a href="#appendix-B-3.14" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="appendix-B-3.15">updated references<a href="#appendix-B-3.15" class="pilcrow">¶</a>
 </li>
       </ul>
 <p id="appendix-B-4">From IETF draft 07 -&gt; IETF draft 08:<a href="#appendix-B-4" class="pilcrow">¶</a></p>
