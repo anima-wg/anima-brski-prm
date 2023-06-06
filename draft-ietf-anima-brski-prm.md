@@ -112,6 +112,11 @@ informative:
     target: "https://mailarchive.ietf.org/arch/msg/saag/m1r9uo4xYznOcf85Eyk0Rhut598/"
     title: "can an on-path attacker drop traffic?"
     org: IETF
+  androidnsd:
+    target: https://developer.android.com/training/connect-devices-wirelessly
+    title: "Android Developer: Connect devices wirelessly"
+    org: Google
+    archivedtarget:  https://web.archive.org/web/20230000000000*/https://developer.android.com/training/connect-devices-wirelessly
 
 --- abstract
 
@@ -341,8 +346,11 @@ An abstract overview of the BRSKI-PRM protocol can be found on slide 8 of {{BRSK
 To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer site/domain, this document specifies the exchange of authenticated self-contained objects with the help of a registrar-agent.
 
 This leads to extensions of the logical components in the BRSKI architecture as shown in {{uc2figure}}.
-Note that the Join Proxy is neglected in the figure.
-It MAY  be used as specified in BRSKI {{RFC8995}} by the registrar-agent to connect to the registrar.
+
+Note that the Join Proxy is not shown in the figure, having been replaced by the Registrar Agent.
+The Join Proxy may still be present, and there MAY be some situations in which the Join Proxy can be used by the Registrar-Agent to connect to the Registrar.
+For example, the Registrar-Agent application on a smartphone often can connect to local wifi without giving up their LTE connection {{androidnsd}}, but only can make link-local connections.
+
 The registrar-agent interacts with the pledge to transfer the required data objects for bootstrapping, which are then also exchanged between the registrar-agent and the domain registrar.
 The addition of the registrar-agent influences the sequences of the data exchange between the pledge and the domain registrar described in {{RFC8995}}.
 To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
