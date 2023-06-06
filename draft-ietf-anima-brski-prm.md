@@ -412,10 +412,11 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 
   * The data objects utilized for the data exchange between the pledge and the registrar are self-contained authenticated objects (signature-wrapped objects).
 
-* Registrar-agent: provides a communication path to exchange data objects between the pledge and the domain registrar.
+* Registrar-agent: provides a store and forward communication path to exchange data objects between the pledge and the domain registrar.
   The registrar-agent brokers in situations in which the domain registrar is not directly reachable by the pledge.
   This may be due to a different technology stack or due to missing connectivity.
-  The registrar-agent triggers a pledge to create bootstrapping artifacts such as the voucher-request and the enrollment-request on one or multiple pledges and performs a (bulk) bootstrapping based on the collected data.
+  The registrar-agent triggers a pledge to create bootstrapping artifacts such as the voucher-request and the enrollment-request on one or multiple pledges.
+  It can then perform a (bulk) bootstrapping based on the collected data.
   The registrar-agent is expected to possess information about the domain registrar: the registrar LDevID certificate, LDevID(CA) certificate, IP address, either by configuration or by using the discovery mechanism defined in {{RFC8995}}.
   There is no trust assumption between the pledge and the registrar-agent as only authenticated self-contained objects are used, which are transported via the registrar-agent and provided either by the pledge or the registrar.
   The trust assumption between the registrar-agent and the registrar is based on the LDevID of the registrar-agent, provided by the PKI responsible for the domain.
