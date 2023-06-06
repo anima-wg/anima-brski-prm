@@ -441,9 +441,17 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 "agent-proximity" is defined as additional assertion type in {{I-D.ietf-anima-rfc8366bis}}.
 This can be verified by the registrar and also by the MASA during the voucher-request processing.
 
-In BRSKI, the pledge verifies POP of the LDevID by the registrar via the TLS handshake and includes that LDevID as the "proximity-registrar-cert" into the voucher request to allow for the MASA to decide whether or how to respond to the voucher-request. Until the pledge receives the voucher, the registrar certificate is accepted provisionally.
-In contrast, in BRSKI-PRM, the pledge has no direct connection to the registrar and takes the LDevID provided by the registrar-agent from the PVR trigger message and includes it into his PVR.
-This allows not only the MASA, but also the registrar to decide whether or how to proceed with the BRSKI-PRM PVR.
+In BRSKI, the pledge verifies POP of the registrar via the TLS handshake and pins that public key as the "proximity-registrar-cert" into the voucher request.
+This allows the MASA to see the proximity of the pledge and registrar, facilitating a decision to assign the pledge to that domain owner.
+In BRSKI, the TLS connection is considered provisional until the pledge receives the voucher.
+
+In contrast, in BRSKI-PRM, the pledge has no direct connection to the registrar and must take the Registrar-Agent LDevID provisionally.
+The registrar-agent has included its LDevID, a certificate signed by the domain owner, into the PVR trigger message.
+The registrar-agent identity is therefore included into the Pledge Voucher Request (PVR).
+
+Akin to the BRSKI case, the pledge has provided proximity evidence to the MASA.
+But additionally, this allows the Registrar to be sure that the PVR collected by the Registrar-Agent was in fact collected by the Registrar-Agent to which the Registrar is connected to.
+
 In a similar fashion, the pledge accepts the registrar certificate provisionally until it receives the voucher as described in {{exchanges_uc2_3}}.
 See also Section 5 of {{RFC8995}} on "PROVISIONAL accept of server cert".
 
