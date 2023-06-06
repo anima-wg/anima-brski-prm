@@ -338,7 +338,7 @@ In constrained environments it may be provided based on COSE {{RFC9052}} and {{R
 
 An abstract overview of the BRSKI-PRM protocol can be found on slide 8 of {{BRSKI-PRM-abstract}}.
 
-To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer site/domain, this document specifies the exchange of authenticated self-contained objects (the voucher-request/response as known from BRSKI and the enrollment-request/response as introduced by BRSKI-PRM) with the help of a registrar-agent.
+To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer site/domain, this document specifies the exchange of authenticated self-contained objects with the help of a registrar-agent.
 
 This leads to extensions of the logical components in the BRSKI architecture as shown in {{uc2figure}}.
 Note that the Join Proxy is neglected in the figure.
