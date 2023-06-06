@@ -275,7 +275,7 @@ In such a case, limited access to a domain registrar may be allowed in carefully
 
 The registration authority (RA) performing the authorization of a certificate request is a critical PKI component and therefore requires higher operational security than other components utilizing the issued certificates.
 CAs may also require higher security in the registration procedures.
-There may be situations in which the customer site/domain does not offer enough security to operate a RA/CA and therefore this service is transferred to a backend that offers a higher level of operational security.
+There may be situations in which the customer site/domain does not offer enough physical security to operate a RA/CA and therefore this service is transferred to a backend that offers a higher level of operational security.
 
 
 ## Limitations
