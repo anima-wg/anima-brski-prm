@@ -614,7 +614,7 @@ or IPv6 address as any BRSKI connection that is supporting BRSKI so that those B
 can continue to announce unmodified "EST-TLS" in the objective-value.
 
 If the Registar-Agent enrolls pledges with other than ACP certificates, then the GRASP Objectibe
-would be "brski-registrar" and the prodedures of {{I-D.eckert-anima-grasp-dnss}} could be used.
+would be "brski-registrar" and the prodedures of {{I-D.eckert-anima-grasp-dnssd}} could be used.
 
 
 ### Discovery of Pledge by Registrar-Agent {#discovery_uc2_ppa}
