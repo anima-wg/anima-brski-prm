@@ -296,9 +296,9 @@ Based on the intended target environment described in {{sup-env}}, the following
   These requests are then provided by the registrar-agent to the registrar.
   This requires the definition of pledge endpoints to allow interaction with the registrar-agent.
 
-* The security of communication between the registrar-agent and the pledge must not rely on Transport Layer Security (TLS) to enable application of BRSKI-PRM in environments, in which the communication between the registrar-agent and the pledge is done over other technologies like BTLE or NFC, which may not support TLS protected communication. 
+* The security of communication between the registrar-agent and the pledge must not rely on Transport Layer Security (TLS) to enable application of BRSKI-PRM in environments, in which the communication between the registrar-agent and the pledge is done over other technologies like BTLE or NFC, which may not support TLS protected communication.
   In addition, the pledge does not have a certificate that can easily be verified by {{RFC6125}} methods.
-  
+
 * The use of authenticated self-contained objects addresses both, the TLS challenges and the technology stack challenge.
 
 * By contrast, the registrar-agent can be authenticated by the registrar as a component, acting on behalf of the registrar.
@@ -706,8 +706,8 @@ Preconditions:
     * configured, e.g., as a list of pledges to be bootstrapped via QR code scanning
     * discovered by using standard approaches like mDNS as described in {{discovery_uc2_ppa}}
     * discovered by using a vendor specific approach, e.g., RF beacons.
-  If the serial numbers are not known in advance, the registrar-agent cannot perform a distinct triggering of pledges but and triggers  all pledges discovered . 
-  
+  If the serial numbers are not known in advance, the registrar-agent cannot perform a distinct triggering of pledges but and triggers  all pledges discovered .
+
   The registrar-agent SHOULD have synchronized time.
 
 * Registrar (same as in BRSKI): possesses/trusts IDevID CA certificate and has own registrar LDevID credentials.
@@ -1354,8 +1354,8 @@ The registrar sends the voucher to the registrar-agent.
 ### Pledge-Enrollment-Request (PER) Processing (Registrar-Agent to Registrar) {#exchanges_uc2_2_per}
 
 After receiving the voucher, the registrar-agent sends the PER to the registrar in the same HTTP-over-TLS connection. Which is similar to the PER processing described in Section 5.2 of {{RFC8995}}.
-In case the PER cannot be send in the same HTTP-over-TLS connection the registrar-agent may send the PER in a new HTTP-over-TLS connection. The registrar is able to correlate the PVR and the PER based on the signatures and the contained product-serial-number information. 
-Note, this also addresses situations in which a nonceless voucher is used and may be pre-provisioned to the pledge. 
+In case the PER cannot be send in the same HTTP-over-TLS connection the registrar-agent may send the PER in a new HTTP-over-TLS connection. The registrar is able to correlate the PVR and the PER based on the signatures and the contained product-serial-number information.
+Note, this also addresses situations in which a nonceless voucher is used and may be pre-provisioned to the pledge.
 As specified in {{PER-response}} deviating from BRSKI the PER is not a raw PKCS#10.
 As the registrar-agent is involved in the exchange, the PKCS#10 is wrapped in a JWS object by the pledge and signed with pledge's IDevID to ensure proof-of-identity as outlined in {{per}}.
 
@@ -1545,7 +1545,7 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
 {
   "version": 1,
   "status": false,
-  "reason": "Failed to authenticate MASA certificate because 
+  "reason": "Failed to authenticate MASA certificate because
   it starts in the future (1/1/2023).",
   "reason-context": {
     "pvs-details": "Current date: 1/1/1970"
@@ -1621,7 +1621,7 @@ The response has the Content-Type `application/jose+json`.
 }
 
 # Example: Decoded payload "pledge-enroll-status" representation
-  in JSON syntax for success case 
+  in JSON syntax for success case
 {
   "version": 1,
   "status": true,
@@ -2487,16 +2487,16 @@ From IETF draft 08 -> IETF draft 09:
 * issue #81, enhanced introduction with motivation for agent_signed_data
 * issue #82, included optional TLS protection of the communication link between registrar-agent and pledge in the introduction {{req-sol}},  and {{exchanges_uc2_1}}
 * issue #83, enhanced {{PER-response}} and {{exchanges_uc2_2_per}} with note to re-enrollment
-* issue #87, clarified available information at the registrar-agent in {#exchanges_uc2_1} 
-* issue #88, clarified, that the PVR in {{pvrr}} and PER in {{PER-response}} may contain the certificate chain. If not contained it MUST be available at the registrar. 
+* issue #87, clarified available information at the registrar-agent in {#exchanges_uc2_1}
+* issue #88, clarified, that the PVR in {{pvrr}} and PER in {{PER-response}} may contain the certificate chain. If not contained it MUST be available at the registrar.
 * issue #91, clarified that a separate HTTP connection may also be used to provide the PER in {{exchanges_uc2_2_per}}
 * resolved remaining editorial issues discovered after WGLC (responded to on the mailing list in Reply 1 and Reply 2) resulting in more consistent descriptions
 * issue #92: kept separate endpoint for wrapped CSR
 * issue #94: clarified terminology (possess vs. obtained)
 * issue #95: clarified optional IDevID CA certificates on registrar-agent
-* issue #96: updated {{exchangesfig_uc2_3}} to correct to just one CA certificate provisioning 
-* issue #97: deleted format explanation in {{exchanges_uc2_3}} as it may be misleading 
-* issue #99: motivated verification of second signature on voucher in {{exchanges_uc2_3}} 
+* issue #96: updated {{exchangesfig_uc2_3}} to correct to just one CA certificate provisioning
+* issue #97: deleted format explanation in {{exchanges_uc2_3}} as it may be misleading
+* issue #99: motivated verification of second signature on voucher in {{exchanges_uc2_3}}
 * issue #100: included negative example in {{vstat}}
 * issue #105: included negative example in {{estat}}
 
