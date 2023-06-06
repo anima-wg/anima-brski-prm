@@ -551,7 +551,7 @@ DNS-SD discovery of the Registar by Registrar-Agents.
 For DNS-SD, discovery of a BRSKI-PRM Registrar uses the same service name "brski-registar" as
 defined by {{RFC8995}} and uses the DNS-SD mechanisms as defined in {{RFC6763}}, using any
 transport known to be potentially supported by the deployment domain, including mDNS (single hop),
-or unicast DNS. {{RFC8995}}, Appendix B outlines some examples. 
+or unicast DNS. {{RFC8995, Appendix B}} outlines some examples. 
 
 To allow operations of both BRSKI ({{RFC8995}}) and BRSKI-PRM on the same and/or different registrars
 using the same DNS-SD service name, DNS-SD information for Registrars that support BRSKI-PRM MUST include a TXT Key
