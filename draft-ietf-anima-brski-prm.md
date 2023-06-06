@@ -562,7 +562,7 @@ indicate the value of "true". Future versions of BRSKI-PRM that are backward com
 may indicate a different value.
 
 DNS-SD information for Registrars that support BRSKI according to {{RFC8995}} and use a TXT
-RR MUST include the TXT key of "rrm" (registrar registrar mode). A registrar supporting both
+RR MUST include the TXT key of "rrm" (registrar mode). A registrar supporting both
 BRSKI and PRSKI-PRM would therefore have a TXT RR of "prm,rrm". A registrar MAY continue
 to not include a TXT RR if it only supports BRSKI and BRKSI clients (pledges or brski proxies)
 would fail in the presence of TXT RRs for the "brski-registrar" service name. Note that the
