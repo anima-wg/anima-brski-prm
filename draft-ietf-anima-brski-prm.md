@@ -606,7 +606,7 @@ be supported for discovery and selection.
 
 If the Registrar-Agent enrolls pledges into the ACP via BRSKI-PRM, then the GRASP Objective
 (the equivalent of the DNS-SD service name) to be used is "AN_join_registar" as defined in
-{{RFC8995}}, section 4.3. To indicate support for BRSKI-PRM, the objective-alue of the
+{{RFC8995}}, section 4.3. To indicate support for BRSKI-PRM, the objective-value of the
 objective, according to {{RFC8995}}, section 4.3 and figure 13 is "PRM-EST-TLS" for the
 connection to a registrar supporting BRSKI-PRM. To avoid backward compatiblity issues with
 AN_join_registrar announcement for BRSKI, BRSKI-PRM in this case MUST use a separate TCP port
