@@ -451,7 +451,7 @@ See also Section 5 of {{RFC8995}} on "PROVISIONAL accept of server cert".
 ## Behavior of Pledge in Pledge-Responder-Mode {#pledge_ep}
 
 The pledge is triggered by the registrar-agent to generate the PVR and PER.
-It will also be triggered for processing of the responses and the generation of status information one the registrar-agent has received the responses from the registrar later in the process.
+It will also be triggered for processing of the responses and the generation of status information once the registrar-agent has received the responses from the registrar later in the process.
 Due to the use of the registrar-agent, the interaction with the domain registrar is changed as shown in {{exchangesfig_uc2_1}}.
 To enable interaction as responder with the registrar-agent, the pledge provides endpoints using the BRSKI defined endpoints based on the "/.well-known/brski" URI tree.
 
