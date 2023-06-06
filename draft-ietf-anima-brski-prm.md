@@ -438,7 +438,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 
 "Agent-proximity" is a statement in the PVR and in the voucher, that the registrar certificate was provided via the registrar-agent as defined in {{exchanges_uc2}} and not directly to the pledge.
 "Agent-proximity" is therefore a weaker assertion then "proximity", which is defined in section 4 of {{RFC8366}}.
-It is defined as additional assertion type in {{I-D.ietf-anima-rfc8366bis}}.
+"agent-proximity" is defined as additional assertion type in {{I-D.ietf-anima-rfc8366bis}}.
 This can be verified by the registrar and also by the MASA during the voucher-request processing.
 
 In BRSKI, the pledge verifies POP of the LDevID by the registrar via the TLS handshake and includes that LDevID as the "proximity-registrar-cert" into the voucher request to allow for the MASA to decide whether or how to respond to the voucher-request. Until the pledge receives the voucher, the registrar certificate is accepted provisionally.
