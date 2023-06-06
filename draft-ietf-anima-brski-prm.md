@@ -584,7 +584,7 @@ the Registrar-Agent MUST retry other instances.
 Registrar-Agents SHOULD allow configuration of explicit Service Instance Names as defined in
 {{RFC6763}}, Section 4.1.1 to overcome any possible issues in selecting the Registrar
 automatically as described above solely by the service name. For example when a
-Registar-Agent is configured to use a Registar by thre Service Instance Name of
+Registar-Agent is configured to use a Registar by the Service Instance Name of
 "Prime PRM Registrar", this would be expanded by the DNS-SD discovery of in the Registrar-Agent to
 "Prime PRM Registrar._brski-registar._tcp.example.com".
 
