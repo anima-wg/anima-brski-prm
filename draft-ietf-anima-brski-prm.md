@@ -1530,13 +1530,25 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
 }
 
 # Example: Decoded payload "pledge-voucher-status" representation
-  in JSON syntax
+  in JSON syntax for success case
 {
   "version": 1,
   "status": true,
   "reason": "Voucher successfully processed",
   "reason-context": {
-    "additional": "JSON"
+    "pvs-details": "JSON"
+  }
+}
+
+# Example: Decoded payload "pledge-voucher-status" representation
+  in JSON syntax for error case
+{
+  "version": 1,
+  "status": false,
+  "reason": "Failed to authenticate MASA certificate because 
+  it starts in the future (1/1/2023).",
+  "reason-context": {
+    "pvs-details": "Current date: 1/1/1970"
   }
 }
 
@@ -1609,13 +1621,24 @@ The response has the Content-Type `application/jose+json`.
 }
 
 # Example: Decoded payload "pledge-enroll-status" representation
-  in JSON syntax
+  in JSON syntax for success case 
 {
   "version": 1,
   "status": true,
   "reason": "Enrollment response successfully processed",
   "reason-context": {
     "additional": "JSON"
+  }
+}
+
+# Example: Decoded payload "pledge-voucher-status" representation
+  in JSON syntax for error case
+{
+  "version": 1,
+  "status": false,
+  "reason": "Enrollment response could not be verified.",
+  "reason-context": {
+    "pes-details": "no matching trust anchor"
   }
 }
 
@@ -2474,6 +2497,8 @@ From IETF draft 08 -> IETF draft 09:
 * issue #96: updated {{exchangesfig_uc2_3}} to correct to just one CA certificate provisioning 
 * issue #97: deleted format explanation in {{exchanges_uc2_3}} as it may be misleading 
 * issue #99: motivated verification of second signature on voucher in {{exchanges_uc2_3}} 
+* issue #100: included negative example in {{vstat}}
+* issue #105: included negative example in {{estat}}
 
 * updated references
 
