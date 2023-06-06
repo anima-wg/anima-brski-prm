@@ -396,7 +396,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 
 * Pledge: The pledge is expected to respond with the necessary data objects for bootstrapping to the registrar-agent.
   The protocol used between the pledge and the registrar-agent is assumed to be HTTP in the context of this document.
-  Any other protocols can be used as long as they support the exchange of the necessary data objects.
+  Any other protocols (including HTTPS) can be used as long as they support the exchange of the necessary data objects.
   This includes CoAP or protocol to be used over Bluetooth or NFC connections
   A pledge acting as a server during bootstrapping leads to some differences for BRSKI:
 
