@@ -8,6 +8,7 @@ date: 2023
 stand_alone: true
 ipr: trust200902
 submissionType: IETF
+updates: rfc8995
 wg: ANIMA WG
 area: Operations and Management
 cat: std
@@ -77,6 +78,7 @@ normative:
   RFC8366:
   RFC8610:
   RFC8615:
+  RFC8994:
   RFC8995:
   I-D.ietf-anima-jws-voucher:
   I-D.ietf-netconf-sztp-csr:
@@ -96,6 +98,7 @@ informative:
   RFC9238:
   I-D.ietf-anima-brski-ae:
   I-D.richardson-emu-eap-onboarding:
+  I-D.eckert-anima-grasp-dnssd:
   IEEE-802.1AR:
     title: IEEE 802.1AR Secure Device Identifier
     author:
@@ -534,9 +537,84 @@ The following information MUST be available at the registrar-agent before intera
 
 ### Discovery of Registrar by Registrar-Agent {#discovery_uc2_reg}
 
-The discovery of the domain registrar may be done as specified in {{RFC8995}} section 4 with the
-deviation that it is done between the registrar-agent and the domain registrar.
-Alternatively, the registrar-agent may be configured with the address of the domain registrar and the certificate of the domain registrar.
+The IP/IPv6 address(es) of a domain registrar SHOULD NOT be configured on Registrar-Agents unless
+the target deployment network is not using DNS and does not have an alternative recommended or mandatory
+discovery mechanism. If the target deployment network is for example one that uses an ACP according to
+{{RFC8994}}, then there is no mandate to support DNS, but instead, ACP GRASP ({{RFC8990}}) is mandatorily
+supported and hence RECOMMENDED to be used.
+
+If the target deployment network can be expected to support DNS and is known to only support
+a single Registrar, Registrar-Agents MAY be configured with the DNS name of that Registrar. Whenever
+two or more Registrars are possible to be supported in a solution and DNS can assumed to be supported,
+DNS-SD discovery of the Registar by Registrar-Agents.
+
+For DNS-SD, discovery of a BRSKI-PRM Registrar uses the same service name "brski-registar" as
+defined by {{RFC8995}} and uses the DNS-SD mechanisms as defined in {{RFC6763}}, using any
+transport known to be potentially supported by the deployment domain, including mDNS (single hop),
+or unicast DNS. {{RFC8995}}, Appendix B outlines some examples. 
+
+To allow operations of both BRSKI ({{RFC8995}}) and BRSKI-PRM on the same and/or different registrars
+using the same DNS-SD service name, DNS-SD information for Registrars that support BRSKI-PRM MUST include a TXT Key
+"prm" with a value of "true". In the rules of {{RFC6763}} Section 6.4, this can be encoded
+simply as "prm", with a value that is not "false". A TXT of "prm" (without any "=\<value")
+implies a value of "true". Registrars that support (only) this specification of PRM SHOULD
+indicate the value of "true". Future versions of BRSKI-PRM that are backward compatible
+may indicate a different value.
+
+DNS-SD information for Registrars that support BRSKI according to {{RFC8995}} and use a TXT
+RR MUST include the TXT key of "rrm" (registrar registrar mode). A registrar supporting both
+BRSKI and PRSKI-PRM would therefore have a TXT RR of "prm,rrm". A registrar MAY continue
+to not include a TXT RR if it only supports BRSKI and BRKSI clients (pledges or brski proxies)
+would fail in the presence of TXT RRs for the "brski-registrar" service name. Note that the
+rules of this paragraph constitue an update to the rules of {{RFC8995} which does not mention
+the use of TXT RRs for DNS-SD discovery.
+
+Discovery of a domain registrar solely serves to avoid having to configure IP/IPv6 addresses of a
+registrar on every Registrar-Agent. It does not eliminate the need to pre-configure a trust-anchor
+for the registrar on the Registrar-Agent because discovery is not carrying that information,
+as it could in general not be trusted. If the domain has only one Registrar, the trust-anchor
+could simply be the certificate of that registrar, otherwise it is a certificate (chain) used
+to sign thre certificate of the domains Registrar certificates.
+
+Registrar-Agents that support DNS-SD for discovery and selection of a Registrar MUST
+select only a Registrar with Key "prm" unequal to "false". If a Registrar to which they
+attempt to connect because of DNS-SD discovery fails to authenticate with its certificate, 
+the Registrar-Agent MUST retry other instances.
+
+Registrar-Agents SHOULD allow configuration of explicit Service Instance Names as defined in
+{{RFC6763}}, Section 4.1.1 to overcome any possible issues in selecting the Registrar
+automatically as described above solely by the service name. For example when a
+Registar-Agent is configured to use a Registar by thre Service Instance Name of
+"Prime PRM Registrar", this would be expanded by the DNS-SD discovery of in the Registrar-Agent to
+"Prime PRM Registrar._brski-registar._tcp.example.com".
+
+Use of Service Instance Names as opposed to simply Domain Names has the benefit of allowing to
+use a broader, more human operator friendly name as well as leveraging all the other benefits of DNS-SD,
+such as discovery of the available Service Instance Names (e.g.: Registrar instances). Registrar
+Agents SHOULD support this so-called browsing, e.g.: discovery and selection of the desired BRSKI-PRM
+capable Registrar Service Instance Name according to {{RFC6763}} section 4.1 to help ease Registrar-Agent
+configuration.
+
+Networks that may not support unicast DNS, and which have more than one hop between Registar-Agent
+and Registrars and hence can not rely solely on mDNS may consider to deploy GRASP {{RFC8995}} as
+a simple multi-hop mDNS transport equivalent. {{I-D.eckert-anima-grasp-dnssd}} describes how to
+carry DNS-SD service information in GRASP so that the above described DNS-SD service selection and
+discovery can be reused across GRASP.
+
+When an ACP according to {{RFC8994}} is used between Registrar and Registrar-Agents, GRASP MUST
+be supported for discovery and selection.
+
+If the Registrar-Agent enrolls pledges into the ACP via BRSKI-PRM, then the GRASP Objective
+(the equivalent of the DNS-SD service name) to be used is "AN_join_registar" as defined in
+{{RFC8995}}, section 4.3. To indicate support for BRSKI-PRM, the objective-alue of the
+objective, according to {{RFC8995}}, section 4.3 and figure 13 is "PRM-EST-TLS" for the
+connection to a registrar supporting BRSKI-PRM. To avoid backward compatiblity issues with
+AN_join_registrar announcement for BRSKI, BRSKI-PRM in this case MUST use a separate TCP port
+or IPv6 address as any BRSKI connection that is supporting BRSKI so that those BRSKI sockets
+can continue to announce unmodified "EST-TLS" in the objective-value.
+
+If the Registar-Agent enrolls pledges with other than ACP certificates, then the GRASP Objectibe
+would be "brski-registrar" and the prodedures of {{I-D.eckert-anima-grasp-dnss}} could be used.
 
 
 ### Discovery of Pledge by Registrar-Agent {#discovery_uc2_ppa}
@@ -1935,6 +2013,20 @@ IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with
 
 ~~~~
 {: artwork-align="left"}
+
+## Service Names
+
+IANA is asked to amend the {{RFC8995}} defined service name entry "brski-registrar" as follows.
+
+    Service Name:  brski-registrar
+    Transport Protocol(s):  tcp
+    Assignee:  IESG <iesg@ietf.org>
+    Contact:  IESG <iesg@ietf.org>
+    Description:  The Bootstrapping Remote Secure Key Infrastructure Registrar
+    Defined TXT keys: prm=true/false, rrm=true/false
+    Reference:  RFC 8995, <this-document>
+~~~~
+{: #iana1figure
 
 
 # Privacy Considerations
