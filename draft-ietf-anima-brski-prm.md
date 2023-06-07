@@ -457,7 +457,7 @@ To enable interaction as responder with the registrar-agent, the pledge provides
 
 The following endpoints are defined for the *pledge* in this document.
 The endpoints are defined with short names to also accommodate for the constraint case.
-The URI path begins with "http://www.example.com/.well-known/brski" followed by a path-suffix that indicates the intended operation.
+The URI path begins with "http://pledge.example/.well-known/brski" followed by a path-suffix that indicates the intended operation.
 
 Operations and their corresponding URIs:
 
