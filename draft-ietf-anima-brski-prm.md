@@ -928,7 +928,7 @@ The "enroll-generic-cert" case is shown in {{raer}}.
 
 This document specifies the request of a generic certificate with no CSR attributes provided to the pledge.
 If specific attributes in the certificate are required, they have to be inserted by the issuing RA/CA.
-How the HTTP POST can be used to provide CSR attributes is out of scope for this specification."
+How the HTTP POST can be used to provide CSR attributes is out of scope for this specification.
 
 
 ### Pledge-Enrollment-Request (PER) - Response {#PER-response}
