@@ -116,7 +116,14 @@ informative:
     target: https://developer.android.com/training/connect-devices-wirelessly
     title: "Android Developer: Connect devices wirelessly"
     org: Google
-    archivedtarget:  https://web.archive.org/web/20230000000000*/https://developer.android.com/training/connect-devices-wirelessly
+    seriesinfo:
+      "archived at": https://web.archive.org/web/20230000000000*/https://developer.android.com/training/connect-devices-wirelessly
+  androidtrustfail:
+    target: https://developer.android.com/training/articles/security-ssl
+    title: "Security with Network Protocols"
+    org: Google
+    seriesinfo:
+      "archived at": https://web.archive.org/web/20230326153937/https://developer.android.com/training/articles/security-ssl
 
 --- abstract
 
@@ -493,9 +500,9 @@ It facilitates the exchange of data between the pledge and the domain registrar,
 
 For the communication with the pledge the registrar-agent utilizes communication endpoints provided by the pledge.
 The transport in this specification is based on HTTP but may also be done using other transport mechanisms.
+
 The communication between the registrar-agent and the pledge MAY be protected using TLS as outlined in {{exchanges_uc2_1}}.
-In this case the registrar-agent needs to the IDevID CA certificates to verify the IdevID certificate and also the proof of possession of the IDevID private key by the pledge.
-This new component changes the general interaction between the pledge and the domain registrar as shown in {{uc2figure}}.
+The details of doing TLS validation are {{pledgehttps}}.
 
 For the communication with the registrar, the registrar-agent uses the endpoints of the domain registrar side already specified in {{RFC8995}} (derived from EST {{RFC7030}}) where suitable.
 These endpoints do not expect signature wrapped-objects, which are used b BRSKI-PRM.
@@ -2493,6 +2500,35 @@ qhRRyjnxp80IV_Fy1RAOXIIzs3Q8CnMgBgg"
 }
 ~~~~
 {: #ExampleVoucherResponseWithRegSignfigure title='Example Voucher-Response from MASA, with additional Registrar signature' artwork-align="left"}
+
+# HTTPS operations between Registrar-Agent and Pledge {#pledgehttps}
+
+The use of HTTPS between the Registrar-Agent and the Pledge has been identified as an optional mechanism.
+
+Provided that the key-agreement in the underlying TLS protocol connection can be properly authenticated, the use of TLS provides privacy for the voucher and enrollment operations between the pledge and the registrar-agent.
+The authenticity of the onboarding and enrollment is not dependant upon the security of the TLS connection.
+
+The use of HTTPS is not mandated by this document for a number of reasons:
+
+1. A certificate is generally required in order to do TLS.  While there are other modes of authentication including PSK, various EAP methods and raw public key, they do no help as there is no previous relationship between the Registrar-Agent.
+
+2. The pledge can use it's IDevID certificate to authenticate itself, but {{?RFC6125}} DNS-ID methods do not apply as the pledge does not have a FQDN.  Instead a new mechanism is required, which authenticates the X520SerialNumber DN attribute which must be present in every IDevID.
+
+If the Registrar-Agent has a preconfigured list of which serial numbers, from which manufacturers it expects to see, then it can attempt to match this pledge against a list of potential devices.
+
+In many cases only the list of manufacturers is known ahead of time, so at most the Registrar-Agent can show the X520SerialNumber to the (human) operator who may then attempt to confirm that they are standing in front of a device with that serial number.
+The use of scannable QRcodes may help automate this in some cases.
+
+3. The CA used to sign the IDevID will be a manufacturer private PKI as described in {{?I-D.irtf-t2trg-taxonomy-manufacturer-anchors, Section 4.1}}.
+The anchors for this PKI will never be part of the public WebPKI anchors which are distributed with most smartphone operating systems.
+A registrar-agent application will need to use different APIs in order to initiate an HTTPS connection without performing WebPKI verification.
+The application will then have to do it's own certificate chain verification against a store of manufacturer trust anchors.
+In the Android ecosystem this involved use of a customer TrustManager: many application developers do not create these correctly, and there is significant push to remove this option as it has repeatedly resulted in security failures. See {{androidtrustfail}}
+
+4. The use of the Host: (or :authority in HTTP/2) is explained in {{?RFC9110, Section 7.2}}. This header is mandatory, and so a compliant HTTPS client is going to insert it.
+But, the contents of this header will at best be an IP address that came from the discovery process.
+The pledge MUST therefore ignore the Host: header when it processes requests, and the pledge MUST NOT do any kind of name-base virtual hosting using the IP address/port combination.
+Note that there is no requirement for the pledge to operate it's BRSKI-PRM service on port 80 or port 443, so if there is no reason for name-based virtual hosting.
 
 # History of Changes [RFC Editor: please delete] {#app_history}
 
