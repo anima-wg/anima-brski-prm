@@ -760,10 +760,7 @@ Preconditions:
 ~~~~
 {: #exchangesfig_uc2_1 title='Request collection (registrar-agent - pledge)' artwork-align="left"}
 
-TLS MAY be optionally used to protect the interaction between the registrar-agent and the pledge.
-If TLS is applied, the registrar-agent MUST use the provided product-serial-number of the pledge for verification against the X520serialnumber component of the IDevID certificate.
-Based on the locally available IDevID CA certificate, the registrar-agent verifies the IDevID certificate as part of the TLS handshake.
-Note that an Extended Key Usage (EKU) for TLS WWW Server authentication cannot be expected in the pledge's IDevID certificate.
+TLS MAY be optionally used to provide privacy for the interaction between the registrar-agent and the pledge, see {{pledgehttps}}.
 
 Note: The registrar-agent may trigger the pledge for the PVR or the PER or both. It is expected that this will be aligned with a service technician workflow, visiting and installing each pledge.
 
@@ -791,7 +788,7 @@ The trigger for the pledge to create a PVR is depicted in the following figure:
 Note that at the time of receiving the PVR trigger, the pledge cannot verify the registrar LDevID certificate and has no proof-of-possession of the corresponding private key for the certificate. The pledge therefore accepts the registrar LDevID certificate provisionally until it receives the voucher as described in {{exchanges_uc2_3}}.
 
 The pledge will also be unable to verify the agent-signed-data itself as it does not possess the LDevID(RegAgt) certificate and the domain trust has not been established at this point of the communication.
-It SHOULD be done, after the voucher has been received.
+Verification SHOULD be done, after the voucher has been received.
 
 The agent-signed-data is a JSON-in-JWS object and contains the following information:
 
@@ -2529,6 +2526,9 @@ In the Android ecosystem this involved use of a customer TrustManager: many appl
 But, the contents of this header will at best be an IP address that came from the discovery process.
 The pledge MUST therefore ignore the Host: header when it processes requests, and the pledge MUST NOT do any kind of name-base virtual hosting using the IP address/port combination.
 Note that there is no requirement for the pledge to operate it's BRSKI-PRM service on port 80 or port 443, so if there is no reason for name-based virtual hosting.
+
+5. Note that an Extended Key Usage (EKU) for TLS WWW Server authentication cannot be expected in the pledge's IDevID certificate.
+IDevID certificates are intended to be widely useable and EKU does not support that use.
 
 # History of Changes [RFC Editor: please delete] {#app_history}
 
