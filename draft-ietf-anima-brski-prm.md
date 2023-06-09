@@ -112,6 +112,11 @@ informative:
     target: "https://mailarchive.ietf.org/arch/msg/saag/m1r9uo4xYznOcf85Eyk0Rhut598/"
     title: "can an on-path attacker drop traffic?"
     org: IETF
+  androidnsd:
+    target: https://developer.android.com/training/connect-devices-wirelessly
+    title: "Android Developer: Connect devices wirelessly"
+    org: Google
+    archivedtarget:  https://web.archive.org/web/20230000000000*/https://developer.android.com/training/connect-devices-wirelessly
 
 --- abstract
 
@@ -275,7 +280,7 @@ In such a case, limited access to a domain registrar may be allowed in carefully
 
 The registration authority (RA) performing the authorization of a certificate request is a critical PKI component and therefore requires higher operational security than other components utilizing the issued certificates.
 CAs may also require higher security in the registration procedures.
-There may be situations in which the customer site/domain does not offer enough security to operate a RA/CA and therefore this service is transferred to a backend that offers a higher level of operational security.
+There may be situations in which the customer site/domain does not offer enough physical security to operate a RA/CA and therefore this service is transferred to a backend that offers a higher level of operational security.
 
 
 ## Limitations
@@ -338,11 +343,14 @@ In constrained environments it may be provided based on COSE {{RFC9052}} and {{R
 
 An abstract overview of the BRSKI-PRM protocol can be found on slide 8 of {{BRSKI-PRM-abstract}}.
 
-To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer site/domain, this document specifies the exchange of authenticated self-contained objects (the voucher-request/response as known from BRSKI and the enrollment-request/response as introduced by BRSKI-PRM) with the help of a registrar-agent.
+To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer site/domain, this document specifies the exchange of authenticated self-contained objects with the help of a registrar-agent.
 
 This leads to extensions of the logical components in the BRSKI architecture as shown in {{uc2figure}}.
-Note that the Join Proxy is neglected in the figure.
-It MAY  be used as specified in BRSKI {{RFC8995}} by the registrar-agent to connect to the registrar.
+
+Note that the Join Proxy is not shown in the figure, having been replaced by the Registrar Agent.
+The Join Proxy may still be present, and there MAY be some situations in which the Join Proxy can be used by the Registrar-Agent to connect to the Registrar.
+For example, the Registrar-Agent application on a smartphone often can connect to local wifi without giving up their LTE connection {{androidnsd}}, but only can make link-local connections.
+
 The registrar-agent interacts with the pledge to transfer the required data objects for bootstrapping, which are then also exchanged between the registrar-agent and the domain registrar.
 The addition of the registrar-agent influences the sequences of the data exchange between the pledge and the domain registrar described in {{RFC8995}}.
 To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
@@ -388,7 +396,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 
 * Pledge: The pledge is expected to respond with the necessary data objects for bootstrapping to the registrar-agent.
   The protocol used between the pledge and the registrar-agent is assumed to be HTTP in the context of this document.
-  Any other protocols can be used as long as they support the exchange of the necessary data objects.
+  Any other protocols (including HTTPS) can be used as long as they support the exchange of the necessary data objects.
   This includes CoAP or protocol to be used over Bluetooth or NFC connections
   A pledge acting as a server during bootstrapping leads to some differences for BRSKI:
 
@@ -404,15 +412,16 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 
   * The data objects utilized for the data exchange between the pledge and the registrar are self-contained authenticated objects (signature-wrapped objects).
 
-* Registrar-agent: provides a communication path to exchange data objects between the pledge and the domain registrar.
+* Registrar-agent: provides a store and forward communication path to exchange data objects between the pledge and the domain registrar.
   The registrar-agent brokers in situations in which the domain registrar is not directly reachable by the pledge.
   This may be due to a different technology stack or due to missing connectivity.
-  The registrar-agent triggers a pledge to create bootstrapping artifacts such as the voucher-request and the enrollment-request on one or multiple pledges and performs a (bulk) bootstrapping based on the collected data.
+  The registrar-agent triggers a pledge to create bootstrapping artifacts such as the voucher-request and the enrollment-request on one or multiple pledges.
+  It can then perform a (bulk) bootstrapping based on the collected data.
   The registrar-agent is expected to possess information about the domain registrar: the registrar LDevID certificate, LDevID(CA) certificate, IP address, either by configuration or by using the discovery mechanism defined in {{RFC8995}}.
   There is no trust assumption between the pledge and the registrar-agent as only authenticated self-contained objects are used, which are transported via the registrar-agent and provided either by the pledge or the registrar.
   The trust assumption between the registrar-agent and the registrar is based on the LDevID of the registrar-agent, provided by the PKI responsible for the domain.
   This allows the registrar-agent to authenticate towards the registrar, e.g., in a TLS handshake.
-  Based on this, the registrar is able to distinguish a pledge from a registrar-agent during the TLS session establishment and also to verify that the registrar-agent is authorized to perform the bootstrapping of the distinct pledge.
+  Based on this, the registrar is able to distinguish a pledge from a registrar-agent during the TLS session establishment and also to verify that this registrar-agent is authorized to perform the bootstrapping of the distinct pledge.
 
 * Join Proxy (not shown): same functionality as described in {{RFC8995}} if needed.
   Note that a registrar-agent may use a join proxy to facilitate the TLS connection to the registrar, in the same way that a BRSKI pledge would use a join proxy. This is useful in cases where the registrar-agent does not have full IP connectivity via the domain network, or cases where it has no other means to locate the registrar on the network.
@@ -429,7 +438,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 
 "Agent-proximity" is a statement in the PVR and in the voucher, that the registrar certificate was provided via the registrar-agent as defined in {{exchanges_uc2}} and not directly to the pledge.
 "Agent-proximity" is therefore a weaker assertion then "proximity", which is defined in section 4 of {{RFC8366}}.
-It is defined as additional assertion type in {{I-D.ietf-anima-rfc8366bis}}.
+"agent-proximity" is defined as additional assertion type in {{I-D.ietf-anima-rfc8366bis}}.
 This can be verified by the registrar and also by the MASA during the voucher-request processing.
 
 In BRSKI, the pledge verifies POP of the LDevID by the registrar via the TLS handshake and includes that LDevID as the "proximity-registrar-cert" into the voucher request to allow for the MASA to decide whether or how to respond to the voucher-request. Until the pledge receives the voucher, the registrar certificate is accepted provisionally.
@@ -442,13 +451,13 @@ See also Section 5 of {{RFC8995}} on "PROVISIONAL accept of server cert".
 ## Behavior of Pledge in Pledge-Responder-Mode {#pledge_ep}
 
 The pledge is triggered by the registrar-agent to generate the PVR and PER.
-It will also be triggered for processing of the responses and the generation of status information one the registrar-agent has received the responses from the registrar later in the process.
+It will also be triggered for processing of the responses and the generation of status information once the registrar-agent has received the responses from the registrar later in the process.
 Due to the use of the registrar-agent, the interaction with the domain registrar is changed as shown in {{exchangesfig_uc2_1}}.
 To enable interaction as responder with the registrar-agent, the pledge provides endpoints using the BRSKI defined endpoints based on the "/.well-known/brski" URI tree.
 
 The following endpoints are defined for the *pledge* in this document.
 The endpoints are defined with short names to also accommodate for the constraint case.
-The URI path begins with "http://www.example.com/.well-known/brski" followed by a path-suffix that indicates the intended operation.
+The URI path begins with "http://pledge.example/.well-known/brski" followed by a path-suffix that indicates the intended operation.
 
 Operations and their corresponding URIs:
 
@@ -919,7 +928,7 @@ The "enroll-generic-cert" case is shown in {{raer}}.
 
 This document specifies the request of a generic certificate with no CSR attributes provided to the pledge.
 If specific attributes in the certificate are required, they have to be inserted by the issuing RA/CA.
-How the HTTP POST can be used to provide CSR attributes is out of scope for this specification."
+How the HTTP POST can be used to provide CSR attributes is out of scope for this specification.
 
 
 ### Pledge-Enrollment-Request (PER) - Response {#PER-response}
