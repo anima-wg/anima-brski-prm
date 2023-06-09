@@ -116,7 +116,14 @@ informative:
     target: https://developer.android.com/training/connect-devices-wirelessly
     title: "Android Developer: Connect devices wirelessly"
     org: Google
-    archivedtarget:  https://web.archive.org/web/20230000000000*/https://developer.android.com/training/connect-devices-wirelessly
+    seriesinfo:
+      "archived at": https://web.archive.org/web/20230000000000*/https://developer.android.com/training/connect-devices-wirelessly
+  androidtrustfail:
+    target: https://developer.android.com/training/articles/security-ssl
+    title: "Security with Network Protocols"
+    org: Google
+    seriesinfo:
+      "archived at": https://web.archive.org/web/20230326153937/https://developer.android.com/training/articles/security-ssl
 
 --- abstract
 
@@ -441,9 +448,17 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 "agent-proximity" is defined as additional assertion type in {{I-D.ietf-anima-rfc8366bis}}.
 This can be verified by the registrar and also by the MASA during the voucher-request processing.
 
-In BRSKI, the pledge verifies POP of the LDevID by the registrar via the TLS handshake and includes that LDevID as the "proximity-registrar-cert" into the voucher request to allow for the MASA to decide whether or how to respond to the voucher-request. Until the pledge receives the voucher, the registrar certificate is accepted provisionally.
-In contrast, in BRSKI-PRM, the pledge has no direct connection to the registrar and takes the LDevID provided by the registrar-agent from the PVR trigger message and includes it into his PVR.
-This allows not only the MASA, but also the registrar to decide whether or how to proceed with the BRSKI-PRM PVR.
+In BRSKI, the pledge verifies POP of the registrar via the TLS handshake and pins that public key as the "proximity-registrar-cert" into the voucher request.
+This allows the MASA to see the proximity of the pledge and registrar, facilitating a decision to assign the pledge to that domain owner.
+In BRSKI, the TLS connection is considered provisional until the pledge receives the voucher.
+
+In contrast, in BRSKI-PRM, the pledge has no direct connection to the registrar and must take the Registrar-Agent LDevID provisionally.
+The registrar-agent has included its LDevID, a certificate signed by the domain owner, into the PVR trigger message.
+The registrar-agent identity is therefore included into the Pledge Voucher Request (PVR).
+
+Akin to the BRSKI case, the pledge has provided proximity evidence to the MASA.
+But additionally, this allows the Registrar to be sure that the PVR collected by the Registrar-Agent was in fact collected by the Registrar-Agent to which the Registrar is connected to.
+
 In a similar fashion, the pledge accepts the registrar certificate provisionally until it receives the voucher as described in {{exchanges_uc2_3}}.
 See also Section 5 of {{RFC8995}} on "PROVISIONAL accept of server cert".
 
@@ -485,9 +500,9 @@ It facilitates the exchange of data between the pledge and the domain registrar,
 
 For the communication with the pledge the registrar-agent utilizes communication endpoints provided by the pledge.
 The transport in this specification is based on HTTP but may also be done using other transport mechanisms.
+
 The communication between the registrar-agent and the pledge MAY be protected using TLS as outlined in {{exchanges_uc2_1}}.
-In this case the registrar-agent needs to the IDevID CA certificates to verify the IdevID certificate and also the proof of possession of the IDevID private key by the pledge.
-This new component changes the general interaction between the pledge and the domain registrar as shown in {{uc2figure}}.
+The details of doing TLS validation are {{pledgehttps}}.
 
 For the communication with the registrar, the registrar-agent uses the endpoints of the domain registrar side already specified in {{RFC8995}} (derived from EST {{RFC7030}}) where suitable.
 These endpoints do not expect signature wrapped-objects, which are used b BRSKI-PRM.
@@ -745,10 +760,7 @@ Preconditions:
 ~~~~
 {: #exchangesfig_uc2_1 title='Request collection (registrar-agent - pledge)' artwork-align="left"}
 
-TLS MAY be optionally used to protect the interaction between the registrar-agent and the pledge.
-If TLS is applied, the registrar-agent MUST use the provided product-serial-number of the pledge for verification against the X520serialnumber component of the IDevID certificate.
-Based on the locally available IDevID CA certificate, the registrar-agent verifies the IDevID certificate as part of the TLS handshake.
-Note that an Extended Key Usage (EKU) for TLS WWW Server authentication cannot be expected in the pledge's IDevID certificate.
+TLS MAY be optionally used to provide privacy for the interaction between the registrar-agent and the pledge, see {{pledgehttps}}.
 
 Note: The registrar-agent may trigger the pledge for the PVR or the PER or both. It is expected that this will be aligned with a service technician workflow, visiting and installing each pledge.
 
@@ -776,7 +788,7 @@ The trigger for the pledge to create a PVR is depicted in the following figure:
 Note that at the time of receiving the PVR trigger, the pledge cannot verify the registrar LDevID certificate and has no proof-of-possession of the corresponding private key for the certificate. The pledge therefore accepts the registrar LDevID certificate provisionally until it receives the voucher as described in {{exchanges_uc2_3}}.
 
 The pledge will also be unable to verify the agent-signed-data itself as it does not possess the LDevID(RegAgt) certificate and the domain trust has not been established at this point of the communication.
-It SHOULD be done, after the voucher has been received.
+Verification SHOULD be done, after the voucher has been received.
 
 The agent-signed-data is a JSON-in-JWS object and contains the following information:
 
@@ -1636,7 +1648,7 @@ The response has the Content-Type `application/jose+json`.
   "status": true,
   "reason": "Enrollment response successfully processed",
   "reason-context": {
-    "additional": "JSON"
+    "pes-details": "JSON"
   }
 }
 
@@ -2485,6 +2497,38 @@ qhRRyjnxp80IV_Fy1RAOXIIzs3Q8CnMgBgg"
 }
 ~~~~
 {: #ExampleVoucherResponseWithRegSignfigure title='Example Voucher-Response from MASA, with additional Registrar signature' artwork-align="left"}
+
+# HTTPS operations between Registrar-Agent and Pledge {#pledgehttps}
+
+The use of HTTPS between the Registrar-Agent and the Pledge has been identified as an optional mechanism.
+
+Provided that the key-agreement in the underlying TLS protocol connection can be properly authenticated, the use of TLS provides privacy for the voucher and enrollment operations between the pledge and the registrar-agent.
+The authenticity of the onboarding and enrollment is not dependant upon the security of the TLS connection.
+
+The use of HTTPS is not mandated by this document for a number of reasons:
+
+1. A certificate is generally required in order to do TLS.  While there are other modes of authentication including PSK, various EAP methods and raw public key, they do no help as there is no previous relationship between the Registrar-Agent.
+
+2. The pledge can use it's IDevID certificate to authenticate itself, but {{?RFC6125}} DNS-ID methods do not apply as the pledge does not have a FQDN.  Instead a new mechanism is required, which authenticates the X520SerialNumber DN attribute which must be present in every IDevID.
+
+If the Registrar-Agent has a preconfigured list of which serial numbers, from which manufacturers it expects to see, then it can attempt to match this pledge against a list of potential devices.
+
+In many cases only the list of manufacturers is known ahead of time, so at most the Registrar-Agent can show the X520SerialNumber to the (human) operator who may then attempt to confirm that they are standing in front of a device with that serial number.
+The use of scannable QRcodes may help automate this in some cases.
+
+3. The CA used to sign the IDevID will be a manufacturer private PKI as described in {{?I-D.irtf-t2trg-taxonomy-manufacturer-anchors, Section 4.1}}.
+The anchors for this PKI will never be part of the public WebPKI anchors which are distributed with most smartphone operating systems.
+A registrar-agent application will need to use different APIs in order to initiate an HTTPS connection without performing WebPKI verification.
+The application will then have to do it's own certificate chain verification against a store of manufacturer trust anchors.
+In the Android ecosystem this involved use of a customer TrustManager: many application developers do not create these correctly, and there is significant push to remove this option as it has repeatedly resulted in security failures. See {{androidtrustfail}}
+
+4. The use of the Host: (or :authority in HTTP/2) is explained in {{?RFC9110, Section 7.2}}. This header is mandatory, and so a compliant HTTPS client is going to insert it.
+But, the contents of this header will at best be an IP address that came from the discovery process.
+The pledge MUST therefore ignore the Host: header when it processes requests, and the pledge MUST NOT do any kind of name-base virtual hosting using the IP address/port combination.
+Note that there is no requirement for the pledge to operate it's BRSKI-PRM service on port 80 or port 443, so if there is no reason for name-based virtual hosting.
+
+5. Note that an Extended Key Usage (EKU) for TLS WWW Server authentication cannot be expected in the pledge's IDevID certificate.
+IDevID certificates are intended to be widely useable and EKU does not support that use.
 
 # History of Changes [RFC Editor: please delete] {#app_history}
 
