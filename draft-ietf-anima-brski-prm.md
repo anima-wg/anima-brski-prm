@@ -1636,7 +1636,7 @@ The response has the Content-Type `application/jose+json`.
   "status": true,
   "reason": "Enrollment response successfully processed",
   "reason-context": {
-    "additional": "JSON"
+    "pes-details": "JSON"
   }
 }
 
