@@ -512,7 +512,7 @@ Operations and their corresponding URIs:
 
 | Operation                  |Endpoint                    | Details |
 |:---------------------------|:---------------------------|:--------|
-| Supply PER to registrar | /requestenroll | {{exchanges_uc2_2_per}}  |
+| Supply PER to registrar - Returns enrollment-response | /requestenroll | {{exchanges_uc2_2_per}}  |
 |------------------------
 | Request (wrapped) CA certificates - Returns wrapped CA Certificates | /wrappedcacerts | {{exchanges_uc2_2_wca}} |
 |===============
