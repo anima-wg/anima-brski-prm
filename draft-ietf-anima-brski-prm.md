@@ -1508,7 +1508,7 @@ The registrar-agent MAY optionally use TLS to protect the communication as outli
 
 The registrar-agent provides the information via distinct pledge endpoints as following.
 
-### Pledge: Voucher-Response Processing
+### Pledge: Voucher-Response Processing {#exchanges_uc2_3a}
 
 The registrar-agent SHALL send the voucher-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/svr".
 
@@ -1529,7 +1529,7 @@ If all steps stated above have been performed successfully, the pledge SHALL ter
 If an error occurs during the verification and validation of the voucher, this SHALL be reported in the reason field of the pledge voucher status.
 
 
-### Pledge: Voucher Status Telemetry
+### Pledge: Voucher Status Telemetry {#exchanges_uc2_3b}
 
 After voucher verification and validation the pledge MUST reply with a status telemetry message as defined in Section 5.7 of {{RFC8995}}.
 The pledge generates the voucher-status and provides it as signed JSON-in-JWS object in response to the registrar-agent.
@@ -1585,12 +1585,14 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
 ~~~~
 {: #vstat title='Representation of pledge voucher status telemetry' artwork-align="left"}
 
+If the pledge did not did not provide voucher status telemetry information after processing the voucher, the registrar agent MAY query the pledge status explicitly as described in {{exchanges_uc2_5}} and MAY re-sent the voucher depending on the Pledge status following the procedure described in {{exchanges_uc2_3a}}.
 
-### Pledge: Wrapped-CA-Certificate(s) Processing
+
+### Pledge: Wrapped-CA-Certificate(s) Processing {#exchanges_uc2_3c}
 
 The registrar-agent SHALL provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/scac".
 
-As the CA certificate provisioning is crucial from a security perspective, this provisioning SHALL only be done, if the voucher-response has been successfully processed by pledge.
+As the CA certificate provisioning is crucial from a security perspective, this provisioning SHOULD only be done, if the voucher-response has been successfully processed by pledge as reflected in the voucher status telemetry.
 
 The CA certificates message has the Content-Type `application/jose+json` and is signed using the credential of the registrar as shown in {{PCAC}}.
 
@@ -1738,6 +1740,9 @@ Note that the signature verification of the status information is an addition to
 
 According to {{RFC8995}} Section 5.9.4, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
 Based on the failure case the registrar MAY decide that for security reasons the pledge is not allowed to reside in the domain. In this case the registrar MUST revoke the certificate.
+An example case for the registrar revoking the issued LDevID for the pledge is when the pledge was not able to verify the received LDevID certificate and therefore did send a 406 (Not Acceptable) response. 
+In this case the registrar may revoke the LDevID certificate as the pledge did no accepted it for installation.
+
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
 Within the server log the registrar SHOULD capture this telemetry information.
 
@@ -1767,7 +1772,7 @@ Preconditions:
 ~~~~
 {: #exchangesfig_uc2_5 title='Pledge-status handling between registrar-agent and pledge' artwork-align="left"}
 
-### Pledge-Status - Trigger (Registrar-Agent to Pledge)
+### Pledge-Status - Request (Registrar-Agent to Pledge) {#exchanges_uc2_5a}
 
 The registrar-agent requests the pledge-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/qps"
 
@@ -1834,7 +1839,7 @@ This is out of scope for this specification.
 {: #stat_req title='Example of registrar-agent request of pledge-status using status-type bootstrap' artwork-align="left"}
 
 
-### Pledge-Status - Response (Pledge - Registrar-Agent)
+### Pledge-Status - Response (Pledge - Registrar-Agent) {#exchanges_uc2_5b}
 
 If the pledge receives the pledge-status request with status-type "bootstrap" it SHALL react with a status response message based on the telemetry information described in {{exchanges_uc2_3}}.
 
@@ -1868,8 +1873,8 @@ Other documents may enhance the above enumeration to reflect further status info
 The pledge-status response message is signed with IDevID or LDevID, depending on bootstrapping state of the pledge.
 
 * "factory-default": Pledge has not been bootstrapped.
-  Additional information may be provided in the reason or reason-context.
-  The pledge signs the response message using its IDevID(Pledge).
+  Additional information may be provided in the reason or reason-context. 
+  The pledge signs the response message using its IDevID(Pledge). 
 * "voucher-success": Pledge processed the voucher exchange successfully.
   Additional information may be provided in the reason or reason-context.
   The pledge signs the response message using its IDevID(Pledge).
@@ -1943,6 +1948,8 @@ If validation of the JWS signature fails, the pledge SHOULD respond with the HTT
 * The HTTP 415 Unsupported Media Type status code SHOULD be used, if the Content-Type of the request is an unknown or unsupported format.
 * The HTTP 400 Bad Request status code SHOULD be used, if the Accept/Content-Type headers are correct but nevertheless the status-request cannot be correctly parsed.
 
+The pledge SHOULD by default only respond to requests from nodes it can authenticate (such as registrar
+agent), once the pledge is enrolled with CA certificates and a matching domain certificate.
 
 # Artifacts
 
@@ -2544,15 +2551,23 @@ From IETF draft 08 -> IETF draft 09:
 * issue #88, clarified, that the PVR in {{pvrr}} and PER in {{PER-response}} may contain the certificate chain. If not contained it MUST be available at the registrar.
 * issue #91, clarified that a separate HTTP connection may also be used to provide the PER in {{exchanges_uc2_2_per}}
 * resolved remaining editorial issues discovered after WGLC (responded to on the mailing list in Reply 1 and Reply 2) resulting in more consistent descriptions
-* issue #92: kept separate endpoint for wrapped CSR
+* issue #92: kept separate endpoint for wrapped CSR on registrar {{exchanges_uc2_2_wca}}
 * issue #94: clarified terminology (possess vs. obtained)
-* issue #95: clarified optional IDevID CA certificates on registrar-agent
+* issue #95: clarified optional IDevID CA certificates on registrar-agent {{exchanges_uc2_3}}
 * issue #96: updated {{exchangesfig_uc2_3}} to correct to just one CA certificate provisioning
 * issue #97: deleted format explanation in {{exchanges_uc2_3}} as it may be misleading
 * issue #99: motivated verification of second signature on voucher in {{exchanges_uc2_3}}
 * issue #100: included negative example in {{vstat}}
-* issue #105: included negative example in {{estat}}
 
+* issue #101: included handling if {{exchanges_uc2_3b}} voucher telemetry information has not been received by the registrar-agent
+* issue #102: relaxed requirements for CA certs provisioning in {{exchanges_uc2_3c}}
+* issue #105: included negative example in {{estat}}
+* issue #107: included example for certificate revocation in {{exchanges_uc2_4}}
+* issue	#108: renamed heading to Pledge-Status Request of {{exchanges_uc2_5a}}
+* issue #111: included pledge-status response processing for authenticated requests in {{exchanges_uc2_5b}}
+* issue #112: added "Example key word in pledge-status response in {{stat_res}}
+* issue #113: enhanced description of status reply for "factory-default" in  {{exchanges_uc2_5b}}
+		 
 * updated references
 
 
