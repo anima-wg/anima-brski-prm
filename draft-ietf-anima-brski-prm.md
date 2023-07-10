@@ -2029,8 +2029,13 @@ Further security aspects are considered here related to:
 
 Disrupting the pledge behavior by a DoS attack may prevent the bootstrapping of the pledge to a new domain.
 
-A DoS attack with a faked registrar-agent may block the bootstrapping of the pledge due to state creation on the pledge (the pledge may produce a voucher-request, and refuse to produce another one).
-One mitigation may be that the pledge does not limited the number of voucher-requests it creates until at least one has finished, or a single onboarding state may expire after a certain time.
+A DoS attack with a faked registrar-agent may block the bootstrapping of the pledge due changing state on the pledge (the pledge may produce a voucher-request, and refuse to produce another one).
+One mitigation may be that the pledge does not limited the number of voucher-requests it creates until at least one has finished.
+An alternative may be that the onboarding state may expire after a certain time, if no further interaction has happened. 
+
+In addition, the pledge may assume that repeated triggering for PVR are the result of a communication error with the registrar-agent.
+In that case the pledge MAY simply resent the PVR previously sent. 
+Note that in case of resending, a contained nonce and also the contained agent-signed-data in the PVR would consequently be reused.
 
 
 ## Misuse of acquired PVR and PER by Registrar-Agent
@@ -2567,7 +2572,9 @@ From IETF draft 08 -> IETF draft 09:
 * issue #111: included pledge-status response processing for authenticated requests in {{exchanges_uc2_5b}}
 * issue #112: added "Example key word in pledge-status response in {{stat_res}}
 * issue #113: enhanced description of status reply for "factory-default" in  {{exchanges_uc2_5b}}
-		 
+* issue #114: Consideration of optional TLS usage in Privacy Considerations
+* issue #115: Consideration of optional TLS usage in Privacy Considerations to protect potentially privacy related information in the bootstrapping like status information, etc.
+* issue #116: Enhanced DoS description and mitigation options in security consideration section	 
 * updated references
 
 
