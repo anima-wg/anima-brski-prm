@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-09
+docname: draft-ietf-anima-brski-prm-10
 area: Operations and Management
 wg: ANIMA WG
 date: 2023
@@ -472,7 +472,9 @@ To enable interaction as responder with the registrar-agent, the pledge provides
 
 The following endpoints are defined for the *pledge* in this document.
 The endpoints are defined with short names to also accommodate for the constraint case.
-The URI path begins with "http://pledge.example/.well-known/brski" followed by a path-suffix that indicates the intended operation.
+The URI path may begin with "http://pledge.example/.well-known/brski" followed by a path-suffix that indicates the intended operation.
+According to RFC 9110 {{?RFC9110, Section 7.2}} the host header to be present. 
+To ensure that the pledge can be involved in the bootstrapping, independent if it can resolve the host header, the pledge SHALL accept any host header.
 
 Operations and their corresponding URIs:
 
@@ -2510,7 +2512,7 @@ qhRRyjnxp80IV_Fy1RAOXIIzs3Q8CnMgBgg"
 ~~~~
 {: #ExampleVoucherResponseWithRegSignfigure title='Example Voucher-Response from MASA, with additional Registrar signature' artwork-align="left"}
 
-# HTTPS operations between Registrar-Agent and Pledge {#pledgehttps}
+# HTTP-over-TLS operations between Registrar-Agent and Pledge {#pledgehttps}
 
 The use of HTTPS between the Registrar-Agent and the Pledge has been identified as an optional mechanism.
 
@@ -2546,13 +2548,18 @@ IDevID certificates are intended to be widely useable and EKU does not support t
 
 Proof of Concept Code available
 
+From IETF draft 09 -> IETF draft 10:
+
+* issue #120, included statement regarding pledge host header processing in {{pledge_ep}}
+
+
 From IETF draft 08 -> IETF draft 09:
 
 * issue #80, enhanced {{discovery_uc2_ppa}} with clarification on the serial number and the inclusion of GRASP
 * issue #81, enhanced introduction with motivation for agent_signed_data
 * issue #82, included optional TLS protection of the communication link between registrar-agent and pledge in the introduction {{req-sol}},  and {{exchanges_uc2_1}}
 * issue #83, enhanced {{PER-response}} and {{exchanges_uc2_2_per}} with note to re-enrollment
-* issue #87, clarified available information at the registrar-agent in {#exchanges_uc2_1}
+* issue #87, clarified available information at the registrar-agent in {{exchanges_uc2_1}
 * issue #88, clarified, that the PVR in {{pvrr}} and PER in {{PER-response}} may contain the certificate chain. If not contained it MUST be available at the registrar.
 * issue #91, clarified that a separate HTTP connection may also be used to provide the PER in {{exchanges_uc2_2_per}}
 * resolved remaining editorial issues discovered after WGLC (responded to on the mailing list in Reply 1 and Reply 2) resulting in more consistent descriptions
