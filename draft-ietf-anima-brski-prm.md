@@ -384,15 +384,14 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 +--------+     .  +------------+        +-----------+  .
 |        |     .  |            |        |           |  .
 | Pledge | BRSKI- | Registrar- | BRSKI- | Domain    |  .
-|        |  PRM   | Agent      |  EST   | Registrar |  .
+|        |  PRM   | Agent      |  PRM   | Registrar |  .
 |        |<------>|            |<------>| (PKI RA)  |  .
 |        |     .  |     LDevID |        |           |  .
 |        |     .  +------------+        +-----+-----+  .
 | IDevID |     .                              |        .
 |        |     .           +------------------+-----+  .
 +--------+     .           | Key Infrastructure     |  .
-               .           | (e.g., PKI Certificate |  .
-               .           |        Authority)      |  .
+               .           | (e.g., PKI CA)         |  .
                .           +------------------------+  .
                .........................................
                          "Domain" Components
