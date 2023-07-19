@@ -1741,7 +1741,7 @@ Note that the signature verification of the status information is an addition to
 
 According to {{RFC8995}} Section 5.9.4, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
 Based on the failure case the registrar MAY decide that for security reasons the pledge is not allowed to reside in the domain. In this case the registrar MUST revoke the certificate.
-An example case for the registrar revoking the issued LDevID for the pledge is when the pledge was not able to verify the received LDevID certificate and therefore did send a 406 (Not Acceptable) response. 
+An example case for the registrar revoking the issued LDevID for the pledge is when the pledge was not able to verify the received LDevID certificate and therefore did send a 406 (Not Acceptable) response.
 In this case the registrar may revoke the LDevID certificate as the pledge did no accepted it for installation.
 
 The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
@@ -1874,8 +1874,8 @@ Other documents may enhance the above enumeration to reflect further status info
 The pledge-status response message is signed with IDevID or LDevID, depending on bootstrapping state of the pledge.
 
 * "factory-default": Pledge has not been bootstrapped.
-  Additional information may be provided in the reason or reason-context. 
-  The pledge signs the response message using its IDevID(Pledge). 
+  Additional information may be provided in the reason or reason-context.
+  The pledge signs the response message using its IDevID(Pledge).
 * "voucher-success": Pledge processed the voucher exchange successfully.
   Additional information may be provided in the reason or reason-context.
   The pledge signs the response message using its IDevID(Pledge).
@@ -2032,10 +2032,10 @@ Disrupting the pledge behavior by a DoS attack may prevent the bootstrapping of 
 
 A DoS attack with a faked registrar-agent may block the bootstrapping of the pledge due changing state on the pledge (the pledge may produce a voucher-request, and refuse to produce another one).
 One mitigation may be that the pledge does not limited the number of voucher-requests it creates until at least one has finished.
-An alternative may be that the onboarding state may expire after a certain time, if no further interaction has happened. 
+An alternative may be that the onboarding state may expire after a certain time, if no further interaction has happened.
 
 In addition, the pledge may assume that repeated triggering for PVR are the result of a communication error with the registrar-agent.
-In that case the pledge MAY simply resent the PVR previously sent. 
+In that case the pledge MAY simply resent the PVR previously sent.
 Note that in case of resending, a contained nonce and also the contained agent-signed-data in the PVR would consequently be reused.
 
 
@@ -2580,7 +2580,7 @@ From IETF draft 08 -> IETF draft 09:
 * issue #113: enhanced description of status reply for "factory-default" in  {{exchanges_uc2_5b}}
 * issue #114: Consideration of optional TLS usage in Privacy Considerations
 * issue #115: Consideration of optional TLS usage in Privacy Considerations to protect potentially privacy related information in the bootstrapping like status information, etc.
-* issue #116: Enhanced DoS description and mitigation options in security consideration section	 
+* issue #116: Enhanced DoS description and mitigation options in security consideration section
 * updated references
 
 
