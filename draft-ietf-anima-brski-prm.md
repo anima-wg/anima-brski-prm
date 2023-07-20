@@ -423,7 +423,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
   This may be due to a different technology stack or due to missing connectivity.
   The registrar-agent triggers a pledge to create bootstrapping artifacts such as the voucher-request and the enrollment-request on one or multiple pledges.
   It can then perform a (bulk) bootstrapping based on the collected data.
-  The registrar-agent is expected to possess information about the domain registrar: the registrar LDevID certificate, LDevID(CA) certificate, IP address, either by configuration or by using the discovery mechanism defined in {{RFC8995}}.
+  The registrar-agent is expected to possess information about the domain registrar: the registrar EE certificate, LDevID(CA) certificate, IP address, either by configuration or by using the discovery mechanism defined in {{RFC8995}}.
   There is no trust assumption between the pledge and the registrar-agent as only authenticated self-contained objects are used, which are transported via the registrar-agent and provided either by the pledge or the registrar.
   The trust assumption between the registrar-agent and the registrar is based on the LDevID of the registrar-agent, provided by the PKI responsible for the domain.
   This allows the registrar-agent to authenticate towards the registrar, e.g., in a TLS handshake.
@@ -472,7 +472,7 @@ To enable interaction as responder with the registrar-agent, the pledge provides
 The following endpoints are defined for the *pledge* in this document.
 The endpoints are defined with short names to also accommodate for the constraint case.
 The URI path may begin with "http://pledge.example/.well-known/brski" followed by a path-suffix that indicates the intended operation.
-According to RFC 9110 {{?RFC9110, Section 7.2}} the host header to be present. 
+According to RFC 9110 {{?RFC9110, Section 7.2}} the host header to be present.
 To ensure that the pledge can be involved in the bootstrapping, independent if it can resolve the host header, the pledge SHALL accept any host header.
 
 Operations and their corresponding URIs:
@@ -552,7 +552,7 @@ The following information MUST be available at the registrar-agent before intera
 
 * LDevID(RegAgt): own operational key pair (to sign agent-signed-data).
 
-* Registrar LDevID certificate: certificate of the domain registrar (to be provided to the pledge).
+* Registrar EE certificate: certificate of the domain registrar (to be provided to the pledge).
 
 * Serial-number(s): product-serial-number(s) of pledge(s) to be bootstrapped (to query discover specific pledges based on the serial number).
 
@@ -723,7 +723,7 @@ Preconditions:
 * Pledge: possesses IDevID
 
 * Registrar-agent:
-  * MAY handle/trusts pledges IDevID CA certificate to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication.
+  * MAY handle/trusts pledge's IDevID CA certificate to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication.
   The distribution of IDevID CA certificates to the registrar-agent is out of scope of this document and may be done by a manual configuration.
   * possesses own LDevID(RegAgt) credentials for the registrar domain (site).
   In addition, the registrar-agent SHOULD know the product-serial-number(s) of the pledge(s) to be bootstrapped.
@@ -735,7 +735,7 @@ Preconditions:
 
   The registrar-agent SHOULD have synchronized time.
 
-* Registrar (same as in BRSKI): possesses/trusts IDevID CA certificate and has own registrar LDevID credentials.
+* Registrar (same as in BRSKI): possesses/trusts IDevID CA certificate and has own registrar EE credentials.
 
 ~~~~ aasvg
 +--------+                             +-----------+
@@ -1050,7 +1050,7 @@ Preconditions:
   It has the address of the domain registrar through configuration or by discovery, e.g., mDNS/DNSSD.
   The registrar-agent has acquired one or more PVR and PER objects.
 
-* Registrar (same as in BRSKI): possesses the IDevID CA certificate of the pledge vendor/manufacturer and its own registrar LDevID credentials of the site domain.
+* Registrar (same as in BRSKI): possesses the IDevID CA certificate of the pledge vendor/manufacturer and its own registrar EE credentials of the site domain.
 
 * MASA (same as in BRSKI): possesses its own vendor/manufacturer credentials (voucher signing key and certificate, TLS server certificate and private key) related to pledges IDevID and MAY possess the site-specific domain CA certificate.
 
