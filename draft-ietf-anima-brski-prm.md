@@ -469,13 +469,14 @@ It will also be triggered for processing of the responses and the generation of 
 Due to the use of the registrar-agent, the interaction with the domain registrar is changed as shown in {{exchangesfig_uc2_1}}.
 To enable interaction as responder with the registrar-agent, the pledge provides endpoints using the BRSKI defined endpoints based on the "/.well-known/brski" URI tree.
 
+When the registrar-agent reaches out to a pledge, for instance with an example URI path "http://pledge.example/.well-known/brski/tpvr", it will in fact send a Host: header of "pledge.example", with a relative path of "/.well-known/brski/tpbr".
+However in practice the pledge will often be known only by its IP address as returned by a discovery protocol, and that is what will be present in the Host: header.
+
+The pledge MUST respond to all queries regardless of what Host: header is provided by the client.
+RFC 9110 {{?RFC9110, Section 7.2}} makes the Host: header mandatory, so it will always be present.
+
 The following endpoints are defined for the *pledge* in this document.
 The endpoints are defined with short names to also accommodate for the constraint case.
-The URI path may begin with "http://pledge.example/.well-known/brski" followed by a path-suffix that indicates the intended operation.
-According to RFC 9110 {{?RFC9110, Section 7.2}} the host header to be present. 
-To ensure that the pledge can be involved in the bootstrapping, independent if it can resolve the host header, the pledge SHALL accept any host header.
-
-Operations and their corresponding URIs:
 
 | Operation                  | Endpoint                   | Details |
 |:---------------------------|:---------------------------|:--------|
