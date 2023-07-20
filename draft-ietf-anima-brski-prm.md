@@ -1308,15 +1308,28 @@ The MASA returns the voucher-response (voucher) to the registrar.
 ### MASA issued Voucher Processing by Registrar {#exchanges_uc2_2_vs}
 
 After receiving the voucher the registrar SHOULD evaluate it for transparency and logging purposes as outlined in Section 5.6 of {{RFC8995}}.
-The registrar MUST add an additional signature to the MASA provided voucher using its registrar credentials.
+The registrar MUST add an additional signature to the MASA provided voucher using its registrar EE credentials.
 
-The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar LDevID credentials (see {{RFC7515}}, Section 5.2 point 8.
-The x5c component of the "JWS Protected Header" MUST contain the registrar LDevID certificate as well as potential intermediate CA certificates up to the pinned domain certificate.
+
+
+The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credentials (see {{RFC7515}}, Section 5.2 point 8.
+The x5c component of the "JWS Protected Header" MUST contain the registrar EE certificate as well as potential subordinate CA certificates up to (but not including) the pinned domain certificate.
 The pinned domain certificate is already contained in the voucher payload ("pinned-domain-cert").
 
-This signature provides POP of the private key corresponding to the registrar LDevID certificate the pledge received in the trigger for the PVR (see {{pavrt}}).
-The registrar MUST use the same registrar LDevID credentials used for authentication in the TLS handshake to authenticate towards the registrar-agent.
-This ensures that the same registrar LDevID certificate can be used to verify the signature as transmitted in the voucher-request as also transferred in the PVR in the "agent-provided-proximity-registrar-cert".
+(For many installations, with a single registrar credential, the registrar credential is what is pinned)
+
+In {{RFC8995}}, the Registrar proved possession of the it's credential when the TLS session was setup.
+While the pledge could not, at the time, validate the certificate truly belonged the registrar, it did validate that the certificate it was provided was able to authenticate the TLS connection.
+
+In the BRSKI-PRM mode, with the Registrar agent mediating all communication, the Pledge has not as yet been able to witness that the intended Registrar really does possess the relevant private key.
+This second signature provides for the same level of assurance to the pledge, and that it matches the public key that the pledge received in the trigger for the PVR (see {{pavrt}}).
+
+The registrar MUST use the same registrar EE credentials used for authentication in the TLS handshake to authenticate towards the registrar-agent.
+This has some operational implications when the registrar may be part of a scalable framework as described in {{?I-D.richardson-anima-registrar-considerations, Section 1.3.1}}.
+
+The second signature MUST either be done with the private key associated with the registrar EE certificate provided to the Registrar-Agent, or the use of a certificate chain is necessary.
+This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher-request as also transferred in the PVR in the "agent-provided-proximity-registrar-cert".
+
 {{MASA-REG-vr}} below provides an example of the voucher with two signatures.
 
 ~~~~
