@@ -423,7 +423,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
   This may be due to a different technology stack or due to missing connectivity.
   The registrar-agent triggers a pledge to create bootstrapping artifacts such as the voucher-request and the enrollment-request on one or multiple pledges.
   It can then perform a (bulk) bootstrapping based on the collected data.
-  The registrar-agent is expected to possess information about the domain registrar: the registrar LDevID certificate, LDevID(CA) certificate, IP address, either by configuration or by using the discovery mechanism defined in {{RFC8995}}.
+  The registrar-agent is expected to possess information about the domain registrar: the registrar EE certificate, LDevID(CA) certificate, IP address, either by configuration or by using the discovery mechanism defined in {{RFC8995}}.
   There is no trust assumption between the pledge and the registrar-agent as only authenticated self-contained objects are used, which are transported via the registrar-agent and provided either by the pledge or the registrar.
   The trust assumption between the registrar-agent and the registrar is based on the LDevID of the registrar-agent, provided by the PKI responsible for the domain.
   This allows the registrar-agent to authenticate towards the registrar, e.g., in a TLS handshake.
@@ -477,6 +477,15 @@ RFC 9110 {{?RFC9110, Section 7.2}} makes the Host: header mandatory, so it will 
 
 The following endpoints are defined for the *pledge* in this document.
 The endpoints are defined with short names to also accommodate for the constraint case.
+
+When the registrar-agent reaches out to a pledge, for instance with an example URI path "http://pledge.example/.well-known/brski/tpvr", it will in fact send a Host: header of "pledge.example", with a relative path of "/.well-known/brski/tpbr".
+However in practice the pledge will often be known only by its IP address as returned by a discovery protocol, and that is what will be present in the Host: header.
+
+The pledge MUST respond to all queries regardless of what Host: header is provided by the client.
+RFC 9110 {{?RFC9110, Section 7.2}} makes the Host: header mandatory, so it will always be present.
+
+Operations and their corresponding URIs:
+=======
 
 | Operation                  | Endpoint                   | Details |
 |:---------------------------|:---------------------------|:--------|
@@ -553,7 +562,7 @@ The following information MUST be available at the registrar-agent before intera
 
 * LDevID(RegAgt): own operational key pair (to sign agent-signed-data).
 
-* Registrar LDevID certificate: certificate of the domain registrar (to be provided to the pledge).
+* Registrar EE certificate: certificate of the domain registrar (to be provided to the pledge).
 
 * Serial-number(s): product-serial-number(s) of pledge(s) to be bootstrapped (to query discover specific pledges based on the serial number).
 
@@ -724,7 +733,7 @@ Preconditions:
 * Pledge: possesses IDevID
 
 * Registrar-agent:
-  * MAY handle/trusts pledges IDevID CA certificate to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication.
+  * MAY handle/trusts pledge's IDevID CA certificate to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication.
   The distribution of IDevID CA certificates to the registrar-agent is out of scope of this document and may be done by a manual configuration.
   * possesses own LDevID(RegAgt) credentials for the registrar domain (site).
   In addition, the registrar-agent SHOULD know the product-serial-number(s) of the pledge(s) to be bootstrapped.
@@ -736,7 +745,7 @@ Preconditions:
 
   The registrar-agent SHOULD have synchronized time.
 
-* Registrar (same as in BRSKI): possesses/trusts IDevID CA certificate and has own registrar LDevID credentials.
+* Registrar (same as in BRSKI): possesses/trusts IDevID CA certificate and has own registrar EE credentials.
 
 ~~~~ aasvg
 +--------+                             +-----------+
@@ -1051,7 +1060,7 @@ Preconditions:
   It has the address of the domain registrar through configuration or by discovery, e.g., mDNS/DNSSD.
   The registrar-agent has acquired one or more PVR and PER objects.
 
-* Registrar (same as in BRSKI): possesses the IDevID CA certificate of the pledge vendor/manufacturer and its own registrar LDevID credentials of the site domain.
+* Registrar (same as in BRSKI): possesses the IDevID CA certificate of the pledge vendor/manufacturer and its own registrar EE credentials of the site domain.
 
 * MASA (same as in BRSKI): possesses its own vendor/manufacturer credentials (voucher signing key and certificate, TLS server certificate and private key) related to pledges IDevID and MAY possess the site-specific domain CA certificate.
 
@@ -1309,15 +1318,28 @@ The MASA returns the voucher-response (voucher) to the registrar.
 ### MASA issued Voucher Processing by Registrar {#exchanges_uc2_2_vs}
 
 After receiving the voucher the registrar SHOULD evaluate it for transparency and logging purposes as outlined in Section 5.6 of {{RFC8995}}.
-The registrar MUST add an additional signature to the MASA provided voucher using its registrar credentials.
+The registrar MUST add an additional signature to the MASA provided voucher using its registrar EE credentials.
 
-The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar LDevID credentials (see {{RFC7515}}, Section 5.2 point 8.
-The x5c component of the "JWS Protected Header" MUST contain the registrar LDevID certificate as well as potential intermediate CA certificates up to the pinned domain certificate.
+
+
+The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credentials (see {{RFC7515}}, Section 5.2 point 8.
+The x5c component of the "JWS Protected Header" MUST contain the registrar EE certificate as well as potential subordinate CA certificates up to (but not including) the pinned domain certificate.
 The pinned domain certificate is already contained in the voucher payload ("pinned-domain-cert").
 
-This signature provides POP of the private key corresponding to the registrar LDevID certificate the pledge received in the trigger for the PVR (see {{pavrt}}).
-The registrar MUST use the same registrar LDevID credentials used for authentication in the TLS handshake to authenticate towards the registrar-agent.
-This ensures that the same registrar LDevID certificate can be used to verify the signature as transmitted in the voucher-request as also transferred in the PVR in the "agent-provided-proximity-registrar-cert".
+(For many installations, with a single registrar credential, the registrar credential is what is pinned)
+
+In {{RFC8995}}, the Registrar proved possession of the it's credential when the TLS session was setup.
+While the pledge could not, at the time, validate the certificate truly belonged the registrar, it did validate that the certificate it was provided was able to authenticate the TLS connection.
+
+In the BRSKI-PRM mode, with the Registrar agent mediating all communication, the Pledge has not as yet been able to witness that the intended Registrar really does possess the relevant private key.
+This second signature provides for the same level of assurance to the pledge, and that it matches the public key that the pledge received in the trigger for the PVR (see {{pavrt}}).
+
+The registrar MUST use the same registrar EE credentials used for authentication in the TLS handshake to authenticate towards the registrar-agent.
+This has some operational implications when the registrar may be part of a scalable framework as described in {{?I-D.richardson-anima-registrar-considerations, Section 1.3.1}}.
+
+The second signature MUST either be done with the private key associated with the registrar EE certificate provided to the Registrar-Agent, or the use of a certificate chain is necessary.
+This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher-request as also transferred in the PVR in the "agent-provided-proximity-registrar-cert".
+
 {{MASA-REG-vr}} below provides an example of the voucher with two signatures.
 
 ~~~~
