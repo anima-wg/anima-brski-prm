@@ -78,6 +78,7 @@ normative:
   RFC8610:
   RFC8615:
   RFC8995:
+  RFC9360:
   I-D.ietf-anima-jws-voucher:
   I-D.ietf-netconf-sztp-csr:
   I-D.ietf-anima-rfc8366bis:
@@ -1456,7 +1457,7 @@ The Content-Type header of the response SHALL be: `application/jose+json`.
 
 This is a deviation from the Content-Type header values used in EST {{RFC7030}} and results in additional processing at the domain registrar (as EST server).
 The additional processing is to sign the CA certificate(s) information using the registrar LDevID credentials.
-This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certificates are provided as base64 encoded "x5b" in the JWS payload.
+This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certificates are provided as base64 encoded "x5bag" (see definition in {{RFC9360}}) in the JWS payload.
 
 ~~~~
 # The CA certificates data with registrar signature in General JWS Serialization syntax
@@ -1472,7 +1473,7 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
 
 # Example: Decoded payload "certs" representation in JSON syntax
 {
-  "x5b": [
+  "x5bag": [
     "base64encodedvalue==",
     "base64encodedvalue=="
   ]
@@ -1628,7 +1629,7 @@ As the CA certificate provisioning is crucial from a security perspective, this 
 
 The CA certificates message has the Content-Type `application/jose+json` and is signed using the credential of the registrar as shown in {{PCAC}}.
 
-The CA certificates are provided as base64 encoded "x5b".
+The CA certificates are provided as base64 encoded "x5bag".
 The pledge SHALL install the received CA certificates as trust anchor after successful verification of the registrar's signature.
 
 The following 4xx client error codes SHOULD be used by the pledge:
@@ -2587,7 +2588,7 @@ From IETF draft 09 -> IETF draft 10:
 * issue #124, determination of pinned domain certificate done as in RFC 8995 included in {{exchanges_uc2_2_vc}}
 * issue #125, remove strength comparison of voucher assertions in {{agt_prx}} and {{exchanges_uc2}}
 * changed naming of registrar certificate from LDevID(RegAgt) to EE (RegAgt) certificate throughout the document 
-
+* change x5b to x5bag according to {{RFC9360}}
 
 From IETF draft 08 -> IETF draft 09:
 
