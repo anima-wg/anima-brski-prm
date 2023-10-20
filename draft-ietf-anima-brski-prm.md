@@ -826,7 +826,7 @@ The body of the agent-signed-data contains an "ietf-voucher-request:agent-signed
   "signatures": [
     {
       "protected": "BASE64URL(UTF8(JWS Protected Header))",
-      "signature": "base64encodedvalue=="
+      "signature": BASE64URL(JWS Signature)
     }
   ]
 }
@@ -898,7 +898,7 @@ The PVR is signed using the pledge's IDevID credential contained as x5c paramete
   "signatures": [
     {
       "protected": "BASE64URL(UTF8(JWS Protected Header))",
-      "signature": "base64encodedvalue=="
+      "signature": BASE64URL(JWS Signature)
     }
   ]
 }
@@ -1016,7 +1016,7 @@ Note that in this case the current LDevID credential is used instead of the IDev
   "signatures": [
     {
       "protected": "BASE64URL(UTF8(JWS Protected Header))",
-      "signature": "base64encodedvalue=="
+      "signature": BASE64URL(JWS Signature)
     }
   ]
 }
@@ -1211,7 +1211,7 @@ The object is signed using the registrar LDevID credentials, which corresponds t
   "signatures": [
     {
       "protected": "BASE64URL(UTF8(JWS Protected Header))",
-      "signature": "base64encodedvalue=="
+      "signature": BASE64URL(JWS Signature)
     }
   ]
 }
@@ -1292,7 +1292,7 @@ The voucher is according to {{I-D.ietf-anima-rfc8366bis}} but uses the new asser
   "signatures": [
     {
       "protected": "BASE64URL(UTF8(JWS Protected Header))",
-      "signature": "base64encodedvalue=="
+      "signature": BASE64URL(JWS Signature)
     }
   ]
 }
@@ -1359,11 +1359,11 @@ This ensures that the same registrar EE certificate can be used to verify the si
   "signatures": [
     {
       "protected": "BASE64URL(UTF8(JWS Protected Header (MASA)))",
-      "signature": "base64encodedvalue=="
+      "signature": BASE64URL(JWS Signature)
     },
     {
       "protected": "BASE64URL(UTF8(JWS Protected Header (Reg)))",
-      "signature": "base64encodedvalue=="
+      "signature": BASE64URL(JWS Signature)
     }
   ]
 }
@@ -1466,7 +1466,7 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
   "signatures": [
     {
       "protected": "BASE64URL(UTF8(JWS Protected Header))",
-      "signature": "base64encodedvalue=="
+      "signature": BASE64URL(JWS Signature)
     }
   ]
 }
@@ -1578,7 +1578,7 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
   "signatures": [
     {
       "protected": "BASE64URL(UTF8(JWS Protected Header))",
-      "signature": "base64encodedvalue=="
+      "signature": BASE64URL(JWS Signature)
     }
   ]
 }
@@ -1632,13 +1632,14 @@ The CA certificates message has the Content-Type `application/jose+json` and is 
 The CA certificates are provided as base64 encoded "x5bag".
 The pledge SHALL install the received CA certificates as trust anchor after successful verification of the registrar's signature.
 
-The following 4xx client error codes SHOULD be used by the pledge:
+The verification comprises the following steps the pledge MUST perform. Maintaining the order of versification steps as indicated allows to determine, which verification has already been passed:
 
-* 403 Forbidden: if the validation of the wrapping signature or another security check fails.
-
-* 415 Unsupported Media Type: if the Content-Type of the request is in an unknown or unsupported format.
-
-* 400 Bad Request: if the pledge detects errors in the encoding of the payload.
+  1. Check content-type of the CA certificates message. If no Content-Type is contained in the HTTP header, the default Content-Type utilized in this document (JSON-in-JWS) is used. If the Content-Type of the response is in an unknown or unsupported format, the pledge SHOULD reply with a 415 Unsupported media type error code.
+  2. Check the encoding of the payload. If the pledge detects errors in the encoding of the payload, it SHOULD reply with 400 Bad Request error code.
+  3. Verify that the wrapped CA certificate object is signed using the registrar certificate against the pinned-domain certificate. This MAY be done by comparing the hash that is indicating the certificate used to sign the message is that of the pinned-domain certificate. If the validation against the pinned domain-certificate fails, the client SHOULD reply with a 401 Unauthorized error code. It signals that the authentication has failed and therefore the object was not accepted.
+  4. Verify signature of the the received wrapped CA certificate object. If the validation of the signature fails, the pledge SHOULD reply with a 406 Not Acceptable. It signals that the object has not been accepted.
+  5. If the received CA certificates are not self-signed, i.e., an intermediate CA certificate, verify them against an already installed trust anchor, as described in section 4.1.3 of [RFC7030].
+  6. The pledge MAY may verify that the LDevID and the pinned-domain-cert can be validated against one of the received TA.
 
 
 ### Pledge: Enrollment-Response Processing
@@ -1671,7 +1672,7 @@ The response has the Content-Type `application/jose+json`.
   "signatures": [
     {
       "protected": "BASE64URL(UTF8(JWS Protected Header))",
-      "signature": "base64encodedvalue=="
+      "signature": BASE64URL(JWS Signature)
     }
   ]
 }
@@ -1750,6 +1751,12 @@ This status indicates if the pledge could process the voucher successfully or no
 In case the TLS connection to the registrar is already closed, the registrar-agent opens a new TLS connection with the registrar as stated in {{exchanges_uc2_2}}.
 
 The registrar-agent sends the pledge voucher status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/voucher_status". The Content-Type header is kept as `application/jose+json` as described in {{exchangesfig_uc2_3}} and depicted in the example in {{vstat}}.
+
+The registrar SHOULD log the transaction provided for a pledge via registrar-agent and include the identity of the registrar-agent in these logs. For log analysis the following may be considered:
+
+-   The registrar knows the interacting registrar-agent from the authentication of the registrar-agent towards the registrar using LDevID (RegAgt) and can log it accordingly.
+-   The telemetry information from the pledge can be correlated to the voucher response provided from the registrar to the registrar-agent and further to the pledge.
+-   The telemetry information, when provided to the registrar is provided via the registrar-agent and can thus be correlated.
 
 The registrar SHALL verify the signature of the pledge voucher status and validate that it belongs to an accepted device of the domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher status.
 
@@ -1845,7 +1852,7 @@ This is out of scope for this specification.
   "signatures": [
     {
       "protected": "BASE64URL(UTF8(JWS Protected Header))",
-      "signature": "base64encodedvalue=="
+      "signature": BASE64URL(JWS Signature)
     }
   ]
 }
@@ -1943,7 +1950,7 @@ The pledge-status responses are cumulative in the sense that connect-success imp
   "signatures": [
     {
       "protected": "BASE64URL(UTF8(JWS Protected Header))",
-      "signature": "base64encodedvalue=="
+      "signature": BASE64URL(JWS Signature)
     }
   ]
 }
@@ -2058,9 +2065,10 @@ Further security aspects are considered here related to:
 * no transport layer security between registrar-agent and pledge
 
 
-## Denial of Service (DoS) Attack on Pledge
+## Denial of Service (DoS) Attack on Pledge {#sec_cons-dos}
 
 Disrupting the pledge behavior by a DoS attack may prevent the bootstrapping of the pledge to a new domain.
+Because in BRSKI-PRM, the pledge responds to requests from real or illicit registrar-agents, pledges are more subject to DoS attacks from registrar-agents in BRSKI-PRM than they are from illicit registrars in {{RFC8995}}, where pledges do initiate the connections.
 
 A DoS attack with a faked registrar-agent may block the bootstrapping of the pledge due changing state on the pledge (the pledge may produce a voucher-request, and refuse to produce another one).
 One mitigation may be that the pledge does not limited the number of voucher-requests it creates until at least one has finished.
@@ -2069,6 +2077,7 @@ An alternative may be that the onboarding state may expire after a certain time,
 In addition, the pledge may assume that repeated triggering for PVR are the result of a communication error with the registrar-agent.
 In that case the pledge MAY simply resent the PVR previously sent.
 Note that in case of resending, a contained nonce and also the contained agent-signed-data in the PVR would consequently be reused.
+
 
 
 ## Misuse of acquired PVR and PER by Registrar-Agent
@@ -2582,6 +2591,9 @@ Proof of Concept Code available
 From IETF draft 09 -> IETF draft 10:
 
 * issue #93, included information about conflict resolution in mDNS and GRASP in {{discovery_uc2_ppa}}
+* issue #103, included verification handling for the wrapped CA certificate provisioning in {{exchanges_uc2_3c}}
+* issue #106, included additional text to elaborate more the registrar status handling in {{exchanges_uc2_4}}
+* issue #116, enhanced DoS description in {{sec_cons-dos}}
 * issue #120, included statement regarding pledge host header processing in {{pledge_ep}}
 * issue #122, availability of serial number information on registrar agent clarified in {{exchanges_uc2_1}}
 * issue #123, Clarified usage of alternative voucher formats in  {{rvr-proc}}
@@ -2589,6 +2601,7 @@ From IETF draft 09 -> IETF draft 10:
 * issue #125, remove strength comparison of voucher assertions in {{agt_prx}} and {{exchanges_uc2}}
 * changed naming of registrar certificate from LDevID(RegAgt) to EE (RegAgt) certificate throughout the document 
 * change x5b to x5bag according to {{RFC9360}}
+* updated JSON examples -> "signature": BASE64URL(JWS Signature)
 
 From IETF draft 08 -> IETF draft 09:
 
