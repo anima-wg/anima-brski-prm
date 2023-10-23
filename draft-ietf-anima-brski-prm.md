@@ -140,20 +140,20 @@ The approach defined here is agnostic to the enrollment protocol that connects t
 
 # Introduction
 
-BRSKI as defined in {{RFC8995}} specifies a solution for secure zero-touch (automated) bootstrapping of devices (pledges) in a (customer) site domain.
-This includes the discovery of the BRSKI registrar in the customer site/domain and the exchange of security information necessary to establish trust between a pledge and the domain.
+BRSKI as defined in {{RFC8995}} specifies a solution for secure zero-touch (automated) bootstrapping of devices (pledges) in a (customer site) domain.
+This includes the discovery of the BRSKI registrar in the customer domain and the exchange of security information necessary to establish trust between a pledge and the domain.
 
-Security information about the customer site/domain, specifically the customer site/domain certificate, are exchanged and authenticated utilizing voucher-request and voucher-response artifacts as defined in {{RFC8995}}.
+Security information about the customer domain, specifically the customer domain certificate, are exchanged and authenticated utilizing voucher-request and voucher-response artifacts as defined in {{RFC8995}}.
 Vouchers are signed objects from the Manufacturer's Authorized Signing Authority (MASA).
 The MASA issues the voucher and provides it via the domain registrar to the pledge.
 {{RFC8366}} specifies the format of the voucher artifacts.
 {{I-D.ietf-anima-rfc8366bis}} further enhances the format of the voucher artifacts and also the voucher-request.
 
-For the certificate enrollment of devices, BRSKI relies on EST {{RFC7030}} to request and distribute customer site/domain specific device certificates.
+For the certificate enrollment of devices, BRSKI relies on EST {{RFC7030}} to request and distribute customer domain specific device certificates.
 EST in turn relies for the authentication and authorization of the certification request on the credentials used by the underlying TLS between the EST client and the EST server.
 
 BRSKI addresses scenarios in which the pledge initiates the bootstrapping acting as client (referred to as initiator mode by this document).
-BRSKI with pledge in responder mode (BRSKI-PRM) defined in this document allows the pledge to act as server, so that it can be triggered to generate bootstrapping requests in the customer site/domain.
+BRSKI with pledge in responder mode (BRSKI-PRM) defined in this document allows the pledge to act as server, so that it can be triggered to generate bootstrapping requests in the customer domain.
 For this approach, this document:
 
 * introduces the registrar-agent as new component to facilitate the communication between the pledge and the domain registrar.
@@ -215,7 +215,7 @@ mTLS:
 : mutual Transport Layer Security.
 
 on-site:
-: Describes a component or service or functionality available in the customer site/domain.
+: Describes a component or service or functionality available in the customer domain.
 
 off-site:
 : Describes a component or service or functionality not available on-site.
@@ -246,6 +246,9 @@ RVR:
 : Registrar Voucher-Request is a request for a voucher signed by the domain registrar to the MASA.
 It may contain the PVR received from the pledge.
 
+site:
+: In the context of this document the term site is considered as synonymously to domain as defined in {{RFC8995}}.
+
 This document includes many examples that would contain many long sequences of base64 encoded objects with no content directly comprehensible to a human reader.
 In order to keep those examples short, they use the token "base64encodedvalue==" as a placeholder for base64 data.
 The full base64 data is included in the appendices of this document.
@@ -260,8 +263,8 @@ The latter is indicated by a string like "BASE64URL(content-name)".
 
 BRSKI-PRM is applicable to scenarios where pledges may have no direct connection to the domain registrar, may have no continuous connection, or require coordination of the pledge requests to be provided to a domain registrar.
 
-This can be motivated by pledges deployed in environments not yet connected to the operational customer site/domain network, e.g., at a building construction site, or environments intentionally disconnected from the Internet, e.g., critical industrial facilities.
-Another example is the assembly of electrical cabinets, which are prepared in advance before the installation at a customer site/domain.
+This can be motivated by pledges deployed in environments not yet connected to the operational customer domain network, e.g., at a building construction site, or environments intentionally disconnected from the Internet, e.g., critical industrial facilities.
+Another example is the assembly of electrical cabinets, which are prepared in advance before the installation at a customer domain.
 
 
 ### Building Automation
@@ -290,7 +293,7 @@ In such a case, limited access to a domain registrar may be allowed in carefully
 
 The registration authority (RA) performing the authorization of a certificate request is a critical PKI component and therefore requires higher operational security than other components utilizing the issued certificates.
 CAs may also require higher security in the registration procedures.
-There may be situations in which the customer site/domain does not offer enough physical security to operate a RA/CA and therefore this service is transferred to a backend that offers a higher level of operational security.
+There may be situations in which the customer domain does not offer enough physical security to operate a RA/CA and therefore this service is transferred to a backend that offers a higher level of operational security.
 
 
 ## Limitations
@@ -353,7 +356,7 @@ In constrained environments it may be provided based on COSE {{RFC9052}} and {{R
 
 An abstract overview of the BRSKI-PRM protocol can be found on slide 8 of {{BRSKI-PRM-abstract}}.
 
-To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer site/domain, this document specifies the exchange of authenticated self-contained objects with the help of a registrar-agent.
+To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer domain, this document specifies the exchange of authenticated self-contained objects with the help of a registrar-agent.
 
 This leads to extensions of the logical components in the BRSKI architecture as shown in {{uc2figure}}.
 
@@ -435,7 +438,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 * Join Proxy (not shown): same functionality as described in {{RFC8995}} if needed.
   Note that a registrar-agent may use a join proxy to facilitate the TLS connection to the registrar, in the same way that a BRSKI pledge would use a join proxy. This is useful in cases where the registrar-agent does not have full IP connectivity via the domain network, or cases where it has no other means to locate the registrar on the network.
 
-* Domain Registrar: In general, the domain registrar fulfills the same functionality regarding the bootstrapping of the pledge in a (customer) site domain by facilitating the communication of the pledge with the MASA service and the domain PKI service.
+* Domain Registrar: In general, the domain registrar fulfills the same functionality regarding the bootstrapping of the pledge in a (customer site) domain by facilitating the communication of the pledge with the MASA service and the domain PKI service.
   In contrast to {{RFC8995}}, the domain registrar does not interact with a pledge directly but through the registrar-agent.
   A registrar with combined functionality of BRSKI and BRSKI-PRM detects if the bootstrapping is performed by the pledge directly (BRSKI case) or by the registrar-agent (BRSKI-PRM case) based on the utilized credential for authentication (either pledge’s IDevID or LDevID from registrar-agent), see also {{exchanges_uc2_2}}.
 
@@ -1062,12 +1065,12 @@ The BRSKI-PRM bootstrapping exchanges between registrar-agent and domain registr
 
 Preconditions:
 
-* Registrar-agent: possesses its own credentials (EE (RegAgt) certificate and corresponding private key) of the site domain.
+* Registrar-agent: possesses its own credentials (EE (RegAgt) certificate and corresponding private key) of the domain.
   In addition, it MAY possess the IDevID CA certificate of the pledge vendor/manufacturer to verify the pledge certificate in the received request messages.
   It has the address of the domain registrar through configuration or by discovery, e.g., mDNS/DNSSD.
   The registrar-agent has acquired one or more PVR and PER objects.
 
-* Registrar (same as in BRSKI): possesses the IDevID CA certificate of the pledge vendor/manufacturer and its own registrar EE credentials of the site domain.
+* Registrar (same as in BRSKI): possesses the IDevID CA certificate of the pledge vendor/manufacturer and its own registrar EE credentials of the domain.
 
 * MASA (same as in BRSKI): possesses its own vendor/manufacturer credentials (voucher signing key and certificate, TLS server certificate and private key) related to pledges IDevID and MAY possess the site-specific domain CA certificate.
 
@@ -2604,6 +2607,7 @@ From IETF draft 09 -> IETF draft 10:
 * issue #123, Clarified usage of alternative voucher formats in  {{rvr-proc}}
 * issue #124, determination of pinned domain certificate done as in RFC 8995 included in {{exchanges_uc2_2_vc}}
 * issue #125, remove strength comparison of voucher assertions in {{agt_prx}} and {{exchanges_uc2}}
+* issue #130, aligned the usage of site and domain throughout the document
 * changed naming of registrar certificate from LDevID(RegAgt) to EE (RegAgt) certificate throughout the document 
 * change x5b to x5bag according to {{RFC9360}}
 * updated JSON examples -> "signature": BASE64URL(JWS Signature)

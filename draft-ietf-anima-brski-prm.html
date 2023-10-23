@@ -1215,7 +1215,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 22 April 2024</td>
+<td class="center">Expires 25 April 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1228,12 +1228,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-10</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-10-20" class="published">20 October 2023</time>
+<time datetime="2023-10-23" class="published">23 October 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-04-22">22 April 2024</time></dd>
+<dd class="expires"><time datetime="2024-04-25">25 April 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1293,7 +1293,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 22 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 25 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1551,17 +1551,17 @@ The approach defined here is agnostic to the enrollment protocol that connects t
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">BRSKI as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> specifies a solution for secure zero-touch (automated) bootstrapping of devices (pledges) in a (customer) site domain.
-This includes the discovery of the BRSKI registrar in the customer site/domain and the exchange of security information necessary to establish trust between a pledge and the domain.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">Security information about the customer site/domain, specifically the customer site/domain certificate, are exchanged and authenticated utilizing voucher-request and voucher-response artifacts as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
+<p id="section-1-1">BRSKI as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> specifies a solution for secure zero-touch (automated) bootstrapping of devices (pledges) in a (customer site) domain.
+This includes the discovery of the BRSKI registrar in the customer domain and the exchange of security information necessary to establish trust between a pledge and the domain.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Security information about the customer domain, specifically the customer domain certificate, are exchanged and authenticated utilizing voucher-request and voucher-response artifacts as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 Vouchers are signed objects from the Manufacturer's Authorized Signing Authority (MASA).
 The MASA issues the voucher and provides it via the domain registrar to the pledge.
 <span>[<a href="#RFC8366" class="cite xref">RFC8366</a>]</span> specifies the format of the voucher artifacts.
 <span>[<a href="#I-D.ietf-anima-rfc8366bis" class="cite xref">I-D.ietf-anima-rfc8366bis</a>]</span> further enhances the format of the voucher artifacts and also the voucher-request.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">For the certificate enrollment of devices, BRSKI relies on EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> to request and distribute customer site/domain specific device certificates.
+<p id="section-1-3">For the certificate enrollment of devices, BRSKI relies on EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> to request and distribute customer domain specific device certificates.
 EST in turn relies for the authentication and authorization of the certification request on the credentials used by the underlying TLS between the EST client and the EST server.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">BRSKI addresses scenarios in which the pledge initiates the bootstrapping acting as client (referred to as initiator mode by this document).
-BRSKI with pledge in responder mode (BRSKI-PRM) defined in this document allows the pledge to act as server, so that it can be triggered to generate bootstrapping requests in the customer site/domain.
+BRSKI with pledge in responder mode (BRSKI-PRM) defined in this document allows the pledge to act as server, so that it can be triggered to generate bootstrapping requests in the customer domain.
 For this approach, this document:<a href="#section-1-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1-5.1">
@@ -1644,7 +1644,7 @@ Endpoints are accessible via .well-known URIs.<a href="#section-2-3.12.1" class=
         <dd class="break"></dd>
 <dt id="section-2-3.15">on-site:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.16">
-          <p id="section-2-3.16.1">Describes a component or service or functionality available in the customer site/domain.<a href="#section-2-3.16.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.16.1">Describes a component or service or functionality available in the customer domain.<a href="#section-2-3.16.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-2-3.17">off-site:</dt>
@@ -1691,6 +1691,11 @@ In BRSKI-PRM this is a functionality of the domain registrar, as in BRSKI <span>
           <p id="section-2-3.32.1">Registrar Voucher-Request is a request for a voucher signed by the domain registrar to the MASA.
 It may contain the PVR received from the pledge.<a href="#section-2-3.32.1" class="pilcrow">¶</a></p>
 </dd>
+        <dd class="break"></dd>
+<dt id="section-2-3.33">site:</dt>
+        <dd style="margin-left: 1.5em" id="section-2-3.34">
+          <p id="section-2-3.34.1">In the context of this document the term site is considered as synonymously to domain as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-2-3.34.1" class="pilcrow">¶</a></p>
+</dd>
       <dd class="break"></dd>
 </dl>
 <p id="section-2-4">This document includes many examples that would contain many long sequences of base64 encoded objects with no content directly comprehensible to a human reader.
@@ -1711,8 +1716,8 @@ The latter is indicated by a string like "BASE64URL(content-name)".<a href="#sec
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-supported-environments-and-" class="section-name selfRef">Supported Environments and Use Case Examples</a>
         </h3>
 <p id="section-3.1-1">BRSKI-PRM is applicable to scenarios where pledges may have no direct connection to the domain registrar, may have no continuous connection, or require coordination of the pledge requests to be provided to a domain registrar.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">This can be motivated by pledges deployed in environments not yet connected to the operational customer site/domain network, e.g., at a building construction site, or environments intentionally disconnected from the Internet, e.g., critical industrial facilities.
-Another example is the assembly of electrical cabinets, which are prepared in advance before the installation at a customer site/domain.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">This can be motivated by pledges deployed in environments not yet connected to the operational customer domain network, e.g., at a building construction site, or environments intentionally disconnected from the Internet, e.g., critical industrial facilities.
+Another example is the assembly of electrical cabinets, which are prepared in advance before the installation at a customer domain.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 <div id="building-automation">
 <section id="section-3.1.1">
           <h4 id="name-building-automation">
@@ -1746,7 +1751,7 @@ In such a case, limited access to a domain registrar may be allowed in carefully
           </h4>
 <p id="section-3.1.3-1">The registration authority (RA) performing the authorization of a certificate request is a critical PKI component and therefore requires higher operational security than other components utilizing the issued certificates.
 CAs may also require higher security in the registration procedures.
-There may be situations in which the customer site/domain does not offer enough physical security to operate a RA/CA and therefore this service is transferred to a backend that offers a higher level of operational security.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
+There may be situations in which the customer domain does not offer enough physical security to operate a RA/CA and therefore this service is transferred to a backend that offers a higher level of operational security.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1832,7 +1837,7 @@ The responder mode allows delegated bootstrapping using a registrar-agent instea
 The format of the bootstrapping objects produced or consumed by the pledge is based on JOSE <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span> and further specified in <a href="#exchanges_uc2" class="auto internal xref">Section 6</a> to address the requirements stated in <a href="#req-sol" class="auto internal xref">Section 4</a> above.
 In constrained environments it may be provided based on COSE <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>]</span> and <span>[<a href="#RFC9053" class="cite xref">RFC9053</a>]</span>.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <p id="section-5-3">An abstract overview of the BRSKI-PRM protocol can be found on slide 8 of <span>[<a href="#BRSKI-PRM-abstract" class="cite xref">BRSKI-PRM-abstract</a>]</span>.<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer site/domain, this document specifies the exchange of authenticated self-contained objects with the help of a registrar-agent.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-4">To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer domain, this document specifies the exchange of authenticated self-contained objects with the help of a registrar-agent.<a href="#section-5-4" class="pilcrow">¶</a></p>
 <p id="section-5-5">This leads to extensions of the logical components in the BRSKI architecture as shown in <a href="#uc2figure" class="auto internal xref">Figure 1</a>.<a href="#section-5-5" class="pilcrow">¶</a></p>
 <p id="section-5-6">Note that the Join Proxy is not shown in the figure, having been replaced by the Registrar Agent.
 The Join Proxy may still be present, and there <span class="bcp14">MAY</span> be some situations in which the Join Proxy can be used by the Registrar-Agent to connect to the Registrar.
@@ -2008,7 +2013,7 @@ Based on this, the registrar is able to distinguish a pledge from a registrar-ag
 Note that a registrar-agent may use a join proxy to facilitate the TLS connection to the registrar, in the same way that a BRSKI pledge would use a join proxy. This is useful in cases where the registrar-agent does not have full IP connectivity via the domain network, or cases where it has no other means to locate the registrar on the network.<a href="#section-5-11.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-11.4">
-          <p id="section-5-11.4.1">Domain Registrar: In general, the domain registrar fulfills the same functionality regarding the bootstrapping of the pledge in a (customer) site domain by facilitating the communication of the pledge with the MASA service and the domain PKI service.
+          <p id="section-5-11.4.1">Domain Registrar: In general, the domain registrar fulfills the same functionality regarding the bootstrapping of the pledge in a (customer site) domain by facilitating the communication of the pledge with the MASA service and the domain PKI service.
 In contrast to <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the domain registrar does not interact with a pledge directly but through the registrar-agent.
 A registrar with combined functionality of BRSKI and BRSKI-PRM detects if the bootstrapping is performed by the pledge directly (BRSKI case) or by the registrar-agent (BRSKI-PRM case) based on the utilized credential for authentication (either pledge’s IDevID or LDevID from registrar-agent), see also <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>.<a href="#section-5-11.4.1" class="pilcrow">¶</a></p>
 </li>
@@ -2206,9 +2211,12 @@ This behavior is retained also in BRSKI-PRM.<a href="#section-5.3-11" class="pil
           <h4 id="name-discovery-of-registrar-by-r">
 <a href="#section-5.3.1" class="section-number selfRef">5.3.1. </a><a href="#name-discovery-of-registrar-by-r" class="section-name selfRef">Discovery of Registrar by Registrar-Agent</a>
           </h4>
-<p id="section-5.3.1-1">The discovery of the domain registrar may be done as specified in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> section 4 with the
-deviation that it is done between the registrar-agent and the domain registrar.
-Alternatively, the registrar-agent may be configured with the address of the domain registrar and the certificate of the domain registrar.<a href="#section-5.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.1-1">As a registrar-agent acts as representative of the domain registrar towards the pledge or may even be collocated with the domain registrar, a separate discovery of the registrar is likely not needed as registrar-agent and registrar are domain components and have a trust relation. 
+Nevertheless, a registrar-agent may discover a registrar using the basic mechanism specified in section 4 and the appendix A.2 of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>. 
+Note that this discovery, does not provide information on specific capabilities of registrars. 
+As a more general solution, the BRSKI discovery mechanism can be extended to provide upfront information on the capabilities of registrars, such as the mode of operation (pledge-responder-mode or registrar-responder-mode). 
+Defining discovery extensions is out of scope of this document. 
+This may be provided in <span>[<a href="#I-D.eckert-anima-brski-discovery" class="cite xref">I-D.eckert-anima-brski-discovery</a>]</span>.<a href="#section-5.3.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="discovery_uc2_ppa">
@@ -3038,13 +3046,13 @@ This allows bulk bootstrapping of several pledges using the same connection betw
 <p id="section-6.2-2">Preconditions:<a href="#section-6.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.2-3.1">
-            <p id="section-6.2-3.1.1">Registrar-agent: possesses its own credentials (EE (RegAgt) certificate and corresponding private key) of the site domain.
+            <p id="section-6.2-3.1.1">Registrar-agent: possesses its own credentials (EE (RegAgt) certificate and corresponding private key) of the domain.
 In addition, it <span class="bcp14">MAY</span> possess the IDevID CA certificate of the pledge vendor/manufacturer to verify the pledge certificate in the received request messages.
 It has the address of the domain registrar through configuration or by discovery, e.g., mDNS/DNSSD.
 The registrar-agent has acquired one or more PVR and PER objects.<a href="#section-6.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.2-3.2">
-            <p id="section-6.2-3.2.1">Registrar (same as in BRSKI): possesses the IDevID CA certificate of the pledge vendor/manufacturer and its own registrar EE credentials of the site domain.<a href="#section-6.2-3.2.1" class="pilcrow">¶</a></p>
+            <p id="section-6.2-3.2.1">Registrar (same as in BRSKI): possesses the IDevID CA certificate of the pledge vendor/manufacturer and its own registrar EE credentials of the domain.<a href="#section-6.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.2-3.3">
             <p id="section-6.2-3.3.1">MASA (same as in BRSKI): possesses its own vendor/manufacturer credentials (voucher signing key and certificate, TLS server certificate and private key) related to pledges IDevID and <span class="bcp14">MAY</span> possess the site-specific domain CA certificate.<a href="#section-6.2-3.3.1" class="pilcrow">¶</a></p>
@@ -4622,9 +4630,13 @@ Support in PoC implementations and comments resulting from the implementation wa
         <dd>
 <span class="refTitle">"Abstract BRSKI-PRM Protocol Overview"</span>, <time datetime="2022-03" class="refDate">March 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/meeting/113/materials/slides-113-anima-update-on-brski-with-pledge-in-responder-mode-brski-prm-00">https://datatracker.ietf.org/meeting/113/materials/slides-113-anima-update-on-brski-with-pledge-in-responder-mode-brski-prm-00</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="I-D.eckert-anima-brski-discovery">[I-D.eckert-anima-brski-discovery]</dt>
+        <dd>
+<span class="refAuthor">Eckert, T. T.</span>, <span class="refTitle">"Discovery for BRSKI variations"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-eckert-anima-brski-discovery-00</span>, <time datetime="2023-09-18" class="refDate">18 September 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-eckert-anima-brski-discovery-00">https://datatracker.ietf.org/doc/html/draft-eckert-anima-brski-discovery-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="I-D.ietf-anima-brski-ae">[I-D.ietf-anima-brski-ae]</dt>
         <dd>
-<span class="refAuthor">von Oheimb, D.</span>, <span class="refAuthor">Fries, S.</span>, and <span class="refAuthor">H. Brockhaus</span>, <span class="refTitle">"BRSKI-AE: Alternative Enrollment Protocols in BRSKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-brski-ae-05</span>, <time datetime="2023-06-28" class="refDate">28 June 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-05">https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-05</a>&gt;</span>. </dd>
+<span class="refAuthor">von Oheimb, D.</span>, <span class="refAuthor">Fries, S.</span>, and <span class="refAuthor">H. Brockhaus</span>, <span class="refTitle">"BRSKI-AE: Alternative Enrollment Protocols in BRSKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-brski-ae-06</span>, <time datetime="2023-10-20" class="refDate">20 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-06">https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-06</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.irtf-t2trg-taxonomy-manufacturer-anchors">[I-D.irtf-t2trg-taxonomy-manufacturer-anchors]</dt>
         <dd>
@@ -5210,40 +5222,46 @@ IDevID certificates are intended to be widely useable and EKU does not support t
 <p id="appendix-C-2">From IETF draft 09 -&gt; IETF draft 10:<a href="#appendix-C-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-3.1">
-          <p id="appendix-C-3.1.1">issue #93, included information about conflict resolution in mDNS and GRASP in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.3.2</a><a href="#appendix-C-3.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.1.1">issue #79, clarified discovery in the context of BRSKI-PRM and included information about future discovery enhancements in a separate draft in <a href="#discovery_uc2_reg" class="auto internal xref">Section 5.3.1</a>.<a href="#appendix-C-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.2">
-          <p id="appendix-C-3.2.1">issue #103, included verification handling for the wrapped CA certificate provisioning in <a href="#exchanges_uc2_3c" class="auto internal xref">Section 6.3.3</a><a href="#appendix-C-3.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.2.1">issue #93, included information about conflict resolution in mDNS and GRASP in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.3.2</a><a href="#appendix-C-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.3">
-          <p id="appendix-C-3.3.1">issue #106, included additional text to elaborate more the registrar status handling in <a href="#exchanges_uc2_4" class="auto internal xref">Section 6.3.6</a><a href="#appendix-C-3.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.3.1">issue #103, included verification handling for the wrapped CA certificate provisioning in <a href="#exchanges_uc2_3c" class="auto internal xref">Section 6.3.3</a><a href="#appendix-C-3.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.4">
-          <p id="appendix-C-3.4.1">issue #116, enhanced DoS description in <a href="#sec_cons-dos" class="auto internal xref">Section 10.1</a><a href="#appendix-C-3.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.4.1">issue #106, included additional text to elaborate more the registrar status handling in <a href="#exchanges_uc2_4" class="auto internal xref">Section 6.3.6</a><a href="#appendix-C-3.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.5">
-          <p id="appendix-C-3.5.1">issue #120, included statement regarding pledge host header processing in <a href="#pledge_ep" class="auto internal xref">Section 5.2</a><a href="#appendix-C-3.5.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.5.1">issue #116, enhanced DoS description in <a href="#sec_cons-dos" class="auto internal xref">Section 10.1</a><a href="#appendix-C-3.5.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.6">
-          <p id="appendix-C-3.6.1">issue #122, availability of serial number information on registrar agent clarified in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a><a href="#appendix-C-3.6.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.6.1">issue #120, included statement regarding pledge host header processing in <a href="#pledge_ep" class="auto internal xref">Section 5.2</a><a href="#appendix-C-3.6.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.7">
-          <p id="appendix-C-3.7.1">issue #123, Clarified usage of alternative voucher formats in  <a href="#rvr-proc" class="auto internal xref">Section 6.2.3</a><a href="#appendix-C-3.7.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.7.1">issue #122, availability of serial number information on registrar agent clarified in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a><a href="#appendix-C-3.7.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.8">
-          <p id="appendix-C-3.8.1">issue #124, determination of pinned domain certificate done as in RFC 8995 included in <a href="#exchanges_uc2_2_vc" class="auto internal xref">Section 6.2.4</a><a href="#appendix-C-3.8.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.8.1">issue #123, Clarified usage of alternative voucher formats in  <a href="#rvr-proc" class="auto internal xref">Section 6.2.3</a><a href="#appendix-C-3.8.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.9">
-          <p id="appendix-C-3.9.1">issue #125, remove strength comparison of voucher assertions in <a href="#agt_prx" class="auto internal xref">Section 5.1</a> and <a href="#exchanges_uc2" class="auto internal xref">Section 6</a><a href="#appendix-C-3.9.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.9.1">issue #124, determination of pinned domain certificate done as in RFC 8995 included in <a href="#exchanges_uc2_2_vc" class="auto internal xref">Section 6.2.4</a><a href="#appendix-C-3.9.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.10">
-          <p id="appendix-C-3.10.1">changed naming of registrar certificate from LDevID(RegAgt) to EE (RegAgt) certificate throughout the document<a href="#appendix-C-3.10.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.10.1">issue #125, remove strength comparison of voucher assertions in <a href="#agt_prx" class="auto internal xref">Section 5.1</a> and <a href="#exchanges_uc2" class="auto internal xref">Section 6</a><a href="#appendix-C-3.10.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.11">
-          <p id="appendix-C-3.11.1">change x5b to x5bag according to <span>[<a href="#RFC9360" class="cite xref">RFC9360</a>]</span><a href="#appendix-C-3.11.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.11.1">issue #130, aligned the usage of site and domain throughout the document<a href="#appendix-C-3.11.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.12">
-          <p id="appendix-C-3.12.1">updated JSON examples -&gt; "signature": BASE64URL(JWS Signature)<a href="#appendix-C-3.12.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.12.1">changed naming of registrar certificate from LDevID(RegAgt) to EE (RegAgt) certificate throughout the document<a href="#appendix-C-3.12.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-3.13">
+          <p id="appendix-C-3.13.1">change x5b to x5bag according to <span>[<a href="#RFC9360" class="cite xref">RFC9360</a>]</span><a href="#appendix-C-3.13.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-3.14">
+          <p id="appendix-C-3.14.1">updated JSON examples -&gt; "signature": BASE64URL(JWS Signature)<a href="#appendix-C-3.14.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-C-4">From IETF draft 08 -&gt; IETF draft 09:<a href="#appendix-C-4" class="pilcrow">¶</a></p>
