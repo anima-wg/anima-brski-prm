@@ -98,6 +98,7 @@ informative:
   RFC9238:
   I-D.ietf-anima-brski-ae:
   I-D.richardson-emu-eap-onboarding:
+  I-D.eckert-anima-brski-discovery:
   IEEE-802.1AR:
     title: IEEE 802.1AR Secure Device Identifier
     author:
@@ -570,9 +571,12 @@ The following information MUST be available at the registrar-agent before intera
 
 ### Discovery of Registrar by Registrar-Agent {#discovery_uc2_reg}
 
-The discovery of the domain registrar may be done as specified in {{RFC8995}} section 4 with the
-deviation that it is done between the registrar-agent and the domain registrar.
-Alternatively, the registrar-agent may be configured with the address of the domain registrar and the certificate of the domain registrar.
+As a registrar-agent acts as representative of the domain registrar towards the pledge or may even be collocated with the domain registrar, a separate discovery of the registrar is likely not needed as registrar-agent and registrar are domain components and have a trust relation. 
+Nevertheless, a registrar-agent may discover a registrar using the basic mechanism specified in section 4 and the appendix A.2 of {{RFC8995}}. 
+Note that this discovery, does not provide information on specific capabilities of registrars. 
+As a more general solution, the BRSKI discovery mechanism can be extended to provide upfront information on the capabilities of registrars, such as the mode of operation (pledge-responder-mode or registrar-responder-mode). 
+Defining discovery extensions is out of scope of this document. 
+This may be provided in {{I-D.eckert-anima-brski-discovery}}. 
 
 
 ### Discovery of Pledge by Registrar-Agent {#discovery_uc2_ppa}
@@ -2590,6 +2594,7 @@ Proof of Concept Code available
 
 From IETF draft 09 -> IETF draft 10:
 
+* issue #79, clarified discovery in the context of BRSKI-PRM and included information about future discovery enhancements in a separate draft in {{discovery_uc2_reg}}.
 * issue #93, included information about conflict resolution in mDNS and GRASP in {{discovery_uc2_ppa}}
 * issue #103, included verification handling for the wrapped CA certificate provisioning in {{exchanges_uc2_3c}}
 * issue #106, included additional text to elaborate more the registrar status handling in {{exchanges_uc2_4}}
