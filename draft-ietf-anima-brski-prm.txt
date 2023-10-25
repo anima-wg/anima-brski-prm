@@ -353,9 +353,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
       the domain registrar to the MASA.  It may contain the PVR received
       from the pledge.
 
-   site:  In the context of this document the term site is considered as
-      synonymously to domain as defined in [RFC8995].
-
    This document includes many examples that would contain many long
    sequences of base64 encoded objects with no content directly
    comprehensible to a human reader.  In order to keep those examples
@@ -383,6 +380,9 @@ Internet-Draft                  BRSKI-PRM                   October 2023
    disconnected from the Internet, e.g., critical industrial facilities.
    Another example is the assembly of electrical cabinets, which are
    prepared in advance before the installation at a customer domain.
+
+
+
 
 
 
@@ -713,15 +713,15 @@ Internet-Draft                  BRSKI-PRM                   October 2023
       is able to distinguish a pledge from a registrar-agent during the
       TLS session establishment and also to verify that this registrar-
       agent is authorized to perform the bootstrapping of the distinct
-      pledge.
+      pledge.  The registrar-agent may be realized as stand-alone
+      component supporting nomadic activities of a service technician
+      moving between different installation sites.  Contrary, the
+      registrar-agent may also be realized as co-located functionality
+      for a registrar, to support pledges in pledge-responder-mode.
 
    *  Join Proxy (not shown): same functionality as described in
       [RFC8995] if needed.  Note that a registrar-agent may use a join
       proxy to facilitate the TLS connection to the registrar, in the
-      same way that a BRSKI pledge would use a join proxy.  This is
-      useful in cases where the registrar-agent does not have full IP
-      connectivity via the domain network, or cases where it has no
-      other means to locate the registrar on the network.
 
 
 
@@ -729,6 +729,11 @@ Fries, et al.             Expires 27 April 2024                [Page 13]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+      same way that a BRSKI pledge would use a join proxy.  This is
+      useful in cases where the registrar-agent does not have full IP
+      connectivity via the domain network, or cases where it has no
+      other means to locate the registrar on the network.
 
    *  Domain Registrar: In general, the domain registrar fulfills the
       same functionality regarding the bootstrapping of the pledge in a
@@ -773,11 +778,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
    the domain owner, into the PVR trigger message.  The registrar-agent
    identity is therefore included into the Pledge Voucher Request (PVR).
 
-   Akin to the BRSKI case, the pledge has provided proximity evidence to
-   the MASA.  But additionally, this allows the Registrar to be sure
-   that the PVR collected by the Registrar-Agent was in fact collected
-   by the Registrar-Agent to which the Registrar is connected to.
-
 
 
 
@@ -785,6 +785,11 @@ Fries, et al.             Expires 27 April 2024                [Page 14]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   Akin to the BRSKI case, the pledge has provided proximity evidence to
+   the MASA.  But additionally, this allows the Registrar to be sure
+   that the PVR collected by the Registrar-Agent was in fact collected
+   by the Registrar-Agent to which the Registrar is connected to.
 
    In a similar fashion, the pledge accepts the registrar certificate
    provisionally until it receives the voucher as described in
@@ -827,11 +832,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
    discovery protocol, and that is what will be present in the Host:
    header.
 
-   The pledge MUST respond to all queries regardless of what Host:
-   header is provided by the client.  [RFC9110], Section 7.2 makes the
-   Host: header mandatory, so it will always be present.
-
-   Operations and their corresponding URIs:
 
 
 
@@ -841,6 +841,12 @@ Fries, et al.             Expires 27 April 2024                [Page 15]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   The pledge MUST respond to all queries regardless of what Host:
+   header is provided by the client.  [RFC9110], Section 7.2 makes the
+   Host: header mandatory, so it will always be present.
+
+   Operations and their corresponding URIs:
 
        +======================================+==========+=========+
        | Operation                            | Endpoint | Details |
@@ -882,12 +888,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
    The communication between the registrar-agent and the pledge MAY be
    protected using TLS as outlined in Section 6.1.  The details of doing
    TLS validation are Appendix B.
-
-
-
-
-
-
 
 
 
@@ -1303,7 +1303,7 @@ Internet-Draft                  BRSKI-PRM                   October 2023
          document and may be done by a manual configuration.
 
       -  possesses own credentials (EE (RegAgt) certificate and
-         corresponding private key) for the registrar domain (site).  In
+         corresponding private key) for the registrar domain.  In
          addition, the registrar-agent SHOULD know the product-serial-
          number(s) of the pledge(s) to be bootstrapped.  The registrar-
          agent MAY be provided with the product-serial-number(s) in
@@ -4630,17 +4630,17 @@ Appendix C.  History of Changes [RFC Editor: please delete]
       wrapped CA certificate provisioning as only applicable after
       enrollment Section 6.3.3
 
+   *  issue #128: included notation of nomadic operation of the
+      registrar-agent in Section 5
+
    *  issue #130, introduced DNS service discovery name for brski_pledge
       to enable discovery by the registrar-agent in Section 8
 
    *  removed unused reference RFC 5280
 
+   *  removed site terminology
+
    From IETF draft 09 -> IETF draft 10:
-
-   *  issue #79, clarified discovery in the context of BRSKI-PRM and
-      included information about future discovery enhancements in a
-      separate draft in Section 5.3.1.
-
 
 
 
@@ -4649,6 +4649,10 @@ Fries, et al.             Expires 27 April 2024                [Page 83]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   *  issue #79, clarified discovery in the context of BRSKI-PRM and
+      included information about future discovery enhancements in a
+      separate draft in Section 5.3.1.
 
    *  issue #93, included information about conflict resolution in mDNS
       and GRASP in Section 5.3.2
@@ -4694,10 +4698,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
    *  issue #81, enhanced introduction with motivation for
       agent_signed_data
 
-   *  issue #82, included optional TLS protection of the communication
-      link between registrar-agent and pledge in the introduction
-      Section 4, and Section 6.1
-
 
 
 
@@ -4705,6 +4705,10 @@ Fries, et al.             Expires 27 April 2024                [Page 84]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   *  issue #82, included optional TLS protection of the communication
+      link between registrar-agent and pledge in the introduction
+      Section 4, and Section 6.1
 
    *  issue #83, enhanced Section 6.1.4 and Section 6.2.6 with note to
       re-enrollment
@@ -4750,10 +4754,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
 
    *  issue #105: included negative example in Figure 16
 
-   *  issue #107: included example for certificate revocation in
-      Section 6.3.6
-
-
 
 
 
@@ -4761,6 +4761,9 @@ Fries, et al.             Expires 27 April 2024                [Page 85]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   *  issue #107: included example for certificate revocation in
+      Section 6.3.6
 
    *  issue #108: renamed heading to Pledge-Status Request of
       Section 6.4.1
@@ -4807,9 +4810,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
 
    *  Update of list of reviewers
 
-   *  Issue #67, shortened the pledge endpoints to prepare for
-      constraint deployments
-
 
 
 
@@ -4817,6 +4817,9 @@ Fries, et al.             Expires 27 April 2024                [Page 86]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   *  Issue #67, shortened the pledge endpoints to prepare for
+      constraint deployments
 
    *  Included table for new endpoints on the registrar in the overview
       of the registrar-agent
@@ -4863,9 +4866,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
    *  Reworked terminology of "enrollment object", "certification
       object", "enrollment request object", etc., issue #27
 
-   *  Reworked all message representations to align with encoding
-
-
 
 
 
@@ -4873,6 +4873,8 @@ Fries, et al.             Expires 27 April 2024                [Page 87]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   *  Reworked all message representations to align with encoding
 
    *  Added explanation of MASA requiring domain CA cert in section
       5.5.1 and section 5.5.2, issue #36
@@ -4920,8 +4922,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
       #18
 
    *  Simplified structure in section Section 3.1, issue #19
-
-
 
 
 

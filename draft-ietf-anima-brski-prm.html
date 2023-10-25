@@ -1694,11 +1694,6 @@ In BRSKI-PRM this is a functionality of the domain registrar, as in BRSKI <span>
           <p id="section-2-3.32.1">Registrar Voucher-Request is a request for a voucher signed by the domain registrar to the MASA.
 It may contain the PVR received from the pledge.<a href="#section-2-3.32.1" class="pilcrow">¶</a></p>
 </dd>
-        <dd class="break"></dd>
-<dt id="section-2-3.33">site:</dt>
-        <dd style="margin-left: 1.5em" id="section-2-3.34">
-          <p id="section-2-3.34.1">In the context of this document the term site is considered as synonymously to domain as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-2-3.34.1" class="pilcrow">¶</a></p>
-</dd>
       <dd class="break"></dd>
 </dl>
 <p id="section-2-4">This document includes many examples that would contain many long sequences of base64 encoded objects with no content directly comprehensible to a human reader.
@@ -2009,7 +2004,9 @@ The registrar-agent is expected to possess information about the domain registra
 There is no trust assumption between the pledge and the registrar-agent as only authenticated self-contained objects are used, which are transported via the registrar-agent and provided either by the pledge or the registrar.
 The trust assumption between the registrar-agent and the registrar is based on the LDevID of the registrar-agent, provided by the PKI responsible for the domain.
 This allows the registrar-agent to authenticate towards the registrar, e.g., in a TLS handshake.
-Based on this, the registrar is able to distinguish a pledge from a registrar-agent during the TLS session establishment and also to verify that this registrar-agent is authorized to perform the bootstrapping of the distinct pledge.<a href="#section-5-11.2.1" class="pilcrow">¶</a></p>
+Based on this, the registrar is able to distinguish a pledge from a registrar-agent during the TLS session establishment and also to verify that this registrar-agent is authorized to perform the bootstrapping of the distinct pledge.
+The registrar-agent may be realized as stand-alone component supporting nomadic activities of a service technician moving between different installation sites. 
+Contrary, the registrar-agent may also be realized as co-located functionality for a registrar, to support pledges in pledge-responder-mode.<a href="#section-5-11.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-11.3">
           <p id="section-5-11.3.1">Join Proxy (not shown): same functionality as described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> if needed.
@@ -2623,7 +2620,7 @@ This may be done as described in <a href="#discovery_uc2_ppa" class="auto intern
 The distribution of IDevID CA certificates to the registrar-agent is out of scope of this document and may be done by a manual configuration.<a href="#section-6.1-4.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-6.1-4.2.2.2">
-                <p id="section-6.1-4.2.2.2.1">possesses own credentials (EE (RegAgt) certificate and corresponding private key) for the registrar domain (site).
+                <p id="section-6.1-4.2.2.2.1">possesses own credentials (EE (RegAgt) certificate and corresponding private key) for the registrar domain.
 In addition, the registrar-agent <span class="bcp14">SHOULD</span> know the product-serial-number(s) of the pledge(s) to be bootstrapped.
 The registrar-agent <span class="bcp14">MAY</span> be provided with the product-serial-number(s) in different ways:<a href="#section-6.1-4.2.2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -5235,10 +5232,16 @@ IDevID certificates are intended to be widely useable and EKU does not support t
           <p id="appendix-C-3.1.1">issue #103, removed step 6 in verification handling for the wrapped CA certificate provisioning as only applicable after enrollment <a href="#exchanges_uc2_3c" class="auto internal xref">Section 6.3.3</a><a href="#appendix-C-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.2">
-          <p id="appendix-C-3.2.1">issue #130, introduced DNS service discovery name for brski_pledge to enable discovery by the registrar-agent in <a href="#iana-con" class="auto internal xref">Section 8</a><a href="#appendix-C-3.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.2.1">issue #128: included notation of nomadic operation of the registrar-agent in <a href="#architecture" class="auto internal xref">Section 5</a><a href="#appendix-C-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.3">
-          <p id="appendix-C-3.3.1">removed unused reference RFC 5280<a href="#appendix-C-3.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.3.1">issue #130, introduced DNS service discovery name for brski_pledge to enable discovery by the registrar-agent in <a href="#iana-con" class="auto internal xref">Section 8</a><a href="#appendix-C-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-3.4">
+          <p id="appendix-C-3.4.1">removed unused reference RFC 5280<a href="#appendix-C-3.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-3.5">
+          <p id="appendix-C-3.5.1">removed site terminology<a href="#appendix-C-3.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-C-4">From IETF draft 09 -&gt; IETF draft 10:<a href="#appendix-C-4" class="pilcrow">¶</a></p>

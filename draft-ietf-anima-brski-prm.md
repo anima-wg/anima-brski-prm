@@ -245,9 +245,6 @@ RVR:
 : Registrar Voucher-Request is a request for a voucher signed by the domain registrar to the MASA.
 It may contain the PVR received from the pledge.
 
-site:
-: In the context of this document the term site is considered as synonymously to domain as defined in {{RFC8995}}.
-
 This document includes many examples that would contain many long sequences of base64 encoded objects with no content directly comprehensible to a human reader.
 In order to keep those examples short, they use the token "base64encodedvalue==" as a placeholder for base64 data.
 The full base64 data is included in the appendices of this document.
@@ -433,6 +430,8 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
   The trust assumption between the registrar-agent and the registrar is based on the LDevID of the registrar-agent, provided by the PKI responsible for the domain.
   This allows the registrar-agent to authenticate towards the registrar, e.g., in a TLS handshake.
   Based on this, the registrar is able to distinguish a pledge from a registrar-agent during the TLS session establishment and also to verify that this registrar-agent is authorized to perform the bootstrapping of the distinct pledge.
+  The registrar-agent may be realized as stand-alone component supporting nomadic activities of a service technician moving between different installation sites. 
+  Contrary, the registrar-agent may also be realized as co-located functionality for a registrar, to support pledges in pledge-responder-mode.
 
 * Join Proxy (not shown): same functionality as described in {{RFC8995}} if needed.
   Note that a registrar-agent may use a join proxy to facilitate the TLS connection to the registrar, in the same way that a BRSKI pledge would use a join proxy. This is useful in cases where the registrar-agent does not have full IP connectivity via the domain network, or cases where it has no other means to locate the registrar on the network.
@@ -744,7 +743,7 @@ Preconditions:
 * Registrar-agent:
   * MAY handle/trusts pledge's IDevID CA certificate to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication.
   The distribution of IDevID CA certificates to the registrar-agent is out of scope of this document and may be done by a manual configuration.
-  * possesses own credentials (EE (RegAgt) certificate and corresponding private key) for the registrar domain (site).
+  * possesses own credentials (EE (RegAgt) certificate and corresponding private key) for the registrar domain.
   In addition, the registrar-agent SHOULD know the product-serial-number(s) of the pledge(s) to be bootstrapped.
   The registrar-agent MAY be provided with the product-serial-number(s) in different ways:
     * configured, e.g., as a list of pledges to be bootstrapped via QR code scanning
@@ -2606,8 +2605,10 @@ Proof of Concept Code available
 From IETF draft 10 -> IETF draft 11:
 
 * issue #103, removed step 6 in verification handling for the wrapped CA certificate provisioning as only applicable after enrollment {{exchanges_uc2_3c}}
+* issue #128: included notation of nomadic operation of the registrar-agent in {{architecture}}
 * issue #130, introduced DNS service discovery name for brski_pledge to enable discovery by the registrar-agent in {{iana-con}
 * removed unused reference RFC 5280
+* removed site terminology
 
 From IETF draft 09 -> IETF draft 10:
 
