@@ -68,7 +68,6 @@ venue:
   anima mail: {anima@ietf.org}
   github: anima-wg/anima-brski-prm
 normative:
-  RFC5280:
   RFC6762:
   RFC6763:
   RFC7030:
@@ -2607,7 +2606,8 @@ Proof of Concept Code available
 From IETF draft 10 -> IETF draft 11:
 
 * issue #103, removed step 6 in verification handling for the wrapped CA certificate provisioning as only applicable after enrollment {{exchanges_uc2_3c}}
-* issue #130, introduced DNS service discovery name for brski_pledge to enable discovery by the registrar-agent in {{iana-con}}.
+* issue #130, introduced DNS service discovery name for brski_pledge to enable discovery by the registrar-agent in {{iana-con}
+* removed unused reference RFC 5280
 
 From IETF draft 09 -> IETF draft 10:
 
