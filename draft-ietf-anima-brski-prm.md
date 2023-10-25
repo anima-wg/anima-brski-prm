@@ -1646,7 +1646,6 @@ The verification comprises the following steps the pledge MUST perform. Maintain
   3. Verify that the wrapped CA certificate object is signed using the registrar certificate against the pinned-domain certificate. This MAY be done by comparing the hash that is indicating the certificate used to sign the message is that of the pinned-domain certificate. If the validation against the pinned domain-certificate fails, the client SHOULD reply with a 401 Unauthorized error code. It signals that the authentication has failed and therefore the object was not accepted.
   4. Verify signature of the the received wrapped CA certificate object. If the validation of the signature fails, the pledge SHOULD reply with a 406 Not Acceptable. It signals that the object has not been accepted.
   5. If the received CA certificates are not self-signed, i.e., an intermediate CA certificate, verify them against an already installed trust anchor, as described in section 4.1.3 of [RFC7030].
-  6. The pledge MAY may verify that the LDevID and the pinned-domain-cert can be validated against one of the received TA.
 
 
 ### Pledge: Enrollment-Response Processing
@@ -2607,6 +2606,7 @@ Proof of Concept Code available
 
 From IETF draft 10 -> IETF draft 11:
 
+* issue #103, removed step 6 in verification handling for the wrapped CA certificate provisioning as only applicable after enrollment {{exchanges_uc2_3c}}
 * issue #130, introduced DNS service discovery name for brski_pledge to enable discovery by the registrar-agent in {{iana-con}}.
 
 From IETF draft 09 -> IETF draft 10:
