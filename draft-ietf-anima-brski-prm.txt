@@ -1016,15 +1016,18 @@ Internet-Draft                  BRSKI-PRM                   October 2023
    towards the pledge or may even be collocated with the domain
    registrar, a separate discovery of the registrar is likely not needed
    as registrar-agent and registrar are domain components and have a
-   trust relation.  Nevertheless, a registrar-agent may discover a
-   registrar using the basic mechanism specified in section 4 and the
-   appendix A.2 of [RFC8995].  Note that this discovery, does not
-   provide information on specific capabilities of registrars.  As a
-   more general solution, the BRSKI discovery mechanism can be extended
-   to provide upfront information on the capabilities of registrars,
-   such as the mode of operation (pledge-responder-mode or registrar-
-   responder-mode).  Defining discovery extensions is out of scope of
-   this document.  This may be provided in
+   trust relation.  Moreover, other communication (not part of this
+   document) between the registrar-agent and the registrar is assumed,
+   e.g., to exchange information about serial numbers of pledges to be
+   discovered.  Therefore, standard discovery as described in section 4
+   and the appendix A.2 of [RFC8995] is not required, respectively may
+   not support the discovery of a registrar with supporting BRSK-PRM.
+
+   As a more general solution, the BRSKI discovery mechanism can be
+   extended to provide upfront information on the capabilities of
+   registrars, such as the mode of operation (pledge-responder-mode or
+   registrar-responder-mode).  Defining discovery extensions is out of
+   scope of this document.  This may be provided in
    [I-D.eckert-anima-brski-discovery].
 
 5.3.2.  Discovery of Pledge by Registrar-Agent
@@ -1055,9 +1058,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
    commissioning tool to discover pledges to be bootstrapped in the
    domain.  The manufacturer support this functionality as outlined in
    Section 10.4.
-
-
-
 
 
 
@@ -4626,6 +4626,9 @@ Appendix C.  History of Changes [RFC Editor: please delete]
 
    From IETF draft 10 -> IETF draft 11:
 
+   *  issue #79, clarified that BRSKI discovery in the context of BRSKI-
+      PRM is not needed in Section 5.3.1.
+
    *  issue #103, removed step 6 in verification handling for the
       wrapped CA certificate provisioning as only applicable after
       enrollment Section 6.3.3
@@ -4640,15 +4643,14 @@ Appendix C.  History of Changes [RFC Editor: please delete]
 
    *  removed site terminology
 
-   From IETF draft 09 -> IETF draft 10:
-
-
 
 
 Fries, et al.             Expires 27 April 2024                [Page 83]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   From IETF draft 09 -> IETF draft 10:
 
    *  issue #79, clarified discovery in the context of BRSKI-PRM and
       included information about future discovery enhancements in a
@@ -4695,8 +4697,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
    *  issue #80, enhanced Section 5.3.2 with clarification on the serial
       number and the inclusion of GRASP
 
-   *  issue #81, enhanced introduction with motivation for
-      agent_signed_data
 
 
 
@@ -4705,6 +4705,9 @@ Fries, et al.             Expires 27 April 2024                [Page 84]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   *  issue #81, enhanced introduction with motivation for
+      agent_signed_data
 
    *  issue #82, included optional TLS protection of the communication
       link between registrar-agent and pledge in the introduction
@@ -4752,15 +4755,14 @@ Internet-Draft                  BRSKI-PRM                   October 2023
    *  issue #102: relaxed requirements for CA certs provisioning in
       Section 6.3.3
 
-   *  issue #105: included negative example in Figure 16
-
-
 
 
 Fries, et al.             Expires 27 April 2024                [Page 85]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   *  issue #105: included negative example in Figure 16
 
    *  issue #107: included example for certificate revocation in
       Section 6.3.6
@@ -4808,8 +4810,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
 
    From IETF draft 05 -> IETF draft 06:
 
-   *  Update of list of reviewers
-
 
 
 
@@ -4817,6 +4817,8 @@ Fries, et al.             Expires 27 April 2024                [Page 86]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   *  Update of list of reviewers
 
    *  Issue #67, shortened the pledge endpoints to prepare for
       constraint deployments
@@ -4863,8 +4865,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
    *  Issue #47 MASA verification of LDevID(RegAgt) to the same
       registrar LDevID certificate domain CA
 
-   *  Reworked terminology of "enrollment object", "certification
-      object", "enrollment request object", etc., issue #27
 
 
 
@@ -4873,6 +4873,9 @@ Fries, et al.             Expires 27 April 2024                [Page 87]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   *  Reworked terminology of "enrollment object", "certification
+      object", "enrollment request object", etc., issue #27
 
    *  Reworked all message representations to align with encoding
 
@@ -4918,10 +4921,7 @@ Internet-Draft                  BRSKI-PRM                   October 2023
    *  Added clarification that registrar-agent may collect PVR or PER or
       both in one run, issue #17
 
-   *  Added a statement that nonceless voucher may be accepted, issue
-      #18
 
-   *  Simplified structure in section Section 3.1, issue #19
 
 
 
@@ -4929,6 +4929,11 @@ Fries, et al.             Expires 27 April 2024                [Page 88]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   *  Added a statement that nonceless voucher may be accepted, issue
+      #18
+
+   *  Simplified structure in section Section 3.1, issue #19
 
    *  Removed join proxy in Figure 1 and added explanatory text, issue
       #20
@@ -4973,11 +4978,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
       pledge voucher-request or an enrollment request in section
       Section 6.1
 
-   *  Removed open issue regarding handling of multiple CSRs and
-      enrollment responses during the bootstrapping as the initial
-      target it the provisioning of a generic LDevID certificate.  The
-      defined endpoint on the pledge may also be used for management of
-      further certificates.
 
 
 
@@ -4985,6 +4985,12 @@ Fries, et al.             Expires 27 April 2024                [Page 89]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   *  Removed open issue regarding handling of multiple CSRs and
+      enrollment responses during the bootstrapping as the initial
+      target it the provisioning of a generic LDevID certificate.  The
+      defined endpoint on the pledge may also be used for management of
+      further certificates.
 
    From IETF draft 00 -> IETF draft 01:
 
@@ -5026,12 +5032,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
    *  Note added in Section 6.2 if sub-CAs are used, that the
       corresponding information is to be provided to the MASA.
 
-   *  Inclusion of limitation section (pledge sleeps and needs to be
-      waked up.  Pledge is awake but registrar-agent is not available)
-      (Issue #10).
-
-   *  Assertion-type aligned with voucher in RFC8366bis, deleted related
-      open issues.  (Issue #4)
 
 
 
@@ -5041,6 +5041,13 @@ Fries, et al.             Expires 27 April 2024                [Page 90]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   *  Inclusion of limitation section (pledge sleeps and needs to be
+      waked up.  Pledge is awake but registrar-agent is not available)
+      (Issue #10).
+
+   *  Assertion-type aligned with voucher in RFC8366bis, deleted related
+      open issues.  (Issue #4)
 
    *  Included table for endpoints in Section 5.2 for better
       readability.
@@ -5082,6 +5089,15 @@ Internet-Draft                  BRSKI-PRM                   October 2023
       to allow better listing of voucher related extensions; aligned
       with constraint voucher (#20)
 
+
+
+
+
+Fries, et al.             Expires 27 April 2024                [Page 91]
+
+Internet-Draft                  BRSKI-PRM                   October 2023
+
+
    *  Utilized ietf-voucher-request-async instead of ietf-voucher-
       request in voucher exchanges to utilize the enhanced voucher-
       request.
@@ -5090,13 +5106,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
       YANG definition of csr-types into the enrollment request exchange.
 
    From IETF draft 02 -> IETF draft 03:
-
-
-
-Fries, et al.             Expires 27 April 2024                [Page 91]
-
-Internet-Draft                  BRSKI-PRM                   October 2023
-
 
    *  Housekeeping, deleted open issue regarding YANG voucher-request in
       Section 6.1 as voucher-request was enhanced with additional leaf.
@@ -5138,21 +5147,19 @@ Internet-Draft                  BRSKI-PRM                   October 2023
       to allow the registrar to verify agent-proximity to the pledge
       (issue #1) in Section 6.
 
-   *  Details on trust relationship between registrar-agent and pledge
-      (issue #5) included in Section 5.
-
-   *  Split of use case 2 call flow into sub sections in Section 6.
-
-   From IETF draft 00 -> IETF draft 01:
-
-
-
 
 
 Fries, et al.             Expires 27 April 2024                [Page 92]
 
 Internet-Draft                  BRSKI-PRM                   October 2023
 
+
+   *  Details on trust relationship between registrar-agent and pledge
+      (issue #5) included in Section 5.
+
+   *  Split of use case 2 call flow into sub sections in Section 6.
+
+   From IETF draft 00 -> IETF draft 01:
 
    *  Update of scope in Section 3.1 to include in which the pledge acts
       as a server.  This is one main motivation for use case 2.
@@ -5193,6 +5200,16 @@ Internet-Draft                  BRSKI-PRM                   October 2023
       Shortened description of proof of identity binding and mapping to
       existing protocols.
 
+
+
+
+
+
+Fries, et al.             Expires 27 April 2024                [Page 93]
+
+Internet-Draft                  BRSKI-PRM                   October 2023
+
+
    *  Removal of copied call flows for voucher exchange and registrar
       discovery flow from [RFC8995] in UC1 to avoid doubling or text or
       inconsistencies.
@@ -5202,13 +5219,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
       have a better distinction between requirements, use case
       description, and solution description as separate sections.
       History moved to appendix.
-
-
-
-Fries, et al.             Expires 27 April 2024                [Page 93]
-
-Internet-Draft                  BRSKI-PRM                   October 2023
-
 
    From individual version 02 -> 03:
 
@@ -5245,6 +5255,17 @@ Internet-Draft                  BRSKI-PRM                   October 2023
    *  Update of examples, specifically for building automation as well
       as two new application use cases in Section 3.1.
 
+
+
+
+
+
+
+Fries, et al.             Expires 27 April 2024                [Page 94]
+
+Internet-Draft                  BRSKI-PRM                   October 2023
+
+
    *  Deletion of asynchronous interaction with MASA to not complicate
       the use case.  Note that the voucher exchange can already be
       handled in an asynchronous manner and is therefore not considered
@@ -5256,15 +5277,6 @@ Internet-Draft                  BRSKI-PRM                   October 2023
 
    *  Consideration of existing enrollment protocols in the context of
       mapping the requirements to existing solutions in Section 4.
-
-
-
-
-
-Fries, et al.             Expires 27 April 2024                [Page 94]
-
-Internet-Draft                  BRSKI-PRM                   October 2023
-
 
    *  New section starting with the mapping to existing enrollment
       protocols by collecting boundary conditions.
@@ -5302,6 +5314,14 @@ Authors' Addresses
    81739 Munich
    Germany
    Email: thomas-werner@siemens.com
+
+
+
+Fries, et al.             Expires 27 April 2024                [Page 95]
+
+Internet-Draft                  BRSKI-PRM                   October 2023
+
+
    URI:   https://www.siemens.com/
 
 
@@ -5314,30 +5334,10 @@ Authors' Addresses
    Email: lear@cisco.com
 
 
-
-
-
-Fries, et al.             Expires 27 April 2024                [Page 95]
-
-Internet-Draft                  BRSKI-PRM                   October 2023
-
-
    Michael C. Richardson
    Sandelman Software Works
    Email: mcr+ietf@sandelman.ca
    URI:   http://www.sandelman.ca/
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
