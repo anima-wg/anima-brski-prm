@@ -341,7 +341,9 @@ Solution examples based on existing technology are provided with the focus on ex
   While BRSKI uses the binding to TLS, BRSKI-PRM aims at an additional signature of the PKCS#10 using existing credentials on the pledge (IDevID). This allows the process to be independent of the selected transport.
 
 
-# Architectural Overview {#architecture}
+# Architecture {#architecture}
+
+## Overview
 
 For BRSKI with pledge in responder mode, the base system architecture defined in BRSKI {{RFC8995}} is enhanced to facilitate new use cases in which the pledge acts as server.
 The responder mode allows delegated bootstrapping using a registrar-agent instead of a direct connection between the pledge and the domain registrar.
@@ -368,20 +370,19 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 * enhances existing endpoints with new supported media types, e.g., for JWS voucher.
 * defines new endpoints where additional functionality is required, e.g., for wrapped certification request, CA certificates, or new status information.
 
-
 ~~~~ aasvg
                          +---------------------------+
-    +---- Drop Ship -----| Vendor Service            |
-    |                    +---------------+-----------+
-    |                    | M anufacturer |           |
-    |                    | A uthorized   | Ownership |
-    |                    | S igning      | Tracker   |
-    |                    | A uthority    |           |
-    |                    +---------------+-----------+
-    |                                         ^
-    |                                         | BRSKI-
-    |                                         | MASA
-    |          ...............................|.........
+    ..... Drop Ship .....| Vendor Service            |
+    :                    +---------------+-----------+
+    :                    | M anufacturer |           |
+    :                    | A uthorized   | Ownership |
+    :                    | S igning      | Tracker   |
+    :                    | A uthority    |           |
+    :                    +---------------+-----------+
+    :                                         ^
+    :                                         | BRSKI-
+    :                                         | MASA
+    :          ...............................|.........
     V          .                              v        .
 +--------+     .  +------------+        +-----------+  .
 |        |     .  |            |        |           |  .
@@ -442,6 +443,86 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 
 * The manufacturer provided components/services (MASA and Ownership tracker) are used as defined in {{RFC8995}}.
   A MASA is able to support enrollment via registrar-agent without changes unless it checks the vouchers proximity indication, in which case it would need to be enhanced to support BRSKI-PRM to also accept the agent-proximity.
+
+## Nomadic connectivity 
+
+In one example instance of the PRM architecture as shown in {{uc3figure}}, there is no connectivity between the location in which the pledge is installed and the location of the domain registrar. 
+This is often the case in the aforementioned building automation use case ({{building-automation}}).
+
+~~~~ aasvg
+                         +---------------------------+
+    ..... Drop Ship .....| Vendor Service            |
+    :                    +---------------------------+
+    :                                         ^
+........................................      |
+.   v                                  .      |
+. +--------+           .-.-.-.-.-.-.-. .      |
+. |        |           : Registrar-  : .      |
+. | Pledge |<--------->: Agent       : .      |
+. +--------+ L2 or L3  :-.-.-.-.-.-.-: .      |
+.          connectivity   ^            .      |
+..........................!.............      |
+   Pledge install         !                   |
+   location               ! Nomadic           |
+                          ! connectivity      |
+                          !                   |
+               ...........!...................|.........
+               .          v                   v        .
+               .  .-.-.-.-.-.-.-.       +-----------+  .
+               .  : Registrar-  :       | Domain    |  .
+               .  : Agent       :<----->| Registrar |  .
+               .  :-.-.-.-.-.-.-:       +-----+-----+  .
+               .                              |        .
+               .           +------------------+-----+  .
+               .           | Key Infrastructure     |  .
+               .           | (e.g., PKI CA)         |  .
+               .           +------------------------+  .
+               .........................................
+                         "Domain" Components
+~~~~
+{: #uc3figure title='Registrar Agent nomadic connectivity example' artwork-align="left"}
+
+PRM enables support of this case through nomadic connectivity of the registrar-agent.
+To perform enrollment in this setup, multiple round trips of the registrar-agent between the pledge install location and the domain registrar are required.
+
+1.  Connectivity to domain registrar: preparation tasks for pledge bootstrapping not part of the BRSKI-PRM protocol definition, like retrieval of list of pledges to enroll.
+2.  Connectivity to pledge install location: retrieve information about available pledges (IDevID), collect request objects like voucher-requests and enrollment-requests using the BRSKI-PRM approach described in {{exchanges_uc2_1}}.
+3.  Connectivity to domain registrar, submit collected pledges' request information, retrieve response objects as voucher and enrollment information using the BRSKI-PRM approach described in {{exchanges_uc2_2}}.
+4.  Connectivity to pledge install location, provide retrieved objects to the pledge to enroll pledges and collect status using the BRSKI-PRM approach described in {{exchanges_uc2_3}}.
+5.  Connectivity to domain registrar, submit voucher status and enrollment status using the BRSKI-PRM approach described in {{exchanges_uc2_4}}.
+
+Variations of this setup include cases where the registrar-agent uses for example WiFi to connect to the pledge installation network, and mobile network connectivity to connect to the domain registrar. 
+Both connections may also be possible in a single location at the same time, based on installation building conditions., 
+
+## Registrar-agent co-located with registrar
+
+Compared to {{RFC8995}} BRSKI, pledges supporting BRSKI-PRM can be completely passive and only need to react when being requested to react by a registrar-agent. 
+In {{RFC8995}}, pledges instead need to continuously request enrollment from a domain registrar, which may result in undesirable communications pattern and possible overload of a domain registrar.
+
+~~~~ aasvg
+                         +---------------------------+
+    ..... Drop Ship .....| Vendor Service            |
+    :                    +---------------------------+
+    :                                         ^
+    :                                         |
+    :          ...............................|.........
+    :          .                              v        .
+    v          .          +-------------------------+  .
+ +--------+    .          |..............           |  .   
+ |        |    .          |. Registrar- . Domain    |  .
+ | Pledge |<------------->|. Agent      . Registrar |  .
+ +--------+ L2 or L3      |..............           |  .   
+            connectivity  +-------------------+-----+  .
+               .                              |        .
+               .           +------------------+-----+  .
+               .           | Key Infrastructure     |  .
+               .           +------------------------+  .
+               .........................................
+                         "Domain" Components
+~~~~
+{: #uc4figure title='Registrar-Agent integrated into Domain Registrar example' artwork-align="left"}
+
+The benefits of BRSKI-PRM can be achieved even without the operational complexity of standalone registrar-agents by integrating the necessary functionality of the registrar-agent as a module into the domain registrar as shown in {{uc4figure}} so that it can support the BRSKI-PRM communications to the pledge.
 
 
 ## Agent-Proximity Assertion {#agt_prx}
@@ -634,7 +715,7 @@ The registrar certificate may be configured at the registrar-agent or may be fet
 In addition, the registrar-agent provides agent-signed-data containing the pledge product-serial-number, signed with the private key corresponding to the EE (RegAgt) certificate, as described in {{exchanges_uc2_1}}.
 This enables the registrar to verify and log, which registrar-agent was in contact with the pledge, when verifying the PVR.
 
-The registrar MUST provide the EE (RegAgt) certificate identified by the SubjectKeyIdentifier (SKID) in the header of the agent-signed-data from the PVR in its RVR (see also {{{pvr-proc-reg}}.
+The registrar MUST provide the EE (RegAgt) certificate identified by the SubjectKeyIdentifier (SKID) in the header of the agent-signed-data from the PVR in its RVR (see also {{pvr-proc-reg}}.
 
 The MASA in turn verifies the registrar LDevID certificate is included in the PVR (contained in the "prior-signed-voucher-request" field of RVR) in the "agent-provided-proximity-registrar-certificate" leaf and may assert the PVR as "verified" or "logged".
 
@@ -1166,7 +1247,7 @@ The following 4xx client error codes SHOULD be used:
 
 * 406 Not Acceptable: if the Content-Type indicated by the Accept header is unknown or unsupported.
 
-If the validation succeeds, the registrar performs pledge authorization according to {{RFC8995}, Section 5.3 followed by obtaining a voucher from the pledge's MASA according to {{RFC8995}}, Section 5.4 with the modifications described below in {{rvr-proc}}.
+If the validation succeeds, the registrar performs pledge authorization according to {{RFC8995}}, Section 5.3 followed by obtaining a voucher from the pledge's MASA according to {{RFC8995}}, Section 5.4 with the modifications described below in {{rvr-proc}}.
 
 
 ### Registrar-Voucher-Request (RVR) Processing (Registrar to MASA) {#rvr-proc}
@@ -2607,7 +2688,7 @@ From IETF draft 10 -> IETF draft 11:
 
 * issue #79, clarified that BRSKI discovery in the context of BRSKI-PRM is not needed in {{discovery_uc2_reg}}.
 * issue #103, removed step 6 in verification handling for the wrapped CA certificate provisioning as only applicable after enrollment {{exchanges_uc2_3c}}
-* issue #128: included notation of nomadic operation of the registrar-agent in {{architecture}}
+* issue #128: included notation of nomadic operation of the registrar-agent in {{architecture}}, including proposed text from PR #131
 * issue #130, introduced DNS service discovery name for brski_pledge to enable discovery by the registrar-agent in {{iana-con}
 * removed unused reference RFC 5280
 * removed site terminology
