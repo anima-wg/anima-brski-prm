@@ -635,7 +635,7 @@ As BRSKI-PRM uses authenticated self-contained data objects between the pledge a
 The objects exchanged between the pledge and the domain registrar used in the context of this specifications are JOSE objects.
 
 In addition to the EE (RegAgt) certificate, the registrar-agent is provided with the product-serial-number(s) of the pledge(s) to be bootstrapped.
-This is necessary to allow the discovery of pledge(s) by the registrar-agent using mDNS (see {{discovery_uc2_ppa}})
+This is necessary to allow the discovery of pledge(s) by the registrar-agent using DNS-SD with mDNS (see {{discovery_uc2_ppa}})
 The list may be provided by prior administrative means or the registrar agent may get the information via an interaction with the pledge.
 For instance, {{RFC9238}} describes scanning of a QR code, the product-serial-number would be initialized from the 12N B005 Product Serial Number.
 
@@ -665,18 +665,18 @@ This may be provided in {{I-D.eckert-anima-brski-discovery}}.
 ### Discovery of Pledge by Registrar-Agent {#discovery_uc2_ppa}
 
 The discovery of the pledge by registrar-agent should be done by using DNS-based Service Discovery {{RFC6763}} over Multicast DNS {{RFC6762}} to discover the pledge.
-Note that {{RFC6762}} Section 9 provides support for conflict resolution in situations when an mDNS responder receives a mDNS response with inconsistent rdata.
+Note that {{RFC6762}} Section 9 provides support for conflict resolution in situations when an DNS-SD with mDNS responder receives a mDNS response with inconsistent data.
 The pledge constructs a local host name based on device local information (product-serial-number), which results in "product-serial-number._brski-pledge._tcp.local".
-The product-serial-number composition is vendor dependent and may contain information regarding the vendor, the product type, and further information specific to the product instance. To allow distinction of pledges, the product-serial-number therfore needs to be sufficiently unique.
+The product-serial-number composition is manufacturer dependent and may contain information regarding the manufacturer, the product type, and further information specific to the product instance. To allow distinction of pledges, the product-serial-number therefore needs to be sufficiently unique.
 
 The registrar-agent MAY use
 
 * "product-serial-number._brski-pledge._tcp.local", to discover a specific pledge, e.g., when connected to a local network.
 * "_brski-pledge._tcp.local" to get a list of pledges to be bootstrapped.
 
-A manufacturer may allow the pledge to react on mDNS discovery without his product-serial-number contained. This allows a commissioning tool to discover pledges to be bootstrapped in the domain. The manufacturer support this functionality as outlined in {{sec_cons_mDNS}}.
+A manufacturer may allow the pledge to react on DNS-SD with mDNS discovery without his product-serial-number contained. This allows a commissioning tool to discover pledges to be bootstrapped in the domain. The manufacturer support this functionality as outlined in {{sec_cons_mDNS}}.
 
-Establishing network connectivity of the pledge is out of scope of this document but necessary to apply mDNS.
+Establishing network connectivity of the pledge is out of scope of this document but necessary to apply DNS-SD with mDNS.
 For Ethernet it is provided by simply connecting the network cable.
 For WiFi networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping, e.g., as proposed in {{I-D.richardson-emu-eap-onboarding}}.
 The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN ID.
@@ -829,8 +829,8 @@ Preconditions:
   In addition, the registrar-agent SHOULD know the product-serial-number(s) of the pledge(s) to be bootstrapped.
   The registrar-agent MAY be provided with the product-serial-number(s) in different ways:
     * configured, e.g., as a list of pledges to be bootstrapped via QR code scanning
-    * discovered by using standard approaches like mDNS as described in {{discovery_uc2_ppa}}
-    * discovered by using a vendor specific approach, e.g., RF beacons.
+    * discovered by using standard approaches like DNS-SD with mDNS as described in {{discovery_uc2_ppa}}
+    * discovered by using a manufacturer specific approach, e.g., RF beacons.
   If the serial numbers are not known in advance, the registrar-agent cannot perform a distinct triggering of pledges but and triggers  all pledges discovered .
 
   The registrar-agent SHOULD have synchronized time.
@@ -1147,7 +1147,7 @@ Preconditions:
 
 * Registrar-agent: possesses its own credentials (EE (RegAgt) certificate and corresponding private key) of the domain.
   In addition, it MAY possess the IDevID CA certificate of the pledge vendor/manufacturer to verify the pledge certificate in the received request messages.
-  It has the address of the domain registrar through configuration or by discovery, e.g., mDNS/DNSSD.
+  It has the address of the domain registrar through configuration or by discovery, e.g., DNS-SD with mDNS.
   The registrar-agent has acquired one or more PVR and PER objects.
 
 * Registrar (same as in BRSKI): possesses the IDevID CA certificate of the pledge vendor/manufacturer and its own registrar EE credentials of the domain.
@@ -2199,7 +2199,7 @@ To address this, the registrar SHOULD verify the certificate used to create the 
 Furthermore the registrar also verifies the EE (RegAgt) certificate used in the TLS handshake with the registrar-agent. If both certificates are verified successfully, the registrar-agent's signature can be considered as valid.
 
 
-## Misuse of mDNS to obtain list of pledges {#sec_cons_mDNS}
+## Misuse of DNS-SD with mDNS to obtain list of pledges {#sec_cons_mDNS}
 
 To discover a specific pledge a registrar-agent may request the service name in combination with the product-serial-number of a specific pledge.
 The pledge reacts on this if its product-serial-number is part of the request message.

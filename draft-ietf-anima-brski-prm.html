@@ -1215,7 +1215,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 5 May 2024</td>
+<td class="center">Expires 9 May 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1228,12 +1228,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-11</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-11-02" class="published">2 November 2023</time>
+<time datetime="2023-11-06" class="published">6 November 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-05-05">5 May 2024</time></dd>
+<dd class="expires"><time datetime="2024-05-09">9 May 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1293,7 +1293,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 5 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 9 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1504,7 +1504,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
                 <p id="section-toc.1-1.10.2.3.1"><a href="#section-10.3" class="auto internal xref">10.3</a>.  <a href="#name-misuse-of-registrar-agent-c" class="internal xref">Misuse of Registrar-Agent Credentials</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4">
-                <p id="section-toc.1-1.10.2.4.1"><a href="#section-10.4" class="auto internal xref">10.4</a>.  <a href="#name-misuse-of-mdns-to-obtain-li" class="internal xref">Misuse of mDNS to obtain list of pledges</a></p>
+                <p id="section-toc.1-1.10.2.4.1"><a href="#section-10.4" class="auto internal xref">10.4</a>.  <a href="#name-misuse-of-dns-sd-with-mdns-" class="internal xref">Misuse of DNS-SD with mDNS to obtain list of pledges</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.5">
                 <p id="section-toc.1-1.10.2.5.1"><a href="#section-10.5" class="auto internal xref">10.5</a>.  <a href="#name-yang-module-security-consid" class="internal xref">YANG Module Security Considerations</a></p>
@@ -2471,7 +2471,7 @@ This allows the registrar to detect registrar-agents based on the issuing CA.<a 
 <p id="section-5.6-9">As BRSKI-PRM uses authenticated self-contained data objects between the pledge and the domain registrar, the binding of the pledge identity to the requests is provided by the data object signature employing the pledge's IDevID.
 The objects exchanged between the pledge and the domain registrar used in the context of this specifications are JOSE objects.<a href="#section-5.6-9" class="pilcrow">¶</a></p>
 <p id="section-5.6-10">In addition to the EE (RegAgt) certificate, the registrar-agent is provided with the product-serial-number(s) of the pledge(s) to be bootstrapped.
-This is necessary to allow the discovery of pledge(s) by the registrar-agent using mDNS (see <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.6.2</a>)
+This is necessary to allow the discovery of pledge(s) by the registrar-agent using DNS-SD with mDNS (see <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.6.2</a>)
 The list may be provided by prior administrative means or the registrar agent may get the information via an interaction with the pledge.
 For instance, <span>[<a href="#RFC9238" class="cite xref">RFC9238</a>]</span> describes scanning of a QR code, the product-serial-number would be initialized from the 12N B005 Product Serial Number.<a href="#section-5.6-10" class="pilcrow">¶</a></p>
 <p id="section-5.6-11">According to <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> section 5.3, the domain registrar performs the pledge authorization for bootstrapping within his domain based on the pledge voucher-request object.
@@ -2507,9 +2507,9 @@ This may be provided in <span>[<a href="#I-D.eckert-anima-brski-discovery" class
 <a href="#section-5.6.2" class="section-number selfRef">5.6.2. </a><a href="#name-discovery-of-pledge-by-regi" class="section-name selfRef">Discovery of Pledge by Registrar-Agent</a>
           </h4>
 <p id="section-5.6.2-1">The discovery of the pledge by registrar-agent should be done by using DNS-based Service Discovery <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span> over Multicast DNS <span>[<a href="#RFC6762" class="cite xref">RFC6762</a>]</span> to discover the pledge.
-Note that <span>[<a href="#RFC6762" class="cite xref">RFC6762</a>]</span> Section 9 provides support for conflict resolution in situations when an mDNS responder receives a mDNS response with inconsistent rdata.
+Note that <span>[<a href="#RFC6762" class="cite xref">RFC6762</a>]</span> Section 9 provides support for conflict resolution in situations when an DNS-SD with mDNS responder receives a mDNS response with inconsistent data.
 The pledge constructs a local host name based on device local information (product-serial-number), which results in "product-serial-number._brski-pledge._tcp.local".
-The product-serial-number composition is vendor dependent and may contain information regarding the vendor, the product type, and further information specific to the product instance. To allow distinction of pledges, the product-serial-number therfore needs to be sufficiently unique.<a href="#section-5.6.2-1" class="pilcrow">¶</a></p>
+The product-serial-number composition is manufacturer dependent and may contain information regarding the manufacturer, the product type, and further information specific to the product instance. To allow distinction of pledges, the product-serial-number therefore needs to be sufficiently unique.<a href="#section-5.6.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.6.2-2">The registrar-agent <span class="bcp14">MAY</span> use<a href="#section-5.6.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.6.2-3.1">
@@ -2519,8 +2519,8 @@ The product-serial-number composition is vendor dependent and may contain inform
               <p id="section-5.6.2-3.2.1">"_brski-pledge._tcp.local" to get a list of pledges to be bootstrapped.<a href="#section-5.6.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-5.6.2-4">A manufacturer may allow the pledge to react on mDNS discovery without his product-serial-number contained. This allows a commissioning tool to discover pledges to be bootstrapped in the domain. The manufacturer support this functionality as outlined in <a href="#sec_cons_mDNS" class="auto internal xref">Section 10.4</a>.<a href="#section-5.6.2-4" class="pilcrow">¶</a></p>
-<p id="section-5.6.2-5">Establishing network connectivity of the pledge is out of scope of this document but necessary to apply mDNS.
+<p id="section-5.6.2-4">A manufacturer may allow the pledge to react on DNS-SD with mDNS discovery without his product-serial-number contained. This allows a commissioning tool to discover pledges to be bootstrapped in the domain. The manufacturer support this functionality as outlined in <a href="#sec_cons_mDNS" class="auto internal xref">Section 10.4</a>.<a href="#section-5.6.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.6.2-5">Establishing network connectivity of the pledge is out of scope of this document but necessary to apply DNS-SD with mDNS.
 For Ethernet it is provided by simply connecting the network cable.
 For WiFi networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping, e.g., as proposed in <span>[<a href="#I-D.richardson-emu-eap-onboarding" class="cite xref">I-D.richardson-emu-eap-onboarding</a>]</span>.
 The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN ID.
@@ -2910,10 +2910,10 @@ The registrar-agent <span class="bcp14">MAY</span> be provided with the product-
                     <p id="section-6.1-4.2.2.2.2.1.1">configured, e.g., as a list of pledges to be bootstrapped via QR code scanning<a href="#section-6.1-4.2.2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
                   <li class="normal" id="section-6.1-4.2.2.2.2.2">
-                    <p id="section-6.1-4.2.2.2.2.2.1">discovered by using standard approaches like mDNS as described in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.6.2</a><a href="#section-6.1-4.2.2.2.2.2.1" class="pilcrow">¶</a></p>
+                    <p id="section-6.1-4.2.2.2.2.2.1">discovered by using standard approaches like DNS-SD with mDNS as described in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.6.2</a><a href="#section-6.1-4.2.2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
                   <li class="normal" id="section-6.1-4.2.2.2.2.3">
-                    <p id="section-6.1-4.2.2.2.2.3.1">discovered by using a vendor specific approach, e.g., RF beacons.
+                    <p id="section-6.1-4.2.2.2.2.3.1">discovered by using a manufacturer specific approach, e.g., RF beacons.
 If the serial numbers are not known in advance, the registrar-agent cannot perform a distinct triggering of pledges but and triggers  all pledges discovered .<a href="#section-6.1-4.2.2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
@@ -3330,7 +3330,7 @@ This allows bulk bootstrapping of several pledges using the same connection betw
 <li class="normal" id="section-6.2-3.1">
             <p id="section-6.2-3.1.1">Registrar-agent: possesses its own credentials (EE (RegAgt) certificate and corresponding private key) of the domain.
 In addition, it <span class="bcp14">MAY</span> possess the IDevID CA certificate of the pledge vendor/manufacturer to verify the pledge certificate in the received request messages.
-It has the address of the domain registrar through configuration or by discovery, e.g., mDNS/DNSSD.
+It has the address of the domain registrar through configuration or by discovery, e.g., DNS-SD with mDNS.
 The registrar-agent has acquired one or more PVR and PER objects.<a href="#section-6.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.2-3.2">
@@ -4790,8 +4790,8 @@ Furthermore the registrar also verifies the EE (RegAgt) certificate used in the 
 </div>
 <div id="sec_cons_mDNS">
 <section id="section-10.4">
-        <h3 id="name-misuse-of-mdns-to-obtain-li">
-<a href="#section-10.4" class="section-number selfRef">10.4. </a><a href="#name-misuse-of-mdns-to-obtain-li" class="section-name selfRef">Misuse of mDNS to obtain list of pledges</a>
+        <h3 id="name-misuse-of-dns-sd-with-mdns-">
+<a href="#section-10.4" class="section-number selfRef">10.4. </a><a href="#name-misuse-of-dns-sd-with-mdns-" class="section-name selfRef">Misuse of DNS-SD with mDNS to obtain list of pledges</a>
         </h3>
 <p id="section-10.4-1">To discover a specific pledge a registrar-agent may request the service name in combination with the product-serial-number of a specific pledge.
 The pledge reacts on this if its product-serial-number is part of the request message.<a href="#section-10.4-1" class="pilcrow">¶</a></p>
