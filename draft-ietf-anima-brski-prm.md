@@ -444,7 +444,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 * The manufacturer provided components/services (MASA and Ownership tracker) are used as defined in {{RFC8995}}.
   A MASA is able to support enrollment via registrar-agent without changes unless it checks the vouchers proximity indication, in which case it would need to be enhanced to support BRSKI-PRM to also accept the agent-proximity.
 
-## Nomadic connectivity 
+## Nomadic connectivity {#arch_nomadic}
 
 In one example instance of the PRM architecture as shown in {{uc3figure}}, there is no connectivity between the location in which the pledge is installed and the location of the domain registrar. 
 This is often the case in the aforementioned building automation use case ({{building-automation}}).
@@ -560,16 +560,9 @@ However in practice the pledge will often be known only by its IP address as ret
 The pledge MUST respond to all queries regardless of what Host: header is provided by the client.
 {{?RFC9110, Section 7.2}} makes the Host: header mandatory, so it will always be present.
 
-The following endpoints are defined for the *pledge* in this document.
+The following operations are defined for the *pledge* in this document, describing their endpoints and their corresponding URIs.
 The endpoints are defined with short names to also accommodate for the constraint case.
 
-When the registrar-agent reaches out to a pledge, for instance with an example URI path "http://pledge.example/.well-known/brski/tpvr", it will in fact send a Host: header of "pledge.example", with a relative path of "/.well-known/brski/tpbr".
-However in practice the pledge will often be known only by its IP address as returned by a discovery protocol, and that is what will be present in the Host: header.
-
-The pledge MUST respond to all queries regardless of what Host: header is provided by the client.
-{{?RFC9110, Section 7.2}} makes the Host: header mandatory, so it will always be present.
-
-Operations and their corresponding URIs:
 
 | Operation                  | Endpoint                   | Details |
 |:---------------------------|:---------------------------|:--------|
@@ -654,8 +647,8 @@ The following information MUST be available at the registrar-agent before intera
 ### Discovery of Registrar by Registrar-Agent {#discovery_uc2_reg}
 
 As a registrar-agent acts as representative of the domain registrar towards the pledge or may even be collocated with the domain registrar, a separate discovery of the registrar is likely not needed as registrar-agent and registrar are domain components and have a trust relation. 
-Moreover, other communication (not part of this document) between the registrar-agent and the registrar is assumed, e.g., to exchange information about serial numbers of pledges to be discovered. 
-Therefore, standard discovery as described in section 4 and the appendix A.2 of {{RFC8995}} is not required, respectively may not support the discovery of a registrar with supporting BRSK-PRM. 
+Moreover, other communication (not part of this document) between the registrar-agent and the registrar is assumed, e.g., to exchange information about serial numbers of pledges to be discovered as outlined in {{arch_nomadic}}. 
+Moreover, as the standard discovery described in section 4 and the appendix A.2 of {{RFC8995}} does not support  of registrars with an enhanced feature set (like the support of BRSKI-PRM), this standard discovery is not applicable.
 
 As a more general solution, the BRSKI discovery mechanism can be extended to provide upfront information on the capabilities of registrars, such as the mode of operation (pledge-responder-mode or registrar-responder-mode).
 Defining discovery extensions is out of scope of this document.
@@ -664,12 +657,17 @@ This may be provided in {{I-D.eckert-anima-brski-discovery}}.
 
 ### Discovery of Pledge by Registrar-Agent {#discovery_uc2_ppa}
 
-The discovery of the pledge by registrar-agent should be done by using DNS-based Service Discovery {{RFC6763}} over Multicast DNS {{RFC6762}} to discover the pledge.
+The discovery of the pledge by registrar-agent in the context of this document describes the minimum discovery approach to be supported. 
+A more general discovery mechanism, also supporting GRASP besides DNS-SD with mDNS may be provided in {{I-D.eckert-anima-brski-discovery}}.
+
+Discovery in BRSKI-PRM uses DNS-based Service Discovery {{RFC6763}} over Multicast DNS {{RFC6762}} to discover the pledge.
 Note that {{RFC6762}} Section 9 provides support for conflict resolution in situations when an DNS-SD with mDNS responder receives a mDNS response with inconsistent data.
+Note that {{RFC8990}} does not support conflict resolution of mDNS, which may be a limitation for its application.
+
 The pledge constructs a local host name based on device local information (product-serial-number), which results in "product-serial-number._brski-pledge._tcp.local".
 The product-serial-number composition is manufacturer dependent and may contain information regarding the manufacturer, the product type, and further information specific to the product instance. To allow distinction of pledges, the product-serial-number therefore needs to be sufficiently unique.
 
-The registrar-agent MAY use
+In the absence of a more general discovery as defined in {{I-D.eckert-anima-brski-discovery}} the registrar-agent MUST  use
 
 * "product-serial-number._brski-pledge._tcp.local", to discover a specific pledge, e.g., when connected to a local network.
 * "_brski-pledge._tcp.local" to get a list of pledges to be bootstrapped.
@@ -681,10 +679,6 @@ For Ethernet it is provided by simply connecting the network cable.
 For WiFi networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping, e.g., as proposed in {{I-D.richardson-emu-eap-onboarding}}.
 The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN ID.
 How to gain network connectivity is out of scope of this document.
-
-As an alternative discovery mechanism GRASP M_DISCOVERY multicast with M_RESPONSE, based on {{RFC8990}}, may be used.
-The specification of this approach to discover a pledge from the registrar-agent is left for further study.
-Note that {{RFC8990}} does not support conflict resolution as mDNS, which may be a limitation for its application.
 
 
 ## Behavior of Pledge with Combined Functionality
@@ -2692,6 +2686,9 @@ From IETF draft 10 -> IETF draft 11:
 * issue #130, introduced DNS service discovery name for brski_pledge to enable discovery by the registrar-agent in {{iana-con}
 * removed unused reference RFC 5280
 * removed site terminology
+* deleted duplicated text in {{pledge_ep}}
+* clarified registrar discovery and relation to BRSKI-Discovery in {{discovery_uc2_reg}}
+* clarified discovery of pledges by the registrar-agent in {{discovery_uc2_ppa}}, deleted reference to GRASP as handled in BRSKI-Discovery
 
 From IETF draft 09 -> IETF draft 10:
 
