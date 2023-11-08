@@ -294,7 +294,7 @@ There may be situations in which the customer domain does not offer enough physi
 
 ## Limitations
 
-The mechanism described in this document presumes the availability of the pledge and the registrar-agent to communicate with another.
+The mechanism described in this document presumes the ability of the pledge and the registrar-agent to communicate with another.
 This may not be possible in constrained environments where, in particular, power must be conserved.
 In these situations, it is anticipated that the transceiver will be powered down most of the time.
 This presents a rendezvous problem: the pledge is unavailable for certain periods of time, and the registrar-agent is similarly presumed to be unavailable for certain periods of time.
@@ -2689,6 +2689,7 @@ From IETF draft 10 -> IETF draft 11:
 * deleted duplicated text in {{pledge_ep}}
 * clarified registrar discovery and relation to BRSKI-Discovery in {{discovery_uc2_reg}}
 * clarified discovery of pledges by the registrar-agent in {{discovery_uc2_ppa}}, deleted reference to GRASP as handled in BRSKI-Discovery
+* addressed comments from SECDIR early review
 
 From IETF draft 09 -> IETF draft 10:
 
