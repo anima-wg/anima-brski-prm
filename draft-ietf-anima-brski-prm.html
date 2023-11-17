@@ -12,7 +12,7 @@
 <meta content="
        This document defines enhancements to Bootstrapping a Remote Secure Key Infrastructure (BRSKI, RFC8995) to enable bootstrapping in domains featuring no or only limited connectivity between a pledge and the domain registrar.
 It specifically changes the interaction model from a pledge-initiated mode, as used in BRSKI, to a pledge-responding mode, where the pledge is in server role.
-For this, BRSKI with Pledge in Responder Mode (BRSKI-PRM) introduces a new component, the registrar-agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
+For this, BRSKI with Pledge in Responder Mode (BRSKI-PRM) introduces a new component, the Registrar-Agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
 To establish the trust relation between pledge and registrar, BRSKI-PRM relies on object security rather than transport security.
 The approach defined here is agnostic to the enrollment protocol that connects the domain registrar to the domain CA. 
     " name="description">
@@ -26,13 +26,13 @@ The approach defined here is agnostic to the enrollment protocol that connects t
     intervaltree 3.1.0
     Jinja2 3.1.2
     lxml 4.9.3
-    platformdirs 3.11.0
+    platformdirs 4.0.0
     pycountry 22.3.5
     PyYAML 6.0.1
     requests 2.31.0
     setuptools 52.0.0
     six 1.16.0
-    wcwidth 0.2.9
+    wcwidth 0.2.10
 -->
 <link href="draft-ietf-anima-brski-prm.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1215,7 +1215,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 11 May 2024</td>
+<td class="center">Expires 17 May 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1228,12 +1228,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-11</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-11-08" class="published">8 November 2023</time>
+<time datetime="2023-11-14" class="published">14 November 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-05-11">11 May 2024</time></dd>
+<dd class="expires"><time datetime="2024-05-17">17 May 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1260,7 +1260,7 @@ li > p:last-of-type:only-child {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">This document defines enhancements to Bootstrapping a Remote Secure Key Infrastructure (BRSKI, RFC8995) to enable bootstrapping in domains featuring no or only limited connectivity between a pledge and the domain registrar.
 It specifically changes the interaction model from a pledge-initiated mode, as used in BRSKI, to a pledge-responding mode, where the pledge is in server role.
-For this, BRSKI with Pledge in Responder Mode (BRSKI-PRM) introduces a new component, the registrar-agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
+For this, BRSKI with Pledge in Responder Mode (BRSKI-PRM) introduces a new component, the Registrar-Agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
 To establish the trust relation between pledge and registrar, BRSKI-PRM relies on object security rather than transport security.
 The approach defined here is agnostic to the enrollment protocol that connects the domain registrar to the domain CA.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
@@ -1293,7 +1293,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 11 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 17 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1363,7 +1363,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
                 <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-nomadic-connectivity" class="internal xref">Nomadic connectivity</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
-                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-registrar-agent-co-located-" class="internal xref">Registrar-agent co-located with registrar</a></p>
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-registrar-agent-co-located-" class="internal xref">Registrar-Agent co-located with registrar</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
                 <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-agent-proximity-assertion" class="internal xref">Agent-Proximity Assertion</a></p>
@@ -1529,16 +1529,16 @@ The approach defined here is agnostic to the enrollment protocol that connects t
             <p id="section-toc.1-1.13.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-examples" class="internal xref">Examples</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
-                <p id="section-toc.1-1.13.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-example-pledge-voucher-requ" class="internal xref">Example Pledge Voucher-Request - PVR (from Pledge to Registrar-agent)</a></p>
+                <p id="section-toc.1-1.13.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-example-pledge-voucher-requ" class="internal xref">Example Pledge Voucher-Request - PVR (from Pledge to Registrar-Agent)</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
                 <p id="section-toc.1-1.13.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-example-parboiled-registrar" class="internal xref">Example Parboiled Registrar Voucher-Request - RVR (from Registrar to MASA)</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.3">
-                <p id="section-toc.1-1.13.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-example-voucher-response-fr" class="internal xref">Example Voucher-Response (from MASA to Pledge, via Registrar and Registrar-agent)</a></p>
+                <p id="section-toc.1-1.13.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-example-voucher-response-fr" class="internal xref">Example Voucher-Response (from MASA to Pledge, via Registrar and Registrar-Agent)</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.4">
-                <p id="section-toc.1-1.13.2.4.1"><a href="#appendix-A.4" class="auto internal xref">A.4</a>.  <a href="#name-example-voucher-response-ma" class="internal xref">Example Voucher-Response, MASA issued Voucher with additional Registrar signature (from MASA to Pledge, via Registrar and Registrar-agent)</a></p>
+                <p id="section-toc.1-1.13.2.4.1"><a href="#appendix-A.4" class="auto internal xref">A.4</a>.  <a href="#name-example-voucher-response-ma" class="internal xref">Example Voucher-Response, MASA issued Voucher with additional Registrar signature (from MASA to Pledge, via Registrar and Registrar-Agent)</a></p>
 </li>
             </ul>
 </li>
@@ -1577,29 +1577,29 @@ BRSKI with pledge in responder mode (BRSKI-PRM) defined in this document allows 
 For this approach, this document:<a href="#section-1-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1-5.1">
-          <p id="section-1-5.1.1">introduces the registrar-agent as new component to facilitate the communication between the pledge and the domain registrar.
-The registrar-agent may be implemented as an integrated functionality of a commissioning tool or be co-located with the registrar itself.
-BRSKI-PRM supports the identification of the registrar-agent that was performing the bootstrapping allowing for accountability of the pledges installation, when the registrar-agent is a component used by an installer and not co-located with the registrar.<a href="#section-1-5.1.1" class="pilcrow">¶</a></p>
+          <p id="section-1-5.1.1">introduces the Registrar-Agent as new component to facilitate the communication between the pledge and the domain registrar.
+The Registrar-Agent may be implemented as an integrated functionality of a commissioning tool or be co-located with the registrar itself.
+BRSKI-PRM supports the identification of the Registrar-Agent that was performing the bootstrapping allowing for accountability of the pledges installation, when the Registrar-Agent is a component used by an installer and not co-located with the registrar.<a href="#section-1-5.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-5.2">
-          <p id="section-1-5.2.1">specifies the interaction (data exchange and data objects) between a pledge acting as server, the registrar-agent acting as client, and the domain registrar.<a href="#section-1-5.2.1" class="pilcrow">¶</a></p>
+          <p id="section-1-5.2.1">specifies the interaction (data exchange and data objects) between a pledge acting as server, the Registrar-Agent acting as client, and the domain registrar.<a href="#section-1-5.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-5.3">
-          <p id="section-1-5.3.1">enables the usage of arbitrary transports between the pledge and the domain registrar via the registrar-agent; security is addressed at the application layer, and both IP-based and non-IP connectivity can be used between pledge and registrar-agent.<a href="#section-1-5.3.1" class="pilcrow">¶</a></p>
+          <p id="section-1-5.3.1">enables the usage of arbitrary transports between the pledge and the domain registrar via the Registrar-Agent; security is addressed at the application layer, and both IP-based and non-IP connectivity can be used between pledge and Registrar-Agent.<a href="#section-1-5.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-5.4">
-          <p id="section-1-5.4.1">allows the application of registrar-agent credentials to establish TLS connections to the domain registrar; these are different from the IDevID of the pledge.<a href="#section-1-5.4.1" class="pilcrow">¶</a></p>
+          <p id="section-1-5.4.1">allows the application of Registrar-Agent credentials to establish TLS connections to the domain registrar; these are different from the IDevID of the pledge.<a href="#section-1-5.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-1-6">The term endpoint used in the context of this document is equivalent to resource in HTTP <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span> and CoAP <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>; it is not used to describe a device.
 Endpoints are accessible via Well-Known URIs <span>[<a href="#RFC8615" class="cite xref">RFC8615</a>]</span>.
-For the interaction with the domain registrar, the registrar-agent will use existing BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> endpoints as well as additional endpoints defined in this document.
-To utilize the EST server endpoints on the domain registrar, the registrar-agent will act as client toward the registrar.<a href="#section-1-6" class="pilcrow">¶</a></p>
-<p id="section-1-7">The registrar-agent also acts as a client when communicating with a pledge in responder mode.
+For the interaction with the domain registrar, the Registrar-Agent will use existing BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> endpoints as well as additional endpoints defined in this document.
+To utilize the EST server endpoints on the domain registrar, the Registrar-Agent will act as client toward the registrar.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">The Registrar-Agent also acts as a client when communicating with a pledge in responder mode.
 Here, TLS with server-side, certificate-based authentication is only optionally supported.
-If TLS is optionally used between the registrar-agent and the pledge, the registrar-agent needs to identify the pledge based on its product serial number rather than the hostname as this is not set in an IDevID certificate.<a href="#section-1-7" class="pilcrow">¶</a></p>
+If TLS is optionally used between the Registrar-Agent and the pledge, the Registrar-Agent needs to identify the pledge based on its product-serial-number rather than the hostname as this is not set in an IDevID certificate.<a href="#section-1-7" class="pilcrow">¶</a></p>
 <p id="section-1-8">BRSKI-PRM is designed to rely on object security to support also for alternative transports for which TLS may not be available, e.g., Bluetooth or NFC.
-This is achieved through an additional signature wrapping of the exchanged data objects involving the registrar-agent for transport.<a href="#section-1-8" class="pilcrow">¶</a></p>
+This is achieved through an additional signature wrapping of the exchanged data objects involving the Registrar-Agent for transport.<a href="#section-1-8" class="pilcrow">¶</a></p>
 <p id="section-1-9">To utilize EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> for enrollment, the domain registrar must perform the pre-processing of this wrapping signature before actually using EST as defined in <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span>.<a href="#section-1-9" class="pilcrow">¶</a></p>
 <p id="section-1-10">There may be pledges which can support both modes, initiator and responder mode.
 In these cases BRSKI-PRM can be combined with BRSKI as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> or BRSKI-AE <span>[<a href="#I-D.ietf-anima-brski-ae" class="cite xref">I-D.ietf-anima-brski-ae</a>]</span> to allow for more bootstrapping flexibility.<a href="#section-1-10" class="pilcrow">¶</a></p>
@@ -1739,7 +1739,7 @@ The service technician may successively collect device-specific information in d
 The central building management system can then provide operational parameters for the specific devices in the basement or other detached areas.
 These operational parameters may comprise values and settings required in the operational phase of the sensors/actuators, among them a certificate issued by the operator to authenticate against other components and services.
 These operational parameters are then provided to the devices in the basement facilitated by the service technician's laptop.
-The registrar-agent, defined in this document, may be run on the technician's laptop to interact with pledges.<a href="#section-3.1.1-3" class="pilcrow">¶</a></p>
+The Registrar-Agent, defined in this document, may be run on the technician's laptop to interact with pledges.<a href="#section-3.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="infrastructure-isolation-policy">
@@ -1768,10 +1768,10 @@ There may be situations in which the customer domain does not offer enough physi
         <h3 id="name-limitations">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-limitations" class="section-name selfRef">Limitations</a>
         </h3>
-<p id="section-3.2-1">The mechanism described in this document presumes the ability of the pledge and the registrar-agent to communicate with another.
+<p id="section-3.2-1">The mechanism described in this document presumes the ability of the pledge and the Registrar-Agent to communicate with another.
 This may not be possible in constrained environments where, in particular, power must be conserved.
 In these situations, it is anticipated that the transceiver will be powered down most of the time.
-This presents a rendezvous problem: the pledge is unavailable for certain periods of time, and the registrar-agent is similarly presumed to be unavailable for certain periods of time.
+This presents a rendezvous problem: the pledge is unavailable for certain periods of time, and the Registrar-Agent is similarly presumed to be unavailable for certain periods of time.
 To overcome this situation, the pledges may need to be powered on, either manually or by sending a trigger signal.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1786,20 +1786,20 @@ To overcome this situation, the pledges may need to be powered on, either manual
 <ul class="normal">
 <li class="normal" id="section-4-2.1">
           <p id="section-4-2.1.1">To facilitate the communication between a pledge in responder mode and the registrar, additional functionality is needed either on the registrar or as a stand-alone component.
-This new functionality is defined as registrar-agent and acts as an agent of the registrar to trigger the pledge to generate requests for voucher and enrollment.
-These requests are then provided by the registrar-agent to the registrar.
-This requires the definition of pledge endpoints to allow interaction with the registrar-agent.<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
+This new functionality is defined as Registrar-Agent and acts as an agent of the registrar to trigger the pledge to generate requests for voucher and enrollment.
+These requests are then provided by the Registrar-Agent to the registrar.
+This requires the definition of pledge endpoints to allow interaction with the Registrar-Agent.<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-2.2">
-          <p id="section-4-2.2.1">The security of communication between the registrar-agent and the pledge must not rely on Transport Layer Security (TLS) to enable application of BRSKI-PRM in environments, in which the communication between the registrar-agent and the pledge is done over other technologies like BTLE or NFC, which may not support TLS protected communication.
+          <p id="section-4-2.2.1">The security of communication between the Registrar-Agent and the pledge must not rely on Transport Layer Security (TLS) to enable application of BRSKI-PRM in environments, in which the communication between the Registrar-Agent and the pledge is done over other technologies like BTLE or NFC, which may not support TLS protected communication.
 In addition, the pledge does not have a certificate that can easily be verified by <span>[<a href="#RFC6125" class="cite xref">RFC6125</a>]</span> methods.<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-2.3">
           <p id="section-4-2.3.1">The use of authenticated self-contained objects addresses both, the TLS challenges and the technology stack challenge.<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-2.4">
-          <p id="section-4-2.4.1">By contrast, the registrar-agent can be authenticated by the registrar as a component, acting on behalf of the registrar.
-In addition the registrar must be able to verify, which registrar-agent was in direct contact with the pledge.<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.4.1">By contrast, the Registrar-Agent can be authenticated by the registrar as a component, acting on behalf of the registrar.
+In addition the registrar must be able to verify, which Registrar-Agent was in direct contact with the pledge.<a href="#section-4-2.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-2.5">
           <p id="section-4-2.5.1">It would be inaccurate for the voucher-request and voucher-response to use an assertion with value "proximity" in the voucher, as the pledge was not in direct contact with the registrar for bootstrapping.
@@ -1844,18 +1844,18 @@ While BRSKI uses the binding to TLS, BRSKI-PRM aims at an additional signature o
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
         </h3>
 <p id="section-5.1-1">For BRSKI with pledge in responder mode, the base system architecture defined in BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> is enhanced to facilitate new use cases in which the pledge acts as server.
-The responder mode allows delegated bootstrapping using a registrar-agent instead of a direct connection between the pledge and the domain registrar.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+The responder mode allows delegated bootstrapping using a Registrar-Agent instead of a direct connection between the pledge and the domain registrar.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">Necessary enhancements to support authenticated self-contained objects for certificate enrollment are kept at a minimum to enable reuse of already defined architecture elements and interactions.
 The format of the bootstrapping objects produced or consumed by the pledge is based on JOSE <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span> and further specified in <a href="#exchanges_uc2" class="auto internal xref">Section 6</a> to address the requirements stated in <a href="#req-sol" class="auto internal xref">Section 4</a> above.
 In constrained environments it may be provided based on COSE <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>]</span> and <span>[<a href="#RFC9053" class="cite xref">RFC9053</a>]</span>.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <p id="section-5.1-3">An abstract overview of the BRSKI-PRM protocol can be found on slide 8 of <span>[<a href="#BRSKI-PRM-abstract" class="cite xref">BRSKI-PRM-abstract</a>]</span>.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
-<p id="section-5.1-4">To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer domain, this document specifies the exchange of authenticated self-contained objects with the help of a registrar-agent.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.1-4">To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer domain, this document specifies the exchange of authenticated self-contained objects with the help of a Registrar-Agent.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 <p id="section-5.1-5">This leads to extensions of the logical components in the BRSKI architecture as shown in <a href="#uc2figure" class="auto internal xref">Figure 1</a>.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
-<p id="section-5.1-6">Note that the Join Proxy is not shown in the figure, having been replaced by the Registrar Agent.
+<p id="section-5.1-6">Note that the Join Proxy is not shown in the figure, having been replaced by Registrar-Agent.
 The Join Proxy may still be present, and there <span class="bcp14">MAY</span> be some situations in which the Join Proxy can be used by the Registrar-Agent to connect to the Registrar.
-For example, the Registrar-Agent application on a smartphone often can connect to local wifi without giving up their LTE connection <span>[<a href="#androidnsd" class="cite xref">androidnsd</a>]</span>, but only can make link-local connections.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
-<p id="section-5.1-7">The registrar-agent interacts with the pledge to transfer the required data objects for bootstrapping, which are then also exchanged between the registrar-agent and the domain registrar.
-The addition of the registrar-agent influences the sequences of the data exchange between the pledge and the domain registrar described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
+For example, a Registrar-Agent application on a smartphone often can connect to local wifi without giving up their LTE connection <span>[<a href="#androidnsd" class="cite xref">androidnsd</a>]</span>, but only can make link-local connections.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
+<p id="section-5.1-7">The Registrar-Agent interacts with the pledge to transfer the required data objects for bootstrapping, which are then also exchanged between the Registrar-Agent and the domain registrar.
+The addition of the Registrar-Agent influences the sequences of the data exchange between the pledge and the domain registrar described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:<a href="#section-5.1-7" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.1-8.1">
@@ -1986,27 +1986,27 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:<a
 </div>
 </div>
 <figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
-<a href="#name-brski-prm-architecture-over" class="selfRef">BRSKI-PRM architecture overview using registrar-agent</a>
+<a href="#name-brski-prm-architecture-over" class="selfRef">BRSKI-PRM architecture overview using Registrar-Agent</a>
           </figcaption></figure>
 </div>
 <p id="section-5.1-10"><a href="#uc2figure" class="auto internal xref">Figure 1</a> shows the relations between the following main components:<a href="#section-5.1-10" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.1-11.1">
-            <p id="section-5.1-11.1.1">Pledge: The pledge is expected to respond with the necessary data objects for bootstrapping to the registrar-agent.
-The protocol used between the pledge and the registrar-agent is assumed to be HTTP in the context of this document.
+            <p id="section-5.1-11.1.1">Pledge: The pledge is expected to respond with the necessary data objects for bootstrapping to the Registrar-Agent.
+The protocol used between the pledge and the Registrar-Agent is assumed to be HTTP in the context of this document.
 Any other protocols (including HTTPS) can be used as long as they support the exchange of the necessary data objects.
 This includes CoAP or protocol to be used over Bluetooth or NFC connections
 A pledge acting as a server during bootstrapping leads to some differences for BRSKI:<a href="#section-5.1-11.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.1-11.1.2.1">
-                <p id="section-5.1-11.1.2.1.1">Discovery of the pledge by the registrar-agent <span class="bcp14">MUST</span> be possible.<a href="#section-5.1-11.1.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-5.1-11.1.2.1.1">Discovery of the pledge by the Registrar-Agent <span class="bcp14">MUST</span> be possible.<a href="#section-5.1-11.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-5.1-11.1.2.2">
-                <p id="section-5.1-11.1.2.2.1">As the registrar-agent <span class="bcp14">MUST</span> be able to request data objects for bootstrapping of the pledge, the pledge <span class="bcp14">MUST</span> offer corresponding endpoints as defined in <a href="#pledge_ep" class="auto internal xref">Section 5.5</a>.<a href="#section-5.1-11.1.2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-5.1-11.1.2.2.1">As the Registrar-Agent <span class="bcp14">MUST</span> be able to request data objects for bootstrapping of the pledge, the pledge <span class="bcp14">MUST</span> offer corresponding endpoints as defined in <a href="#pledge_ep" class="auto internal xref">Section 5.5</a>.<a href="#section-5.1-11.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-5.1-11.1.2.3">
-                <p id="section-5.1-11.1.2.3.1">The registrar-agent <span class="bcp14">MUST</span> provide additional data to the pledge in the context of the voucher-request trigger, which the pledge <span class="bcp14">MUST</span> include into the PVR as defined in <a href="#pvrt" class="auto internal xref">Section 6.1.1</a> and <a href="#pvrr" class="auto internal xref">Section 6.1.2</a>.
-This allows the registrar to identify, with which registrar-agent the pledge was in contact.<a href="#section-5.1-11.1.2.3.1" class="pilcrow">¶</a></p>
+                <p id="section-5.1-11.1.2.3.1">The Registrar-Agent <span class="bcp14">MUST</span> provide additional data to the pledge in the context of the voucher-request trigger, which the pledge <span class="bcp14">MUST</span> include into the PVR as defined in <a href="#pvrt" class="auto internal xref">Section 6.1.1</a> and <a href="#pvrr" class="auto internal xref">Section 6.1.2</a>.
+This allows the registrar to identify, with which Registrar-Agent the pledge was in contact.<a href="#section-5.1-11.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-5.1-11.1.2.4">
                 <p id="section-5.1-11.1.2.4.1">The order of exchanges in the BRSKI-PRM call flow is different those in BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, as the PVR and PER are collected at once and provided to the registrar.
@@ -2018,31 +2018,31 @@ This enables bulk bootstrapping of several devices.<a href="#section-5.1-11.1.2.
             </ul>
 </li>
           <li class="normal" id="section-5.1-11.2">
-            <p id="section-5.1-11.2.1">Registrar-agent: provides a store and forward communication path to exchange data objects between the pledge and the domain registrar.
-The registrar-agent brokers in situations in which the domain registrar is not directly reachable by the pledge.
+            <p id="section-5.1-11.2.1">Registrar-Agent: provides a store and forward communication path to exchange data objects between the pledge and the domain registrar.
+The Registrar-Agent brokers in situations in which the domain registrar is not directly reachable by the pledge.
 This may be due to a different technology stack or due to missing connectivity.
-The registrar-agent triggers a pledge to create bootstrapping artifacts such as the voucher-request and the enrollment-request on one or multiple pledges.
+The Registrar-Agent triggers a pledge to create bootstrapping artifacts such as the voucher-request and the enrollment-request on one or multiple pledges.
 It can then perform a (bulk) bootstrapping based on the collected data.
-The registrar-agent is expected to possess information about the domain registrar: the registrar EE certificate, LDevID(CA) certificate, IP address, either by configuration or by using the discovery mechanism defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
-There is no trust assumption between the pledge and the registrar-agent as only authenticated self-contained objects are used, which are transported via the registrar-agent and provided either by the pledge or the registrar.
-The trust assumption between the registrar-agent and the registrar is based on the LDevID of the registrar-agent, provided by the PKI responsible for the domain.
-This allows the registrar-agent to authenticate towards the registrar, e.g., in a TLS handshake.
-Based on this, the registrar is able to distinguish a pledge from a registrar-agent during the TLS session establishment and also to verify that this registrar-agent is authorized to perform the bootstrapping of the distinct pledge.
-The registrar-agent may be realized as stand-alone component supporting nomadic activities of a service technician moving between different installation sites. 
-Contrary, the registrar-agent may also be realized as co-located functionality for a registrar, to support pledges in pledge-responder-mode.<a href="#section-5.1-11.2.1" class="pilcrow">¶</a></p>
+The Registrar-Agent is expected to possess information about the domain registrar: the registrar EE certificate, LDevID(CA) certificate, IP address, either by configuration or by using the discovery mechanism defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
+There is no trust assumption between the pledge and the Registrar-Agent as only authenticated self-contained objects are used, which are transported via the Registrar-Agent and provided either by the pledge or the registrar.
+The trust assumption between the Registrar-Agent and the registrar is based on the LDevID of the Registrar-Agent, provided by the PKI responsible for the domain.
+This allows the Registrar-Agent to authenticate towards the registrar, e.g., in a TLS handshake.
+Based on this, the registrar is able to distinguish a pledge from a Registrar-Agent during the TLS session establishment and also to verify that this Registrar-Agent is authorized to perform the bootstrapping of the distinct pledge.
+The Registrar-Agent may be realized as stand-alone component supporting nomadic activities of a service technician moving between different installation sites.
+Contrary, the Registrar-Agent may also be realized as co-located functionality for a registrar, to support pledges in pledge-responder-mode.<a href="#section-5.1-11.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-11.3">
             <p id="section-5.1-11.3.1">Join Proxy (not shown): same functionality as described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> if needed.
-Note that a registrar-agent may use a join proxy to facilitate the TLS connection to the registrar, in the same way that a BRSKI pledge would use a join proxy. This is useful in cases where the registrar-agent does not have full IP connectivity via the domain network, or cases where it has no other means to locate the registrar on the network.<a href="#section-5.1-11.3.1" class="pilcrow">¶</a></p>
+Note that a Registrar-Agent may use a join proxy to facilitate the TLS connection to the registrar, in the same way that a BRSKI pledge would use a join proxy. This is useful in cases where the Registrar-Agent does not have full IP connectivity via the domain network, or cases where it has no other means to locate the registrar on the network.<a href="#section-5.1-11.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-11.4">
             <p id="section-5.1-11.4.1">Domain Registrar: In general, the domain registrar fulfills the same functionality regarding the bootstrapping of the pledge in a (customer site) domain by facilitating the communication of the pledge with the MASA service and the domain PKI service.
-In contrast to <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the domain registrar does not interact with a pledge directly but through the registrar-agent.
-A registrar with combined functionality of BRSKI and BRSKI-PRM detects if the bootstrapping is performed by the pledge directly (BRSKI case) or by the registrar-agent (BRSKI-PRM case) based on the utilized credential for authentication (either pledge’s IDevID or LDevID from registrar-agent), see also <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>.<a href="#section-5.1-11.4.1" class="pilcrow">¶</a></p>
+In contrast to <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the domain registrar does not interact with a pledge directly but through the Registrar-Agent.
+A registrar with combined functionality of BRSKI and BRSKI-PRM detects if the bootstrapping is performed by the pledge directly (BRSKI case) or by the Registrar-Agent (BRSKI-PRM case) based on the utilized credential for authentication (either pledge’s IDevID or LDevID from Registrar-Agent), see also <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>.<a href="#section-5.1-11.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.1-11.5">
             <p id="section-5.1-11.5.1">The manufacturer provided components/services (MASA and Ownership tracker) are used as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
-A MASA is able to support enrollment via registrar-agent without changes unless it checks the vouchers proximity indication, in which case it would need to be enhanced to support BRSKI-PRM to also accept the agent-proximity.<a href="#section-5.1-11.5.1" class="pilcrow">¶</a></p>
+A MASA is able to support enrollment via Registrar-Agent without changes unless it checks the vouchers proximity indication, in which case it would need to be enhanced to support BRSKI-PRM to also accept the agent-proximity.<a href="#section-5.1-11.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -2052,7 +2052,7 @@ A MASA is able to support enrollment via registrar-agent without changes unless 
         <h3 id="name-nomadic-connectivity">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-nomadic-connectivity" class="section-name selfRef">Nomadic connectivity</a>
         </h3>
-<p id="section-5.2-1">In one example instance of the PRM architecture as shown in <a href="#uc3figure" class="auto internal xref">Figure 2</a>, there is no connectivity between the location in which the pledge is installed and the location of the domain registrar. 
+<p id="section-5.2-1">In one example instance of the PRM architecture as shown in <a href="#uc3figure" class="auto internal xref">Figure 2</a>, there is no connectivity between the location in which the pledge is installed and the location of the domain registrar.
 This is often the case in the aforementioned building automation use case (<a href="#building-automation" class="auto internal xref">Section 3.1.1</a>).<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <span id="name-registrar-agent-nomadic-con"></span><div id="uc3figure">
 <figure id="figure-2">
@@ -2178,11 +2178,11 @@ This is often the case in the aforementioned building automation use case (<a hr
 </div>
 </div>
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
-<a href="#name-registrar-agent-nomadic-con" class="selfRef">Registrar Agent nomadic connectivity example</a>
+<a href="#name-registrar-agent-nomadic-con" class="selfRef">Registrar-Agent nomadic connectivity example</a>
           </figcaption></figure>
 </div>
-<p id="section-5.2-3">PRM enables support of this case through nomadic connectivity of the registrar-agent.
-To perform enrollment in this setup, multiple round trips of the registrar-agent between the pledge install location and the domain registrar are required.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">PRM enables support of this case through nomadic connectivity of the Registrar-Agent.
+To perform enrollment in this setup, multiple round trips of the Registrar-Agent between the pledge install location and the domain registrar are required.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-5.2-4">
 <li id="section-5.2-4.1">
             <p id="section-5.2-4.1.1">Connectivity to domain registrar: preparation tasks for pledge bootstrapping not part of the BRSKI-PRM protocol definition, like retrieval of list of pledges to enroll.<a href="#section-5.2-4.1.1" class="pilcrow">¶</a></p>
@@ -2200,16 +2200,16 @@ To perform enrollment in this setup, multiple round trips of the registrar-agent
             <p id="section-5.2-4.5.1">Connectivity to domain registrar, submit voucher status and enrollment status using the BRSKI-PRM approach described in <a href="#exchanges_uc2_4" class="auto internal xref">Section 6.3.6</a>.<a href="#section-5.2-4.5.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-5.2-5">Variations of this setup include cases where the registrar-agent uses for example WiFi to connect to the pledge installation network, and mobile network connectivity to connect to the domain registrar. 
+<p id="section-5.2-5">Variations of this setup include cases where the Registrar-Agent uses for example WiFi to connect to the pledge installation network, and mobile network connectivity to connect to the domain registrar.
 Both connections may also be possible in a single location at the same time, based on installation building conditions.,<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="registrar-agent-co-located-with-registrar">
 <section id="section-5.3">
         <h3 id="name-registrar-agent-co-located-">
-<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-registrar-agent-co-located-" class="section-name selfRef">Registrar-agent co-located with registrar</a>
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-registrar-agent-co-located-" class="section-name selfRef">Registrar-Agent co-located with registrar</a>
         </h3>
-<p id="section-5.3-1">Compared to <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> BRSKI, pledges supporting BRSKI-PRM can be completely passive and only need to react when being requested to react by a registrar-agent. 
+<p id="section-5.3-1">Compared to <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> BRSKI, pledges supporting BRSKI-PRM can be completely passive and only need to react when being requested to react by a Registrar-Agent.
 In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, pledges instead need to continuously request enrollment from a domain registrar, which may result in undesirable communications pattern and possible overload of a domain registrar.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
 <span id="name-registrar-agent-integrated-"></span><div id="uc4figure">
 <figure id="figure-3">
@@ -2301,7 +2301,7 @@ In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, pledges inst
 <a href="#name-registrar-agent-integrated-" class="selfRef">Registrar-Agent integrated into Domain Registrar example</a>
           </figcaption></figure>
 </div>
-<p id="section-5.3-3">The benefits of BRSKI-PRM can be achieved even without the operational complexity of standalone registrar-agents by integrating the necessary functionality of the registrar-agent as a module into the domain registrar as shown in <a href="#uc4figure" class="auto internal xref">Figure 3</a> so that it can support the BRSKI-PRM communications to the pledge.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.3-3">The benefits of BRSKI-PRM can be achieved even without the operational complexity of standalone Registrar-Agents by integrating the necessary functionality of the Registrar-Agent as a module into the domain registrar as shown in <a href="#uc4figure" class="auto internal xref">Figure 3</a> so that it can support the BRSKI-PRM communications to the pledge.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="agt_prx">
@@ -2309,7 +2309,7 @@ In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, pledges inst
         <h3 id="name-agent-proximity-assertion">
 <a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-agent-proximity-assertion" class="section-name selfRef">Agent-Proximity Assertion</a>
         </h3>
-<p id="section-5.4-1">"Agent-proximity" is a statement in the PVR and in the voucher, that the registrar certificate was provided via the registrar-agent as defined in <a href="#exchanges_uc2" class="auto internal xref">Section 6</a> and not directly to the pledge.
+<p id="section-5.4-1">"Agent-proximity" is a statement in the PVR and in the voucher, that the registrar certificate was provided via the Registrar-Agent as defined in <a href="#exchanges_uc2" class="auto internal xref">Section 6</a> and not directly to the pledge.
 "Agent-proximity" is therefore a different assertion then "proximity", which is defined in section 4 of <span>[<a href="#RFC8366" class="cite xref">RFC8366</a>]</span>.
 "Agent-proximity" is defined as additional assertion type in <span>[<a href="#I-D.ietf-anima-rfc8366bis" class="cite xref">I-D.ietf-anima-rfc8366bis</a>]</span>.
 This can be verified by the registrar and also by the MASA during the voucher-request processing.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
@@ -2317,8 +2317,8 @@ This can be verified by the registrar and also by the MASA during the voucher-re
 This allows the MASA to verify the proximity of the pledge and registrar, facilitating a decision to assign the pledge to that domain owner.
 In BRSKI, the TLS connection is considered provisional until the pledge receives the voucher.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
 <p id="section-5.4-3">In contrast, in BRSKI-PRM, the pledge has no direct connection to the registrar and must take the Registrar-Agent LDevID provisionally.
-The registrar-agent has included its LDevID, a certificate signed by the domain owner, into the PVR trigger message.
-The registrar-agent identity is therefore included into the Pledge Voucher Request (PVR).<a href="#section-5.4-3" class="pilcrow">¶</a></p>
+The Registrar-Agent has included its LDevID, a certificate signed by the domain owner, into the PVR trigger message.
+The Registrar-Agent identity is therefore included into the Pledge Voucher Request (PVR).<a href="#section-5.4-3" class="pilcrow">¶</a></p>
 <p id="section-5.4-4">Akin to the BRSKI case, the pledge has provided proximity evidence to the MASA.
 But additionally, this allows the Registrar to be sure that the PVR collected by the Registrar-Agent was in fact collected by the Registrar-Agent to which the Registrar is connected to.<a href="#section-5.4-4" class="pilcrow">¶</a></p>
 <p id="section-5.4-5">In a similar fashion, the pledge accepts the registrar certificate provisionally until it receives the voucher as described in <a href="#exchanges_uc2_3" class="auto internal xref">Section 6.3</a>.
@@ -2330,11 +2330,11 @@ See also Section 5 of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</
         <h3 id="name-behavior-of-pledge-in-pledg">
 <a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-behavior-of-pledge-in-pledg" class="section-name selfRef">Behavior of Pledge in Pledge-Responder-Mode</a>
         </h3>
-<p id="section-5.5-1">The pledge is triggered by the registrar-agent to generate the PVR and PER.
-It will also be triggered for processing of the responses and the generation of status information once the registrar-agent has received the responses from the registrar later in the process.
-Due to the use of the registrar-agent, the interaction with the domain registrar is changed as shown in <a href="#exchangesfig_uc2_1" class="auto internal xref">Figure 5</a>.
-To enable interaction as responder with the registrar-agent, the pledge provides endpoints using the BRSKI defined endpoints based on the "/.well-known/brski" URI tree.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
-<p id="section-5.5-2">When the registrar-agent reaches out to a pledge, for instance with an example URI path "http://pledge.example/.well-known/brski/tpvr", it will in fact send a Host: header of "pledge.example", with a relative path of "/.well-known/brski/tpbr".
+<p id="section-5.5-1">The pledge is triggered by the Registrar-Agent to generate the PVR and PER.
+It will also be triggered for processing of the responses and the generation of status information once the Registrar-Agent has received the responses from the registrar later in the process.
+Due to the use of the Registrar-Agent, the interaction with the domain registrar is changed as shown in <a href="#exchangesfig_uc2_1" class="auto internal xref">Figure 5</a>.
+To enable interaction as responder with the Registrar-Agent, the pledge provides endpoints using the BRSKI defined endpoints based on the "/.well-known/brski" URI tree.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
+<p id="section-5.5-2">When the Registrar-Agent reaches out to a pledge, for instance with an example URI path "http://pledge.example/.well-known/brski/tpvr", it will in fact send a Host: header of "pledge.example", with a relative path of "/.well-known/brski/tpbr".
 However in practice the pledge will often be known only by its IP address as returned by a discovery protocol, and that is what will be present in the Host: header.<a href="#section-5.5-2" class="pilcrow">¶</a></p>
 <p id="section-5.5-3">The pledge <span class="bcp14">MUST</span> respond to all queries regardless of what Host: header is provided by the client.
 <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>], <a href="https://rfc-editor.org/rfc/rfc9110#section-7.2" class="relref">Section 7.2</a></span> makes the Host: header mandatory, so it will always be present.<a href="#section-5.5-3" class="pilcrow">¶</a></p>
@@ -2406,13 +2406,13 @@ The endpoints are defined with short names to also accommodate for the constrain
         <h3 id="name-behavior-of-registrar-agent">
 <a href="#section-5.6" class="section-number selfRef">5.6. </a><a href="#name-behavior-of-registrar-agent" class="section-name selfRef">Behavior of Registrar-Agent</a>
         </h3>
-<p id="section-5.6-1">The registrar-agent as a new component provides a message passing service between the pledge and the domain registrar.
+<p id="section-5.6-1">The Registrar-Agent as a new component provides a message passing service between the pledge and the domain registrar.
 It facilitates the exchange of data between the pledge and the domain registrar, which are the voucher-request/response, the enrollment-request/response, as well as related telemetry and status information.<a href="#section-5.6-1" class="pilcrow">¶</a></p>
-<p id="section-5.6-2">For the communication with the pledge the registrar-agent utilizes communication endpoints provided by the pledge.
+<p id="section-5.6-2">For the communication with the pledge the Registrar-Agent utilizes communication endpoints provided by the pledge.
 The transport in this specification is based on HTTP but may also be done using other transport mechanisms.<a href="#section-5.6-2" class="pilcrow">¶</a></p>
-<p id="section-5.6-3">The communication between the registrar-agent and the pledge <span class="bcp14">MAY</span> be protected using TLS as outlined in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a>.
+<p id="section-5.6-3">The communication between the Registrar-Agent and the pledge <span class="bcp14">MAY</span> be protected using TLS as outlined in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a>.
 The details of doing TLS validation are <a href="#pledgehttps" class="auto internal xref">Appendix B</a>.<a href="#section-5.6-3" class="pilcrow">¶</a></p>
-<p id="section-5.6-4">For the communication with the registrar, the registrar-agent uses the endpoints of the domain registrar side already specified in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> (derived from EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span>) where suitable.
+<p id="section-5.6-4">For the communication with the registrar, the Registrar-Agent uses the endpoints of the domain registrar side already specified in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> (derived from EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span>) where suitable.
 These endpoints do not expect signature wrapped-objects, which are used b BRSKI-PRM.
 This specifically applies for the enrollment-request and the provisioning of CA certificates.
 To accommodate the use of signature-wrapped object, the following additional endpoints are defined for the <em>registrar</em>.
@@ -2448,30 +2448,30 @@ Operations and their corresponding URIs:<a href="#section-5.6-4" class="pilcrow"
           </tbody>
         </table>
 </div>
-<p id="section-5.6-6">For authentication to the domain registrar, the registrar-agent uses its EE (RegAgt) certificate.
-The provisioning of the registrar-agent LDevID is out of scope for this document, but may be done in advance using a separate BRSKI run or by other means like configuration.
-It is recommended to use short lived registrar-agent LDevIDs in the range of days or weeks as outlined in <a href="#sec_cons_reg-agt" class="auto internal xref">Section 10.3</a>.<a href="#section-5.6-6" class="pilcrow">¶</a></p>
-<p id="section-5.6-7">The registrar-agent will use its EE certificate when establishing a TLS session with the domain registrar for TLS client authentication.
+<p id="section-5.6-6">For authentication to the domain registrar, the Registrar-Agent uses its EE (RegAgt) certificate.
+The provisioning of the Registrar-Agent LDevID is out of scope for this document, but may be done in advance using a separate BRSKI run or by other means like configuration.
+It is recommended to use short lived Registrar-Agent LDevIDs in the range of days or weeks as outlined in <a href="#sec_cons_reg-agt" class="auto internal xref">Section 10.3</a>.<a href="#section-5.6-6" class="pilcrow">¶</a></p>
+<p id="section-5.6-7">The Registrar-Agent will use its EE certificate when establishing a TLS session with the domain registrar for TLS client authentication.
 The EE (RegAgt) certificate <span class="bcp14">MUST</span> include a SubjectKeyIdentifier (SKID), which is used as reference in the context of an agent-signed-data object as defined in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a>.
 Note that this is an additional requirement for issuing the certificate, as <span>[<a href="#IEEE-802.1AR" class="cite xref">IEEE-802.1AR</a>]</span> only requires the SKID to be included for intermediate CA certificates.
 <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> makes a similar requirement.
 In BRSKI-PRM, the SKID is used in favor of providing the complete EE (RegAgt) certificate to accommodate also constraint environments and reduce bandwidth needed for communication with the pledge.
 In addition, it follows the recommendation from BRSKI to use SKID in favor of a certificate fingerprint to avoid additional computations.<a href="#section-5.6-7" class="pilcrow">¶</a></p>
-<p id="section-5.6-8">Using an LDevID for TLS client authentication of the registrar-agent is a deviation from <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, in which the pledge's IDevID credential is used to perform TLS client authentication.
-The use of the EE (RegAgt) certificate allows the domain registrar to distinguish, if bootstrapping is initiated from a pledge or from a registrar-agent and to adopt different internal handling accordingly.
-If a registrar detects a request that originates from a registrar-agent it is able to switch the operational mode from BRSKI to BRSKI-PRM.
+<p id="section-5.6-8">Using an LDevID for TLS client authentication of the Registrar-Agent is a deviation from <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, in which the pledge's IDevID credential is used to perform TLS client authentication.
+The use of the EE (RegAgt) certificate allows the domain registrar to distinguish, if bootstrapping is initiated from a pledge or from a Registrar-Agent and to adopt different internal handling accordingly.
+If a registrar detects a request that originates from a Registrar-Agent it is able to switch the operational mode from BRSKI to BRSKI-PRM.
 This may be supported by a specific naming in the SAN (subject alternative name) component of the EE (RegAgt) certificate.
-Alternatively, the domain may feature a CA specifically for issuing registrar-agent LDevID certificates.
-This allows the registrar to detect registrar-agents based on the issuing CA.<a href="#section-5.6-8" class="pilcrow">¶</a></p>
+Alternatively, the domain may feature a CA specifically for issuing Registrar-Agent LDevID certificates.
+This allows the registrar to detect Registrar-Agents based on the issuing CA.<a href="#section-5.6-8" class="pilcrow">¶</a></p>
 <p id="section-5.6-9">As BRSKI-PRM uses authenticated self-contained data objects between the pledge and the domain registrar, the binding of the pledge identity to the requests is provided by the data object signature employing the pledge's IDevID.
 The objects exchanged between the pledge and the domain registrar used in the context of this specifications are JOSE objects.<a href="#section-5.6-9" class="pilcrow">¶</a></p>
-<p id="section-5.6-10">In addition to the EE (RegAgt) certificate, the registrar-agent is provided with the product-serial-number(s) of the pledge(s) to be bootstrapped.
-This is necessary to allow the discovery of pledge(s) by the registrar-agent using DNS-SD with mDNS (see <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.6.2</a>)
-The list may be provided by prior administrative means or the registrar agent may get the information via an interaction with the pledge.
+<p id="section-5.6-10">In addition to the EE (RegAgt) certificate, the Registrar-Agent is provided with the product-serial-number(s) of the pledge(s) to be bootstrapped.
+This is necessary to allow the discovery of pledge(s) by the Registrar-Agent using DNS-SD with mDNS (see <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.6.2</a>)
+The list may be provided by prior administrative means or the Registrar-Agent may get the information via an interaction with the pledge.
 For instance, <span>[<a href="#RFC9238" class="cite xref">RFC9238</a>]</span> describes scanning of a QR code, the product-serial-number would be initialized from the 12N B005 Product Serial Number.<a href="#section-5.6-10" class="pilcrow">¶</a></p>
 <p id="section-5.6-11">According to <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> section 5.3, the domain registrar performs the pledge authorization for bootstrapping within his domain based on the pledge voucher-request object.
 This behavior is retained also in BRSKI-PRM.<a href="#section-5.6-11" class="pilcrow">¶</a></p>
-<p id="section-5.6-12">The following information <span class="bcp14">MUST</span> be available at the registrar-agent before interaction with a pledge:<a href="#section-5.6-12" class="pilcrow">¶</a></p>
+<p id="section-5.6-12">The following information <span class="bcp14">MUST</span> be available at the Registrar-Agent before interaction with a pledge:<a href="#section-5.6-12" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.6-13.1">
             <p id="section-5.6-13.1.1">EE (RegAgt) certificate and corresponding private key: own operational key pair (to sign agent-signed-data).<a href="#section-5.6-13.1.1" class="pilcrow">¶</a></p>
@@ -2480,7 +2480,7 @@ This behavior is retained also in BRSKI-PRM.<a href="#section-5.6-11" class="pil
             <p id="section-5.6-13.2.1">Registrar EE certificate: certificate of the domain registrar (to be provided to the pledge).<a href="#section-5.6-13.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.6-13.3">
-            <p id="section-5.6-13.3.1">Serial-number(s): product-serial-number(s) of pledge(s) to be bootstrapped (to query discover specific pledges based on the serial number).<a href="#section-5.6-13.3.1" class="pilcrow">¶</a></p>
+            <p id="section-5.6-13.3.1">Serial-number(s): product-serial-number(s) of pledge(s) to be bootstrapped (to query discovery of specific pledges based on the product-serial-number).<a href="#section-5.6-13.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <div id="discovery_uc2_reg">
@@ -2488,8 +2488,8 @@ This behavior is retained also in BRSKI-PRM.<a href="#section-5.6-11" class="pil
           <h4 id="name-discovery-of-registrar-by-r">
 <a href="#section-5.6.1" class="section-number selfRef">5.6.1. </a><a href="#name-discovery-of-registrar-by-r" class="section-name selfRef">Discovery of Registrar by Registrar-Agent</a>
           </h4>
-<p id="section-5.6.1-1">As a registrar-agent acts as representative of the domain registrar towards the pledge or may even be collocated with the domain registrar, a separate discovery of the registrar is likely not needed as registrar-agent and registrar are domain components and have a trust relation. 
-Moreover, other communication (not part of this document) between the registrar-agent and the registrar is assumed, e.g., to exchange information about serial numbers of pledges to be discovered as outlined in <a href="#arch_nomadic" class="auto internal xref">Section 5.2</a>. 
+<p id="section-5.6.1-1">As a Registrar-Agent acts as representative of the domain registrar towards the pledge or may even be collocated with the domain registrar, a separate discovery of the registrar is likely not needed as Registrar-Agent and registrar are domain components and have a trust relation.
+Moreover, other communication (not part of this document) between the Registrar-Agent and the registrar is assumed, e.g., to exchange information about product-serial-number(s) of pledges to be discovered as outlined in <a href="#arch_nomadic" class="auto internal xref">Section 5.2</a>.
 Moreover, as the standard discovery described in section 4 and the appendix A.2 of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> does not support  of registrars with an enhanced feature set (like the support of BRSKI-PRM), this standard discovery is not applicable.<a href="#section-5.6.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.6.1-2">As a more general solution, the BRSKI discovery mechanism can be extended to provide upfront information on the capabilities of registrars, such as the mode of operation (pledge-responder-mode or registrar-responder-mode).
 Defining discovery extensions is out of scope of this document.
@@ -2501,14 +2501,14 @@ This may be provided in <span>[<a href="#I-D.eckert-anima-brski-discovery" class
           <h4 id="name-discovery-of-pledge-by-regi">
 <a href="#section-5.6.2" class="section-number selfRef">5.6.2. </a><a href="#name-discovery-of-pledge-by-regi" class="section-name selfRef">Discovery of Pledge by Registrar-Agent</a>
           </h4>
-<p id="section-5.6.2-1">The discovery of the pledge by registrar-agent in the context of this document describes the minimum discovery approach to be supported. 
+<p id="section-5.6.2-1">The discovery of the pledge by Registrar-Agent in the context of this document describes the minimum discovery approach to be supported.
 A more general discovery mechanism, also supporting GRASP besides DNS-SD with mDNS may be provided in <span>[<a href="#I-D.eckert-anima-brski-discovery" class="cite xref">I-D.eckert-anima-brski-discovery</a>]</span>.<a href="#section-5.6.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.6.2-2">Discovery in BRSKI-PRM uses DNS-based Service Discovery <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span> over Multicast DNS <span>[<a href="#RFC6762" class="cite xref">RFC6762</a>]</span> to discover the pledge.
 Note that <span>[<a href="#RFC6762" class="cite xref">RFC6762</a>]</span> Section 9 provides support for conflict resolution in situations when an DNS-SD with mDNS responder receives a mDNS response with inconsistent data.
 Note that <span>[<a href="#RFC8990" class="cite xref">RFC8990</a>]</span> does not support conflict resolution of mDNS, which may be a limitation for its application.<a href="#section-5.6.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.6.2-3">The pledge constructs a local host name based on device local information (product-serial-number), which results in "product-serial-number._brski-pledge._tcp.local".
 The product-serial-number composition is manufacturer dependent and may contain information regarding the manufacturer, the product type, and further information specific to the product instance. To allow distinction of pledges, the product-serial-number therefore needs to be sufficiently unique.<a href="#section-5.6.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.6.2-4">In the absence of a more general discovery as defined in <span>[<a href="#I-D.eckert-anima-brski-discovery" class="cite xref">I-D.eckert-anima-brski-discovery</a>]</span> the registrar-agent <span class="bcp14">MUST</span>  use<a href="#section-5.6.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.6.2-4">In the absence of a more general discovery as defined in <span>[<a href="#I-D.eckert-anima-brski-discovery" class="cite xref">I-D.eckert-anima-brski-discovery</a>]</span> the Registrar-Agent <span class="bcp14">MUST</span>  use<a href="#section-5.6.2-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.6.2-5.1">
               <p id="section-5.6.2-5.1.1">"product-serial-number._brski-pledge._tcp.local", to discover a specific pledge, e.g., when connected to a local network.<a href="#section-5.6.2-5.1.1" class="pilcrow">¶</a></p>
@@ -2547,17 +2547,17 @@ If it still acts as server, the defined BRSKI-PRM endpoints to trigger a pledge 
       <h2 id="name-bootstrapping-data-objects-">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-bootstrapping-data-objects-" class="section-name selfRef">Bootstrapping Data Objects and Corresponding Exchanges</a>
       </h2>
-<p id="section-6-1">The interaction of the pledge with the registrar-agent may be accomplished using different transport means (protocols and/or network technologies).
+<p id="section-6-1">The interaction of the pledge with the Registrar-Agent may be accomplished using different transport means (protocols and/or network technologies).
 This specification utilizes HTTP as transport.
 Alternative transport channels may be CoAP, Bluetooth Low Energy (BLE), or Nearfield Communication (NFC).
-These transport means may differ from, and are independent of, the ones used between the registrar-agent and the registrar.
-Transport channel independence is realized by data objects, which are not bound to specific transport security and stay the same across the communication from the pledge via the registrar-agent to the registrar..
+These transport means may differ from, and are independent of, the ones used between the Registrar-Agent and the registrar.
+Transport channel independence is realized by data objects, which are not bound to specific transport security and stay the same across the communication from the pledge via the Registrar-Agent to the registrar..
 Therefore, authenticated self-contained objects (here: signature-wrapped objects) are applied for data exchanges between the pledge and the registrar.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">The registrar-agent provides the domain registrar certificate (registrar LDevID certificate) to the pledge to be included in the PVR leaf "agent-provided-proximity-registrar-certificate".
+<p id="section-6-2">The Registrar-Agent provides the domain registrar certificate (registrar LDevID certificate) to the pledge to be included in the PVR leaf "agent-provided-proximity-registrar-certificate".
 This enables the registrar to verify that it is the desired registrar for handling the request.<a href="#section-6-2" class="pilcrow">¶</a></p>
-<p id="section-6-3">The registrar certificate may be configured at the registrar-agent or may be fetched by the registrar-agent based on a prior TLS connection with this domain registrar.
-In addition, the registrar-agent provides agent-signed-data containing the pledge product-serial-number, signed with the private key corresponding to the EE (RegAgt) certificate, as described in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a>.
-This enables the registrar to verify and log, which registrar-agent was in contact with the pledge, when verifying the PVR.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-3">The registrar certificate may be configured at the Registrar-Agent or may be fetched by the Registrar-Agent based on a prior TLS connection with this domain registrar.
+In addition, the Registrar-Agent provides agent-signed-data containing the pledge product-serial-number, signed with the private key corresponding to the EE (RegAgt) certificate, as described in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a>.
+This enables the registrar to verify and log, which Registrar-Agent was in contact with the pledge, when verifying the PVR.<a href="#section-6-3" class="pilcrow">¶</a></p>
 <p id="section-6-4">The registrar <span class="bcp14">MUST</span> provide the EE (RegAgt) certificate identified by the SubjectKeyIdentifier (SKID) in the header of the agent-signed-data from the PVR in its RVR (see also <a href="#pvr-proc-reg" class="auto internal xref">Section 6.2.2</a>.<a href="#section-6-4" class="pilcrow">¶</a></p>
 <p id="section-6-5">The MASA in turn verifies the registrar LDevID certificate is included in the PVR (contained in the "prior-signed-voucher-request" field of RVR) in the "agent-provided-proximity-registrar-certificate" leaf and may assert the PVR as "verified" or "logged".<a href="#section-6-5" class="pilcrow">¶</a></p>
 <p id="section-6-6">In addition, the MASA <span class="bcp14">MAY</span> issue the assertion "agent-proximity" as follows:
@@ -2566,7 +2566,7 @@ If both can be verified successfully, the MASA can assert "agent-proximity" in t
 The assertion of "agent-proximity" is similar to the proximity assertion by the MASA when using BRSKI.
 Note that the different assertions do not provide a metric of strength as the security properties are not comparable.<a href="#section-6-6" class="pilcrow">¶</a></p>
 <p id="section-6-7">Depending on the MASA verification policy, it may also respond with a suitable 4xx or 5xx error status code as described in section 5.6 of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
-When successful, the voucher will then be supplied via the registrar to the registrar-agent.<a href="#section-6-7" class="pilcrow">¶</a></p>
+When successful, the voucher will then be supplied via the registrar to the Registrar-Agent.<a href="#section-6-7" class="pilcrow">¶</a></p>
 <p id="section-6-8"><a href="#exchangesfig_uc2_all" class="auto internal xref">Figure 4</a> provides an overview of the exchanges detailed in the following sub sections.<a href="#section-6-8" class="pilcrow">¶</a></p>
 <span id="name-overview-pledge-responder-m"></span><div id="exchangesfig_uc2_all">
 <figure id="figure-4">
@@ -2724,7 +2724,7 @@ When successful, the voucher will then be supplied via the registrar to the regi
               <circle cx="168" cy="624" r="6" class="opendot" fill="white" stroke="black"></circle>
               <g class="text">
                 <text x="44" y="52">Pledge</text>
-                <text x="160" y="52">Registrar</text>
+                <text x="164" y="52">Registrar-</text>
                 <text x="276" y="52">Domain</text>
                 <text x="412" y="52">Domain</text>
                 <text x="508" y="52">Vendor</text>
@@ -2864,16 +2864,16 @@ When successful, the voucher will then be supplied via the registrar to the regi
 <p id="section-6-10">The following sub sections split the interactions shown in <a href="#exchangesfig_uc2_all" class="auto internal xref">Figure 4</a> between the different components into:<a href="#section-6-10" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6-11">
 <li id="section-6-11.1">
-          <p id="section-6-11.1.1"><a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a> describes the request object acquisition by the registrar-agent from pledge.<a href="#section-6-11.1.1" class="pilcrow">¶</a></p>
+          <p id="section-6-11.1.1"><a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a> describes the request object acquisition by the Registrar-Agent from pledge.<a href="#section-6-11.1.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-6-11.2">
-          <p id="section-6-11.2.1"><a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a> describes the request object processing initiated by the registrar-agent to the registrar and also the interaction of the registrar with the MASA and the domain CA including the response object processing by these entities.<a href="#section-6-11.2.1" class="pilcrow">¶</a></p>
+          <p id="section-6-11.2.1"><a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a> describes the request object processing initiated by the Registrar-Agent to the registrar and also the interaction of the registrar with the MASA and the domain CA including the response object processing by these entities.<a href="#section-6-11.2.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-6-11.3">
-          <p id="section-6-11.3.1"><a href="#exchanges_uc2_3" class="auto internal xref">Section 6.3</a> describes the supply of response objects between the registrar-agent and the pledge including the status information.<a href="#section-6-11.3.1" class="pilcrow">¶</a></p>
+          <p id="section-6-11.3.1"><a href="#exchanges_uc2_3" class="auto internal xref">Section 6.3</a> describes the supply of response objects between the Registrar-Agent and the pledge including the status information.<a href="#section-6-11.3.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-6-11.4">
-          <p id="section-6-11.4.1"><a href="#exchanges_uc2_5" class="auto internal xref">Section 6.4</a> describes the general status handling and addresses corresponding exchanges between the registrar-agent and the registrar.<a href="#section-6-11.4.1" class="pilcrow">¶</a></p>
+          <p id="section-6-11.4.1"><a href="#exchanges_uc2_5" class="auto internal xref">Section 6.4</a> describes the general status handling and addresses corresponding exchanges between the Registrar-Agent and the registrar.<a href="#section-6-11.4.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
 <div id="exchanges_uc2_1">
@@ -2881,7 +2881,7 @@ When successful, the voucher will then be supplied via the registrar to the regi
         <h3 id="name-request-objects-acquisition">
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-request-objects-acquisition" class="section-name selfRef">Request Objects Acquisition by Registrar-Agent from Pledge</a>
         </h3>
-<p id="section-6.1-1">The following description assumes that the registrar-agent has already discovered the pledge.
+<p id="section-6.1-1">The following description assumes that the Registrar-Agent has already discovered the pledge.
 This may be done as described in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.6.2</a> and <a href="#exchangesfig_uc2_all" class="auto internal xref">Figure 4</a> based on DNS-SD or similar.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">The focus is on the exchange of signature-wrapped objects using endpoints defined for the pledge in <a href="#pledge_ep" class="auto internal xref">Section 5.5</a>.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
 <p id="section-6.1-3">Preconditions:<a href="#section-6.1-3" class="pilcrow">¶</a></p>
@@ -2890,16 +2890,16 @@ This may be done as described in <a href="#discovery_uc2_ppa" class="auto intern
             <p id="section-6.1-4.1.1">Pledge: possesses IDevID<a href="#section-6.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.1-4.2">
-            <p id="section-6.1-4.2.1">Registrar-agent:<a href="#section-6.1-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-4.2.1">Registrar-Agent:<a href="#section-6.1-4.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1-4.2.2.1">
                 <p id="section-6.1-4.2.2.1.1"><span class="bcp14">MAY</span> handle/trusts pledge's IDevID CA certificate to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication.
-The distribution of IDevID CA certificates to the registrar-agent is out of scope of this document and may be done by a manual configuration.<a href="#section-6.1-4.2.2.1.1" class="pilcrow">¶</a></p>
+The distribution of IDevID CA certificates to the Registrar-Agent is out of scope of this document and may be done by a manual configuration.<a href="#section-6.1-4.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-6.1-4.2.2.2">
                 <p id="section-6.1-4.2.2.2.1">possesses own credentials (EE (RegAgt) certificate and corresponding private key) for the registrar domain.
-In addition, the registrar-agent <span class="bcp14">SHOULD</span> know the product-serial-number(s) of the pledge(s) to be bootstrapped.
-The registrar-agent <span class="bcp14">MAY</span> be provided with the product-serial-number(s) in different ways:<a href="#section-6.1-4.2.2.2.1" class="pilcrow">¶</a></p>
+In addition, the Registrar-Agent <span class="bcp14">SHOULD</span> know the product-serial-number(s) of the pledge(s) to be bootstrapped.
+The Registrar-Agent <span class="bcp14">MAY</span> be provided with the product-serial-number(s) in different ways:<a href="#section-6.1-4.2.2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1-4.2.2.2.2.1">
                     <p id="section-6.1-4.2.2.2.2.1.1">configured, e.g., as a list of pledges to be bootstrapped via QR code scanning<a href="#section-6.1-4.2.2.2.2.1.1" class="pilcrow">¶</a></p>
@@ -2909,13 +2909,13 @@ The registrar-agent <span class="bcp14">MAY</span> be provided with the product-
 </li>
                   <li class="normal" id="section-6.1-4.2.2.2.2.3">
                     <p id="section-6.1-4.2.2.2.2.3.1">discovered by using a manufacturer specific approach, e.g., RF beacons.
-If the serial numbers are not known in advance, the registrar-agent cannot perform a distinct triggering of pledges but and triggers  all pledges discovered .<a href="#section-6.1-4.2.2.2.2.3.1" class="pilcrow">¶</a></p>
+If the product-serial-number(s) are not known in advance, the Registrar-Agent cannot perform a distinct triggering of pledges but and triggers  all pledges discovered .<a href="#section-6.1-4.2.2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
             </ul>
 <p id="section-6.1-4.2.3">
-The registrar-agent <span class="bcp14">SHOULD</span> have synchronized time.<a href="#section-6.1-4.2.3" class="pilcrow">¶</a></p>
+The Registrar-Agent <span class="bcp14">SHOULD</span> have synchronized time.<a href="#section-6.1-4.2.3" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.1-4.3">
             <p id="section-6.1-4.3.1">Registrar (same as in BRSKI): possesses/trusts IDevID CA certificate and has own registrar EE credentials.<a href="#section-6.1-4.3.1" class="pilcrow">¶</a></p>
@@ -2952,7 +2952,7 @@ The registrar-agent <span class="bcp14">SHOULD</span> have synchronized time.<a 
                 <polygon class="arrowhead" points="56,144 44,138.4 44,149.6" fill="black" transform="rotate(180,48,144)"></polygon>
                 <g class="text">
                   <text x="44" y="52">Pledge</text>
-                  <text x="368" y="52">Registrar</text>
+                  <text x="372" y="52">Registrar-</text>
                   <text x="352" y="68">Agent</text>
                   <text x="364" y="84">(RegAgt)</text>
                   <text x="400" y="116">-create</text>
@@ -2983,18 +2983,18 @@ The registrar-agent <span class="bcp14">SHOULD</span> have synchronized time.<a 
 </div>
 </div>
 <figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
-<a href="#name-request-collection-registra" class="selfRef">Request collection (registrar-agent - pledge)</a>
+<a href="#name-request-collection-registra" class="selfRef">Request collection (Registrar-Agent - pledge)</a>
           </figcaption></figure>
 </div>
-<p id="section-6.1-6">TLS <span class="bcp14">MAY</span> be optionally used to provide privacy for the interaction between the registrar-agent and the pledge, see <a href="#pledgehttps" class="auto internal xref">Appendix B</a>.<a href="#section-6.1-6" class="pilcrow">¶</a></p>
-<p id="section-6.1-7">Note: The registrar-agent may trigger the pledge for the PVR or the PER or both. It is expected that this will be aligned with a service technician workflow, visiting and installing each pledge.<a href="#section-6.1-7" class="pilcrow">¶</a></p>
+<p id="section-6.1-6">TLS <span class="bcp14">MAY</span> be optionally used to provide privacy for the interaction between the Registrar-Agent and the pledge, see <a href="#pledgehttps" class="auto internal xref">Appendix B</a>.<a href="#section-6.1-6" class="pilcrow">¶</a></p>
+<p id="section-6.1-7">Note: The Registrar-Agent may trigger the pledge for the PVR or the PER or both. It is expected that this will be aligned with a service technician workflow, visiting and installing each pledge.<a href="#section-6.1-7" class="pilcrow">¶</a></p>
 <div id="pvrt">
 <section id="section-6.1.1">
           <h4 id="name-pledge-voucher-request-pvr-">
 <a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-pledge-voucher-request-pvr-" class="section-name selfRef">Pledge-Voucher-Request (PVR) - Trigger</a>
           </h4>
 <p id="section-6.1.1-1">Triggering the pledge to create the PVR is done using HTTP POST on the defined pledge endpoint: "/.well-known/brski/tpvr"<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.1.1-2">The registrar-agent PVR trigger Content-Type header is: <code>application/json</code>.
+<p id="section-6.1.1-2">The Registrar-Agent PVR trigger Content-Type header is: <code>application/json</code>.
 Following parameters are provided in the JSON object:<a href="#section-6.1.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1.1-3.1">
@@ -3085,9 +3085,9 @@ The serial-number corresponds with the product-serial-number contained in the X5
 <a href="#section-6.1.2" class="section-number selfRef">6.1.2. </a><a href="#name-pledge-voucher-request-pvr-r" class="section-name selfRef">Pledge-Voucher-Request (PVR) - Response</a>
           </h4>
 <p id="section-6.1.2-1">Upon receiving the voucher-request trigger, the pledge <span class="bcp14">SHALL</span> construct the body of the PVR as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
-It will contain additional information provided by the registrar-agent as specified in the following.
+It will contain additional information provided by the Registrar-Agent as specified in the following.
 This PVR becomes a JSON-in-JWS object as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.
-If the pledge is unable to construct the PVR it <span class="bcp14">SHOULD</span> respond with a HTTP error code to the registrar-agent to indicate that it is not able to create the PVR.<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
+If the pledge is unable to construct the PVR it <span class="bcp14">SHOULD</span> respond with a HTTP error code to the Registrar-Agent to indicate that it is not able to create the PVR.<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.2-2">The following client error responses <span class="bcp14">MAY</span> be used:<a href="#section-6.1.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1.2-3.1">
@@ -3126,10 +3126,10 @@ If the pledge does not have synchronized time, it <span class="bcp14">SHALL</spa
 <p id="section-6.1.2-8">The ietf-voucher-request:voucher is extended with additional parameters:<a href="#section-6.1.2-8" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1.2-9.1">
-              <p id="section-6.1.2-9.1.1">agent-provided-proximity-registrar-cert: <span class="bcp14">MUST</span> be included and contains the base64-encoded registrar LDevID certificate (provided as PVR trigger parameter by the registrar-agent).<a href="#section-6.1.2-9.1.1" class="pilcrow">¶</a></p>
+              <p id="section-6.1.2-9.1.1">agent-provided-proximity-registrar-cert: <span class="bcp14">MUST</span> be included and contains the base64-encoded registrar LDevID certificate (provided as PVR trigger parameter by the Registrar-Agent).<a href="#section-6.1.2-9.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.1.2-9.2">
-              <p id="section-6.1.2-9.2.1">agent-signed-data: <span class="bcp14">MUST</span> contain the base64-encoded agent-signed-data (as defined in <a href="#asd" class="auto internal xref">Figure 7</a>) and provided as a PVR trigger parameter by the registrar-agent.<a href="#section-6.1.2-9.2.1" class="pilcrow">¶</a></p>
+              <p id="section-6.1.2-9.2.1">agent-signed-data: <span class="bcp14">MUST</span> contain the base64-encoded agent-signed-data (as defined in <a href="#asd" class="auto internal xref">Figure 7</a>) and provided as a PVR trigger parameter by the Registrar-Agent.<a href="#section-6.1.2-9.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-6.1.2-10">The enhancements of the YANG module for the ietf-voucher-request with these new leaves are defined in <span>[<a href="#I-D.ietf-anima-rfc8366bis" class="cite xref">I-D.ietf-anima-rfc8366bis</a>]</span>.<a href="#section-6.1.2-10" class="pilcrow">¶</a></p>
@@ -3186,11 +3186,11 @@ The PVR is included by the registrar in its RCR as described in <a href="#exchan
           <h4 id="name-pledge-enrollment-request-p">
 <a href="#section-6.1.3" class="section-number selfRef">6.1.3. </a><a href="#name-pledge-enrollment-request-p" class="section-name selfRef">Pledge-Enrollment-Request (PER) - Trigger</a>
           </h4>
-<p id="section-6.1.3-1">Once the registrar-agent has received the PVR it can trigger the pledge to generate a PER.
+<p id="section-6.1.3-1">Once the Registrar-Agent has received the PVR it can trigger the pledge to generate a PER.
 As in BRSKI the PER contains a PKCS#10, but additionally signed using the pledge's IDevID.
 Note, as the initial enrollment aims to request a generic certificate, no certificate attributes are provided to the pledge.<a href="#section-6.1.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.3-2">Triggering the pledge to create the enrollment-request is done using HTTP POST on the defined pledge endpoint: "/.well-known/brski/tper"<a href="#section-6.1.3-2" class="pilcrow">¶</a></p>
-<p id="section-6.1.3-3">The registrar-agent PER trigger Content-Type header is: <code>application/json</code> with an empty body by default.
+<p id="section-6.1.3-3">The Registrar-Agent PER trigger Content-Type header is: <code>application/json</code> with an empty body by default.
 Note that using HTTP POST allows for an empty body, but also to provide additional data, like CSR attributes or information about the enroll type "enroll-generic-cert" or "re-enroll-generic-cert".
 The "enroll-generic-cert" case is shown in <a href="#raer" class="auto internal xref">Figure 9</a>.<a href="#section-6.1.3-3" class="pilcrow">¶</a></p>
 <span id="name-example-of-trigger-to-creat"></span><div id="raer">
@@ -3227,7 +3227,7 @@ If the pledge has already implemented an enrollment protocol, it may leverage th
 Note, <span>[<a href="#I-D.ietf-netconf-sztp-csr" class="cite xref">I-D.ietf-netconf-sztp-csr</a>]</span> also allows for inclusion of certification requests in different formats used by CMP or CMC.<a href="#section-6.1.4-3" class="pilcrow">¶</a></p>
 <p id="section-6.1.4-4">The pledge <span class="bcp14">MUST</span> construct the PER as PKCS#10.
 In BRSKI-PRM it <span class="bcp14">MUST</span> sign it additionally with its IDevID credentials to provide proof-of-identity bound to the PKCS#10 as described below.<a href="#section-6.1.4-4" class="pilcrow">¶</a></p>
-<p id="section-6.1.4-5">If the pledge is unable to construct the PER it <span class="bcp14">SHOULD</span> respond with a HTTP 4xx/5xx error code to the registrar-agent to indicate that it is not able to create the PER.<a href="#section-6.1.4-5" class="pilcrow">¶</a></p>
+<p id="section-6.1.4-5">If the pledge is unable to construct the PER it <span class="bcp14">SHOULD</span> respond with a HTTP 4xx/5xx error code to the Registrar-Agent to indicate that it is not able to create the PER.<a href="#section-6.1.4-5" class="pilcrow">¶</a></p>
 <p id="section-6.1.4-6">The following 4xx client error codes <span class="bcp14">MAY</span> be used:<a href="#section-6.1.4-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1.4-7.1">
@@ -3244,10 +3244,10 @@ In BRSKI-PRM it <span class="bcp14">MUST</span> sign it additionally with its ID
 </li>
           </ul>
 <p id="section-6.1.4-8">A successful enrollment will result in a generic LDevID certificate for the pledge in the new domain, which can be used to request further (application specific) LDevID certificates if necessary for operation.
-The registrar-agent <span class="bcp14">SHALL</span> use the endpoints specified in this document.<a href="#section-6.1.4-8" class="pilcrow">¶</a></p>
+The Registrar-Agent <span class="bcp14">SHALL</span> use the endpoints specified in this document.<a href="#section-6.1.4-8" class="pilcrow">¶</a></p>
 <p id="section-6.1.4-9"><span>[<a href="#I-D.ietf-netconf-sztp-csr" class="cite xref">I-D.ietf-netconf-sztp-csr</a>]</span> considers PKCS#10 but also CMP and CMC as certification request format.
 Note that the wrapping of the PER signature is only necessary for plain PKCS#10 as other request formats like CMP and CMS support the signature wrapping as part of their own certificate request format.<a href="#section-6.1.4-9" class="pilcrow">¶</a></p>
-<p id="section-6.1.4-10">The registrar-agent enrollment-request Content-Type header for a signature-wrapped PKCS#10 is: <code>application/jose+json</code><a href="#section-6.1.4-10" class="pilcrow">¶</a></p>
+<p id="section-6.1.4-10">The Registrar-Agent enrollment-request Content-Type header for a signature-wrapped PKCS#10 is: <code>application/jose+json</code><a href="#section-6.1.4-10" class="pilcrow">¶</a></p>
 <p id="section-6.1.4-11">The header of the pledge enrollment-request <span class="bcp14">SHALL</span> contain the following parameter as defined in <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>:<a href="#section-6.1.4-11" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1.4-12.1">
@@ -3303,13 +3303,13 @@ Note that in this case the current LDevID credential is used instead of the IDev
 <a href="#name-representation-of-per" class="selfRef">Representation of PER</a>
             </figcaption></figure>
 </div>
-<p id="section-6.1.4-16">With the collected PVR and PER, the registrar-agent starts the interaction with the domain registrar.<a href="#section-6.1.4-16" class="pilcrow">¶</a></p>
+<p id="section-6.1.4-16">With the collected PVR and PER, the Registrar-Agent starts the interaction with the domain registrar.<a href="#section-6.1.4-16" class="pilcrow">¶</a></p>
 <p id="section-6.1.4-17">The new protected header field "created-on" is introduced to reflect freshness of the PER.
 The field is marked critical "crit" to ensure that it must be understood and validated by the receiver (here the domain registrar) according to section 4.1.11 of <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.
 It allows the registrar to verify the timely correlation between the PER and previously exchanged messages, i.e., created-on of PER &gt;= created-on of PVR &gt;= created-on of PVR trigger.
 The registrar <span class="bcp14">MAY</span> consider to ignore any but the newest PER from the same pledge in the case the registrar has at any point in time more than one pending PER from the pledge.<a href="#section-6.1.4-17" class="pilcrow">¶</a></p>
-<p id="section-6.1.4-18">As the registrar-agent is intended to facilitate communication between the pledge and the domain registrar, a collection of requests from more than one pledge is possible.
-This allows bulk bootstrapping of several pledges using the same connection between the registrar-agent and the domain registrar.<a href="#section-6.1.4-18" class="pilcrow">¶</a></p>
+<p id="section-6.1.4-18">As the Registrar-Agent is intended to facilitate communication between the pledge and the domain registrar, a collection of requests from more than one pledge is possible.
+This allows bulk bootstrapping of several pledges using the same connection between the Registrar-Agent and the domain registrar.<a href="#section-6.1.4-18" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3319,14 +3319,14 @@ This allows bulk bootstrapping of several pledges using the same connection betw
         <h3 id="name-request-object-handling-ini">
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-request-object-handling-ini" class="section-name selfRef">Request Object Handling initiated by the Registrar-Agent on Registrar, MASA and Domain CA</a>
         </h3>
-<p id="section-6.2-1">The BRSKI-PRM bootstrapping exchanges between registrar-agent and domain registrar resemble the BRSKI exchanges between pledge and domain registrar (pledge-initiator-mode) with some deviations.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-1">The BRSKI-PRM bootstrapping exchanges between Registrar-Agent and domain registrar resemble the BRSKI exchanges between pledge and domain registrar (pledge-initiator-mode) with some deviations.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.2-2">Preconditions:<a href="#section-6.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.2-3.1">
-            <p id="section-6.2-3.1.1">Registrar-agent: possesses its own credentials (EE (RegAgt) certificate and corresponding private key) of the domain.
+            <p id="section-6.2-3.1.1">Registrar-Agent: possesses its own credentials (EE (RegAgt) certificate and corresponding private key) of the domain.
 In addition, it <span class="bcp14">MAY</span> possess the IDevID CA certificate of the pledge vendor/manufacturer to verify the pledge certificate in the received request messages.
 It has the address of the domain registrar through configuration or by discovery, e.g., DNS-SD with mDNS.
-The registrar-agent has acquired one or more PVR and PER objects.<a href="#section-6.2-3.1.1" class="pilcrow">¶</a></p>
+The Registrar-Agent has acquired one or more PVR and PER objects.<a href="#section-6.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.2-3.2">
             <p id="section-6.2-3.2.1">Registrar (same as in BRSKI): possesses the IDevID CA certificate of the pledge vendor/manufacturer and its own registrar EE credentials of the domain.<a href="#section-6.2-3.2.1" class="pilcrow">¶</a></p>
@@ -3410,7 +3410,7 @@ The registrar-agent has acquired one or more PVR and PER objects.<a href="#secti
                   <text x="188" y="52">Domain</text>
                   <text x="348" y="52">Domain</text>
                   <text x="452" y="52">Vendor</text>
-                  <text x="40" y="68">agent</text>
+                  <text x="40" y="68">Agent</text>
                   <text x="200" y="68">Registrar</text>
                   <text x="332" y="68">CA</text>
                   <text x="456" y="68">Service</text>
@@ -3463,12 +3463,12 @@ The registrar-agent has acquired one or more PVR and PER objects.<a href="#secti
 </div>
 </div>
 <figcaption><a href="#figure-11" class="selfRef">Figure 11</a>:
-<a href="#name-request-processing-between-" class="selfRef">Request processing between registrar-agent and bootstrapping services</a>
+<a href="#name-request-processing-between-" class="selfRef">Request processing between Registrar-Agent and bootstrapping services</a>
           </figcaption></figure>
 </div>
-<p id="section-6.2-5">The registrar-agent establishes a TLS connection to the registrar.
+<p id="section-6.2-5">The Registrar-Agent establishes a TLS connection to the registrar.
 As already stated in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the use of TLS 1.3 (or newer) is encouraged.
-TLS 1.2 or newer is <span class="bcp14">REQUIRED</span> on the registrar-agent side.
+TLS 1.2 or newer is <span class="bcp14">REQUIRED</span> on the Registrar-Agent side.
 TLS 1.3 (or newer) <span class="bcp14">SHOULD</span> be available on the registrar, but TLS 1.2 <span class="bcp14">MAY</span> be used.
 TLS 1.3 (or newer) <span class="bcp14">SHOULD</span> be available on the MASA, but TLS 1.2 <span class="bcp14">MAY</span> be used.<a href="#section-6.2-5" class="pilcrow">¶</a></p>
 <div id="connection-establishment-registrar-agent-to-registrar">
@@ -3476,17 +3476,17 @@ TLS 1.3 (or newer) <span class="bcp14">SHOULD</span> be available on the MASA, b
           <h4 id="name-connection-establishment-re">
 <a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-connection-establishment-re" class="section-name selfRef">Connection Establishment (Registrar-Agent to Registrar)</a>
           </h4>
-<p id="section-6.2.1-1">In contrast to BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> TLS client authentication to the registrar is achieved by using registrar-agent EE credentials instead of pledge IDevID credentials.
+<p id="section-6.2.1-1">In contrast to BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> TLS client authentication to the registrar is achieved by using Registrar-Agent EE credentials instead of pledge IDevID credentials.
 Consequently BRSKI (pledge-initiator-mode) is distinguishable from BRSKI-PRM (pledge-responder-mode) by the registrar.
-The registrar <span class="bcp14">SHOULD</span> verify that the registrar-agent is authorized to establish a connection to the registrar based on the TLS client authentication.
-If the connection from registrar-agent to registrar is established, the authorization <span class="bcp14">SHOULD</span> be verified again based on agent-signed-data contained in the PVR.
-This ensures that the pledge has been triggered by an authorized registrar-agent.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-2">With BRSKI-PRM, the pledge generates PVR and PER as JSON-in-JWS objects and the registrar agent forwards them to the registrar.
+The registrar <span class="bcp14">SHOULD</span> verify that the Registrar-Agent is authorized to establish a connection to the registrar based on the TLS client authentication.
+If the connection from Registrar-Agent to registrar is established, the authorization <span class="bcp14">SHOULD</span> be verified again based on agent-signed-data contained in the PVR.
+This ensures that the pledge has been triggered by an authorized Registrar-Agent.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-2">With BRSKI-PRM, the pledge generates PVR and PER as JSON-in-JWS objects and the Registrar-Agent forwards them to the registrar.
 In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the pledge generates PVR as CMS-signed JSON and PER as PKCS#10 or PKCS#7 according to <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> and inherited by <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-3">For BRSKI-PRM, the registrar agent sends the PVR by HTTP POST to the same registrar endpoint as introduced by BRSKI: "/.well-
+<p id="section-6.2.1-3">For BRSKI-PRM, the Registrar-Agent sends the PVR by HTTP POST to the same registrar endpoint as introduced by BRSKI: "/.well-
 known/brski/requestvoucher", but with a Content-Type header field for JSON-in-JWS"<a href="#section-6.2.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.2.1-4">The Content-Type header field for JSON-in-JWS PVR is: <code>application/voucher-jws+json</code> (see <a href="#pvr" class="auto internal xref">Figure 8</a> for the content definition), as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.<a href="#section-6.2.1-4" class="pilcrow">¶</a></p>
-<p id="section-6.2.1-5">The registrar-agent sets the Accept field in the request-header indicating the acceptable Content-Type for the voucher-response.
+<p id="section-6.2.1-5">The Registrar-Agent sets the Accept field in the request-header indicating the acceptable Content-Type for the voucher-response.
 The voucher-response Content-Type header field is set to <code>application/voucher-jws+json</code> as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.<a href="#section-6.2.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -3495,23 +3495,23 @@ The voucher-response Content-Type header field is set to <code>application/vouch
           <h4 id="name-pledge-voucher-request-pvr-p">
 <a href="#section-6.2.2" class="section-number selfRef">6.2.2. </a><a href="#name-pledge-voucher-request-pvr-p" class="section-name selfRef">Pledge-Voucher-Request (PVR) Processing by Registrar</a>
           </h4>
-<p id="section-6.2.2-1">After receiving the PVR from registrar-agent, the registrar <span class="bcp14">SHALL</span> perform the verification as defined in section 5.3 of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
+<p id="section-6.2.2-1">After receiving the PVR from Registrar-Agent, the registrar <span class="bcp14">SHALL</span> perform the verification as defined in section 5.3 of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 In addition, the registrar <span class="bcp14">SHALL</span> verify the following parameters from the PVR:<a href="#section-6.2.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.2.2-2.1">
-              <p id="section-6.2.2-2.1.1">agent-provided-proximity-registrar-cert: <span class="bcp14">MUST</span> contain registrar's own registrar LDevID certificate to ensure the registrar in proximity of the registrar-agent is the desired registrar for this PVR.<a href="#section-6.2.2-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-6.2.2-2.1.1">agent-provided-proximity-registrar-cert: <span class="bcp14">MUST</span> contain registrar's own registrar LDevID certificate to ensure the registrar in proximity of the Registrar-Agent is the desired registrar for this PVR.<a href="#section-6.2.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.2.2-2.2">
-              <p id="section-6.2.2-2.2.1">agent-signed-data: The registrar <span class="bcp14">MUST</span> verify that the agent provided data has been signed with the private key corresponding to the EE (RegAgt) certificate indicated in the "kid" JOSE header parameter.
+              <p id="section-6.2.2-2.2.1">agent-signed-data: The registrar <span class="bcp14">MUST</span> verify that the Registrar-Agent provided data has been signed with the private key corresponding to the EE (RegAgt) certificate indicated in the "kid" JOSE header parameter.
 The registrar <span class="bcp14">MUST</span> verify that the LDevID(ReAgt) certificate, corresponding to the signature, is still valid.
 If the certificate is already expired, the registrar <span class="bcp14">SHALL</span> reject the request.
-Validity of used signing certificates at the time of signing the agent-signed-data is necessary to avoid that a rogue registrar-agent generates agent-signed-data objects to onboard arbitrary pledges at a later point in time, see also <a href="#sec_cons_reg-agt" class="auto internal xref">Section 10.3</a>.
+Validity of used signing certificates at the time of signing the agent-signed-data is necessary to avoid that a rogue Registrar-Agent generates agent-signed-data objects to onboard arbitrary pledges at a later point in time, see also <a href="#sec_cons_reg-agt" class="auto internal xref">Section 10.3</a>.
 The registrar <span class="bcp14">MUST</span> fetch the EE (RegAgt) certificate, based on the provided SubjectKeyIdentifier (SKID) contained in the "kid" header parameter of the agent-signed-data, and perform this verification.
 This requires, that the registrar has access to the EE (RegAgt) certificate data (including intermediate CA certificates if existent) based on the SKID.
-Note, the registrar may have stored the EE (RegAgt) certificate if used during TLS establishment between registrar-agent and registrar or it may be provided via a repository.<a href="#section-6.2.2-2.2.1" class="pilcrow">¶</a></p>
+Note, the registrar may have stored the EE (RegAgt) certificate if used during TLS establishment between Registrar-Agent and registrar or it may be provided via a repository.<a href="#section-6.2.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-6.2.2-3">If the registrar is unable to validate the PVR it <span class="bcp14">SHOULD</span> respond with a HTTP 4xx/5xx error code to the registrar-agent.<a href="#section-6.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.2.2-3">If the registrar is unable to validate the PVR it <span class="bcp14">SHOULD</span> respond with a HTTP 4xx/5xx error code to the Registrar-Agent.<a href="#section-6.2.2-3" class="pilcrow">¶</a></p>
 <p id="section-6.2.2-4">The following 4xx client error codes <span class="bcp14">SHOULD</span> be used:<a href="#section-6.2.2-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.2.2-5.1">
@@ -3561,10 +3561,10 @@ In addition, it <span class="bcp14">MUST</span> be equal to the serial-number va
 </li>
             <li class="normal" id="section-6.2.3-6.4">
               <p id="section-6.2.3-6.4.1">assertion: voucher assertion requested by the pledge (agent-proximity).
-The registrar provides this information to assure successful verification of agent proximity based on the agent-signed-data.<a href="#section-6.2.3-6.4.1" class="pilcrow">¶</a></p>
+The registrar provides this information to assure successful verification of Registrar-Agent proximity based on the agent-signed-data.<a href="#section-6.2.3-6.4.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.2.3-6.5">
-              <p id="section-6.2.3-6.5.1">prior-signed-voucher-request: PVR as received from registrar-agent, see <a href="#pvrr" class="auto internal xref">Section 6.1.2</a><a href="#section-6.2.3-6.5.1" class="pilcrow">¶</a></p>
+              <p id="section-6.2.3-6.5.1">prior-signed-voucher-request: PVR as received from Registrar-Agent, see <a href="#pvrr" class="auto internal xref">Section 6.1.2</a><a href="#section-6.2.3-6.5.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-6.2.3-7">The RVR <span class="bcp14">MUST</span> be extended with the following parameter, when the assertion "agent-proximity" is requested, as defined in <span>[<a href="#I-D.ietf-anima-rfc8366bis" class="cite xref">I-D.ietf-anima-rfc8366bis</a>]</span>:<a href="#section-6.2.3-7" class="pilcrow">¶</a></p>
@@ -3576,7 +3576,7 @@ If only a single object is contained in the x5c it <span class="bcp14">MUST</spa
 If multiple certificates are included in the x5c, the first <span class="bcp14">MUST</span> be the base64-encoded EE (RegAgt) certificate.<a href="#section-6.2.3-8.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-6.2.3-9">The MASA uses this information for verification that the registrar-agent is in proximity to the registrar to state the corresponding assertion "agent-proximity".<a href="#section-6.2.3-9" class="pilcrow">¶</a></p>
+<p id="section-6.2.3-9">The MASA uses this information for verification that the Registrar-Agent is in proximity to the registrar to state the corresponding assertion "agent-proximity".<a href="#section-6.2.3-9" class="pilcrow">¶</a></p>
 <p id="section-6.2.3-10">The object is signed using the registrar LDevID credentials, which corresponds to the certificate referenced in the JOSE header.<a href="#section-6.2.3-10" class="pilcrow">¶</a></p>
 <span id="name-representation-of-rvr"></span><div id="rvr">
 <figure id="figure-12">
@@ -3722,9 +3722,9 @@ The pinned domain certificate is already contained in the voucher payload ("pinn
 <p id="section-6.2.5-3">(For many installations, with a single registrar credential, the registrar credential is what is pinned)<a href="#section-6.2.5-3" class="pilcrow">¶</a></p>
 <p id="section-6.2.5-4">In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the Registrar proved possession of the it's credential when the TLS session was setup.
 While the pledge could not, at the time, validate the certificate truly belonged the registrar, it did validate that the certificate it was provided was able to authenticate the TLS connection.<a href="#section-6.2.5-4" class="pilcrow">¶</a></p>
-<p id="section-6.2.5-5">In the BRSKI-PRM mode, with the Registrar agent mediating all communication, the Pledge has not as yet been able to witness that the intended Registrar really does possess the relevant private key.
+<p id="section-6.2.5-5">In the BRSKI-PRM mode, with the Registrar-Agent mediating all communication, the Pledge has not as yet been able to witness that the intended Registrar really does possess the relevant private key.
 This second signature provides for the same level of assurance to the pledge, and that it matches the public key that the pledge received in the trigger for the PVR (see <a href="#pavrt" class="auto internal xref">Figure 6</a>).<a href="#section-6.2.5-5" class="pilcrow">¶</a></p>
-<p id="section-6.2.5-6">The registrar <span class="bcp14">MUST</span> use the same registrar EE credentials used for authentication in the TLS handshake to authenticate towards the registrar-agent.
+<p id="section-6.2.5-6">The registrar <span class="bcp14">MUST</span> use the same registrar EE credentials used for authentication in the TLS handshake to authenticate towards the Registrar-Agent.
 This has some operational implications when the registrar may be part of a scalable framework as described in <span>[<a href="#I-D.richardson-anima-registrar-considerations" class="cite xref">I-D.richardson-anima-registrar-considerations</a>], <a href="https://datatracker.ietf.org/doc/html/draft-richardson-anima-registrar-considerations-07#section-1.3.1" class="relref">Section 1.3.1</a></span>.<a href="#section-6.2.5-6" class="pilcrow">¶</a></p>
 <p id="section-6.2.5-7">The second signature <span class="bcp14">MUST</span> either be done with the private key associated with the registrar EE certificate provided to the Registrar-Agent, or the use of a certificate chain is necessary.
 This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher-request as also transferred in the PVR in the "agent-provided-proximity-registrar-cert".<a href="#section-6.2.5-7" class="pilcrow">¶</a></p>
@@ -3786,7 +3786,7 @@ This ensures that the same registrar EE certificate can be used to verify the si
             </figcaption></figure>
 </div>
 <p id="section-6.2.5-10">Depending on the security policy of the operator, this signature can also be interpreted by the pledge as explicit authorization of the registrar to install the contained trust anchor.
-The registrar sends the voucher to the registrar-agent.<a href="#section-6.2.5-10" class="pilcrow">¶</a></p>
+The registrar sends the voucher to the Registrar-Agent.<a href="#section-6.2.5-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="exchanges_uc2_2_per">
@@ -3794,11 +3794,11 @@ The registrar sends the voucher to the registrar-agent.<a href="#section-6.2.5-1
           <h4 id="name-pledge-enrollment-request-per">
 <a href="#section-6.2.6" class="section-number selfRef">6.2.6. </a><a href="#name-pledge-enrollment-request-per" class="section-name selfRef">Pledge-Enrollment-Request (PER) Processing (Registrar-Agent to Registrar)</a>
           </h4>
-<p id="section-6.2.6-1">After receiving the voucher, the registrar-agent sends the PER to the registrar in the same HTTP-over-TLS connection. Which is similar to the PER processing described in Section 5.2 of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
-In case the PER cannot be send in the same HTTP-over-TLS connection the registrar-agent may send the PER in a new HTTP-over-TLS connection. The registrar is able to correlate the PVR and the PER based on the signatures and the contained product-serial-number information.
+<p id="section-6.2.6-1">After receiving the voucher, the Registrar-Agent sends the PER to the registrar in the same HTTP-over-TLS connection. Which is similar to the PER processing described in Section 5.2 of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
+In case the PER cannot be send in the same HTTP-over-TLS connection the Registrar-Agent may send the PER in a new HTTP-over-TLS connection. The registrar is able to correlate the PVR and the PER based on the signatures and the contained product-serial-number information.
 Note, this also addresses situations in which a nonceless voucher is used and may be pre-provisioned to the pledge.
 As specified in <a href="#PER-response" class="auto internal xref">Section 6.1.4</a> deviating from BRSKI the PER is not a raw PKCS#10.
-As the registrar-agent is involved in the exchange, the PKCS#10 is wrapped in a JWS object by the pledge and signed with pledge's IDevID to ensure proof-of-identity as outlined in <a href="#per" class="auto internal xref">Figure 10</a>.<a href="#section-6.2.6-1" class="pilcrow">¶</a></p>
+As the Registrar-Agent is involved in the exchange, the PKCS#10 is wrapped in a JWS object by the pledge and signed with pledge's IDevID to ensure proof-of-identity as outlined in <a href="#per" class="auto internal xref">Figure 10</a>.<a href="#section-6.2.6-1" class="pilcrow">¶</a></p>
 <p id="section-6.2.6-2">EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> standard endpoints (/simpleenroll, /simplereenroll, /serverkeygen, /cacerts) on the registrar cannot be used for BRSKI-PRM.
 This is caused by the utilization of signature wrapped-objects in BRSKI-PRM.
 As EST requires to sent a raw PKCS#10 request to e.g., "/.well-known/est/simpleenroll" endpoint, this document makes an enhancement by utilizing EST but with the exception to transport a signature wrapped PKCS#10 request.
@@ -3821,9 +3821,9 @@ The approach of sending this information to the CA depends on the utilized certi
 </li>
           </ul>
 <p id="section-6.2.6-6">Note while BRSKI-PRM targets the initial enrollment, re-enrollment may be supported in a similar way with the exception that the current LDevID certificate is used instead of the IDevID certificate to verify the wrapping signature of the PKCS#10 request (see also <a href="#PER-response" class="auto internal xref">Section 6.1.4</a>).<a href="#section-6.2.6-6" class="pilcrow">¶</a></p>
-<p id="section-6.2.6-7">The registrar-agent <span class="bcp14">SHALL</span> send the PER to the registrar by HTTP POST to the endpoint: "/.well-known/brski/requestenroll"<a href="#section-6.2.6-7" class="pilcrow">¶</a></p>
+<p id="section-6.2.6-7">The Registrar-Agent <span class="bcp14">SHALL</span> send the PER to the registrar by HTTP POST to the endpoint: "/.well-known/brski/requestenroll"<a href="#section-6.2.6-7" class="pilcrow">¶</a></p>
 <p id="section-6.2.6-8">The registrar <span class="bcp14">SHOULD</span> respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.<a href="#section-6.2.6-8" class="pilcrow">¶</a></p>
-<p id="section-6.2.6-9">A successful interaction with the domain CA will result in a pledge LDevID certificate, which is then forwarded by the registrar to the registrar-agent using the Content-Type header: <code>application/pkcs7-mime</code>.<a href="#section-6.2.6-9" class="pilcrow">¶</a></p>
+<p id="section-6.2.6-9">A successful interaction with the domain CA will result in a pledge LDevID certificate, which is then forwarded by the registrar to the Registrar-Agent using the Content-Type header: <code>application/pkcs7-mime</code>.<a href="#section-6.2.6-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="exchanges_uc2_2_wca">
@@ -3836,8 +3836,8 @@ This is done in EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</sp
 BRSKI-PRM requires a signature wrapped CA certificate object, to avoid that the pledge can be provided with arbitrary CA certificates in an authorized way.
 The registrar signed CA certificate object will allow the pledge to verify the authorization to install the received CA certificate(s).
 As the CA certificate(s) are provided to the pledge after the voucher, the pledge has the required information (the domain certificate) to verify the wrapped CA certificate object.<a href="#section-6.2.7-1" class="pilcrow">¶</a></p>
-<p id="section-6.2.7-2">To support registrar-agents requesting a signature wrapped CA certificate(s) object, a new endpoint for BRSKI-PRM is defined on the registrar: "/.well-known/brski/wrappedcacerts"<a href="#section-6.2.7-2" class="pilcrow">¶</a></p>
-<p id="section-6.2.7-3">The registrar-agent <span class="bcp14">SHALL</span> requests the EST CA trust anchor database information (in form of CA certificates) by HTTP GET.<a href="#section-6.2.7-3" class="pilcrow">¶</a></p>
+<p id="section-6.2.7-2">To support Registrar-Agents requesting a signature wrapped CA certificate(s) object, a new endpoint for BRSKI-PRM is defined on the registrar: "/.well-known/brski/wrappedcacerts"<a href="#section-6.2.7-2" class="pilcrow">¶</a></p>
+<p id="section-6.2.7-3">The Registrar-Agent <span class="bcp14">SHALL</span> requests the EST CA trust anchor database information (in form of CA certificates) by HTTP GET.<a href="#section-6.2.7-3" class="pilcrow">¶</a></p>
 <p id="section-6.2.7-4">The Content-Type header of the response <span class="bcp14">SHALL</span> be: <code>application/jose+json</code>.<a href="#section-6.2.7-4" class="pilcrow">¶</a></p>
 <p id="section-6.2.7-5">This is a deviation from the Content-Type header values used in EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> and results in additional processing at the domain registrar (as EST server).
 The additional processing is to sign the CA certificate(s) information using the registrar LDevID credentials.
@@ -3890,7 +3890,7 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
         <h3 id="name-response-objects-supplied-b">
 <a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-response-objects-supplied-b" class="section-name selfRef">Response Objects supplied by the Registrar-Agent to the Pledge</a>
         </h3>
-<p id="section-6.3-1">It is assumed that the registrar-agent already obtained the bootstrapping response objects from the domain registrar and can supply them to the pledge:<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3-1">It is assumed that the Registrar-Agent already obtained the bootstrapping response objects from the domain registrar and can supply them to the pledge:<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3-2.1">
             <p id="section-6.3-2.1.1">voucher-response - Voucher (from MASA via Registrar)<a href="#section-6.3-2.1.1" class="pilcrow">¶</a></p>
@@ -3902,13 +3902,13 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
             <p id="section-6.3-2.3.1">enrollment-response - LDevID (Pledge) certificate (from CA via registrar)<a href="#section-6.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-6.3-3">To deliver these response objects, the registrar-agent will re-connect to the pledge.
+<p id="section-6.3-3">To deliver these response objects, the Registrar-Agent will re-connect to the pledge.
 To contact the pledge, it may either discover the pledge as described in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.6.2</a> or use stored information from the first contact with the pledge.<a href="#section-6.3-3" class="pilcrow">¶</a></p>
 <p id="section-6.3-4">Preconditions in addition to <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>:<a href="#section-6.3-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3-5.1">
-            <p id="section-6.3-5.1.1">Registrar-agent: obtained voucher and LDevID certificate and optionally IDevID CA certificates.
-The IDevID CA certificate is necessary, when the connection between the Registrar-agent and the pledge is established using TLS to enable the registrar-agent to validate the pledges' IDevID certificate during the TLS handshake as described in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a>.<a href="#section-6.3-5.1.1" class="pilcrow">¶</a></p>
+            <p id="section-6.3-5.1.1">Registrar-Agent: obtained voucher and LDevID certificate and optionally IDevID CA certificates.
+The IDevID CA certificate is necessary, when the connection between the Registrar-Agent and the pledge is established using TLS to enable the Registrar-Agent to validate the pledges' IDevID certificate during the TLS handshake as described in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a>.<a href="#section-6.3-5.1.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <span id="name-responses-and-status-handli"></span><div id="exchangesfig_uc2_3">
@@ -3983,18 +3983,18 @@ The IDevID CA certificate is necessary, when the connection between the Registra
 </div>
 </div>
 <figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
-<a href="#name-responses-and-status-handli" class="selfRef">Responses and status handling between pledge and registrar-agent</a>
+<a href="#name-responses-and-status-handli" class="selfRef">Responses and status handling between pledge and Registrar-Agent</a>
           </figcaption></figure>
 </div>
-<p id="section-6.3-7">The registrar-agent <span class="bcp14">MAY</span> optionally use TLS to protect the communication as outlined in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a>.<a href="#section-6.3-7" class="pilcrow">¶</a></p>
-<p id="section-6.3-8">The registrar-agent provides the information via distinct pledge endpoints as following.<a href="#section-6.3-8" class="pilcrow">¶</a></p>
+<p id="section-6.3-7">The Registrar-Agent <span class="bcp14">MAY</span> optionally use TLS to protect the communication as outlined in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a>.<a href="#section-6.3-7" class="pilcrow">¶</a></p>
+<p id="section-6.3-8">The Registrar-Agent provides the information via distinct pledge endpoints as following.<a href="#section-6.3-8" class="pilcrow">¶</a></p>
 <div id="exchanges_uc2_3a">
 <section id="section-6.3.1">
           <h4 id="name-pledge-voucher-response-pro">
 <a href="#section-6.3.1" class="section-number selfRef">6.3.1. </a><a href="#name-pledge-voucher-response-pro" class="section-name selfRef">Pledge: Voucher-Response Processing</a>
           </h4>
-<p id="section-6.3.1-1">The registrar-agent <span class="bcp14">SHALL</span> send the voucher-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/svr".<a href="#section-6.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.3.1-2">The registrar-agent voucher-response Content-Type header is <code>application/voucher-jws+json</code> and contains the voucher as provided by the MASA. An example is given in <a href="#MASA-vr" class="auto internal xref">Figure 13</a> for a MASA  signed voucher and in <a href="#MASA-REG-vr" class="auto internal xref">Figure 14</a> for the voucher with the additional signature of the registrar.<a href="#section-6.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-1">The Registrar-Agent <span class="bcp14">SHALL</span> send the voucher-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/svr".<a href="#section-6.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-2">The Registrar-Agent voucher-response Content-Type header is <code>application/voucher-jws+json</code> and contains the voucher as provided by the MASA. An example is given in <a href="#MASA-vr" class="auto internal xref">Figure 13</a> for a MASA  signed voucher and in <a href="#MASA-REG-vr" class="auto internal xref">Figure 14</a> for the voucher with the additional signature of the registrar.<a href="#section-6.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-3">A nonceless voucher may be accepted as in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> and may be allowed by a manufacture's pledge implementation.<a href="#section-6.3.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-4">To perform the validation of several signatures on the voucher object, the pledge <span class="bcp14">SHALL</span> perform the signature verification in the following order:<a href="#section-6.3.1-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.3.1-5">
@@ -4022,7 +4022,7 @@ If all steps stated above have been performed successfully, the pledge <span cla
 <a href="#section-6.3.2" class="section-number selfRef">6.3.2. </a><a href="#name-pledge-voucher-status-telem" class="section-name selfRef">Pledge: Voucher Status Telemetry</a>
           </h4>
 <p id="section-6.3.2-1">After voucher verification and validation the pledge <span class="bcp14">MUST</span> reply with a status telemetry message as defined in Section 5.7 of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
-The pledge generates the voucher-status and provides it as signed JSON-in-JWS object in response to the registrar-agent.<a href="#section-6.3.2-1" class="pilcrow">¶</a></p>
+The pledge generates the voucher-status and provides it as signed JSON-in-JWS object in response to the Registrar-Agent.<a href="#section-6.3.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.2-2">The response has the Content-Type <code>application/jose+json</code> and is signed using the IDevID of the pledge as shown in <a href="#vstat" class="auto internal xref">Figure 17</a>.
 As the reason field is optional (see <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>), it <span class="bcp14">MAY</span> be omitted in case of success.<a href="#section-6.3.2-2" class="pilcrow">¶</a></p>
 <span id="name-representation-of-pledge-vo"></span><div id="vstat">
@@ -4079,7 +4079,7 @@ As the reason field is optional (see <span>[<a href="#RFC8995" class="cite xref"
 <a href="#name-representation-of-pledge-vo" class="selfRef">Representation of pledge voucher status telemetry</a>
             </figcaption></figure>
 </div>
-<p id="section-6.3.2-4">If the pledge did not did not provide voucher status telemetry information after processing the voucher, the registrar agent <span class="bcp14">MAY</span> query the pledge status explicitly as described in <a href="#exchanges_uc2_5" class="auto internal xref">Section 6.4</a> and <span class="bcp14">MAY</span> re-sent the voucher depending on the Pledge status following the procedure described in <a href="#exchanges_uc2_3a" class="auto internal xref">Section 6.3.1</a>.<a href="#section-6.3.2-4" class="pilcrow">¶</a></p>
+<p id="section-6.3.2-4">If the pledge did not did not provide voucher status telemetry information after processing the voucher, the Registrar-Agent <span class="bcp14">MAY</span> query the pledge status explicitly as described in <a href="#exchanges_uc2_5" class="auto internal xref">Section 6.4</a> and <span class="bcp14">MAY</span> re-sent the voucher depending on the Pledge status following the procedure described in <a href="#exchanges_uc2_3a" class="auto internal xref">Section 6.3.1</a>.<a href="#section-6.3.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="exchanges_uc2_3c">
@@ -4087,7 +4087,7 @@ As the reason field is optional (see <span>[<a href="#RFC8995" class="cite xref"
           <h4 id="name-pledge-wrapped-ca-certifica">
 <a href="#section-6.3.3" class="section-number selfRef">6.3.3. </a><a href="#name-pledge-wrapped-ca-certifica" class="section-name selfRef">Pledge: Wrapped-CA-Certificate(s) Processing</a>
           </h4>
-<p id="section-6.3.3-1">The registrar-agent <span class="bcp14">SHALL</span> provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/scac".<a href="#section-6.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.3-1">The Registrar-Agent <span class="bcp14">SHALL</span> provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/scac".<a href="#section-6.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.3-2">As the CA certificate provisioning is crucial from a security perspective, this provisioning <span class="bcp14">SHOULD</span> only be done, if the voucher-response has been successfully processed by pledge as reflected in the voucher status telemetry.<a href="#section-6.3.3-2" class="pilcrow">¶</a></p>
 <p id="section-6.3.3-3">The CA certificates message has the Content-Type <code>application/jose+json</code> and is signed using the credential of the registrar as shown in <a href="#PCAC" class="auto internal xref">Figure 15</a>.<a href="#section-6.3.3-3" class="pilcrow">¶</a></p>
 <p id="section-6.3.3-4">The CA certificates are provided as base64 encoded "x5bag".
@@ -4117,11 +4117,11 @@ The pledge <span class="bcp14">SHALL</span> install the received CA certificates
           <h4 id="name-pledge-enrollment-response-">
 <a href="#section-6.3.4" class="section-number selfRef">6.3.4. </a><a href="#name-pledge-enrollment-response-" class="section-name selfRef">Pledge: Enrollment-Response Processing</a>
           </h4>
-<p id="section-6.3.4-1">The registrar-agent <span class="bcp14">SHALL</span> send the enroll-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/ser".<a href="#section-6.3.4-1" class="pilcrow">¶</a></p>
-<p id="section-6.3.4-2">The registrar-agent enroll-response Content-Type header, when using EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> as enrollment protocol between the registrar-agent and the infrastructure is: <code>application/pkcs7-mime</code>.
+<p id="section-6.3.4-1">The Registrar-Agent <span class="bcp14">SHALL</span> send the enroll-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/ser".<a href="#section-6.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.4-2">The Registrar-Agent enroll-response Content-Type header, when using EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> as enrollment protocol between the Registrar-Agent and the infrastructure is: <code>application/pkcs7-mime</code>.
 Note: It only contains the LDevID certificate for the pledge, not the certificate chain.<a href="#section-6.3.4-2" class="pilcrow">¶</a></p>
 <p id="section-6.3.4-3">Upon reception, the pledge <span class="bcp14">SHALL</span> verify the received LDevID certificate.
-The pledge <span class="bcp14">SHALL</span> generate the enroll status and provide it in the response to the registrar-agent.
+The pledge <span class="bcp14">SHALL</span> generate the enroll status and provide it in the response to the Registrar-Agent.
 If the verification of the LDevID certificate succeeds, the status property <span class="bcp14">SHALL</span> be set to "status": true, otherwise to "status": false<a href="#section-6.3.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -4189,7 +4189,7 @@ As the reason field is optional, it <span class="bcp14">MAY</span> be omitted in
 <a href="#name-representation-of-pledge-en" class="selfRef">Representation of pledge enroll status telemetry</a>
             </figcaption></figure>
 </div>
-<p id="section-6.3.5-4">Once the registrar-agent has collected the information, it can connect to the registrar to provide it with the status responses.<a href="#section-6.3.5-4" class="pilcrow">¶</a></p>
+<p id="section-6.3.5-4">Once the Registrar-Agent has collected the information, it can connect to the registrar to provide it with the status responses.<a href="#section-6.3.5-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="exchanges_uc2_4">
@@ -4197,12 +4197,12 @@ As the reason field is optional, it <span class="bcp14">MAY</span> be omitted in
           <h4 id="name-telemetry-voucher-status-an">
 <a href="#section-6.3.6" class="section-number selfRef">6.3.6. </a><a href="#name-telemetry-voucher-status-an" class="section-name selfRef">Telemetry Voucher Status and Enroll Status Handling (Registrar-Agent to Domain Registrar)</a>
           </h4>
-<p id="section-6.3.6-1">The following description requires that the registrar-agent has collected the status information from the pledge.
+<p id="section-6.3.6-1">The following description requires that the Registrar-Agent has collected the status information from the pledge.
 It <span class="bcp14">SHALL</span> provide the status information to the registrar for further processing.<a href="#section-6.3.6-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.6-2">Preconditions in addition to <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>:<a href="#section-6.3.6-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3.6-3.1">
-              <p id="section-6.3.6-3.1.1">Registrar-agent: obtained voucher status and enroll status from pledge.<a href="#section-6.3.6-3.1.1" class="pilcrow">¶</a></p>
+              <p id="section-6.3.6-3.1.1">Registrar-Agent: obtained voucher status and enroll status from pledge.<a href="#section-6.3.6-3.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <span id="name-bootstrapping-status-handli"></span><div id="exchangesfig_uc2_4">
@@ -4250,7 +4250,7 @@ It <span class="bcp14">SHALL</span> provide the status information to the regist
                   <polygon class="arrowhead" points="224,176 212,170.4 212,181.6" fill="black" transform="rotate(0,216,176)"></polygon>
                   <polygon class="arrowhead" points="56,176 44,170.4 44,181.6" fill="black" transform="rotate(180,48,176)"></polygon>
                   <g class="text">
-                    <text x="56" y="52">Registrar</text>
+                    <text x="60" y="52">Registrar-</text>
                     <text x="212" y="52">Domain</text>
                     <text x="340" y="52">Domain</text>
                     <text x="444" y="52">Vendor</text>
@@ -4258,7 +4258,7 @@ It <span class="bcp14">SHALL</span> provide the status information to the regist
                     <text x="224" y="68">Registrar</text>
                     <text x="324" y="68">CA</text>
                     <text x="448" y="68">Service</text>
-                    <text x="48" y="84">RegAgt)</text>
+                    <text x="52" y="84">(RegAgt)</text>
                     <text x="216" y="84">(JRC)</text>
                     <text x="444" y="84">(MASA)</text>
                     <text x="40" y="116">|</text>
@@ -4293,30 +4293,30 @@ It <span class="bcp14">SHALL</span> provide the status information to the regist
 <a href="#name-bootstrapping-status-handli" class="selfRef">Bootstrapping status handling</a>
             </figcaption></figure>
 </div>
-<p id="section-6.3.6-5">The registrar-agent <span class="bcp14">MUST</span> provide the collected pledge voucher status to the registrar.
+<p id="section-6.3.6-5">The Registrar-Agent <span class="bcp14">MUST</span> provide the collected pledge voucher status to the registrar.
 This status indicates if the pledge could process the voucher successfully or not.<a href="#section-6.3.6-5" class="pilcrow">¶</a></p>
-<p id="section-6.3.6-6">In case the TLS connection to the registrar is already closed, the registrar-agent opens a new TLS connection with the registrar as stated in <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>.<a href="#section-6.3.6-6" class="pilcrow">¶</a></p>
-<p id="section-6.3.6-7">The registrar-agent sends the pledge voucher status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/voucher_status". The Content-Type header is kept as <code>application/jose+json</code> as described in <a href="#exchangesfig_uc2_3" class="auto internal xref">Figure 16</a> and depicted in the example in <a href="#vstat" class="auto internal xref">Figure 17</a>.<a href="#section-6.3.6-7" class="pilcrow">¶</a></p>
-<p id="section-6.3.6-8">The registrar <span class="bcp14">SHOULD</span> log the transaction provided for a pledge via registrar-agent and include the identity of the registrar-agent in these logs. For log analysis the following may be considered:<a href="#section-6.3.6-8" class="pilcrow">¶</a></p>
+<p id="section-6.3.6-6">In case the TLS connection to the registrar is already closed, the Registrar-Agent opens a new TLS connection with the registrar as stated in <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>.<a href="#section-6.3.6-6" class="pilcrow">¶</a></p>
+<p id="section-6.3.6-7">The Registrar-Agent sends the pledge voucher status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/voucher_status". The Content-Type header is kept as <code>application/jose+json</code> as described in <a href="#exchangesfig_uc2_3" class="auto internal xref">Figure 16</a> and depicted in the example in <a href="#vstat" class="auto internal xref">Figure 17</a>.<a href="#section-6.3.6-7" class="pilcrow">¶</a></p>
+<p id="section-6.3.6-8">The registrar <span class="bcp14">SHOULD</span> log the transaction provided for a pledge via Registrar-Agent and include the identity of the Registrar-Agent in these logs. For log analysis the following may be considered:<a href="#section-6.3.6-8" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3.6-9.1">
-              <p id="section-6.3.6-9.1.1">The registrar knows the interacting registrar-agent from the authentication of the registrar-agent towards the registrar using LDevID (RegAgt) and can log it accordingly.<a href="#section-6.3.6-9.1.1" class="pilcrow">¶</a></p>
+              <p id="section-6.3.6-9.1.1">The registrar knows the interacting Registrar-Agent from the authentication of the Registrar-Agent towards the registrar using LDevID (RegAgt) and can log it accordingly.<a href="#section-6.3.6-9.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.3.6-9.2">
-              <p id="section-6.3.6-9.2.1">The telemetry information from the pledge can be correlated to the voucher response provided from the registrar to the registrar-agent and further to the pledge.<a href="#section-6.3.6-9.2.1" class="pilcrow">¶</a></p>
+              <p id="section-6.3.6-9.2.1">The telemetry information from the pledge can be correlated to the voucher response provided from the registrar to the Registrar-Agent and further to the pledge.<a href="#section-6.3.6-9.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.3.6-9.3">
-              <p id="section-6.3.6-9.3.1">The telemetry information, when provided to the registrar is provided via the registrar-agent and can thus be correlated.<a href="#section-6.3.6-9.3.1" class="pilcrow">¶</a></p>
+              <p id="section-6.3.6-9.3.1">The telemetry information, when provided to the registrar is provided via the Registrar-Agent and can thus be correlated.<a href="#section-6.3.6-9.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-6.3.6-10">The registrar <span class="bcp14">SHALL</span> verify the signature of the pledge voucher status and validate that it belongs to an accepted device of the domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher status.<a href="#section-6.3.6-10" class="pilcrow">¶</a></p>
 <p id="section-6.3.6-11">According to <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> Section 5.7, the registrar <span class="bcp14">SHOULD</span> respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
-The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
+The Registrar-Agent may use the response to signal success / failure to the service technician operating the Registrar-Agent.
 Within the server logs the server <span class="bcp14">SHOULD</span> capture this telemetry information.<a href="#section-6.3.6-11" class="pilcrow">¶</a></p>
 <p id="section-6.3.6-12">The registrar <span class="bcp14">SHOULD</span> proceed with collecting and logging status information by requesting the MASA audit-log from the MASA service as described in Section 5.8 of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-6.3.6-12" class="pilcrow">¶</a></p>
-<p id="section-6.3.6-13">The registrar-agent <span class="bcp14">MUST</span> provide the pledge's enroll status to the registrar.
+<p id="section-6.3.6-13">The Registrar-Agent <span class="bcp14">MUST</span> provide the pledge's enroll status to the registrar.
 The status indicates the pledge could process the enroll-response (certificate) and holds the corresponding private key.<a href="#section-6.3.6-13" class="pilcrow">¶</a></p>
-<p id="section-6.3.6-14">The registrar-agent sends the pledge enroll status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/enrollstatus".
+<p id="section-6.3.6-14">The Registrar-Agent sends the pledge enroll status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/enrollstatus".
 The Content-Type header is kept as <code>application/jose+json</code> as described in <a href="#exchangesfig_uc2_3" class="auto internal xref">Figure 16</a> and depicted in the example in <a href="#estat" class="auto internal xref">Figure 18</a>.<a href="#section-6.3.6-14" class="pilcrow">¶</a></p>
 <p id="section-6.3.6-15">The registrar <span class="bcp14">MUST</span> verify the signature of the pledge enroll status.
 Also, the registrar <span class="bcp14">SHALL</span> validate that the pledge is an accepted device of the domain based on the contained product-serial-number in the LDevID certificate referenced in the header of the enroll status.
@@ -4327,7 +4327,7 @@ Note that the signature verification of the status information is an addition to
 Based on the failure case the registrar <span class="bcp14">MAY</span> decide that for security reasons the pledge is not allowed to reside in the domain. In this case the registrar <span class="bcp14">MUST</span> revoke the certificate.
 An example case for the registrar revoking the issued LDevID for the pledge is when the pledge was not able to verify the received LDevID certificate and therefore did send a 406 (Not Acceptable) response.
 In this case the registrar may revoke the LDevID certificate as the pledge did no accepted it for installation.<a href="#section-6.3.6-16" class="pilcrow">¶</a></p>
-<p id="section-6.3.6-17">The registrar-agent may use the response to signal success / failure to the service technician operating the registrar agent.
+<p id="section-6.3.6-17">The Registrar-Agent may use the response to signal success / failure to the service technician operating the Registrar-Agent.
 Within the server log the registrar <span class="bcp14">SHOULD</span> capture this telemetry information.<a href="#section-6.3.6-17" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -4338,13 +4338,13 @@ Within the server log the registrar <span class="bcp14">SHOULD</span> capture th
         <h3 id="name-request-pledge-status-by-re">
 <a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-request-pledge-status-by-re" class="section-name selfRef">Request Pledge-Status by Registrar-Agent from Pledge</a>
         </h3>
-<p id="section-6.4-1">The following assumes that a registrar-agent may need to query the status of a pledge.
+<p id="section-6.4-1">The following assumes that a Registrar-Agent may need to query the status of a pledge.
 This information may be useful to solve errors, when the pledge was not able to connect to the target domain during the bootstrapping.
 The pledge <span class="bcp14">MAY</span> provide a dedicated endpoint to accept status-requests.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.4-2">Preconditions:<a href="#section-6.4-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.4-3.1">
-            <p id="section-6.4-3.1.1">Registrar-agent: possesses LDevID (RegAgt), may have a list of serial numbers of pledges to be queried and a list of corresponding manufacturer trust anchors to be able to verify signatures performed with the IDevID credential.<a href="#section-6.4-3.1.1" class="pilcrow">¶</a></p>
+            <p id="section-6.4-3.1.1">Registrar-Agent: possesses LDevID (RegAgt), may have a list of product-serial-number(s) of pledges to be queried and a list of corresponding manufacturer trust anchors to be able to verify signatures performed with the IDevID credential.<a href="#section-6.4-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.4-3.2">
             <p id="section-6.4-3.2.1">Pledge: may already possess domain credentials and LDevID(Pledge), or may not possess one or both of these.<a href="#section-6.4-3.2.1" class="pilcrow">¶</a></p>
@@ -4385,7 +4385,7 @@ The pledge <span class="bcp14">MAY</span> provide a dedicated endpoint to accept
 </div>
 </div>
 <figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
-<a href="#name-pledge-status-handling-betw" class="selfRef">Pledge-status handling between registrar-agent and pledge</a>
+<a href="#name-pledge-status-handling-betw" class="selfRef">Pledge-status handling between Registrar-Agent and pledge</a>
           </figcaption></figure>
 </div>
 <div id="exchanges_uc2_5a">
@@ -4393,14 +4393,14 @@ The pledge <span class="bcp14">MAY</span> provide a dedicated endpoint to accept
           <h4 id="name-pledge-status-request-regis">
 <a href="#section-6.4.1" class="section-number selfRef">6.4.1. </a><a href="#name-pledge-status-request-regis" class="section-name selfRef">Pledge-Status - Request (Registrar-Agent to Pledge)</a>
           </h4>
-<p id="section-6.4.1-1">The registrar-agent requests the pledge-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/qps"<a href="#section-6.4.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.4.1-2">The registrar-agent Content-Type header for the pledge-status request is: <code>application/jose+json</code>.
+<p id="section-6.4.1-1">The Registrar-Agent requests the pledge-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/qps"<a href="#section-6.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.4.1-2">The Registrar-Agent Content-Type header for the pledge-status request is: <code>application/jose+json</code>.
 It contains information on the requested status-type, the time and date the request is created, and the product serial-number of the pledge contacted as shown in <a href="#stat_req_def" class="auto internal xref">Figure 21</a>.
-The pledge-status request is signed by registrar-agent using the private key corresponding to the EE (RegAgt) certificate.<a href="#section-6.4.1-2" class="pilcrow">¶</a></p>
+The pledge-status request is signed by Registrar-Agent using the private key corresponding to the EE (RegAgt) certificate.<a href="#section-6.4.1-2" class="pilcrow">¶</a></p>
 <p id="section-6.4.1-3">The following Concise Data Definition Language (CDDL) <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> explains the structure of the format for the pledge-status request. It is defined following the status telemetry definitions in BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 Consequently, format and semantics of pledge-status requests below are for version 1.
 The version field is included to permit significant changes to the pledge-status request and response in the future.
-A pledge or a registrar-agent that receives a pledge-status request with a version larger than it knows about <span class="bcp14">SHOULD</span> log the contents and alert a human.<a href="#section-6.4.1-3" class="pilcrow">¶</a></p>
+A pledge or a Registrar-Agent that receives a pledge-status request with a version larger than it knows about <span class="bcp14">SHOULD</span> log the contents and alert a human.<a href="#section-6.4.1-3" class="pilcrow">¶</a></p>
 <span id="name-cddl-for-pledge-status-requ"></span><div id="stat_req_def">
 <figure id="figure-21">
             <div class="sourcecode" id="section-6.4.1-4.1">
@@ -4427,7 +4427,7 @@ This is out of scope for this specification.<a href="#section-6.4.1-5" class="pi
 <figure id="figure-22">
             <div class="alignLeft art-text artwork" id="section-6.4.1-7.1">
 <pre>
-# The registrar-agent request of "pledge-status" in general JWS
+# The Registrar-Agent request of "pledge-status" in general JWS
   serialization syntax
 {
   "payload": "BASE64URL(status-request)",
@@ -4460,7 +4460,7 @@ This is out of scope for this specification.<a href="#section-6.4.1-5" class="pi
 </pre>
 </div>
 <figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
-<a href="#name-example-of-registrar-agent-" class="selfRef">Example of registrar-agent request of pledge-status using status-type bootstrap</a>
+<a href="#name-example-of-registrar-agent-" class="selfRef">Example of Registrar-Agent request of pledge-status using status-type bootstrap</a>
             </figcaption></figure>
 </div>
 </section>
@@ -4588,10 +4588,10 @@ The pledge signs the response message using its LDevID(Pledge).<a href="#section
 <ul class="normal">
 <li class="normal" id="section-6.4.2-14.1">
               <p id="section-6.4.2-14.1.1">In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor.
-It will not be able to verify the signature of the registrar-agent in the bootstrapping-status request.<a href="#section-6.4.2-14.1.1" class="pilcrow">¶</a></p>
+It will not be able to verify the signature of the Registrar-Agent in the bootstrapping-status request.<a href="#section-6.4.2-14.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.4.2-14.2">
-              <p id="section-6.4.2-14.2.1">In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchor) and can therefore validate the signature of the registrar-agent.
+              <p id="section-6.4.2-14.2.1">In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchor) and can therefore validate the signature of the Registrar-Agent.
 If validation of the JWS signature fails, the pledge <span class="bcp14">SHOULD</span> respond with the HTTP 403 Forbidden status code.<a href="#section-6.4.2-14.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.4.2-14.3">
@@ -4626,13 +4626,13 @@ agent), once the pledge is enrolled with CA certificates and a matching domain c
 These additional fields are defined in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a> as:<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.1-2.1">
-            <p id="section-7.1-2.1.1">agent-signed-data to provide a JSON encoded artifact from the involved registrar-agent, which allows the registrar to verify the agent's involvement<a href="#section-7.1-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-7.1-2.1.1">agent-signed-data to provide a JSON encoded artifact from the involved Registrar-Agent, which allows the registrar to verify the Registrar-Agent's involvement<a href="#section-7.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.1-2.2">
-            <p id="section-7.1-2.2.1">agent-provided-proximity-registrar-cert to provide the registrar certificate visible to the registrar-agent, comparable to the registrar-proximity-certificate used in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span><a href="#section-7.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-7.1-2.2.1">agent-provided-proximity-registrar-cert to provide the registrar certificate visible to the Registrar-Agent, comparable to the registrar-proximity-certificate used in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span><a href="#section-7.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.1-2.3">
-            <p id="section-7.1-2.3.1">agent-signing certificate to optionally provide the registrar agent signing certificate.<a href="#section-7.1-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-7.1-2.3.1">agent-signing certificate to optionally provide the Registrar-Agent signing certificate.<a href="#section-7.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-7.1-3">Examples for the application of these fields in the context of a PVR are provided in <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
@@ -4693,25 +4693,25 @@ These additional fields are defined in <a href="#exchanges_uc2_1" class="auto in
 Further privacy aspects need to be considered for:<a href="#section-9-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9-2.1">
-          <p id="section-9-2.1.1">the introduction of the additional component registrar-agent<a href="#section-9-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-9-2.1.1">the introduction of the additional component Registrar-Agent<a href="#section-9-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-9-2.2">
-          <p id="section-9-2.2.1">potentially no transport layer security between registrar-agent and pledge<a href="#section-9-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-9-2.2.1">potentially no transport layer security between Registrar-Agent and pledge<a href="#section-9-2.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-9-3"><a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a> describes to optional apply TLS to protect the communication between the registrar-agent and the pledge.
+<p id="section-9-3"><a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a> describes to optional apply TLS to protect the communication between the Registrar-Agent and the pledge.
 The following is therefore applicable to the communication without the TLS protection.<a href="#section-9-3" class="pilcrow">¶</a></p>
-<p id="section-9-4">The credential used by the registrar-agent to sign the data for the pledge <span class="bcp14">SHOULD NOT</span> contain any personal information.
+<p id="section-9-4">The credential used by the Registrar-Agent to sign the data for the pledge <span class="bcp14">SHOULD NOT</span> contain any personal information.
 Therefore, it is recommended to use an LDevID certificate associated with the commissioning device instead of an LDevID certificate associated with the service technician operating the device.
 This avoids revealing potentially included personal information to Registrar and MASA.<a href="#section-9-4" class="pilcrow">¶</a></p>
-<p id="section-9-5">The communication between the pledge and the registrar-agent is performed over plain HTTP.
+<p id="section-9-5">The communication between the pledge and the Registrar-Agent is performed over plain HTTP.
 Therefore, it is subject to disclosure by a Dolev-Yao attacker (an "oppressive observer")<span>[<a href="#onpath" class="cite xref">onpath</a>]</span>.
 Depending on the requests and responses, the following information is disclosed.<a href="#section-9-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9-6.1">
           <p id="section-9-6.1.1">the Pledge product-serial-number is contained in the trigger message for the PVR and in all responses from the pledge.
 This information reveals the identity of the devices being bootstrapped and allows deduction of which products an operator is using in their environment.
-As the communication between the pledge and the registrar-agent may be realized over wireless link, this information could easily be eavesdropped, if the wireless network is unencrypted.
+As the communication between the pledge and the Registrar-Agent may be realized over wireless link, this information could easily be eavesdropped, if the wireless network is unencrypted.
 Even if the wireless network is encrypted, if it uses a network-wide key, then layer-2 attacks (ARP/ND spoofing) could insert an on-path observer into the path.<a href="#section-9-6.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-9-6.2">
@@ -4732,13 +4732,13 @@ Even if the wireless network is encrypted, if it uses a network-wide key, then l
 Further security aspects are considered here related to:<a href="#section-10-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-10-2.1">
-          <p id="section-10-2.1.1">the introduction of the additional component registrar-agent<a href="#section-10-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-10-2.1.1">the introduction of the additional component Registrar-Agent<a href="#section-10-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-10-2.2">
           <p id="section-10-2.2.1">the reversal of the pledge communication direction (push mode, compared to BRSKI)<a href="#section-10-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-10-2.3">
-          <p id="section-10-2.3.1">no transport layer security between registrar-agent and pledge<a href="#section-10-2.3.1" class="pilcrow">¶</a></p>
+          <p id="section-10-2.3.1">no transport layer security between Registrar-Agent and pledge<a href="#section-10-2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <div id="sec_cons-dos">
@@ -4747,11 +4747,11 @@ Further security aspects are considered here related to:<a href="#section-10-1" 
 <a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-denial-of-service-dos-attac" class="section-name selfRef">Denial of Service (DoS) Attack on Pledge</a>
         </h3>
 <p id="section-10.1-1">Disrupting the pledge behavior by a DoS attack may prevent the bootstrapping of the pledge to a new domain.
-Because in BRSKI-PRM, the pledge responds to requests from real or illicit registrar-agents, pledges are more subject to DoS attacks from registrar-agents in BRSKI-PRM than they are from illicit registrars in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, where pledges do initiate the connections.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
-<p id="section-10.1-2">A DoS attack with a faked registrar-agent may block the bootstrapping of the pledge due changing state on the pledge (the pledge may produce a voucher-request, and refuse to produce another one).
+Because in BRSKI-PRM, the pledge responds to requests from real or illicit Registrar-Agents, pledges are more subject to DoS attacks from Registrar-Agents in BRSKI-PRM than they are from illicit registrars in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, where pledges do initiate the connections.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
+<p id="section-10.1-2">A DoS attack with a faked Registrar-Agent may block the bootstrapping of the pledge due changing state on the pledge (the pledge may produce a voucher-request, and refuse to produce another one).
 One mitigation may be that the pledge does not limited the number of voucher-requests it creates until at least one has finished.
 An alternative may be that the onboarding state may expire after a certain time, if no further interaction has happened.<a href="#section-10.1-2" class="pilcrow">¶</a></p>
-<p id="section-10.1-3">In addition, the pledge may assume that repeated triggering for PVR are the result of a communication error with the registrar-agent.
+<p id="section-10.1-3">In addition, the pledge may assume that repeated triggering for PVR are the result of a communication error with the Registrar-Agent.
 In that case the pledge <span class="bcp14">MAY</span> simply resent the PVR previously sent.
 Note that in case of resending, a contained nonce and also the contained agent-signed-data in the PVR would consequently be reused.<a href="#section-10.1-3" class="pilcrow">¶</a></p>
 </section>
@@ -4761,10 +4761,10 @@ Note that in case of resending, a contained nonce and also the contained agent-s
         <h3 id="name-misuse-of-acquired-pvr-and-">
 <a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-misuse-of-acquired-pvr-and-" class="section-name selfRef">Misuse of acquired PVR and PER by Registrar-Agent</a>
         </h3>
-<p id="section-10.2-1">A registrar-agent that uses previously requested PVR and PER for domain-A, may attempt to onboard the device into domain-B.  This can be detected by the domain registrar while PVR processing.
+<p id="section-10.2-1">A Registrar-Agent that uses previously requested PVR and PER for domain-A, may attempt to onboard the device into domain-B.  This can be detected by the domain registrar while PVR processing.
 The domain registrar needs to verify that the "proximity-registrar-cert" field in the PVR matches its own registrar LDevID certificate.
 In addition, the domain registrar needs to verify the association of the pledge to its domain based on the product-serial-number contained in the PVR and in the IDevID certificate of the pledge. (This is just part of the supply chain integration).
-Moreover, the domain registrar verifies if the registrar-agent is authorized to interact with the pledge for voucher-requests and enroll-requests, based on the EE (RegAgt) certificate data contained in the PVR.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
+Moreover, the domain registrar verifies if the Registrar-Agent is authorized to interact with the pledge for voucher-requests and enroll-requests, based on the EE (RegAgt) certificate data contained in the PVR.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
 <p id="section-10.2-2">Misbinding of a pledge by a faked domain registrar is countered as described in BRSKI security considerations <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> (Section 11.4).<a href="#section-10.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -4773,14 +4773,14 @@ Moreover, the domain registrar verifies if the registrar-agent is authorized to 
         <h3 id="name-misuse-of-registrar-agent-c">
 <a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-misuse-of-registrar-agent-c" class="section-name selfRef">Misuse of Registrar-Agent Credentials</a>
         </h3>
-<p id="section-10.3-1">Concerns of misusage of a registrar-agent with a valid EE (RegAgt) certificate may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the registrar-agent against the domain registrar.
-The EE (RegAgt) certificate may have been acquired by a prior BRSKI run for the registrar-agent, if an IDevID is available on registrar-agent.
+<p id="section-10.3-1">Concerns of misusage of a Registrar-Agent with a valid EE (RegAgt) certificate may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the Registrar-Agent against the domain registrar.
+The EE (RegAgt) certificate may have been acquired by a prior BRSKI run for the Registrar-Agent, if an IDevID is available on Registrar-Agent.
 Alternatively, the EE (RegAgt) certificate may be acquired by a service technician from the domain PKI system in an authenticated way.<a href="#section-10.3-1" class="pilcrow">¶</a></p>
 <p id="section-10.3-2">In addition it is required that the EE (RegAgt) certificate is valid for the complete bootstrapping phase.
-This avoids that a registrar-agent could be misused to create arbitrary "agent-signed-data" objects to perform an authorized bootstrapping of a rogue pledge at a later point in time.
-In this misuse "agent-signed-data" could be dated after the validity time of the EE (RegAgt) certificate, due to missing trusted timestamp in the registrar-agents signature.
+This avoids that a Registrar-Agent could be misused to create arbitrary "agent-signed-data" objects to perform an authorized bootstrapping of a rogue pledge at a later point in time.
+In this misuse "agent-signed-data" could be dated after the validity time of the EE (RegAgt) certificate, due to missing trusted timestamp in the Registrar-Agents signature.
 To address this, the registrar <span class="bcp14">SHOULD</span> verify the certificate used to create the signature on "agent-signed-data".
-Furthermore the registrar also verifies the EE (RegAgt) certificate used in the TLS handshake with the registrar-agent. If both certificates are verified successfully, the registrar-agent's signature can be considered as valid.<a href="#section-10.3-2" class="pilcrow">¶</a></p>
+Furthermore the registrar also verifies the EE (RegAgt) certificate used in the TLS handshake with the Registrar-Agent. If both certificates are verified successfully, the Registrar-Agent's signature can be considered as valid.<a href="#section-10.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec_cons_mDNS">
@@ -4788,9 +4788,9 @@ Furthermore the registrar also verifies the EE (RegAgt) certificate used in the 
         <h3 id="name-misuse-of-dns-sd-with-mdns-">
 <a href="#section-10.4" class="section-number selfRef">10.4. </a><a href="#name-misuse-of-dns-sd-with-mdns-" class="section-name selfRef">Misuse of DNS-SD with mDNS to obtain list of pledges</a>
         </h3>
-<p id="section-10.4-1">To discover a specific pledge a registrar-agent may request the service name in combination with the product-serial-number of a specific pledge.
+<p id="section-10.4-1">To discover a specific pledge a Registrar-Agent may request the service name in combination with the product-serial-number of a specific pledge.
 The pledge reacts on this if its product-serial-number is part of the request message.<a href="#section-10.4-1" class="pilcrow">¶</a></p>
-<p id="section-10.4-2">If the registrar-agent performs DNS-based Service Discovery without a specific product-serial-number, all  pledges in the domain react if the functionality is supported.
+<p id="section-10.4-2">If the Registrar-Agent performs DNS-based Service Discovery without a specific product-serial-number, all  pledges in the domain react if the functionality is supported.
 This functionality enumerates and reveals the information of devices available in the domain.
 The information about this is provided here as a feature to support the commissioning of devices.
 A manufacturer may decide to support this feature only for devices not possessing a LDevID or to not support this feature at all, to avoid an enumeration in an operative domain.<a href="#section-10.4-2" class="pilcrow">¶</a></p>
@@ -5011,9 +5011,9 @@ Support in PoC implementations and comments resulting from the implementation wa
 <div id="example-pledge-voucher-request-pvr-from-pledge-to-registrar-agent">
 <section id="appendix-A.1">
         <h3 id="name-example-pledge-voucher-requ">
-<a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-example-pledge-voucher-requ" class="section-name selfRef">Example Pledge Voucher-Request - PVR (from Pledge to Registrar-agent)</a>
+<a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-example-pledge-voucher-requ" class="section-name selfRef">Example Pledge Voucher-Request - PVR (from Pledge to Registrar-Agent)</a>
         </h3>
-<p id="appendix-A.1-1">The following is an example request sent from a Pledge to the Registrar-agent, in "General JWS JSON Serialization".
+<p id="appendix-A.1-1">The following is an example request sent from a Pledge to the Registrar-Agent, in "General JWS JSON Serialization".
 The message size of this PVR is: 4649 bytes<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
 <span id="name-example-pledge-voucher-reque"></span><div id="ExamplePledgeVoucherRequestfigure">
 <figure id="figure-25">
@@ -5332,9 +5332,9 @@ yyFd3kP6YCn35YYJ7yK35d3styo_yoiPfKA"
 <div id="example-voucher-response-from-masa-to-pledge-via-registrar-and-registrar-agent">
 <section id="appendix-A.3">
         <h3 id="name-example-voucher-response-fr">
-<a href="#appendix-A.3" class="section-number selfRef">A.3. </a><a href="#name-example-voucher-response-fr" class="section-name selfRef">Example Voucher-Response (from MASA to Pledge, via Registrar and Registrar-agent)</a>
+<a href="#appendix-A.3" class="section-number selfRef">A.3. </a><a href="#name-example-voucher-response-fr" class="section-name selfRef">Example Voucher-Response (from MASA to Pledge, via Registrar and Registrar-Agent)</a>
         </h3>
-<p id="appendix-A.3-1">The following is an example voucher-response from MASA to Pledge via Registrar and Registrar-agent, in "General JWS JSON Serialization". The message size of this Voucher is: 1916 bytes<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.3-1">The following is an example voucher-response from MASA to Pledge via Registrar and Registrar-Agent, in "General JWS JSON Serialization". The message size of this Voucher is: 1916 bytes<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
 <span id="name-example-voucher-response-fro"></span><div id="ExampleVoucherResponsefigure">
 <figure id="figure-27">
           <div class="alignLeft art-text artwork" id="appendix-A.3-2.1">
@@ -5385,9 +5385,9 @@ TvHMUw0wx9wdyuNVjNoAgLysNIgEvlcltBw"
 <div id="example-voucher-response-masa-issued-voucher-with-additional-registrar-signature-from-masa-to-pledge-via-registrar-and-registrar-agent">
 <section id="appendix-A.4">
         <h3 id="name-example-voucher-response-ma">
-<a href="#appendix-A.4" class="section-number selfRef">A.4. </a><a href="#name-example-voucher-response-ma" class="section-name selfRef">Example Voucher-Response, MASA issued Voucher with additional Registrar signature (from MASA to Pledge, via Registrar and Registrar-agent)</a>
+<a href="#appendix-A.4" class="section-number selfRef">A.4. </a><a href="#name-example-voucher-response-ma" class="section-name selfRef">Example Voucher-Response, MASA issued Voucher with additional Registrar signature (from MASA to Pledge, via Registrar and Registrar-Agent)</a>
         </h3>
-<p id="appendix-A.4-1">The following is an example voucher-response from MASA to Pledge via Registrar and Registrar-agent, in "General JWS JSON Serialization".
+<p id="appendix-A.4-1">The following is an example voucher-response from MASA to Pledge via Registrar and Registrar-Agent, in "General JWS JSON Serialization".
 The message size of this Voucher is: 3006 bytes<a href="#appendix-A.4-1" class="pilcrow">¶</a></p>
 <span id="name-example-voucher-response-from"></span><div id="ExampleVoucherResponseWithRegSignfigure">
 <figure id="figure-28">
@@ -5461,10 +5461,10 @@ qhRRyjnxp80IV_Fy1RAOXIIzs3Q8CnMgBgg"
       <h2 id="name-http-over-tls-operations-be">
 <a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-http-over-tls-operations-be" class="section-name selfRef">HTTP-over-TLS operations between Registrar-Agent and Pledge</a>
       </h2>
-<p id="appendix-B-1">The use of HTTPS between the Registrar-Agent and the Pledge has been identified as an optional mechanism.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<p id="appendix-B-2">Provided that the key-agreement in the underlying TLS protocol connection can be properly authenticated, the use of TLS provides privacy for the voucher and enrollment operations between the pledge and the registrar-agent.
+<p id="appendix-B-1">The use of HTTP-over-TLS between Registrar-Agent and pledge has been identified as an optional mechanism.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">Provided that the key-agreement in the underlying TLS protocol connection can be properly authenticated, the use of TLS provides privacy for the voucher and enrollment operations between the pledge and the Registrar-Agent.
 The authenticity of the onboarding and enrollment is not dependant upon the security of the TLS connection.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
-<p id="appendix-B-3">The use of HTTPS is not mandated by this document for a number of reasons:<a href="#appendix-B-3" class="pilcrow">¶</a></p>
+<p id="appendix-B-3">The use of HTTP-over-TLS is not mandated by this document for a number of reasons:<a href="#appendix-B-3" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="appendix-B-4">
 <li id="appendix-B-4.1">
           <p id="appendix-B-4.1.1">A certificate is generally required in order to do TLS.  While there are other modes of authentication including PSK, various EAP methods and raw public key, they do no help as there is no previous relationship between the Registrar-Agent.<a href="#appendix-B-4.1.1" class="pilcrow">¶</a></p>
@@ -5473,14 +5473,14 @@ The authenticity of the onboarding and enrollment is not dependant upon the secu
           <p id="appendix-B-4.2.1">The pledge can use it's IDevID certificate to authenticate itself, but <span>[<a href="#RFC6125" class="cite xref">RFC6125</a>]</span> DNS-ID methods do not apply as the pledge does not have a FQDN.  Instead a new mechanism is required, which authenticates the X520SerialNumber DN attribute which must be present in every IDevID.<a href="#appendix-B-4.2.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
-<p id="appendix-B-5">If the Registrar-Agent has a preconfigured list of which serial numbers, from which manufacturers it expects to see, then it can attempt to match this pledge against a list of potential devices.<a href="#appendix-B-5" class="pilcrow">¶</a></p>
-<p id="appendix-B-6">In many cases only the list of manufacturers is known ahead of time, so at most the Registrar-Agent can show the X520SerialNumber to the (human) operator who may then attempt to confirm that they are standing in front of a device with that serial number.
+<p id="appendix-B-5">If the Registrar-Agent has a preconfigured list of which product-serial-number(s), from which manufacturers it expects to see, then it can attempt to match this pledge against a list of potential devices.<a href="#appendix-B-5" class="pilcrow">¶</a></p>
+<p id="appendix-B-6">In many cases only the list of manufacturers is known ahead of time, so at most the Registrar-Agent can show the X520SerialNumber to the (human) operator who may then attempt to confirm that they are standing in front of a device with that product-serial-number.
 The use of scannable QRcodes may help automate this in some cases.<a href="#appendix-B-6" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="appendix-B-7">
 <li id="appendix-B-7.1">
           <p id="appendix-B-7.1.1">The CA used to sign the IDevID will be a manufacturer private PKI as described in <span>[<a href="#I-D.irtf-t2trg-taxonomy-manufacturer-anchors" class="cite xref">I-D.irtf-t2trg-taxonomy-manufacturer-anchors</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-t2trg-taxonomy-manufacturer-anchors-02#section-4.1" class="relref">Section 4.1</a></span>.
 The anchors for this PKI will never be part of the public WebPKI anchors which are distributed with most smartphone operating systems.
-A registrar-agent application will need to use different APIs in order to initiate an HTTPS connection without performing WebPKI verification.
+A Registrar-Agent application will need to use different APIs in order to initiate an HTTPS connection without performing WebPKI verification.
 The application will then have to do it's own certificate chain verification against a store of manufacturer trust anchors.
 In the Android ecosystem this involved use of a customer TrustManager: many application developers do not create these correctly, and there is significant push to remove this option as it has repeatedly resulted in security failures. See <span>[<a href="#androidtrustfail" class="cite xref">androidtrustfail</a>]</span><a href="#appendix-B-7.1.1" class="pilcrow">¶</a></p>
 </li>
@@ -5512,10 +5512,10 @@ IDevID certificates are intended to be widely useable and EKU does not support t
           <p id="appendix-C-3.2.1">issue #103, removed step 6 in verification handling for the wrapped CA certificate provisioning as only applicable after enrollment <a href="#exchanges_uc2_3c" class="auto internal xref">Section 6.3.3</a><a href="#appendix-C-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.3">
-          <p id="appendix-C-3.3.1">issue #128: included notation of nomadic operation of the registrar-agent in <a href="#architecture" class="auto internal xref">Section 5</a>, including proposed text from PR #131<a href="#appendix-C-3.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.3.1">issue #128: included notation of nomadic operation of the Registrar-Agent in <a href="#architecture" class="auto internal xref">Section 5</a>, including proposed text from PR #131<a href="#appendix-C-3.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.4">
-          <p id="appendix-C-3.4.1">issue #130, introduced DNS service discovery name for brski_pledge to enable discovery by the registrar-agent in <a href="#iana-con" class="auto internal xref">Section 8</a><a href="#appendix-C-3.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.4.1">issue #130, introduced DNS service discovery name for brski_pledge to enable discovery by the Registrar-Agent in <a href="#iana-con" class="auto internal xref">Section 8</a><a href="#appendix-C-3.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.5">
           <p id="appendix-C-3.5.1">removed unused reference RFC 5280<a href="#appendix-C-3.5.1" class="pilcrow">¶</a></p>
@@ -5530,7 +5530,7 @@ IDevID certificates are intended to be widely useable and EKU does not support t
           <p id="appendix-C-3.8.1">clarified registrar discovery and relation to BRSKI-Discovery in <a href="#discovery_uc2_reg" class="auto internal xref">Section 5.6.1</a><a href="#appendix-C-3.8.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.9">
-          <p id="appendix-C-3.9.1">clarified discovery of pledges by the registrar-agent in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.6.2</a>, deleted reference to GRASP as handled in BRSKI-Discovery<a href="#appendix-C-3.9.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.9.1">clarified discovery of pledges by the Registrar-Agent in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.6.2</a>, deleted reference to GRASP as handled in BRSKI-Discovery<a href="#appendix-C-3.9.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.10">
           <p id="appendix-C-3.10.1">addressed comments from SECDIR early review<a href="#appendix-C-3.10.1" class="pilcrow">¶</a></p>
@@ -5557,7 +5557,7 @@ IDevID certificates are intended to be widely useable and EKU does not support t
           <p id="appendix-C-5.6.1">issue #120, included statement regarding pledge host header processing in <a href="#pledge_ep" class="auto internal xref">Section 5.5</a><a href="#appendix-C-5.6.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-5.7">
-          <p id="appendix-C-5.7.1">issue #122, availability of serial number information on registrar agent clarified in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a><a href="#appendix-C-5.7.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-5.7.1">issue #122, availability of product-serial-number information on registrar agent clarified in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a><a href="#appendix-C-5.7.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-5.8">
           <p id="appendix-C-5.8.1">issue #123, Clarified usage of alternative voucher formats in  <a href="#rvr-proc" class="auto internal xref">Section 6.2.3</a><a href="#appendix-C-5.8.1" class="pilcrow">¶</a></p>
@@ -5584,19 +5584,19 @@ IDevID certificates are intended to be widely useable and EKU does not support t
 <p id="appendix-C-6">From IETF draft 08 -&gt; IETF draft 09:<a href="#appendix-C-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-7.1">
-          <p id="appendix-C-7.1.1">issue #80, enhanced <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.6.2</a> with clarification on the serial number and the inclusion of GRASP<a href="#appendix-C-7.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-7.1.1">issue #80, enhanced <a href="#discovery_uc2_ppa" class="auto internal xref">Section 5.6.2</a> with clarification on the product-serial-number and the inclusion of GRASP<a href="#appendix-C-7.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-7.2">
           <p id="appendix-C-7.2.1">issue #81, enhanced introduction with motivation for agent_signed_data<a href="#appendix-C-7.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-7.3">
-          <p id="appendix-C-7.3.1">issue #82, included optional TLS protection of the communication link between registrar-agent and pledge in the introduction <a href="#req-sol" class="auto internal xref">Section 4</a>, and <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a><a href="#appendix-C-7.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-7.3.1">issue #82, included optional TLS protection of the communication link between Registrar-Agent and pledge in the introduction <a href="#req-sol" class="auto internal xref">Section 4</a>, and <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a><a href="#appendix-C-7.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-7.4">
           <p id="appendix-C-7.4.1">issue #83, enhanced <a href="#PER-response" class="auto internal xref">Section 6.1.4</a> and <a href="#exchanges_uc2_2_per" class="auto internal xref">Section 6.2.6</a> with note to re-enrollment<a href="#appendix-C-7.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-7.5">
-          <p id="appendix-C-7.5.1">issue #87, clarified available information at the registrar-agent in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a><a href="#appendix-C-7.5.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-7.5.1">issue #87, clarified available information at the Registrar-Agent in <a href="#exchanges_uc2_1" class="auto internal xref">Section 6.1</a><a href="#appendix-C-7.5.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-7.6">
           <p id="appendix-C-7.6.1">issue #88, clarified, that the PVR in <a href="#pvrr" class="auto internal xref">Section 6.1.2</a> and PER in <a href="#PER-response" class="auto internal xref">Section 6.1.4</a> may contain the certificate chain. If not contained it <span class="bcp14">MUST</span> be available at the registrar.<a href="#appendix-C-7.6.1" class="pilcrow">¶</a></p>
@@ -5614,7 +5614,7 @@ IDevID certificates are intended to be widely useable and EKU does not support t
           <p id="appendix-C-7.10.1">issue #94: clarified terminology (possess vs. obtained)<a href="#appendix-C-7.10.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-7.11">
-          <p id="appendix-C-7.11.1">issue #95: clarified optional IDevID CA certificates on registrar-agent <a href="#exchanges_uc2_3" class="auto internal xref">Section 6.3</a><a href="#appendix-C-7.11.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-7.11.1">issue #95: clarified optional IDevID CA certificates on Registrar-Agent <a href="#exchanges_uc2_3" class="auto internal xref">Section 6.3</a><a href="#appendix-C-7.11.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-7.12">
           <p id="appendix-C-7.12.1">issue #96: updated <a href="#exchangesfig_uc2_3" class="auto internal xref">Figure 16</a> to correct to just one CA certificate provisioning<a href="#appendix-C-7.12.1" class="pilcrow">¶</a></p>
@@ -5629,7 +5629,7 @@ IDevID certificates are intended to be widely useable and EKU does not support t
           <p id="appendix-C-7.15.1">issue #100: included negative example in <a href="#vstat" class="auto internal xref">Figure 17</a><a href="#appendix-C-7.15.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-7.16">
-          <p id="appendix-C-7.16.1">issue #101: included handling if <a href="#exchanges_uc2_3b" class="auto internal xref">Section 6.3.2</a> voucher telemetry information has not been received by the registrar-agent<a href="#appendix-C-7.16.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-7.16.1">issue #101: included handling if <a href="#exchanges_uc2_3b" class="auto internal xref">Section 6.3.2</a> voucher telemetry information has not been received by the Registrar-Agent<a href="#appendix-C-7.16.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-7.17">
           <p id="appendix-C-7.17.1">issue #102: relaxed requirements for CA certs provisioning in <a href="#exchanges_uc2_3c" class="auto internal xref">Section 6.3.3</a><a href="#appendix-C-7.17.1" class="pilcrow">¶</a></p>
@@ -5692,7 +5692,7 @@ IDevID certificates are intended to be widely useable and EKU does not support t
           <p id="appendix-C-13.2.1">Issue #67, shortened the pledge endpoints to prepare for constraint deployments<a href="#appendix-C-13.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-13.3">
-          <p id="appendix-C-13.3.1">Included table for new endpoints on the registrar in the overview of the registrar-agent<a href="#appendix-C-13.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-13.3.1">Included table for new endpoints on the registrar in the overview of the Registrar-Agent<a href="#appendix-C-13.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-13.4">
           <p id="appendix-C-13.4.1">addressed review comments from SECDIR early review (terminology clarifications, editorial improvements)<a href="#appendix-C-13.4.1" class="pilcrow">¶</a></p>
@@ -5779,7 +5779,7 @@ IDevID certificates are intended to be widely useable and EKU does not support t
           <p id="appendix-C-17.3.1">Added explanation for terminology "endpoint" used in this document, issue #16<a href="#appendix-C-17.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-17.4">
-          <p id="appendix-C-17.4.1">Added clarification that registrar-agent may collect PVR or PER or both in one run, issue #17<a href="#appendix-C-17.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-17.4.1">Added clarification that Registrar-Agent may collect PVR or PER or both in one run, issue #17<a href="#appendix-C-17.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-17.5">
           <p id="appendix-C-17.5.1">Added a statement that nonceless voucher may be accepted, issue #18<a href="#appendix-C-17.5.1" class="pilcrow">¶</a></p>
@@ -5840,7 +5840,7 @@ The verification of multiple signatures is described in section <a href="#exchan
 <p id="appendix-C-22">From IETF draft 00 -&gt; IETF draft 01:<a href="#appendix-C-22" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-23.1">
-          <p id="appendix-C-23.1.1">Issue #15 lead to the inclusion of an option for an additional signature of the registrar on the voucher received from the MASA before forwarding to the registrar-agent to support verification of POP of the registrars private key in section <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a> and <a href="#exchanges_uc2_3" class="auto internal xref">Section 6.3</a>.<a href="#appendix-C-23.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-23.1.1">Issue #15 lead to the inclusion of an option for an additional signature of the registrar on the voucher received from the MASA before forwarding to the Registrar-Agent to support verification of POP of the registrars private key in section <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a> and <a href="#exchanges_uc2_3" class="auto internal xref">Section 6.3</a>.<a href="#appendix-C-23.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-23.2">
           <p id="appendix-C-23.2.1">Based on issue #11, a new endpoint was defined for the registrar to enable delivery of the wrapped enrollment request from the pledge (in contrast to plain PKCS#10 in simple enroll).<a href="#appendix-C-23.2.1" class="pilcrow">¶</a></p>
@@ -5874,7 +5874,7 @@ corresponding information is to be provided to the MASA.<a href="#appendix-C-23.
 </li>
         <li class="normal" id="appendix-C-23.11">
           <p id="appendix-C-23.11.1">Inclusion of limitation section (pledge sleeps and needs to be waked
-up. Pledge is awake but registrar-agent is not available) (Issue #10).<a href="#appendix-C-23.11.1" class="pilcrow">¶</a></p>
+up. Pledge is awake but Registrar-Agent is not available) (Issue #10).<a href="#appendix-C-23.11.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-23.12">
           <p id="appendix-C-23.12.1">Assertion-type aligned with voucher in RFC8366bis, deleted related
@@ -5884,12 +5884,12 @@ open issues. (Issue #4)<a href="#appendix-C-23.12.1" class="pilcrow">¶</a></p>
           <p id="appendix-C-23.13.1">Included table for endpoints in <a href="#pledge_ep" class="auto internal xref">Section 5.5</a> for better readability.<a href="#appendix-C-23.13.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-23.14">
-          <p id="appendix-C-23.14.1">Included registrar authorization check for registrar-agent during
+          <p id="appendix-C-23.14.1">Included registrar authorization check for Registrar-Agent during
 TLS handshake  in section <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>. Also enhanced figure
 <a href="#exchangesfig_uc2_2" class="auto internal xref">Figure 11</a> with the authorization step on TLS level.<a href="#appendix-C-23.14.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-23.15">
-          <p id="appendix-C-23.15.1">Enhanced description of registrar authorization check for registrar-agent
+          <p id="appendix-C-23.15.1">Enhanced description of registrar authorization check for Registrar-Agent
 based on the agent-signed-data in section <a href="#exchanges_uc2_2" class="auto internal xref">Section 6.2</a>. Also
 enhanced figure <a href="#exchangesfig_uc2_2" class="auto internal xref">Figure 11</a> with the authorization step
 on pledge-voucher-request level.<a href="#appendix-C-23.15.1" class="pilcrow">¶</a></p>
@@ -5897,7 +5897,7 @@ on pledge-voucher-request level.<a href="#appendix-C-23.15.1" class="pilcrow">¶
         <li class="normal" id="appendix-C-23.16">
           <p id="appendix-C-23.16.1">Changed agent-signed-cert to an array to allow for providing further
 certificate information like the issuing CA cert for the LDevID(RegAgt)
-certificate in case the registrar and the registrar-agent have different
+certificate in case the registrar and the Registrar-Agent have different
 issuing CAs in <a href="#exchangesfig_uc2_2" class="auto internal xref">Figure 11</a> (issue #12).
 This also required changes in the YANG module in <span>[<a href="#I-D.ietf-anima-rfc8366bis" class="cite xref">I-D.ietf-anima-rfc8366bis</a>]</span><a href="#appendix-C-23.16.1" class="pilcrow">¶</a></p>
 </li>
@@ -5956,15 +5956,15 @@ based on draft for JOSE signed voucher artifacts and aligned the
 remaining objects with this approach in <a href="#exchanges_uc2" class="auto internal xref">Section 6</a>.<a href="#appendix-C-29.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-29.2">
-          <p id="appendix-C-29.2.1">Terminology change: issue #2 pledge-agent -&gt; registrar-agent to
-better underline agent relation.<a href="#appendix-C-29.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-29.2.1">Terminology change: issue #2 pledge-agent -&gt; Registrar-Agent to
+better underline Registrar-Agent relation.<a href="#appendix-C-29.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-29.3">
           <p id="appendix-C-29.3.1">Terminology change: issue #3 PULL/PUSH -&gt; pledge-initiator-mode
 and pledge-responder-mode to better address the pledge operation.<a href="#appendix-C-29.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-29.4">
-          <p id="appendix-C-29.4.1">Communication approach between pledge and registrar-agent
+          <p id="appendix-C-29.4.1">Communication approach between pledge and Registrar-Agent
 changed by removing TLS-PSK (former section TLS establishment)
 and associated references to other drafts in favor of relying on
 higher layer exchange of signed data objects. These data objects
@@ -5972,25 +5972,25 @@ are included also in the pledge-voucher-request and lead to an
 extension of the YANG module for the voucher-request (issue #12).<a href="#appendix-C-29.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-29.5">
-          <p id="appendix-C-29.5.1">Details on trust relationship between registrar-agent and
+          <p id="appendix-C-29.5.1">Details on trust relationship between Registrar-Agent and
 registrar (issue #4, #5, #9) included in <a href="#architecture" class="auto internal xref">Section 5</a>.<a href="#appendix-C-29.5.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-29.6">
           <p id="appendix-C-29.6.1">Recommendation regarding short-lived certificates for
-registrar-agent authentication towards registrar (issue #7) in
+Registrar-Agent authentication towards registrar (issue #7) in
 the security considerations.<a href="#appendix-C-29.6.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-29.7">
-          <p id="appendix-C-29.7.1">Introduction of reference to agent signing certificate using SKID
-in agent signed data (issue #37).<a href="#appendix-C-29.7.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-29.7.1">Introduction of reference to Registrar-Agent signing certificate using SKID
+in Registrar-Agent signed data (issue #37).<a href="#appendix-C-29.7.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-29.8">
-          <p id="appendix-C-29.8.1">Enhanced objects in exchanges between pledge and registrar-agent
+          <p id="appendix-C-29.8.1">Enhanced objects in exchanges between pledge and Registrar-Agent
 to allow the registrar to verify agent-proximity to the pledge
 (issue #1) in <a href="#exchanges_uc2" class="auto internal xref">Section 6</a>.<a href="#appendix-C-29.8.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-29.9">
-          <p id="appendix-C-29.9.1">Details on trust relationship between registrar-agent and
+          <p id="appendix-C-29.9.1">Details on trust relationship between Registrar-Agent and
 pledge (issue #5) included in <a href="#architecture" class="auto internal xref">Section 5</a>.<a href="#appendix-C-29.9.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-29.10">

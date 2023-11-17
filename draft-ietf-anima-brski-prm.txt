@@ -5,11 +5,11 @@
 ANIMA WG                                                        S. Fries
 Internet-Draft                                                 T. Werner
 Intended status: Standards Track                                 Siemens
-Expires: 11 May 2024                                             E. Lear
+Expires: 17 May 2024                                             E. Lear
                                                            Cisco Systems
                                                            M. Richardson
                                                 Sandelman Software Works
-                                                         8 November 2023
+                                                        14 November 2023
 
 
             BRSKI with Pledge in Responder Mode (BRSKI-PRM)
@@ -24,7 +24,7 @@ Abstract
    model from a pledge-initiated mode, as used in BRSKI, to a pledge-
    responding mode, where the pledge is in server role.  For this, BRSKI
    with Pledge in Responder Mode (BRSKI-PRM) introduces a new component,
-   the registrar-agent, which facilitates the communication between
+   the Registrar-Agent, which facilitates the communication between
    pledge and registrar during the bootstrapping phase.  To establish
    the trust relation between pledge and registrar, BRSKI-PRM relies on
    object security rather than transport security.  The approach defined
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Fries, et al.              Expires 11 May 2024                  [Page 1]
+Fries, et al.              Expires 17 May 2024                  [Page 1]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -63,7 +63,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 May 2024.
+   This Internet-Draft will expire on 17 May 2024.
 
 Copyright Notice
 
@@ -93,7 +93,7 @@ Table of Contents
    5.  Architecture  . . . . . . . . . . . . . . . . . . . . . . . .  10
      5.1.  Overview  . . . . . . . . . . . . . . . . . . . . . . . .  11
      5.2.  Nomadic connectivity  . . . . . . . . . . . . . . . . . .  14
-     5.3.  Registrar-agent co-located with registrar . . . . . . . .  16
+     5.3.  Registrar-Agent co-located with registrar . . . . . . . .  16
      5.4.  Agent-Proximity Assertion . . . . . . . . . . . . . . . .  17
      5.5.  Behavior of Pledge in Pledge-Responder-Mode . . . . . . .  18
      5.6.  Behavior of Registrar-Agent . . . . . . . . . . . . . . .  19
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Fries, et al.              Expires 11 May 2024                  [Page 2]
+Fries, et al.              Expires 17 May 2024                  [Page 2]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -161,11 +161,11 @@ Internet-Draft                  BRSKI-PRM                  November 2023
      12.2.  Informative References . . . . . . . . . . . . . . . . .  72
    Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  75
      A.1.  Example Pledge Voucher-Request - PVR (from Pledge to
-           Registrar-agent)  . . . . . . . . . . . . . . . . . . . .  76
+           Registrar-Agent)  . . . . . . . . . . . . . . . . . . . .  76
 
 
 
-Fries, et al.              Expires 11 May 2024                  [Page 3]
+Fries, et al.              Expires 17 May 2024                  [Page 3]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -173,10 +173,10 @@ Internet-Draft                  BRSKI-PRM                  November 2023
      A.2.  Example Parboiled Registrar Voucher-Request - RVR (from
            Registrar to MASA)  . . . . . . . . . . . . . . . . . . .  77
      A.3.  Example Voucher-Response (from MASA to Pledge, via
-           Registrar and Registrar-agent)  . . . . . . . . . . . . .  82
+           Registrar and Registrar-Agent)  . . . . . . . . . . . . .  82
      A.4.  Example Voucher-Response, MASA issued Voucher with
            additional Registrar signature (from MASA to Pledge, via
-           Registrar and Registrar-agent)  . . . . . . . . . . . . .  83
+           Registrar and Registrar-Agent)  . . . . . . . . . . . . .  83
    Appendix B.  HTTP-over-TLS operations between Registrar-Agent and
            Pledge  . . . . . . . . . . . . . . . . . . . . . . . . .  85
    Appendix C.  History of Changes [RFC Editor: please delete] . . .  86
@@ -214,34 +214,34 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    be triggered to generate bootstrapping requests in the customer
    domain.  For this approach, this document:
 
-   *  introduces the registrar-agent as new component to facilitate the
+   *  introduces the Registrar-Agent as new component to facilitate the
       communication between the pledge and the domain registrar.  The
-      registrar-agent may be implemented as an integrated functionality
+      Registrar-Agent may be implemented as an integrated functionality
       of a commissioning tool or be co-located with the registrar
 
 
 
-Fries, et al.              Expires 11 May 2024                  [Page 4]
+Fries, et al.              Expires 17 May 2024                  [Page 4]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
-      itself.  BRSKI-PRM supports the identification of the registrar-
-      agent that was performing the bootstrapping allowing for
-      accountability of the pledges installation, when the registrar-
-      agent is a component used by an installer and not co-located with
+      itself.  BRSKI-PRM supports the identification of the Registrar-
+      Agent that was performing the bootstrapping allowing for
+      accountability of the pledges installation, when the Registrar-
+      Agent is a component used by an installer and not co-located with
       the registrar.
 
    *  specifies the interaction (data exchange and data objects) between
-      a pledge acting as server, the registrar-agent acting as client,
+      a pledge acting as server, the Registrar-Agent acting as client,
       and the domain registrar.
 
    *  enables the usage of arbitrary transports between the pledge and
-      the domain registrar via the registrar-agent; security is
+      the domain registrar via the Registrar-Agent; security is
       addressed at the application layer, and both IP-based and non-IP
-      connectivity can be used between pledge and registrar-agent.
+      connectivity can be used between pledge and Registrar-Agent.
 
-   *  allows the application of registrar-agent credentials to establish
+   *  allows the application of Registrar-Agent credentials to establish
       TLS connections to the domain registrar; these are different from
       the IDevID of the pledge.
 
@@ -249,23 +249,23 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    to resource in HTTP [RFC9110] and CoAP [RFC7252]; it is not used to
    describe a device.  Endpoints are accessible via Well-Known URIs
    [RFC8615].  For the interaction with the domain registrar, the
-   registrar-agent will use existing BRSKI [RFC8995] endpoints as well
+   Registrar-Agent will use existing BRSKI [RFC8995] endpoints as well
    as additional endpoints defined in this document.  To utilize the EST
-   server endpoints on the domain registrar, the registrar-agent will
+   server endpoints on the domain registrar, the Registrar-Agent will
    act as client toward the registrar.
 
-   The registrar-agent also acts as a client when communicating with a
+   The Registrar-Agent also acts as a client when communicating with a
    pledge in responder mode.  Here, TLS with server-side, certificate-
    based authentication is only optionally supported.  If TLS is
-   optionally used between the registrar-agent and the pledge, the
-   registrar-agent needs to identify the pledge based on its product
-   serial number rather than the hostname as this is not set in an
+   optionally used between the Registrar-Agent and the pledge, the
+   Registrar-Agent needs to identify the pledge based on its product-
+   serial-number rather than the hostname as this is not set in an
    IDevID certificate.
 
    BRSKI-PRM is designed to rely on object security to support also for
    alternative transports for which TLS may not be available, e.g.,
    Bluetooth or NFC.  This is achieved through an additional signature
-   wrapping of the exchanged data objects involving the registrar-agent
+   wrapping of the exchanged data objects involving the Registrar-Agent
    for transport.
 
    To utilize EST [RFC7030] for enrollment, the domain registrar must
@@ -277,7 +277,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                  [Page 5]
+Fries, et al.              Expires 17 May 2024                  [Page 5]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -333,7 +333,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                  [Page 6]
+Fries, et al.              Expires 17 May 2024                  [Page 6]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -389,7 +389,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                  [Page 7]
+Fries, et al.              Expires 17 May 2024                  [Page 7]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -420,7 +420,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    them a certificate issued by the operator to authenticate against
    other components and services.  These operational parameters are then
    provided to the devices in the basement facilitated by the service
-   technician's laptop.  The registrar-agent, defined in this document,
+   technician's laptop.  The Registrar-Agent, defined in this document,
    may be run on the technician's laptop to interact with pledges.
 
 3.1.2.  Infrastructure Isolation Policy
@@ -445,7 +445,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                  [Page 8]
+Fries, et al.              Expires 17 May 2024                  [Page 8]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -453,12 +453,12 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 3.2.  Limitations
 
    The mechanism described in this document presumes the ability of the
-   pledge and the registrar-agent to communicate with another.  This may
+   pledge and the Registrar-Agent to communicate with another.  This may
    not be possible in constrained environments where, in particular,
    power must be conserved.  In these situations, it is anticipated that
    the transceiver will be powered down most of the time.  This presents
    a rendezvous problem: the pledge is unavailable for certain periods
-   of time, and the registrar-agent is similarly presumed to be
+   of time, and the Registrar-Agent is similarly presumed to be
    unavailable for certain periods of time.  To overcome this situation,
    the pledges may need to be powered on, either manually or by sending
    a trigger signal.
@@ -472,16 +472,16 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    *  To facilitate the communication between a pledge in responder mode
       and the registrar, additional functionality is needed either on
       the registrar or as a stand-alone component.  This new
-      functionality is defined as registrar-agent and acts as an agent
+      functionality is defined as Registrar-Agent and acts as an agent
       of the registrar to trigger the pledge to generate requests for
       voucher and enrollment.  These requests are then provided by the
-      registrar-agent to the registrar.  This requires the definition of
-      pledge endpoints to allow interaction with the registrar-agent.
+      Registrar-Agent to the registrar.  This requires the definition of
+      pledge endpoints to allow interaction with the Registrar-Agent.
 
-   *  The security of communication between the registrar-agent and the
+   *  The security of communication between the Registrar-Agent and the
       pledge must not rely on Transport Layer Security (TLS) to enable
       application of BRSKI-PRM in environments, in which the
-      communication between the registrar-agent and the pledge is done
+      communication between the Registrar-Agent and the pledge is done
       over other technologies like BTLE or NFC, which may not support
       TLS protected communication.  In addition, the pledge does not
       have a certificate that can easily be verified by [RFC6125]
@@ -490,10 +490,10 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    *  The use of authenticated self-contained objects addresses both,
       the TLS challenges and the technology stack challenge.
 
-   *  By contrast, the registrar-agent can be authenticated by the
+   *  By contrast, the Registrar-Agent can be authenticated by the
       registrar as a component, acting on behalf of the registrar.  In
-      addition the registrar must be able to verify, which registrar-
-      agent was in direct contact with the pledge.
+      addition the registrar must be able to verify, which Registrar-
+      Agent was in direct contact with the pledge.
 
    *  It would be inaccurate for the voucher-request and voucher-
       response to use an assertion with value "proximity" in the
@@ -501,7 +501,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                  [Page 9]
+Fries, et al.              Expires 17 May 2024                  [Page 9]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -557,7 +557,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 10]
+Fries, et al.              Expires 17 May 2024                 [Page 10]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -567,7 +567,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    For BRSKI with pledge in responder mode, the base system architecture
    defined in BRSKI [RFC8995] is enhanced to facilitate new use cases in
    which the pledge acts as server.  The responder mode allows delegated
-   bootstrapping using a registrar-agent instead of a direct connection
+   bootstrapping using a Registrar-Agent instead of a direct connection
    between the pledge and the domain registrar.
 
    Necessary enhancements to support authenticated self-contained
@@ -585,23 +585,23 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    To support mutual trust establishment between the domain registrar
    and pledges not directly connected to the customer domain, this
    document specifies the exchange of authenticated self-contained
-   objects with the help of a registrar-agent.
+   objects with the help of a Registrar-Agent.
 
    This leads to extensions of the logical components in the BRSKI
    architecture as shown in Figure 1.
 
    Note that the Join Proxy is not shown in the figure, having been
-   replaced by the Registrar Agent.  The Join Proxy may still be
-   present, and there MAY be some situations in which the Join Proxy can
-   be used by the Registrar-Agent to connect to the Registrar.  For
-   example, the Registrar-Agent application on a smartphone often can
-   connect to local wifi without giving up their LTE connection
-   [androidnsd], but only can make link-local connections.
+   replaced by Registrar-Agent.  The Join Proxy may still be present,
+   and there MAY be some situations in which the Join Proxy can be used
+   by the Registrar-Agent to connect to the Registrar.  For example, a
+   Registrar-Agent application on a smartphone often can connect to
+   local wifi without giving up their LTE connection [androidnsd], but
+   only can make link-local connections.
 
-   The registrar-agent interacts with the pledge to transfer the
+   The Registrar-Agent interacts with the pledge to transfer the
    required data objects for bootstrapping, which are then also
-   exchanged between the registrar-agent and the domain registrar.  The
-   addition of the registrar-agent influences the sequences of the data
+   exchanged between the Registrar-Agent and the domain registrar.  The
+   addition of the Registrar-Agent influences the sequences of the data
    exchange between the pledge and the domain registrar described in
    [RFC8995].  To enable reuse of BRSKI defined functionality as much as
    possible, BRSKI-PRM:
@@ -613,7 +613,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 11]
+Fries, et al.              Expires 17 May 2024                 [Page 11]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -653,13 +653,13 @@ Internet-Draft                  BRSKI-PRM                  November 2023
                   .........................................
                             "Domain" Components
 
-      Figure 1: BRSKI-PRM architecture overview using registrar-agent
+      Figure 1: BRSKI-PRM architecture overview using Registrar-Agent
 
    Figure 1 shows the relations between the following main components:
 
    *  Pledge: The pledge is expected to respond with the necessary data
-      objects for bootstrapping to the registrar-agent.  The protocol
-      used between the pledge and the registrar-agent is assumed to be
+      objects for bootstrapping to the Registrar-Agent.  The protocol
+      used between the pledge and the Registrar-Agent is assumed to be
       HTTP in the context of this document.  Any other protocols
       (including HTTPS) can be used as long as they support the exchange
       of the necessary data objects.  This includes CoAP or protocol to
@@ -669,23 +669,23 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 12]
+Fries, et al.              Expires 17 May 2024                 [Page 12]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
-      -  Discovery of the pledge by the registrar-agent MUST be
+      -  Discovery of the pledge by the Registrar-Agent MUST be
          possible.
 
-      -  As the registrar-agent MUST be able to request data objects for
+      -  As the Registrar-Agent MUST be able to request data objects for
          bootstrapping of the pledge, the pledge MUST offer
          corresponding endpoints as defined in Section 5.5.
 
-      -  The registrar-agent MUST provide additional data to the pledge
+      -  The Registrar-Agent MUST provide additional data to the pledge
          in the context of the voucher-request trigger, which the pledge
          MUST include into the PVR as defined in Section 6.1.1 and
          Section 6.1.2.  This allows the registrar to identify, with
-         which registrar-agent the pledge was in contact.
+         which Registrar-Agent the pledge was in contact.
 
       -  The order of exchanges in the BRSKI-PRM call flow is different
          those in BRSKI [RFC8995], as the PVR and PER are collected at
@@ -696,49 +696,49 @@ Internet-Draft                  BRSKI-PRM                  November 2023
          pledge and the registrar are self-contained authenticated
          objects (signature-wrapped objects).
 
-   *  Registrar-agent: provides a store and forward communication path
+   *  Registrar-Agent: provides a store and forward communication path
       to exchange data objects between the pledge and the domain
-      registrar.  The registrar-agent brokers in situations in which the
+      registrar.  The Registrar-Agent brokers in situations in which the
       domain registrar is not directly reachable by the pledge.  This
       may be due to a different technology stack or due to missing
-      connectivity.  The registrar-agent triggers a pledge to create
+      connectivity.  The Registrar-Agent triggers a pledge to create
       bootstrapping artifacts such as the voucher-request and the
       enrollment-request on one or multiple pledges.  It can then
       perform a (bulk) bootstrapping based on the collected data.  The
-      registrar-agent is expected to possess information about the
+      Registrar-Agent is expected to possess information about the
       domain registrar: the registrar EE certificate, LDevID(CA)
       certificate, IP address, either by configuration or by using the
       discovery mechanism defined in [RFC8995].  There is no trust
-      assumption between the pledge and the registrar-agent as only
+      assumption between the pledge and the Registrar-Agent as only
       authenticated self-contained objects are used, which are
-      transported via the registrar-agent and provided either by the
+      transported via the Registrar-Agent and provided either by the
       pledge or the registrar.  The trust assumption between the
-      registrar-agent and the registrar is based on the LDevID of the
-      registrar-agent, provided by the PKI responsible for the domain.
-      This allows the registrar-agent to authenticate towards the
+      Registrar-Agent and the registrar is based on the LDevID of the
+      Registrar-Agent, provided by the PKI responsible for the domain.
+      This allows the Registrar-Agent to authenticate towards the
       registrar, e.g., in a TLS handshake.  Based on this, the registrar
-      is able to distinguish a pledge from a registrar-agent during the
-      TLS session establishment and also to verify that this registrar-
-      agent is authorized to perform the bootstrapping of the distinct
-      pledge.  The registrar-agent may be realized as stand-alone
+      is able to distinguish a pledge from a Registrar-Agent during the
+      TLS session establishment and also to verify that this Registrar-
+      Agent is authorized to perform the bootstrapping of the distinct
+      pledge.  The Registrar-Agent may be realized as stand-alone
       component supporting nomadic activities of a service technician
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 13]
+Fries, et al.              Expires 17 May 2024                 [Page 13]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
       moving between different installation sites.  Contrary, the
-      registrar-agent may also be realized as co-located functionality
+      Registrar-Agent may also be realized as co-located functionality
       for a registrar, to support pledges in pledge-responder-mode.
 
    *  Join Proxy (not shown): same functionality as described in
-      [RFC8995] if needed.  Note that a registrar-agent may use a join
+      [RFC8995] if needed.  Note that a Registrar-Agent may use a join
       proxy to facilitate the TLS connection to the registrar, in the
       same way that a BRSKI pledge would use a join proxy.  This is
-      useful in cases where the registrar-agent does not have full IP
+      useful in cases where the Registrar-Agent does not have full IP
       connectivity via the domain network, or cases where it has no
       other means to locate the registrar on the network.
 
@@ -747,16 +747,16 @@ Internet-Draft                  BRSKI-PRM                  November 2023
       (customer site) domain by facilitating the communication of the
       pledge with the MASA service and the domain PKI service.  In
       contrast to [RFC8995], the domain registrar does not interact with
-      a pledge directly but through the registrar-agent.  A registrar
+      a pledge directly but through the Registrar-Agent.  A registrar
       with combined functionality of BRSKI and BRSKI-PRM detects if the
       bootstrapping is performed by the pledge directly (BRSKI case) or
-      by the registrar-agent (BRSKI-PRM case) based on the utilized
+      by the Registrar-Agent (BRSKI-PRM case) based on the utilized
       credential for authentication (either pledge’s IDevID or LDevID
-      from registrar-agent), see also Section 6.2.
+      from Registrar-Agent), see also Section 6.2.
 
    *  The manufacturer provided components/services (MASA and Ownership
       tracker) are used as defined in [RFC8995].  A MASA is able to
-      support enrollment via registrar-agent without changes unless it
+      support enrollment via Registrar-Agent without changes unless it
       checks the vouchers proximity indication, in which case it would
       need to be enhanced to support BRSKI-PRM to also accept the agent-
       proximity.
@@ -781,7 +781,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 14]
+Fries, et al.              Expires 17 May 2024                 [Page 14]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -816,11 +816,11 @@ Internet-Draft                  BRSKI-PRM                  November 2023
                   .........................................
                             "Domain" Components
 
-           Figure 2: Registrar Agent nomadic connectivity example
+           Figure 2: Registrar-Agent nomadic connectivity example
 
    PRM enables support of this case through nomadic connectivity of the
-   registrar-agent.  To perform enrollment in this setup, multiple round
-   trips of the registrar-agent between the pledge install location and
+   Registrar-Agent.  To perform enrollment in this setup, multiple round
+   trips of the Registrar-Agent between the pledge install location and
    the domain registrar are required.
 
    1.  Connectivity to domain registrar: preparation tasks for pledge
@@ -837,7 +837,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 15]
+Fries, et al.              Expires 17 May 2024                 [Page 15]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -855,17 +855,17 @@ Internet-Draft                  BRSKI-PRM                  November 2023
        enrollment status using the BRSKI-PRM approach described in
        Section 6.3.6.
 
-   Variations of this setup include cases where the registrar-agent uses
+   Variations of this setup include cases where the Registrar-Agent uses
    for example WiFi to connect to the pledge installation network, and
    mobile network connectivity to connect to the domain registrar.  Both
    connections may also be possible in a single location at the same
    time, based on installation building conditions.,
 
-5.3.  Registrar-agent co-located with registrar
+5.3.  Registrar-Agent co-located with registrar
 
    Compared to [RFC8995] BRSKI, pledges supporting BRSKI-PRM can be
    completely passive and only need to react when being requested to
-   react by a registrar-agent.  In [RFC8995], pledges instead need to
+   react by a Registrar-Agent.  In [RFC8995], pledges instead need to
    continuously request enrollment from a domain registrar, which may
    result in undesirable communications pattern and possible overload of
    a domain registrar.
@@ -893,7 +893,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 16]
+Fries, et al.              Expires 17 May 2024                 [Page 16]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -901,15 +901,15 @@ Internet-Draft                  BRSKI-PRM                  November 2023
      Figure 3: Registrar-Agent integrated into Domain Registrar example
 
    The benefits of BRSKI-PRM can be achieved even without the
-   operational complexity of standalone registrar-agents by integrating
-   the necessary functionality of the registrar-agent as a module into
+   operational complexity of standalone Registrar-Agents by integrating
+   the necessary functionality of the Registrar-Agent as a module into
    the domain registrar as shown in Figure 3 so that it can support the
    BRSKI-PRM communications to the pledge.
 
 5.4.  Agent-Proximity Assertion
 
    "Agent-proximity" is a statement in the PVR and in the voucher, that
-   the registrar certificate was provided via the registrar-agent as
+   the registrar certificate was provided via the Registrar-Agent as
    defined in Section 6 and not directly to the pledge.  "Agent-
    proximity" is therefore a different assertion then "proximity", which
    is defined in section 4 of [RFC8366].  "Agent-proximity" is defined
@@ -926,8 +926,8 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
    In contrast, in BRSKI-PRM, the pledge has no direct connection to the
    registrar and must take the Registrar-Agent LDevID provisionally.
-   The registrar-agent has included its LDevID, a certificate signed by
-   the domain owner, into the PVR trigger message.  The registrar-agent
+   The Registrar-Agent has included its LDevID, a certificate signed by
+   the domain owner, into the PVR trigger message.  The Registrar-Agent
    identity is therefore included into the Pledge Voucher Request (PVR).
 
    Akin to the BRSKI case, the pledge has provided proximity evidence to
@@ -949,24 +949,24 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 17]
+Fries, et al.              Expires 17 May 2024                 [Page 17]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 5.5.  Behavior of Pledge in Pledge-Responder-Mode
 
-   The pledge is triggered by the registrar-agent to generate the PVR
+   The pledge is triggered by the Registrar-Agent to generate the PVR
    and PER.  It will also be triggered for processing of the responses
-   and the generation of status information once the registrar-agent has
+   and the generation of status information once the Registrar-Agent has
    received the responses from the registrar later in the process.  Due
-   to the use of the registrar-agent, the interaction with the domain
+   to the use of the Registrar-Agent, the interaction with the domain
    registrar is changed as shown in Figure 5.  To enable interaction as
-   responder with the registrar-agent, the pledge provides endpoints
+   responder with the Registrar-Agent, the pledge provides endpoints
    using the BRSKI defined endpoints based on the "/.well-known/brski"
    URI tree.
 
-   When the registrar-agent reaches out to a pledge, for instance with
+   When the Registrar-Agent reaches out to a pledge, for instance with
    an example URI path "http://pledge.example/.well-known/brski/tpvr",
    it will in fact send a Host: header of "pledge.example", with a
    relative path of "/.well-known/brski/tpbr".  However in practice the
@@ -1005,7 +1005,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 18]
+Fries, et al.              Expires 17 May 2024                 [Page 18]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -1036,18 +1036,18 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 5.6.  Behavior of Registrar-Agent
 
-   The registrar-agent as a new component provides a message passing
+   The Registrar-Agent as a new component provides a message passing
    service between the pledge and the domain registrar.  It facilitates
    the exchange of data between the pledge and the domain registrar,
    which are the voucher-request/response, the enrollment-request/
    response, as well as related telemetry and status information.
 
-   For the communication with the pledge the registrar-agent utilizes
+   For the communication with the pledge the Registrar-Agent utilizes
    communication endpoints provided by the pledge.  The transport in
    this specification is based on HTTP but may also be done using other
    transport mechanisms.
 
-   The communication between the registrar-agent and the pledge MAY be
+   The communication between the Registrar-Agent and the pledge MAY be
    protected using TLS as outlined in Section 6.1.  The details of doing
    TLS validation are Appendix B.
 
@@ -1061,12 +1061,12 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 19]
+Fries, et al.              Expires 17 May 2024                 [Page 19]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
-   For the communication with the registrar, the registrar-agent uses
+   For the communication with the registrar, the Registrar-Agent uses
    the endpoints of the domain registrar side already specified in
    [RFC8995] (derived from EST [RFC7030]) where suitable.  These
    endpoints do not expect signature wrapped-objects, which are used b
@@ -1087,14 +1087,14 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
                Table 2: Additional endpoints on the registrar
 
-   For authentication to the domain registrar, the registrar-agent uses
-   its EE (RegAgt) certificate.  The provisioning of the registrar-agent
+   For authentication to the domain registrar, the Registrar-Agent uses
+   its EE (RegAgt) certificate.  The provisioning of the Registrar-Agent
    LDevID is out of scope for this document, but may be done in advance
    using a separate BRSKI run or by other means like configuration.  It
-   is recommended to use short lived registrar-agent LDevIDs in the
+   is recommended to use short lived Registrar-Agent LDevIDs in the
    range of days or weeks as outlined in Section 10.3.
 
-   The registrar-agent will use its EE certificate when establishing a
+   The Registrar-Agent will use its EE certificate when establishing a
    TLS session with the domain registrar for TLS client authentication.
    The EE (RegAgt) certificate MUST include a SubjectKeyIdentifier
    (SKID), which is used as reference in the context of an agent-signed-
@@ -1108,27 +1108,27 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    follows the recommendation from BRSKI to use SKID in favor of a
    certificate fingerprint to avoid additional computations.
 
-   Using an LDevID for TLS client authentication of the registrar-agent
+   Using an LDevID for TLS client authentication of the Registrar-Agent
    is a deviation from [RFC8995], in which the pledge's IDevID
    credential is used to perform TLS client authentication.  The use of
    the EE (RegAgt) certificate allows the domain registrar to
    distinguish, if bootstrapping is initiated from a pledge or from a
-   registrar-agent and to adopt different internal handling accordingly.
+   Registrar-Agent and to adopt different internal handling accordingly.
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 20]
+Fries, et al.              Expires 17 May 2024                 [Page 20]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
-   If a registrar detects a request that originates from a registrar-
-   agent it is able to switch the operational mode from BRSKI to BRSKI-
+   If a registrar detects a request that originates from a Registrar-
+   Agent it is able to switch the operational mode from BRSKI to BRSKI-
    PRM.  This may be supported by a specific naming in the SAN (subject
    alternative name) component of the EE (RegAgt) certificate.
    Alternatively, the domain may feature a CA specifically for issuing
-   registrar-agent LDevID certificates.  This allows the registrar to
-   detect registrar-agents based on the issuing CA.
+   Registrar-Agent LDevID certificates.  This allows the registrar to
+   detect Registrar-Agents based on the issuing CA.
 
    As BRSKI-PRM uses authenticated self-contained data objects between
    the pledge and the domain registrar, the binding of the pledge
@@ -1137,12 +1137,12 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    pledge and the domain registrar used in the context of this
    specifications are JOSE objects.
 
-   In addition to the EE (RegAgt) certificate, the registrar-agent is
+   In addition to the EE (RegAgt) certificate, the Registrar-Agent is
    provided with the product-serial-number(s) of the pledge(s) to be
    bootstrapped.  This is necessary to allow the discovery of pledge(s)
-   by the registrar-agent using DNS-SD with mDNS (see Section 5.6.2) The
-   list may be provided by prior administrative means or the registrar
-   agent may get the information via an interaction with the pledge.
+   by the Registrar-Agent using DNS-SD with mDNS (see Section 5.6.2) The
+   list may be provided by prior administrative means or the Registrar-
+   Agent may get the information via an interaction with the pledge.
    For instance, [RFC9238] describes scanning of a QR code, the product-
    serial-number would be initialized from the 12N B005 Product Serial
    Number.
@@ -1152,7 +1152,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    pledge voucher-request object.  This behavior is retained also in
    BRSKI-PRM.
 
-   The following information MUST be available at the registrar-agent
+   The following information MUST be available at the Registrar-Agent
    before interaction with a pledge:
 
    *  EE (RegAgt) certificate and corresponding private key: own
@@ -1162,8 +1162,8 @@ Internet-Draft                  BRSKI-PRM                  November 2023
       be provided to the pledge).
 
    *  Serial-number(s): product-serial-number(s) of pledge(s) to be
-      bootstrapped (to query discover specific pledges based on the
-      serial number).
+      bootstrapped (to query discovery of specific pledges based on the
+      product-serial-number).
 
 
 
@@ -1173,24 +1173,25 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 21]
+Fries, et al.              Expires 17 May 2024                 [Page 21]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 5.6.1.  Discovery of Registrar by Registrar-Agent
 
-   As a registrar-agent acts as representative of the domain registrar
+   As a Registrar-Agent acts as representative of the domain registrar
    towards the pledge or may even be collocated with the domain
    registrar, a separate discovery of the registrar is likely not needed
-   as registrar-agent and registrar are domain components and have a
+   as Registrar-Agent and registrar are domain components and have a
    trust relation.  Moreover, other communication (not part of this
-   document) between the registrar-agent and the registrar is assumed,
-   e.g., to exchange information about serial numbers of pledges to be
-   discovered as outlined in Section 5.2.  Moreover, as the standard
-   discovery described in section 4 and the appendix A.2 of [RFC8995]
-   does not support of registrars with an enhanced feature set (like the
-   support of BRSKI-PRM), this standard discovery is not applicable.
+   document) between the Registrar-Agent and the registrar is assumed,
+   e.g., to exchange information about product-serial-number(s) of
+   pledges to be discovered as outlined in Section 5.2.  Moreover, as
+   the standard discovery described in section 4 and the appendix A.2 of
+   [RFC8995] does not support of registrars with an enhanced feature set
+   (like the support of BRSKI-PRM), this standard discovery is not
+   applicable.
 
    As a more general solution, the BRSKI discovery mechanism can be
    extended to provide upfront information on the capabilities of
@@ -1201,7 +1202,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 5.6.2.  Discovery of Pledge by Registrar-Agent
 
-   The discovery of the pledge by registrar-agent in the context of this
+   The discovery of the pledge by Registrar-Agent in the context of this
    document describes the minimum discovery approach to be supported.  A
    more general discovery mechanism, also supporting GRASP besides DNS-
    SD with mDNS may be provided in [I-D.eckert-anima-brski-discovery].
@@ -1223,13 +1224,12 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    the product-serial-number therefore needs to be sufficiently unique.
 
    In the absence of a more general discovery as defined in
-   [I-D.eckert-anima-brski-discovery] the registrar-agent MUST use
+   [I-D.eckert-anima-brski-discovery] the Registrar-Agent MUST use
 
 
 
 
-
-Fries, et al.              Expires 11 May 2024                 [Page 22]
+Fries, et al.              Expires 17 May 2024                 [Page 22]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -1275,41 +1275,41 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 6.  Bootstrapping Data Objects and Corresponding Exchanges
 
-   The interaction of the pledge with the registrar-agent may be
+   The interaction of the pledge with the Registrar-Agent may be
    accomplished using different transport means (protocols and/or
    network technologies).  This specification utilizes HTTP as
    transport.  Alternative transport channels may be CoAP, Bluetooth Low
    Energy (BLE), or Nearfield Communication (NFC).  These transport
    means may differ from, and are independent of, the ones used between
-   the registrar-agent and the registrar.  Transport channel
+   the Registrar-Agent and the registrar.  Transport channel
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 23]
+Fries, et al.              Expires 17 May 2024                 [Page 23]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
    independence is realized by data objects, which are not bound to
    specific transport security and stay the same across the
-   communication from the pledge via the registrar-agent to the
+   communication from the pledge via the Registrar-Agent to the
    registrar.. Therefore, authenticated self-contained objects (here:
    signature-wrapped objects) are applied for data exchanges between the
    pledge and the registrar.
 
-   The registrar-agent provides the domain registrar certificate
+   The Registrar-Agent provides the domain registrar certificate
    (registrar LDevID certificate) to the pledge to be included in the
    PVR leaf "agent-provided-proximity-registrar-certificate".  This
    enables the registrar to verify that it is the desired registrar for
    handling the request.
 
-   The registrar certificate may be configured at the registrar-agent or
-   may be fetched by the registrar-agent based on a prior TLS connection
-   with this domain registrar.  In addition, the registrar-agent
+   The registrar certificate may be configured at the Registrar-Agent or
+   may be fetched by the Registrar-Agent based on a prior TLS connection
+   with this domain registrar.  In addition, the Registrar-Agent
    provides agent-signed-data containing the pledge product-serial-
    number, signed with the private key corresponding to the EE (RegAgt)
    certificate, as described in Section 6.1.  This enables the registrar
-   to verify and log, which registrar-agent was in contact with the
+   to verify and log, which Registrar-Agent was in contact with the
    pledge, when verifying the PVR.
 
    The registrar MUST provide the EE (RegAgt) certificate identified by
@@ -1334,20 +1334,20 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    Depending on the MASA verification policy, it may also respond with a
    suitable 4xx or 5xx error status code as described in section 5.6 of
    [RFC8995].  When successful, the voucher will then be supplied via
-   the registrar to the registrar-agent.
+   the registrar to the Registrar-Agent.
 
    Figure 4 provides an overview of the exchanges detailed in the
    following sub sections.
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 24]
+Fries, et al.              Expires 17 May 2024                 [Page 24]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
    +--------+   +-----------+   +-----------+    +--------+  +---------+
-   | Pledge |   | Registrar |   | Domain    |    | Domain |  | Vendor  |
+   | Pledge |   | Registrar-|   | Domain    |    | Domain |  | Vendor  |
    |        |   | Agent     |   | Registrar |    | CA     |  | Service |
    |        |   | (RegAgt)  |   |  (JRC)    |    |        |  | (MASA)  |
    +--------+   +-----------+   +-----------+    +--------+  +---------+
@@ -1397,7 +1397,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 25]
+Fries, et al.              Expires 17 May 2024                 [Page 25]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -1427,23 +1427,23 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    between the different components into:
 
    1.  Section 6.1 describes the request object acquisition by the
-       registrar-agent from pledge.
+       Registrar-Agent from pledge.
 
    2.  Section 6.2 describes the request object processing initiated by
-       the registrar-agent to the registrar and also the interaction of
+       the Registrar-Agent to the registrar and also the interaction of
        the registrar with the MASA and the domain CA including the
        response object processing by these entities.
 
    3.  Section 6.3 describes the supply of response objects between the
-       registrar-agent and the pledge including the status information.
+       Registrar-Agent and the pledge including the status information.
 
    4.  Section 6.4 describes the general status handling and addresses
-       corresponding exchanges between the registrar-agent and the
+       corresponding exchanges between the Registrar-Agent and the
        registrar.
 
 6.1.  Request Objects Acquisition by Registrar-Agent from Pledge
 
-   The following description assumes that the registrar-agent has
+   The following description assumes that the Registrar-Agent has
    already discovered the pledge.  This may be done as described in
    Section 5.6.2 and Figure 4 based on DNS-SD or similar.
 
@@ -1453,7 +1453,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 26]
+Fries, et al.              Expires 17 May 2024                 [Page 26]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -1462,19 +1462,19 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
    *  Pledge: possesses IDevID
 
-   *  Registrar-agent:
+   *  Registrar-Agent:
 
       -  MAY handle/trusts pledge's IDevID CA certificate to validate
          IDevID certificate on returned PVR or in case of TLS usage for
          pledge communication.  The distribution of IDevID CA
-         certificates to the registrar-agent is out of scope of this
+         certificates to the Registrar-Agent is out of scope of this
          document and may be done by a manual configuration.
 
       -  possesses own credentials (EE (RegAgt) certificate and
          corresponding private key) for the registrar domain.  In
-         addition, the registrar-agent SHOULD know the product-serial-
-         number(s) of the pledge(s) to be bootstrapped.  The registrar-
-         agent MAY be provided with the product-serial-number(s) in
+         addition, the Registrar-Agent SHOULD know the product-serial-
+         number(s) of the pledge(s) to be bootstrapped.  The Registrar-
+         Agent MAY be provided with the product-serial-number(s) in
          different ways:
 
          o  configured, e.g., as a list of pledges to be bootstrapped
@@ -1484,11 +1484,12 @@ Internet-Draft                  BRSKI-PRM                  November 2023
             mDNS as described in Section 5.6.2
 
          o  discovered by using a manufacturer specific approach, e.g.,
-            RF beacons.  If the serial numbers are not known in advance,
-            the registrar-agent cannot perform a distinct triggering of
-            pledges but and triggers all pledges discovered .
+            RF beacons.  If the product-serial-number(s) are not known
+            in advance, the Registrar-Agent cannot perform a distinct
+            triggering of pledges but and triggers all pledges
+            discovered .
 
-      The registrar-agent SHOULD have synchronized time.
+      The Registrar-Agent SHOULD have synchronized time.
 
    *  Registrar (same as in BRSKI): possesses/trusts IDevID CA
       certificate and has own registrar EE credentials.
@@ -1508,14 +1509,13 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-
-Fries, et al.              Expires 11 May 2024                 [Page 27]
+Fries, et al.              Expires 17 May 2024                 [Page 27]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
    +--------+                             +-----------+
-   | Pledge |                             | Registrar |
+   | Pledge |                             | Registrar-|
    |        |                             | Agent     |
    |        |                             | (RegAgt)  |
    +--------+                             +-----------+
@@ -1535,12 +1535,12 @@ Internet-Draft                  BRSKI-PRM                  November 2023
        |------ pledge enrollment-request ------>|-store (PER)
        |                                        |
 
-          Figure 5: Request collection (registrar-agent - pledge)
+          Figure 5: Request collection (Registrar-Agent - pledge)
 
    TLS MAY be optionally used to provide privacy for the interaction
-   between the registrar-agent and the pledge, see Appendix B.
+   between the Registrar-Agent and the pledge, see Appendix B.
 
-   Note: The registrar-agent may trigger the pledge for the PVR or the
+   Note: The Registrar-Agent may trigger the pledge for the PVR or the
    PER or both.  It is expected that this will be aligned with a service
    technician workflow, visiting and installing each pledge.
 
@@ -1549,7 +1549,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    Triggering the pledge to create the PVR is done using HTTP POST on
    the defined pledge endpoint: "/.well-known/brski/tpvr"
 
-   The registrar-agent PVR trigger Content-Type header is: application/
+   The Registrar-Agent PVR trigger Content-Type header is: application/
    json.  Following parameters are provided in the JSON object:
 
    *  agent-provided-proximity-registrar-cert: base64-encoded registrar
@@ -1565,7 +1565,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 28]
+Fries, et al.              Expires 17 May 2024                 [Page 28]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -1621,7 +1621,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 29]
+Fries, et al.              Expires 17 May 2024                 [Page 29]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -1659,11 +1659,11 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
    Upon receiving the voucher-request trigger, the pledge SHALL
    construct the body of the PVR as defined in [RFC8995].  It will
-   contain additional information provided by the registrar-agent as
+   contain additional information provided by the Registrar-Agent as
    specified in the following.  This PVR becomes a JSON-in-JWS object as
    defined in [I-D.ietf-anima-jws-voucher].  If the pledge is unable to
    construct the PVR it SHOULD respond with a HTTP error code to the
-   registrar-agent to indicate that it is not able to create the PVR.
+   Registrar-Agent to indicate that it is not able to create the PVR.
 
    The following client error responses MAY be used:
 
@@ -1677,7 +1677,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 30]
+Fries, et al.              Expires 17 May 2024                 [Page 30]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -1718,11 +1718,11 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
    *  agent-provided-proximity-registrar-cert: MUST be included and
       contains the base64-encoded registrar LDevID certificate (provided
-      as PVR trigger parameter by the registrar-agent).
+      as PVR trigger parameter by the Registrar-Agent).
 
    *  agent-signed-data: MUST contain the base64-encoded agent-signed-
       data (as defined in Figure 7) and provided as a PVR trigger
-      parameter by the registrar-agent.
+      parameter by the Registrar-Agent.
 
    The enhancements of the YANG module for the ietf-voucher-request with
    these new leaves are defined in [I-D.ietf-anima-rfc8366bis].
@@ -1733,7 +1733,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 31]
+Fries, et al.              Expires 17 May 2024                 [Page 31]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -1789,14 +1789,14 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 32]
+Fries, et al.              Expires 17 May 2024                 [Page 32]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 6.1.3.  Pledge-Enrollment-Request (PER) - Trigger
 
-   Once the registrar-agent has received the PVR it can trigger the
+   Once the Registrar-Agent has received the PVR it can trigger the
    pledge to generate a PER.  As in BRSKI the PER contains a PKCS#10,
    but additionally signed using the pledge's IDevID.  Note, as the
    initial enrollment aims to request a generic certificate, no
@@ -1805,7 +1805,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    Triggering the pledge to create the enrollment-request is done using
    HTTP POST on the defined pledge endpoint: "/.well-known/brski/tper"
 
-   The registrar-agent PER trigger Content-Type header is: application/
+   The Registrar-Agent PER trigger Content-Type header is: application/
    json with an empty body by default.  Note that using HTTP POST allows
    for an empty body, but also to provide additional data, like CSR
    attributes or information about the enroll type "enroll-generic-cert"
@@ -1845,7 +1845,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 33]
+Fries, et al.              Expires 17 May 2024                 [Page 33]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -1859,7 +1859,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    identity bound to the PKCS#10 as described below.
 
    If the pledge is unable to construct the PER it SHOULD respond with a
-   HTTP 4xx/5xx error code to the registrar-agent to indicate that it is
+   HTTP 4xx/5xx error code to the Registrar-Agent to indicate that it is
    not able to create the PER.
 
    The following 4xx client error codes MAY be used:
@@ -1883,7 +1883,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    A successful enrollment will result in a generic LDevID certificate
    for the pledge in the new domain, which can be used to request
    further (application specific) LDevID certificates if necessary for
-   operation.  The registrar-agent SHALL use the endpoints specified in
+   operation.  The Registrar-Agent SHALL use the endpoints specified in
    this document.
 
    [I-D.ietf-netconf-sztp-csr] considers PKCS#10 but also CMP and CMC as
@@ -1892,7 +1892,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    formats like CMP and CMS support the signature wrapping as part of
    their own certificate request format.
 
-   The registrar-agent enrollment-request Content-Type header for a
+   The Registrar-Agent enrollment-request Content-Type header for a
    signature-wrapped PKCS#10 is: application/jose+json
 
    The header of the pledge enrollment-request SHALL contain the
@@ -1901,7 +1901,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 34]
+Fries, et al.              Expires 17 May 2024                 [Page 34]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -1957,7 +1957,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 35]
+Fries, et al.              Expires 17 May 2024                 [Page 35]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -1993,7 +1993,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
                       Figure 10: Representation of PER
 
-   With the collected PVR and PER, the registrar-agent starts the
+   With the collected PVR and PER, the Registrar-Agent starts the
    interaction with the domain registrar.
 
    The new protected header field "created-on" is introduced to reflect
@@ -2013,33 +2013,33 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 36]
+Fries, et al.              Expires 17 May 2024                 [Page 36]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
-   As the registrar-agent is intended to facilitate communication
+   As the Registrar-Agent is intended to facilitate communication
    between the pledge and the domain registrar, a collection of requests
    from more than one pledge is possible.  This allows bulk
    bootstrapping of several pledges using the same connection between
-   the registrar-agent and the domain registrar.
+   the Registrar-Agent and the domain registrar.
 
 6.2.  Request Object Handling initiated by the Registrar-Agent on
       Registrar, MASA and Domain CA
 
-   The BRSKI-PRM bootstrapping exchanges between registrar-agent and
+   The BRSKI-PRM bootstrapping exchanges between Registrar-Agent and
    domain registrar resemble the BRSKI exchanges between pledge and
    domain registrar (pledge-initiator-mode) with some deviations.
 
    Preconditions:
 
-   *  Registrar-agent: possesses its own credentials (EE (RegAgt)
+   *  Registrar-Agent: possesses its own credentials (EE (RegAgt)
       certificate and corresponding private key) of the domain.  In
       addition, it MAY possess the IDevID CA certificate of the pledge
       vendor/manufacturer to verify the pledge certificate in the
       received request messages.  It has the address of the domain
       registrar through configuration or by discovery, e.g., DNS-SD with
-      mDNS.  The registrar-agent has acquired one or more PVR and PER
+      mDNS.  The Registrar-Agent has acquired one or more PVR and PER
       objects.
 
    *  Registrar (same as in BRSKI): possesses the IDevID CA certificate
@@ -2069,14 +2069,14 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 37]
+Fries, et al.              Expires 17 May 2024                 [Page 37]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
    +-----------+     +-----------+       +--------+   +---------+
    | Registrar-|     | Domain    |       | Domain |   | Vendor  |
-   | agent     |     | Registrar |       | CA     |   | Service |
+   | Agent     |     | Registrar |       | CA     |   | Service |
    | (RegAgt)  |     |  (JRC)    |       |        |   | (MASA)  |
    +-----------+     +-----------+       +--------+   +---------+
        |                   |                  |   Internet |
@@ -2112,12 +2112,12 @@ Internet-Draft                  BRSKI-PRM                  November 2023
        |<-- caCerts-Res ---|                  |            |
        |                   |                  |            |
 
-         Figure 11: Request processing between registrar-agent and
+         Figure 11: Request processing between Registrar-Agent and
                            bootstrapping services
 
-   The registrar-agent establishes a TLS connection to the registrar.
+   The Registrar-Agent establishes a TLS connection to the registrar.
    As already stated in [RFC8995], the use of TLS 1.3 (or newer) is
-   encouraged.  TLS 1.2 or newer is REQUIRED on the registrar-agent
+   encouraged.  TLS 1.2 or newer is REQUIRED on the Registrar-Agent
    side.  TLS 1.3 (or newer) SHOULD be available on the registrar, but
    TLS 1.2 MAY be used.  TLS 1.3 (or newer) SHOULD be available on the
    MASA, but TLS 1.2 MAY be used.
@@ -2125,7 +2125,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 38]
+Fries, et al.              Expires 17 May 2024                 [Page 38]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -2133,22 +2133,22 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 6.2.1.  Connection Establishment (Registrar-Agent to Registrar)
 
    In contrast to BRSKI [RFC8995] TLS client authentication to the
-   registrar is achieved by using registrar-agent EE credentials instead
+   registrar is achieved by using Registrar-Agent EE credentials instead
    of pledge IDevID credentials.  Consequently BRSKI (pledge-initiator-
    mode) is distinguishable from BRSKI-PRM (pledge-responder-mode) by
-   the registrar.  The registrar SHOULD verify that the registrar-agent
+   the registrar.  The registrar SHOULD verify that the Registrar-Agent
    is authorized to establish a connection to the registrar based on the
-   TLS client authentication.  If the connection from registrar-agent to
+   TLS client authentication.  If the connection from Registrar-Agent to
    registrar is established, the authorization SHOULD be verified again
    based on agent-signed-data contained in the PVR.  This ensures that
-   the pledge has been triggered by an authorized registrar-agent.
+   the pledge has been triggered by an authorized Registrar-Agent.
 
    With BRSKI-PRM, the pledge generates PVR and PER as JSON-in-JWS
-   objects and the registrar agent forwards them to the registrar.  In
+   objects and the Registrar-Agent forwards them to the registrar.  In
    [RFC8995], the pledge generates PVR as CMS-signed JSON and PER as
    PKCS#10 or PKCS#7 according to [RFC7030] and inherited by [RFC8995].
 
-   For BRSKI-PRM, the registrar agent sends the PVR by HTTP POST to the
+   For BRSKI-PRM, the Registrar-Agent sends the PVR by HTTP POST to the
    same registrar endpoint as introduced by BRSKI: "/.well- known/brski/
    requestvoucher", but with a Content-Type header field for JSON-in-
    JWS"
@@ -2157,53 +2157,53 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    voucher-jws+json (see Figure 8 for the content definition), as
    defined in [I-D.ietf-anima-jws-voucher].
 
-   The registrar-agent sets the Accept field in the request-header
+   The Registrar-Agent sets the Accept field in the request-header
    indicating the acceptable Content-Type for the voucher-response.  The
    voucher-response Content-Type header field is set to application/
    voucher-jws+json as defined in [I-D.ietf-anima-jws-voucher].
 
 6.2.2.  Pledge-Voucher-Request (PVR) Processing by Registrar
 
-   After receiving the PVR from registrar-agent, the registrar SHALL
+   After receiving the PVR from Registrar-Agent, the registrar SHALL
    perform the verification as defined in section 5.3 of [RFC8995].  In
    addition, the registrar SHALL verify the following parameters from
    the PVR:
 
    *  agent-provided-proximity-registrar-cert: MUST contain registrar's
       own registrar LDevID certificate to ensure the registrar in
-      proximity of the registrar-agent is the desired registrar for this
+      proximity of the Registrar-Agent is the desired registrar for this
       PVR.
 
-   *  agent-signed-data: The registrar MUST verify that the agent
-      provided data has been signed with the private key corresponding
-      to the EE (RegAgt) certificate indicated in the "kid" JOSE header
-      parameter.  The registrar MUST verify that the LDevID(ReAgt)
+   *  agent-signed-data: The registrar MUST verify that the Registrar-
+      Agent provided data has been signed with the private key
+      corresponding to the EE (RegAgt) certificate indicated in the
+      "kid" JOSE header parameter.  The registrar MUST verify that the
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 39]
+Fries, et al.              Expires 17 May 2024                 [Page 39]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
-      certificate, corresponding to the signature, is still valid.  If
-      the certificate is already expired, the registrar SHALL reject the
-      request.  Validity of used signing certificates at the time of
-      signing the agent-signed-data is necessary to avoid that a rogue
-      registrar-agent generates agent-signed-data objects to onboard
-      arbitrary pledges at a later point in time, see also Section 10.3.
-      The registrar MUST fetch the EE (RegAgt) certificate, based on the
-      provided SubjectKeyIdentifier (SKID) contained in the "kid" header
-      parameter of the agent-signed-data, and perform this verification.
-      This requires, that the registrar has access to the EE (RegAgt)
-      certificate data (including intermediate CA certificates if
-      existent) based on the SKID.  Note, the registrar may have stored
-      the EE (RegAgt) certificate if used during TLS establishment
-      between registrar-agent and registrar or it may be provided via a
-      repository.
+      LDevID(ReAgt) certificate, corresponding to the signature, is
+      still valid.  If the certificate is already expired, the registrar
+      SHALL reject the request.  Validity of used signing certificates
+      at the time of signing the agent-signed-data is necessary to avoid
+      that a rogue Registrar-Agent generates agent-signed-data objects
+      to onboard arbitrary pledges at a later point in time, see also
+      Section 10.3.  The registrar MUST fetch the EE (RegAgt)
+      certificate, based on the provided SubjectKeyIdentifier (SKID)
+      contained in the "kid" header parameter of the agent-signed-data,
+      and perform this verification.  This requires, that the registrar
+      has access to the EE (RegAgt) certificate data (including
+      intermediate CA certificates if existent) based on the SKID.
+      Note, the registrar may have stored the EE (RegAgt) certificate if
+      used during TLS establishment between Registrar-Agent and
+      registrar or it may be provided via a repository.
 
    If the registrar is unable to validate the PVR it SHOULD respond with
-   a HTTP 4xx/5xx error code to the registrar-agent.
+   a HTTP 4xx/5xx error code to the Registrar-Agent.
 
    The following 4xx client error codes SHOULD be used:
 
@@ -2237,7 +2237,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 40]
+Fries, et al.              Expires 17 May 2024                 [Page 40]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -2270,11 +2270,11 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
    *  assertion: voucher assertion requested by the pledge (agent-
       proximity).  The registrar provides this information to assure
-      successful verification of agent proximity based on the agent-
-      signed-data.
+      successful verification of Registrar-Agent proximity based on the
+      agent-signed-data.
 
-   *  prior-signed-voucher-request: PVR as received from registrar-
-      agent, see Section 6.1.2
+   *  prior-signed-voucher-request: PVR as received from Registrar-
+      Agent, see Section 6.1.2
 
    The RVR MUST be extended with the following parameter, when the
    assertion "agent-proximity" is requested, as defined in
@@ -2293,13 +2293,13 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 41]
+Fries, et al.              Expires 17 May 2024                 [Page 41]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
-   The MASA uses this information for verification that the registrar-
-   agent is in proximity to the registrar to state the corresponding
+   The MASA uses this information for verification that the Registrar-
+   Agent is in proximity to the registrar to state the corresponding
    assertion "agent-proximity".
 
    The object is signed using the registrar LDevID credentials, which
@@ -2349,7 +2349,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 42]
+Fries, et al.              Expires 17 May 2024                 [Page 42]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -2405,7 +2405,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 43]
+Fries, et al.              Expires 17 May 2024                 [Page 43]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -2461,7 +2461,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 44]
+Fries, et al.              Expires 17 May 2024                 [Page 44]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -2497,7 +2497,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    validate that the certificate it was provided was able to
    authenticate the TLS connection.
 
-   In the BRSKI-PRM mode, with the Registrar agent mediating all
+   In the BRSKI-PRM mode, with the Registrar-Agent mediating all
    communication, the Pledge has not as yet been able to witness that
    the intended Registrar really does possess the relevant private key.
    This second signature provides for the same level of assurance to the
@@ -2506,7 +2506,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
    The registrar MUST use the same registrar EE credentials used for
    authentication in the TLS handshake to authenticate towards the
-   registrar-agent.  This has some operational implications when the
+   Registrar-Agent.  This has some operational implications when the
    registrar may be part of a scalable framework as described in
    [I-D.richardson-anima-registrar-considerations], Section 1.3.1.
 
@@ -2517,7 +2517,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 45]
+Fries, et al.              Expires 17 May 2024                 [Page 45]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -2573,7 +2573,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 46]
+Fries, et al.              Expires 17 May 2024                 [Page 46]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -2629,7 +2629,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 47]
+Fries, et al.              Expires 17 May 2024                 [Page 47]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -2640,22 +2640,22 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    Depending on the security policy of the operator, this signature can
    also be interpreted by the pledge as explicit authorization of the
    registrar to install the contained trust anchor.  The registrar sends
-   the voucher to the registrar-agent.
+   the voucher to the Registrar-Agent.
 
 6.2.6.  Pledge-Enrollment-Request (PER) Processing (Registrar-Agent to
         Registrar)
 
-   After receiving the voucher, the registrar-agent sends the PER to the
+   After receiving the voucher, the Registrar-Agent sends the PER to the
    registrar in the same HTTP-over-TLS connection.  Which is similar to
    the PER processing described in Section 5.2 of [RFC8995].  In case
    the PER cannot be send in the same HTTP-over-TLS connection the
-   registrar-agent may send the PER in a new HTTP-over-TLS connection.
+   Registrar-Agent may send the PER in a new HTTP-over-TLS connection.
    The registrar is able to correlate the PVR and the PER based on the
    signatures and the contained product-serial-number information.
    Note, this also addresses situations in which a nonceless voucher is
    used and may be pre-provisioned to the pledge.  As specified in
    Section 6.1.4 deviating from BRSKI the PER is not a raw PKCS#10.  As
-   the registrar-agent is involved in the exchange, the PKCS#10 is
+   the Registrar-Agent is involved in the exchange, the PKCS#10 is
    wrapped in a JWS object by the pledge and signed with pledge's IDevID
    to ensure proof-of-identity as outlined in Figure 10.
 
@@ -2685,7 +2685,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 48]
+Fries, et al.              Expires 17 May 2024                 [Page 48]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -2712,7 +2712,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    verify the wrapping signature of the PKCS#10 request (see also
    Section 6.1.4).
 
-   The registrar-agent SHALL send the PER to the registrar by HTTP POST
+   The Registrar-Agent SHALL send the PER to the registrar by HTTP POST
    to the endpoint: "/.well-known/brski/requestenroll"
 
    The registrar SHOULD respond with an HTTP 200 OK in the success case
@@ -2721,7 +2721,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
    A successful interaction with the domain CA will result in a pledge
    LDevID certificate, which is then forwarded by the registrar to the
-   registrar-agent using the Content-Type header: application/
+   Registrar-Agent using the Content-Type header: application/
    pkcs7-mime.
 
 6.2.7.  Request Wrapped-CA-certificate(s) (Registrar-Agent to Registrar)
@@ -2741,16 +2741,16 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 49]
+Fries, et al.              Expires 17 May 2024                 [Page 49]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
-   To support registrar-agents requesting a signature wrapped CA
+   To support Registrar-Agents requesting a signature wrapped CA
    certificate(s) object, a new endpoint for BRSKI-PRM is defined on the
    registrar: "/.well-known/brski/wrappedcacerts"
 
-   The registrar-agent SHALL requests the EST CA trust anchor database
+   The Registrar-Agent SHALL requests the EST CA trust anchor database
    information (in form of CA certificates) by HTTP GET.
 
    The Content-Type header of the response SHALL be: application/
@@ -2797,7 +2797,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 50]
+Fries, et al.              Expires 17 May 2024                 [Page 50]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -2807,7 +2807,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 6.3.  Response Objects supplied by the Registrar-Agent to the Pledge
 
-   It is assumed that the registrar-agent already obtained the
+   It is assumed that the Registrar-Agent already obtained the
    bootstrapping response objects from the domain registrar and can
    supply them to the pledge:
 
@@ -2818,17 +2818,17 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    *  enrollment-response - LDevID (Pledge) certificate (from CA via
       registrar)
 
-   To deliver these response objects, the registrar-agent will re-
+   To deliver these response objects, the Registrar-Agent will re-
    connect to the pledge.  To contact the pledge, it may either discover
    the pledge as described in Section 5.6.2 or use stored information
    from the first contact with the pledge.
 
    Preconditions in addition to Section 6.2:
 
-   *  Registrar-agent: obtained voucher and LDevID certificate and
+   *  Registrar-Agent: obtained voucher and LDevID certificate and
       optionally IDevID CA certificates.  The IDevID CA certificate is
-      necessary, when the connection between the Registrar-agent and the
-      pledge is established using TLS to enable the registrar-agent to
+      necessary, when the connection between the Registrar-Agent and the
+      pledge is established using TLS to enable the Registrar-Agent to
       validate the pledges' IDevID certificate during the TLS handshake
       as described in Section 6.1.
 
@@ -2853,7 +2853,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 51]
+Fries, et al.              Expires 17 May 2024                 [Page 51]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -2880,20 +2880,20 @@ Internet-Draft                  BRSKI-PRM                  November 2023
        |                                   |   pledge enroll status
 
         Figure 16: Responses and status handling between pledge and
-                              registrar-agent
+                              Registrar-Agent
 
-   The registrar-agent MAY optionally use TLS to protect the
+   The Registrar-Agent MAY optionally use TLS to protect the
    communication as outlined in Section 6.1.
 
-   The registrar-agent provides the information via distinct pledge
+   The Registrar-Agent provides the information via distinct pledge
    endpoints as following.
 
 6.3.1.  Pledge: Voucher-Response Processing
 
-   The registrar-agent SHALL send the voucher-response to the pledge by
+   The Registrar-Agent SHALL send the voucher-response to the pledge by
    HTTP POST to the endpoint: "/.well-known/brski/svr".
 
-   The registrar-agent voucher-response Content-Type header is
+   The Registrar-Agent voucher-response Content-Type header is
    application/voucher-jws+json and contains the voucher as provided by
    the MASA.  An example is given in Figure 13 for a MASA signed voucher
    and in Figure 14 for the voucher with the additional signature of the
@@ -2909,7 +2909,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 52]
+Fries, et al.              Expires 17 May 2024                 [Page 52]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -2946,7 +2946,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    After voucher verification and validation the pledge MUST reply with
    a status telemetry message as defined in Section 5.7 of [RFC8995].
    The pledge generates the voucher-status and provides it as signed
-   JSON-in-JWS object in response to the registrar-agent.
+   JSON-in-JWS object in response to the Registrar-Agent.
 
    The response has the Content-Type application/jose+json and is signed
    using the IDevID of the pledge as shown in Figure 17.  As the reason
@@ -2965,7 +2965,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 53]
+Fries, et al.              Expires 17 May 2024                 [Page 53]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -3021,20 +3021,20 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 54]
+Fries, et al.              Expires 17 May 2024                 [Page 54]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
    If the pledge did not did not provide voucher status telemetry
-   information after processing the voucher, the registrar agent MAY
+   information after processing the voucher, the Registrar-Agent MAY
    query the pledge status explicitly as described in Section 6.4 and
    MAY re-sent the voucher depending on the Pledge status following the
    procedure described in Section 6.3.1.
 
 6.3.3.  Pledge: Wrapped-CA-Certificate(s) Processing
 
-   The registrar-agent SHALL provide the set of CA certificates
+   The Registrar-Agent SHALL provide the set of CA certificates
    requested from the registrar to the pledge by HTTP POST to the
    endpoint: "/.well-known/brski/scac".
 
@@ -3077,7 +3077,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 55]
+Fries, et al.              Expires 17 May 2024                 [Page 55]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -3094,18 +3094,18 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 6.3.4.  Pledge: Enrollment-Response Processing
 
-   The registrar-agent SHALL send the enroll-response to the pledge by
+   The Registrar-Agent SHALL send the enroll-response to the pledge by
    HTTP POST to the endpoint: "/.well-known/brski/ser".
 
-   The registrar-agent enroll-response Content-Type header, when using
-   EST [RFC7030] as enrollment protocol between the registrar-agent and
+   The Registrar-Agent enroll-response Content-Type header, when using
+   EST [RFC7030] as enrollment protocol between the Registrar-Agent and
    the infrastructure is: application/pkcs7-mime.  Note: It only
    contains the LDevID certificate for the pledge, not the certificate
    chain.
 
    Upon reception, the pledge SHALL verify the received LDevID
    certificate.  The pledge SHALL generate the enroll status and provide
-   it in the response to the registrar-agent.  If the verification of
+   it in the response to the Registrar-Agent.  If the verification of
    the LDevID certificate succeeds, the status property SHALL be set to
    "status": true, otherwise to "status": false
 
@@ -3133,7 +3133,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 56]
+Fries, et al.              Expires 17 May 2024                 [Page 56]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -3184,12 +3184,12 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
         Figure 18: Representation of pledge enroll status telemetry
 
-   Once the registrar-agent has collected the information, it can
+   Once the Registrar-Agent has collected the information, it can
    connect to the registrar to provide it with the status responses.
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 57]
+Fries, et al.              Expires 17 May 2024                 [Page 57]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -3197,19 +3197,19 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 6.3.6.  Telemetry Voucher Status and Enroll Status Handling (Registrar-
         Agent to Domain Registrar)
 
-   The following description requires that the registrar-agent has
+   The following description requires that the Registrar-Agent has
    collected the status information from the pledge.  It SHALL provide
    the status information to the registrar for further processing.
 
    Preconditions in addition to Section 6.2:
 
-   *  Registrar-agent: obtained voucher status and enroll status from
+   *  Registrar-Agent: obtained voucher status and enroll status from
       pledge.
 
    +-----------+        +-----------+   +--------+   +---------+
-   | Registrar |        | Domain    |   | Domain |   | Vendor  |
+   | Registrar-|        | Domain    |   | Domain |   | Vendor  |
    | Agent     |        | Registrar |   | CA     |   | Service |
-   | RegAgt)   |        |  (JRC)    |   |        |   | (MASA)  |
+   | (RegAgt)  |        |  (JRC)    |   |        |   | (MASA)  |
    +-----------+        +-----------+   +--------+   +---------+
        |                      |              |   Internet |
    [voucher + enroll ]        |              |            |
@@ -3227,15 +3227,15 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
                   Figure 19: Bootstrapping status handling
 
-   The registrar-agent MUST provide the collected pledge voucher status
+   The Registrar-Agent MUST provide the collected pledge voucher status
    to the registrar.  This status indicates if the pledge could process
    the voucher successfully or not.
 
    In case the TLS connection to the registrar is already closed, the
-   registrar-agent opens a new TLS connection with the registrar as
+   Registrar-Agent opens a new TLS connection with the registrar as
    stated in Section 6.2.
 
-   The registrar-agent sends the pledge voucher status without
+   The Registrar-Agent sends the pledge voucher status without
    modification to the registrar with an HTTP-over-TLS POST using the
    registrar endpoint "/.well-known/brski/voucher_status".  The Content-
    Type header is kept as application/jose+json as described in
@@ -3245,25 +3245,25 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 58]
+Fries, et al.              Expires 17 May 2024                 [Page 58]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
    The registrar SHOULD log the transaction provided for a pledge via
-   registrar-agent and include the identity of the registrar-agent in
+   Registrar-Agent and include the identity of the Registrar-Agent in
    these logs.  For log analysis the following may be considered:
 
-   *  The registrar knows the interacting registrar-agent from the
-      authentication of the registrar-agent towards the registrar using
+   *  The registrar knows the interacting Registrar-Agent from the
+      authentication of the Registrar-Agent towards the registrar using
       LDevID (RegAgt) and can log it accordingly.
 
    *  The telemetry information from the pledge can be correlated to the
-      voucher response provided from the registrar to the registrar-
-      agent and further to the pledge.
+      voucher response provided from the registrar to the Registrar-
+      Agent and further to the pledge.
 
    *  The telemetry information, when provided to the registrar is
-      provided via the registrar-agent and can thus be correlated.
+      provided via the Registrar-Agent and can thus be correlated.
 
    The registrar SHALL verify the signature of the pledge voucher status
    and validate that it belongs to an accepted device of the domain
@@ -3272,20 +3272,20 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
    According to [RFC8995] Section 5.7, the registrar SHOULD respond with
    an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status
-   codes as defined by the HTTP standard.  The registrar-agent may use
+   codes as defined by the HTTP standard.  The Registrar-Agent may use
    the response to signal success / failure to the service technician
-   operating the registrar agent.  Within the server logs the server
+   operating the Registrar-Agent.  Within the server logs the server
    SHOULD capture this telemetry information.
 
    The registrar SHOULD proceed with collecting and logging status
    information by requesting the MASA audit-log from the MASA service as
    described in Section 5.8 of [RFC8995].
 
-   The registrar-agent MUST provide the pledge's enroll status to the
+   The Registrar-Agent MUST provide the pledge's enroll status to the
    registrar.  The status indicates the pledge could process the enroll-
    response (certificate) and holds the corresponding private key.
 
-   The registrar-agent sends the pledge enroll status without
+   The Registrar-Agent sends the pledge enroll status without
    modification to the registrar with an HTTP-over-TLS POST using the
    registrar endpoint "/.well-known/brski/enrollstatus".  The Content-
    Type header is kept as application/jose+json as described in
@@ -3301,7 +3301,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 59]
+Fries, et al.              Expires 17 May 2024                 [Page 59]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -3322,13 +3322,13 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    (Not Acceptable) response.  In this case the registrar may revoke the
    LDevID certificate as the pledge did no accepted it for installation.
 
-   The registrar-agent may use the response to signal success / failure
-   to the service technician operating the registrar agent.  Within the
+   The Registrar-Agent may use the response to signal success / failure
+   to the service technician operating the Registrar-Agent.  Within the
    server log the registrar SHOULD capture this telemetry information.
 
 6.4.  Request Pledge-Status by Registrar-Agent from Pledge
 
-   The following assumes that a registrar-agent may need to query the
+   The following assumes that a Registrar-Agent may need to query the
    status of a pledge.  This information may be useful to solve errors,
    when the pledge was not able to connect to the target domain during
    the bootstrapping.  The pledge MAY provide a dedicated endpoint to
@@ -3336,8 +3336,8 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
    Preconditions:
 
-   *  Registrar-agent: possesses LDevID (RegAgt), may have a list of
-      serial numbers of pledges to be queried and a list of
+   *  Registrar-Agent: possesses LDevID (RegAgt), may have a list of
+      product-serial-number(s) of pledges to be queried and a list of
       corresponding manufacturer trust anchors to be able to verify
       signatures performed with the IDevID credential.
 
@@ -3357,23 +3357,23 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 60]
+Fries, et al.              Expires 17 May 2024                 [Page 60]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
-    Figure 20: Pledge-status handling between registrar-agent and pledge
+    Figure 20: Pledge-status handling between Registrar-Agent and pledge
 
 6.4.1.  Pledge-Status - Request (Registrar-Agent to Pledge)
 
-   The registrar-agent requests the pledge-status via HTTP POST on the
+   The Registrar-Agent requests the pledge-status via HTTP POST on the
    defined pledge endpoint: "/.well-known/brski/qps"
 
-   The registrar-agent Content-Type header for the pledge-status request
+   The Registrar-Agent Content-Type header for the pledge-status request
    is: application/jose+json.  It contains information on the requested
    status-type, the time and date the request is created, and the
    product serial-number of the pledge contacted as shown in Figure 21.
-   The pledge-status request is signed by registrar-agent using the
+   The pledge-status request is signed by Registrar-Agent using the
    private key corresponding to the EE (RegAgt) certificate.
 
    The following Concise Data Definition Language (CDDL) [RFC8610]
@@ -3382,7 +3382,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    [RFC8995].  Consequently, format and semantics of pledge-status
    requests below are for version 1.  The version field is included to
    permit significant changes to the pledge-status request and response
-   in the future.  A pledge or a registrar-agent that receives a pledge-
+   in the future.  A pledge or a Registrar-Agent that receives a pledge-
    status request with a version larger than it knows about SHOULD log
    the contents and alert a human.
 
@@ -3413,12 +3413,12 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 61]
+Fries, et al.              Expires 17 May 2024                 [Page 61]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
-   # The registrar-agent request of "pledge-status" in general JWS
+   # The Registrar-Agent request of "pledge-status" in general JWS
      serialization syntax
    {
      "payload": "BASE64URL(status-request)",
@@ -3449,7 +3449,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
      ]
    }
 
-       Figure 22: Example of registrar-agent request of pledge-status
+       Figure 22: Example of Registrar-Agent request of pledge-status
                         using status-type bootstrap
 
 6.4.2.  Pledge-Status - Response (Pledge - Registrar-Agent)
@@ -3469,7 +3469,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 62]
+Fries, et al.              Expires 17 May 2024                 [Page 62]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -3525,7 +3525,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 63]
+Fries, et al.              Expires 17 May 2024                 [Page 63]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -3581,7 +3581,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 64]
+Fries, et al.              Expires 17 May 2024                 [Page 64]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -3622,12 +3622,12 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
    *  In case "factory-default" the pledge does not possess the domain
       certificate resp. the domain trust-anchor.  It will not be able to
-      verify the signature of the registrar-agent in the bootstrapping-
+      verify the signature of the Registrar-Agent in the bootstrapping-
       status request.
 
    *  In cases "vouchered" and "enrolled" the pledge already possesses
       the domain certificate (has domain trust-anchor) and can therefore
-      validate the signature of the registrar-agent.  If validation of
+      validate the signature of the Registrar-Agent.  If validation of
       the JWS signature fails, the pledge SHOULD respond with the HTTP
       403 Forbidden status code.
 
@@ -3637,7 +3637,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 65]
+Fries, et al.              Expires 17 May 2024                 [Page 65]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -3664,15 +3664,15 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    are defined in Section 6.1 as:
 
    *  agent-signed-data to provide a JSON encoded artifact from the
-      involved registrar-agent, which allows the registrar to verify the
-      agent's involvement
+      involved Registrar-Agent, which allows the registrar to verify the
+      Registrar-Agent's involvement
 
    *  agent-provided-proximity-registrar-cert to provide the registrar
-      certificate visible to the registrar-agent, comparable to the
+      certificate visible to the Registrar-Agent, comparable to the
       registrar-proximity-certificate used in [RFC8995]
 
-   *  agent-signing certificate to optionally provide the registrar
-      agent signing certificate.
+   *  agent-signing certificate to optionally provide the Registrar-
+      Agent signing certificate.
 
    Examples for the application of these fields in the context of a PVR
    are provided in Section 6.2.
@@ -3693,7 +3693,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 66]
+Fries, et al.              Expires 17 May 2024                 [Page 66]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -3725,17 +3725,17 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    In general, the privacy considerations of [RFC8995] apply for BRSKI-
    PRM also.  Further privacy aspects need to be considered for:
 
-   *  the introduction of the additional component registrar-agent
+   *  the introduction of the additional component Registrar-Agent
 
-   *  potentially no transport layer security between registrar-agent
+   *  potentially no transport layer security between Registrar-Agent
       and pledge
 
    Section 6.1 describes to optional apply TLS to protect the
-   communication between the registrar-agent and the pledge.  The
+   communication between the Registrar-Agent and the pledge.  The
    following is therefore applicable to the communication without the
    TLS protection.
 
-   The credential used by the registrar-agent to sign the data for the
+   The credential used by the Registrar-Agent to sign the data for the
    pledge SHOULD NOT contain any personal information.  Therefore, it is
    recommended to use an LDevID certificate associated with the
    commissioning device instead of an LDevID certificate associated with
@@ -3749,12 +3749,12 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 67]
+Fries, et al.              Expires 17 May 2024                 [Page 67]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
-   The communication between the pledge and the registrar-agent is
+   The communication between the pledge and the Registrar-Agent is
    performed over plain HTTP.  Therefore, it is subject to disclosure by
    a Dolev-Yao attacker (an "oppressive observer")[onpath].  Depending
    on the requests and responses, the following information is
@@ -3765,7 +3765,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
       information reveals the identity of the devices being bootstrapped
       and allows deduction of which products an operator is using in
       their environment.  As the communication between the pledge and
-      the registrar-agent may be realized over wireless link, this
+      the Registrar-Agent may be realized over wireless link, this
       information could easily be eavesdropped, if the wireless network
       is unencrypted.  Even if the wireless network is encrypted, if it
       uses a network-wide key, then layer-2 attacks (ARP/ND spoofing)
@@ -3781,19 +3781,19 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    In general, the security considerations of [RFC8995] apply for BRSKI-
    PRM also.  Further security aspects are considered here related to:
 
-   *  the introduction of the additional component registrar-agent
+   *  the introduction of the additional component Registrar-Agent
 
    *  the reversal of the pledge communication direction (push mode,
       compared to BRSKI)
 
-   *  no transport layer security between registrar-agent and pledge
+   *  no transport layer security between Registrar-Agent and pledge
 
 10.1.  Denial of Service (DoS) Attack on Pledge
 
    Disrupting the pledge behavior by a DoS attack may prevent the
    bootstrapping of the pledge to a new domain.  Because in BRSKI-PRM,
-   the pledge responds to requests from real or illicit registrar-
-   agents, pledges are more subject to DoS attacks from registrar-agents
+   the pledge responds to requests from real or illicit Registrar-
+   Agents, pledges are more subject to DoS attacks from Registrar-Agents
    in BRSKI-PRM than they are from illicit registrars in [RFC8995],
    where pledges do initiate the connections.
 
@@ -3805,12 +3805,12 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 68]
+Fries, et al.              Expires 17 May 2024                 [Page 68]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
-   A DoS attack with a faked registrar-agent may block the bootstrapping
+   A DoS attack with a faked Registrar-Agent may block the bootstrapping
    of the pledge due changing state on the pledge (the pledge may
    produce a voucher-request, and refuse to produce another one).  One
    mitigation may be that the pledge does not limited the number of
@@ -3819,14 +3819,14 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    certain time, if no further interaction has happened.
 
    In addition, the pledge may assume that repeated triggering for PVR
-   are the result of a communication error with the registrar-agent.  In
+   are the result of a communication error with the Registrar-Agent.  In
    that case the pledge MAY simply resent the PVR previously sent.  Note
    that in case of resending, a contained nonce and also the contained
    agent-signed-data in the PVR would consequently be reused.
 
 10.2.  Misuse of acquired PVR and PER by Registrar-Agent
 
-   A registrar-agent that uses previously requested PVR and PER for
+   A Registrar-Agent that uses previously requested PVR and PER for
    domain-A, may attempt to onboard the device into domain-B.  This can
    be detected by the domain registrar while PVR processing.  The domain
    registrar needs to verify that the "proximity-registrar-cert" field
@@ -3835,7 +3835,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    pledge to its domain based on the product-serial-number contained in
    the PVR and in the IDevID certificate of the pledge.  (This is just
    part of the supply chain integration).  Moreover, the domain
-   registrar verifies if the registrar-agent is authorized to interact
+   registrar verifies if the Registrar-Agent is authorized to interact
    with the pledge for voucher-requests and enroll-requests, based on
    the EE (RegAgt) certificate data contained in the PVR.
 
@@ -3844,45 +3844,45 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 10.3.  Misuse of Registrar-Agent Credentials
 
-   Concerns of misusage of a registrar-agent with a valid EE (RegAgt)
+   Concerns of misusage of a Registrar-Agent with a valid EE (RegAgt)
    certificate may be addressed by utilizing short-lived certificates
-   (e.g., valid for a day) to authenticate the registrar-agent against
+   (e.g., valid for a day) to authenticate the Registrar-Agent against
    the domain registrar.  The EE (RegAgt) certificate may have been
-   acquired by a prior BRSKI run for the registrar-agent, if an IDevID
-   is available on registrar-agent.  Alternatively, the EE (RegAgt)
+   acquired by a prior BRSKI run for the Registrar-Agent, if an IDevID
+   is available on Registrar-Agent.  Alternatively, the EE (RegAgt)
    certificate may be acquired by a service technician from the domain
    PKI system in an authenticated way.
 
    In addition it is required that the EE (RegAgt) certificate is valid
-   for the complete bootstrapping phase.  This avoids that a registrar-
-   agent could be misused to create arbitrary "agent-signed-data"
+   for the complete bootstrapping phase.  This avoids that a Registrar-
+   Agent could be misused to create arbitrary "agent-signed-data"
    objects to perform an authorized bootstrapping of a rogue pledge at a
    later point in time.  In this misuse "agent-signed-data" could be
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 69]
+Fries, et al.              Expires 17 May 2024                 [Page 69]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
    dated after the validity time of the EE (RegAgt) certificate, due to
-   missing trusted timestamp in the registrar-agents signature.  To
+   missing trusted timestamp in the Registrar-Agents signature.  To
    address this, the registrar SHOULD verify the certificate used to
    create the signature on "agent-signed-data".  Furthermore the
    registrar also verifies the EE (RegAgt) certificate used in the TLS
-   handshake with the registrar-agent.  If both certificates are
-   verified successfully, the registrar-agent's signature can be
+   handshake with the Registrar-Agent.  If both certificates are
+   verified successfully, the Registrar-Agent's signature can be
    considered as valid.
 
 10.4.  Misuse of DNS-SD with mDNS to obtain list of pledges
 
-   To discover a specific pledge a registrar-agent may request the
+   To discover a specific pledge a Registrar-Agent may request the
    service name in combination with the product-serial-number of a
    specific pledge.  The pledge reacts on this if its product-serial-
    number is part of the request message.
 
-   If the registrar-agent performs DNS-based Service Discovery without a
+   If the Registrar-Agent performs DNS-based Service Discovery without a
    specific product-serial-number, all pledges in the domain react if
    the functionality is supported.  This functionality enumerates and
    reveals the information of devices available in the domain.  The
@@ -3917,7 +3917,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 70]
+Fries, et al.              Expires 17 May 2024                 [Page 70]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -3973,7 +3973,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 71]
+Fries, et al.              Expires 17 May 2024                 [Page 71]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4029,7 +4029,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 72]
+Fries, et al.              Expires 17 May 2024                 [Page 72]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4085,7 +4085,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 73]
+Fries, et al.              Expires 17 May 2024                 [Page 73]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4141,7 +4141,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 74]
+Fries, et al.              Expires 17 May 2024                 [Page 74]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4197,16 +4197,16 @@ Appendix A.  Examples
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 75]
+Fries, et al.              Expires 17 May 2024                 [Page 75]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 A.1.  Example Pledge Voucher-Request - PVR (from Pledge to Registrar-
-      agent)
+      Agent)
 
    The following is an example request sent from a Pledge to the
-   Registrar-agent, in "General JWS JSON Serialization".  The message
+   Registrar-Agent, in "General JWS JSON Serialization".  The message
    size of this PVR is: 4649 bytes
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
@@ -4253,7 +4253,7 @@ A.1.  Example Pledge Voucher-Request - PVR (from Pledge to Registrar-
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 76]
+Fries, et al.              Expires 17 May 2024                 [Page 76]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4309,7 +4309,7 @@ A.2.  Example Parboiled Registrar Voucher-Request - RVR (from Registrar
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 77]
+Fries, et al.              Expires 17 May 2024                 [Page 77]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4365,7 +4365,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 78]
+Fries, et al.              Expires 17 May 2024                 [Page 78]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4421,7 +4421,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 79]
+Fries, et al.              Expires 17 May 2024                 [Page 79]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4477,7 +4477,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 80]
+Fries, et al.              Expires 17 May 2024                 [Page 80]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4533,7 +4533,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 81]
+Fries, et al.              Expires 17 May 2024                 [Page 81]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4558,10 +4558,10 @@ Internet-Draft                  BRSKI-PRM                  November 2023
              Figure 26: Example Registrar Voucher-Request - RVR
 
 A.3.  Example Voucher-Response (from MASA to Pledge, via Registrar and
-      Registrar-agent)
+      Registrar-Agent)
 
    The following is an example voucher-response from MASA to Pledge via
-   Registrar and Registrar-agent, in "General JWS JSON Serialization".
+   Registrar and Registrar-Agent, in "General JWS JSON Serialization".
    The message size of this Voucher is: 1916 bytes
 
 
@@ -4589,7 +4589,7 @@ A.3.  Example Voucher-Response (from MASA to Pledge, via Registrar and
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 82]
+Fries, et al.              Expires 17 May 2024                 [Page 82]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4634,10 +4634,10 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 A.4.  Example Voucher-Response, MASA issued Voucher with additional
       Registrar signature (from MASA to Pledge, via Registrar and
-      Registrar-agent)
+      Registrar-Agent)
 
    The following is an example voucher-response from MASA to Pledge via
-   Registrar and Registrar-agent, in "General JWS JSON Serialization".
+   Registrar and Registrar-Agent, in "General JWS JSON Serialization".
    The message size of this Voucher is: 3006 bytes
 
 
@@ -4645,7 +4645,7 @@ A.4.  Example Voucher-Response, MASA issued Voucher with additional
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 83]
+Fries, et al.              Expires 17 May 2024                 [Page 83]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4701,7 +4701,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 84]
+Fries, et al.              Expires 17 May 2024                 [Page 84]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4717,17 +4717,17 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 Appendix B.  HTTP-over-TLS operations between Registrar-Agent and Pledge
 
-   The use of HTTPS between the Registrar-Agent and the Pledge has been
+   The use of HTTP-over-TLS between Registrar-Agent and pledge has been
    identified as an optional mechanism.
 
    Provided that the key-agreement in the underlying TLS protocol
    connection can be properly authenticated, the use of TLS provides
    privacy for the voucher and enrollment operations between the pledge
-   and the registrar-agent.  The authenticity of the onboarding and
+   and the Registrar-Agent.  The authenticity of the onboarding and
    enrollment is not dependant upon the security of the TLS connection.
 
-   The use of HTTPS is not mandated by this document for a number of
-   reasons:
+   The use of HTTP-over-TLS is not mandated by this document for a
+   number of reasons:
 
    1.  A certificate is generally required in order to do TLS.  While
        there are other modes of authentication including PSK, various
@@ -4740,15 +4740,15 @@ Appendix B.  HTTP-over-TLS operations between Registrar-Agent and Pledge
        authenticates the X520SerialNumber DN attribute which must be
        present in every IDevID.
 
-   If the Registrar-Agent has a preconfigured list of which serial
-   numbers, from which manufacturers it expects to see, then it can
-   attempt to match this pledge against a list of potential devices.
+   If the Registrar-Agent has a preconfigured list of which product-
+   serial-number(s), from which manufacturers it expects to see, then it
+   can attempt to match this pledge against a list of potential devices.
 
    In many cases only the list of manufacturers is known ahead of time,
    so at most the Registrar-Agent can show the X520SerialNumber to the
    (human) operator who may then attempt to confirm that they are
-   standing in front of a device with that serial number.  The use of
-   scannable QRcodes may help automate this in some cases.
+   standing in front of a device with that product-serial-number.  The
+   use of scannable QRcodes may help automate this in some cases.
 
    1.  The CA used to sign the IDevID will be a manufacturer private PKI
        as described in [I-D.irtf-t2trg-taxonomy-manufacturer-anchors],
@@ -4757,12 +4757,12 @@ Appendix B.  HTTP-over-TLS operations between Registrar-Agent and Pledge
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 85]
+Fries, et al.              Expires 17 May 2024                 [Page 85]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
-       operating systems.  A registrar-agent application will need to
+       operating systems.  A Registrar-Agent application will need to
        use different APIs in order to initiate an HTTPS connection
        without performing WebPKI verification.  The application will
        then have to do it's own certificate chain verification against a
@@ -4802,10 +4802,10 @@ Appendix C.  History of Changes [RFC Editor: please delete]
       enrollment Section 6.3.3
 
    *  issue #128: included notation of nomadic operation of the
-      registrar-agent in Section 5, including proposed text from PR #131
+      Registrar-Agent in Section 5, including proposed text from PR #131
 
    *  issue #130, introduced DNS service discovery name for brski_pledge
-      to enable discovery by the registrar-agent in Section 8
+      to enable discovery by the Registrar-Agent in Section 8
 
    *  removed unused reference RFC 5280
 
@@ -4813,7 +4813,7 @@ Appendix C.  History of Changes [RFC Editor: please delete]
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 86]
+Fries, et al.              Expires 17 May 2024                 [Page 86]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4823,7 +4823,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    *  clarified registrar discovery and relation to BRSKI-Discovery in
       Section 5.6.1
 
-   *  clarified discovery of pledges by the registrar-agent in
+   *  clarified discovery of pledges by the Registrar-Agent in
       Section 5.6.2, deleted reference to GRASP as handled in BRSKI-
       Discovery
 
@@ -4849,8 +4849,8 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    *  issue #120, included statement regarding pledge host header
       processing in Section 5.5
 
-   *  issue #122, availability of serial number information on registrar
-      agent clarified in Section 6.1
+   *  issue #122, availability of product-serial-number information on
+      registrar agent clarified in Section 6.1
 
    *  issue #123, Clarified usage of alternative voucher formats in
       Section 6.2.3
@@ -4869,7 +4869,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 87]
+Fries, et al.              Expires 17 May 2024                 [Page 87]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4880,20 +4880,20 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
    From IETF draft 08 -> IETF draft 09:
 
-   *  issue #80, enhanced Section 5.6.2 with clarification on the serial
-      number and the inclusion of GRASP
+   *  issue #80, enhanced Section 5.6.2 with clarification on the
+      product-serial-number and the inclusion of GRASP
 
    *  issue #81, enhanced introduction with motivation for
       agent_signed_data
 
    *  issue #82, included optional TLS protection of the communication
-      link between registrar-agent and pledge in the introduction
+      link between Registrar-Agent and pledge in the introduction
       Section 4, and Section 6.1
 
    *  issue #83, enhanced Section 6.1.4 and Section 6.2.6 with note to
       re-enrollment
 
-   *  issue #87, clarified available information at the registrar-agent
+   *  issue #87, clarified available information at the Registrar-Agent
       in Section 6.1
 
    *  issue #88, clarified, that the PVR in Section 6.1.2 and PER in
@@ -4912,8 +4912,8 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
    *  issue #94: clarified terminology (possess vs. obtained)
 
-   *  issue #95: clarified optional IDevID CA certificates on registrar-
-      agent Section 6.3
+   *  issue #95: clarified optional IDevID CA certificates on Registrar-
+      Agent Section 6.3
 
    *  issue #96: updated Figure 16 to correct to just one CA certificate
       provisioning
@@ -4925,7 +4925,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 88]
+Fries, et al.              Expires 17 May 2024                 [Page 88]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -4936,7 +4936,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    *  issue #100: included negative example in Figure 17
 
    *  issue #101: included handling if Section 6.3.2 voucher telemetry
-      information has not been received by the registrar-agent
+      information has not been received by the Registrar-Agent
 
    *  issue #102: relaxed requirements for CA certs provisioning in
       Section 6.3.3
@@ -4981,7 +4981,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 89]
+Fries, et al.              Expires 17 May 2024                 [Page 89]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -5003,7 +5003,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
       constraint deployments
 
    *  Included table for new endpoints on the registrar in the overview
-      of the registrar-agent
+      of the Registrar-Agent
 
    *  addressed review comments from SECDIR early review (terminology
       clarifications, editorial improvements)
@@ -5037,7 +5037,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 90]
+Fries, et al.              Expires 17 May 2024                 [Page 90]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -5093,7 +5093,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 91]
+Fries, et al.              Expires 17 May 2024                 [Page 91]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -5104,7 +5104,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    *  Added explanation for terminology "endpoint" used in this
       document, issue #16
 
-   *  Added clarification that registrar-agent may collect PVR or PER or
+   *  Added clarification that Registrar-Agent may collect PVR or PER or
       both in one run, issue #17
 
    *  Added a statement that nonceless voucher may be accepted, issue
@@ -5149,7 +5149,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 92]
+Fries, et al.              Expires 17 May 2024                 [Page 92]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -5175,7 +5175,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
    *  Issue #15 lead to the inclusion of an option for an additional
       signature of the registrar on the voucher received from the MASA
-      before forwarding to the registrar-agent to support verification
+      before forwarding to the Registrar-Agent to support verification
       of POP of the registrars private key in section Section 6.2 and
       Section 6.3.
 
@@ -5205,7 +5205,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 93]
+Fries, et al.              Expires 17 May 2024                 [Page 93]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -5219,7 +5219,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
       corresponding information is to be provided to the MASA.
 
    *  Inclusion of limitation section (pledge sleeps and needs to be
-      waked up.  Pledge is awake but registrar-agent is not available)
+      waked up.  Pledge is awake but Registrar-Agent is not available)
       (Issue #10).
 
    *  Assertion-type aligned with voucher in RFC8366bis, deleted related
@@ -5228,19 +5228,19 @@ Internet-Draft                  BRSKI-PRM                  November 2023
    *  Included table for endpoints in Section 5.5 for better
       readability.
 
-   *  Included registrar authorization check for registrar-agent during
+   *  Included registrar authorization check for Registrar-Agent during
       TLS handshake in section Section 6.2.  Also enhanced figure
       Figure 11 with the authorization step on TLS level.
 
    *  Enhanced description of registrar authorization check for
-      registrar-agent based on the agent-signed-data in section
+      Registrar-Agent based on the agent-signed-data in section
       Section 6.2.  Also enhanced figure Figure 11 with the
       authorization step on pledge-voucher-request level.
 
    *  Changed agent-signed-cert to an array to allow for providing
       further certificate information like the issuing CA cert for the
       LDevID(RegAgt) certificate in case the registrar and the
-      registrar-agent have different issuing CAs in Figure 11 (issue
+      Registrar-Agent have different issuing CAs in Figure 11 (issue
       #12).  This also required changes in the YANG module in
       [I-D.ietf-anima-rfc8366bis]
 
@@ -5261,7 +5261,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 94]
+Fries, et al.              Expires 17 May 2024                 [Page 94]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -5296,20 +5296,20 @@ Internet-Draft                  BRSKI-PRM                  November 2023
       format based on draft for JOSE signed voucher artifacts and
       aligned the remaining objects with this approach in Section 6.
 
-   *  Terminology change: issue #2 pledge-agent -> registrar-agent to
-      better underline agent relation.
+   *  Terminology change: issue #2 pledge-agent -> Registrar-Agent to
+      better underline Registrar-Agent relation.
 
    *  Terminology change: issue #3 PULL/PUSH -> pledge-initiator-mode
       and pledge-responder-mode to better address the pledge operation.
 
-   *  Communication approach between pledge and registrar-agent changed
+   *  Communication approach between pledge and Registrar-Agent changed
       by removing TLS-PSK (former section TLS establishment) and
       associated references to other drafts in favor of relying on
       higher layer exchange of signed data objects.  These data objects
       are included also in the pledge-voucher-request and lead to an
       extension of the YANG module for the voucher-request (issue #12).
 
-   *  Details on trust relationship between registrar-agent and
+   *  Details on trust relationship between Registrar-Agent and
       registrar (issue #4, #5, #9) included in Section 5.
 
 
@@ -5317,23 +5317,23 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 95]
+Fries, et al.              Expires 17 May 2024                 [Page 95]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
 
-   *  Recommendation regarding short-lived certificates for registrar-
-      agent authentication towards registrar (issue #7) in the security
+   *  Recommendation regarding short-lived certificates for Registrar-
+      Agent authentication towards registrar (issue #7) in the security
       considerations.
 
-   *  Introduction of reference to agent signing certificate using SKID
-      in agent signed data (issue #37).
+   *  Introduction of reference to Registrar-Agent signing certificate
+      using SKID in Registrar-Agent signed data (issue #37).
 
-   *  Enhanced objects in exchanges between pledge and registrar-agent
+   *  Enhanced objects in exchanges between pledge and Registrar-Agent
       to allow the registrar to verify agent-proximity to the pledge
       (issue #1) in Section 6.
 
-   *  Details on trust relationship between registrar-agent and pledge
+   *  Details on trust relationship between Registrar-Agent and pledge
       (issue #5) included in Section 5.
 
    *  Split of use case 2 call flow into sub sections in Section 6.
@@ -5373,7 +5373,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 96]
+Fries, et al.              Expires 17 May 2024                 [Page 96]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -5429,7 +5429,7 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 97]
+Fries, et al.              Expires 17 May 2024                 [Page 97]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -5485,7 +5485,7 @@ Authors' Addresses
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 98]
+Fries, et al.              Expires 17 May 2024                 [Page 98]
 
 Internet-Draft                  BRSKI-PRM                  November 2023
 
@@ -5541,4 +5541,4 @@ Internet-Draft                  BRSKI-PRM                  November 2023
 
 
 
-Fries, et al.              Expires 11 May 2024                 [Page 99]
+Fries, et al.              Expires 17 May 2024                 [Page 99]
