@@ -1215,7 +1215,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 17 May 2024</td>
+<td class="center">Expires 23 May 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1228,12 +1228,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-11</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-11-14" class="published">14 November 2023</time>
+<time datetime="2023-11-20" class="published">20 November 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-05-17">17 May 2024</time></dd>
+<dd class="expires"><time datetime="2024-05-23">23 May 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1293,7 +1293,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 17 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1852,7 +1852,7 @@ In constrained environments it may be provided based on COSE <span>[<a href="#RF
 <p id="section-5.1-4">To support mutual trust establishment between the domain registrar and pledges not directly connected to the customer domain, this document specifies the exchange of authenticated self-contained objects with the help of a Registrar-Agent.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 <p id="section-5.1-5">This leads to extensions of the logical components in the BRSKI architecture as shown in <a href="#uc2figure" class="auto internal xref">Figure 1</a>.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
 <p id="section-5.1-6">Note that the Join Proxy is not shown in the figure, having been replaced by Registrar-Agent.
-The Join Proxy may still be present, and there <span class="bcp14">MAY</span> be some situations in which the Join Proxy can be used by the Registrar-Agent to connect to the Registrar.
+In certain situations the Join Proxy may still be present and could be used by the Registrar-Agent to connect to the Registrar.
 For example, a Registrar-Agent application on a smartphone often can connect to local wifi without giving up their LTE connection <span>[<a href="#androidnsd" class="cite xref">androidnsd</a>]</span>, but only can make link-local connections.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
 <p id="section-5.1-7">The Registrar-Agent interacts with the pledge to transfer the required data objects for bootstrapping, which are then also exchanged between the Registrar-Agent and the domain registrar.
 The addition of the Registrar-Agent influences the sequences of the data exchange between the pledge and the domain registrar described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
@@ -2893,11 +2893,11 @@ This may be done as described in <a href="#discovery_uc2_ppa" class="auto intern
             <p id="section-6.1-4.2.1">Registrar-Agent:<a href="#section-6.1-4.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.1-4.2.2.1">
-                <p id="section-6.1-4.2.2.1.1"><span class="bcp14">MAY</span> handle/trusts pledge's IDevID CA certificate to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication.
-The distribution of IDevID CA certificates to the Registrar-Agent is out of scope of this document and may be done by a manual configuration.<a href="#section-6.1-4.2.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-6.1-4.2.2.1.1">possesses own credentials (EE (RegAgt) certificate and corresponding private key) for the registrar domain.<a href="#section-6.1-4.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-6.1-4.2.2.2">
-                <p id="section-6.1-4.2.2.2.1">possesses own credentials (EE (RegAgt) certificate and corresponding private key) for the registrar domain.
+                <p id="section-6.1-4.2.2.2.1"><span class="bcp14">MAY</span> possess the IDevID CA certificate of the pledge vendor/manufacturer to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication.
+The distribution of IDevID CA certificates to the Registrar-Agent is out of scope of this document and may be done by a manual configuration.
 In addition, the Registrar-Agent <span class="bcp14">SHOULD</span> know the product-serial-number(s) of the pledge(s) to be bootstrapped.
 The Registrar-Agent <span class="bcp14">MAY</span> be provided with the product-serial-number(s) in different ways:<a href="#section-6.1-4.2.2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -4079,7 +4079,7 @@ As the reason field is optional (see <span>[<a href="#RFC8995" class="cite xref"
 <a href="#name-representation-of-pledge-vo" class="selfRef">Representation of pledge voucher status telemetry</a>
             </figcaption></figure>
 </div>
-<p id="section-6.3.2-4">If the pledge did not did not provide voucher status telemetry information after processing the voucher, the Registrar-Agent <span class="bcp14">MAY</span> query the pledge status explicitly as described in <a href="#exchanges_uc2_5" class="auto internal xref">Section 6.4</a> and <span class="bcp14">MAY</span> re-sent the voucher depending on the Pledge status following the procedure described in <a href="#exchanges_uc2_3a" class="auto internal xref">Section 6.3.1</a>.<a href="#section-6.3.2-4" class="pilcrow">¶</a></p>
+<p id="section-6.3.2-4">If the pledge did not did not provide voucher status telemetry information after processing the voucher, the Registrar-Agent <span class="bcp14">MAY</span> query the pledge status explicitly as described in <a href="#exchanges_uc2_5" class="auto internal xref">Section 6.4</a> and <span class="bcp14">MAY</span> resent the voucher depending on the Pledge status following the procedure described in <a href="#exchanges_uc2_3a" class="auto internal xref">Section 6.3.1</a>.<a href="#section-6.3.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="exchanges_uc2_3c">
@@ -4920,7 +4920,7 @@ Support in PoC implementations and comments resulting from the implementation wa
 <dd class="break"></dd>
 <dt id="I-D.ietf-anima-brski-ae">[I-D.ietf-anima-brski-ae]</dt>
         <dd>
-<span class="refAuthor">von Oheimb, D.</span>, <span class="refAuthor">Fries, S.</span>, and <span class="refAuthor">H. Brockhaus</span>, <span class="refTitle">"BRSKI-AE: Alternative Enrollment Protocols in BRSKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-brski-ae-06</span>, <time datetime="2023-10-20" class="refDate">20 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-06">https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-06</a>&gt;</span>. </dd>
+<span class="refAuthor">von Oheimb, D.</span>, <span class="refAuthor">Fries, S.</span>, and <span class="refAuthor">H. Brockhaus</span>, <span class="refTitle">"BRSKI-AE: Alternative Enrollment Protocols in BRSKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-brski-ae-07</span>, <time datetime="2023-11-17" class="refDate">17 November 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-07">https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-07</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.irtf-t2trg-taxonomy-manufacturer-anchors">[I-D.irtf-t2trg-taxonomy-manufacturer-anchors]</dt>
         <dd>

@@ -359,7 +359,7 @@ To support mutual trust establishment between the domain registrar and pledges n
 This leads to extensions of the logical components in the BRSKI architecture as shown in {{uc2figure}}.
 
 Note that the Join Proxy is not shown in the figure, having been replaced by Registrar-Agent.
-The Join Proxy may still be present, and there MAY be some situations in which the Join Proxy can be used by the Registrar-Agent to connect to the Registrar.
+In certain situations the Join Proxy may still be present and could be used by the Registrar-Agent to connect to the Registrar.
 For example, a Registrar-Agent application on a smartphone often can connect to local wifi without giving up their LTE connection {{androidnsd}}, but only can make link-local connections.
 
 The Registrar-Agent interacts with the pledge to transfer the required data objects for bootstrapping, which are then also exchanged between the Registrar-Agent and the domain registrar.
@@ -817,9 +817,9 @@ Preconditions:
 * Pledge: possesses IDevID
 
 * Registrar-Agent:
-  * MAY handle/trusts pledge's IDevID CA certificate to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication.
-  The distribution of IDevID CA certificates to the Registrar-Agent is out of scope of this document and may be done by a manual configuration.
   * possesses own credentials (EE (RegAgt) certificate and corresponding private key) for the registrar domain.
+  * MAY possess the IDevID CA certificate of the pledge vendor/manufacturer to validate IDevID certificate on returned PVR or in case of TLS usage for pledge communication.
+  The distribution of IDevID CA certificates to the Registrar-Agent is out of scope of this document and may be done by a manual configuration.
   In addition, the Registrar-Agent SHOULD know the product-serial-number(s) of the pledge(s) to be bootstrapped.
   The Registrar-Agent MAY be provided with the product-serial-number(s) in different ways:
     * configured, e.g., as a list of pledges to be bootstrapped via QR code scanning
@@ -1699,7 +1699,7 @@ As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of 
 ~~~~
 {: #vstat title='Representation of pledge voucher status telemetry' artwork-align="left"}
 
-If the pledge did not did not provide voucher status telemetry information after processing the voucher, the Registrar-Agent MAY query the pledge status explicitly as described in {{exchanges_uc2_5}} and MAY re-sent the voucher depending on the Pledge status following the procedure described in {{exchanges_uc2_3a}}.
+If the pledge did not did not provide voucher status telemetry information after processing the voucher, the Registrar-Agent MAY query the pledge status explicitly as described in {{exchanges_uc2_5}} and MAY resent the voucher depending on the Pledge status following the procedure described in {{exchanges_uc2_3a}}.
 
 
 ### Pledge: Wrapped-CA-Certificate(s) Processing {#exchanges_uc2_3c}
