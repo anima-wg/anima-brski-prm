@@ -222,7 +222,7 @@ It may be at a central site or an internet resident "cloud" service.
 The on-site to off-site connection may also be temporary and, e.g., only available at times when workers are present on a construction side, for instance.
 
 PER:
-: Pledge Enrollment-Request is a signature wrapped CSR, signed by the pledge that requests enrollment to a domain.
+: Pledge-Enrollment-Request is a signature wrapped CSR, signed by the pledge that requests enrollment to a domain.
 
 POP:
 : Proof-of-Possession (of a private key), as defined in {{RFC5272}}.
@@ -231,7 +231,7 @@ POI:
 : Proof-of-Identity, as defined in {{RFC5272}}.
 
 PVR:
-: Pledge Voucher-Request is a request for a voucher sent to the domain registrar.
+: Pledge-Voucher-Request is a request for a voucher sent to the domain registrar.
 The PVR is signed by the Pledge.
 
 RA:
@@ -239,10 +239,10 @@ RA:
 In BRSKI-PRM this is a functionality of the domain registrar, as in BRSKI {{RFC8995}}.
 
 RER:
-: Registrar Enrollment-Request is the CSR of a PER sent to the CA by the domain registrar (RA).
+: Registrar-Enrollment-Request is the CSR of a PER sent to the CA by the domain registrar (in its role as PKI RA).
 
 RVR:
-: Registrar Voucher-Request is a request for a voucher signed by the domain registrar to the MASA.
+: Registrar-Voucher-Request is a request for a voucher signed by the domain registrar to the MASA.
 It may contain the PVR received from the pledge.
 
 This document includes many examples that would contain many long sequences of base64 encoded objects with no content directly comprehensible to a human reader.
@@ -566,9 +566,9 @@ The endpoints are defined with short names to also accommodate for the constrain
 
 | Operation                  | Endpoint                   | Details |
 |:---------------------------|:---------------------------|:--------|
-| Trigger pledge voucher-request creation - Returns PVR| /tpvr| {{exchanges_uc2_1}}  |
+| Trigger pledge-voucher-request creation - Returns PVR| /tpvr| {{exchanges_uc2_1}}  |
 |------------------------
-| Trigger pledge enrollment-request - Returns PER | /tper | {{exchanges_uc2_1}} |
+| Trigger pledge-enrollment-request - Returns PER | /tper | {{exchanges_uc2_1}} |
 |------------------------
 | Supply voucher to pledge - Returns pledge voucher-status | /svr | {{exchanges_uc2_3}} |
 |------------------------
@@ -632,7 +632,7 @@ This is necessary to allow the discovery of pledge(s) by the Registrar-Agent usi
 The list may be provided by prior administrative means or the Registrar-Agent may get the information via an interaction with the pledge.
 For instance, {{RFC9238}} describes scanning of a QR code, the product-serial-number would be initialized from the 12N B005 Product Serial Number.
 
-According to {{RFC8995}} section 5.3, the domain registrar performs the pledge authorization for bootstrapping within his domain based on the pledge voucher-request object.
+According to {{RFC8995}} section 5.3, the domain registrar performs the pledge authorization for bootstrapping within his domain based on the pledge-voucher-request object.
 This behavior is retained also in BRSKI-PRM.
 
 The following information MUST be available at the Registrar-Agent before interaction with a pledge:
@@ -690,7 +690,7 @@ Upon discovery of a potential registrar, it initiates the bootstrapping to that 
 At the same time (so as to avoid the Slowloris-attack described in {{RFC8995}}), it SHOULD also respond to the triggers for responder mode described in this document.
 
 Once a pledge with combined functionality has been bootstrapped, it MAY act as client for enrollment of further certificates needed, e.g., using the enrollment protocol of choice.
-If it still acts as server, the defined BRSKI-PRM endpoints to trigger a pledge enrollment-request (PER) or to provide an enrollment-response can be used for further certificates.
+If it still acts as server, the defined BRSKI-PRM endpoints to trigger a pledge-enrollment-request (PER) or to provide an enrollment-response can be used for further certificates.
 
 
 # Bootstrapping Data Objects and Corresponding Exchanges {#exchanges_uc2}
@@ -714,7 +714,7 @@ The registrar MUST provide the EE (RegAgt) certificate identified by the Subject
 The MASA in turn verifies the registrar LDevID certificate is included in the PVR (contained in the "prior-signed-voucher-request" field of RVR) in the "agent-provided-proximity-registrar-certificate" leaf and may assert the PVR as "verified" or "logged".
 
 In addition, the MASA MAY issue the assertion "agent-proximity" as follows:
-The MASA verifies the signature of the agent-signed-data contained in the prior-signed-voucher-request, based on the provided EE (RegAgt) certificate in the "agent-sign-cert" leaf of the RVR.
+The MASA verifies the signature of the "agent-signed-data" contained in the "prior-signed-voucher-request", based on the provided EE (RegAgt) certificate in the "agent-sign-cert" leaf of the RVR.
 If both can be verified successfully, the MASA can assert "agent-proximity" in the voucher.
 The assertion of "agent-proximity" is similar to the proximity assertion by the MASA when using BRSKI.
 Note that the different assertions do not provide a metric of strength as the security properties are not comparable.
@@ -832,26 +832,26 @@ Preconditions:
 * Registrar (same as in BRSKI): possesses/trusts IDevID CA certificate and has own registrar EE credentials.
 
 ~~~~ aasvg
-+--------+                             +-----------+
-| Pledge |                             | Registrar-|
-|        |                             | Agent     |
-|        |                             | (RegAgt)  |
-+--------+                             +-----------+
-    |                                        |-create
-    |                                        | agent-signed-data
-    |<-- optional establish TLS connection --|
-    |                                        |
-    |<--- trigger pledge voucher-request ----|
-    |-agent-provided-proximity-registrar-cert|
-    |-agent-signed-data                      |
-    |                                        |
-    |----- pledge voucher-request ---------->|-store PVR
-    |                                        |
-    |<----- trigger enrollment-request ------|
-    |       (empty)                          |
-    |                                        |
-    |------ pledge enrollment-request ------>|-store (PER)
-    |                                        |
++--------+                                    +-----------+
+| Pledge |                                    | Registrar-|
+|        |                                    | Agent     |
+|        |                                    | (RegAgt)  |
++--------+                                    +-----------+
+    |                                               |-create
+    |                                               | agent-signed-data
+    |<-- optional establish TLS connection ---------|
+    |                                               |
+    |<--- trigger pledge-voucher-request -----------|
+    |     -agent-provided-proximity-registrar-cert  |
+    |     -agent-signed-data                        |
+    |                                               |
+    |----- pledge-voucher-request ----------------->|-store PVR
+    |                                               |
+    |<----- trigger pledge-enrollment-request ------|
+    |       (empty)                                 |
+    |                                               |
+    |------ pledge-enrollment-request ------------->|-store (PER)
+    |                                               |
 ~~~~
 {: #exchangesfig_uc2_1 title='Request collection (Registrar-Agent - pledge)' artwork-align="left"}
 
@@ -1047,7 +1047,7 @@ The CSR already assures POP of the private key corresponding to the contained pu
 In addition, based on the PER signature using the IDevID, POI is provided.
 Here, a JOSE object is being created in which the body utilizes the YANG module ietf-ztp-types with the grouping for csr-grouping for the CSR as defined in {{I-D.ietf-netconf-sztp-csr}}.
 
-Depending on the capability of the pledge, it constructs the pledge enrollment-request (PER) as plain PKCS#10.
+Depending on the capability of the pledge, it constructs the pledge-enrollment-request (PER) as plain PKCS#10.
 Note, the focus in this use case is placed on PKCS#10 as PKCS#10 can be transmitted in different enrollment protocols in the infrastructure like EST, CMP, CMS, and SCEP.
 If the pledge has already implemented an enrollment protocol, it may leverage that functionality for the creation of the CSR.
 Note, {{I-D.ietf-netconf-sztp-csr}} also allows for inclusion of certification requests in different formats used by CMP or CMC.
@@ -1075,13 +1075,13 @@ Note that the wrapping of the PER signature is only necessary for plain PKCS#10 
 
 The Registrar-Agent enrollment-request Content-Type header for a signature-wrapped PKCS#10 is: `application/jose+json`
 
-The header of the pledge enrollment-request SHALL contain the following parameter as defined in {{RFC7515}}:
+The header of the pledge-enrollment-request SHALL contain the following parameter as defined in {{RFC7515}}:
 
 * alg: algorithm used for creating the object signature.
 
 * x5c: contains the base64-encoded pledge IDevID certificate.
   It MAY optionally contain the certificate chain for this certificate. If the certificate chain is not included it MUST be available at the registrar for verification of the IDevID certificate.
-The body of the pledge enrollment-request SHOULD contain a P10 parameter (for PKCS#10) as defined for ietf-ztp-types:p10-csr in {{I-D.ietf-netconf-sztp-csr}}:
+The body of the pledge-enrollment-request SHOULD contain a P10 parameter (for PKCS#10) as defined for ietf-ztp-types:p10-csr in {{I-D.ietf-netconf-sztp-csr}}
 
 * P10: contains the base64-encoded PKCS#10 of the pledge.
 
@@ -1509,7 +1509,7 @@ Note, the registrar is already aware that the bootstrapping is performed in a pl
 * The registrar verifies that the pledge's certificate (here IDevID), carried in "x5c" header field, is accepted to join the domain after successful validation of the PVR.
 
 * If both succeed, the registrar utilizes the PKCS#10 request contained in the JWS object body as "P10" parameter of "ietf-sztp-csr:csr" for further processing of the enrollment-request with the corresponding domain CA.
-  It creates a registrar enrollment-request (RER) by utilizing the protocol expected by the domain CA.
+  It creates a registrar-enrollment-request (RER) by utilizing the protocol expected by the domain CA.
   The domain registrar may either directly forward the provided PKCS#10 request to the CA or provide additional information about attributes to be included by the CA into the requested LDevID certificate.
   The approach of sending this information to the CA depends on the utilized certificate management protocol between the RA and the CA and is out of scope for this document.
 
@@ -2095,8 +2095,8 @@ IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with
 
 ~~~~
  URI                Description                       Reference
- tpvr               create pledge voucher-request     [THISRFC]
- tper               create pledge enrollment-request  [THISRFC]
+ tpvr               create pledge-voucher-request     [THISRFC]
+ tper               create pledge-enrollment-request  [THISRFC]
  svr                supply voucher-response           [THISRFC]
  ser                supply enrollment-response        [THISRFC]
  scac               supply CA certificates to pledge  [THISRFC]
@@ -2232,7 +2232,7 @@ Support in PoC implementations and comments resulting from the implementation wa
 These examples are folded according to {{RFC8792}} Single Backslash rule.
 
 
-## Example Pledge Voucher-Request - PVR (from Pledge to Registrar-Agent)
+## Example Pledge-Voucher-Request - PVR (from Pledge to Registrar-Agent)
 
 The following is an example request sent from a Pledge to the Registrar-Agent, in "General JWS JSON Serialization".
 The message size of this PVR is: 4649 bytes
@@ -2316,15 +2316,15 @@ yuXZ2aw93zZId45R7XxAK-12YKIx6qLjiPjMw"
   }]
 }
 ~~~~
-{: #ExamplePledgeVoucherRequestfigure title='Example Pledge Voucher-Request - PVR' artwork-align="left"}
+{: #ExamplePledgeVoucherRequestfigure title='Example Pledge-Voucher-Request - PVR' artwork-align="left"}
 
 
-## Example Parboiled Registrar Voucher-Request - RVR (from Registrar to MASA)
+## Example Parboiled Registrar-Voucher-Request - RVR (from Registrar to MASA)
 
-The term parboiled refers to food which is partially cooked.  In {{RFC8995}}, the term refers to a Pledge voucher-request (PVR) which has
+The term parboiled refers to food which is partially cooked.  In {{RFC8995}}, the term refers to a pledge-voucher-request (PVR) which has
 been received by the Registrar, and then has been processed by the Registrar ("cooked"), and is now being forwarded to the MASA.
 
-The following is an example Registrar voucher-request (RVR) sent from the Registrar to the MASA, in "General JWS JSON Serialization".
+The following is an example registrar-voucher-request (RVR) sent from the Registrar to the MASA, in "General JWS JSON Serialization".
 Note that the previous PVR can be seen in the payload as "prior-signed-voucher-request".
 The message size of this RVR is: 13257 bytes
 
@@ -2533,7 +2533,7 @@ yyFd3kP6YCn35YYJ7yK35d3styo_yoiPfKA"
   }]
 }
 ~~~~
-{: #ExampleRegistrarVoucherRequestfigure title='Example Registrar Voucher-Request - RVR' artwork-align="left"}
+{: #ExampleRegistrarVoucherRequestfigure title='Example Registrar-Voucher-Request - RVR' artwork-align="left"}
 
 
 ## Example Voucher-Response (from MASA to Pledge, via Registrar and Registrar-Agent)
@@ -2811,7 +2811,7 @@ From IETF draft 01 -> IETF draft 02:
 
 * Included representation for General JWS JSON Serialization for examples
 
-* Included error responses from pledge if it is not able to create a pledge voucher-request or an enrollment request in section {{exchanges_uc2_1}}
+* Included error responses from pledge if it is not able to create a pledge-voucher-request or an enrollment request in section {{exchanges_uc2_1}}
 
 * Removed open issue regarding handling of multiple CSRs and enrollment responses during the bootstrapping as the initial target it the provisioning of a generic LDevID certificate. The defined endpoint on the pledge may also be used for management of further certificates.
 
@@ -2866,7 +2866,7 @@ From IETF draft 00 -> IETF draft 01:
 * Addressed YANG warning (issue #1)
 
 * Inclusion of examples for a trigger to create a pledge-voucher-request
-  and an enrollment-request.
+  and an pledge-enrollment-request.
 
 From IETF draft-ietf-anima-brski-async-enroll-03 -> IETF anima-brski-prm-00:
 
