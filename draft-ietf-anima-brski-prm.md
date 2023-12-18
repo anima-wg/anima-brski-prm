@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-11
+docname: draft-ietf-anima-brski-prm-12
 area: Operations and Management
 wg: ANIMA WG
 date: 2023
@@ -422,7 +422,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
   * The data objects utilized for the data exchange between the pledge and the registrar are self-contained authenticated objects (signature-wrapped objects).
 
 * Registrar-Agent: provides a store and forward communication path to exchange data objects between the pledge and the domain registrar.
-  The Registrar-Agent brokers in situations in which the domain registrar is not directly reachable by the pledge.
+  The Registrar-Agent acts as a broker in situations in which the domain registrar is not directly reachable by the pledge.
   This may be due to a different technology stack or due to missing connectivity.
   The Registrar-Agent triggers a pledge to create bootstrapping artifacts such as the voucher-request and the enrollment-request on one or multiple pledges.
   It can then perform a (bulk) bootstrapping based on the collected data.
@@ -2219,7 +2219,7 @@ For this reason, these guidelines do not follow the template described by {{RFC8
 
 # Acknowledgments
 
-We would like to thank the various reviewers, in particular Brian E. Carpenter, Oskar Camenzind, Hendrik Brockhaus, and Ingo Wenda for their input and discussion on use cases and call flows.
+We would like to thank the various reviewers, in particular Brian E. Carpenter, Charlie Kaufman (Early SECDIR review), Martin Björklund (Early YANGDOCTORS review), Marco Tiloca (Early IOTDIR review), Oskar Camenzind, Hendrik Brockhaus, and Ingo Wenda for their input and discussion on use cases and call flows.
 Further review input was provided by Jesser Bouzid, Dominik Tacke, and Christian Spindler.
 Special thanks to Esko Dijk for the in deep review and the improving proposals.
 Support in PoC implementations and comments resulting from the implementation was provided by Hong Rui Li and He Peng Jia.
@@ -2677,6 +2677,12 @@ IDevID certificates are intended to be widely useable and EKU does not support t
 # History of Changes [RFC Editor: please delete] {#app_history}
 
 Proof of Concept Code available
+
+
+From IETF draft 11 -> IETF draft 12:
+
+* Updated acknowledgements to reflect early reviews
+
 
 From IETF draft 10 -> IETF draft 11:
 
