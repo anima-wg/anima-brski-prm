@@ -4,7 +4,7 @@ abbrev: BRSKI-PRM
 docname: draft-ietf-anima-brski-prm-12
 area: Operations and Management
 wg: ANIMA WG
-date: 2023
+date: 2024
 stand_alone: true
 ipr: trust200902
 submissionType: IETF
@@ -508,10 +508,10 @@ In {{RFC8995}}, pledges instead need to continuously request enrollment from a d
     :          ...............................|.........
     :          .                              v        .
     v          .          +-------------------------+  .
- +--------+    .          |..............           |  .   
+ +--------+    .          |..............           |  .
  |        |    .          |. Registrar- . Domain    |  .
  | Pledge |<------------->|. Agent      . Registrar |  .
- +--------+ L2 or L3      |..............           |  .   
+ +--------+ L2 or L3      |..............           |  .
             connectivity  +-------------------+-----+  .
                .                              |        .
                .           +------------------+-----+  .
@@ -544,7 +544,7 @@ Akin to the BRSKI case, the pledge has provided proximity evidence to the MASA.
 But additionally, this allows the Registrar to be sure that the PVR collected by the Registrar-Agent was in fact collected by the Registrar-Agent to which the Registrar is connected to.
 
 In a similar fashion, the pledge accepts the registrar certificate provisionally until it receives the voucher as described in {{exchanges_uc2_3}}.
-See also Section 5 of {{RFC8995}} on "PROVISIONAL accept of server cert".
+See also section 5 of {{RFC8995}} on "PROVISIONAL accept of server cert".
 
 
 ## Behavior of Pledge in Pledge-Responder-Mode {#pledge_ep}
@@ -558,7 +558,7 @@ When the Registrar-Agent reaches out to a pledge, for instance with an example U
 However in practice the pledge will often be known only by its IP address as returned by a discovery protocol, and that is what will be present in the Host: header.
 
 The pledge MUST respond to all queries regardless of what Host: header is provided by the client.
-{{?RFC9110, Section 7.2}} makes the Host: header mandatory, so it will always be present.
+{{?RFC9110, section 7.2}} makes the Host: header mandatory, so it will always be present.
 
 The following operations are defined for the *pledge* in this document, describing their endpoints and their corresponding URIs.
 The endpoints are defined with short names to also accommodate for the constraint case.
@@ -661,7 +661,7 @@ The discovery of the pledge by Registrar-Agent in the context of this document d
 A more general discovery mechanism, also supporting GRASP besides DNS-SD with mDNS may be provided in {{I-D.eckert-anima-brski-discovery}}.
 
 Discovery in BRSKI-PRM uses DNS-based Service Discovery {{RFC6763}} over Multicast DNS {{RFC6762}} to discover the pledge.
-Note that {{RFC6762}} Section 9 provides support for conflict resolution in situations when an DNS-SD with mDNS responder receives a mDNS response with inconsistent data.
+Note that {{RFC6762}} section 9 provides support for conflict resolution in situations when an DNS-SD with mDNS responder receives a mDNS response with inconsistent data.
 Note that {{RFC8990}} does not support conflict resolution of mDNS, which may be a limitation for its application.
 
 The pledge constructs a local host name based on device local information (product-serial-number), which results in "product-serial-number._brski-pledge._tcp.local".
@@ -903,21 +903,23 @@ The body of the agent-signed-data contains an "ietf-voucher-request:agent-signed
 ~~~~
 # The agent-signed-data in General JWS Serialization syntax
 {
-  "payload": "BASE64URL(ietf-voucher-request-prm:agent-signed-data)",
+  "payload": BASE64URL(ietf-voucher-request:agent-signed-data),
   "signatures": [
     {
-      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "protected": BASE64URL(UTF8(JWS Protected Header)),
       "signature": BASE64URL(JWS Signature)
     }
   ]
 }
 
 # Example: Decoded payload representation in JSON syntax of
-  "ietf-voucher-request-prm:agent-signed-data"
+  "ietf-voucher-request:agent-signed-data"
 
-"ietf-voucher-request-prm:agent-signed-data": {
-  "created-on": "2021-04-16T00:00:01.000Z",
-  "serial-number": "callee4711"
+{
+  "ietf-voucher-request:agent-signed-data": {
+    "created-on": "2021-04-16T00:00:01.000Z",
+    "serial-number": "callee4711"
+  }
 }
 
 # Example: Decoded "JWS Protected Header" representation
@@ -950,7 +952,7 @@ The header of the PVR SHALL contain the following parameters as defined in {{RFC
 * x5c: contains the base64-encoded pledge IDevID certificate.
   It MAY optionally contain the certificate chain for this certificate. If the certificate chain is not included it MUST be available at the registrar for verification of the IDevID certificate.
 
-The payload of the PVR MUST contain the following parameters as part of the ietf-voucher-request-prm:voucher as defined in {{RFC8995}}:
+The payload of the PVR MUST contain the following parameters as part of the ietf-voucher-request:voucher as defined in {{I-D.ietf-anima-rfc8366bis}}:
 
 * created-on: SHALL contain the current date and time in yang:date-and-time format.
   If the pledge does not have synchronized time, it SHALL use the created-on time from the agent-signed-data, received in the trigger to create a PVR.
@@ -975,24 +977,26 @@ The PVR is signed using the pledge's IDevID credential contained as x5c paramete
 ~~~~
 # The PVR in General JWS Serialization syntax
 {
-  "payload": "BASE64URL(ietf-voucher-request-prm:voucher)",
+  "payload": BASE64URL(ietf-voucher-request:voucher),
   "signatures": [
     {
-      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "protected": BASE64URL(UTF8(JWS Protected Header)),
       "signature": BASE64URL(JWS Signature)
     }
   ]
 }
 
-# Example: Decoded Payload "ietf-voucher-request-prm:voucher"
+# Example: Decoded Payload "ietf-voucher-request:voucher"
   representation in JSON syntax
-"ietf-voucher-request-prm:voucher": {
-   "created-on": "2021-04-16T00:00:02.000Z",
-   "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
-   "serial-number": "callee4711",
-   "assertion": "agent-proximity",
-   "agent-provided-proximity-registrar-cert": "base64encodedvalue==",
-   "agent-signed-data": "base64encodedvalue=="
+{
+  "ietf-voucher-request:voucher": {
+     "created-on": "2021-04-16T00:00:02.000Z",
+     "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
+     "serial-number": "callee4711",
+     "assertion": "agent-proximity",
+     "agent-provided-proximity-registrar-cert": "base64encodedvalue==",
+     "agent-signed-data": "base64encodedvalue=="
+  }
 }
 
 # Example: Decoded "JWS Protected Header" representation
@@ -1093,10 +1097,10 @@ Note that in this case the current LDevID credential is used instead of the IDev
 ~~~~
 # The PER in General JWS Serialization syntax
 {
-  "payload": "BASE64URL(ietf-ztp-types)",
+  "payload": BASE64URL(ietf-ztp-types),
   "signatures": [
     {
-      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "protected": BASE64URL(UTF8(JWS Protected Header)),
       "signature": BASE64URL(JWS Signature)
     }
   ]
@@ -1104,8 +1108,10 @@ Note that in this case the current LDevID credential is used instead of the IDev
 
 # Example: Decoded Payload "ietf-ztp-types" Representation
   in JSON Syntax
-"ietf-ztp-types": {
-  "p10-csr": "base64encodedvalue=="
+{
+  "ietf-ztp-types": {
+    "p10-csr": "base64encodedvalue=="
+  }
 }
 
 # Example: Decoded "JWS Protected Header" Representation
@@ -1241,15 +1247,15 @@ The following 4xx client error codes SHOULD be used:
 
 * 406 Not Acceptable: if the Content-Type indicated by the Accept header is unknown or unsupported.
 
-If the validation succeeds, the registrar performs pledge authorization according to {{RFC8995}}, Section 5.3 followed by obtaining a voucher from the pledge's MASA according to {{RFC8995}}, Section 5.4 with the modifications described below in {{rvr-proc}}.
+If the validation succeeds, the registrar performs pledge authorization according to {{RFC8995}}, section 5.3 followed by obtaining a voucher from the pledge's MASA according to {{RFC8995}}, section 5.4 with the modifications described below in {{rvr-proc}}.
 
 
 ### Registrar-Voucher-Request (RVR) Processing (Registrar to MASA) {#rvr-proc}
 
-If the MASA address/URI is learned from the {{RFC8995}} Section 2.3 IDevID MASA URI extension, then the MASA on that URI MUST support the procedures defined in this document if the PVR used JSON-JWS encoding.
+If the MASA address/URI is learned from the {{RFC8995}} section 2.3 IDevID MASA URI extension, then the MASA on that URI MUST support the procedures defined in this document if the PVR used JSON-JWS encoding.
 If the MASA is only configured on the registrar, then a registrar supporting BRKSI-PRM and other voucher encoding formats (such as those in {{RFC8995}}) SHOULD support per-message-format MASA address/URI configuration for the same IDevID trust anchor."
 
-The registrar SHALL construct the payload of the RVR as defined in {{RFC8995}}, Section 5.5.
+The registrar SHALL construct the payload of the RVR as defined in {{RFC8995}}, section 5.5.
 The RVR encoding SHALL be JSON-in-JWS as defined in {{I-D.ietf-anima-jws-voucher}}.
 
 The header of the RVR SHALL contain the following parameter as defined for JWS {{RFC7515}}:
@@ -1288,28 +1294,30 @@ The object is signed using the registrar LDevID credentials, which corresponds t
 ~~~~
 # The RVR in General JWS Serialization syntax
 {
-  "payload": "BASE64URL(ietf-voucher-request-prm:voucher)",
+  "payload": BASE64URL(ietf-voucher-request:voucher),
   "signatures": [
     {
-      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "protected": BASE64URL(UTF8(JWS Protected Header)),
       "signature": BASE64URL(JWS Signature)
     }
   ]
 }
 
-# Example: Decoded payload "ietf-voucher-request-prm:voucher"
+# Example: Decoded payload "ietf-voucher-request:voucher"
   representation in JSON syntax
-"ietf-voucher-request-prm:voucher": {
-   "created-on": "2022-01-04T02:37:39.235Z",
-   "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
-   "serial-number": "callee4711",
-   "assertion": "agent-proximity",
-   "prior-signed-voucher-request": "base64encodedvalue==",
-   "agent-sign-cert": [
-     "base64encodedvalue==",
-     "base64encodedvalue==",
-     "..."
-   ]
+{
+  "ietf-voucher-request:voucher": {
+     "created-on": "2022-01-04T02:37:39.235Z",
+     "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
+     "serial-number": "callee4711",
+     "assertion": "agent-proximity",
+     "prior-signed-voucher-request": "base64encodedvalue==",
+     "agent-sign-cert": [
+       "base64encodedvalue==",
+       "base64encodedvalue==",
+       "..."
+     ]
+  }
 }
 
 # Example: Decoded "JWS Protected Header" representation
@@ -1337,7 +1345,7 @@ Nevertheless, alternative encodings of the voucher as used in BRSKI {{RFC8995}} 
 The assumption is that a pledge typically supports a single encoding variant and creates the PVR in the supported format.
 To ensure that the pledge is able to process the voucher, the registrar MUST use the media type for Accept header in the RVR based on the media type used for the PVR.
 
-Once the MASA receives the RVR it SHALL perform the verification as described in Section 5.5 in {{RFC8995}}.
+Once the MASA receives the RVR it SHALL perform the verification as described in section 5.5 in {{RFC8995}}.
 
 In addition, the following processing SHALL be performed for PVR contained in RVR "prior-signed-voucher-request" field:
 
@@ -1355,7 +1363,7 @@ In addition, the following processing SHALL be performed for PVR contained in RV
   As the "agent-sign-cert" field is defined as array (x5c), it can handle multiple certificates.
 
 If validation fails, the MASA SHOULD respond with an HTTP 4xx client error status code to the registrar.
-The HTTP error status codes are kept the same as defined in Section 5.6 of {{RFC8995}} and comprise the codes: 403, 404, 406, and 415.
+The HTTP error status codes are kept the same as defined in section 5.6 of {{RFC8995}} and comprise the codes: 403, 404, 406, and 415.
 
 
 ### Voucher Issuance by MASA {#exchanges_uc2_2_vc}
@@ -1369,10 +1377,10 @@ The voucher is according to {{I-D.ietf-anima-rfc8366bis}} but uses the new asser
 ~~~~
 # The MASA issued voucher in General JWS Serialization syntax
 {
-  "payload": "BASE64URL(ietf-voucher:voucher)",
+  "payload": BASE64URL(ietf-voucher:voucher),
   "signatures": [
     {
-      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "protected": BASE64URL(UTF8(JWS Protected Header)),
       "signature": BASE64URL(JWS Signature)
     }
   ]
@@ -1380,12 +1388,14 @@ The voucher is according to {{I-D.ietf-anima-rfc8366bis}} but uses the new asser
 
 # Example: Decoded payload "ietf-voucher:voucher" representation
   in JSON syntax
-"ietf-voucher:voucher": {
-  "assertion": "agent-proximity",
-  "serial-number": "callee4711",
-  "nonce": "base64encodedvalue==",
-  "created-on": "2022-01-04T00:00:02.000Z",
-  "pinned-domain-cert": "base64encodedvalue=="
+{
+  "ietf-voucher:voucher": {
+    "assertion": "agent-proximity",
+    "serial-number": "callee4711",
+    "nonce": "base64encodedvalue==",
+    "created-on": "2022-01-04T00:00:02.000Z",
+    "pinned-domain-cert": "base64encodedvalue=="
+  }
 }
 
 # Example: Decoded "JWS Protected Header" representation
@@ -1407,12 +1417,12 @@ The MASA returns the voucher-response (voucher) to the registrar.
 
 ### MASA issued Voucher Processing by Registrar {#exchanges_uc2_2_vs}
 
-After receiving the voucher the registrar SHOULD evaluate it for transparency and logging purposes as outlined in Section 5.6 of {{RFC8995}}.
+After receiving the voucher the registrar SHOULD evaluate it for transparency and logging purposes as outlined in section 5.6 of {{RFC8995}}.
 The registrar MUST add an additional signature to the MASA provided voucher using its registrar EE credentials.
 
 
 
-The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credentials (see {{RFC7515}}, Section 5.2 point 8.
+The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credentials (see {{RFC7515}}, section 5.2 point 8.
 The x5c component of the "JWS Protected Header" MUST contain the registrar EE certificate as well as potential subordinate CA certificates up to (but not including) the pinned domain certificate.
 The pinned domain certificate is already contained in the voucher payload ("pinned-domain-cert").
 
@@ -1425,7 +1435,7 @@ In the BRSKI-PRM mode, with the Registrar-Agent mediating all communication, the
 This second signature provides for the same level of assurance to the pledge, and that it matches the public key that the pledge received in the trigger for the PVR (see {{pavrt}}).
 
 The registrar MUST use the same registrar EE credentials used for authentication in the TLS handshake to authenticate towards the Registrar-Agent.
-This has some operational implications when the registrar may be part of a scalable framework as described in {{?I-D.richardson-anima-registrar-considerations, Section 1.3.1}}.
+This has some operational implications when the registrar may be part of a scalable framework as described in {{?I-D.richardson-anima-registrar-considerations, section 1.3.1}}.
 
 The second signature MUST either be done with the private key associated with the registrar EE certificate provided to the Registrar-Agent, or the use of a certificate chain is necessary.
 This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher-request as also transferred in the PVR in the "agent-provided-proximity-registrar-cert".
@@ -1436,14 +1446,14 @@ This ensures that the same registrar EE certificate can be used to verify the si
 # The MASA issued voucher with additional registrar signature in
   General JWS Serialization syntax
 {
-  "payload": "BASE64URL(ietf-voucher:voucher)",
+  "payload": BASE64URL(ietf-voucher:voucher),
   "signatures": [
     {
-      "protected": "BASE64URL(UTF8(JWS Protected Header (MASA)))",
+      "protected": BASE64URL(UTF8(JWS Protected Header (MASA))),
       "signature": BASE64URL(JWS Signature)
     },
     {
-      "protected": "BASE64URL(UTF8(JWS Protected Header (Reg)))",
+      "protected": BASE64URL(UTF8(JWS Protected Header (Reg))),
       "signature": BASE64URL(JWS Signature)
     }
   ]
@@ -1451,12 +1461,14 @@ This ensures that the same registrar EE certificate can be used to verify the si
 
 # Example: Decoded payload "ietf-voucher:voucher" representation in
   JSON syntax
-"ietf-voucher:voucher": {
-   "assertion": "agent-proximity",
-   "serial-number": "callee4711",
-   "nonce": "base64encodedvalue==",
-   "created-on": "2022-01-04T00:00:02.000Z",
-   "pinned-domain-cert": "base64encodedvalue=="
+{
+  "ietf-voucher:voucher": {
+     "assertion": "agent-proximity",
+     "serial-number": "callee4711",
+     "nonce": "base64encodedvalue==",
+     "created-on": "2022-01-04T00:00:02.000Z",
+     "pinned-domain-cert": "base64encodedvalue=="
+  }
 }
 
 # Example: Decoded "JWS Protected Header (MASA)" representation
@@ -1488,7 +1500,7 @@ The registrar sends the voucher to the Registrar-Agent.
 
 ### Pledge-Enrollment-Request (PER) Processing (Registrar-Agent to Registrar) {#exchanges_uc2_2_per}
 
-After receiving the voucher, the Registrar-Agent sends the PER to the registrar in the same HTTP-over-TLS connection. Which is similar to the PER processing described in Section 5.2 of {{RFC8995}}.
+After receiving the voucher, the Registrar-Agent sends the PER to the registrar in the same HTTP-over-TLS connection. Which is similar to the PER processing described in section 5.2 of {{RFC8995}}.
 In case the PER cannot be send in the same HTTP-over-TLS connection the Registrar-Agent may send the PER in a new HTTP-over-TLS connection. The registrar is able to correlate the PVR and the PER based on the signatures and the contained product-serial-number information.
 Note, this also addresses situations in which a nonceless voucher is used and may be pre-provisioned to the pledge.
 As specified in {{PER-response}} deviating from BRSKI the PER is not a raw PKCS#10.
@@ -1543,10 +1555,10 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
 ~~~~
 # The CA certificates data with registrar signature in General JWS Serialization syntax
 {
-  "payload": "BASE64URL(certs)",
+  "payload": BASE64URL(certs),
   "signatures": [
     {
-      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "protected": BASE64URL(UTF8(JWS Protected Header)),
       "signature": BASE64URL(JWS Signature)
     }
   ]
@@ -1632,10 +1644,10 @@ A nonceless voucher may be accepted as in {{RFC8995}} and may be allowed by a ma
 
 To perform the validation of several signatures on the voucher object, the pledge SHALL perform the signature verification in the following order:
 
-  1. Verify MASA signature as described in Section 5.6.1 in {{RFC8995}}, against pre-installed manufacturer trust anchor (IDevID).
+  1. Verify MASA signature as described in section 5.6.1 in {{RFC8995}}, against pre-installed manufacturer trust anchor (IDevID).
   2. Install trust anchor contained in the voucher ("pinned-domain-cert")  provisionally
   3. Validate the LDevID(Reg) certificate received in the agent-provided-proximity-registrar-cert in the pledge-voucher-request trigger request (in the field "agent-provided-proximity-registrar-cert")
-  4. Verify registrar signature of the voucher similar as described in Section 5.6.1 in {{RFC8995}}, but take the registrar certificate instead of the MASA certificate for the verification
+  4. Verify registrar signature of the voucher similar as described in section 5.6.1 in {{RFC8995}}, but take the registrar certificate instead of the MASA certificate for the verification
 
 Step3 and step 4 have been introduced in BRSKI-PRM to enable verification of LDevID(Reg) certificate and also the proof-of-possession of the corresponding private key by the registrar, which is done in BRSKI based on the established TLS channel.
 If all steps stated above have been performed successfully, the pledge SHALL terminate the "PROVISIONAL accept" state for the domain trust anchor and the registrar LDevID certificate.
@@ -1643,22 +1655,41 @@ If all steps stated above have been performed successfully, the pledge SHALL ter
 If an error occurs during the verification and validation of the voucher, this SHALL be reported in the reason field of the pledge voucher status.
 
 
-### Pledge: Voucher Status Telemetry {#exchanges_uc2_3b}
+### Pledge: Voucher-Status Telemetry {#exchanges_uc2_3b}
 
-After voucher verification and validation the pledge MUST reply with a status telemetry message as defined in Section 5.7 of {{RFC8995}}.
+After voucher processing the pledge MUST reply with a voucher status telemetry message as defined in section 5.7 of {{RFC8995}}.
+The voucher-status is also a signed object in BRSKI-PRM and results in form of JSON-in-JWS here. 
+It SHALL be signed with pledge's IDevID credentials.
+BRSKI {{RFC8995}} section 5.7 specifies the voucher status telemetry message with two optional fields for "reason" and "reason-context". 
+In BRSKI-PRM the optional fields are mandated to have a clear distinction between other status messages and MUST be provided therefore.
+This distinction is intended for better error handling on registrar side, as a status object could be send to a wrong status endpoint.
+The following CDDL {{RFC8610}} defines the pledge voucher-status response structure. 
+It is similar as defined in {{?RFC8995, section 5.7}} with the optional fields set as mandatory as described above.
+
+~~~~
+<CODE BEGINS>
+voucherstatus-post = {
+    "version": uint,
+    "status": bool,
+    "reason": text,
+    "reason-context" : { $$arbitrary-map }
+  }
+<CODE ENDS>
+~~~~
+{: #v_stat_res_def title='CDDL for pledge-voucher-status response' artwork-align="left"}
+
+  
 The pledge generates the voucher-status and provides it as signed JSON-in-JWS object in response to the Registrar-Agent.
-
 The response has the Content-Type `application/jose+json` and is signed using the IDevID of the pledge as shown in {{vstat}}.
-As the reason field is optional (see {{RFC8995}}), it MAY be omitted in case of success.
 
 ~~~~
 # The "pledge-voucher-status" telemetry in general JWS
   serialization syntax
 {
-  "payload": "BASE64URL(pledge-voucher-status)",
+  "payload": BASE64URL(pledge-voucher-status),
   "signatures": [
     {
-      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "protected": BASE64URL(UTF8(JWS Protected Header)),
       "signature": BASE64URL(JWS Signature)
     }
   ]
@@ -1734,13 +1765,30 @@ The pledge SHALL generate the enroll status and provide it in the response to th
 If the verification of the LDevID certificate succeeds, the status property SHALL be set to "status": true, otherwise to "status": false
 
 
-### Pledge: Enrollment-Status Telemetry
+### Pledge: Enrollment-Status Telemetry  {#exchanges_uc2_3e}
 
-The pledge MUST reply with a status telemetry message as defined in Section 5.9.4 of {{RFC8995}}.
-As for the other objects, the enroll-status is signed and results in a JSON-in-JWS object.
-If the pledge verified the received LDevID certificate successfully it SHALL sign the response using its new LDevID credentials as shown in {{estat}}.
-In the failure case, the pledge SHALL use the available IDevID credentials.
-As the reason field is optional, it MAY be omitted in case of success.
+After enrollment processing the pledge MUST reply with a enrollment status telemetry message as defined in section 5.9.4 of {{RFC8995}}.
+The enroll-status is also a signed object in BRSKI-PRM and results in form of JSON-in-JWS here.
+If the pledge verified the received LDevID certificate successfully it SHALL sign the enroll-status using its new LDevID credentials as shown in {{estat}}.
+In failure case, the pledge SHALL use its IDevID credentials.
+BRSKI {{RFC8995}} section 5.9.4 specifies the enrollment status telemetry message with two optional fields for "reason" and "reason-context". 
+In BRSKI-PRM the optional fields are mandated to have a clear distinction between other status messages and MUST be provided therefore.
+This distinction is intended for better error handling on registrar side, as a status object could be send to a wrong status endpoint.
+
+The following CDDL {{RFC8610}} explains enroll-status response structure. 
+It is similar as defined in {{?RFC8995, section 5.9.4}} with the optional fields set to mandatory as described above.
+
+~~~~
+<CODE BEGINS>
+enrollstatus-post = {
+    "version": uint,
+    "status": bool,
+    "reason": text,
+    "reason-context" : { $$arbitrary-map }
+  }
+<CODE ENDS>
+~~~~
+{: #e_stat_res_def title='CDDL for pledge-enrollment-status response' artwork-align="left"}
 
 The response has the Content-Type `application/jose+json`.
 
@@ -1748,10 +1796,10 @@ The response has the Content-Type `application/jose+json`.
 # The "pledge-enroll-status" telemetry in General JWS Serialization
   syntax
 {
-  "payload": "BASE64URL(pledge-enroll-status)",
+  "payload": BASE64URL(pledge-enroll-status),
   "signatures": [
     {
-      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "protected": BASE64URL(UTF8(JWS Protected Header)),
       "signature": BASE64URL(JWS Signature)
     }
   ]
@@ -1840,11 +1888,11 @@ The registrar SHOULD log the transaction provided for a pledge via Registrar-Age
 
 The registrar SHALL verify the signature of the pledge voucher status and validate that it belongs to an accepted device of the domain based on the contained "serial-number" in the IDevID certificate referenced in the header of the voucher status.
 
-According to {{RFC8995}} Section 5.7, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
+According to {{RFC8995}} section 5.7, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
 The Registrar-Agent may use the response to signal success / failure to the service technician operating the Registrar-Agent.
 Within the server logs the server SHOULD capture this telemetry information.
 
-The registrar SHOULD proceed with collecting and logging status information by requesting the MASA audit-log from the MASA service as described in Section 5.8 of {{RFC8995}}.
+The registrar SHOULD proceed with collecting and logging status information by requesting the MASA audit-log from the MASA service as described in section 5.8 of {{RFC8995}}.
 
 The Registrar-Agent MUST provide the pledge's enroll status to the registrar.
 The status indicates the pledge could process the enroll-response (certificate) and holds the corresponding private key.
@@ -1856,9 +1904,9 @@ The registrar MUST verify the signature of the pledge enroll status.
 Also, the registrar SHALL validate that the pledge is an accepted device of the domain based on the contained product-serial-number in the LDevID certificate referenced in the header of the enroll status.
 The registrar SHOULD log this event.
 In case the pledge enroll status indicates a failure, the pledge was unable to verify the received LDevID certificate and therefore signed the enroll status with its IDevID credential.
-Note that the signature verification of the status information is an addition to the described handling in Section 5.9.4 of {{RFC8995}}, and is replacing the pledges TLS client authentication by DevID credentials in [RFC8995].
+Note that the signature verification of the status information is an addition to the described handling in section 5.9.4 of {{RFC8995}}, and is replacing the pledges TLS client authentication by DevID credentials in [RFC8995].
 
-According to {{RFC8995}} Section 5.9.4, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
+According to {{RFC8995}} section 5.9.4, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes as defined by the HTTP standard.
 Based on the failure case the registrar MAY decide that for security reasons the pledge is not allowed to reside in the domain. In this case the registrar MUST revoke the certificate.
 An example case for the registrar revoking the issued LDevID for the pledge is when the pledge was not able to verify the received LDevID certificate and therefore did send a 406 (Not Acceptable) response.
 In this case the registrar may revoke the LDevID certificate as the pledge did no accepted it for installation.
@@ -1928,10 +1976,10 @@ This is out of scope for this specification.
 # The Registrar-Agent request of "pledge-status" in general JWS
   serialization syntax
 {
-  "payload": "BASE64URL(status-request)",
+  "payload": BASE64URL(status-request),
   "signatures": [
     {
-      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "protected": BASE64URL(UTF8(JWS Protected Header)),
       "signature": BASE64URL(JWS Signature)
     }
   ]
@@ -2026,10 +2074,10 @@ The pledge-status responses are cumulative in the sense that connect-success imp
 ~~~~
 # The pledge "status-response" in General JWS Serialization syntax
 {
-  "payload": "BASE64URL(status-response)",
+  "payload": BASE64URL(status-response),
   "signatures": [
     {
-      "protected": "BASE64URL(UTF8(JWS Protected Header))",
+      "protected": BASE64URL(UTF8(JWS Protected Header)),
       "signature": BASE64URL(JWS Signature)
     }
   ]
@@ -2207,14 +2255,14 @@ A manufacturer may decide to support this feature only for devices not possessin
 ## YANG Module Security Considerations
 
 The enhanced voucher-request described in {{I-D.ietf-anima-rfc8366bis}} is based on {{RFC8995}}, but uses a different encoding based on {{I-D.ietf-anima-jws-voucher}}.
-The security considerations as described in {{RFC8995}} Section 11.7 (Security Considerations) apply.
+The security considerations as described in {{RFC8995}} section 11.7 (Security Considerations) apply.
 
 The YANG module specified in {{I-D.ietf-anima-rfc8366bis}} defines the schema for data that is subsequently encapsulated by a JOSE signed-data Content-type as described in {{I-D.ietf-anima-jws-voucher}}.
 As such, all of the YANG-modeled data is protected against modification.
 
 The use of YANG to define data structures via the {{?RFC8971}} "structure" statement, is relatively
 new and distinct from the traditional use of YANG to define an API accessed by network management protocols such as NETCONF {{RFC6241}} and RESTCONF {{RFC8040}}.
-For this reason, these guidelines do not follow the template described by {{RFC8407}} Section 3.7 (Security Considerations Section).
+For this reason, these guidelines do not follow the template described by {{RFC8407}} section 3.7 (Security Considerations section).
 
 
 # Acknowledgments
@@ -2660,13 +2708,13 @@ If the Registrar-Agent has a preconfigured list of which product-serial-number(s
 In many cases only the list of manufacturers is known ahead of time, so at most the Registrar-Agent can show the X520SerialNumber to the (human) operator who may then attempt to confirm that they are standing in front of a device with that product-serial-number.
 The use of scannable QRcodes may help automate this in some cases.
 
-3. The CA used to sign the IDevID will be a manufacturer private PKI as described in {{?I-D.irtf-t2trg-taxonomy-manufacturer-anchors, Section 4.1}}.
+3. The CA used to sign the IDevID will be a manufacturer private PKI as described in {{?I-D.irtf-t2trg-taxonomy-manufacturer-anchors, section 4.1}}.
 The anchors for this PKI will never be part of the public WebPKI anchors which are distributed with most smartphone operating systems.
 A Registrar-Agent application will need to use different APIs in order to initiate an HTTPS connection without performing WebPKI verification.
 The application will then have to do it's own certificate chain verification against a store of manufacturer trust anchors.
 In the Android ecosystem this involved use of a customer TrustManager: many application developers do not create these correctly, and there is significant push to remove this option as it has repeatedly resulted in security failures. See {{androidtrustfail}}
 
-4. The use of the Host: (or :authority in HTTP/2) is explained in {{?RFC9110, Section 7.2}}. This header is mandatory, and so a compliant HTTPS client is going to insert it.
+4. The use of the Host: (or :authority in HTTP/2) is explained in {{?RFC9110, section 7.2}}. This header is mandatory, and so a compliant HTTPS client is going to insert it.
 But, the contents of this header will at best be an IP address that came from the discovery process.
 The pledge MUST therefore ignore the Host: header when it processes requests, and the pledge MUST NOT do any kind of name-base virtual hosting using the IP address/port combination.
 Note that there is no requirement for the pledge to operate it's BRSKI-PRM service on port 80 or port 443, so if there is no reason for name-based virtual hosting.
@@ -2682,6 +2730,10 @@ Proof of Concept Code available
 From IETF draft 11 -> IETF draft 12:
 
 * Updated acknowledgements to reflect early reviews
+* Reworked examples to fit JSON syntax
+* Update references to for voucher context to I-D.ietf-anima-rfc8366bis
+* Renamed ietf-voucher-request-prm to ietf-voucher to refelct move of YANG module to RFC8366bis
+* Updated status response member usage in {{exchanges_uc2_3b}} and {{exchanges_uc2_3e}} to always use all field in the BRSKI defined status messages 
 
 
 From IETF draft 10 -> IETF draft 11:
