@@ -331,9 +331,9 @@ At least the following properties are required for the voucher and enrollment pr
 
 Solution examples based on existing technology are provided with the focus on existing IETF RFCs:
 
-* Voucher-requests and -responses as used in {{!RFC8995}} already provide both, POP and POI, through a digital signature to protect the integrity of the voucher, while the corresponding signing certificate contains the identity of the signer.
+* Voucher-Requests and Vouchers as used in {{!RFC8995}} already provide both, POP and POI, through a digital signature to protect the integrity of the voucher, while the corresponding signing certificate contains the identity of the signer.
 
-* Certification requests are data structures containing the information from a requester for a CA to create a certificate.
+* Enroll-Requests are data structures containing the information from a requester for a CA to create a certificate.
   The certification request format in BRSKI is PKCS#10 {{!RFC2986}}.
   In PKCS#10, the structure is signed to ensure integrity protection and POP of the private key of the requester that corresponds to the contained public key.
   In the application examples, this POP alone is not sufficient.
