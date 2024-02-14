@@ -536,9 +536,6 @@ In a similar fashion, the pledge MUST accept the Registrar-Agent EE certificate 
 See also {{Section 5 of !RFC8995}} on "provisional state".
 
 For agent-proximity, the EE certificate of the Registrar-Agent MUST be an LDevID certificate signed by the domain owner.
-TODO[always in agent-signed-data] Further, the Registrar-Agent MUST include its LDevID certificate in the PVR trigger message and, in turn, the pledge MUST include it in the Pledge Voucher Request (PVR).
-TODO[no other field, right?] The corresponding fields are defined in {{tpvr}}.
-
 Akin to the proximity assertion in the BRSKI case, the agent-proximity provides pledge proximity evidence to the MASA.
 But additionally, agent-proximity allows the domain registrar to be sure that the PVR collected by the Registrar-Agent was in fact collected by the Registrar-Agent, to which the registrar is connected to.
 
