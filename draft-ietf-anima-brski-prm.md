@@ -204,7 +204,8 @@ CSR:
 : Certificate Signing Request.
 
 EE:
-: End entity.
+: End entity, as defined in {{?RFC9483}}.
+  Typically a device or service that owns a public-private key pair for which it manages a public key certificate.
 
 EE certificate:
 : Either IDevID certificate or LDevID certificate of the EE.
