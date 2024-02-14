@@ -825,7 +825,8 @@ This enables the registrar to verify and log, which Registrar-Agent was in conta
    ~                ~                 ~              ~            ~
 ~~~~
 {: #exchangesfig_uc2_all title='Overview pledge-responder-mode exchanges' artwork-align="left"}
-TODO[where general status req/res]
+
+TODO[align, shorten, move into figure, or remove?]
 
 The following sub sections split the interactions shown in {{exchangesfig_uc2_all}} between the different components into:
 
@@ -840,6 +841,8 @@ The following sub sections split the interactions shown in {{exchangesfig_uc2_al
 5. {{enroll_response}} describes the supply of the Enroll Reponse from the Registrar-Agent to the pledge including the returned status information.
 
 6. {{vstatus}} and {{estatus}} describe the general status handling and addresses corresponding exchanges between the Registrar-Agent and the registrar.
+
+TODO[...]
 
 ## Trigger Pledge Voucher-Request {#tpvr}
 
@@ -1670,6 +1673,8 @@ The CA certificates message has the Content-Type `application/jose+json` and is 
 The CA certificates are provided as base64-encoded "x5bag".
 The pledge SHALL install the received CA certificates as trust anchor after successful verification of the registrar's signature.
 
+### Response
+
 The verification comprises the following steps the pledge MUST perform. Maintaining the order of versification steps as indicated allows to determine, which verification has already been passed:
 
   1. Check content-type of the CA certificates message. If no Content-Type is contained in the HTTP header, the default Content-Type utilized in this document (JSON-in-JWS) is used. If the Content-Type of the response is in an unknown or unsupported format, the pledge SHOULD reply with a 415 Unsupported media type error code.
@@ -1678,9 +1683,6 @@ The verification comprises the following steps the pledge MUST perform. Maintain
   4. Verify signature of the the received wrapped CA certificate object. If the validation of the signature fails, the pledge SHOULD reply with a 406 Not Acceptable. It signals that the object has not been accepted.
   5. If the received CA certificates are not self-signed, i.e., an intermediate CA certificate, verify them against an already installed trust anchor, as described in section 4.1.3 of [RFC7030].
 
-### Response
-
-TODO[empty?]
 
 ## Supply Enroll-Response to Pledge {#enroll_response}
 
@@ -1947,7 +1949,7 @@ This is out of scope for this specification.
 
 ### Response Artifact: status-response
 
-If the pledge receives the pledge-status request with status-type "bootstrap" it SHALL react with a status response message based on the telemetry information described in TODO.
+If the pledge receives the pledge-status request with status-type "bootstrap" it SHALL react with a status response message based on previously collected telemetry information (see {{vstatus}} and {{estatus}}) in a single status-response artifact.
 
 The pledge-status response Content-Type header is `application/jose+json`.
 
@@ -1993,8 +1995,6 @@ The pledge-status response message is signed with IDevID or LDevID, depending on
 * "enroll-error": Pledge enrollment-response processing terminated with error.
   Additional information may be provided in the reason or reason-context.
   The pledge signs the response message using its IDevID(Pledge).
-
-The reason and the reason-context SHOULD contain the telemetry information as described in TODO[exchanges_uc2_3].
 
 As the pledge is assumed to utilize its bootstrapped credentials (LDevID) in communication with other peers, additional status information is provided for the connectivity to other peers, which may be helpful in analyzing potential error cases.
 
@@ -2057,18 +2057,6 @@ If validation of the JWS signature fails, the pledge SHOULD respond with the HTT
 The pledge SHOULD by default only respond to requests from nodes it can authenticate (such as registrar
 agent), once the pledge is enrolled with CA certificates and a matching domain certificate.
 
-# TODO Artifacts
-
-## Voucher-Request Artifact {#voucher-request-prm-yang}
-
-{{I-D.ietf-anima-rfc8366bis}} extends the voucher-request as defined in {{!RFC8995}} to include additional fields necessary for handling bootstrapping in the pledge-responder-mode.
-These additional fields are defined in {{tpvr}} as:
-
-* agent-signed-data to provide a JSON encoded artifact from the involved Registrar-Agent, which allows the registrar to verify the Registrar-Agent's involvement
-* agent-provided-proximity-registrar-cert to provide the registrar certificate visible to the Registrar-Agent, comparable to the registrar-proximity-certificate used in {{!RFC8995}}
-* TODO[where used? LDevID?] agent-signing certificate to optionally provide the Registrar-Agent signing certificate.
-
-Examples for the application of these fields in the context of a PVR are provided in {{pvr}}.
 
 
 # IANA Considerations {#iana-con}
@@ -2720,7 +2708,7 @@ From IETF draft 08 -> IETF draft 09:
 * issue #101: included handling if {{voucher}} voucher telemetry information has not been received by the Registrar-Agent
 * issue #102: relaxed requirements for CA certs provisioning in {{cacerts}}
 * issue #105: included negative example in {{estat}}
-* issue #107: included example for certificate revocation in exchanges_uc2_4 TODO[N/A]
+* issue #107: included example for certificate revocation in {{estatus}}
 * issue	#108: renamed heading to Pledge-Status Request of {{query}}
 * issue #111: included pledge-status response processing for authenticated requests in {{query}}
 * issue #112: added "Example key word in pledge-status response in {{stat_res}}
