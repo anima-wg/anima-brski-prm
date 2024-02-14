@@ -711,20 +711,6 @@ The registrar EE certificate may be configured at the Registrar-Agent or may be 
 In addition, the Registrar-Agent provides "agent-signed-data" containing the pledge product serial number signed with the private key corresponding to the EE certificate of the Registrar-Agent, as described in {{tpvr}}.
 This enables the registrar to verify and log, which Registrar-Agent was in contact with the pledge, when verifying the PVR.
 
-The registrar provides the EE certificate of the Registrar-Agent identified by the SubjectKeyIdentifier (SKID) in the header of the "agent-signed-data" from the PVR in its RVR (see also {{rvr-proc}}).
-
-The MASA in turn verifies the registrar LDevID certificate is included in the PVR (contained in the "prior-signed-voucher-request" field of RVR) in the "agent-provided-proximity-registrar-certificate" leaf and may assert the PVR as "verified" or "logged".
-
-TODO[LDevID as EE cert for agent-proximity]
-In addition, the MASA may issue the assertion "agent-proximity" as follows:
-The MASA verifies the signature of the "agent-signed-data" contained in the "prior-signed-voucher-request", based on the provided EE certificate of the Registrar-Agent in the "agent-sign-cert" leaf of the RVR.
-If both can be verified successfully, the MASA can assert "agent-proximity" in the voucher.
-The assertion of "agent-proximity" is similar to the proximity assertion by the MASA when using BRSKI.
-Note that the different assertions do not provide a metric of strength as the security properties are not comparable.
-
-Depending on the MASA verification policy, it may also respond with a suitable 4xx or 5xx response status codes as described in {{Section 5.6 of !RFC8995}}.
-When successful, the Voucher will then be supplied via the registrar to the Registrar-Agent.
-
 {{exchangesfig_uc2_all}} provides an overview of the exchanges detailed in the following subsections.
 
 ~~~~ aasvg
@@ -1290,6 +1276,19 @@ In addition, the following processing SHALL be performed for PVR contained in RV
 If validation fails, the MASA SHOULD respond with an HTTP 4xx client error status code to the registrar.
 The HTTP error status codes are kept the same as defined in {{Section 5.6 of !RFC8995}} and comprise the codes: 403, 404, 406, and 415.
 
+
+The registrar provides the EE certificate of the Registrar-Agent identified by the SubjectKeyIdentifier (SKID) in the header of the "agent-signed-data" from the PVR in its RVR (see also {{rvr-proc}}).
+
+The MASA in turn verifies the registrar LDevID certificate is included in the PVR (contained in the "prior-signed-voucher-request" field of RVR) in the "agent-provided-proximity-registrar-certificate" leaf and may assert the PVR as "verified" or "logged".
+
+In addition, the MASA may issue the assertion "agent-proximity" as follows:
+The MASA verifies the signature of the "agent-signed-data" contained in the "prior-signed-voucher-request", based on the provided EE certificate of the Registrar-Agent in the "agent-sign-cert" leaf of the RVR.
+If both can be verified successfully, the MASA can assert "agent-proximity" in the voucher.
+The assertion of "agent-proximity" is similar to the proximity assertion by the MASA when using BRSKI.
+Note that the different assertions do not provide a metric of strength as the security properties are not comparable.
+
+Depending on the MASA verification policy, it may also respond with a suitable 4xx or 5xx response status codes as described in {{Section 5.6 of !RFC8995}}.
+When successful, the Voucher will then be supplied via the registrar to the Registrar-Agent.
 
 ### Voucher Issuance by MASA {#exchanges_uc2_2_vc}
 
