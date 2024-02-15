@@ -742,7 +742,7 @@ This enables the registrar to verify and log, which Registrar-Agent was in conta
    |----- PER ----->|                 |              |            |
    |                |                 |              |            |
    ~                ~                 ~              ~            ~
-   (3) Request Voucher from the Registrar
+   (3) Request PVR to Registrar incl. backend interaction
    ~                ~                 ~              ~            ~
    |                |                 |              |            |
    |                |<---- mTLS ----->|              |            |
@@ -760,7 +760,7 @@ This enables the registrar to verify and log, which Registrar-Agent was in conta
    |                |<--- Voucher ----|              |            |
    |                |                 |              |            |
    ~                ~                 ~              ~            ~
-   (4) Supply PER to Registrar
+   (4) Supply PER to Registrar incl. backend interaction
    ~                ~                 ~              ~            ~
    |                |                 |              |            |
    |                |<---- mTLS ----->|              |            |
@@ -820,29 +820,38 @@ This enables the registrar to verify and log, which Registrar-Agent was in conta
    (11) Query Pledge Status
    ~                ~                 ~              ~            ~
    |                |                 |              |            |
-   TODO
+   |<--pStatus Req--|                 |              |            |
+   |--pStatus Resp->|                 |              |            |
    |                |                 |              |            |
    ~                ~                 ~              ~            ~
 ~~~~
 {: #exchangesfig_uc2_all title='Overview pledge-responder-mode exchanges' artwork-align="left"}
 
-TODO[align, shorten, move into figure, or remove?]
-
 The following sub sections split the interactions shown in {{exchangesfig_uc2_all}} between the different components into:
 
-1. {{tpvr}} describes the request object acquisition by the Registrar-Agent from pledge.
+1. {{tpvr}} describes the request object acquisition for the Pledge Voucher-Request by the Registrar-Agent.
 
-2. {{tper}} TODO
+2. {{tper}} describes the request object acquisition for the Pledge Enroll-Request by the Registrar-Agent.
 
-3. {{pvr}} describes the request object processing initiated by the Registrar-Agent to the registrar and also the interaction of the registrar with the MASA and the domain CA including the response object processing by these entities.
+3. {{pvr}} describes the request object processing initiated by the Registrar-Agent to the registrar and also the interaction of the registrar with the MASA using the RVR {{rvr-proc}} including the response object processing by these entities.
 
-4. {{voucher}} describes the supply of the Voucher from the Registrar-Agent to the pledge including the returned status information.
+4. {per}} describes the request object processing initiated by the Registrar-Agent to the registrar and also the interaction of the registrar with the CA using the PER including the response object processing by these entities.
 
-5. {{enroll_response}} describes the supply of the Enroll Reponse from the Registrar-Agent to the pledge including the returned status information.
+5. {{req_cacerts}} describes the object acquisition for the optional CA certificate provisioning to the Pledge initiated by the Registrar-Agent to the CA. 
 
-6. {{vstatus}} and {{estatus}} describe the general status handling and addresses corresponding exchanges between the Registrar-Agent and the registrar.
+6. {{voucher}} describes the supply of the Voucher from the Registrar-Agent to the pledge including the returned status information.
 
-TODO[...]
+7. {{cacerts}} describes the supply of CA certificates to the Pledge by the Registrar-Agent. 
+
+8. {{enroll_response}} describes the supply of the Enroll Reponse (containing the LDevID (Pledge) certificate) from the Registrar-Agent to the pledge including the returned status information.
+
+9. {{vstatus}} describes the status handling for the pledge processing of the voucher and addresses corresponding exchanges between the Registrar-Agent and the registrar as well as between the registrar and the MASA.
+
+10. {{estatus}} describes the status handling for the pledge processing of the enrollment response  and addresses the corresponding exchange between the Registrar-Agent and the registrar.
+
+11. {{query}} describes the general status handling to query information about the bootstrapping state from the pledge initiated by the Registrar-Agent.
+   
+
 
 ## Trigger Pledge Voucher-Request {#tpvr}
 
@@ -1834,7 +1843,7 @@ The registrar SHOULD proceed with collecting and logging status information by r
 The Registrar-Agent MUST provide the pledge's enroll status to the registrar.
 The status indicates the pledge could process the Enroll-Response (certificate) and holds the corresponding private key.
 
-### Request Artifact: vStatus
+### Request Artifact: eStatus
 
 The Registrar-Agent sends the pledge enroll status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/enrollstatus".
 The Content-Type header is kept as `application/jose+json` as depicted in the example in {{estat}}.
