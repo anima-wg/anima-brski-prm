@@ -820,8 +820,8 @@ This enables the registrar to verify and log, which Registrar-Agent was in conta
    (11) Query Pledge Status
    ~                ~                 ~              ~            ~
    |                |                 |              |            |
-   |<--pStatus Req--|                 |              |            |
-   |--pStatus Resp->|                 |              |            |
+   |<--pStatus-Req--|                 |              |            |
+   |--pStatus-Resp->|                 |              |            |
    |                |                 |              |            |
    ~                ~                 ~              ~            ~
 ~~~~
@@ -1790,7 +1790,7 @@ It SHALL provide the status information to the registrar for further processing.
 
 Preconditions in addition to {{pvr}}:
 
-* Registrar-Agent: obtained voucher status and enroll status from pledge.
+* Registrar-Agent: obtained voucher status (vStatus) and enroll status (eStatus) from pledge.
 
 ~~~~ aasvg
 +-----------+        +-----------+   +--------+   +---------+
@@ -1803,12 +1803,12 @@ Preconditions in addition to {{pvr}}:
     |                      |              |            |
     |<------- mTLS ------->|              |            |
     |                      |              |            |
-    |--- Voucher Status -->|              |            |
+    |------ vStatus ------>|              |            |
     |                      |--- req-device audit log-->|
     |                      |<---- device audit log ----|
     |              [verify audit log ]
     |                      |              |            |
-    |--- Enroll Status --->|              |            |
+    |------ eStatus ------>|              |            |
     |                      |              |            |
 ~~~~
 {: #exchangesfig_uc2_4 title='Bootstrapping status handling' artwork-align="left"}
@@ -1871,25 +1871,20 @@ The following assumes that a Registrar-Agent may need to query the status of a p
 This information may be useful to solve errors, when the pledge was not able to connect to the target domain during the bootstrapping.
 The pledge MAY provide a dedicated endpoint to accept status-requests.
 
-Preconditions:
-
-* Registrar-Agent: possesses LDevID (RegAgt), may have a list of product-serial-number(s) of pledges to be queried and a list of corresponding manufacturer trust anchors to be able to verify signatures performed with the IDevID credential.
-* Pledge: may already possess domain credentials and LDevID(Pledge), or may not possess one or both of these.
-
 ~~~~ aasvg
 +--------+                     +-----------+
 | Pledge |                     | Registrar-|
 |        |                     | Agent     |
 +--------+                     +-----------+
     |                                |
-    |<--- pledge-status request -----|
+    |<-------- pStatus-Req ----------|
     |                                |
-    |---- pledge-status response --->|
+    | -------- pStatus-Resp -------->|
     |                                |
 ~~~~
 {: #exchangesfig_uc2_5 title='Pledge-status handling between Registrar-Agent and pledge' artwork-align="left"}
 
-### Request Artifact: status-request
+### Request Artifact: pStatus-Req
 
 The Registrar-Agent requests the pledge-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/qps"
 
@@ -1956,7 +1951,7 @@ This is out of scope for this specification.
 {: #stat_req title='Example of Registrar-Agent request of pledge-status using status-type bootstrap' artwork-align="left"}
 
 
-### Response Artifact: status-response
+### Response Artifact: pStatus-Resp
 
 If the pledge receives the pledge-status request with status-type "bootstrap" it SHALL react with a status response message based on previously collected telemetry information (see {{vstatus}} and {{estatus}}) in a single status-response artifact.
 
