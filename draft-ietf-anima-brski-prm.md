@@ -835,7 +835,7 @@ The following sub sections split the interactions shown in {{exchangesfig_uc2_al
 
 3. {{pvr}} describes the request object processing initiated by the Registrar-Agent to the registrar and also the interaction of the registrar with the MASA using the RVR {{rvr-proc}} including the response object processing by these entities.
 
-4. {per}} describes the request object processing initiated by the Registrar-Agent to the registrar and also the interaction of the registrar with the CA using the PER including the response object processing by these entities.
+4. {{per}} describes the request object processing initiated by the Registrar-Agent to the registrar and also the interaction of the registrar with the CA using the PER including the response object processing by these entities.
 
 5. {{req_cacerts}} describes the object acquisition for the optional CA certificate provisioning to the Pledge initiated by the Registrar-Agent to the CA. 
 
