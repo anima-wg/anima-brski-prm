@@ -2864,8 +2864,7 @@ From IETF draft-ietf-anima-brski-async-enroll-03 -> IETF anima-brski-prm-00:
   the description and references to UC1.
 
 * Addressed feedback for voucher-request enhancements from YANG doctor
-  early review in {{voucher-request-prm-yang}} as well as in the
-  security considerations (formerly named ietf-async-voucher-request).
+  early review, meanwhile moved to {{I-D.ietf-anima-rfc8366bis}} as well as in the security considerations (formerly named ietf-async-voucher-request).
 
 * Renamed ietf-async-voucher-request to IETF-voucher-request-prm to
   to allow better listing of voucher related extensions; aligned with
