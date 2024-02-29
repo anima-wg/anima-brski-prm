@@ -742,7 +742,7 @@ This enables the registrar to verify and log, which Registrar-Agent was in conta
    |----- PER ----->|                 |              |            |
    |                |                 |              |            |
    ~                ~                 ~              ~            ~
-   (3) Request PVR to Registrar incl. backend interaction
+   (3) Supply PVR to Registrar (including backend interaction)
    ~                ~                 ~              ~            ~
    |                |                 |              |            |
    |                |<---- mTLS ----->|              |            |
@@ -760,7 +760,7 @@ This enables the registrar to verify and log, which Registrar-Agent was in conta
    |                |<--- Voucher ----|              |            |
    |                |                 |              |            |
    ~                ~                 ~              ~            ~
-   (4) Supply PER to Registrar incl. backend interaction
+   (4) Supply PER to Registrar (including backend interaction)
    ~                ~                 ~              ~            ~
    |                |                 |              |            |
    |                |<---- mTLS ----->|              |            |
@@ -1142,7 +1142,7 @@ This allows bulk bootstrapping of several pledges using the same connection betw
 
 
 
-## Request Voucher from the Registrar {#pvr}
+## Supply Voucher Request to Registrar (including backend interaction) {#pvr}
 
 Similar to BRSKI "requestvoucher" endpoint in {{Section 5.2 of !RFC8995}}.
 
@@ -1462,7 +1462,7 @@ If the validation succeeds, the registrar performs pledge authorization accordin
 
 
 
-## Supply PER to Registrar {#per}
+## Supply PER to Registrar (including backend interaction) {#per}
 
 After receiving the voucher, the Registrar-Agent sends the PER to the registrar in the same HTTP-over-TLS connection. Which is similar to the PER processing described in {{Section 5.2 of !RFC8995}}.
 In case the PER cannot be send in the same HTTP-over-TLS connection the Registrar-Agent may send the PER in a new HTTP-over-TLS connection. The registrar is able to correlate the PVR and the PER based on the signatures and the contained product-serial-number information.
@@ -1610,7 +1610,7 @@ If all steps stated above have been performed successfully, the pledge SHALL ter
 If an error occurs during the verification and validation of the voucher, this SHALL be reported in the reason field of the pledge voucher status.
 
 
-### Response Artifact: vStatus
+### Response Artifact: Voucher Status (vStatus)
 
 After voucher verification and validation the pledge MUST reply with a status telemetry message as defined in {{Section 5.7 of !RFC8995}}.
 The pledge generates the voucher-status and provides it as signed JSON-in-JWS object in response to the Registrar-Agent.
@@ -1706,7 +1706,7 @@ Upon reception, the pledge SHALL verify the received LDevID certificate.
 The pledge SHALL generate the enroll status and provide it in the response to the Registrar-Agent.
 If the verification of the LDevID certificate succeeds, the status property SHALL be set to "status": true, otherwise to "status": false
 
-### Response Artifact: eStatus
+### Response Artifact: Enroll Status (eStatus)
 
 After enrollment processing the pledge MUST reply with a enrollment status telemetry message as defined in {{Section 5.9.4 of !RFC8995}}.
 The enroll-status is also a signed object in BRSKI-PRM and results in form of JSON-in-JWS here.
@@ -1818,7 +1818,7 @@ This status indicates if the pledge could process the voucher successfully or no
 
 In case the TLS connection to the registrar is already closed, the Registrar-Agent opens a new TLS connection with the registrar as stated in {{pvr}}.
 
-### Request Artifact: vStatus
+### Request Artifact: Voucher Status (vStatus)
 
 The Registrar-Agent sends the pledge voucher status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/voucher_status". The Content-Type header is kept as `application/jose+json` as depicted in the example in {{vstat}}.
 
@@ -1843,7 +1843,7 @@ The registrar SHOULD proceed with collecting and logging status information by r
 The Registrar-Agent MUST provide the pledge's enroll status to the registrar.
 The status indicates the pledge could process the Enroll-Response (certificate) and holds the corresponding private key.
 
-### Request Artifact: eStatus
+### Request Artifact: Enroll Status (eStatus)
 
 The Registrar-Agent sends the pledge enroll status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/enrollstatus".
 The Content-Type header is kept as `application/jose+json` as depicted in the example in {{estat}}.
@@ -1884,7 +1884,7 @@ The pledge MAY provide a dedicated endpoint to accept status-requests.
 ~~~~
 {: #exchangesfig_uc2_5 title='Pledge-status handling between Registrar-Agent and pledge' artwork-align="left"}
 
-### Request Artifact: pStatus-Req
+### Request Artifact: Pledge Status Request (pStatus-Req)
 
 The Registrar-Agent requests the pledge-status via HTTP POST on the defined pledge endpoint: "/.well-known/brski/qps"
 
@@ -1951,7 +1951,7 @@ This is out of scope for this specification.
 {: #stat_req title='Example of Registrar-Agent request of pledge-status using status-type bootstrap' artwork-align="left"}
 
 
-### Response Artifact: pStatus-Resp
+### Response Artifact: Pledge Status Response (pStatus-Resp)
 
 If the pledge receives the pledge-status request with status-type "bootstrap" it SHALL react with a status response message based on previously collected telemetry information (see {{vstatus}} and {{estatus}}) in a single status-response artifact.
 
