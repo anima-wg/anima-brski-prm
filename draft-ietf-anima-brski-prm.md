@@ -860,6 +860,26 @@ This may be done as described in {{discovery_uc2_ppa}} and {{exchangesfig_uc2_al
 
 TLS MAY be optionally used to provide privacy for this exchange between the Registrar-Agent and the pledge, see {{pledgehttps}}.
 
+{{exchangesfig_uc2_1}} shows the Pledge Voucher-Request aquisition and the following subsections describe the corresponding artifacts. 
+
+~~~~ aasvg
++--------+   +-----------+   +-----------+    +--------+  +---------+
+| Pledge |   | Registrar-|   | Domain    |    | Domain |  | MASA    |
+|        |   | Agent     |   | Registrar |    | CA     |  |         |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+   |                |                 |              |   Internet |
+   ~                ~                 ~              ~            ~
+   (1) Trigger Pledge Voucher-Request
+   ~                ~                 ~              ~            ~
+   |                |                 |              |            |
+   |<-- opt. TLS -->|                 |              |            |
+   |<---- tPVR -----|                 |              |            |
+   |----- PVR ----->|                 |              |            |
+   |                |                 |              |            |
+   ~                ~                 ~              ~            ~
+~~~~
+{: #exchangesfig_uc2_1 title='PVR aquisition exchanges' artwork-align="left"}
+
 ### Request Artifact: Pledge Voucher-Request Trigger (tPVR)
 
 Triggering the pledge to create the PVR is done using HTTP POST on the defined pledge endpoint: "/.well-known/brski/tpvr"
@@ -1017,6 +1037,25 @@ The PVR is included by the registrar in its RVR as described in {{pvr}}.
 
 
 ## Trigger Pledge Enroll-Request {#tper}
+{{exchangesfig_uc2_2}} shows the the aquisition of the Pledge Enroll-Request aquisition and the following subsections describe the corresponding artifacts. 
+
+~~~~ aasvg
++--------+   +-----------+   +-----------+    +--------+  +---------+
+| Pledge |   | Registrar-|   | Domain    |    | Domain |  | MASA    |
+|        |   | Agent     |   | Registrar |    | CA     |  |         |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+   |                |                 |              |   Internet |
+  ~                ~                 ~              ~            ~
+   (2) Trigger Pledge Enroll-Request
+   ~                ~                 ~              ~            ~
+   |                |                 |              |            |
+   |<-- opt. TLS -->|                 |              |            |
+   |<---- tPER -----|                 |              |            |
+   |----- PER ----->|                 |              |            |
+   |                |                 |              |            |
+   ~                ~                 ~              ~            ~
+~~~~
+{: #exchangesfig_uc2_2 title='PER aquisition exchanges' artwork-align="left"}
 
 ### Request Artifact: Pledge Enroll-Request Trigger (tPER)
 
@@ -1162,6 +1201,36 @@ This ensures that the pledge has been triggered by an authorized Registrar-Agent
 
 With BRSKI-PRM, the pledge generates PVR and PER as JSON-in-JWS objects and the Registrar-Agent forwards them to the registrar.
 In {{!RFC8995}}, the pledge generates PVR as CMS-signed JSON and PER as PKCS#10 or PKCS#7 according to {{!RFC7030}} and inherited by {{!RFC8995}}.
+
+{{exchangesfig_uc2_3}} shows the exchanges for the Voucher Request processing and the following subsections describe the corresponding artifacts. 
+
+~~~~ aasvg
++--------+   +-----------+   +-----------+    +--------+  +---------+
+| Pledge |   | Registrar-|   | Domain    |    | Domain |  | MASA    |
+|        |   | Agent     |   | Registrar |    | CA     |  |         |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+   |                |                 |              |   Internet |
+   ~                ~                 ~              ~            ~
+   (3) Supply PVR to Registrar (including backend interaction)
+   ~                ~                 ~              ~            ~
+   |                |                 |              |            |
+   |                |<---- mTLS ----->|              |            |
+   |                |         [Registrar-Agent       |            |
+   |                |    authenticated&authorized?]  |            |
+   |                |----- PVR ------>|              |            |
+   |                |         [accept device?]       |            |
+   |                |         [contact vendor]       |            |
+   |                |                 |              |            |
+   |                |                 |<---------- mTLS --------->|
+   |                |                 |------------ RVR --------->|
+   |                |                 |           [extract DomainID]
+   |                |                 |           [update audit log]
+   |                |                 |<--------- Voucher --------|
+   |                |<--- Voucher ----|              |            |
+   |                |                 |              |            |
+   ~                ~                 ~              ~            ~
+~~~~
+{: #exchangesfig_uc2_3 title='Voucher Request processing' artwork-align="left"}
 
 ### Request Artifact: PVR
 
@@ -1468,6 +1537,29 @@ After receiving the voucher, the Registrar-Agent sends the PER to the registrar 
 In case the PER cannot be send in the same HTTP-over-TLS connection the Registrar-Agent may send the PER in a new HTTP-over-TLS connection. The registrar is able to correlate the PVR and the PER based on the signatures and the contained product-serial-number information.
 Note, this also addresses situations in which a nonceless voucher is used and may be pre-provisioned to the pledge.
 
+{{exchangesfig_uc2_4}} depicts exchanges for the PER request handling and the following subsections describe the corresponding artifacts. 
+
+~~~~ aasvg
++--------+   +-----------+   +-----------+    +--------+  +---------+
+| Pledge |   | Registrar-|   | Domain    |    | Domain |  | MASA    |
+|        |   | Agent     |   | Registrar |    | CA     |  |         |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+   |                |                 |              |   Internet |
+   ~                ~                 ~              ~            ~
+   (4) Supply PER to Registrar (including backend interaction)
+   ~                ~                 ~              ~            ~
+   |                |                 |              |            |
+   |                |<---- mTLS ----->|              |            |
+   |                |----- PER ------>|              |            |
+   |                |                 |<--- mTLS --->|            |
+   |                |                 |---- RER ---->|            |
+   |                |                 |<-Enroll Resp-|            |
+   |                |<--Enroll Resp---|              |            |
+   |                |                 |              |            |
+   ~                ~                 ~              ~            ~
+~~~~
+{: #exchangesfig_uc2_4 title='Pledge Enroll-Request processing' artwork-align="left"}
+
 ### Request Artifact: Pledge Enroll-Request (PER)
 
 As specified in {{tper}} deviating from BRSKI the PER is not a raw PKCS#10.
@@ -1515,6 +1607,26 @@ This is done in EST {{RFC7030}} using the "/.well-known/est/cacerts" endpoint, w
 BRSKI-PRM requires a signature wrapped CA certificate object, to avoid that the pledge can be provided with arbitrary CA certificates in an authorized way.
 The registrar signed CA certificate object will allow the pledge to verify the authorization to install the received CA certificate(s).
 As the CA certificate(s) are provided to the pledge after the voucher, the pledge has the required information (the domain certificate) to verify the wrapped CA certificate object.
+
+{{exchangesfig_uc2_5}} shows the request and provisioning of CA certificates in the infrastructure. 
+The following subsections describe the corresponding artifacts. 
+
+~~~~ aasvg
++--------+   +-----------+   +-----------+    +--------+  +---------+
+| Pledge |   | Registrar-|   | Domain    |    | Domain |  | MASA    |
+|        |   | Agent     |   | Registrar |    | CA     |  |         |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+   |                |                 |              |   Internet |
+   ~                ~                 ~              ~            ~
+   (5) Request CA Certificates
+   ~                ~                 ~              ~            ~
+   |                |                 |              |            |
+   |                |-- cACert-Req -->|              |            |
+   |                |<-- cACert-Resp--|              |            |
+   |                |                 |              |            |
+   ~                ~                 ~              ~            ~
+~~~~
+{: #exchangesfig_uc2_5 title='CA certificate retrival' artwork-align="left"}
 
 ### Request Artifact: cACert-Req
 
@@ -1587,7 +1699,26 @@ Preconditions in addition to {{pvr}}:
 The Registrar-Agent MAY optionally use TLS to protect the communication as outlined in {{tpvr}}.
 
 The Registrar-Agent provides the information via distinct pledge endpoints as following.
+{{exchangesfig_uc2_6}} shows the provisioning of the voucher to the pledge. 
+The following subsections describe the corresponding artifacts. 
 
+~~~~ aasvg
++--------+   +-----------+   +-----------+    +--------+  +---------+
+| Pledge |   | Registrar-|   | Domain    |    | Domain |  | MASA    |
+|        |   | Agent     |   | Registrar |    | CA     |  |         |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+   |                |                 |              |   Internet |
+   ~                ~                 ~              ~            ~
+   (6) Supply Voucher to Pledge
+   ~                ~                 ~              ~            ~
+   |                |                 |              |            |
+   |<--opt. TLS --->|                 |              |            |
+   |<--- Voucher ---|                 |              |            |
+   |---- vStatus -->|                 |              |            |
+   |                |                 |              |            |
+   ~                ~                 ~              ~            ~
+~~~~
+{: #exchangesfig_uc2_6 title='Supply voucher to pledge' artwork-align="left"}
 
 ### Request Artifact: Voucher
 
@@ -1670,6 +1801,26 @@ If the pledge did not did not provide voucher status telemetry information after
 
 
 ## Supply CA certificates to Pledge {#cacerts}
+{{exchangesfig_uc2_7}} shows the provisioning of the CA certificates aquired by the pledge-agent to the pledge. 
+The following subsections describe the corresponding artifacts. 
+
+~~~~ aasvg
++--------+   +-----------+   +-----------+    +--------+  +---------+
+| Pledge |   | Registrar-|   | Domain    |    | Domain |  | MASA    |
+|        |   | Agent     |   | Registrar |    | CA     |  |         |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+   |                |                 |              |   Internet |
+   ~                ~                 ~              ~            ~
+   (7) Supply CA certificates to Pledge
+   ~                ~                 ~              ~            ~
+   |                |                 |              |            |
+   |<--opt. TLS --->|                 |              |            |
+   |<--- cACerts ---|                 |              |            |
+   |--- cACerts --->|                 |              |            |
+   |                |                 |              |            |
+   ~                ~                 ~              ~            ~
+~~~~
+{: #exchangesfig_uc2_7 title='Supply CA certificates to pledge' artwork-align="left"}
 
 ### Request Artifact:
 
@@ -1694,6 +1845,25 @@ The verification comprises the following steps the pledge MUST perform. Maintain
 
 
 ## Supply Enroll-Response to Pledge {#enroll_response}
+{{exchangesfig_uc2_8}} shows the supply of the Enroll-Response to the pledge.
+The following subsections describe the corresponding artifacts. 
+
+~~~~ aasvg
++--------+   +-----------+   +-----------+    +--------+  +---------+
+| Pledge |   | Registrar-|   | Domain    |    | Domain |  | MASA    |
+|        |   | Agent     |   | Registrar |    | CA     |  |         |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+   |                |                 |              |   Internet |
+   ~                ~                 ~              ~            ~
+   (8) Supply Enroll-Response to Pledge
+   ~                ~                 ~              ~            ~
+   |                |                 |              |            |
+   |<--Enroll Resp--|                 |              |            |
+   |--- eStatus --->|                 |              |            |
+   |                |                 |              |            |
+   ~                ~                 ~              ~            ~
+~~~~
+{: #exchangesfig_uc2_8 title='Supply Enroll-Response to pledge' artwork-align="left"}
 
 ### Request Artifact: Enroll-Response
 
@@ -1793,25 +1963,24 @@ Preconditions in addition to {{pvr}}:
 * Registrar-Agent: obtained voucher status (vStatus) and enroll status (eStatus) from pledge.
 
 ~~~~ aasvg
-+-----------+        +-----------+   +--------+   +---------+
-| Registrar-|        | Domain    |   | Domain |   | MASA    |
-| Agent     |        | Registrar |   | CA     |   |         |
-+-----------+        +-----------+   +--------+   +---------+
-    |                      |              |   Internet |
-[voucher + enroll ]        |              |            |
-[status info available]    |              |            |
-    |                      |              |            |
-    |<------- mTLS ------->|              |            |
-    |                      |              |            |
-    |------ vStatus ------>|              |            |
-    |                      |--- req-device audit log-->|
-    |                      |<---- device audit log ----|
-    |              [verify audit log ]
-    |                      |              |            |
-    |------ eStatus ------>|              |            |
-    |                      |              |            |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+| Pledge |   | Registrar-|   | Domain    |    | Domain |  | MASA    |
+|        |   | Agent     |   | Registrar |    | CA     |  |         |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+   |                |                 |              |   Internet |
+   ~                ~                 ~              ~            ~
+   (9) Voucher Status Telemetry
+   ~                ~                 ~              ~            ~
+   |                |                 |              |            |
+   |                |<---- mTLS ----->|              |            |
+   |                |---- vStatus --->|              |            |
+   |                |                 |--- req device audit log-->|
+   |                |                 |<---- device audit log ----|
+   |                |           [verify audit log]
+   |                |                 |              |            |
+   ~                ~                 ~              ~            ~
 ~~~~
-{: #exchangesfig_uc2_4 title='Bootstrapping status handling' artwork-align="left"}
+{: #exchangesfig_uc2_9 title='Voucher Status tekemetry handling' artwork-align="left"}~~~~ aasvg
 
 The Registrar-Agent MUST provide the collected pledge voucher status to the registrar.
 This status indicates if the pledge could process the voucher successfully or not.
@@ -1843,6 +2012,22 @@ The registrar SHOULD proceed with collecting and logging status information by r
 The Registrar-Agent MUST provide the pledge's enroll status to the registrar.
 The status indicates the pledge could process the Enroll-Response (certificate) and holds the corresponding private key.
 
+~~~~ aasvg
++--------+   +-----------+   +-----------+    +--------+  +---------+
+| Pledge |   | Registrar-|   | Domain    |    | Domain |  | MASA    |
+|        |   | Agent     |   | Registrar |    | CA     |  |         |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+   |                |                 |              |   Internet |
+   ~                ~                 ~              ~            ~
+   (10) Enroll Status Telemetry
+   ~                ~                 ~              ~            ~
+   |                |                 |              |            |
+   |                |---- eStatus --->|              |            |
+   |                |                 |              |            |
+   ~                ~                 ~              ~            ~
+~~~~
+{: #exchangesfig_uc2_10 title='Enroll-Status provisioning to domain registrar' artwork-align="left"}
+
 ### Request Artifact: Enroll Status (eStatus)
 
 The Registrar-Agent sends the pledge enroll status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/enrollstatus".
@@ -1872,17 +2057,21 @@ This information may be useful to solve errors, when the pledge was not able to 
 The pledge MAY provide a dedicated endpoint to accept status-requests.
 
 ~~~~ aasvg
-+--------+                     +-----------+
-| Pledge |                     | Registrar-|
-|        |                     | Agent     |
-+--------+                     +-----------+
-    |                                |
-    |<-------- pStatus-Req ----------|
-    |                                |
-    | -------- pStatus-Resp -------->|
-    |                                |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+| Pledge |   | Registrar-|   | Domain    |    | Domain |  | MASA    |
+|        |   | Agent     |   | Registrar |    | CA     |  |         |
++--------+   +-----------+   +-----------+    +--------+  +---------+
+   |                |                 |              |   Internet |
+   ~                ~                 ~              ~            ~
+   (11) Query Pledge Status
+   ~                ~                 ~              ~            ~
+   |                |                 |              |            |
+   |<--pStatus-Req--|                 |              |            |
+   |--pStatus-Resp->|                 |              |            |
+   |                |                 |              |            |
+   ~                ~                 ~              ~            ~
 ~~~~
-{: #exchangesfig_uc2_5 title='Pledge-status handling between Registrar-Agent and pledge' artwork-align="left"}
+{: #exchangesfig_uc2_11 title='Pledge-status handling between Registrar-Agent and pledge' artwork-align="left"}
 
 ### Request Artifact: Pledge Status Request (pStatus-Req)
 
