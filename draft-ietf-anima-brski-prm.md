@@ -916,7 +916,7 @@ The fields contained in the `pledgevoucherrequesttrigger` are:
 
 * `agent-provided-proximity-registrar-cert`: X.509 v3 certificate structure of the domain registrar EE certificate (base64-encoded value); may be configured at the Registrar-Agent or may be fetched by the Registrar-Agent based on a prior TLS connection with this domain registrar
 
-* `agent-signed-data`: base64-encoded JWS structure containing the SubjectKeyIdentifier of the EE (RegAgt) certificate and signing Data including the serial number of the pledge
+* `agent-signed-data`: base64-encoded JWS structure containing the SubjectKeyIdentifier of the EE (RegAgt) certificate and signing Data including the creation date and serial number of the pledge. Note that {{I-D.ietf-anima-rfc8366bis}} defines an opaque binary element for agent-signed data, for which the structure is defined in BRSKI-PRM.
 
 ~~~~
 {
