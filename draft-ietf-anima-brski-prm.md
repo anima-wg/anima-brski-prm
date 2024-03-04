@@ -1262,19 +1262,19 @@ In {{!RFC8995}}, the pledge generates PVR as CMS-signed JSON and PER as PKCS#10 
 ~~~~
 {: #exchangesfig_uc2_3 title="Voucher issuing exchange" artwork-align="center"}
 
+The HTTP request Content-Type header field for JSON-in-JWS PVR is: `application/voucher-jws+json` (see {{tpvr}} for the content definition), as defined in {{I-D.ietf-anima-jws-voucher}}.
+
+The Registrar-Agent sets the Accept field in the request-header indicating the acceptable Content-Type for the Voucher.
+
+The HTTP response Content-Type header field is set to `application/voucher-jws+json` as defined in {{I-D.ietf-anima-jws-voucher}} if no content negotiation is used.
+
 
 ### Request Artifact: Pledge Voucher-Request (PVR)
 
 For BRSKI-PRM, the Registrar-Agent sends the PVR by HTTP POST to the same registrar endpoint as introduced by BRSKI: "/.well-
 known/brski/requestvoucher", but with a Content-Type header field for JSON-in-JWS"
 
-The Content-Type header field for JSON-in-JWS PVR is: `application/voucher-jws+json` (see {{tpvr}} for the content definition), as defined in {{I-D.ietf-anima-jws-voucher}}.
 
-The Registrar-Agent sets the Accept field in the request-header indicating the acceptable Content-Type for the Voucher.
-
-The voucher-response Content-Type header field is set to `application/voucher-jws+json` as defined in {{I-D.ietf-anima-jws-voucher}}.
-
-TODO: conflict with content negotiation (Accept). So you mean "by default"?
 
 ### Supply RVR to MASA (backend interaction) {#rvr-proc}
 
@@ -1885,7 +1885,7 @@ The verification comprises the following steps the pledge MUST perform. Maintain
 4. Verify signature of the received wrapped CA certificate object using the domain certificate contained in the voucher. If the validation of the signature fails, the pledge SHOULD reply with a 403 Forbidden. It signals that the object could not be verified and has not been accepted.
 5. If the received CA certificates are not self-signed, i.e., an intermediate CA certificate, verify them against an already installed trust anchor, as described in section 4.1.3 of {{RFC7030}}.
 
-In case of success, the pledge SHOULD reply with 200 OK.
+In case of success, the pledge SHOULD reply with HTTP 200 OK without a response body.
 
 
 
@@ -2051,10 +2051,8 @@ The registrar SHALL verify the signature of the pledge voucher status and valida
 
 ### Response (no artifact)
 
-TODO: Clarify if diagnostic payload (and what representation format) may be included "to signal success/failure to the service technician. 200 OK should have payload, otherwise 204 No Content...
-
-According to {{Section 5.7 of !RFC8995}}, the registrar SHOULD respond with an HTTP 200 OK in the success case or fail with HTTP 4xx/5xx status codes.
-The Registrar-Agent may use the response to signal success/failure to the service technician operating the Registrar-Agent.
+According to {{Section 5.7 of !RFC8995}}, the registrar SHOULD respond with an HTTP 200 OK without a response body in the success case or fail with HTTP 4xx/5xx status codes.
+The Registrar-Agent may use the response status code to signal success/failure to the service technician operating the Registrar-Agent.
 Within the server logs the server SHOULD capture this telemetry information.
 
 The registrar SHOULD proceed with collecting and logging status information by requesting the MASA audit-log from the MASA service as described in {{Section 5.8 of !RFC8995}}.
