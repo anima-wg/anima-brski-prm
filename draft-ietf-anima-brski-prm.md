@@ -822,7 +822,7 @@ Therefore, authenticated self-contained artifacts (e.g., JWS-signed JSON structu
  ~                  ~                 ~                 ~            ~
  |                  |                 |                 |            |
  |<----opt. TLS---->|                 |                 |            |
- |<-----qStatus-----|                 |                 |            |
+ |<-----tStatus-----|                 |                 |            |
  |------pStatus---->|                 |                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
@@ -887,17 +887,11 @@ The request body MUST contain the JSON-based Pledge Voucher-Request Trigger (tPV
 The request header MUST set the Content-Type field to `application/json`.
 
 Upon receiving a valid tPVR, the pledge MUST reply with the PVR artifact in the body of a 200 OK response.
-The response header MUST have the Content-Type field set to `application/voucher-jws+json` as defined in {{!I-D.ietf-anima-jws-voucher}}.
-
-TODO: Confirm that the media type goes into the HTTP response Content-Type header, not some JSON member inside the artifact (was unclear).
+The Content-Type field header of the response MUST be set to `application/voucher-jws+json` as defined in {{!I-D.ietf-anima-jws-voucher}}.
 
 If the pledge is unable to create the PVR, it SHOULD respond with an HTTP error code. The following client error responses MAY be used:
 
 * 400 Bad Request: if the pledge detected an error in the format of the request, e.g. missing field, wrong data types, etc. or if the request is not valid JSON even though the PVR media type was set to `application/json`.
-
-* 403 Forbidden: if the pledge detected that one or more security parameters from the trigger message to create the PVR were not valid.
-
-TODO: There is even a note that the pledge cannot validate any security parameters at this point (in particular the originally given LDevID (Reg) cert). When is 403 really a choice?
 
 * 406 Not Acceptable: if the Accept request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/jose+json`.
 
@@ -905,9 +899,18 @@ TODO: There is even a note that the pledge cannot validate any security paramete
 
 ### Request Artifact: Pledge Voucher-Request Trigger (tPVR)
 
-The Pledge Voucher-Request Trigger (tPVR) artifact is an unsigned JSON structure providing the following trigger parameters:
+The Pledge Voucher-Request Trigger (tPVR) artifact is an unsigned JSON structure providing the trigger parameters.
+The following CDDL {{!RFC8610}} explains the Pledge Voucher-Request Trigger structure. 
 
-TODO: Why not CDDL here? It's a format defined here just like status-query.
+~~~~
+<CODE BEGINS>
+pledge-voucher-request-trigger = {
+    "agent-provided-proximity-registrar-cert": bytes,
+    "agent-signed-data": bytes
+  }
+<CODE ENDS>
+~~~~
+{: #tpvr_CDDL-def title='CDDL for Pledge Voucher-Request Trigger' artwork-align="left"}
 
 * `agent-provided-proximity-registrar-cert`: X.509 v3 certificate structure of the domain registrar EE certificate (base64-encoded value); may be configured at the Registrar-Agent or may be fetched by the Registrar-Agent based on a prior TLS connection with this domain registrar
 
@@ -916,7 +919,7 @@ TODO: Why not CDDL here? It's a format defined here just like status-query.
 ~~~~
 # The agent-signed-data in General JWS Serialization syntax
 {
-  "payload": BASE64URL(UTF8(Data)),
+  "payload": BASE64URL(UTF8(asData)),
   "signatures": [
     {
       "protected": BASE64URL(UTF8(JWS Protected Header)),
@@ -929,8 +932,20 @@ TODO: Why not CDDL here? It's a format defined here just like status-query.
 
 TODO: ietf-voucher-request:agent-signed-data is only defined as binary in YANG! No definition of the fields! /* "ietf-voucher-request:agent-signed-data" element (defined in {{I-D.ietf-anima-rfc8366bis}}): */
 
-The Data MUST be UTF-8 encoded to become the octet-based JWS Payload defined in {{!RFC7515}}.
+The asData MUST be UTF-8 encoded to become the octet-based JWS Payload defined in {{!RFC7515}}.
 The JWS Payload is further base64url-encoded to become the string value of the `payload` member as described in {{Section 3.2 of RFC7515}}.
+
+The following CDDL {{!RFC8610}} explains the asData structure. 
+
+~~~~
+<CODE BEGINS>
+asData = {
+    "created": tdate,
+    "serial-number": string
+  }
+<CODE ENDS>
+~~~~
+{: #asData_CDDL-def title='CDDL for asData' artwork-align="left"}
 
 The Data MUST be a JSON object with two members (see {{asd_payload}} for an example):
 
@@ -939,13 +954,12 @@ The Data MUST be a JSON object with two members (see {{asd_payload}} for an exam
 * `serial-number`: product-serial-number in the X520SerialNumber field of the IDevID certificate of the pledge as string as defined in {{Section 2.3.1 of !RFC8995}}
 
 ~~~~
-TODO: Even unclearer if there is this wrapper, as this element is not defined in YANG!
-"ietf-voucher-request-prm:agent-signed-data": {
+{
   "created-on": "2021-04-16T00:00:01.000Z",
   "serial-number": "callee4711"
 }
 ~~~~
-{: #asd_payload title="Data example inside agent-signed-data" artwork-align="left"}
+{: #asd_payload title="Data example for asData" artwork-align="left"}
 
 The JWS Protected Header of the `agent-signed-data` JWS structure MUST contain the following parameters (see {{asd_header}} for an example):
 
@@ -984,9 +998,7 @@ The Pledge Voucher-Request (PVR) artifact is a JWS Voucher Request as defined in
 Its unsigned data SHALL be constructed similar to the Voucher-Request artifact defined in {{!RFC8995}}.
 It will contain additional data provided by the Registrar-Agent as specified in the following.
 
-The payload of the PVR MUST contain the following parameters as part of the ietf-voucher-request-prm:voucher as defined in {{!RFC8995}}:
-
-TODO: ietf-voucher-request-prm:voucher does not exist.
+The payload of the PVR MUST contain the following parameters as part of the ietf-voucher-request:voucher as defined in {{!RFC8995}}:
 
 * `created-on`: SHALL contain the current date and time in yang:date-and-time format.
   If the pledge does not have synchronized time, it SHALL use the created-on time from the agent-signed-data, received in the trigger to create a PVR.
@@ -1010,7 +1022,7 @@ The PVR is signed using the pledge's IDevID credential contained as x5c paramete
 ~~~~
 # The PVR in General JWS Serialization syntax
 {
-  "payload": BASE64URL(UTF8(ietf-voucher-request-prm:voucher)),
+  "payload": BASE64URL(UTF8(ietf-voucher-request:voucher)),
   "signatures": [
     {
       "protected": BASE64URL(UTF8(JWS Protected Header)),
@@ -1019,15 +1031,17 @@ The PVR is signed using the pledge's IDevID credential contained as x5c paramete
   ]
 }
 
-# Example: Decoded Payload "ietf-voucher-request-prm:voucher"
+# Example: Decoded Payload "ietf-voucher-request:voucher"
   representation in JSON syntax
-"ietf-voucher-request-prm:voucher": {
-   "created-on": "2021-04-16T00:00:02.000Z",
-   "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
-   "serial-number": "callee4711",
-   "assertion": "agent-proximity",
-   "agent-provided-proximity-registrar-cert": "base64encodedvalue==",
-   "agent-signed-data": "base64encodedvalue=="
+{
+  "ietf-voucher-request:voucher": {
+     "created-on": "2021-04-16T00:00:02.000Z",
+     "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
+     "serial-number": "callee4711",
+     "assertion": "agent-proximity",
+     "agent-provided-proximity-registrar-cert": "base64encodedvalue==",
+     "agent-signed-data": "base64encodedvalue=="
+  }
 }
 
 # Example: Decoded "JWS Protected Header" representation
@@ -1302,7 +1316,7 @@ The object is signed using the registrar LDevID credentials, which corresponds t
 ~~~~
 # The RVR in General JWS Serialization syntax
 {
-  "payload": BASE64URL(UTF8(ietf-voucher-request-prm:voucher)),
+  "payload": BASE64URL(UTF8(ietf-voucher-request:voucher)),
   "signatures": [
     {
       "protected": BASE64URL(UTF8(JWS Protected Header)),
@@ -1311,9 +1325,9 @@ The object is signed using the registrar LDevID credentials, which corresponds t
   ]
 }
 
-# Example: Decoded payload "ietf-voucher-request-prm:voucher"
+# Example: Decoded payload "ietf-voucher-request:voucher"
   representation in JSON syntax
-"ietf-voucher-request-prm:voucher": {
+"ietf-voucher-request:voucher": {
    "created-on": "2022-01-04T02:37:39.235Z",
    "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
    "serial-number": "callee4711",
@@ -1921,7 +1935,7 @@ It is similar as defined in {{Section 5.9.4 of !RFC8995}} with the optional fiel
 
 ~~~~
 <CODE BEGINS>
-enrollstatus-post = {
+enrollstatus-trigger = {
     "version": uint,
     "status": bool,
     "reason": text,
@@ -2108,7 +2122,7 @@ The pledge MAY provide the dedicated endpoint for the Query Pledge Status operat
  ~                  ~                 ~                 ~            ~
  |                  |                 |                 |            |
  |<----opt. TLS---->|                 |                 |            |
- |<-----qStatus-----|                 |                 |            |
+ |<-----tStatus-----|                 |                 |            |
  |------pStatus---->|                 |                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
@@ -2116,13 +2130,13 @@ The pledge MAY provide the dedicated endpoint for the Query Pledge Status operat
 {: #exchangesfig_uc2_11 title="Pledge Status exchange" artwork-align="center"}
 
 The Registrar-Agent queries the Pledge Status via HTTP POST request on the well-known pledge endpoint `/.well-known/brski/qps`.
-The request body MUST contain the JWS-signed Status Query (qStatus) artifact.
+The request body MUST contain the JWS-signed Status Trigger (tStatus) artifact.
 The request header MUST set the Content-Type field `application/jose+json`.
 
 If the pledge provides the Query Pledge Status endpoint, it MUST reply to this request with the Pledge Status (pStatus) artifact in the body of a 200 OK response.
 The response header MUST have the Content-Type field set to `application/jose+json`.
 
-### Request Artifact: Status Query (qStatus)
+### Request Artifact: Status Trigger (tStatus)
 
 The Status Query artifact is a JWS structure signing information on the requested status-type, the time and date the request is created, and the product serial-number of the pledge contacted as shown in {{stat_req_def}}.
 The following Concise Data Definition Language (CDDL) {{RFC8610}} defines the structure of the unsigned Status Query data (i.e., JWS payload):
