@@ -947,7 +947,7 @@ asData = {
 ~~~~
 {: #asData_CDDL-def title='CDDL for asData' artwork-align="left"}
 
-The Data MUST be a JSON object with two members (see {{asd_payload}} for an example):
+The asData MUST be a JSON object with two members (see {{asd_payload}} for an example):
 
 * `created-on`: creation date and time in yang:date-and-time format
 
@@ -998,7 +998,7 @@ The Pledge Voucher-Request (PVR) artifact is a JWS Voucher Request as defined in
 Its unsigned data SHALL be constructed similar to the Voucher-Request artifact defined in {{!RFC8995}}.
 It will contain additional data provided by the Registrar-Agent as specified in the following.
 
-The payload of the PVR MUST contain the following parameters as part of the ietf-voucher-request:voucher as defined in {{!RFC8995}}:
+The payload of the PVR MUST contain the following parameters as part of the ietf-voucher-request:voucher as defined in {{I-D.ietf-anima-rfc8366bis}} and thus makes optional leaves in the YANG definition mandatory:
 
 * `created-on`: SHALL contain the current date and time in yang:date-and-time format.
   If the pledge does not have synchronized time, it SHALL use the created-on time from the agent-signed-data, received in the trigger to create a PVR.
@@ -1087,7 +1087,7 @@ Optionally, TLS MAY be used to provide privacy for this exchange between the Reg
 
 The Registrar-Agent triggers the pledge to create the PER via HTTP POST on the well-known pledge endpoint `/.well-known/brski/tper`.
 As the initial enrollment aims to request a generic certificate, no certificate attributes are provided to the pledge.
-Hence, by default, the request body is empty, no artifact is provided.
+To avoid an empty request body an artifact is provided containing the description of the requested operation.
 
 Upon receiving a valid tPER, the pledge MUST reply with the PER artifact in the body of a 200 OK response.
 The response header MUST have the Content-Type field set to `application/jose+json`.
@@ -1095,10 +1095,6 @@ The response header MUST have the Content-Type field set to `application/jose+js
 If the pledge is unable to create the PER, it SHOULD respond with an HTTP error code. The following 4xx client error codes MAY be used:
 
 * 400 Bad Request: if the pledge detected an error in the format of the request.
-
-* 403 Forbidden: if the pledge detected that one or more security parameters (if provided) from the trigger message to create the PER are not valid.
-
-TODO: Can this make sense? (empty body, note that it cannot validate)
 
 * 406 Not Acceptable: if the Accept request header field indicates a type that is unknown or unsupported. For example, a type other than `application/jose+json`.
 
@@ -1109,6 +1105,27 @@ TODO: Can this make sense? (empty body, note that it cannot validate)
 This document specifies the trigger for a generic certificate with no CSR attributes provided to the pledge.
 If specific attributes in the certificate are required, they have to be inserted by the issuing RA/CA.
 
+The Pledge Enroll-Request Trigger (tPVR) artifact is an unsigned JSON structure providing the trigger parameters (tPER-data).
+The following CDDL {{!RFC8610}} explains the tPER-data parameter. 
+
+~~~~
+<CODE BEGINS>
+tPER-data = {
+    "enroll-type": text
+  }
+<CODE ENDS>
+~~~~
+{: #tpvr_CDDL-def title='CDDL for tPER-data' artwork-align="left"}
+
+The enroll-type field provided  information about the enroll type "enroll-generic-cert" or "re-enroll-generic-cert". The "enroll-generic-cert" case is shown 
+The tPER-data MUST be a JSON object with one member (see {{tPER_payload}} for an example):
+
+~~~~
+{
+  "enroll-type" : "enroll-generic-cert"
+}
+~~~~
+{: #tPER_payload title="Data example for asData" artwork-align="left"}
 TODO: Unclear if JSON with { "enroll-type" : "enroll-generic-cert" } could be used alternatively to an empty body (i.e., is the assumed default enroll-type). Must update/remove response codes if there is no alternative to empty body.
 
 The Pledge Enroll-Request Trigger (tPER) artifact MAY be used to provide additional data, like CSR attributes or information about the enroll type.
@@ -2143,10 +2160,9 @@ The following Concise Data Definition Language (CDDL) {{RFC8610}} defines the st
 
 ~~~~
 <CODE BEGINS>
-  status-query = {
+  statustrigger = {
       "version": uint,
-      "created-on": tdate ttime,
-TODO: Not sure if "ttime" exists. tdate is already a string with CBOR tag 0, i.e., a full datatime string
+      "created-on": tdate,
       "serial-number": text,
       "status-type": text
   }
