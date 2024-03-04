@@ -789,7 +789,6 @@ Therefore, authenticated self-contained artifacts (e.g., JWS-signed JSON structu
  |                  |                 |                 |            |
  |<----opt. TLS---->|                 |                 |            |
  |<-----cACerts-----|                 |                 |            |
- |------cACerts---->|                 |                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
 (8) Supply Enroll-Response to Pledge
@@ -1557,11 +1556,7 @@ If the registrar is unable to validate the PVR, it SHOULD respond with a HTTP 4x
 
 The following 4xx client error codes SHOULD be used:
 
-* 403 Forbidden: if the registrar detected that one or more security related parameters are not valid.
-
-* 404 Not Found: if the pledge provided information could not be used with automated allowance, as described in {{Section 5.3 of RFC8995}}.
-
-TODO: From EST or BRSKI? Otherwise should be 422 Unprocessable Content, as the resource endpoint must exist and cannot be 404.
+* 403 Forbidden: if the registrar detected that one or more security related parameters are not valid or if the pledge-provided information could not be used with automated allowance.
 
 * 406 Not Acceptable: if the Content-Type indicated by the Accept header is unknown or unsupported.
 
@@ -1862,8 +1857,6 @@ The following subsections describe the corresponding artifacts.
  |                  |                 |                 |            |
  |<----opt. TLS---->|                 |                 |            |
  |<-----cACerts-----|                 |                 |            |
-TODO: certs sent back in response?
- |------cACerts---->|                 |                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
 ~~~~
@@ -1889,7 +1882,7 @@ The verification comprises the following steps the pledge MUST perform. Maintain
 1. Check content-type of the CA certificates message. If no Content-Type is contained in the HTTP header, the default Content-Type utilized in this document (JSON-in-JWS) is used. If the Content-Type of the response is in an unknown or unsupported format, the pledge SHOULD reply with a 415 Unsupported media type error code.
 2. Check the encoding of the payload. If the pledge detects errors in the encoding of the payload, it SHOULD reply with 400 Bad Request error code.
 3. Verify that the wrapped CA certificate object is signed using the registrar certificate against the pinned-domain certificate. This MAY be done by comparing the hash that is indicating the certificate used to sign the message is that of the pinned-domain certificate. If the validation against the pinned domain-certificate fails, the client SHOULD reply with a 401 Unauthorized error code. It signals that the authentication has failed and therefore the object was not accepted.
-4. Verify signature of the received wrapped CA certificate object using the domain certificate contained in the voucher. If the validation of the signature fails, the pledge SHOULD reply with a 406 Not Acceptable. It signals that the object could not be verified and has not been accepted.
+4. Verify signature of the received wrapped CA certificate object using the domain certificate contained in the voucher. If the validation of the signature fails, the pledge SHOULD reply with a 403 Forbidden. It signals that the object could not be verified and has not been accepted.
 5. If the received CA certificates are not self-signed, i.e., an intermediate CA certificate, verify them against an already installed trust anchor, as described in section 4.1.3 of {{RFC7030}}.
 
 In case of success, the pledge SHOULD reply with 200 OK.
