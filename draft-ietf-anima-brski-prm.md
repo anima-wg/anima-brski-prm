@@ -1141,27 +1141,14 @@ The Pledge Enroll-Request (PER) artifact is a JWS-signed PKCS#10 Certificate Sig
 The CSR already assures POP of the private key corresponding to the contained public key.
 In addition, based on the PER signature using the IDevID, POI is provided.
 
-TODO: What is the next paragraph saying? That PRM could also just use a plain PKCS#10? That it could use some other enrollment protocol? That CMP is also okay?
-
-Depending on the capability of the pledge, it constructs the Pledge Enroll-Request (PER) as plain PKCS#10.
-Note, the focus in this use case is placed on PKCS#10, as PKCS#10 can be transmitted in different enrollment protocols in the infrastructure like EST, CMP, CMS, and SCEP.
-If the pledge has already implemented an enrollment protocol, it may leverage that functionality for the creation of the CSR.
+The pledge constructs the Pledge Enroll-Request (PER) artifact as a JWS structure containing the PKCS#10 request wrapped in ietf-ztp-types YANG structrue as JWS payload.
 Note, {{!I-D.ietf-netconf-sztp-csr}} also allows for inclusion of certification requests in different formats used by CMP or CMC.
 
-The pledge MUST construct the PER as PKCS#10.
-In BRSKI-PRM it MUST sign it additionally with its IDevID credentials to provide proof-of-identity bound to the PKCS#10 as described below.
+The pledge MUST construct the PER as PKCS#10 and MUST sign it additionally with its IDevID credentials to provide proof-of-identity bound to the PKCS#10 as described below.
 
-TODO: Why is the following information given here?
-
-A successful enrollment will result in a generic LDevID certificate for the pledge in the new domain, which can be used to request further (application specific) LDevID certificates if necessary for operation.
-The Registrar-Agent SHALL use the endpoints specified in this document.
-
-TODO: What endpointS? My guess would be use ./tper with a request body to do specific cert enrollment, yes?
-
-TODO: Why is the confusing information even repeated? It does not clarify anything.
-
-{{I-D.ietf-netconf-sztp-csr}} considers PKCS#10 but also CMP and CMC as certification request format.
-Note that the wrapping of the PER signature is only necessary for plain PKCS#10 as other request formats like CMP and CMS support the signature wrapping as part of their own certificate request format.
+A successful enrollment will result in a generic LDevID certificate for the pledge in the new domain.
+This generic LDevID certificate can be used to request further (application specific) LDevID certificates if necessary for operation.
+The Registrar-Agent SHALL use the enrollment endpoint `requestenroll` specified in this document to provide the Pledge Enroll-Request artifact to the Registrar.
 
 The JWS Protected Header of the PER MUST contain the following parameters as defined in {{RFC7515}}:
 
@@ -1172,10 +1159,7 @@ The JWS Protected Header of the PER MUST contain the following parameters as def
 
 The body of the Pledge Enroll-Request SHOULD contain a P10 parameter (for PKCS#10) as defined for ietf-ztp-types:p10-csr in {{I-D.ietf-netconf-sztp-csr}}:
 
-* `p10`: base64-encoded PKCS#10 of the pledge.
-
-TODO: Confirm lowercase p (not "P10")
-TODO: We contain the full CSR that is already in the payload again in the header?!
+* `p10-csr`: base64-encoded PKCS#10 of the pledge.
 
 The JOSE object is signed using the pledge's IDevID credential, which corresponds to the certificate signaled in the JOSE header.
 
@@ -1196,8 +1180,10 @@ Note that in this case the current LDevID credential is used instead of the IDev
 
 # Example: Decoded Payload "ietf-ztp-types" Representation
   in JSON Syntax
-"ietf-ztp-types": {
-  "p10-csr": "base64encodedvalue=="
+{
+  "ietf-ztp-types": {
+     "p10-csr": "base64encodedvalue=="
+   }
 }
 
 # Example: Decoded "JWS Protected Header" Representation
@@ -1348,17 +1334,19 @@ The object is signed using the registrar LDevID credentials, which corresponds t
 
 # Example: Decoded payload "ietf-voucher-request:voucher"
   representation in JSON syntax
-"ietf-voucher-request:voucher": {
-   "created-on": "2022-01-04T02:37:39.235Z",
-   "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
-   "serial-number": "callee4711",
-   "assertion": "agent-proximity",
-   "prior-signed-voucher-request": "base64encodedvalue==",
-   "agent-sign-cert": [
-     "base64encodedvalue==",
-     "base64encodedvalue==",
-     "..."
-   ]
+{
+  "ietf-voucher-request:voucher": {
+     "created-on": "2022-01-04T02:37:39.235Z",
+     "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
+     "serial-number": "callee4711",
+     "assertion": "agent-proximity",
+     "prior-signed-voucher-request": "base64encodedvalue==",
+     "agent-sign-cert": [
+       "base64encodedvalue==",
+       "base64encodedvalue==",
+       "..."
+     ]
+  }
 }
 
 # Example: Decoded "JWS Protected Header" representation
@@ -1442,12 +1430,14 @@ The voucher is according to {{I-D.ietf-anima-rfc8366bis}} but uses the new asser
 
 # Example: Decoded payload "ietf-voucher:voucher" representation
   in JSON syntax
-"ietf-voucher:voucher": {
-  "assertion": "agent-proximity",
-  "serial-number": "callee4711",
-  "nonce": "base64encodedvalue==",
-  "created-on": "2022-01-04T00:00:02.000Z",
-  "pinned-domain-cert": "base64encodedvalue=="
+{
+  "ietf-voucher:voucher": {
+    "assertion": "agent-proximity",
+    "serial-number": "callee4711",
+    "nonce": "base64encodedvalue==",
+    "created-on": "2022-01-04T00:00:02.000Z",
+    "pinned-domain-cert": "base64encodedvalue=="
+  }
 }
 
 # Example: Decoded "JWS Protected Header" representation
@@ -1511,12 +1501,14 @@ This ensures that the same registrar EE certificate can be used to verify the si
 
 # Example: Decoded payload "ietf-voucher:voucher" representation in
   JSON syntax
-"ietf-voucher:voucher": {
-   "assertion": "agent-proximity",
-   "serial-number": "callee4711",
-   "nonce": "base64encodedvalue==",
-   "created-on": "2022-01-04T00:00:02.000Z",
-   "pinned-domain-cert": "base64encodedvalue=="
+{
+  "ietf-voucher:voucher": {
+     "assertion": "agent-proximity",
+     "serial-number": "callee4711",
+     "nonce": "base64encodedvalue==",
+     "created-on": "2022-01-04T00:00:02.000Z",
+     "pinned-domain-cert": "base64encodedvalue=="
+  }
 }
 
 # Example: Decoded "JWS Protected Header (MASA)" representation
@@ -1897,10 +1889,10 @@ The verification comprises the following steps the pledge MUST perform. Maintain
 1. Check content-type of the CA certificates message. If no Content-Type is contained in the HTTP header, the default Content-Type utilized in this document (JSON-in-JWS) is used. If the Content-Type of the response is in an unknown or unsupported format, the pledge SHOULD reply with a 415 Unsupported media type error code.
 2. Check the encoding of the payload. If the pledge detects errors in the encoding of the payload, it SHOULD reply with 400 Bad Request error code.
 3. Verify that the wrapped CA certificate object is signed using the registrar certificate against the pinned-domain certificate. This MAY be done by comparing the hash that is indicating the certificate used to sign the message is that of the pinned-domain certificate. If the validation against the pinned domain-certificate fails, the client SHOULD reply with a 401 Unauthorized error code. It signals that the authentication has failed and therefore the object was not accepted.
-4. Verify signature of the the received wrapped CA certificate object [TODO: against what?]. If the validation of the signature fails, the pledge SHOULD reply with a TODO [406 Not Acceptable --> 409 Conflict? 422 Unprocessable Content?; Acceptable code is for Accept header]. It signals that the object has not been TODO accepted.
-5. If the received CA certificates are not self-signed, i.e., an intermediate CA certificate, verify them against an already installed trust anchor, as described in section 4.1.3 of [RFC7030].
+4. Verify signature of the received wrapped CA certificate object using the domain certificate contained in the voucher. If the validation of the signature fails, the pledge SHOULD reply with a 406 Not Acceptable. It signals that the object could not be verified and has not been accepted.
+5. If the received CA certificates are not self-signed, i.e., an intermediate CA certificate, verify them against an already installed trust anchor, as described in section 4.1.3 of {{RFC7030}}.
 
-TODO: Not clear what the success response code and what the response payload should be. Figure illustrates sending back the same certs, which does not make sense.
+In case of success, the pledge SHOULD reply with 200 OK.
 
 
 
@@ -1930,8 +1922,6 @@ The following subsections describe the corresponding artifacts.
 ### Request Artifact: Enroll-Response (Enroll-Resp)
 
 The Registrar-Agent SHALL send the Enroll-Response to the pledge by HTTP(S) POST to the endpoint: "/.well-known/brski/ser".
-
-TODO: Confirm "opt. TLS", which was missing.
 
 The Content-Type header when using EST {{RFC7030}} as enrollment protocol between the Registrar-Agent and the infrastructure is `application/pkcs7-mime`.
 Note: It only contains the LDevID certificate for the pledge, not the certificate chain.
