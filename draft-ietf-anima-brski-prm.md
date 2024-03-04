@@ -903,13 +903,13 @@ The following CDDL {{!RFC8610}} explains the Pledge Voucher-Request Trigger stru
 
 ~~~~
 <CODE BEGINS>
-pledgevoucherrequesttrigger = {
+  pledgevoucherrequesttrigger = {
     "agent-provided-proximity-registrar-cert": bytes,
     "agent-signed-data": bytes
   }
 <CODE ENDS>
 ~~~~
-{: #tpvr_CDDL-def title='CDDL for Pledge Voucher-Request Trigger' artwork-align="left"}
+{: #tpvr_CDDL_def title='CDDL for Pledge Voucher-Request Trigger' artwork-align="left"}
 
 The fields contained in the `pledgevoucherrequesttrigger` are:
 
@@ -919,7 +919,7 @@ The fields contained in the `pledgevoucherrequesttrigger` are:
 
 ~~~~
 {
-  "payload": BASE64URL(UTF8(asData)),
+  "payload": BASE64URL(UTF8(prmasd)),
   "signatures": [
     {
       "protected": BASE64URL(UTF8(JWS Protected Header)),
@@ -928,22 +928,22 @@ The fields contained in the `pledgevoucherrequesttrigger` are:
   ]
 }
 ~~~~
-{: #asd title="JWS structure for the agent-sigend-data member in General JWS Serialization syntax" artwork-align="left"}
+{: #asd title="JWS structure for the agent-signed-data member in General JWS Serialization syntax" artwork-align="left"}
 
-The asdfields MUST be UTF-8 encoded to become the octet-based JWS Payload defined in {{!RFC7515}}.
+The BRSKI-PRM Agent Signed Data structure MUST be encoded in JSON as defined in {{!RFC8259}} following the CDDL definition {{prmasd_CDDL_def}}.
 The JWS Payload is further base64url-encoded to become the string value of the `payload` member as described in {{Section 3.2 of RFC7515}}.
 
 The following CDDL {{!RFC8610}} explains the BRSKI-PRM Agent Signed Data structure. 
 
 ~~~~
 <CODE BEGINS>
-prmasd = {
+  prmasd = {
     "created": tdate,
     "serial-number": text
   }
 <CODE ENDS>
 ~~~~
-{: #prmasd_CDDL-def title='CDDL for BRSKI-PRM Agent Signed Data' artwork-align="left"}
+{: #prmasd_CDDL_def title='CDDL for BRSKI-PRM Agent Signed Data' artwork-align="left"}
 
 The fields contained in the `prmasd` are:
 
@@ -952,6 +952,7 @@ The fields contained in the `prmasd` are:
 * `serial-number`: product-serial-number in the X520SerialNumber field of the IDevID certificate of the pledge as string as defined in {{Section 2.3.1 of !RFC8995}}
 
 {{prmasd_payload}} below shows an example for unsigned BRSKI-PRM Agent Signed Data in JSON syntax. 
+
 ~~~~
 {
   "created-on": "2021-04-16T00:00:01.000Z",
@@ -1114,7 +1115,7 @@ pledgeenrollrequesttrigger = {
   }
 <CODE ENDS>
 ~~~~
-{: #tpvr_CDDL_def title='CDDL for Pledge Enroll-Request Trigger' artwork-align="left"}
+{: #tper_CDDL_def title='CDDL for Pledge Enroll-Request Trigger' artwork-align="left"}
 
 The enroll-type field is an enum, identifying what is being enrolled. 
 Currently only "enroll-generic-cert" for the LDevID certificate is defined. 
@@ -1129,7 +1130,7 @@ Currently only "enroll-generic-cert" for the LDevID certificate is defined.
 {: #tPER_payload title="Data example for pledgeenrollrequesttrigger" artwork-align="left"}
 
 
-The Pledge Enroll-Request Trigger (tPER) artifact MUST be encoded in JSON as defined in {{!RFC8259}} following the CDDL definition {{tpvr_CDDL_def}}.
+The Pledge Enroll-Request Trigger (tPER) artifact MUST be encoded in JSON as defined in {{!RFC8259}} following the CDDL definition {{tper_CDDL_def}}.
 
 The Pledge Enroll-Request Trigger (tPER) artifact MAY be used to provide additional data, like CSR attributes.
 How to provide and use such additional data is out of scope for this specification.
@@ -1685,7 +1686,8 @@ The additional processing is to sign the CA certificate(s) information using the
 This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certificates are provided as base64-encoded "x5bag" (see definition in {{RFC9360}}) in the JWS payload.
 
 ~~~~
-# The CA certificates data with registrar signature in General JWS Serialization syntax
+# The CA certificates data with registrar signature in 
+# General JWS Serialization syntax
 {
   "payload": BASE64URL(certs),
   "signatures": [
@@ -2937,6 +2939,7 @@ Proof of Concept Code available
 From IETF draft 11 -> IETF draft 12:
 
 * Updated acknowledgements to reflect early reviews
+* Addressed Shepherd review part 2 (Pull Request #132)
 
 
 From IETF draft 10 -> IETF draft 11:
