@@ -904,7 +904,7 @@ The following CDDL {{!RFC8610}} explains the Pledge Voucher-Request Trigger stru
 
 ~~~~
 <CODE BEGINS>
-pledge-voucher-request-trigger = {
+pledgevoucherrequesttrigger = {
     "agent-provided-proximity-registrar-cert": bytes,
     "agent-signed-data": bytes
   }
@@ -912,12 +912,13 @@ pledge-voucher-request-trigger = {
 ~~~~
 {: #tpvr_CDDL-def title='CDDL for Pledge Voucher-Request Trigger' artwork-align="left"}
 
+The fields contained in the `pledgevoucherrequesttrigger` are:
+
 * `agent-provided-proximity-registrar-cert`: X.509 v3 certificate structure of the domain registrar EE certificate (base64-encoded value); may be configured at the Registrar-Agent or may be fetched by the Registrar-Agent based on a prior TLS connection with this domain registrar
 
 * `agent-signed-data`: base64-encoded JWS structure containing the SubjectKeyIdentifier of the EE (RegAgt) certificate and signing Data including the serial number of the pledge
 
 ~~~~
-# The agent-signed-data in General JWS Serialization syntax
 {
   "payload": BASE64URL(UTF8(asData)),
   "signatures": [
@@ -930,36 +931,35 @@ pledge-voucher-request-trigger = {
 ~~~~
 {: #asd title="JWS structure for the agent-sigend-data member in General JWS Serialization syntax" artwork-align="left"}
 
-TODO: ietf-voucher-request:agent-signed-data is only defined as binary in YANG! No definition of the fields! /* "ietf-voucher-request:agent-signed-data" element (defined in {{I-D.ietf-anima-rfc8366bis}}): */
-
-The asData MUST be UTF-8 encoded to become the octet-based JWS Payload defined in {{!RFC7515}}.
+The asdfields MUST be UTF-8 encoded to become the octet-based JWS Payload defined in {{!RFC7515}}.
 The JWS Payload is further base64url-encoded to become the string value of the `payload` member as described in {{Section 3.2 of RFC7515}}.
 
-The following CDDL {{!RFC8610}} explains the asData structure. 
+The following CDDL {{!RFC8610}} explains the BRSKI-PRM Agent Signed Data structure. 
 
 ~~~~
 <CODE BEGINS>
-asData = {
+prmasd = {
     "created": tdate,
-    "serial-number": string
+    "serial-number": text
   }
 <CODE ENDS>
 ~~~~
-{: #asData_CDDL-def title='CDDL for asData' artwork-align="left"}
+{: #prmasd_CDDL-def title='CDDL for BRSKI-PRM Agent Signed Data' artwork-align="left"}
 
-The asData MUST be a JSON object with two members (see {{asd_payload}} for an example):
+The fields contained in the `prmasd` are:
 
-* `created-on`: creation date and time in yang:date-and-time format
+* `created-on`: creation date and time as standard date/time string as defined in {{!RFC3339}} 
 
 * `serial-number`: product-serial-number in the X520SerialNumber field of the IDevID certificate of the pledge as string as defined in {{Section 2.3.1 of !RFC8995}}
 
+{{prmasd_payload}} below shows an example for unsigned BRSKI-PRM Agent Signed Data in JSON syntax. 
 ~~~~
 {
   "created-on": "2021-04-16T00:00:01.000Z",
   "serial-number": "callee4711"
 }
 ~~~~
-{: #asd_payload title="Data example for asData" artwork-align="left"}
+{: #prmasd_payload title="Data example for prmasd" artwork-align="left"}
 
 The JWS Protected Header of the `agent-signed-data` JWS structure MUST contain the following parameters (see {{asd_header}} for an example):
 
@@ -1106,29 +1106,33 @@ This document specifies the trigger for a generic certificate with no CSR attrib
 If specific attributes in the certificate are required, they have to be inserted by the issuing RA/CA.
 
 The Pledge Enroll-Request Trigger (tPVR) artifact is an unsigned JSON structure providing the trigger parameters (tPER-data).
-The following CDDL {{!RFC8610}} explains the tPER-data parameter. 
+The following CDDL {{!RFC8610}} explains the Pledge Enroll-Request Trigger structure. 
 
 ~~~~
 <CODE BEGINS>
-tPER-data = {
-    "enroll-type": text
+pledgeenrollrequesttrigger = {
+    "enroll-type": "enroll-generic-cert"
   }
 <CODE ENDS>
 ~~~~
-{: #tpvr_CDDL-def title='CDDL for tPER-data' artwork-align="left"}
+{: #tpvr_CDDL_def title='CDDL for Pledge Enroll-Request Trigger' artwork-align="left"}
 
-The enroll-type field provided  information about the enroll type "enroll-generic-cert" or "re-enroll-generic-cert". The "enroll-generic-cert" case is shown 
-The tPER-data MUST be a JSON object with one member (see {{tPER_payload}} for an example):
+The enroll-type field is an enum, identifying what is being enrolled. 
+Currently only "enroll-generic-cert" for the LDevID certificate is defined. 
+
+{{tPER_payload}} below shows an example for unsigned Pledge Enroll-Request Trigger in JSON syntax. 
 
 ~~~~
 {
   "enroll-type" : "enroll-generic-cert"
 }
 ~~~~
-{: #tPER_payload title="Data example for asData" artwork-align="left"}
-TODO: Unclear if JSON with { "enroll-type" : "enroll-generic-cert" } could be used alternatively to an empty body (i.e., is the assumed default enroll-type). Must update/remove response codes if there is no alternative to empty body.
+{: #tPER_payload title="Data example for pledgeenrollrequesttrigger" artwork-align="left"}
 
-The Pledge Enroll-Request Trigger (tPER) artifact MAY be used to provide additional data, like CSR attributes or information about the enroll type.
+
+The Pledge Enroll-Request Trigger (tPER) artifact MUST be encoded in JSON as defined in {{!RFC8259}} following the CDDL definition {{tpvr_CDDL_def}}.
+
+The Pledge Enroll-Request Trigger (tPER) artifact MAY be used to provide additional data, like CSR attributes.
 How to provide and use such additional data is out of scope for this specification.
 
 ### Response Artifact: Pledge Enroll-Request (PER)
@@ -2168,7 +2172,7 @@ The following Concise Data Definition Language (CDDL) {{RFC8610}} defines the st
   }
 <CODE ENDS>
 ~~~~
-{: #stat_req_def title="CDDL for unsigned Status Query data (status-query)" artwork-align="left"}
+{: #stat_req_def title="CDDL for unsigned Status Trigger data (statustrigger)" artwork-align="left"}
 
 The `version` field is included to permit significant changes to the pledge status artifacts in the future.
 The format and semantics in this document follow the status telemetry definitions of {{!RFC8995}}.
