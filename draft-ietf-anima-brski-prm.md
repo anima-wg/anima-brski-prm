@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-12
+docname: draft-ietf-anima-brski-prm-13
 area: Operations and Management
 wg: ANIMA WG
 date: 2024
@@ -981,16 +981,6 @@ Hence, the tPVR is an unsigned artifact and the pledge only accepts the registra
 The pledge will also be unable to verify the agent-signed-data itself as it does not possess the EE (RegAgt) certificate and the domain trust has not been established at this point of the communication.
 Verification SHOULD be done, after the voucher has been received.
 
-The trigger for the pledge to create a PVR is depicted in the following figure:
-
-~~~~
-{
-  "agent-provided-proximity-registrar-cert": "base64encodedvalue==",
-  "agent-signed-data": "base64encodedvalue=="
-}
-~~~~
-{: #pavrt title='Representation of trigger to create PVR' artwork-align="left"}
-
 
 ### Response Artifact: Pledge Voucher-Request (PVR)
 
@@ -1472,7 +1462,7 @@ In {{!RFC8995}}, the Registrar proved possession of the it's credential when the
 While the pledge could not, at the time, validate the certificate truly belonged the registrar, it did validate that the certificate it was provided was able to authenticate the TLS connection.
 
 In the BRSKI-PRM mode, with the Registrar-Agent mediating all communication, the Pledge has not as yet been able to witness that the intended Registrar really does possess the relevant private key.
-This second signature provides for the same level of assurance to the pledge, and that it matches the public key that the pledge received in the trigger for the PVR (see {{pavrt}}).
+This second signature provides for the same level of assurance to the pledge, and that it matches the public key (of the Registrar) that the pledge received in the trigger for the PVR (see {{tpvr_CDDL_def}}).
 
 The registrar MUST use the same registrar EE credentials used for authentication in the TLS handshake to authenticate towards the Registrar-Agent.
 This has some operational implications when the registrar may be part of a scalable framework as described in {{?I-D.richardson-anima-registrar-considerations, Section 1.3.1}}.
@@ -2935,11 +2925,14 @@ IDevID certificates are intended to be widely useable and EKU does not support t
 
 Proof of Concept Code available
 
+From IETF draft 12 -> IETF draft 13:
+
+* deleted figure in Section "Request Artifact: Pledge Voucher-Request Trigger (tPVR)" for JSON representation of tPVR, as it has been replaced by CDDL
 
 From IETF draft 11 -> IETF draft 12:
 
 * Updated acknowledgements to reflect early reviews
-* Addressed Shepherd review part 2 (Pull Request #132)
+* Addressed Shepherd review part 2 (Pull Request #132); containing: terminology alignment, structural improvements of the document; deletion of leftovers from previous draft versions; change of definitions to CDDL, when no YANG is available
 
 
 From IETF draft 10 -> IETF draft 11:
