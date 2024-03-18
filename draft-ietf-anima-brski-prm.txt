@@ -124,10 +124,10 @@ Internet-Draft                  BRSKI-PRM                     March 2024
      7.3.  Supply PVR to Registrar (including backend
             interaction) . . . . . . . . . . . . . . . . . . . . . .  38
        7.3.1.  Request Artifact: Pledge Voucher-Request (PVR)  . . .  39
-       7.3.2.  Supply RVR to MASA (backend interaction)  . . . . . .  40
-       7.3.3.  Issue Voucher by MASA (backend interaction) . . . . .  44
-       7.3.4.  Supply Voucher to Registrar (backend interaction) . .  45
-       7.3.5.  Response Artifact: Voucher  . . . . . . . . . . . . .  48
+       7.3.2.  Supply RVR to MASA (backend interaction)  . . . . . .  41
+       7.3.3.  Issue Voucher by MASA (backend interaction) . . . . .  45
+       7.3.4.  Supply Voucher to Registrar (backend interaction) . .  46
+       7.3.5.  Response Artifact: Registrar countersigned Voucher  .  47
      7.4.  Supply PER to Registrar (including backend
             interaction) . . . . . . . . . . . . . . . . . . . . . .  49
        7.4.1.  Request Artifact: Pledge Enroll-Request (PER) . . . .  50
@@ -2173,7 +2173,7 @@ Internet-Draft                  BRSKI-PRM                     March 2024
    For BRSKI-PRM, the Registrar-Agent sends the PVR by HTTP POST to the
    same registrar endpoint as introduced by BRSKI: "/.well- known/brski/
    requestvoucher", but with a Content-Type header field for JSON-in-
-   JWS"
+   JWS".
 
 
 
@@ -2182,6 +2182,62 @@ Internet-Draft                  BRSKI-PRM                     March 2024
 
 
 Fries, et al.           Expires 19 September 2024              [Page 39]
+
+Internet-Draft                  BRSKI-PRM                     March 2024
+
+
+   After receiving the PVR from Registrar-Agent, the registrar SHALL
+   perform the verification as defined in Section 5.3 of [RFC8995].  In
+   addition, the registrar SHALL verify the following parameters from
+   the PVR:
+
+   *  agent-provided-proximity-registrar-cert: MUST contain registrar's
+      own registrar LDevID certificate to ensure the registrar in
+      proximity of the Registrar-Agent is the desired registrar for this
+      PVR.
+
+   *  agent-signed-data: The registrar MUST verify that the Registrar-
+      Agent provided data has been signed with the private key
+      corresponding to the EE (RegAgt) certificate indicated in the
+      "kid" JOSE header parameter.  The registrar MUST verify that the
+      LDevID(ReAgt) certificate, corresponding to the signature, is
+      still valid.  If the certificate is already expired, the registrar
+      SHALL reject the request.  Validity of used signing certificates
+      at the time of signing the agent-signed-data is necessary to avoid
+      that a rogue Registrar-Agent generates agent-signed-data objects
+      to onboard arbitrary pledges at a later point in time, see also
+      Section 10.3.  The registrar MUST fetch the EE (RegAgt)
+      certificate, based on the provided SubjectKeyIdentifier (SKID)
+      contained in the "kid" header parameter of the agent-signed-data,
+      and perform this verification.  This requires, that the registrar
+      has access to the EE (RegAgt) certificate data (including
+      intermediate CA certificates if existent) based on the SKID.
+      Note, the registrar may have stored the EE (RegAgt) certificate if
+      used during TLS establishment between Registrar-Agent and
+      registrar or it may be provided via a repository.
+
+   If the registrar is unable to validate the PVR, it SHOULD respond
+   with a HTTP 4xx/5xx error code to the Registrar-Agent.
+
+   The following 4xx client error codes SHOULD be used:
+
+   *  403 Forbidden: if the registrar detected that one or more security
+      related parameters are not valid or if the pledge-provided
+      information could not be used with automated allowance.
+
+   *  406 Not Acceptable: if the Content-Type indicated by the Accept
+      header is unknown or unsupported.
+
+   If the validation succeeds, the registrar performs pledge
+   authorization according to Section 5.3 of [RFC8995] followed by
+   obtaining a voucher from the pledge's MASA according to Section 5.4
+   of [RFC8995] with the modifications described below in Section 7.3.2.
+
+
+
+
+
+Fries, et al.           Expires 19 September 2024              [Page 40]
 
 Internet-Draft                  BRSKI-PRM                     March 2024
 
@@ -2237,7 +2293,7 @@ Internet-Draft                  BRSKI-PRM                     March 2024
 
 
 
-Fries, et al.           Expires 19 September 2024              [Page 40]
+Fries, et al.           Expires 19 September 2024              [Page 41]
 
 Internet-Draft                  BRSKI-PRM                     March 2024
 
@@ -2293,7 +2349,7 @@ Internet-Draft                  BRSKI-PRM                     March 2024
 
 
 
-Fries, et al.           Expires 19 September 2024              [Page 41]
+Fries, et al.           Expires 19 September 2024              [Page 42]
 
 Internet-Draft                  BRSKI-PRM                     March 2024
 
@@ -2349,7 +2405,7 @@ Internet-Draft                  BRSKI-PRM                     March 2024
 
 
 
-Fries, et al.           Expires 19 September 2024              [Page 42]
+Fries, et al.           Expires 19 September 2024              [Page 43]
 
 Internet-Draft                  BRSKI-PRM                     March 2024
 
@@ -2405,7 +2461,7 @@ Internet-Draft                  BRSKI-PRM                     March 2024
 
 
 
-Fries, et al.           Expires 19 September 2024              [Page 43]
+Fries, et al.           Expires 19 September 2024              [Page 44]
 
 Internet-Draft                  BRSKI-PRM                     March 2024
 
@@ -2461,7 +2517,7 @@ Internet-Draft                  BRSKI-PRM                     March 2024
 
 
 
-Fries, et al.           Expires 19 September 2024              [Page 44]
+Fries, et al.           Expires 19 September 2024              [Page 45]
 
 Internet-Draft                  BRSKI-PRM                     March 2024
 
@@ -2508,28 +2564,32 @@ Internet-Draft                  BRSKI-PRM                     March 2024
 
 7.3.4.  Supply Voucher to Registrar (backend interaction)
 
-   After receiving the voucher the registrar SHOULD evaluate it for
-   transparency and logging purposes as outlined in Section 5.6 of
-   [RFC8995].  The registrar MUST add an additional signature to the
-   MASA provided voucher using its registrar EE credentials.
+   After receiving the voucher from the MASA, the registrar SHOULD
+   evaluate it for transparency and logging purposes as outlined in
+   Section 5.6 of [RFC8995].  The registrar then prepares the artifact
+   to be provided via the registrar-agent to the pledge as described in
+   the following section Section 7.3.5.
 
 
 
 
-
-Fries, et al.           Expires 19 September 2024              [Page 45]
+Fries, et al.           Expires 19 September 2024              [Page 46]
 
 Internet-Draft                  BRSKI-PRM                     March 2024
 
 
-   The signature is created by signing the original "JWS Payload"
-   produced by MASA and the registrar added "JWS Protected Header" using
-   the registrar EE credentials (see [RFC7515], Section 5.2 point 8.
-   The x5c component of the "JWS Protected Header" MUST contain the
-   registrar EE certificate as well as potential subordinate CA
-   certificates up to (but not including) the pinned domain certificate.
-   The pinned domain certificate is already contained in the voucher
-   payload ("pinned-domain-cert").
+7.3.5.  Response Artifact: Registrar countersigned Voucher
+
+   The registrar MUST add an additional signature to the MASA provided
+   voucher using its registrar EE credentials.  The signature is created
+   by signing the original "JWS Payload" produced by MASA and the
+   registrar added "JWS Protected Header" using the registrar EE
+   credentials (see [RFC7515], Section 5.2 point 8.  The x5c component
+   of the "JWS Protected Header" MUST contain the registrar EE
+   certificate as well as potential subordinate CA certificates up to
+   (but not including) the pinned domain certificate.  The pinned domain
+   certificate is already contained in the voucher payload ("pinned-
+   domain-cert").
 
    (For many installations, with a single registrar credential, the
    registrar credential is what is pinned)
@@ -2564,20 +2624,22 @@ Internet-Draft                  BRSKI-PRM                     March 2024
    Figure 19 below provides an example of the voucher with two
    signatures.
 
+
+
+
+
+
+Fries, et al.           Expires 19 September 2024              [Page 47]
+
+Internet-Draft                  BRSKI-PRM                     March 2024
+
+
    # The MASA issued voucher with additional registrar signature in
      General JWS Serialization syntax
    {
      "payload": BASE64URL(ietf-voucher:voucher),
      "signatures": [
        {
-
-
-
-Fries, et al.           Expires 19 September 2024              [Page 46]
-
-Internet-Draft                  BRSKI-PRM                     March 2024
-
-
          "protected": BASE64URL(UTF8(JWS Protected Header (MASA))),
          "signature": BASE64URL(JWS Signature)
        },
@@ -2621,68 +2683,6 @@ Internet-Draft                  BRSKI-PRM                     March 2024
      ]
    }
 
-      Figure 19: Representation of MASA issued voucher with additional
-                            registrar signature
-
-
-
-
-
-
-Fries, et al.           Expires 19 September 2024              [Page 47]
-
-Internet-Draft                  BRSKI-PRM                     March 2024
-
-
-   Depending on the security policy of the operator, this signature can
-   also be interpreted by the pledge as explicit authorization of the
-   registrar to install the contained trust anchor.  The registrar sends
-   the voucher to the Registrar-Agent.
-
-7.3.5.  Response Artifact: Voucher
-
-   After receiving the PVR from Registrar-Agent, the registrar SHALL
-   perform the verification as defined in Section 5.3 of [RFC8995].  In
-   addition, the registrar SHALL verify the following parameters from
-   the PVR:
-
-   *  agent-provided-proximity-registrar-cert: MUST contain registrar's
-      own registrar LDevID certificate to ensure the registrar in
-      proximity of the Registrar-Agent is the desired registrar for this
-      PVR.
-
-   *  agent-signed-data: The registrar MUST verify that the Registrar-
-      Agent provided data has been signed with the private key
-      corresponding to the EE (RegAgt) certificate indicated in the
-      "kid" JOSE header parameter.  The registrar MUST verify that the
-      LDevID(ReAgt) certificate, corresponding to the signature, is
-      still valid.  If the certificate is already expired, the registrar
-      SHALL reject the request.  Validity of used signing certificates
-      at the time of signing the agent-signed-data is necessary to avoid
-      that a rogue Registrar-Agent generates agent-signed-data objects
-      to onboard arbitrary pledges at a later point in time, see also
-      Section 10.3.  The registrar MUST fetch the EE (RegAgt)
-      certificate, based on the provided SubjectKeyIdentifier (SKID)
-      contained in the "kid" header parameter of the agent-signed-data,
-      and perform this verification.  This requires, that the registrar
-      has access to the EE (RegAgt) certificate data (including
-      intermediate CA certificates if existent) based on the SKID.
-      Note, the registrar may have stored the EE (RegAgt) certificate if
-      used during TLS establishment between Registrar-Agent and
-      registrar or it may be provided via a repository.
-
-   If the registrar is unable to validate the PVR, it SHOULD respond
-   with a HTTP 4xx/5xx error code to the Registrar-Agent.
-
-   The following 4xx client error codes SHOULD be used:
-
-   *  403 Forbidden: if the registrar detected that one or more security
-      related parameters are not valid or if the pledge-provided
-      information could not be used with automated allowance.
-
-   *  406 Not Acceptable: if the Content-Type indicated by the Accept
-      header is unknown or unsupported.
-
 
 
 Fries, et al.           Expires 19 September 2024              [Page 48]
@@ -2690,10 +2690,13 @@ Fries, et al.           Expires 19 September 2024              [Page 48]
 Internet-Draft                  BRSKI-PRM                     March 2024
 
 
-   If the validation succeeds, the registrar performs pledge
-   authorization according to Section 5.3 of [RFC8995] followed by
-   obtaining a voucher from the pledge's MASA according to Section 5.4
-   of [RFC8995] with the modifications described below in Section 7.3.2.
+      Figure 19: Representation of MASA issued voucher with additional
+                            registrar signature
+
+   Depending on the security policy of the operator, this signature can
+   also be interpreted as explicit authorization of the registrar to
+   install the contained trust anchor.  The registrar returns the
+   voucher to the Registrar-Agent.
 
 7.4.  Supply PER to Registrar (including backend interaction)
 
@@ -2733,9 +2736,6 @@ Internet-Draft                  BRSKI-PRM                     March 2024
    In case the TLS connection to the registrar is already closed, the
    Registrar-Agent opens a new TLS connection with the registrar as
    stated in Section 7.3.
-
-
-
 
 
 
@@ -5101,6 +5101,9 @@ Internet-Draft                  BRSKI-PRM                     March 2024
    *  Updated CDDL source code integration to allow for automatic
       verification
 
+   *  Reordered description in section Section 7.3 to better match the
+      order of communication and artifact processing.
+
    From IETF draft 11 -> IETF draft 12:
 
    *  Updated acknowledgements to reflect early reviews
@@ -5142,9 +5145,6 @@ Internet-Draft                  BRSKI-PRM                     March 2024
 
    From IETF draft 09 -> IETF draft 10:
 
-   *  issue #79, clarified discovery in the context of BRSKI-PRM and
-      included information about future discovery enhancements in a
-      separate draft in Section 6.2.1.
 
 
 
@@ -5153,6 +5153,10 @@ Fries, et al.           Expires 19 September 2024              [Page 92]
 
 Internet-Draft                  BRSKI-PRM                     March 2024
 
+
+   *  issue #79, clarified discovery in the context of BRSKI-PRM and
+      included information about future discovery enhancements in a
+      separate draft in Section 6.2.1.
 
    *  issue #93, included information about conflict resolution in mDNS
       and GRASP in Section 6.2.2
@@ -5198,10 +5202,6 @@ Internet-Draft                  BRSKI-PRM                     March 2024
    *  issue #81, enhanced introduction with motivation for
       agent_signed_data
 
-   *  issue #82, included optional TLS protection of the communication
-      link between Registrar-Agent and pledge in the introduction
-      Section 4, and Section 7.1
-
 
 
 
@@ -5209,6 +5209,10 @@ Fries, et al.           Expires 19 September 2024              [Page 93]
 
 Internet-Draft                  BRSKI-PRM                     March 2024
 
+
+   *  issue #82, included optional TLS protection of the communication
+      link between Registrar-Agent and pledge in the introduction
+      Section 4, and Section 7.1
 
    *  issue #83, enhanced Section 7.2 and Section 7.3 with note to re-
       enrollment
@@ -5254,10 +5258,6 @@ Internet-Draft                  BRSKI-PRM                     March 2024
 
    *  issue #105: included negative example in Figure 28
 
-   *  issue #107: included example for certificate revocation in
-      Section 7.10
-
-
 
 
 
@@ -5265,6 +5265,9 @@ Fries, et al.           Expires 19 September 2024              [Page 94]
 
 Internet-Draft                  BRSKI-PRM                     March 2024
 
+
+   *  issue #107: included example for certificate revocation in
+      Section 7.10
 
    *  issue #108: renamed heading to Pledge-Status Request of
       Section 7.11
@@ -5311,9 +5314,6 @@ Internet-Draft                  BRSKI-PRM                     March 2024
 
    *  Update of list of reviewers
 
-   *  Issue #67, shortened the pledge endpoints to prepare for
-      constraint deployments
-
 
 
 
@@ -5321,6 +5321,9 @@ Fries, et al.           Expires 19 September 2024              [Page 95]
 
 Internet-Draft                  BRSKI-PRM                     March 2024
 
+
+   *  Issue #67, shortened the pledge endpoints to prepare for
+      constraint deployments
 
    *  Included table for new endpoints on the registrar in the overview
       of the Registrar-Agent
@@ -5367,9 +5370,6 @@ Internet-Draft                  BRSKI-PRM                     March 2024
    *  Reworked terminology of "enrollment object", "certification
       object", "enrollment request object", etc., issue #27
 
-   *  Reworked all message representations to align with encoding
-
-
 
 
 
@@ -5377,6 +5377,8 @@ Fries, et al.           Expires 19 September 2024              [Page 96]
 
 Internet-Draft                  BRSKI-PRM                     March 2024
 
+
+   *  Reworked all message representations to align with encoding
 
    *  Added explanation of MASA requiring domain CA cert in section
       5.5.1 and section 5.5.2, issue #36
@@ -5424,8 +5426,6 @@ Internet-Draft                  BRSKI-PRM                     March 2024
       #18
 
    *  Simplified structure in section Section 3.1, issue #19
-
-
 
 
 

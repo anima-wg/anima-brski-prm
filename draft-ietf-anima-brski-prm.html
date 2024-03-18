@@ -1446,7 +1446,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
                     <p id="section-toc.1-1.7.2.3.2.4.1"><a href="#section-7.3.4" class="auto internal xref">7.3.4</a>.  <a href="#name-supply-voucher-to-registrar" class="internal xref">Supply Voucher to Registrar (backend interaction)</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3.2.5">
-                    <p id="section-toc.1-1.7.2.3.2.5.1"><a href="#section-7.3.5" class="auto internal xref">7.3.5</a>.  <a href="#name-response-artifact-voucher" class="internal xref">Response Artifact: Voucher</a></p>
+                    <p id="section-toc.1-1.7.2.3.2.5.1"><a href="#section-7.3.5" class="auto internal xref">7.3.5</a>.  <a href="#name-response-artifact-registrar" class="internal xref">Response Artifact: Registrar countersigned Voucher</a></p>
 </li>
                 </ul>
 </li>
@@ -3873,7 +3873,34 @@ In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the pledge g
 <a href="#section-7.3.1" class="section-number selfRef">7.3.1. </a><a href="#name-request-artifact-pledge-vouc" class="section-name selfRef">Request Artifact: Pledge Voucher-Request (PVR)</a>
           </h4>
 <p id="section-7.3.1-1">For BRSKI-PRM, the Registrar-Agent sends the PVR by HTTP POST to the same registrar endpoint as introduced by BRSKI: "/.well-
-known/brski/requestvoucher", but with a Content-Type header field for JSON-in-JWS"<a href="#section-7.3.1-1" class="pilcrow">¶</a></p>
+known/brski/requestvoucher", but with a Content-Type header field for JSON-in-JWS".<a href="#section-7.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.3.1-2">After receiving the PVR from Registrar-Agent, the registrar <span class="bcp14">SHALL</span> perform the verification as defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.3" class="relref">Section 5.3</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
+In addition, the registrar <span class="bcp14">SHALL</span> verify the following parameters from the PVR:<a href="#section-7.3.1-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.3.1-3.1">
+              <p id="section-7.3.1-3.1.1">agent-provided-proximity-registrar-cert: <span class="bcp14">MUST</span> contain registrar's own registrar LDevID certificate to ensure the registrar in proximity of the Registrar-Agent is the desired registrar for this PVR.<a href="#section-7.3.1-3.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-7.3.1-3.2">
+              <p id="section-7.3.1-3.2.1">agent-signed-data: The registrar <span class="bcp14">MUST</span> verify that the Registrar-Agent provided data has been signed with the private key corresponding to the EE (RegAgt) certificate indicated in the "kid" JOSE header parameter.
+The registrar <span class="bcp14">MUST</span> verify that the LDevID(ReAgt) certificate, corresponding to the signature, is still valid.
+If the certificate is already expired, the registrar <span class="bcp14">SHALL</span> reject the request.
+Validity of used signing certificates at the time of signing the agent-signed-data is necessary to avoid that a rogue Registrar-Agent generates agent-signed-data objects to onboard arbitrary pledges at a later point in time, see also <a href="#sec_cons_reg-agt" class="auto internal xref">Section 10.3</a>.
+The registrar <span class="bcp14">MUST</span> fetch the EE (RegAgt) certificate, based on the provided SubjectKeyIdentifier (SKID) contained in the "kid" header parameter of the agent-signed-data, and perform this verification.
+This requires, that the registrar has access to the EE (RegAgt) certificate data (including intermediate CA certificates if existent) based on the SKID.
+Note, the registrar may have stored the EE (RegAgt) certificate if used during TLS establishment between Registrar-Agent and registrar or it may be provided via a repository.<a href="#section-7.3.1-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-7.3.1-4">If the registrar is unable to validate the PVR, it <span class="bcp14">SHOULD</span> respond with a HTTP 4xx/5xx error code to the Registrar-Agent.<a href="#section-7.3.1-4" class="pilcrow">¶</a></p>
+<p id="section-7.3.1-5">The following 4xx client error codes <span class="bcp14">SHOULD</span> be used:<a href="#section-7.3.1-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.3.1-6.1">
+              <p id="section-7.3.1-6.1.1">403 Forbidden: if the registrar detected that one or more security related parameters are not valid or if the pledge-provided information could not be used with automated allowance.<a href="#section-7.3.1-6.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-7.3.1-6.2">
+              <p id="section-7.3.1-6.2.1">406 Not Acceptable: if the Content-Type indicated by the Accept header is unknown or unsupported.<a href="#section-7.3.1-6.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-7.3.1-7">If the validation succeeds, the registrar performs pledge authorization according to <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.3" class="relref">Section 5.3</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> followed by obtaining a voucher from the pledge's MASA according to <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.4" class="relref">Section 5.4</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> with the modifications described below in <a href="#rvr-proc" class="auto internal xref">Section 7.3.2</a>.<a href="#section-7.3.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="rvr-proc">
@@ -4077,24 +4104,32 @@ The MASA returns the voucher-response (voucher) to the registrar.<a href="#secti
           <h4 id="name-supply-voucher-to-registrar">
 <a href="#section-7.3.4" class="section-number selfRef">7.3.4. </a><a href="#name-supply-voucher-to-registrar" class="section-name selfRef">Supply Voucher to Registrar (backend interaction)</a>
           </h4>
-<p id="section-7.3.4-1">After receiving the voucher the registrar <span class="bcp14">SHOULD</span> evaluate it for transparency and logging purposes as outlined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.6" class="relref">Section 5.6</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
-The registrar <span class="bcp14">MUST</span> add an additional signature to the MASA provided voucher using its registrar EE credentials.<a href="#section-7.3.4-1" class="pilcrow">¶</a></p>
-<p id="section-7.3.4-2">The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credentials (see <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>, Section 5.2 point 8.
+<p id="section-7.3.4-1">After receiving the voucher from the MASA, the registrar <span class="bcp14">SHOULD</span> evaluate it for transparency and logging purposes as outlined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.6" class="relref">Section 5.6</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
+The registrar then prepares the artifact to be provided via the registrar-agent to the pledge as described in the following section <a href="#exchanges_uc2_2_reg_signed_voucher" class="auto internal xref">Section 7.3.5</a>.<a href="#section-7.3.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="exchanges_uc2_2_reg_signed_voucher">
+<section id="section-7.3.5">
+          <h4 id="name-response-artifact-registrar">
+<a href="#section-7.3.5" class="section-number selfRef">7.3.5. </a><a href="#name-response-artifact-registrar" class="section-name selfRef">Response Artifact: Registrar countersigned Voucher</a>
+          </h4>
+<p id="section-7.3.5-1">The registrar <span class="bcp14">MUST</span> add an additional signature to the MASA provided voucher using its registrar EE credentials.
+The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credentials (see <span>[<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>, Section 5.2 point 8.
 The x5c component of the "JWS Protected Header" <span class="bcp14">MUST</span> contain the registrar EE certificate as well as potential subordinate CA certificates up to (but not including) the pinned domain certificate.
-The pinned domain certificate is already contained in the voucher payload ("pinned-domain-cert").<a href="#section-7.3.4-2" class="pilcrow">¶</a></p>
-<p id="section-7.3.4-3">(For many installations, with a single registrar credential, the registrar credential is what is pinned)<a href="#section-7.3.4-3" class="pilcrow">¶</a></p>
-<p id="section-7.3.4-4">In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the Registrar proved possession of the it's credential when the TLS session was setup.
-While the pledge could not, at the time, validate the certificate truly belonged the registrar, it did validate that the certificate it was provided was able to authenticate the TLS connection.<a href="#section-7.3.4-4" class="pilcrow">¶</a></p>
-<p id="section-7.3.4-5">In the BRSKI-PRM mode, with the Registrar-Agent mediating all communication, the Pledge has not as yet been able to witness that the intended Registrar really does possess the relevant private key.
-This second signature provides for the same level of assurance to the pledge, and that it matches the public key (of the Registrar) that the pledge received in the trigger for the PVR (see <a href="#tpvr_CDDL_def" class="auto internal xref">Figure 6</a>).<a href="#section-7.3.4-5" class="pilcrow">¶</a></p>
-<p id="section-7.3.4-6">The registrar <span class="bcp14">MUST</span> use the same registrar EE credentials used for authentication in the TLS handshake to authenticate towards the Registrar-Agent.
-This has some operational implications when the registrar may be part of a scalable framework as described in <span>[<a href="#I-D.richardson-anima-registrar-considerations" class="cite xref">I-D.richardson-anima-registrar-considerations</a>], <a href="https://datatracker.ietf.org/doc/html/draft-richardson-anima-registrar-considerations-08#section-1.3.1" class="relref">Section 1.3.1</a></span>.<a href="#section-7.3.4-6" class="pilcrow">¶</a></p>
-<p id="section-7.3.4-7">The second signature <span class="bcp14">MUST</span> either be done with the private key associated with the registrar EE certificate provided to the Registrar-Agent, or the use of a certificate chain is necessary.
-This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher-request as also transferred in the PVR in the "agent-provided-proximity-registrar-cert".<a href="#section-7.3.4-7" class="pilcrow">¶</a></p>
-<p id="section-7.3.4-8"><a href="#MASA-REG-vr" class="auto internal xref">Figure 19</a> below provides an example of the voucher with two signatures.<a href="#section-7.3.4-8" class="pilcrow">¶</a></p>
+The pinned domain certificate is already contained in the voucher payload ("pinned-domain-cert").<a href="#section-7.3.5-1" class="pilcrow">¶</a></p>
+<p id="section-7.3.5-2">(For many installations, with a single registrar credential, the registrar credential is what is pinned)<a href="#section-7.3.5-2" class="pilcrow">¶</a></p>
+<p id="section-7.3.5-3">In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the Registrar proved possession of the it's credential when the TLS session was setup.
+While the pledge could not, at the time, validate the certificate truly belonged the registrar, it did validate that the certificate it was provided was able to authenticate the TLS connection.<a href="#section-7.3.5-3" class="pilcrow">¶</a></p>
+<p id="section-7.3.5-4">In the BRSKI-PRM mode, with the Registrar-Agent mediating all communication, the Pledge has not as yet been able to witness that the intended Registrar really does possess the relevant private key.
+This second signature provides for the same level of assurance to the pledge, and that it matches the public key (of the Registrar) that the pledge received in the trigger for the PVR (see <a href="#tpvr_CDDL_def" class="auto internal xref">Figure 6</a>).<a href="#section-7.3.5-4" class="pilcrow">¶</a></p>
+<p id="section-7.3.5-5">The registrar <span class="bcp14">MUST</span> use the same registrar EE credentials used for authentication in the TLS handshake to authenticate towards the Registrar-Agent.
+This has some operational implications when the registrar may be part of a scalable framework as described in <span>[<a href="#I-D.richardson-anima-registrar-considerations" class="cite xref">I-D.richardson-anima-registrar-considerations</a>], <a href="https://datatracker.ietf.org/doc/html/draft-richardson-anima-registrar-considerations-08#section-1.3.1" class="relref">Section 1.3.1</a></span>.<a href="#section-7.3.5-5" class="pilcrow">¶</a></p>
+<p id="section-7.3.5-6">The second signature <span class="bcp14">MUST</span> either be done with the private key associated with the registrar EE certificate provided to the Registrar-Agent, or the use of a certificate chain is necessary.
+This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher-request as also transferred in the PVR in the "agent-provided-proximity-registrar-cert".<a href="#section-7.3.5-6" class="pilcrow">¶</a></p>
+<p id="section-7.3.5-7"><a href="#MASA-REG-vr" class="auto internal xref">Figure 19</a> below provides an example of the voucher with two signatures.<a href="#section-7.3.5-7" class="pilcrow">¶</a></p>
 <span id="name-representation-of-masa-issue"></span><div id="MASA-REG-vr">
 <figure id="figure-19">
-            <div class="alignLeft art-text artwork" id="section-7.3.4-9.1">
+            <div class="alignLeft art-text artwork" id="section-7.3.5-8.1">
 <pre>
 # The MASA issued voucher with additional registrar signature in
   General JWS Serialization syntax
@@ -4150,42 +4185,8 @@ This ensures that the same registrar EE certificate can be used to verify the si
 <a href="#name-representation-of-masa-issue" class="selfRef">Representation of MASA issued voucher with additional registrar signature</a>
             </figcaption></figure>
 </div>
-<p id="section-7.3.4-10">Depending on the security policy of the operator, this signature can also be interpreted by the pledge as explicit authorization of the registrar to install the contained trust anchor.
-The registrar sends the voucher to the Registrar-Agent.<a href="#section-7.3.4-10" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="response-artifact-voucher">
-<section id="section-7.3.5">
-          <h4 id="name-response-artifact-voucher">
-<a href="#section-7.3.5" class="section-number selfRef">7.3.5. </a><a href="#name-response-artifact-voucher" class="section-name selfRef">Response Artifact: Voucher</a>
-          </h4>
-<p id="section-7.3.5-1">After receiving the PVR from Registrar-Agent, the registrar <span class="bcp14">SHALL</span> perform the verification as defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.3" class="relref">Section 5.3</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
-In addition, the registrar <span class="bcp14">SHALL</span> verify the following parameters from the PVR:<a href="#section-7.3.5-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-7.3.5-2.1">
-              <p id="section-7.3.5-2.1.1">agent-provided-proximity-registrar-cert: <span class="bcp14">MUST</span> contain registrar's own registrar LDevID certificate to ensure the registrar in proximity of the Registrar-Agent is the desired registrar for this PVR.<a href="#section-7.3.5-2.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-7.3.5-2.2">
-              <p id="section-7.3.5-2.2.1">agent-signed-data: The registrar <span class="bcp14">MUST</span> verify that the Registrar-Agent provided data has been signed with the private key corresponding to the EE (RegAgt) certificate indicated in the "kid" JOSE header parameter.
-The registrar <span class="bcp14">MUST</span> verify that the LDevID(ReAgt) certificate, corresponding to the signature, is still valid.
-If the certificate is already expired, the registrar <span class="bcp14">SHALL</span> reject the request.
-Validity of used signing certificates at the time of signing the agent-signed-data is necessary to avoid that a rogue Registrar-Agent generates agent-signed-data objects to onboard arbitrary pledges at a later point in time, see also <a href="#sec_cons_reg-agt" class="auto internal xref">Section 10.3</a>.
-The registrar <span class="bcp14">MUST</span> fetch the EE (RegAgt) certificate, based on the provided SubjectKeyIdentifier (SKID) contained in the "kid" header parameter of the agent-signed-data, and perform this verification.
-This requires, that the registrar has access to the EE (RegAgt) certificate data (including intermediate CA certificates if existent) based on the SKID.
-Note, the registrar may have stored the EE (RegAgt) certificate if used during TLS establishment between Registrar-Agent and registrar or it may be provided via a repository.<a href="#section-7.3.5-2.2.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-<p id="section-7.3.5-3">If the registrar is unable to validate the PVR, it <span class="bcp14">SHOULD</span> respond with a HTTP 4xx/5xx error code to the Registrar-Agent.<a href="#section-7.3.5-3" class="pilcrow">¶</a></p>
-<p id="section-7.3.5-4">The following 4xx client error codes <span class="bcp14">SHOULD</span> be used:<a href="#section-7.3.5-4" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-7.3.5-5.1">
-              <p id="section-7.3.5-5.1.1">403 Forbidden: if the registrar detected that one or more security related parameters are not valid or if the pledge-provided information could not be used with automated allowance.<a href="#section-7.3.5-5.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-7.3.5-5.2">
-              <p id="section-7.3.5-5.2.1">406 Not Acceptable: if the Content-Type indicated by the Accept header is unknown or unsupported.<a href="#section-7.3.5-5.2.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-<p id="section-7.3.5-6">If the validation succeeds, the registrar performs pledge authorization according to <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.3" class="relref">Section 5.3</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> followed by obtaining a voucher from the pledge's MASA according to <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.4" class="relref">Section 5.4</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> with the modifications described below in <a href="#rvr-proc" class="auto internal xref">Section 7.3.2</a>.<a href="#section-7.3.5-6" class="pilcrow">¶</a></p>
+<p id="section-7.3.5-9">Depending on the security policy of the operator, this signature can also be interpreted as explicit authorization of the registrar to install the contained trust anchor.
+The registrar returns the voucher to the Registrar-Agent.<a href="#section-7.3.5-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -6566,6 +6567,9 @@ IDevID certificates are intended to be widely useable and EKU does not support t
 </li>
         <li class="normal" id="appendix-C-3.3">
           <p id="appendix-C-3.3.1">Updated CDDL source code integration to allow for automatic verification<a href="#appendix-C-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-3.4">
+          <p id="appendix-C-3.4.1">Reordered description in section <a href="#pvr" class="auto internal xref">Section 7.3</a> to better match the order of communication and artifact processing.<a href="#appendix-C-3.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-C-4">From IETF draft 11 -&gt; IETF draft 12:<a href="#appendix-C-4" class="pilcrow">¶</a></p>

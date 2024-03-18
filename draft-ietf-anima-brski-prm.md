@@ -1259,9 +1259,30 @@ The HTTP response Content-Type header field is set to `application/voucher-jws+j
 ### Request Artifact: Pledge Voucher-Request (PVR)
 
 For BRSKI-PRM, the Registrar-Agent sends the PVR by HTTP POST to the same registrar endpoint as introduced by BRSKI: "/.well-
-known/brski/requestvoucher", but with a Content-Type header field for JSON-in-JWS"
+known/brski/requestvoucher", but with a Content-Type header field for JSON-in-JWS".
 
+After receiving the PVR from Registrar-Agent, the registrar SHALL perform the verification as defined in {{Section 5.3 of RFC8995}}.
+In addition, the registrar SHALL verify the following parameters from the PVR:
 
+* agent-provided-proximity-registrar-cert: MUST contain registrar's own registrar LDevID certificate to ensure the registrar in proximity of the Registrar-Agent is the desired registrar for this PVR.
+
+* agent-signed-data: The registrar MUST verify that the Registrar-Agent provided data has been signed with the private key corresponding to the EE (RegAgt) certificate indicated in the "kid" JOSE header parameter.
+  The registrar MUST verify that the LDevID(ReAgt) certificate, corresponding to the signature, is still valid.
+  If the certificate is already expired, the registrar SHALL reject the request.
+  Validity of used signing certificates at the time of signing the agent-signed-data is necessary to avoid that a rogue Registrar-Agent generates agent-signed-data objects to onboard arbitrary pledges at a later point in time, see also {{sec_cons_reg-agt}}.
+  The registrar MUST fetch the EE (RegAgt) certificate, based on the provided SubjectKeyIdentifier (SKID) contained in the "kid" header parameter of the agent-signed-data, and perform this verification.
+  This requires, that the registrar has access to the EE (RegAgt) certificate data (including intermediate CA certificates if existent) based on the SKID.
+  Note, the registrar may have stored the EE (RegAgt) certificate if used during TLS establishment between Registrar-Agent and registrar or it may be provided via a repository.
+
+If the registrar is unable to validate the PVR, it SHOULD respond with a HTTP 4xx/5xx error code to the Registrar-Agent.
+
+The following 4xx client error codes SHOULD be used:
+
+* 403 Forbidden: if the registrar detected that one or more security related parameters are not valid or if the pledge-provided information could not be used with automated allowance.
+
+* 406 Not Acceptable: if the Content-Type indicated by the Accept header is unknown or unsupported.
+
+If the validation succeeds, the registrar performs pledge authorization according to {{Section 5.3 of !RFC8995}} followed by obtaining a voucher from the pledge's MASA according to {{Section 5.4 of !RFC8995}} with the modifications described below in {{rvr-proc}}.
 
 ### Supply RVR to MASA (backend interaction) {#rvr-proc}
 
@@ -1380,7 +1401,6 @@ In addition, the following processing SHALL be performed for PVR contained in RV
 If validation fails, the MASA SHOULD respond with an HTTP 4xx client error status code to the registrar.
 The HTTP error status codes are kept the same as defined in {{Section 5.6 of !RFC8995}} and comprise the codes: 403, 404, 406, and 415.
 
-
 The registrar provides the EE certificate of the Registrar-Agent identified by the SubjectKeyIdentifier (SKID) in the header of the "agent-signed-data" from the PVR in its RVR (see also {{rvr-proc}}).
 
 The MASA in turn verifies the registrar LDevID certificate is included in the PVR (contained in the "prior-signed-voucher-request" field of RVR) in the "agent-provided-proximity-registrar-cert" leaf and may assert the PVR as "verified" or "logged".
@@ -1445,9 +1465,12 @@ The MASA returns the voucher-response (voucher) to the registrar.
 
 ### Supply Voucher to Registrar (backend interaction) {#exchanges_uc2_2_vs}
 
-After receiving the voucher the registrar SHOULD evaluate it for transparency and logging purposes as outlined in {{Section 5.6 of !RFC8995}}.
-The registrar MUST add an additional signature to the MASA provided voucher using its registrar EE credentials.
+After receiving the voucher from the MASA, the registrar SHOULD evaluate it for transparency and logging purposes as outlined in {{Section 5.6 of !RFC8995}}.
+The registrar then prepares the artifact to be provided via the registrar-agent to the pledge as described in the following section {{exchanges_uc2_2_reg_signed_voucher}}. 
 
+
+### Response Artifact: Registrar countersigned Voucher {#exchanges_uc2_2_reg_signed_voucher}
+The registrar MUST add an additional signature to the MASA provided voucher using its registrar EE credentials.
 The signature is created by signing the original "JWS Payload" produced by MASA and the registrar added "JWS Protected Header" using the registrar EE credentials (see {{RFC7515}}, Section 5.2 point 8.
 The x5c component of the "JWS Protected Header" MUST contain the registrar EE certificate as well as potential subordinate CA certificates up to (but not including) the pinned domain certificate.
 The pinned domain certificate is already contained in the voucher payload ("pinned-domain-cert").
@@ -1520,35 +1543,8 @@ This ensures that the same registrar EE certificate can be used to verify the si
 ~~~~
 {: #MASA-REG-vr title='Representation of MASA issued voucher with additional registrar signature' artwork-align="left"}
 
-Depending on the security policy of the operator, this signature can also be interpreted by the pledge as explicit authorization of the registrar to install the contained trust anchor.
-The registrar sends the voucher to the Registrar-Agent.
-
-
-### Response Artifact: Voucher
-
-After receiving the PVR from Registrar-Agent, the registrar SHALL perform the verification as defined in {{Section 5.3 of RFC8995}}.
-In addition, the registrar SHALL verify the following parameters from the PVR:
-
-* agent-provided-proximity-registrar-cert: MUST contain registrar's own registrar LDevID certificate to ensure the registrar in proximity of the Registrar-Agent is the desired registrar for this PVR.
-
-* agent-signed-data: The registrar MUST verify that the Registrar-Agent provided data has been signed with the private key corresponding to the EE (RegAgt) certificate indicated in the "kid" JOSE header parameter.
-  The registrar MUST verify that the LDevID(ReAgt) certificate, corresponding to the signature, is still valid.
-  If the certificate is already expired, the registrar SHALL reject the request.
-  Validity of used signing certificates at the time of signing the agent-signed-data is necessary to avoid that a rogue Registrar-Agent generates agent-signed-data objects to onboard arbitrary pledges at a later point in time, see also {{sec_cons_reg-agt}}.
-  The registrar MUST fetch the EE (RegAgt) certificate, based on the provided SubjectKeyIdentifier (SKID) contained in the "kid" header parameter of the agent-signed-data, and perform this verification.
-  This requires, that the registrar has access to the EE (RegAgt) certificate data (including intermediate CA certificates if existent) based on the SKID.
-  Note, the registrar may have stored the EE (RegAgt) certificate if used during TLS establishment between Registrar-Agent and registrar or it may be provided via a repository.
-
-If the registrar is unable to validate the PVR, it SHOULD respond with a HTTP 4xx/5xx error code to the Registrar-Agent.
-
-The following 4xx client error codes SHOULD be used:
-
-* 403 Forbidden: if the registrar detected that one or more security related parameters are not valid or if the pledge-provided information could not be used with automated allowance.
-
-* 406 Not Acceptable: if the Content-Type indicated by the Accept header is unknown or unsupported.
-
-If the validation succeeds, the registrar performs pledge authorization according to {{Section 5.3 of !RFC8995}} followed by obtaining a voucher from the pledge's MASA according to {{Section 5.4 of !RFC8995}} with the modifications described below in {{rvr-proc}}.
-
+Depending on the security policy of the operator, this signature can also be interpreted as explicit authorization of the registrar to install the contained trust anchor.
+The registrar returns the voucher to the Registrar-Agent.
 
 
 ## Supply PER to Registrar (including backend interaction) {#per}
@@ -2921,6 +2917,7 @@ From IETF draft 12 -> IETF draft 13:
 * Deleted figure in Section "Request Artifact: Pledge Voucher-Request Trigger (tPVR)" for JSON representation of tPVR, as it has been replaced by CDDL
 * Updated reason-content description in status response messages (enroll-status, voucher-status, and status-response.
 * Updated CDDL source code integration to allow for automatic verification
+* Reordered description in section {{pvr}} to better match the order of communication and artifact processing.
 
 From IETF draft 11 -> IETF draft 12:
 
