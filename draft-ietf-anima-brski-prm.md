@@ -901,15 +901,15 @@ If the pledge is unable to create the PVR, it SHOULD respond with an HTTP error 
 The Pledge Voucher-Request Trigger (tPVR) artifact is an unsigned JSON structure providing the trigger parameters.
 The following CDDL {{!RFC8610}} explains the Pledge Voucher-Request Trigger structure. 
 
-~~~~
-<CODE BEGINS>
+
+~~~~ cddl
   pledgevoucherrequesttrigger = {
     "agent-provided-proximity-registrar-cert": bytes,
     "agent-signed-data": bytes
   }
-<CODE ENDS>
 ~~~~
-{: #tpvr_CDDL_def title='CDDL for Pledge Voucher-Request Trigger' artwork-align="left"}
+{: #tpvr_CDDL_def title='CDDL for Pledge Voucher-Request Trigger' artwork-align="left" sourcecode-markers=“true”}
+
 
 The fields contained in the `pledgevoucherrequesttrigger` are:
 
@@ -935,15 +935,13 @@ The JWS Payload is further base64url-encoded to become the string value of the `
 
 The following CDDL {{!RFC8610}} explains the BRSKI-PRM Agent Signed Data structure. 
 
-~~~~
-<CODE BEGINS>
+~~~~ cddl
   prmasd = {
     "created": tdate,
     "serial-number": text
   }
-<CODE ENDS>
 ~~~~
-{: #prmasd_CDDL_def title='CDDL for BRSKI-PRM Agent Signed Data' artwork-align="left"}
+{: #prmasd_CDDL_def title='CDDL for BRSKI-PRM Agent Signed Data' artwork-align="left" sourcecode-markers=“true”}
 
 The fields contained in the `prmasd` are:
 
@@ -1098,14 +1096,12 @@ If specific attributes in the certificate are required, they have to be inserted
 The Pledge Enroll-Request Trigger (tPVR) artifact is an unsigned JSON structure providing the trigger parameters (tPER-data).
 The following CDDL {{!RFC8610}} explains the Pledge Enroll-Request Trigger structure. 
 
-~~~~
-<CODE BEGINS>
+~~~~ cddl
 pledgeenrollrequesttrigger = {
     "enroll-type": "enroll-generic-cert"
   }
-<CODE ENDS>
 ~~~~
-{: #tper_CDDL_def title='CDDL for Pledge Enroll-Request Trigger' artwork-align="left"}
+{: #tper_CDDL_def title='CDDL for Pledge Enroll-Request Trigger' artwork-align="left" sourcecode-markers=“true”}
 
 The enroll-type field is an enum, identifying what is being enrolled. 
 Currently only "enroll-generic-cert" for the LDevID certificate is defined. 
@@ -1779,6 +1775,8 @@ The pledge generates the voucher-status and provides it as signed JSON-in-JWS ob
 
 The response has the Content-Type `application/jose+json` and is signed using the IDevID of the pledge as shown in {{vstat}}.
 As the reason field is optional (see {{!RFC8995}}), it MAY be omitted in case of success.
+The reason-context is an arbitrary JSON object that may provide additional information specific to a failure. 
+The content of this field is not subject to standardization, but examples are provided in {{vstat}}. 
 
 ~~~~
 # The "pledge-voucher-status" telemetry in general JWS
@@ -1924,22 +1922,21 @@ If the pledge verified the received LDevID certificate successfully it SHALL sig
 In failure case, the pledge SHALL use its IDevID credentials.
 {{Section 5.9.4 of !RFC8995}} specifies the enrollment status telemetry message with two optional fields for "reason" and "reason-context". 
 In BRSKI-PRM the optional fields are mandated to have a clear distinction between other status messages and MUST be provided therefore.
-This distinction is intended for better error handling on registrar side, as a status object could be send to a wrong status endpoint.
+The reason-context is an arbitrary JSON object that provides additional information specific to a failure. 
+The content of this field is not subject to standardization, but examples are provided in {{estat}}. 
 
 The following CDDL {{!RFC8610}} explains enroll-status response structure. 
 It is similar as defined in {{Section 5.9.4 of !RFC8995}} with the optional fields set to mandatory as described above.
 
-~~~~
-<CODE BEGINS>
+~~~~ cddl
 enrollstatus-trigger = {
     "version": uint,
     "status": bool,
     "reason": text,
-    "reason-context" : { $$arbitrary-map }
+    "reason-context" : { * $$arbitrary-map }
   }
-<CODE ENDS>
 ~~~~
-{: #e_stat_res_def title='CDDL for pledge-enrollment-status response' artwork-align="left"}
+{: #e_stat_res_def title='CDDL for pledge-enrollment-status response' artwork-align="left" sourcecode-markers=“true”}
 
 The response has the Content-Type `application/jose+json`.
 
@@ -2135,17 +2132,15 @@ The response header MUST have the Content-Type field set to `application/jose+js
 The Status Query artifact is a JWS structure signing information on the requested status-type, the time and date the request is created, and the product serial-number of the pledge contacted as shown in {{stat_req_def}}.
 The following Concise Data Definition Language (CDDL) {{RFC8610}} defines the structure of the unsigned Status Query data (i.e., JWS payload):
 
-~~~~
-<CODE BEGINS>
+~~~~ cddl
   statustrigger = {
       "version": uint,
       "created-on": tdate,
       "serial-number": text,
       "status-type": text
   }
-<CODE ENDS>
 ~~~~
-{: #stat_req_def title="CDDL for unsigned Status Trigger data (statustrigger)" artwork-align="left"}
+{: #stat_req_def title="CDDL for unsigned Status Trigger data (statustrigger)" artwork-align="left" sourcecode-markers=“true”}
 
 The `version` field is included to permit significant changes to the pledge status artifacts in the future.
 The format and semantics in this document follow the status telemetry definitions of {{!RFC8995}}.
@@ -2202,8 +2197,7 @@ The pledge-status response message is signed with IDevID or LDevID, depending on
 
 The following CDDL defines the structure of the Pledge Status (pStatus) data:
 
-~~~~
-<CODE BEGINS>
+~~~~ cddl
   pledgestatus = {
     "version": uint,
     "status":
@@ -2215,11 +2209,10 @@ The following CDDL defines the structure of the Pledge Status (pStatus) data:
       "connect-success" /
       "connect-error",
     ?"reason" : text,
-    ?"reason-context": { $$arbitrary-map }
+    ?"reason-context": { * $$arbitrary-map }
   }
-<CODE ENDS>
 ~~~~
-{: #stat_res_def title='CDDL for unsigned Pledge Status data (pledgestatus)' artwork-align="left"}
+{: #stat_res_def title='CDDL for unsigned Pledge Status data (pledgestatus)' artwork-align="left" sourcecode-markers=“true”}
 
 Different cases for pledge bootstrapping status may occur, which SHOULD be reflected using the status enumeration.
 This document specifies the status values in the context of the bootstrapping process and credential application.
@@ -2253,12 +2246,10 @@ As the pledge is assumed to utilize its bootstrapped credentials (LDevID) in com
   The pledge signs the response message using its LDevID(Pledge).
 
 The pledge-status responses are cumulative in the sense that connect-success implies enroll-success, which in turn implies voucher-success.
+The reason-context is an arbitrary JSON object that provides additional information specific to a failure. 
+The content of this field is not subject to standardization, but examples are provided in {{stat_res}}. 
 
 {{stat_res}} provides an example for the bootstrapping-status information.
-
-
-
-
 
 
 ~~~~
@@ -2927,7 +2918,9 @@ Proof of Concept Code available
 
 From IETF draft 12 -> IETF draft 13:
 
-* deleted figure in Section "Request Artifact: Pledge Voucher-Request Trigger (tPVR)" for JSON representation of tPVR, as it has been replaced by CDDL
+* Deleted figure in Section "Request Artifact: Pledge Voucher-Request Trigger (tPVR)" for JSON representation of tPVR, as it has been replaced by CDDL
+* Updated reason-content description in status response messages (enroll-status, voucher-status, and status-response.
+* Updated CDDL source code integration to allow for automatic verification
 
 From IETF draft 11 -> IETF draft 12:
 
