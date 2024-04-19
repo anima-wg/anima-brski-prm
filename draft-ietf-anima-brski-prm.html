@@ -16,10 +16,10 @@ For this, BRSKI with Pledge in Responder Mode (BRSKI-PRM) introduces a new compo
 To establish the trust relation between pledge and registrar, BRSKI-PRM relies on object security rather than transport security.
 The approach defined here is agnostic to the enrollment protocol that connects the domain registrar to the domain CA. 
     " name="description">
-<meta content="xml2rfc 3.20.1" name="generator">
+<meta content="xml2rfc 3.21.0" name="generator">
 <meta content="draft-ietf-anima-brski-prm-13" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.20.1
+  xml2rfc 3.21.0
     Python 3.9.2
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
@@ -317,6 +317,9 @@ cite {
   display: block;
   text-align: right;
   font-style: italic;
+}
+.xref {
+  overflow-wrap: normal;
 }
 
 /* tables */
@@ -1214,11 +1217,11 @@ li > p:last-of-type:only-child {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">BRSKI-PRM</td>
-<td class="right">March 2024</td>
+<td class="right">April 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 19 September 2024</td>
+<td class="center">Expires 21 October 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1231,12 +1234,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-13</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-03-18" class="published">18 March 2024</time>
+<time datetime="2024-04-19" class="published">19 April 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-09-19">19 September 2024</time></dd>
+<dd class="expires"><time datetime="2024-10-21">21 October 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1296,7 +1299,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 19 September 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 October 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -3614,33 +3617,23 @@ The following CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</spa
             <div class="alignLeft art-cddl art-text artwork" id="section-7.2.1-3.1">
 <pre>
 pledgeenrollrequesttrigger = {
-    "enroll-type": "enroll-generic-cert"
-  }
+        "enroll-type": $enroll-type
+}
+
+$enroll-type /= "enroll-generic-cert"
 </pre>
 </div>
 <figcaption><a href="#figure-13" class="selfRef">Figure 13</a>:
 <a href="#name-cddl-for-pledge-enroll-requ" class="selfRef">CDDL for Pledge Enroll-Request Trigger</a>
             </figcaption></figure>
 </div>
-<p id="section-7.2.1-4">The enroll-type field is an enum, identifying what is being enrolled. 
-Currently only "enroll-generic-cert" for the LDevID certificate is defined.<a href="#section-7.2.1-4" class="pilcrow">¶</a></p>
-<p id="section-7.2.1-5"><a href="#tPER_payload" class="auto internal xref">Figure 14</a> below shows an example for unsigned Pledge Enroll-Request Trigger in JSON syntax.<a href="#section-7.2.1-5" class="pilcrow">¶</a></p>
-<span id="name-data-example-for-pledgeenro"></span><div id="tPER_payload">
-<figure id="figure-14">
-            <div class="alignLeft art-text artwork" id="section-7.2.1-6.1">
-<pre>
-{
-  "enroll-type" : "enroll-generic-cert"
-}
-</pre>
-</div>
-<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
-<a href="#name-data-example-for-pledgeenro" class="selfRef">Data example for pledgeenrollrequesttrigger</a>
-            </figcaption></figure>
-</div>
-<p id="section-7.2.1-7">The Pledge Enroll-Request Trigger (tPER) artifact <span class="bcp14">MUST</span> be encoded in JSON as defined in <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> following the CDDL definition <a href="#tper_CDDL_def" class="auto internal xref">Figure 13</a>.<a href="#section-7.2.1-7" class="pilcrow">¶</a></p>
-<p id="section-7.2.1-8">The Pledge Enroll-Request Trigger (tPER) artifact <span class="bcp14">MAY</span> be used to provide additional data, like CSR attributes.
-How to provide and use such additional data is out of scope for this specification.<a href="#section-7.2.1-8" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-4">The enroll-type  allows for specifying arbitrary indications, which type of certificate is to be enrolled. 
+BRSKI enris an enum, identifying what is being enrolled. 
+As shown in <a href="#tper_CDDL_def" class="auto internal xref">Figure 13</a>, BRSKI-PRM defines only "enroll-generic-cert" for the enrollment of the generic LDevID certificate. 
+Other specifications using this mechanism may define further values, e.g., to bootstrap application related certificates, e.g., indicated by a value "enroll-app-cert".<a href="#section-7.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-5">The Pledge Enroll-Request Trigger (tPER) artifact <span class="bcp14">MUST</span> be encoded in JSON as defined in <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> following the CDDL definition <a href="#tper_CDDL_def" class="auto internal xref">Figure 13</a>.<a href="#section-7.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-6">The Pledge Enroll-Request Trigger (tPER) artifact <span class="bcp14">MAY</span> be used to provide additional data, like CSR attributes.
+How to provide and use such additional data is out of scope for this specification.<a href="#section-7.2.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="response-artifact-pledge-enroll-request-per">
@@ -3677,7 +3670,7 @@ it <span class="bcp14">MAY</span> optionally contain the certificate chain for t
 <p id="section-7.2.2-10">While BRSKI-PRM targets the initial enrollment, re-enrollment <span class="bcp14">SHOULD</span> be supported as described in a similar way as for enrollment in this document, if no other re-enrollment mechanism is supported.
 Note that in this case the current LDevID credential is used instead of the IDevID credential to create the signature of the PKCS#10 request.<a href="#section-7.2.2-10" class="pilcrow">¶</a></p>
 <span id="name-representation-of-per"></span><div id="per_example">
-<figure id="figure-15">
+<figure id="figure-14">
             <div class="alignLeft art-text artwork" id="section-7.2.2-11.1">
 <pre>
 # The PER in General JWS Serialization syntax
@@ -3712,7 +3705,7 @@ Note that in this case the current LDevID credential is used instead of the IDev
 }
 </pre>
 </div>
-<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
+<figcaption><a href="#figure-14" class="selfRef">Figure 14</a>:
 <a href="#name-representation-of-per" class="selfRef">Representation of PER</a>
             </figcaption></figure>
 </div>
@@ -3746,9 +3739,9 @@ If the connection from Registrar-Agent to registrar is established, the authoriz
 This ensures that the pledge has been triggered by an authorized Registrar-Agent.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
 <p id="section-7.3-5">With BRSKI-PRM, the pledge generates PVR and PER as JSON-in-JWS objects and the Registrar-Agent forwards them to the registrar.
 In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the pledge generates PVR as CMS-signed JSON and PER as PKCS#10 or PKCS#7 according to <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> and inherited by <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-7.3-5" class="pilcrow">¶</a></p>
-<p id="section-7.3-6"><a href="#exchangesfig_uc2_3" class="auto internal xref">Figure 16</a> shows the exchanges for the Voucher Request processing and the following subsections describe the corresponding artifacts.<a href="#section-7.3-6" class="pilcrow">¶</a></p>
+<p id="section-7.3-6"><a href="#exchangesfig_uc2_3" class="auto internal xref">Figure 15</a> shows the exchanges for the Voucher Request processing and the following subsections describe the corresponding artifacts.<a href="#section-7.3-6" class="pilcrow">¶</a></p>
 <span id="name-voucher-issuing-exchange"></span><div id="exchangesfig_uc2_3">
-<figure id="figure-16">
+<figure id="figure-15">
           <div id="section-7.3-7.1">
             <div class="alignCenter art-svg artwork" id="section-7.3-7.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="416" width="576" viewBox="0 0 576 416" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -3860,7 +3853,7 @@ In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the pledge g
               </svg><a href="#section-7.3-7.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
+<figcaption><a href="#figure-15" class="selfRef">Figure 15</a>:
 <a href="#name-voucher-issuing-exchange" class="selfRef">Voucher issuing exchange</a>
           </figcaption></figure>
 </div>
@@ -3956,7 +3949,7 @@ If multiple certificates are included in the x5c, the first <span class="bcp14">
 <p id="section-7.3.2-10">The MASA uses this information for verification that the Registrar-Agent is in proximity to the registrar to state the corresponding assertion "agent-proximity".<a href="#section-7.3.2-10" class="pilcrow">¶</a></p>
 <p id="section-7.3.2-11">The object is signed using the registrar LDevID credentials, which corresponds to the certificate referenced in the JOSE header.<a href="#section-7.3.2-11" class="pilcrow">¶</a></p>
 <span id="name-representation-of-rvr"></span><div id="rvr">
-<figure id="figure-17">
+<figure id="figure-16">
             <div class="alignLeft art-text artwork" id="section-7.3.2-12.1">
 <pre>
 # The RVR in General JWS Serialization syntax
@@ -3999,7 +3992,7 @@ If multiple certificates are included in the x5c, the first <span class="bcp14">
 }
 </pre>
 </div>
-<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
+<figcaption><a href="#figure-16" class="selfRef">Figure 16</a>:
 <a href="#name-representation-of-rvr" class="selfRef">Representation of RVR</a>
             </figcaption></figure>
 </div>
@@ -4051,9 +4044,9 @@ When successful, the Voucher will then be supplied via the registrar to the Regi
 <p id="section-7.3.3-1">The MASA creates a voucher with Media-Type of <code>application/voucher-jws+json</code> as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.
 If the MASA detects that the Accept header of the PVR does not match <code>application/voucher-jws+json</code> it <span class="bcp14">SHOULD</span> respond with the HTTP status code "406 Not Acceptable" as the pledge will not be able to parse the response.
 The voucher is according to <span>[<a href="#I-D.ietf-anima-rfc8366bis" class="cite xref">I-D.ietf-anima-rfc8366bis</a>]</span> but uses the new assertion value specified <a href="#agt_prx" class="auto internal xref">Section 5.4</a>.<a href="#section-7.3.3-1" class="pilcrow">¶</a></p>
-<p id="section-7.3.3-2"><a href="#MASA-vr" class="auto internal xref">Figure 18</a> shows an example of the contents of a voucher.<a href="#section-7.3.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.3.3-2"><a href="#MASA-vr" class="auto internal xref">Figure 17</a> shows an example of the contents of a voucher.<a href="#section-7.3.3-2" class="pilcrow">¶</a></p>
 <span id="name-representation-of-masa-issu"></span><div id="MASA-vr">
-<figure id="figure-18">
+<figure id="figure-17">
             <div class="alignLeft art-text artwork" id="section-7.3.3-3.1">
 <pre>
 # The MASA issued voucher in General JWS Serialization syntax
@@ -4091,7 +4084,7 @@ The voucher is according to <span>[<a href="#I-D.ietf-anima-rfc8366bis" class="c
 }
 </pre>
 </div>
-<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
+<figcaption><a href="#figure-17" class="selfRef">Figure 17</a>:
 <a href="#name-representation-of-masa-issu" class="selfRef">Representation of MASA issued voucher</a>
             </figcaption></figure>
 </div>
@@ -4126,9 +4119,9 @@ This second signature provides for the same level of assurance to the pledge, an
 This has some operational implications when the registrar may be part of a scalable framework as described in <span>[<a href="#I-D.richardson-anima-registrar-considerations" class="cite xref">I-D.richardson-anima-registrar-considerations</a>], <a href="https://datatracker.ietf.org/doc/html/draft-richardson-anima-registrar-considerations-08#section-1.3.1" class="relref">Section 1.3.1</a></span>.<a href="#section-7.3.5-5" class="pilcrow">¶</a></p>
 <p id="section-7.3.5-6">The second signature <span class="bcp14">MUST</span> either be done with the private key associated with the registrar EE certificate provided to the Registrar-Agent, or the use of a certificate chain is necessary.
 This ensures that the same registrar EE certificate can be used to verify the signature as transmitted in the voucher-request as also transferred in the PVR in the "agent-provided-proximity-registrar-cert".<a href="#section-7.3.5-6" class="pilcrow">¶</a></p>
-<p id="section-7.3.5-7"><a href="#MASA-REG-vr" class="auto internal xref">Figure 19</a> below provides an example of the voucher with two signatures.<a href="#section-7.3.5-7" class="pilcrow">¶</a></p>
+<p id="section-7.3.5-7"><a href="#MASA-REG-vr" class="auto internal xref">Figure 18</a> below provides an example of the voucher with two signatures.<a href="#section-7.3.5-7" class="pilcrow">¶</a></p>
 <span id="name-representation-of-masa-issue"></span><div id="MASA-REG-vr">
-<figure id="figure-19">
+<figure id="figure-18">
             <div class="alignLeft art-text artwork" id="section-7.3.5-8.1">
 <pre>
 # The MASA issued voucher with additional registrar signature in
@@ -4181,7 +4174,7 @@ This ensures that the same registrar EE certificate can be used to verify the si
 }
 </pre>
 </div>
-<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
+<figcaption><a href="#figure-18" class="selfRef">Figure 18</a>:
 <a href="#name-representation-of-masa-issue" class="selfRef">Representation of MASA issued voucher with additional registrar signature</a>
             </figcaption></figure>
 </div>
@@ -4199,9 +4192,9 @@ The registrar returns the voucher to the Registrar-Agent.<a href="#section-7.3.5
 <p id="section-7.4-1">After receiving the voucher, the Registrar-Agent sends the PER to the registrar in the same HTTP-over-TLS connection. Which is similar to the PER processing described in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.2" class="relref">Section 5.2</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 In case the PER cannot be send in the same HTTP-over-TLS connection the Registrar-Agent may send the PER in a new HTTP-over-TLS connection. The registrar is able to correlate the PVR and the PER based on the signatures and the contained product-serial-number information.
 Note, this also addresses situations in which a nonceless voucher is used and may be pre-provisioned to the pledge.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
-<p id="section-7.4-2"><a href="#exchangesfig_uc2_4" class="auto internal xref">Figure 20</a> depicts exchanges for the PER request handling and the following subsections describe the corresponding artifacts.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
+<p id="section-7.4-2"><a href="#exchangesfig_uc2_4" class="auto internal xref">Figure 19</a> depicts exchanges for the PER request handling and the following subsections describe the corresponding artifacts.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
 <span id="name-enroll-exchange"></span><div id="exchangesfig_uc2_4">
-<figure id="figure-20">
+<figure id="figure-19">
           <div id="section-7.4-3.1">
             <div class="alignCenter art-svg artwork" id="section-7.4-3.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="304" width="576" viewBox="0 0 576 304" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4298,7 +4291,7 @@ Note, this also addresses situations in which a nonceless voucher is used and ma
               </svg><a href="#section-7.4-3.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
+<figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
 <a href="#name-enroll-exchange" class="selfRef">Enroll exchange</a>
           </figcaption></figure>
 </div>
@@ -4309,7 +4302,7 @@ Note, this also addresses situations in which a nonceless voucher is used and ma
 <a href="#section-7.4.1" class="section-number selfRef">7.4.1. </a><a href="#name-request-artifact-pledge-enro" class="section-name selfRef">Request Artifact: Pledge Enroll-Request (PER)</a>
           </h4>
 <p id="section-7.4.1-1">As specified in <a href="#tper" class="auto internal xref">Section 7.2</a> deviating from BRSKI the PER is not a raw PKCS#10.
-As the Registrar-Agent is involved in the exchange, the PKCS#10 is wrapped in a JWS object by the pledge and signed with pledge's IDevID to ensure proof-of-identity as outlined in <a href="#per_example" class="auto internal xref">Figure 15</a>.<a href="#section-7.4.1-1" class="pilcrow">¶</a></p>
+As the Registrar-Agent is involved in the exchange, the PKCS#10 is wrapped in a JWS object by the pledge and signed with pledge's IDevID to ensure proof-of-identity as outlined in <a href="#per_example" class="auto internal xref">Figure 14</a>.<a href="#section-7.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.4.1-2">EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> standard endpoints (/simpleenroll, /simplereenroll, /serverkeygen, /cacerts) on the registrar cannot be used for BRSKI-PRM.
 This is caused by the utilization of signature wrapped-objects in BRSKI-PRM.
 As EST requires to sent a raw PKCS#10 request to e.g., "/.well-known/est/simpleenroll" endpoint, this document makes an enhancement by utilizing EST but with the exception to transport a signature wrapped PKCS#10 request.
@@ -4361,10 +4354,10 @@ This is done in EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</sp
 BRSKI-PRM requires a signature wrapped CA certificate object, to avoid that the pledge can be provided with arbitrary CA certificates in an authorized way.
 The registrar signed CA certificate object will allow the pledge to verify the authorization to install the received CA certificate(s).
 As the CA certificate(s) are provided to the pledge after the voucher, the pledge has the required information (the domain certificate) to verify the wrapped CA certificate object.<a href="#section-7.5-1" class="pilcrow">¶</a></p>
-<p id="section-7.5-2"><a href="#exchangesfig_uc2_5" class="auto internal xref">Figure 21</a> shows the request and provisioning of CA certificates in the infrastructure. 
+<p id="section-7.5-2"><a href="#exchangesfig_uc2_5" class="auto internal xref">Figure 20</a> shows the request and provisioning of CA certificates in the infrastructure. 
 The following subsections describe the corresponding artifacts.<a href="#section-7.5-2" class="pilcrow">¶</a></p>
 <span id="name-ca-certificates-retrival-ex"></span><div id="exchangesfig_uc2_5">
-<figure id="figure-21">
+<figure id="figure-20">
           <div id="section-7.5-3.1">
             <div class="alignCenter art-svg artwork" id="section-7.5-3.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="256" width="576" viewBox="0 0 576 256" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4444,7 +4437,7 @@ The following subsections describe the corresponding artifacts.<a href="#section
               </svg><a href="#section-7.5-3.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
+<figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
 <a href="#name-ca-certificates-retrival-ex" class="selfRef">CA certificates retrival exchange</a>
           </figcaption></figure>
 </div>
@@ -4468,7 +4461,7 @@ The following subsections describe the corresponding artifacts.<a href="#section
 The additional processing is to sign the CA certificate(s) information using the registrar LDevID credentials.
 This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certificates are provided as base64-encoded "x5bag" (see definition in <span>[<a href="#RFC9360" class="cite xref">RFC9360</a>]</span>) in the JWS payload.<a href="#section-7.5.2-2" class="pilcrow">¶</a></p>
 <span id="name-representation-of-ca-certif"></span><div id="PCAC">
-<figure id="figure-22">
+<figure id="figure-21">
             <div class="alignLeft art-text artwork" id="section-7.5.2-3.1">
 <pre>
 # The CA certificates data with registrar signature in
@@ -4503,7 +4496,7 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
 }
 </pre>
 </div>
-<figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
+<figcaption><a href="#figure-21" class="selfRef">Figure 21</a>:
 <a href="#name-representation-of-ca-certif" class="selfRef">Representation of CA certificate(s) data with registrar signature</a>
             </figcaption></figure>
 </div>
@@ -4539,10 +4532,10 @@ The IDevID CA certificate is necessary, when the connection between the Registra
         </ul>
 <p id="section-7.6-6">The Registrar-Agent <span class="bcp14">MAY</span> optionally use TLS to protect the communication as outlined in <a href="#tpvr" class="auto internal xref">Section 7.1</a>.<a href="#section-7.6-6" class="pilcrow">¶</a></p>
 <p id="section-7.6-7">The Registrar-Agent provides the information via distinct pledge endpoints as following.
-<a href="#exchangesfig_uc2_6" class="auto internal xref">Figure 23</a> shows the provisioning of the voucher to the pledge. 
+<a href="#exchangesfig_uc2_6" class="auto internal xref">Figure 22</a> shows the provisioning of the voucher to the pledge. 
 The following subsections describe the corresponding artifacts.<a href="#section-7.6-7" class="pilcrow">¶</a></p>
 <span id="name-voucher-exchange"></span><div id="exchangesfig_uc2_6">
-<figure id="figure-23">
+<figure id="figure-22">
           <div id="section-7.6-8.1">
             <div class="alignCenter art-svg artwork" id="section-7.6-8.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="256" width="576" viewBox="0 0 576 256" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4624,7 +4617,7 @@ The following subsections describe the corresponding artifacts.<a href="#section
               </svg><a href="#section-7.6-8.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-23" class="selfRef">Figure 23</a>:
+<figcaption><a href="#figure-22" class="selfRef">Figure 22</a>:
 <a href="#name-voucher-exchange" class="selfRef">Voucher exchange</a>
           </figcaption></figure>
 </div>
@@ -4634,7 +4627,7 @@ The following subsections describe the corresponding artifacts.<a href="#section
 <a href="#section-7.6.1" class="section-number selfRef">7.6.1. </a><a href="#name-request-artifact-voucher" class="section-name selfRef">Request Artifact: Voucher</a>
           </h4>
 <p id="section-7.6.1-1">The Registrar-Agent <span class="bcp14">SHALL</span> send the voucher-response to the pledge by HTTP POST to the endpoint: "/.well-known/brski/svr".<a href="#section-7.6.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.6.1-2">The Registrar-Agent voucher-response Content-Type header is <code>application/voucher-jws+json</code> and contains the voucher as provided by the MASA. An example is given in <a href="#MASA-vr" class="auto internal xref">Figure 18</a> for a MASA  signed voucher and in <a href="#MASA-REG-vr" class="auto internal xref">Figure 19</a> for the voucher with the additional signature of the registrar.<a href="#section-7.6.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.6.1-2">The Registrar-Agent voucher-response Content-Type header is <code>application/voucher-jws+json</code> and contains the voucher as provided by the MASA. An example is given in <a href="#MASA-vr" class="auto internal xref">Figure 17</a> for a MASA  signed voucher and in <a href="#MASA-REG-vr" class="auto internal xref">Figure 18</a> for the voucher with the additional signature of the registrar.<a href="#section-7.6.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.6.1-3">A nonceless voucher may be accepted as in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> and may be allowed by a manufacture's pledge implementation.<a href="#section-7.6.1-3" class="pilcrow">¶</a></p>
 <p id="section-7.6.1-4">To perform the validation of several signatures on the voucher object, the pledge <span class="bcp14">SHALL</span> perform the signature verification in the following order:<a href="#section-7.6.1-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-7.6.1-5">
@@ -4663,12 +4656,12 @@ If all steps stated above have been performed successfully, the pledge <span cla
           </h4>
 <p id="section-7.6.2-1">After voucher verification and validation the pledge <span class="bcp14">MUST</span> reply with a status telemetry message as defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.7" class="relref">Section 5.7</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 The pledge generates the voucher-status and provides it as signed JSON-in-JWS object in response to the Registrar-Agent.<a href="#section-7.6.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.6.2-2">The response has the Content-Type <code>application/jose+json</code> and is signed using the IDevID of the pledge as shown in <a href="#vstat" class="auto internal xref">Figure 24</a>.
+<p id="section-7.6.2-2">The response has the Content-Type <code>application/jose+json</code> and is signed using the IDevID of the pledge as shown in <a href="#vstat" class="auto internal xref">Figure 23</a>.
 As the reason field is optional (see <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>), it <span class="bcp14">MAY</span> be omitted in case of success.
 The reason-context is an arbitrary JSON object that may provide additional information specific to a failure. 
-The content of this field is not subject to standardization, but examples are provided in <a href="#vstat" class="auto internal xref">Figure 24</a>.<a href="#section-7.6.2-2" class="pilcrow">¶</a></p>
+The content of this field is not subject to standardization, but examples are provided in <a href="#vstat" class="auto internal xref">Figure 23</a>.<a href="#section-7.6.2-2" class="pilcrow">¶</a></p>
 <span id="name-representation-of-pledge-vo"></span><div id="vstat">
-<figure id="figure-24">
+<figure id="figure-23">
             <div class="alignLeft art-text artwork" id="section-7.6.2-3.1">
 <pre>
 # The "pledge-voucher-status" telemetry in general JWS
@@ -4717,7 +4710,7 @@ The content of this field is not subject to standardization, but examples are pr
 }
 </pre>
 </div>
-<figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
+<figcaption><a href="#figure-23" class="selfRef">Figure 23</a>:
 <a href="#name-representation-of-pledge-vo" class="selfRef">Representation of pledge voucher status telemetry</a>
             </figcaption></figure>
 </div>
@@ -4731,10 +4724,10 @@ The content of this field is not subject to standardization, but examples are pr
         <h3 id="name-supply-ca-certificates-to-p">
 <a href="#section-7.7" class="section-number selfRef">7.7. </a><a href="#name-supply-ca-certificates-to-p" class="section-name selfRef">Supply CA Certificates to Pledge</a>
         </h3>
-<p id="section-7.7-1"><a href="#exchangesfig_uc2_7" class="auto internal xref">Figure 25</a> shows the provisioning of the CA certificates aquired by the pledge-agent to the pledge. 
+<p id="section-7.7-1"><a href="#exchangesfig_uc2_7" class="auto internal xref">Figure 24</a> shows the provisioning of the CA certificates aquired by the pledge-agent to the pledge. 
 The following subsections describe the corresponding artifacts.<a href="#section-7.7-1" class="pilcrow">¶</a></p>
 <span id="name-certificate-provisioning-ex"></span><div id="exchangesfig_uc2_7">
-<figure id="figure-25">
+<figure id="figure-24">
           <div id="section-7.7-2.1">
             <div class="alignCenter art-svg artwork" id="section-7.7-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="240" width="576" viewBox="0 0 576 240" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4813,7 +4806,7 @@ The following subsections describe the corresponding artifacts.<a href="#section
               </svg><a href="#section-7.7-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-25" class="selfRef">Figure 25</a>:
+<figcaption><a href="#figure-24" class="selfRef">Figure 24</a>:
 <a href="#name-certificate-provisioning-ex" class="selfRef">Certificate provisioning exchange</a>
           </figcaption></figure>
 </div>
@@ -4824,7 +4817,7 @@ The following subsections describe the corresponding artifacts.<a href="#section
           </h4>
 <p id="section-7.7.1-1">The Registrar-Agent <span class="bcp14">SHALL</span> provide the set of CA certificates requested from the registrar to the pledge by HTTP POST to the endpoint: "/.well-known/brski/scac".<a href="#section-7.7.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.7.1-2">As the CA certificate provisioning is crucial from a security perspective, this provisioning <span class="bcp14">SHOULD</span> only be done, if the voucher-response has been successfully processed by pledge as reflected in the voucher status telemetry.<a href="#section-7.7.1-2" class="pilcrow">¶</a></p>
-<p id="section-7.7.1-3">The CA certificates message has the Content-Type <code>application/jose+json</code> and is signed using the credential of the registrar as shown in <a href="#PCAC" class="auto internal xref">Figure 22</a>.<a href="#section-7.7.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.7.1-3">The CA certificates message has the Content-Type <code>application/jose+json</code> and is signed using the credential of the registrar as shown in <a href="#PCAC" class="auto internal xref">Figure 21</a>.<a href="#section-7.7.1-3" class="pilcrow">¶</a></p>
 <p id="section-7.7.1-4">The CA certificates are provided as base64-encoded "x5bag".
 The pledge <span class="bcp14">SHALL</span> install the received CA certificates as trust anchor after successful verification of the registrar's signature.<a href="#section-7.7.1-4" class="pilcrow">¶</a></p>
 </section>
@@ -4862,10 +4855,10 @@ The pledge <span class="bcp14">SHALL</span> install the received CA certificates
         <h3 id="name-supply-enroll-response-to-p">
 <a href="#section-7.8" class="section-number selfRef">7.8. </a><a href="#name-supply-enroll-response-to-p" class="section-name selfRef">Supply Enroll-Response to Pledge</a>
         </h3>
-<p id="section-7.8-1"><a href="#exchangesfig_uc2_8" class="auto internal xref">Figure 26</a> shows the supply of the Enroll-Response to the pledge.
+<p id="section-7.8-1"><a href="#exchangesfig_uc2_8" class="auto internal xref">Figure 25</a> shows the supply of the Enroll-Response to the pledge.
 The following subsections describe the corresponding artifacts.<a href="#section-7.8-1" class="pilcrow">¶</a></p>
 <span id="name-enroll-response-exchange"></span><div id="exchangesfig_uc2_8">
-<figure id="figure-26">
+<figure id="figure-25">
           <div id="section-7.8-2.1">
             <div class="alignCenter art-svg artwork" id="section-7.8-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="256" width="576" viewBox="0 0 576 256" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -4947,7 +4940,7 @@ The following subsections describe the corresponding artifacts.<a href="#section
               </svg><a href="#section-7.8-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-26" class="selfRef">Figure 26</a>:
+<figcaption><a href="#figure-25" class="selfRef">Figure 25</a>:
 <a href="#name-enroll-response-exchange" class="selfRef">Enroll-Response exchange</a>
           </figcaption></figure>
 </div>
@@ -4971,16 +4964,16 @@ If the verification of the LDevID certificate succeeds, the status property <spa
           </h4>
 <p id="section-7.8.2-1">After enrollment processing the pledge <span class="bcp14">MUST</span> reply with a enrollment status telemetry message as defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.9.4" class="relref">Section 5.9.4</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 The enroll-status is also a signed object in BRSKI-PRM and results in form of JSON-in-JWS here.
-If the pledge verified the received LDevID certificate successfully it <span class="bcp14">SHALL</span> sign the enroll-status using its new LDevID credentials as shown in <a href="#estat" class="auto internal xref">Figure 28</a>.
+If the pledge verified the received LDevID certificate successfully it <span class="bcp14">SHALL</span> sign the enroll-status using its new LDevID credentials as shown in <a href="#estat" class="auto internal xref">Figure 27</a>.
 In failure case, the pledge <span class="bcp14">SHALL</span> use its IDevID credentials.
 <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.9.4" class="relref">Section 5.9.4</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> specifies the enrollment status telemetry message with two optional fields for "reason" and "reason-context". 
 In BRSKI-PRM the optional fields are mandated to have a clear distinction between other status messages and <span class="bcp14">MUST</span> be provided therefore.
 The reason-context is an arbitrary JSON object that provides additional information specific to a failure. 
-The content of this field is not subject to standardization, but examples are provided in <a href="#estat" class="auto internal xref">Figure 28</a>.<a href="#section-7.8.2-1" class="pilcrow">¶</a></p>
+The content of this field is not subject to standardization, but examples are provided in <a href="#estat" class="auto internal xref">Figure 27</a>.<a href="#section-7.8.2-1" class="pilcrow">¶</a></p>
 <p id="section-7.8.2-2">The following CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> explains enroll-status response structure. 
 It is similar as defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.9.4" class="relref">Section 5.9.4</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> with the optional fields set to mandatory as described above.<a href="#section-7.8.2-2" class="pilcrow">¶</a></p>
 <span id="name-cddl-for-pledge-enrollment-"></span><div id="e_stat_res_def">
-<figure id="figure-27">
+<figure id="figure-26">
             <div class="alignLeft art-cddl art-text artwork" id="section-7.8.2-3.1">
 <pre>
 enrollstatus-trigger = {
@@ -4991,13 +4984,13 @@ enrollstatus-trigger = {
   }
 </pre>
 </div>
-<figcaption><a href="#figure-27" class="selfRef">Figure 27</a>:
+<figcaption><a href="#figure-26" class="selfRef">Figure 26</a>:
 <a href="#name-cddl-for-pledge-enrollment-" class="selfRef">CDDL for pledge-enrollment-status response</a>
             </figcaption></figure>
 </div>
 <p id="section-7.8.2-4">The response has the Content-Type <code>application/jose+json</code>.<a href="#section-7.8.2-4" class="pilcrow">¶</a></p>
 <span id="name-representation-of-pledge-en"></span><div id="estat">
-<figure id="figure-28">
+<figure id="figure-27">
             <div class="alignLeft art-text artwork" id="section-7.8.2-5.1">
 <pre>
 # The "pledge-enroll-status" telemetry in General JWS Serialization
@@ -5045,7 +5038,7 @@ enrollstatus-trigger = {
 }
 </pre>
 </div>
-<figcaption><a href="#figure-28" class="selfRef">Figure 28</a>:
+<figcaption><a href="#figure-27" class="selfRef">Figure 27</a>:
 <a href="#name-representation-of-pledge-en" class="selfRef">Representation of pledge enroll status telemetry</a>
             </figcaption></figure>
 </div>
@@ -5177,7 +5170,7 @@ This status indicates if the pledge could process the voucher successfully or no
           <h4 id="name-request-artifact-voucher-st">
 <a href="#section-7.9.1" class="section-number selfRef">7.9.1. </a><a href="#name-request-artifact-voucher-st" class="section-name selfRef">Request Artifact: Voucher Status (vStatus)</a>
           </h4>
-<p id="section-7.9.1-1">The Registrar-Agent sends the pledge voucher status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/voucher_status". The Content-Type header is kept as <code>application/jose+json</code> as depicted in the example in <a href="#vstat" class="auto internal xref">Figure 24</a>.<a href="#section-7.9.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.9.1-1">The Registrar-Agent sends the pledge voucher status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/voucher_status". The Content-Type header is kept as <code>application/jose+json</code> as depicted in the example in <a href="#vstat" class="auto internal xref">Figure 23</a>.<a href="#section-7.9.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.9.1-2">The registrar <span class="bcp14">SHOULD</span> log the transaction provided for a pledge via Registrar-Agent and include the identity of the Registrar-Agent in these logs. For log analysis the following may be considered:<a href="#section-7.9.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.9.1-3.1">
@@ -5214,7 +5207,7 @@ Within the server logs the server <span class="bcp14">SHOULD</span> capture this
 <p id="section-7.10-1">The Registrar-Agent <span class="bcp14">MUST</span> provide the pledge's enroll status to the registrar.
 The status indicates the pledge could process the Enroll-Response (certificate) and holds the corresponding private key.<a href="#section-7.10-1" class="pilcrow">¶</a></p>
 <span id="name-enroll-status-telemetry-exc"></span><div id="exchangesfig_uc2_10">
-<figure id="figure-29">
+<figure id="figure-28">
           <div id="section-7.10-2.1">
             <div class="alignCenter art-svg artwork" id="section-7.10-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="240" width="576" viewBox="0 0 576 240" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -5290,7 +5283,7 @@ The status indicates the pledge could process the Enroll-Response (certificate) 
               </svg><a href="#section-7.10-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-29" class="selfRef">Figure 29</a>:
+<figcaption><a href="#figure-28" class="selfRef">Figure 28</a>:
 <a href="#name-enroll-status-telemetry-exc" class="selfRef">Enroll Status telemetry exchange</a>
           </figcaption></figure>
 </div>
@@ -5301,7 +5294,7 @@ The status indicates the pledge could process the Enroll-Response (certificate) 
 <a href="#section-7.10.1" class="section-number selfRef">7.10.1. </a><a href="#name-request-artifact-enroll-sta" class="section-name selfRef">Request Artifact: Enroll Status (eStatus)</a>
           </h4>
 <p id="section-7.10.1-1">The Registrar-Agent sends the pledge enroll status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint "/.well-known/brski/enrollstatus".
-The Content-Type header is kept as <code>application/jose+json</code> as depicted in the example in <a href="#estat" class="auto internal xref">Figure 28</a>.<a href="#section-7.10.1-1" class="pilcrow">¶</a></p>
+The Content-Type header is kept as <code>application/jose+json</code> as depicted in the example in <a href="#estat" class="auto internal xref">Figure 27</a>.<a href="#section-7.10.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.10.1-2">The registrar <span class="bcp14">MUST</span> verify the signature of the pledge enroll status.
 Also, the registrar <span class="bcp14">SHALL</span> validate that the pledge is an accepted device of the domain based on the contained product-serial-number in the LDevID certificate referenced in the header of the enroll status.
 The registrar <span class="bcp14">SHOULD</span> log this event.
@@ -5333,7 +5326,7 @@ Within the server log the registrar <span class="bcp14">SHOULD</span> capture th
 This information may be useful to solve errors, when the pledge was not able to connect to the target domain during the bootstrapping.
 The pledge <span class="bcp14">MAY</span> provide the dedicated endpoint for the Query Pledge Status operation.<a href="#section-7.11-1" class="pilcrow">¶</a></p>
 <span id="name-pledge-status-exchange"></span><div id="exchangesfig_uc2_11">
-<figure id="figure-30">
+<figure id="figure-29">
           <div id="section-7.11-2.1">
             <div class="alignCenter art-svg artwork" id="section-7.11-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="256" width="576" viewBox="0 0 576 256" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -5414,7 +5407,7 @@ The pledge <span class="bcp14">MAY</span> provide the dedicated endpoint for the
               </svg><a href="#section-7.11-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
-<figcaption><a href="#figure-30" class="selfRef">Figure 30</a>:
+<figcaption><a href="#figure-29" class="selfRef">Figure 29</a>:
 <a href="#name-pledge-status-exchange" class="selfRef">Pledge Status exchange</a>
           </figcaption></figure>
 </div>
@@ -5428,10 +5421,10 @@ The response header <span class="bcp14">MUST</span> have the Content-Type field 
           <h4 id="name-request-artifact-status-tri">
 <a href="#section-7.11.1" class="section-number selfRef">7.11.1. </a><a href="#name-request-artifact-status-tri" class="section-name selfRef">Request Artifact: Status Trigger (tStatus)</a>
           </h4>
-<p id="section-7.11.1-1">The Status Query artifact is a JWS structure signing information on the requested status-type, the time and date the request is created, and the product serial-number of the pledge contacted as shown in <a href="#stat_req_def" class="auto internal xref">Figure 31</a>.
+<p id="section-7.11.1-1">The Status Query artifact is a JWS structure signing information on the requested status-type, the time and date the request is created, and the product serial-number of the pledge contacted as shown in <a href="#stat_req_def" class="auto internal xref">Figure 30</a>.
 The following Concise Data Definition Language (CDDL) <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> defines the structure of the unsigned Status Query data (i.e., JWS payload):<a href="#section-7.11.1-1" class="pilcrow">¶</a></p>
 <span id="name-cddl-for-unsigned-status-tr"></span><div id="stat_req_def">
-<figure id="figure-31">
+<figure id="figure-30">
             <div class="alignLeft art-cddl art-text artwork" id="section-7.11.1-2.1">
 <pre>
   statustrigger = {
@@ -5442,7 +5435,7 @@ The following Concise Data Definition Language (CDDL) <span>[<a href="#RFC8610" 
   }
 </pre>
 </div>
-<figcaption><a href="#figure-31" class="selfRef">Figure 31</a>:
+<figcaption><a href="#figure-30" class="selfRef">Figure 30</a>:
 <a href="#name-cddl-for-unsigned-status-tr" class="selfRef">CDDL for unsigned Status Trigger data (statustrigger)</a>
             </figcaption></figure>
 </div>
@@ -5456,9 +5449,9 @@ A pledge (or Registrar-Agent) that receives a version larger than it knows about
 This indicates the pledge to provide current status information regarding the bootstrapping status (voucher processing and enrollment of the pledge into the new domain).<a href="#section-7.11.1-6" class="pilcrow">¶</a></p>
 <p id="section-7.11.1-7">As the Status Query artifact is defined generic, it may be used by other specifications to request further status information using other status types, e.g., for onboarding to get further information about enrollment of application specific LDevIDs or other parameters.
 This is out of scope for this specification.<a href="#section-7.11.1-7" class="pilcrow">¶</a></p>
-<p id="section-7.11.1-8"><a href="#stat_req_data" class="auto internal xref">Figure 32</a> below shows an example for unsigned Status Query data in JSON syntax using status-type <code>bootstrap</code>.<a href="#section-7.11.1-8" class="pilcrow">¶</a></p>
+<p id="section-7.11.1-8"><a href="#stat_req_data" class="auto internal xref">Figure 31</a> below shows an example for unsigned Status Query data in JSON syntax using status-type <code>bootstrap</code>.<a href="#section-7.11.1-8" class="pilcrow">¶</a></p>
 <span id="name-example-of-unsigned-status-"></span><div id="stat_req_data">
-<figure id="figure-32">
+<figure id="figure-31">
             <div class="alignLeft art-text artwork" id="section-7.11.1-9.1">
 <pre>
 {
@@ -5469,14 +5462,14 @@ This is out of scope for this specification.<a href="#section-7.11.1-7" class="p
 }
 </pre>
 </div>
-<figcaption><a href="#figure-32" class="selfRef">Figure 32</a>:
+<figcaption><a href="#figure-31" class="selfRef">Figure 31</a>:
 <a href="#name-example-of-unsigned-status-" class="selfRef">Example of unsigned Status Query data in JSON syntax using status-type bootstrap for the Status Query artifact</a>
             </figcaption></figure>
 </div>
 <p id="section-7.11.1-10">The Status Query data <span class="bcp14">MUST</span> be signed by the Registrar-Agent using its private key corresponding to the EE (RegAgt) certificate.
-When using a JWS signature, the Status Query artifact looks as shown in <a href="#stat_req" class="auto internal xref">Figure 33</a> and the Content-Type response header <span class="bcp14">MUST</span> be set to <code>application/jose+json</code>:<a href="#section-7.11.1-10" class="pilcrow">¶</a></p>
+When using a JWS signature, the Status Query artifact looks as shown in <a href="#stat_req" class="auto internal xref">Figure 32</a> and the Content-Type response header <span class="bcp14">MUST</span> be set to <code>application/jose+json</code>:<a href="#section-7.11.1-10" class="pilcrow">¶</a></p>
 <span id="name-status-query-representation"></span><div id="stat_req">
-<figure id="figure-33">
+<figure id="figure-32">
             <div class="alignLeft art-text artwork" id="section-7.11.1-11.1">
 <pre>
 {
@@ -5490,7 +5483,7 @@ When using a JWS signature, the Status Query artifact looks as shown in <a href=
 }
 </pre>
 </div>
-<figcaption><a href="#figure-33" class="selfRef">Figure 33</a>:
+<figcaption><a href="#figure-32" class="selfRef">Figure 32</a>:
 <a href="#name-status-query-representation" class="selfRef">Status Query Representation in General JWS JSON Serialization Syntax</a>
             </figcaption></figure>
 </div>
@@ -5506,7 +5499,7 @@ When using a JWS signature, the Status Query artifact looks as shown in <a href=
 <p id="section-7.11.2-2">The pledge-status response message is signed with IDevID or LDevID, depending on bootstrapping state of the pledge.<a href="#section-7.11.2-2" class="pilcrow">¶</a></p>
 <p id="section-7.11.2-3">The following CDDL defines the structure of the Pledge Status (pStatus) data:<a href="#section-7.11.2-3" class="pilcrow">¶</a></p>
 <span id="name-cddl-for-unsigned-pledge-st"></span><div id="stat_res_def">
-<figure id="figure-34">
+<figure id="figure-33">
             <div class="alignLeft art-cddl art-text artwork" id="section-7.11.2-4.1">
 <pre>
   pledgestatus = {
@@ -5524,7 +5517,7 @@ When using a JWS signature, the Status Query artifact looks as shown in <a href=
   }
 </pre>
 </div>
-<figcaption><a href="#figure-34" class="selfRef">Figure 34</a>:
+<figcaption><a href="#figure-33" class="selfRef">Figure 33</a>:
 <a href="#name-cddl-for-unsigned-pledge-st" class="selfRef">CDDL for unsigned Pledge Status data (pledgestatus)</a>
             </figcaption></figure>
 </div>
@@ -5573,10 +5566,10 @@ The pledge signs the response message using its LDevID(Pledge).<a href="#section
           </ul>
 <p id="section-7.11.2-9">The pledge-status responses are cumulative in the sense that connect-success implies enroll-success, which in turn implies voucher-success.
 The reason-context is an arbitrary JSON object that provides additional information specific to a failure. 
-The content of this field is not subject to standardization, but examples are provided in <a href="#stat_res" class="auto internal xref">Figure 35</a>.<a href="#section-7.11.2-9" class="pilcrow">¶</a></p>
-<p id="section-7.11.2-10"><a href="#stat_res" class="auto internal xref">Figure 35</a> provides an example for the bootstrapping-status information.<a href="#section-7.11.2-10" class="pilcrow">¶</a></p>
+The content of this field is not subject to standardization, but examples are provided in <a href="#stat_res" class="auto internal xref">Figure 34</a>.<a href="#section-7.11.2-9" class="pilcrow">¶</a></p>
+<p id="section-7.11.2-10"><a href="#stat_res" class="auto internal xref">Figure 34</a> provides an example for the bootstrapping-status information.<a href="#section-7.11.2-10" class="pilcrow">¶</a></p>
 <span id="name-example-of-pledge-status-re"></span><div id="stat_res">
-<figure id="figure-35">
+<figure id="figure-34">
             <div class="alignLeft art-text artwork" id="section-7.11.2-11.1">
 <pre>
 # The pledge "status-response" in General JWS Serialization syntax
@@ -5612,7 +5605,7 @@ The content of this field is not subject to standardization, but examples are pr
 }
 </pre>
 </div>
-<figcaption><a href="#figure-35" class="selfRef">Figure 35</a>:
+<figcaption><a href="#figure-34" class="selfRef">Figure 34</a>:
 <a href="#name-example-of-pledge-status-re" class="selfRef">Example of pledge-status response</a>
             </figcaption></figure>
 </div>
@@ -6070,7 +6063,7 @@ Support in PoC implementations and comments resulting from the implementation wa
 <p id="appendix-A.1-1">The following is an example request sent from a Pledge to the Registrar-Agent, in "General JWS JSON Serialization".
 The message size of this PVR is: 4649 bytes<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
 <span id="name-example-pledge-voucher-reque"></span><div id="ExamplePledgeVoucherRequestfigure">
-<figure id="figure-36">
+<figure id="figure-35">
           <div class="alignLeft art-text artwork" id="appendix-A.1-2.1">
 <pre>
 =============== NOTE: '\' line wrapping per RFC 8792 ================
@@ -6152,7 +6145,7 @@ yuXZ2aw93zZId45R7XxAK-12YKIx6qLjiPjMw"
 }
 </pre>
 </div>
-<figcaption><a href="#figure-36" class="selfRef">Figure 36</a>:
+<figcaption><a href="#figure-35" class="selfRef">Figure 35</a>:
 <a href="#name-example-pledge-voucher-reque" class="selfRef">Example Pledge-Voucher-Request - PVR</a>
           </figcaption></figure>
 </div>
@@ -6169,7 +6162,7 @@ been received by the Registrar, and then has been processed by the Registrar ("c
 Note that the previous PVR can be seen in the payload as "prior-signed-voucher-request".
 The message size of this RVR is: 13257 bytes<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
 <span id="name-example-registrar-voucher-r"></span><div id="ExampleRegistrarVoucherRequestfigure">
-<figure id="figure-37">
+<figure id="figure-36">
           <div class="alignLeft art-text artwork" id="appendix-A.2-3.1">
 <pre>
 =============== NOTE: '\' line wrapping per RFC 8792 ================
@@ -6377,7 +6370,7 @@ yyFd3kP6YCn35YYJ7yK35d3styo_yoiPfKA"
 }
 </pre>
 </div>
-<figcaption><a href="#figure-37" class="selfRef">Figure 37</a>:
+<figcaption><a href="#figure-36" class="selfRef">Figure 36</a>:
 <a href="#name-example-registrar-voucher-r" class="selfRef">Example Registrar-Voucher-Request - RVR</a>
           </figcaption></figure>
 </div>
@@ -6390,7 +6383,7 @@ yyFd3kP6YCn35YYJ7yK35d3styo_yoiPfKA"
         </h3>
 <p id="appendix-A.3-1">The following is an example voucher-response from MASA to Pledge via Registrar and Registrar-Agent, in "General JWS JSON Serialization". The message size of this Voucher is: 1916 bytes<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
 <span id="name-example-voucher-response-fr"></span><div id="ExampleVoucherResponsefigure">
-<figure id="figure-38">
+<figure id="figure-37">
           <div class="alignLeft art-text artwork" id="appendix-A.3-2.1">
 <pre>
 =============== NOTE: '\' line wrapping per RFC 8792 ================
@@ -6430,7 +6423,7 @@ TvHMUw0wx9wdyuNVjNoAgLysNIgEvlcltBw"
 }
 </pre>
 </div>
-<figcaption><a href="#figure-38" class="selfRef">Figure 38</a>:
+<figcaption><a href="#figure-37" class="selfRef">Figure 37</a>:
 <a href="#name-example-voucher-response-fr" class="selfRef">Example Voucher-Response from MASA</a>
           </figcaption></figure>
 </div>
@@ -6444,7 +6437,7 @@ TvHMUw0wx9wdyuNVjNoAgLysNIgEvlcltBw"
 <p id="appendix-A.4-1">The following is an example voucher-response from MASA to Pledge via Registrar and Registrar-Agent, in "General JWS JSON Serialization".
 The message size of this Voucher is: 3006 bytes<a href="#appendix-A.4-1" class="pilcrow">¶</a></p>
 <span id="name-example-voucher-response-fro"></span><div id="ExampleVoucherResponseWithRegSignfigure">
-<figure id="figure-39">
+<figure id="figure-38">
           <div class="alignLeft art-text artwork" id="appendix-A.4-2.1">
 <pre>
 =============== NOTE: '\' line wrapping per RFC 8792 ================
@@ -6502,7 +6495,7 @@ qhRRyjnxp80IV_Fy1RAOXIIzs3Q8CnMgBgg"
 }
 </pre>
 </div>
-<figcaption><a href="#figure-39" class="selfRef">Figure 39</a>:
+<figcaption><a href="#figure-38" class="selfRef">Figure 38</a>:
 <a href="#name-example-voucher-response-fro" class="selfRef">Example Voucher-Response from MASA, with additional Registrar signature</a>
           </figcaption></figure>
 </div>
@@ -6569,7 +6562,10 @@ IDevID certificates are intended to be widely useable and EKU does not support t
           <p id="appendix-C-3.3.1">Updated CDDL source code integration to allow for automatic verification<a href="#appendix-C-3.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.4">
-          <p id="appendix-C-3.4.1">Reordered description in section <a href="#pvr" class="auto internal xref">Section 7.3</a> to better match the order of communication and artifact processing.<a href="#appendix-C-3.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.4.1">Reordered description in section <a href="#pvr" class="auto internal xref">Section 7.3</a> in <a href="#tper" class="auto internal xref">Section 7.2</a> to better match the order of communication and artifact processing.<a href="#appendix-C-3.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-3.5">
+          <p id="appendix-C-3.5.1">Updated CDDL for the request-enroll trigger in <a href="#tper_CDDL_def" class="auto internal xref">Figure 13</a> according to the outcome of the interim ANIMA WG meeting discussions on April 19, 2024<a href="#appendix-C-3.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-C-4">From IETF draft 11 -&gt; IETF draft 12:<a href="#appendix-C-4" class="pilcrow">¶</a></p>
@@ -6704,7 +6700,7 @@ IDevID certificates are intended to be widely useable and EKU does not support t
           <p id="appendix-C-11.14.1">issue #99: motivated verification of second signature on voucher in <a href="#voucher" class="auto internal xref">Section 7.6</a><a href="#appendix-C-11.14.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.15">
-          <p id="appendix-C-11.15.1">issue #100: included negative example in <a href="#vstat" class="auto internal xref">Figure 24</a><a href="#appendix-C-11.15.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.15.1">issue #100: included negative example in <a href="#vstat" class="auto internal xref">Figure 23</a><a href="#appendix-C-11.15.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.16">
           <p id="appendix-C-11.16.1">issue #101: included handling if <a href="#voucher" class="auto internal xref">Section 7.6</a> voucher telemetry information has not been received by the Registrar-Agent<a href="#appendix-C-11.16.1" class="pilcrow">¶</a></p>
@@ -6713,7 +6709,7 @@ IDevID certificates are intended to be widely useable and EKU does not support t
           <p id="appendix-C-11.17.1">issue #102: relaxed requirements for CA certs provisioning in <a href="#cacerts" class="auto internal xref">Section 7.7</a><a href="#appendix-C-11.17.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.18">
-          <p id="appendix-C-11.18.1">issue #105: included negative example in <a href="#estat" class="auto internal xref">Figure 28</a><a href="#appendix-C-11.18.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.18.1">issue #105: included negative example in <a href="#estat" class="auto internal xref">Figure 27</a><a href="#appendix-C-11.18.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.19">
           <p id="appendix-C-11.19.1">issue #107: included example for certificate revocation in <a href="#estatus" class="auto internal xref">Section 7.10</a><a href="#appendix-C-11.19.1" class="pilcrow">¶</a></p>
@@ -6725,7 +6721,7 @@ IDevID certificates are intended to be widely useable and EKU does not support t
           <p id="appendix-C-11.21.1">issue #111: included pledge-status response processing for authenticated requests in <a href="#query" class="auto internal xref">Section 7.11</a><a href="#appendix-C-11.21.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.22">
-          <p id="appendix-C-11.22.1">issue #112: added "Example key word in pledge-status response in <a href="#stat_res" class="auto internal xref">Figure 35</a><a href="#appendix-C-11.22.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.22.1">issue #112: added "Example key word in pledge-status response in <a href="#stat_res" class="auto internal xref">Figure 34</a><a href="#appendix-C-11.22.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.23">
           <p id="appendix-C-11.23.1">issue #113: enhanced description of status reply for "factory-default" in  <a href="#query" class="auto internal xref">Section 7.11</a><a href="#appendix-C-11.23.1" class="pilcrow">¶</a></p>

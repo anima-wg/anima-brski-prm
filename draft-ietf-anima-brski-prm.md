@@ -1098,23 +1098,17 @@ The following CDDL {{!RFC8610}} explains the Pledge Enroll-Request Trigger struc
 
 ~~~~ cddl
 pledgeenrollrequesttrigger = {
-    "enroll-type": "enroll-generic-cert"
-  }
+	"enroll-type": $enroll-type
+}
+
+$enroll-type /= "enroll-generic-cert"
 ~~~~
 {: #tper_CDDL_def title='CDDL for Pledge Enroll-Request Trigger' artwork-align="left" sourcecode-markers=“true”}
 
-The enroll-type field is an enum, identifying what is being enrolled. 
-Currently only "enroll-generic-cert" for the LDevID certificate is defined. 
-
-{{tPER_payload}} below shows an example for unsigned Pledge Enroll-Request Trigger in JSON syntax. 
-
-~~~~
-{
-  "enroll-type" : "enroll-generic-cert"
-}
-~~~~
-{: #tPER_payload title="Data example for pledgeenrollrequesttrigger" artwork-align="left"}
-
+The enroll-type  allows for specifying arbitrary indications, which type of certificate is to be enrolled. 
+BRSKI enris an enum, identifying what is being enrolled. 
+As shown in {{tper_CDDL_def}}, BRSKI-PRM defines only "enroll-generic-cert" for the enrollment of the generic LDevID certificate. 
+Other specifications using this mechanism may define further values, e.g., to bootstrap application related certificates, e.g., indicated by a value "enroll-app-cert".
 
 The Pledge Enroll-Request Trigger (tPER) artifact MUST be encoded in JSON as defined in {{!RFC8259}} following the CDDL definition {{tper_CDDL_def}}.
 
@@ -2917,7 +2911,8 @@ From IETF draft 12 -> IETF draft 13:
 * Deleted figure in Section "Request Artifact: Pledge Voucher-Request Trigger (tPVR)" for JSON representation of tPVR, as it has been replaced by CDDL
 * Updated reason-content description in status response messages (enroll-status, voucher-status, and status-response.
 * Updated CDDL source code integration to allow for automatic verification
-* Reordered description in section {{pvr}} to better match the order of communication and artifact processing.
+* Reordered description in section {{pvr}} in {{tper}} to better match the order of communication and artifact processing.
+* Updated CDDL for the request-enroll trigger in {{tper_CDDL_def}} according to the outcome of the interim ANIMA WG meeting discussions on April 19, 2024
 
 From IETF draft 11 -> IETF draft 12:
 
