@@ -1115,7 +1115,7 @@ The Pledge Enroll-Request Trigger (tPER) artifact MUST be encoded in JSON as def
 The Pledge Enroll-Request Trigger (tPER) artifact MAY be used to provide additional data, like CSR attributes.
 How to provide and use such additional data is out of scope for this specification.
 
-### Response Artifact: Pledge Enroll-Request (PER)
+### Response Artifact: Pledge Enroll-Request (PER)  {#per-resp-artifact}
 
 The Pledge Enroll-Request (PER) artifact is a JWS-signed PKCS#10 Certificate Signing Request (CSR) utilizing the csr-grouping of the `ietf-ztp-types` YANG module as defined in {{!I-D.ietf-netconf-sztp-csr}}.
 The CSR already assures POP of the private key corresponding to the contained public key.
@@ -1185,6 +1185,7 @@ With the collected PVR and PER, the Registrar-Agent starts the interaction with 
 The new protected header field "created-on" is introduced to reflect freshness of the PER.
 The field is marked critical "crit" to ensure that it must be understood and validated by the receiver (here the domain registrar) according to {{Section 4.1.11 of RFC7515}}.
 It allows the registrar to verify the timely correlation between the PER and previously exchanged messages, i.e., created-on of PER >= created-on of PVR >= created-on of PVR trigger.
+If the pledge does not have synchronized time, it used the created-on time from the agent-signed-data during the creation of the PVR and should advance that value for use in PER creation.
 The registrar MAY consider to ignore any but the newest PER from the same pledge in the case the registrar has at any point in time more than one pending PER from the pledge.
 
 As the Registrar-Agent is intended to facilitate communication between the pledge and the domain registrar, a collection of requests from more than one pledge is possible.
@@ -1471,7 +1472,7 @@ The pinned domain certificate is already contained in the voucher payload ("pinn
 
 (For many installations, with a single registrar credential, the registrar credential is what is pinned)
 
-In {{!RFC8995}}, the Registrar proved possession of the it's credential when the TLS session was setup.
+In {{!RFC8995}}, the Registrar proved possession of it's credential when the TLS session was setup.
 While the pledge could not, at the time, validate the certificate truly belonged the registrar, it did validate that the certificate it was provided was able to authenticate the TLS connection.
 
 In the BRSKI-PRM mode, with the Registrar-Agent mediating all communication, the Pledge has not as yet been able to witness that the intended Registrar really does possess the relevant private key.
@@ -1616,7 +1617,7 @@ Note while BRSKI-PRM targets the initial enrollment, re-enrollment may be suppor
 
 ## Request CA Certificates {#req_cacerts}
 
-As the pledge will verify it own certificate LDevID certificate when received, it also needs the corresponding CA certificates.
+As the pledge will verify it own LDevID certificate when received, it also needs the corresponding CA certificates.
 This is done in EST {{RFC7030}} using the "/.well-known/est/cacerts" endpoint, which provides the CA certificates over a TLS protected connection.
 BRSKI-PRM requires a signature wrapped CA certificate object, to avoid that the pledge can be provided with arbitrary CA certificates in an authorized way.
 The registrar signed CA certificate object will allow the pledge to verify the authorization to install the received CA certificate(s).
@@ -1641,7 +1642,7 @@ The following subsections describe the corresponding artifacts.
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
 ~~~~
-{: #exchangesfig_uc2_5 title="CA certificates retrival exchange" artwork-align="center"}
+{: #exchangesfig_uc2_5 title="CA certificates retrieval exchange" artwork-align="center"}
 
 In case the TLS connection to the registrar is already closed, the Registrar-Agent opens a new TLS connection with the registrar as stated in {{pvr}}.
 
@@ -1822,7 +1823,7 @@ If the pledge did not did not provide voucher status telemetry information after
 
 ## Supply CA Certificates to Pledge {#cacerts}
 
-{{exchangesfig_uc2_7}} shows the provisioning of the CA certificates aquired by the pledge-agent to the pledge. 
+{{exchangesfig_uc2_7}} shows the provisioning of the CA certificates acquired by the pledge-agent to the pledge. 
 The following subsections describe the corresponding artifacts. 
 
 ~~~~ aasvg
@@ -2383,7 +2384,7 @@ An alternative may be that the onboarding state may expire after a certain time,
 
 In addition, the pledge may assume that repeated triggering for PVR are the result of a communication error with the Registrar-Agent.
 In that case the pledge MAY simply resent the PVR previously sent.
-Note that in case of resending, a contained nonce and also the contained agent-signed-data in the PVR would consequently be reused.
+Note that in case of re-sending, a contained nonce and also the contained agent-signed-data in the PVR would consequently be reused.
 
 
 
@@ -2394,13 +2395,13 @@ The domain registrar needs to verify that the "proximity-registrar-cert" field i
 In addition, the domain registrar needs to verify the association of the pledge to its domain based on the product-serial-number contained in the PVR and in the IDevID certificate of the pledge. (This is just part of the supply chain integration).
 Moreover, the domain registrar verifies if the Registrar-Agent is authorized to interact with the pledge for voucher-requests and enroll-requests, based on the EE (RegAgt) certificate data contained in the PVR.
 
-Misbinding of a pledge by a faked domain registrar is countered as described in BRSKI security considerations {{Section 11.4 of !RFC8995}}.
+Mis-binding of a pledge by a faked domain registrar is countered as described in BRSKI security considerations {{Section 11.4 of !RFC8995}}.
 
 
 
 ## Misuse of Registrar-Agent Credentials {#sec_cons_reg-agt}
 
-Concerns of misusage of a Registrar-Agent with a valid EE (RegAgt) certificate may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the Registrar-Agent against the domain registrar.
+Concerns of misuse of a Registrar-Agent with a valid EE (RegAgt) certificate may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the Registrar-Agent against the domain registrar.
 The EE (RegAgt) certificate may have been acquired by a prior BRSKI run for the Registrar-Agent, if an IDevID is available on Registrar-Agent.
 Alternatively, the EE (RegAgt) certificate may be acquired by a service technician from the domain PKI system in an authenticated way.
 
@@ -2441,10 +2442,11 @@ For this reason, these guidelines do not follow the template described by {{Sect
 
 # Acknowledgments
 
-We would like to thank the various reviewers, in particular Brian E. Carpenter, Charlie Kaufman (Early SECDIR review), Martin Björklund (Early YANGDOCTORS review), Marco Tiloca (Early IOTDIR review), Oskar Camenzind, Hendrik Brockhaus, and Ingo Wenda for their input and discussion on use cases and call flows.
-Further review input was provided by Jesser Bouzid, Dominik Tacke, and Christian Spindler.
+We would like to thank the various reviewers, in particular Brian E. Carpenter, Charlie Kaufman (Early SECDIR review), Martin Bj&ouml;rklund (Early YANGDOCTORS review), Marco Tiloca (Early IOTDIR review), Oskar Camenzind, Hendrik Brockhaus, and Ingo Wenda for their input and discussion on use cases and call flows.
+Further review input was provided by Jesser Bouzid, Dominik Tacke, Christian Spindler, and Julian Krieger.
 Special thanks to Esko Dijk for the in deep review and the improving proposals.
 Support in PoC implementations and comments resulting from the implementation was provided by Hong Rui Li and He Peng Jia.
+Review comments in the context of a formal analysis of BRSKI-PRM have been provided by Marco Calipari. 
 
 
 
@@ -2913,6 +2915,7 @@ From IETF draft 12 -> IETF draft 13:
 * Updated CDDL source code integration to allow for automatic verification
 * Reordered description in section {{pvr}} in {{tper}} to better match the order of communication and artifact processing.
 * Updated CDDL for the request-enroll trigger in {{tper_CDDL_def}} according to the outcome of the interim ANIMA WG meeting discussions on April 19, 2024
+* Included statement in {{per-resp-artifact}} for using the advanced created-on time from the agent-signed-data also for the PER, when the pledge has no synchronized clock
 
 From IETF draft 11 -> IETF draft 12:
 

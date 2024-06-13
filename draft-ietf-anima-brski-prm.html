@@ -24,12 +24,12 @@ The approach defined here is agnostic to the enrollment protocol that connects t
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
     intervaltree 3.1.0
-    Jinja2 3.1.3
+    Jinja2 3.1.4
     lxml 4.9.4
-    platformdirs 4.2.0
-    pycountry 23.12.11
+    platformdirs 4.2.2
+    pycountry 24.6.1
     PyYAML 6.0.1
-    requests 2.31.0
+    requests 2.32.3
     setuptools 52.0.0
     six 1.16.0
     wcwidth 0.2.13
@@ -1217,11 +1217,11 @@ li > p:last-of-type:only-child {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">BRSKI-PRM</td>
-<td class="right">April 2024</td>
+<td class="right">June 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 21 October 2024</td>
+<td class="center">Expires 15 December 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1234,12 +1234,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-13</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-04-19" class="published">19 April 2024</time>
+<time datetime="2024-06-13" class="published">13 June 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-10-21">21 October 2024</time></dd>
+<dd class="expires"><time datetime="2024-12-15">15 December 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1299,7 +1299,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 21 October 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 15 December 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -3636,7 +3636,7 @@ Other specifications using this mechanism may define further values, e.g., to bo
 How to provide and use such additional data is out of scope for this specification.<a href="#section-7.2.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="response-artifact-pledge-enroll-request-per">
+<div id="per-resp-artifact">
 <section id="section-7.2.2">
           <h4 id="name-response-artifact-pledge-en">
 <a href="#section-7.2.2" class="section-number selfRef">7.2.2. </a><a href="#name-response-artifact-pledge-en" class="section-name selfRef">Response Artifact: Pledge Enroll-Request (PER)</a>
@@ -3713,6 +3713,7 @@ Note that in this case the current LDevID credential is used instead of the IDev
 <p id="section-7.2.2-13">The new protected header field "created-on" is introduced to reflect freshness of the PER.
 The field is marked critical "crit" to ensure that it must be understood and validated by the receiver (here the domain registrar) according to <span><a href="https://rfc-editor.org/rfc/rfc7515#section-4.1.11" class="relref">Section 4.1.11</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.
 It allows the registrar to verify the timely correlation between the PER and previously exchanged messages, i.e., created-on of PER &gt;= created-on of PVR &gt;= created-on of PVR trigger.
+If the pledge does not have synchronized time, it used the created-on time from the agent-signed-data during the creation of the PVR and should advance that value for use in PER creation.
 The registrar <span class="bcp14">MAY</span> consider to ignore any but the newest PER from the same pledge in the case the registrar has at any point in time more than one pending PER from the pledge.<a href="#section-7.2.2-13" class="pilcrow">¶</a></p>
 <p id="section-7.2.2-14">As the Registrar-Agent is intended to facilitate communication between the pledge and the domain registrar, a collection of requests from more than one pledge is possible.
 This allows bulk bootstrapping of several pledges using the same connection between the Registrar-Agent and the domain registrar.<a href="#section-7.2.2-14" class="pilcrow">¶</a></p>
@@ -4111,7 +4112,7 @@ The signature is created by signing the original "JWS Payload" produced by MASA 
 The x5c component of the "JWS Protected Header" <span class="bcp14">MUST</span> contain the registrar EE certificate as well as potential subordinate CA certificates up to (but not including) the pinned domain certificate.
 The pinned domain certificate is already contained in the voucher payload ("pinned-domain-cert").<a href="#section-7.3.5-1" class="pilcrow">¶</a></p>
 <p id="section-7.3.5-2">(For many installations, with a single registrar credential, the registrar credential is what is pinned)<a href="#section-7.3.5-2" class="pilcrow">¶</a></p>
-<p id="section-7.3.5-3">In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the Registrar proved possession of the it's credential when the TLS session was setup.
+<p id="section-7.3.5-3">In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the Registrar proved possession of it's credential when the TLS session was setup.
 While the pledge could not, at the time, validate the certificate truly belonged the registrar, it did validate that the certificate it was provided was able to authenticate the TLS connection.<a href="#section-7.3.5-3" class="pilcrow">¶</a></p>
 <p id="section-7.3.5-4">In the BRSKI-PRM mode, with the Registrar-Agent mediating all communication, the Pledge has not as yet been able to witness that the intended Registrar really does possess the relevant private key.
 This second signature provides for the same level of assurance to the pledge, and that it matches the public key (of the Registrar) that the pledge received in the trigger for the PVR (see <a href="#tpvr_CDDL_def" class="auto internal xref">Figure 6</a>).<a href="#section-7.3.5-4" class="pilcrow">¶</a></p>
@@ -4349,14 +4350,14 @@ It creates a Registrar Enroll-Request (RER) by utilizing the protocol expected b
         <h3 id="name-request-ca-certificates">
 <a href="#section-7.5" class="section-number selfRef">7.5. </a><a href="#name-request-ca-certificates" class="section-name selfRef">Request CA Certificates</a>
         </h3>
-<p id="section-7.5-1">As the pledge will verify it own certificate LDevID certificate when received, it also needs the corresponding CA certificates.
+<p id="section-7.5-1">As the pledge will verify it own LDevID certificate when received, it also needs the corresponding CA certificates.
 This is done in EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> using the "/.well-known/est/cacerts" endpoint, which provides the CA certificates over a TLS protected connection.
 BRSKI-PRM requires a signature wrapped CA certificate object, to avoid that the pledge can be provided with arbitrary CA certificates in an authorized way.
 The registrar signed CA certificate object will allow the pledge to verify the authorization to install the received CA certificate(s).
 As the CA certificate(s) are provided to the pledge after the voucher, the pledge has the required information (the domain certificate) to verify the wrapped CA certificate object.<a href="#section-7.5-1" class="pilcrow">¶</a></p>
 <p id="section-7.5-2"><a href="#exchangesfig_uc2_5" class="auto internal xref">Figure 20</a> shows the request and provisioning of CA certificates in the infrastructure. 
 The following subsections describe the corresponding artifacts.<a href="#section-7.5-2" class="pilcrow">¶</a></p>
-<span id="name-ca-certificates-retrival-ex"></span><div id="exchangesfig_uc2_5">
+<span id="name-ca-certificates-retrieval-e"></span><div id="exchangesfig_uc2_5">
 <figure id="figure-20">
           <div id="section-7.5-3.1">
             <div class="alignCenter art-svg artwork" id="section-7.5-3.1.1">
@@ -4438,7 +4439,7 @@ The following subsections describe the corresponding artifacts.<a href="#section
 </div>
 </div>
 <figcaption><a href="#figure-20" class="selfRef">Figure 20</a>:
-<a href="#name-ca-certificates-retrival-ex" class="selfRef">CA certificates retrival exchange</a>
+<a href="#name-ca-certificates-retrieval-e" class="selfRef">CA certificates retrieval exchange</a>
           </figcaption></figure>
 </div>
 <p id="section-7.5-4">In case the TLS connection to the registrar is already closed, the Registrar-Agent opens a new TLS connection with the registrar as stated in <a href="#pvr" class="auto internal xref">Section 7.3</a>.<a href="#section-7.5-4" class="pilcrow">¶</a></p>
@@ -4724,7 +4725,7 @@ The content of this field is not subject to standardization, but examples are pr
         <h3 id="name-supply-ca-certificates-to-p">
 <a href="#section-7.7" class="section-number selfRef">7.7. </a><a href="#name-supply-ca-certificates-to-p" class="section-name selfRef">Supply CA Certificates to Pledge</a>
         </h3>
-<p id="section-7.7-1"><a href="#exchangesfig_uc2_7" class="auto internal xref">Figure 24</a> shows the provisioning of the CA certificates aquired by the pledge-agent to the pledge. 
+<p id="section-7.7-1"><a href="#exchangesfig_uc2_7" class="auto internal xref">Figure 24</a> shows the provisioning of the CA certificates acquired by the pledge-agent to the pledge. 
 The following subsections describe the corresponding artifacts.<a href="#section-7.7-1" class="pilcrow">¶</a></p>
 <span id="name-certificate-provisioning-ex"></span><div id="exchangesfig_uc2_7">
 <figure id="figure-24">
@@ -5792,7 +5793,7 @@ One mitigation may be that the pledge does not limited the number of voucher-req
 An alternative may be that the onboarding state may expire after a certain time, if no further interaction has happened.<a href="#section-10.1-2" class="pilcrow">¶</a></p>
 <p id="section-10.1-3">In addition, the pledge may assume that repeated triggering for PVR are the result of a communication error with the Registrar-Agent.
 In that case the pledge <span class="bcp14">MAY</span> simply resent the PVR previously sent.
-Note that in case of resending, a contained nonce and also the contained agent-signed-data in the PVR would consequently be reused.<a href="#section-10.1-3" class="pilcrow">¶</a></p>
+Note that in case of re-sending, a contained nonce and also the contained agent-signed-data in the PVR would consequently be reused.<a href="#section-10.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="misuse-of-acquired-pvr-and-per-by-registrar-agent">
@@ -5804,7 +5805,7 @@ Note that in case of resending, a contained nonce and also the contained agent-s
 The domain registrar needs to verify that the "proximity-registrar-cert" field in the PVR matches its own registrar LDevID certificate.
 In addition, the domain registrar needs to verify the association of the pledge to its domain based on the product-serial-number contained in the PVR and in the IDevID certificate of the pledge. (This is just part of the supply chain integration).
 Moreover, the domain registrar verifies if the Registrar-Agent is authorized to interact with the pledge for voucher-requests and enroll-requests, based on the EE (RegAgt) certificate data contained in the PVR.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
-<p id="section-10.2-2">Misbinding of a pledge by a faked domain registrar is countered as described in BRSKI security considerations <span><a href="https://rfc-editor.org/rfc/rfc8995#section-11.4" class="relref">Section 11.4</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-10.2-2" class="pilcrow">¶</a></p>
+<p id="section-10.2-2">Mis-binding of a pledge by a faked domain registrar is countered as described in BRSKI security considerations <span><a href="https://rfc-editor.org/rfc/rfc8995#section-11.4" class="relref">Section 11.4</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-10.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec_cons_reg-agt">
@@ -5812,7 +5813,7 @@ Moreover, the domain registrar verifies if the Registrar-Agent is authorized to 
         <h3 id="name-misuse-of-registrar-agent-c">
 <a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-misuse-of-registrar-agent-c" class="section-name selfRef">Misuse of Registrar-Agent Credentials</a>
         </h3>
-<p id="section-10.3-1">Concerns of misusage of a Registrar-Agent with a valid EE (RegAgt) certificate may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the Registrar-Agent against the domain registrar.
+<p id="section-10.3-1">Concerns of misuse of a Registrar-Agent with a valid EE (RegAgt) certificate may be addressed by utilizing short-lived certificates (e.g., valid for a day) to authenticate the Registrar-Agent against the domain registrar.
 The EE (RegAgt) certificate may have been acquired by a prior BRSKI run for the Registrar-Agent, if an IDevID is available on Registrar-Agent.
 Alternatively, the EE (RegAgt) certificate may be acquired by a service technician from the domain PKI system in an authenticated way.<a href="#section-10.3-1" class="pilcrow">¶</a></p>
 <p id="section-10.3-2">In addition it is required that the EE (RegAgt) certificate is valid for the complete bootstrapping phase.
@@ -5857,9 +5858,10 @@ For this reason, these guidelines do not follow the template described by <span>
 <a href="#section-11" class="section-number selfRef">11. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
 <p id="section-11-1">We would like to thank the various reviewers, in particular Brian E. Carpenter, Charlie Kaufman (Early SECDIR review), Martin Björklund (Early YANGDOCTORS review), Marco Tiloca (Early IOTDIR review), Oskar Camenzind, Hendrik Brockhaus, and Ingo Wenda for their input and discussion on use cases and call flows.
-Further review input was provided by Jesser Bouzid, Dominik Tacke, and Christian Spindler.
+Further review input was provided by Jesser Bouzid, Dominik Tacke, Christian Spindler, and Julian Krieger.
 Special thanks to Esko Dijk for the in deep review and the improving proposals.
-Support in PoC implementations and comments resulting from the implementation was provided by Hong Rui Li and He Peng Jia.<a href="#section-11-1" class="pilcrow">¶</a></p>
+Support in PoC implementations and comments resulting from the implementation was provided by Hong Rui Li and He Peng Jia.
+Review comments in the context of a formal analysis of BRSKI-PRM have been provided by Marco Calipari.<a href="#section-11-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <section id="section-12">
@@ -5963,7 +5965,7 @@ Support in PoC implementations and comments resulting from the implementation wa
 <dd class="break"></dd>
 <dt id="I-D.ietf-anima-brski-ae">[I-D.ietf-anima-brski-ae]</dt>
         <dd>
-<span class="refAuthor">von Oheimb, D.</span>, <span class="refAuthor">Fries, S.</span>, and <span class="refAuthor">H. Brockhaus</span>, <span class="refTitle">"BRSKI-AE: Alternative Enrollment Protocols in BRSKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-brski-ae-10</span>, <time datetime="2024-03-01" class="refDate">1 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-10">https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-10</a>&gt;</span>. </dd>
+<span class="refAuthor">von Oheimb, D.</span>, <span class="refAuthor">Fries, S.</span>, and <span class="refAuthor">H. Brockhaus</span>, <span class="refTitle">"BRSKI-AE: Alternative Enrollment Protocols in BRSKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-brski-ae-11</span>, <time datetime="2024-06-03" class="refDate">3 June 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-11">https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-11</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.irtf-t2trg-taxonomy-manufacturer-anchors">[I-D.irtf-t2trg-taxonomy-manufacturer-anchors]</dt>
         <dd>
@@ -6566,6 +6568,9 @@ IDevID certificates are intended to be widely useable and EKU does not support t
 </li>
         <li class="normal" id="appendix-C-3.5">
           <p id="appendix-C-3.5.1">Updated CDDL for the request-enroll trigger in <a href="#tper_CDDL_def" class="auto internal xref">Figure 13</a> according to the outcome of the interim ANIMA WG meeting discussions on April 19, 2024<a href="#appendix-C-3.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-3.6">
+          <p id="appendix-C-3.6.1">Included statement in <a href="#per-resp-artifact" class="auto internal xref">Section 7.2.2</a> for using the advanced created-on time from the agent-signed-data also for the PER, when the pledge has no synchronized clock<a href="#appendix-C-3.6.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-C-4">From IETF draft 11 -&gt; IETF draft 12:<a href="#appendix-C-4" class="pilcrow">¶</a></p>
