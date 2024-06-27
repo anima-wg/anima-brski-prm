@@ -1342,6 +1342,8 @@ The payload of the RVR MUST contain the following parameter as part of the vouch
 
 * created-on: current date and time in yang:date-and-time format of RVR creation
 
+* idevid-issuer: issuer value from the pledge IDevID certificate
+
 * nonce: copied from the PVR
 
 * serial-number: product-serial-number of pledge.
@@ -1382,6 +1384,7 @@ The object is signed using the registrar LDevID credentials, which corresponds t
   "ietf-voucher-request:voucher": {
      "created-on": "2022-01-04T02:37:39.235Z",
      "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
+     "idevid-issuer": "base64encodedvalue==",
      "serial-number": "callee4711",
      "assertion": "agent-proximity",
      "prior-signed-voucher-request": "base64encodedvalue==",
