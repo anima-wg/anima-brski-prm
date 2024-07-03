@@ -242,9 +242,6 @@ RA:
 : Registration Authority, an optional system component to which a CA delegates certificate management functions such as authorization checks.
 In BRSKI-PRM, this is a functionality of the domain registrar, as in BRSKI {{!RFC8995}}.
 
-RER:
-: Registrar Enroll-Request is the CSR of a PER sent to the CA by the domain registrar (in its role as PKI RA).
-
 RVR:
 : Registrar Voucher-Request is a signature-wrapped voucher-request, signed by the domain registrar that sends it to the MASA.
 For BRSKI-PRM, it contains a copy of the original PVR received from the pledge.
@@ -1408,7 +1405,7 @@ For the JWS-signed JSON format used by this specification, the RVR artifact MUST
 
 ~~~~
 {
-  "payload": BASE64URL(UTF8(ietf-voucher-request:voucher)),
+  "payload": BASE64URL(UTF8(JSON RVR Data)),
   "signatures": [
     {
       "protected": BASE64URL(UTF8(JWS Protected Header)),
