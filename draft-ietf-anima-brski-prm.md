@@ -76,7 +76,6 @@ normative:
   RFC6763:
   RFC7030:
   RFC7515:
-  RFC8366:
   RFC8610:
   RFC8615:
   RFC8995:
@@ -332,8 +331,8 @@ Based on the intended target environment described in {{sup-env}}, the following
 * By contrast, the Registrar-Agent can be authenticated by the registrar as a component, acting on behalf of the registrar.
   In addition the registrar must be able to verify, which Registrar-Agent was in direct contact with the pledge.
 
-* It would be inaccurate for the voucher-request and voucher-response to use an assertion with value `proximity` in the voucher, as the pledge was not in direct contact with the registrar for bootstrapping.
-  Therefore, a new Agent-Proximity Assertion value {#agt_prx} is necessary for distinguishing assertions the MASA can state.
+* It would be inaccurate for the voucher-request and voucher-response to use the assertion type `proximity` in the voucher, as the pledge was not in direct contact with the registrar for bootstrapping.
+  Therefore, a new assertion type is necessary for distinguishing assertions the MASA can state.
 
 At least the following properties are required for the voucher and enrollment processing:
 
@@ -449,7 +448,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
   However, there are also differences compared to BRSKI {{!RFC8995}}:
   
   * A BRSKI-PRM domain registrar does not interact with a pledge directly, but through the Registrar-Agent as defined in {{exchanges}}.
-  * A BRSKI-PRM domain registrar offers additional endpoints as defined in {{registrar_component}} to support the the signature-wrapped artifacts used by BRSKI-PRM.
+  * A BRSKI-PRM domain registrar offers additional endpoints as defined in {{registrar_component}} to support the signature-wrapped artifacts used by BRSKI-PRM.
 
 * Vendor services: Encompass MASA and Ownership Tracker and are used as defined in {{!RFC8995}}.
   A MASA responsible for pledges that implement BRSKI-PRM is expected to support BRSKI-PRM extensions:
@@ -544,10 +543,10 @@ The benefits of BRSKI-PRM can be achieved even without the operational complexit
 
 ## Agent-Proximity Assertion {#agt_prx}
 
-"Agent-proximity" is a statement in the PVR and in the voucher that the registrar LDevID certificate was provided via the Registrar-Agent as defined in {{exchanges}} and not directly to the pledge.
-Agent-proximity is therefore a different assertion than "proximity", which is defined in {{Section 4 of RFC8366}}. TODO: not bis, no proximity in Section 4
-Agent-proximity is defined as additional assertion type in {{I-D.ietf-anima-rfc8366bis}}.
-This assertion can be verified by the registrar and also by the MASA during the voucher-request processing.
+"Agent-proximity" is a statement in the PVR and in Voucher that the registrar LDevID certificate was provided via the Registrar-Agent as defined in {{exchanges}} and not directly to the pledge.
+It is therefore a different assertion than "proximity", which is defined in {{Section 3 of !RFC8995}}. TODO(check correct RFC; was RFC8366)
+Hence, {{I-D.ietf-anima-rfc8366bis}} defines the additional assertion type `agent-proximity`.
+This assertion type can be verified by the registrar and MASA during BRSKI-PRM voucher-request processing.
 
 In BRSKI, the pledge verifies POP of the registrar via the TLS handshake and pins that public key as the `proximity-registrar-cert` into the voucher request.
 This allows the MASA to verify the proximity of the pledge and registrar, facilitating a decision to assign the pledge to that domain owner.
@@ -557,9 +556,9 @@ In contrast, in BRSKI-PRM, the pledge has no direct connection to the registrar 
 In a similar fashion, the pledge MUST accept the Registrar-Agent LDevID certificate provisionally.
 See also {{Section 5 of !RFC8995}} on "provisional state".
 
-For asserting agent-proximity, the Registrar-Agent LDevID certificate MUST belong the same domain as the registrar LDevID certificate, i.e., MUST possess a common domain trust anchor.
-Akin to the proximity assertion in the BRSKI case, the agent-proximity provides pledge proximity evidence to the MASA.
-But additionally, agent-proximity allows the domain registrar to be sure that the PVR collected by the Registrar-Agent was in fact collected by the Registrar-Agent, to which the registrar is connected to.
+For the Agent-Proximity Assertion, the Registrar-Agent LDevID certificate MUST belong the same domain as the registrar LDevID certificate, i.e., MUST possess a common domain trust anchor.
+Akin to the Proximity Assertion in BRSKI {{!RFC8995}}, the Agent-Proximity Assertion provides pledge proximity evidence to the MASA.
+But additionally, the Agent-Proximity Assertion allows the domain registrar to be sure that the PVR collected by the Registrar-Agent was in fact collected by the Registrar-Agent to which the registrar is connected.
 
 
 
@@ -576,7 +575,7 @@ These endpoints accommodate for the authenticated self-contained objects used by
 |:---------------|:---------------------------|:------------------------|
 | requestenroll  | Supply PER to Registrar    | {{per}} |
 |------------------------
-| wrappedcacerts | Obtain CA Certificates    | {{req_cacerts}} |
+| wrappedcacerts | Obtain CA Certificates    | {{obtain_cacerts}} |
 |===============
 {: #registrar_ep_table title='Additional Well-Known Endpoints on a BRSKI-PRM Registrar'}
 
@@ -585,15 +584,15 @@ For this, it MUST possess the IDevID trust anchor(s) (i.e., root or issuing CA c
 This behavior is retained in BRSKI-PRM.
 
 Further, the registrar possesses its own LDevID certificate and corresponding private key for authenticating and signing.
-It MUST use the same credential for authentication in the TLS session with a Registrar-Agent and for signing artifacts for that Registrar-Agent (see {{rcv-artifact}}).
+It MUST use the same certificate/credential for authentication in the TLS session with a Registrar-Agent and for signing artifacts for that Registrar-Agent and its pledges (see {{rcv-artifact}}).
 If the registrar LDevID certificate is provided to the Registrar-Agent(s) via configuration, the credential used for signing artifacts for a Registrar-Agent MUST correspond to the registrar LDevID certificate configured at that Registrar-Agent.
 This ensures that Registrar-Agent and pledge can verify the certficate and signature of the intended domain registrar.
-Overall, this has operational implications when the registrar is part of a scalable framework as described in {{?I-D.richardson-anima-registrar-considerations, Section 1.3.1}}.
+Overall, this has operational implications when the registrar is part of a scalable framework as described in {{Section 1.3.1 of ?I-D.richardson-anima-registrar-considerations}}.
 
 Finally, the domain registrar MUST possess the Registrar-Agent LDevID certificate(s) to validate agent-signed data and to provide it to the MASA.
 The registrar MAY use the certificate verified during client authentication within the TLS sessions with the Registrar-Agent;
 in this case, the registrar MUST possess the domain trust anchor (i.e., domain CA certificate) for the Registrar-Agent LDevID certificate to verify the certificate chain.
-Alternatively, the the Registrar-Agent LDevID certificate(s) MAY be provided via configuration or a repository.
+Alternatively, the Registrar-Agent LDevID certificate(s) MAY be provided via configuration or a repository.
 
 
 ### Domain Registrar with Combined Functionality
@@ -628,7 +627,7 @@ It is RECOMMENDED to use short lived Registrar-Agent LDevIDs in the range of day
 Further, the Registrar-Agent requires the domain registrar LDevID certificate to provide it to the pledge.
 It MAY use the certificate verified during server authentication within an initial TLS session with the registrar;
 in this case, the Registrar-Agent MUST possess the domain trust anchor (i.e., CA certificate) for the registrar LDevID certificate to verify the certificate chain.
-Alternatively, the the registrar LDevID certificate(s) MAY be provided via configuration or a repository.
+Alternatively, the registrar LDevID certificate(s) MAY be provided via configuration or a repository.
 The registrar IP address is provided either by configuration or by using the discovery mechanism defined in {{!RFC8995}} (see {{discovery_uc2_reg}}).
 
 In addition to the certificates, the Registrar-Agent is provided with the product-serial-number(s) of the pledge(s) to be bootstrapped.
@@ -785,27 +784,32 @@ Other specifications may define alternative formats for representing authenticat
  ~                  ~                 ~                 ~            ~
  |                  |                 |                 |            |
  |                  |<-----mTLS------>|                 |            |
+ |                  |                 |                 |            |
  |                  |         [Registrar-Agent          |            |
  |                  |    authenticated&authorized?]     |            |
+ |                  |                 |                 |            |
  |                  |-------PVR------>|                 |            |
+ |                  |                 |                 |            |
  |                  |          [accept device?]         |            |
  |                  |          [contact vendor]         |            |
  |                  |                 |                 |            |
  |                  |                 |<------------mTLS------------>|
  |                  |                 |--------------RVR------------>|
+ |                  |                 |                 ~            |
  |                  |                 |              [extract DomainID]
  |                  |                 |              [update audit log]
+ |                  |                 |                 ~            |
  |                  |                 |<-----------Voucher-----------|
- |                  |<----Voucher'----|                 |            |
+ |                  |<----Voucher''---|                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
 (4) Supply PER to Registrar (including Key Infrastructure interaction)
  ~                  ~                 ~                 ~            ~
  |                  |                 |                 |            |
- |                  |<----(mTLS)----->|                 |            |
+ |                  |<---((mTLS))---->|                 |            |
  |                  |-------PER------>|                 |            |
- |                  |                 |-------CSR------>|            |
- |                  |                 |<--Certificate---|            |
+ |                  |                 |----[Request]--->|            |
+ |                  |                 |<--[Certificate]-|            |
  |                  |<--Enroll-Resp---|                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
@@ -813,14 +817,14 @@ Other specifications may define alternative formats for representing authenticat
  ~                  ~                 ~                 ~            ~
  |                  |                 |                 |            |
  |                  |<----(mTLS)----->|                 |            |
- |                  |<--cACert-Resp---|                 |            |
+ |                  |<----caCerts-----|                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
 (6) Supply Voucher to Pledge
  ~                  ~                 ~                 ~            ~
  |                  |                 |                 |            |
  |<----opt. TLS---->|                 |                 |            |
- |<----Voucher'-----|                 |                 |            |
+ |<-----Voucher''---|                 |                 |            |
  |------vStatus---->|                 |                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
@@ -828,7 +832,7 @@ Other specifications may define alternative formats for representing authenticat
  ~                  ~                 ~                 ~            ~
  |                  |                 |                 |            |
  |<----opt. TLS---->|                 |                 |            |
- |<-----cACerts-----|                 |                 |            |
+ |<-----caCerts-----|                 |                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
 (8) Supply Enroll-Response to Pledge
@@ -847,6 +851,7 @@ Other specifications may define alternative formats for representing authenticat
  |                  |                 |<-----------(mTLS)----------->|
  |                  |                 |-----req device audit log---->|
  |                  |                 |<------device audit log-------|
+ |                  |                 |                 |            |
  |                  |        [verify audit log]         |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
@@ -878,7 +883,7 @@ The following sub sections split the interactions shown in {{exchangesfig_uc2_al
 
 4. {{per}} describes the enroll exchange initiated by the Registrar-Agent to the registrar including the interaction of the registrar with the CA using the PER as well as the artifact processing by these entities.
 
-5. {{req_cacerts}} describes the retrival exchange for the optional CA certificate provisioning to the pledge initiated by the Registrar-Agent to the CA.
+5. {{obtain_cacerts}} describes the retrival exchange for the optional CA certificate provisioning to the pledge initiated by the Registrar-Agent to the CA.
 
 6. {{voucher}} describes the Voucher exchange initiated by the Registrar-Agent to the pledge and the returned status information.
 
@@ -897,7 +902,7 @@ The following sub sections split the interactions shown in {{exchangesfig_uc2_al
 ## Trigger Pledge Voucher-Request {#tpvr}
 
 The Registrar-Agent MUST begin the sequence of exchanges by sending the Pledge Voucher-Request Trigger (tPVR).
-This assumes that the Registrar-Agent has already discovered the pledge, for instance as described in {{discovery_uc2_ppa}} and {{exchangesfig_uc2_all}} based on DNS-SD or similar.
+This assumes that the Registrar-Agent has already discovered the pledge, for instance as described in {{discovery_uc2_ppa}} based on DNS-SD or similar.
 
 Optionally, TLS MAY be used to provide privacy for this exchange between the Registrar-Agent and the pledge (see {{pledgehttps}}).
 
@@ -921,12 +926,13 @@ Optionally, TLS MAY be used to provide privacy for this exchange between the Reg
 ~~~~
 {: #exchangesfig_uc2_1 title="PVR acquisition exchange" artwork-align="center"}
 
-The Registrar-Agent triggers the pledge to create a PVR via HTTP POST to the pledge endpoint at `/.well-known/brski/tpvr`.
+The Registrar-Agent SHALL trigger the pledge to create a PVR via HTTP(S) POST to the pledge endpoint at `/.well-known/brski/tpvr`.
 The request body MUST contain the JSON-based Pledge Voucher-Request Trigger (tPVR) artifact as defined in {{tpvr-artifact}}.
 In the request header, the Content-Type field MUST be set to `application/json` and the Accept field SHOULD be set to `application/voucher-jws+json` as defined in {{!I-D.ietf-anima-jws-voucher}}.
 
 Upon receiving a valid tPVR, the pledge MUST reply with the PVR artifact as defined in {{pvr-artifact}} in the body of a 200 OK response.
 In the response header, the Content-Type field MUST be set to `application/voucher-jws+json` as defined in {{!I-D.ietf-anima-jws-voucher}}.
+Note that the pledge has to provisionally accept the tPVR parameters until it receives the voucher (see {{agt_prx}}).
 
 If the pledge is unable to create the PVR, it SHOULD respond with an HTTP error code.
 The following client error status codes SHOULD be used:
@@ -1068,7 +1074,7 @@ note that this makes optional leaves in the YANG definition mandatory for the PV
   if the pledge does not have synchronized time, it SHALL use the `created-on` value from the JSON Agent-Signed Data received with the tPVR artifact and SHOULD advance that value based on its local clock to reflect the PVR creation time
 * `nonce`: SHALL contain a cryptographically strong pseudo-random number
 * `serial-number`: SHALL contain the product-serial-number in the X520SerialNumber field of the pledge IDevID certificate as string as defined in {{Section 2.3.1 of !RFC8995}}
-* `assertion`: SHALL contain the requested voucher assertion value `agent-proximity` (different value as in RFC 8995)
+* `assertion`: SHALL contain the assertion type `agent-proximity` to indicate the pledge request (different from BRSKI {{!RFC8995}})
 * `agent-provided-proximity-registrar-cert`: SHALL contain the base64-encoded registrar LDevID certificate provided in the tPVR by the Registrar-Agent;
   enables the registrar to verify that it is the desired registrar for handling the PVR
 * `agent-signed-data`: SHALL be a copy of the `agent-signed data` member provided in the tPVR by the Registrar-Agent;
@@ -1092,7 +1098,7 @@ note that this makes optional leaves in the YANG definition mandatory for the PV
 
 #### JWS Protected Header
 
-JWS Protected Header MUST follow the definitions of {{Section 3.3 of !I-D.ietf-anima-jws-voucher}}.
+The JWS Protected Header MUST follow the definitions of {{Section 3.3 of !I-D.ietf-anima-jws-voucher}}.
 If the certificate chain is not included in the `x5c` Header Parameter, it MUST be available at the domain registrar for verification of the pledge IDevID certificate.
 
 #### JWS Signature
@@ -1107,7 +1113,7 @@ Once the Registrar-Agent has received the PVR it can trigger the pledge to gener
 
 Optionally, TLS MAY be used to provide privacy for this exchange between the Registrar-Agent and the pledge (see {{pledgehttps}}).
 
-{{exchangesfig_uc2_2}} shows the the acquisition of the PER and the following subsections describe the corresponding artifacts.
+{{exchangesfig_uc2_2}} shows the acquisition of the PER and the following subsections describe the corresponding artifacts.
 
 ~~~~ aasvg
 +--------+    +------------+    +-----------+    +--------+    +------+
@@ -1127,7 +1133,7 @@ Optionally, TLS MAY be used to provide privacy for this exchange between the Reg
 ~~~~
 {: #exchangesfig_uc2_2 title="PER acquisition exchange" artwork-align="center"}
 
-The Registrar-Agent triggers the pledge to create the PER via HTTP POST to the pledge endpoint at `/.well-known/brski/tper`.
+The Registrar-Agent SHALL trigger the pledge to create the PER via HTTP(S) POST to the pledge endpoint at `/.well-known/brski/tper`.
 The request body MUST contain the JSON-based Pledge Enroll-Request Trigger (tPER) artifact as defined in {{tper-artifact}}.
 In the request header, the Content-Type field MUST be set to `application/json` and the Accept field SHOULD BE set to `application/jose+json`.
 
@@ -1196,7 +1202,7 @@ The generated JWS Signature is base64url-encoded to become the string value of t
 
 #### JSON CSR Data {#per-data}
 
-The JSON CSR Data is a JSON document {{RFC8259}} that MUST conform with the data model described by the `csr-grouping` of the `ietf-ztp-types` YANG module defined in {{Section 3.2 of !I-D.ietf-netconf-sztp-csr}} and MUST be encoded using the rules defined in {{!RFC7951}}.
+The JSON CSR Data SHALL be a JSON document {{RFC8259}} that MUST conform with the data model described by the `csr-grouping` of the `ietf-ztp-types` YANG module defined in {{Section 3.2 of !I-D.ietf-netconf-sztp-csr}} and MUST be encoded using the rules defined in {{!RFC7951}}.
 Note that {{!I-D.ietf-netconf-sztp-csr}} also allows for inclusion of CSRs in different formats used by CMP and CMC.
 For PKCS#10 CSRs as used in BRSKI and BRSKI-PRM, the `p10-csr` case of the `csr-grouping` MUST be used.
 
@@ -1266,15 +1272,15 @@ The Registrar-Agent MUST establish a TLS session to the registrar with mutual au
 In contrast to BRSKI {{RFC8995}}, the TLS client authentication uses the Registrar-Agent LDevID certificate instead of pledge IDevID certificate.
 Consequently, the domain registrar can distinguish BRSKI (pledge-initiator-mode) from BRSKI-PRM (pledge-responder-mode).
 
-The registrar SHOULD verify the TLS client authentication of the Registrar-Agent.
-Note that authentication and authorization is verified during the TLS session based on the signatures inside the PVR artifact.
+The registrar SHOULD verify the TLS client authentication of the Registrar-Agent, in particular if the TLS session is used to obtain a fresh Registrar-Agent LDevID certificate (see {{registrar_component}}).
+Note that authentication and authorization is of the pledge verified during the TLS session based on the signatures inside the PVR artifact.
 
 As already stated in {{!RFC8995}}, the use of TLS 1.3 (or newer) is encouraged.
 TLS 1.2 or newer is REQUIRED on the Registrar-Agent side.
 TLS 1.3 (or newer) SHOULD be available on the registrar, but TLS 1.2 MAY be used.
 TLS 1.3 (or newer) SHOULD be available on the MASA, but TLS 1.2 MAY be used.
 
-{{exchangesfig_uc2_3}} shows the exchanges for the Voucher Request processing and the following subsections describe the corresponding artifacts.
+{{exchangesfig_uc2_3}} shows the voucher-request processing and the following subsections describe the corresponding artifacts.
 
 ~~~~ aasvg
 +--------+    +------------+    +-----------+    +--------+    +------+
@@ -1287,24 +1293,30 @@ TLS 1.3 (or newer) SHOULD be available on the MASA, but TLS 1.2 MAY be used.
  ~                  ~                 ~                 ~            ~
  |                  |                 |                 |            |
  |                  |<-----mTLS------>|                 |            |
+ |                  |                 |                 |            |
  |                  |         [Registrar-Agent          |            |
  |                  |    authenticated&authorized?]     |            |
+ |                  |                 |                 |            |
  |                  |-------PVR------>|                 |            |
+ |                  |                 |                 |            |
  |                  |          [accept device?]         |            |
  |                  |          [contact vendor]         |            |
  |                  |                 |                 |            |
  |                  |                 |<------------mTLS------------>|
  |                  |                 |--------------RVR------------>|
+ |                  |                 |                 ~            |
  |                  |                 |              [extract DomainID]
  |                  |                 |              [update audit log]
+ |                  |                 |                 ~            |
  |                  |                 |<-----------Voucher-----------|
- |                  |<----Voucher'----|                 |            |
+ |                  |<----Voucher''---|                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
 ~~~~
 {: #exchangesfig_uc2_3 title="Voucher issuing exchange" artwork-align="center"}
 
-As a first step of the interaction with the domain registrar, the Registrar-Agent supplies the PVR artifact(s) to the registrar via HTTP-over-TLS POST to the registrar endpoint at `/.well-known/brski/requestvoucher`, which is the same endpoint as for to the BRSKI pledge request described in {{Section 5.2 of !RFC8995}}.
+As a first step of the interaction with the domain registrar, the Registrar-Agent SHALL supply the PVR artifact(s) to the registrar via HTTP-over-TLS POST to the registrar endpoint at `/.well-known/brski/requestvoucher`.
+Note that this is the same endpoint as for BRSKI described in {{Section 5.2 of !RFC8995}}.
 The request body MUST contain one previously acquired PVR artifact as defined in {{pvr-artifact}}.
 In the request header, the Content-Type field MUST be set to `application/voucher-jws+json` and the Accept field SHOULD be set to `application/voucher-jws+json` as defined in {{I-D.ietf-anima-jws-voucher}}.
 
@@ -1346,11 +1358,12 @@ Note that BRSKI-PRM allows for alternative formats such as CMS-signed JSON as us
 Overall, a MASA responsible for BRSKI-PRM capabable pledges MUST support the same formats as supported by those pledges.
 
 Once the MASA receives the RVR artifact, it MUST perform the verification as described in {{Section 5.5 of !RFC8995}}.
-Depending on policy, the MASA MAY chose the kind of assertion to perform.
+Depending on policy, the MASA MAY chose the type of assertion to perform.
 For the Agent-Proximity Assertion of BRSKI-PRM (see {{agt_prx}}), the MASA MUST skip the verification described in {{Section 5.5.5 of !RFC8995}} and instead MUST verify for the PVR contained in the `prior-signed-voucher-request` field of the RVR that
 
-* the `agent-provided-proximity-registrar-cert` field contains the registrar LDevID certificate and corresponds to the LDevID credentials used to sign the RVR;
-  TODO(unclear): Note: Correspond here relates to the case that a single registrar LDevID certificate is used or that different registrar LDevID certificates are used, which are issued by the same CA.
+* the `agent-provided-proximity-registrar-cert` field contains an LDevID certificate that belongs to the same domain as the LDevID certificate/credential used to sign the RVR;
+  note that this check allows for installations with multiple domain registrars and for registrar LDevID certificate renewal while PVRs are collected by the Registrar-Agent;
+  in many installations with a single registrar the contained certificate is identical to the sigining certificate
 * the `agent-signed-data` field is signed with the credentials corresponding to the Registrar-Agent LDevID certificate provided in the `agent-sign-cert` field of the RVR;
   this is done via the SubjectKeyIdentifier of the certificate in the `kid` Header Parameter of the JWS Protected Header in the `agent-signed-data` field;
 * the registrar LDevID certificate and the Registrar-Agent LDevID certificate belong to the same domain (i.e., have a common domain CA certificate in their chains).
@@ -1431,10 +1444,10 @@ note that this makes optional leaves in the YANG definition mandatory for the RV
 
 As BRSKI-PRM uses the Agent-Proximity Assertion (see {{agt_prx}}), the JSON RVR Data MUST also contain the following fields:
 
-* `assertion`: SHALL contain the value `agent-proximity` to indicate successful verification of agent-proximity by the registrar
+* `assertion`: SHALL contain the value `agent-proximity` to indicate successful verification of the Agent-Proximity Assertion (see {{agt_prx}}) by the registrar
 * `agent-sign-cert`: SHALL be a JSON array that contains the base64-encoded Registrar-Agent LDevID certificate as known by the registrar (see {{registrar_component}}) as the first item;
   subsequent items MUST contain the corresponding certificate chain for verification at the MASA;
-  the field is used for verification of the `agent-signed-data` field of the PVR for the Agent-Proximity Assertion (see {{agt_prx}})
+  the field is used for verification of the `agent-signed-data` field of the contained PVR
 
 Note that the `ietf-voucher-request` YANG module defines the leaf `agent-sign-cert` as binary;
 this specification refines it as a JSON array structure similar to the `x5c` Header Parameter defined in {{Section 4.1.6 of !RFC7515}}.
@@ -1462,7 +1475,7 @@ this specification refines it as a JSON array structure similar to the `x5c` Hea
 
 #### JWS Protected Header
 
-JWS Protected Header MUST follow the definitions of {{Section 3.3 of !I-D.ietf-anima-jws-voucher}}.
+The JWS Protected Header MUST follow the definitions of {{Section 3.3 of !I-D.ietf-anima-jws-voucher}}.
 However, the `x5c` Header Parameter MUST also contain the certificate chain for verification at the MASA.
 
 #### JWS Signature
@@ -1473,7 +1486,7 @@ The domain registrar MUST sign the RVR artifact using its LDevID credential foll
 ### Backend Response Artifact: Voucher {#voucher-artifact}
 
 The Voucher artifact is defined in {{Section 5.6 of !RFC8995}} (cf. "voucher response").
-The only difference for BRSKI-PRM is that the `assertion` field MAY contain the value `agent-proximity` as defined in {{I-D.ietf-anima-rfc8366bis}}, when it applies.
+The only difference for BRSKI-PRM is that the `assertion` field MAY contain the value `agent-proximity` as defined in {{I-D.ietf-anima-rfc8366bis}}, when the Agent-Proxomity Assertion (see {{agt_prx}}) is performed by the MASA.
 
 For the JWS-signed JSON format used by this specification, the Voucher artifact MUST be a JWS Voucher structure as defined in {{!I-D.ietf-anima-jws-voucher}}.
 It contains JSON Voucher Data in the JWS Payload, for which an example is given in {{voucher_data_example}}:
@@ -1533,16 +1546,17 @@ The domain registrar MUST NOT modify the JWS Payload.
 The registrar-added JWS Protected Header (Registrar) MUST contain the following standard Header Parameters as defined in {{!RFC7515}}:
 
 * `alg`: SHALL contain the algorithm type used to create the signature, e.g., `ES256`, as defined in {{Section 4.1.1 of !RFC7515}}
-* `x5c`: SHALL contain the base64-encoded registrar LDevID certificate as well as the certificate chain up to (but not including) the pinned domain certificate;
+* `x5c`: SHALL contain the base64-encoded registrar LDevID certificate used to sign the voucher as well as the certificate chain up to (but not including) the pinned domain certificate;
   the pinned domain certificate is already contained in the JSON Voucher Data
 
-TODO(certificate, not credential pinned?): Note that for many installations with a single registrar credential, the registrar credential is what is pinned.
+Note that for many installations with a single registrar credential, the registrar LDevID certificate is pinned.
 
 #### JWS Signature (Registrar)
 
 The signature is created by signing the registrar-added JWS Protected Header (Registrar) and the original JWS Payload produced by the MASA as described in {{Section 5.1 of RFC7515}}.
 The registrar MUST use its LDevID credential to sign.
-Note that the credential needs to correspond to the registrar LDevID certificate that was provided to the Registrar-Agent receiving this artifact (see {{registrar_component}}).
+
+Note that the credential needs to be the same as used for server authentication in the TLS session with the Registrar-Agent receiving this artifact (see {{registrar_component}}).
 
 
 ## Supply PER to Registrar (including Key Infrastructure interaction) {#per}
@@ -1554,6 +1568,7 @@ The registrar is able to correlate the PVR and PER artifacts based on the signat
 Note that this also addresses situations in which a nonceless voucher is used and may be pre-provisioned to the pledge.
 
 {{exchangesfig_uc2_4}} depicts exchanges for the PER request handling and the following subsections describe the corresponding artifacts.
+Note that "Request" and "Certificate" do not denote BRSKI-PRM defined artifacts, but are data objects depending on the certificate management protocol used by the domain Key Infrastructure.
 
 ~~~~ aasvg
 +--------+    +------------+    +-----------+    +--------+    +------+
@@ -1567,15 +1582,15 @@ Note that this also addresses situations in which a nonceless voucher is used an
  |                  |                 |                 |            |
  |                  |<----(mTLS)----->|                 |            |
  |                  |-------PER------>|                 |            |
- |                  |                 |-------CSR------>|            |
- |                  |                 |<--Certificate---|            |
+ |                  |                 |----[Request]--->|            |
+ |                  |                 |<--[Certificate]-|            |
  |                  |<--Enroll-Resp---|                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
 ~~~~
 {: #exchangesfig_uc2_4 title="Enroll exchange" artwork-align="center"}
 
-As a first step of the interaction with the domain registrar, the Registrar-Agent supplies the PER artifact(s) to the registrar via HTTP-over-TLS POST to the registrar endpoint at `/.well-known/brski/requestenroll`.
+As a second step of the interaction with the domain registrar, the Registrar-Agent SHALL supply the PER artifact(s) to the registrar via HTTP-over-TLS POST to the registrar endpoint at `/.well-known/brski/requestenroll`.
 The request body MUST contain one previously acquired PER artifact as defined in {{per-artifact}}.
 In the request header, the Content-Type field MUST be set to `application/jose+json` and the Accept field SHOULD be set to `application/jose+json`.
 
@@ -1590,8 +1605,8 @@ The following client error codes SHOULD be used:
 
 * TODO
 
-Otherwise, the registrar extracts the PKCS#10 Certificate Signing Request (CSR) inside the PER (see {{per-artifact}}) and uses the CSR to requests a new pledge LDevID certificate from the domain Key Infrastructure.
-The exact interaction with the Key Infrastructure including the artifacts depends on the certificate management protocol between the RA and the CA, and is out of scope for this document.
+Otherwise, the registrar extracts the PKCS#10 Certificate Signing Request (CSR) inside the PER (see {{per-artifact}}) and uses the CSR to request a new pledge LDevID certificate from the domain Key Infrastructure.
+The exact interaction and exchanged data objects depends on the certificate management protocol used by the Key Infrastructure, and is out of scope for this document.
 
 A successful interaction with the Key Infrastrcutre will result in a pledge LDevID certificate.
 The registrar MUST reply to the Registrar-Agent with the Enroll-Response (Enroll-Resp) as defined in {{er-artifact}} in the body of a 200 OK response.
@@ -1602,7 +1617,7 @@ The following server error codes SHOULD be used:
 
 * TODO
 
-Note while BRSKI-PRM targets the initial enrollment, re-enrollment may be supported in a similar way with the exception that the current pledge LDevID certificate is used instead of the IDevID certificate to sign the PER artifact (see also {{tper}}).
+Note that while BRSKI-PRM targets the initial enrollment, re-enrollment may be supported in a similar way with the exception that the current pledge LDevID certificate is used instead of the IDevID certificate to sign the PER artifact (see also {{tper}}).
 
 
 ### Request Artifact: Pledge Enroll-Request (PER)
@@ -1619,16 +1634,19 @@ For this specification, the Enroll-Resp artifact MUST be a certs-only CMC Simple
 
 
 
-## Obtain CA Certificates {#req_cacerts}
+## Obtain CA Certificates {#obtain_cacerts}
 
-As the pledge will verify it own LDevID certificate when received, it also needs the corresponding CA certificates.
-This is done in EST {{RFC7030}} using the "/.well-known/est/cacerts" endpoint, which provides the CA certificates over a TLS protected connection.
-BRSKI-PRM requires a signature wrapped CA certificate object, to avoid that the pledge can be provided with arbitrary CA certificates in an authorized way.
-The registrar signed CA certificate object will allow the pledge to verify the authorization to install the received CA certificate(s).
-As the CA certificate(s) are provided to the pledge after the voucher, the pledge has the required information (the domain certificate) to verify the wrapped CA certificate object.
+The pinned domain certificate in the voucher is only the initial trust anchor for only the domain registrar.
+To fully trust the domain and also to fully verify its own LDevID certificate, the pledge also needs the corresponding domain CA certificate(s).
+A bag of CA certificates signed by the registrar will allow the pledge to verify the authorization to install the received CA certificate(s) through the pinned domain certificate in the voucher.
 
-{{exchangesfig_uc2_5}} shows the request and provisioning of CA certificates in the infrastructure.
-The following subsections describe the corresponding artifacts.
+Note that this is a deviation from EST {{RFC7030}} used in BRSKI {{!RFC8995}}.
+
+The Registrar-Agent obtains this artifact within the same TLS session.
+In case the TLS session to the registrar is already closed, the Registrar-Agent establishes a new session as described in {{pvr}}.
+The CA certificates do not need to be correlated to a specific voucher or Enroll-Response; they only need to be fresh.
+
+{{exchangesfig_uc2_5}} shows the acquisition of the CA certificate(s) and the following subsections describe the corresponding artifact.
 
 ~~~~ aasvg
 +--------+    +------------+    +-----------+    +--------+    +------+
@@ -1641,35 +1659,36 @@ The following subsections describe the corresponding artifacts.
  ~                  ~                 ~                 ~            ~
  |                  |                 |                 |            |
  |                  |<----(mTLS)----->|                 |            |
- |                  |<--cACert-Resp---|                 |            |
+ |                  |<----caCerts-----|                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
 ~~~~
 {: #exchangesfig_uc2_5 title="CA certificates retrieval exchange" artwork-align="center"}
 
-In case the TLS connection to the registrar is already closed, the Registrar-Agent opens a new TLS connection with the registrar as stated in {{pvr}}.
+As a third step of the interaction with the domain registrar, the Registrar-Agent SHALL obtain the CA-Certificates artificat from the registrar via HTTP-over-TLS GET to the registrar endpoint at `/.well-known/brski/wrappedcacerts`.
+In the request header, the Accept field SHOULD be set to `application/jose+json`.
 
+Upon receiving a GET request at `/.well-known/brski/wrappedcacerts`, the domain registrar MUST reply with the CA-Certificates artifact as defined in {{cacerts-artifact}} in the body of a 200 OK response.
+In the response header, the Content-Type field MUST be set to `application/jose+json`.
+
+TODO(from where do the CA certificates come? I would expect an exchange with the Key Infrastructure, as there was no requirement in Section 6.1 to configure the CA certs at the registrar; also need to be up-to-date)
 
 ### Request (no artifact)
 
-To support Registrar-Agents requesting a signature-wrapped CA certificate(s) object, a new endpoint for BRSKI-PRM is defined on the registrar: `/.well-known/brski/wrappedcacerts`
+In this exchange, the request is a result of the HTTP(S) default transport for this specification.
+There is no artifact provided to the registrar.
 
-The Registrar-Agent SHALL requests the EST CA trust anchor database information (in form of CA certificates) by HTTP GET.
+### Response Artifact: CA-Certificates (caCerts) {#cacerts-artifact}
 
+The CA-Certificates (caCerts) artifact SHALL be an authenticated self-contained object signed by the registrar, containing the domain trust anchors, i.e., CA (root or issuing) certificate(s).
 
-### Response Artifact: cACert-Response (cACert-Resp)
+For the JWS-signed JSON format used by this specification, the caCerts artifact MUST use the "General JWS JSON Serialization Syntax" defined in {{Section 7.2.1 of !RFC7515}}, which MUST contain the JSON CA Data defined in {{cacerts-data}} in the JWS Payload.
 
-The Content-Type header of the response SHALL be: `application/jose+json`.
-
-This is a deviation from the Content-Type header values used in EST {{RFC7030}} and results in additional processing at the domain registrar (as EST server).
-The additional processing is to sign the CA certificate(s) information using the registrar LDevID credentials.
-This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certificates are provided as base64-encoded "x5bag" (see definition in {{RFC9360}}) in the JWS payload.
+{{cacerts_representation}} summarizes the serialization of the JWS-signed JSON caCerts artifact:
 
 ~~~~
-# The CA certificates data with registrar signature in 
-# General JWS Serialization syntax
 {
-  "payload": BASE64URL(certs),
+  "payload": BASE64URL(UTF8(JSON CA Data)),
   "signatures": [
     {
       "protected": BASE64URL(UTF8(JWS Protected Header)),
@@ -1677,18 +1696,53 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
     }
   ]
 }
+~~~~
+{: #cacerts_representation title='Voucher\' Representation in General JWS JSON Serialization Syntax' artwork-align="left"}
 
-# Example: Decoded payload "certs" representation in JSON syntax
+The JSON CA Data MUST be UTF-8 encoded to become the octet-based JWS Payload defined in {{RFC7515}}.
+The JWS Payload is further base64url-encoded to become the string value of the `payload` member as described in {{Section 3.2 of RFC7515}}.
+The octets of the UTF-8 representation of the JWS Protected Header are base64url-encoded to become the string value of the `protected` member.
+The generated JWS Signature is base64url-encoded to become the string value of the `signature` member.
+
+#### JSON CA Data {#cacerts-data}
+
+The JSON CA Data SHALL be a JSON document {{RFC8259}} that MUST conform with the CDDL {{!RFC8610}} data model defined in {{cacerts_CDDL_def}}:
+
+~~~~ cddl
+pledgeenrollrequesttrigger = {
+	"x5bag": bytes / [+ bytes]
+}
+~~~~
+{: #cacerts_CDDL_def title='CDDL for JSON CA Data' artwork-align="left"}
+
+The `x5bag` member MUST follow the definition of the `x5bag` COSE Header Parameter in {{Section 2 of !RFC9360}}.
+It is either a single X.509 v3 certificate or an array of at least two X.509 v3 certificates in DER format.
+For JSON syntax, the octet-based certificates MUST be base64-encoded.
+It SHALL contain one or more domain CA (root or issuing) certificates.
+
+{{cacerts_data_example}} below shows an example for the JSON CA Data:
+
+~~~~
 {
   "x5bag": [
     "base64encodedvalue==",
     "base64encodedvalue=="
   ]
 }
+~~~~
+{: #cacerts_data_example title='JSON CA Data Example' artwork-align="left"}
 
 
-# Example: Decoded "JWS Protected Header" representation
-  in JSON syntax
+#### JWS Protected Header
+
+The JWS Protected Header of the caCerts artifact MUST contain the following standard Header Parameters as defined in {{RFC7515}}:
+
+* `alg`: SHALL contain the algorithm type used to create the signature, e.g., `ES256`, as defined in {{Section 4.1.1 of RFC7515}}
+* `x5c`: SHALL contain the base64-encoded registrar LDevID certificate used to sign the caCerts artifact as well as the certificate chain up to (but not including) the pinned domain certificate
+
+{{cacerts_header}} below shows an example for this JWS Protected Header:
+
+~~~~
 {
   "alg": "ES256",
   "x5c": [
@@ -1697,31 +1751,30 @@ This results in a signed CA certificate(s) object (JSON-in-JWS), the CA certific
   ]
 }
 ~~~~
-{: #PCAC title='Representation of CA certificate(s) data with registrar signature' artwork-align="left"}
+{: #cacerts_header title='JWS Protected Header Example within PER' artwork-align="left"}
+
+#### JWS Signature
+
+The registrar MUST sign the caCerts artifact using its LDevID credential.
+The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
 
 
 
 ## Supply Voucher to Pledge {#voucher}
 
-It is assumed that the Registrar-Agent already obtained the bootstrapping response objects from the domain registrar and can supply them to the pledge:
+Once the Registrar-Agent has acquired the following three bootstrapping artifacts, it can supply them to the pledge starting with the Voucher':
 
-* voucher-response - Voucher (from MASA via Registrar)
-* wrapped-CA-certificate(s)-response - CA certificates
-* enrollment-response - LDevID (Pledge) certificate (from CA via registrar)
+* Voucher': voucher countersigned by the registrar (from MASA via Registrar)
+* Enroll-Resp: pledge LDevID certificate (from Key Infrastructure via registrar)
+* caCerts: domain trust anchors (from Key Infrastructure via Registrar)
 
-To deliver these response objects, the Registrar-Agent will re-connect to the pledge.
-To contact the pledge, it may either discover the pledge as described in {{discovery_uc2_ppa}} or use stored information from the first contact with the pledge.
+Reconnecting to the pledge might require to re-discover the pledge as described in {{discovery_uc2_ppa}}.
+The Registrar-Agent MAY stored information from the first connection with the pledge to optimize.
 
-Preconditions in addition to {{pvr}}:
+Optionally, TLS MAY be used to provide privacy for this exchange between the Registrar-Agent and the pledge (see {{pledgehttps}}).
 
-* Registrar-Agent: obtained voucher and LDevID certificate and optionally IDevID CA certificates.
-  The IDevID CA certificate is necessary, when the connection between the Registrar-Agent and the pledge is established using TLS to enable the Registrar-Agent to validate the pledges' IDevID certificate during the TLS handshake as described in {{tpvr}}.
 
-The Registrar-Agent MAY optionally use TLS to protect the communication as outlined in {{tpvr}}.
-
-The Registrar-Agent provides the information via distinct pledge endpoints as following.
-{{exchangesfig_uc2_6}} shows the provisioning of the voucher to the pledge. 
-The following subsections describe the corresponding artifacts. 
+{{exchangesfig_uc2_6}} shows the provisioning of the voucher to the pledge and the following subsections describe the corresponding artifacts.
 
 ~~~~ aasvg
 +--------+    +------------+    +-----------+    +--------+    +------+
@@ -1734,50 +1787,55 @@ The following subsections describe the corresponding artifacts.
  ~                  ~                 ~                 ~            ~
  |                  |                 |                 |            |
  |<----opt. TLS---->|                 |                 |            |
- |<-----Voucher-----|                 |                 |            |
+ |<-----Voucher''---|                 |                 |            |
  |------vStatus---->|                 |                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
 ~~~~
 {: #exchangesfig_uc2_6 title="Voucher exchange" artwork-align="center"}
 
-### Request Artifact: Voucher
+The Registrar-Agent SHALL supply the voucher to the pledge via HTTP(S) POST to the pledge endpoint at `/.well-known/brski/svr`.
+The request body MUST contain the Registrar-Countersigned Voucher (Voucher') artifact previously acquired from the domain registrar as defined in {{rcv-artifact}}.
+In the request header, the Content-Type field MUST be set to `application/voucher-jws+json` as defined in [I-D.ietf-anima-jws-voucher] and the Accept field SHOULD be set to `application/jose+json`.
 
-The Registrar-Agent SHALL send the voucher-response to the pledge by HTTP(S) POST to the pledge endpoint at `/.well-known/brski/svr`.
+Upon receiving the voucher, the pledge SHALL perform the signature verification in the following order:
 
-The Registrar-Agent voucher-response Content-Type header is `application/voucher-jws+json` and contains the voucher as provided by the MASA.
-TODO(Examples?)
+1. Verify the MASA signature as described in {{Section 5.6.1 of !RFC8995}} against the pre-installed manufacturer trust anchor (e.g., IDevID).
+2. Provisionally install the trust anchor contained in the `pinned-domain-cert` field of the voucher.
+3. Validate the registrar LDevID certificate received in the `agent-provided-proximity-registrar-cert` field of the previously received tPVR artifact using the pinned domain certificate.
+4. Verify registrar signature of the Voucher' artifact similar as described in {{Section 5.6.1 of !RFC8995}}, but use the pinned domain certificate instead of the MASA certificate for the verification.
 
-A nonceless voucher may be accepted as in {{!RFC8995}} and may be allowed by a manufacture's pledge implementation.
+BRSKI-PRM instroduces Steps 3 and 4 to verify the provisionally accepted registrar LDevID certificate from the tPVR parameter `agent-provided-proximity-registrar-cert` (see {{agt_prx}}). TODO(what about agent-signed data verification?)
+If all steps stated above have been performed successfully, the pledge SHALL terminate the "provisional state" for the domain trust anchor and the registrar LDevID certificate.
 
-To perform the validation of several signatures on the voucher object, the pledge SHALL perform the signature verification in the following order:
+A nonceless voucher MAY be accepted as in {{!RFC8995}} if allowed by the pledge implementation of the manufacturer.
 
-  1. Verify MASA signature as described in {{Section 5.6.1 of !RFC8995}}, against pre-installed manufacturer trust anchor (IDevID).
-  2. Install trust anchor contained in the voucher ("pinned-domain-cert")  provisionally
-  3. Validate the LDevID(Reg) certificate received in the agent-provided-proximity-registrar-cert in the Pledge-Voucher-Request trigger request (in the field "agent-provided-proximity-registrar-cert")
-  4. Verify registrar signature of the voucher similar as described in {{Section 5.6.1 of !RFC8995}}, but take the registrar certificate instead of the MASA certificate for the verification
+After voucher validation and verification, the pledge needs to reply with a status telemetry message as defined in {{Section 5.7 of !RFC8995}}.
+The pledge MUST generate the Voucher Status (vStatus) artifact as defined in {{vstatus-artifact}} and provides to the Registrar-Agent in the body of a 200 OK response.
+In the response header, the Content-Type field MUST be set to `application/jose+json`.
 
-Step3 and step 4 have been introduced in BRSKI-PRM to enable verification of LDevID(Reg) certificate and also the proof-of-possession of the corresponding private key by the registrar, which is done in BRSKI based on the established TLS channel.
-If all steps stated above have been performed successfully, the pledge SHALL terminate the "PROVISIONAL accept" state for the domain trust anchor and the registrar LDevID certificate.
+If the pledge is unable to validate or verify the voucher, it MUST report the reason in the corresponding field of the Voucher Status.
 
-If an error occurs during the verification and validation of the voucher, this SHALL be reported in the reason field of the pledge voucher status.
+If the pledge did not did not provide voucher status telemetry information after processing the voucher, the Registrar-Agent MAY query the pledge status explicitly as described in {{query}}.
+It MAY resend the voucher depending on the Pledge status following the same procedure.
 
 
-### Response Artifact: Voucher Status (vStatus)
+### Request Artifact: Registrar-Countersigned Voucher
 
-After voucher verification and validation the pledge MUST reply with a status telemetry message as defined in {{Section 5.7 of !RFC8995}}.
-The pledge generates the voucher-status and provides it as signed JSON-in-JWS object in response to the Registrar-Agent.
+Identical to the Registrar-Countersigned Voucher (Voucher') artifact received from the registrar as defined in {{rcv-artifact}}.
+The Registrar-Agent MUST NOT modify countersigned vouchers.
 
-The response has the Content-Type `application/jose+json` and is signed using the IDevID of the pledge as shown in {{vstat}}.
-As the reason field is optional (see {{!RFC8995}}), it MAY be omitted in case of success.
-The reason-context is an arbitrary JSON object that may provide additional information specific to a failure. 
-The content of this field is not subject to standardization, but examples are provided in {{vstat}}. 
+
+### Response Artifact: Voucher Status (vStatus) {#vstatus-artifact}
+
+The Voucher Status (vStatus) artifact SHALL be an authenticated self-contained object signed by the pledge, containing status telemetry as defined in {{Section 5.7 of !RFC8995}}.
+
+For the JWS-signed JSON format used by this specification, the vStatus artifact MUST use the "General JWS JSON Serialization Syntax" defined in {{Section 7.2.1 of RFC7515}}, which MUST contain the JSON Status Data defined in {{vstatus-data}} in the JWS Payload.
+{{vstatus_representation}} summarizes the serialization of the JWS-signed JSON PER artifact:
 
 ~~~~
-# The "pledge-voucher-status" telemetry in general JWS
-  serialization syntax
 {
-  "payload": BASE64URL(pledge-voucher-status),
+  "payload": BASE64URL(UTF8(JSON Status Data)),
   "signatures": [
     {
       "protected": BASE64URL(UTF8(JWS Protected Header)),
@@ -1785,30 +1843,61 @@ The content of this field is not subject to standardization, but examples are pr
     }
   ]
 }
+~~~~
+{: #vstatus_representation title='vSatus Representation in General JWS JSON Serialization Syntax' artwork-align="left"}
 
-# Example: Decoded payload "pledge-voucher-status" representation
-  in JSON syntax for success case
+The JSON Status Data MUST be UTF-8 encoded to become the octet-based JWS Payload defined in {{RFC7515}}.
+The JWS Payload is further base64url-encoded to become the string value of the `payload` member as described in {{Section 3.2 of RFC7515}}.
+The octets of the UTF-8 representation of the JWS Protected Header are base64url-encoded to become the string value of the `protected` member.
+The generated JWS Signature is base64url-encoded to become the string value of the `signature` member.
+
+#### JSON Status Data {#vstatus-data}
+
+The JSON Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with the `voucherstatus-post` CDDL {{!RFC8610}} data model defined in {{Section 5.7 of !RFC8995}}:
+
+* `version`: contains a version number for the format and semantics of the other fields;
+* `status`: contains the boolean value `true` in case of success and `false` in case of failure
+* `reason`: contains a human-readable message;
+  MAY be omitted in the case of success;
+  SHOULD NOT provide information beneficial to an attacker
+* `reason-context`: contain an arbitrary JSON object that provides additional information specific to a failure;
+   MAY be omitted in the case of success
+
+{{vstatus_data_example_success}} below shows an example for the JSON PVR Data in case of success and {{vstatus_data_example_error}} in case of failure:
+
+~~~~
 {
   "version": 1,
   "status": true,
-  "reason": "Voucher successfully processed",
-  "reason-context": {
-    "pvs-details": "JSON"
-  }
+  "reason": "Voucher successfully processed"
 }
+~~~~
+{: #vstatus_data_example_success title='JSON Status Data Success Example' artwork-align="left"}
 
-# Example: Decoded payload "pledge-voucher-status" representation
-  in JSON syntax for error case
+~~~~
 {
   "version": 1,
   "status": false,
-  "reason": "Failed to authenticate MASA certificate because
-  it starts in the future (1/1/2023).",
+  "reason": "Failed to authenticate MASA certificate because it starts in the future (1/1/2023).",
   "reason-context": {
     "pvs-details": "Current date: 1/1/1970"
   }
 }
+~~~~
+{: #vstatus_data_example_error title='JSON Status Data Failure Example' artwork-align="left"}
 
+#### JWS Protected Header
+
+The JWS Protected Header of the vStatus artifact MUST contain the following standard Header Parameters as defined in {{!RFC7515}}:
+
+* `alg`: SHALL contain the algorithm type used to create the signature, e.g., `ES256`, as defined in {{Section 4.1.1 of !RFC7515}}
+* `x5c`: SHALL contain the base64-encoded pledge IDevID certificate used to sign the vStatus artifact;
+  it SHOULD also contain the certificate chain for this certificate;
+  if the certificate chain is not included in the `x5c` Header Parameter, it MUST be available at the domain registrar for verification
+
+{{vstatus_header}} below shows an example for this JWS Protected Header:
+
+~~~~
 # Example: Decoded "JWS Protected Header" representation
   in JSON syntax
 {
@@ -1819,16 +1908,23 @@ The content of this field is not subject to standardization, but examples are pr
   ]
 }
 ~~~~
-{: #vstat title='Representation of pledge voucher status telemetry' artwork-align="left"}
+{: #vstatus_header title='JWS Protected Header Example within vStatus' artwork-align="left"}
 
-If the pledge did not did not provide voucher status telemetry information after processing the voucher, the Registrar-Agent MAY query the pledge status explicitly as described in {{query}} and MAY resent the voucher depending on the Pledge status following the procedure described in {{voucher}}.
+#### JWS Signature
+
+The plege MUST sign the vStatus artifact using its IDevID credential.
+The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
 
 
 
 ## Supply CA Certificates to Pledge {#cacerts}
 
-{{exchangesfig_uc2_7}} shows the provisioning of the CA certificates acquired by the pledge-agent to the pledge. 
-The following subsections describe the corresponding artifacts. 
+Before supplying the pledge LDevID certificate, the Registrar-Agent supplies the domain CA certificates to the pledge, so the pledge can verify its LDevID certficate in the next exchange.
+As the CA certificate provisioning is crucial from a security perspective, this exchange SHOULD only be done, if supplying the voucher in the previous exchange ({{voucher}}) has been successfully processed by pledge as reflected in the vStatus artifact.
+
+Optionally, TLS MAY be used to provide privacy for this exchange between the Registrar-Agent and the pledge (see {{pledgehttps}}).
+
+{{exchangesfig_uc2_7}} shows the provisioning of the CA certificates to the pledge and the following subsections describe the corresponding artifacts.
 
 ~~~~ aasvg
 +--------+    +------------+    +-----------+    +--------+    +------+
@@ -1841,28 +1937,27 @@ The following subsections describe the corresponding artifacts.
  ~                  ~                 ~                 ~            ~
  |                  |                 |                 |            |
  |<----opt. TLS---->|                 |                 |            |
- |<-----cACerts-----|                 |                 |            |
+ |<-----caCerts-----|                 |                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
 ~~~~
 {: #exchangesfig_uc2_7 title="Certificate provisioning exchange" artwork-align="center"}
 
+The Registrar-Agent SHALL provide the bag of CA certificates requested from and signed by the registrar to the pledge by HTTP(S) POST to the pledge endpoint at `/.well-known/brski/scac`.
+The request body MUST contain the caCerts artifact as defined in {{cacerts-artifact}}.
+In the request header, the Content-Type field MUST be set to `application/jose+json`.
 
-### Request Artifact:
+Upon receiving valid caCerts, the pledge MUST first verify the signature of the registrar using the initial trust anchor from the pinned domain certificate.
+If the pledge is unable to process the caCerts, it SHOULD respond with an HTTP error code.
+The following client error status codes SHOULD be used:
 
-The Registrar-Agent SHALL provide the set of CA certificates requested from the registrar to the pledge by HTTP(S) POST to the pledge endpoint at `/.well-known/brski/scac`.
-
-As the CA certificate provisioning is crucial from a security perspective, this provisioning SHOULD only be done, if the voucher-response has been successfully processed by pledge as reflected in the voucher status telemetry.
-
-The CA certificates message has the Content-Type `application/jose+json` and is signed using the credential of the registrar as shown in {{PCAC}}.
-
-The CA certificates are provided as base64-encoded "x5bag".
-The pledge SHALL install the received CA certificates as trust anchor after successful verification of the registrar's signature.
-
-
-### Response (no artifact)
+* 400 Bad Request: if the pledge detects an error in the format of the request, e.g., missing field, wrong data types, etc. or if the request is not valid JWS-signed JSON even though the Content-Type request header field was set to `application/jose+json`
+* 401 Unauthorized: if the signature cannot be verified against the installed initial trust anchor (pinned domain certificate)
+* 415 Unsupported Media Type: if the Content-Type request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/jose+json`
 
 The verification comprises the following steps the pledge MUST perform. Maintaining the order of versification steps as indicated allows to determine, which verification has already been passed:
+
+TODO(steps 3 and 4 overlap)
 
 1. Check content-type of the CA certificates message. If no Content-Type is contained in the HTTP header, the default Content-Type utilized in this document (JSON-in-JWS) is used. If the Content-Type of the response is in an unknown or unsupported format, the pledge SHOULD reply with a 415 Unsupported media type error code.
 2. Check the encoding of the payload. If the pledge detects errors in the encoding of the payload, it SHOULD reply with 400 Bad Request error code.
@@ -1870,7 +1965,19 @@ The verification comprises the following steps the pledge MUST perform. Maintain
 4. Verify signature of the received wrapped CA certificate object using the domain certificate contained in the voucher. If the validation of the signature fails, the pledge SHOULD reply with a 403 Forbidden. It signals that the object could not be verified and has not been accepted.
 5. If the received CA certificates are not self-signed, i.e., an intermediate CA certificate, verify them against an already installed trust anchor, as described in section 4.1.3 of {{RFC7030}}.
 
-In case of success, the pledge SHOULD reply with HTTP 200 OK without a response body.
+In case of success, the pledge MUST install the contained CA certificates as trust anchors and SHOULD reply with HTTP 200 OK without a response body.
+
+
+### Request Artifact: CA-Certificates (caCerts)
+
+Identical to the CA-Certificates (caCerts) artifact received from the registrar as defined in {{cacerts-artifact}}.
+The Registrar-Agent MUST NOT modify CA-Certificates artifacts.
+
+
+### Response (no artifact)
+
+In this exchange, the response is a result of the HTTP(S) default transport for this specification.
+There is no artifact provided to the Registrar-Agent.
 
 
 
@@ -2005,11 +2112,12 @@ Preconditions in addition to {{pvr}}:
 (9) Voucher Status Telemetry (including backend interaction)
  ~                  ~                 ~                 ~            ~
  |                  |                 |                 |            |
- |                  |<----(mTLS)----->|                 |            |
+ |                  |<---((mTLS))---->|                 |            |
  |                  |-----vStatus---->|                 |            |
- |                  |                 |<-----------(mTLS)----------->|
+ |                  |                 |<----------((mTLS))---------->|
  |                  |                 |-----req device audit log---->|
  |                  |                 |<------device audit log-------|
+ |                  |                 |                 |            |
  |                  |        [verify audit log]         |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
@@ -2024,7 +2132,7 @@ This status indicates if the pledge could process the voucher successfully or no
 ### Request Artifact: Voucher Status (vStatus)
 
 The Registrar-Agent sends the pledge voucher status without modification to the registrar with an HTTP-over-TLS POST using the registrar endpoint at `/.well-known/brski/voucher_status`.
-The Content-Type header is kept as `application/jose+json` as depicted in the example in {{vstat}}.
+The Content-Type header is kept as `application/jose+json`.
 
 The registrar SHOULD log the transaction provided for a pledge via Registrar-Agent and include the identity of the Registrar-Agent in these logs. For log analysis the following may be considered:
 
@@ -2059,7 +2167,7 @@ The status indicates the pledge could process the Enroll-Response (certificate) 
 (10) Enroll Status Telemetry
  ~                  ~                 ~                 ~            ~
  |                  |                 |                 |            |
- |                  |<----(mTLS)----->|                 |            |
+ |                  |<---((mTLS))---->|                 |            |
  |                  |-----eStatus---->|                 |            |
  |                  |                 |                 |            |
  ~                  ~                 ~                 ~            ~
@@ -2116,7 +2224,7 @@ The pledge MAY provide the dedicated endpoint for the Query Pledge Status operat
 ~~~~
 {: #exchangesfig_uc2_11 title="Pledge Status exchange" artwork-align="center"}
 
-The Registrar-Agent queries the Pledge Status via HTTP POST request on the well-known pledge endpoint at `/.well-known/brski/qps`.
+The Registrar-Agent queries the Pledge Status via HTTP(S) POST request on the well-known pledge endpoint at `/.well-known/brski/qps`.
 The request body MUST contain the JWS-signed Status Trigger (tStatus) artifact as defined in {{tstatus-artifact}}.
 The request header MUST set the Content-Type field `application/jose+json`.
 
@@ -2864,13 +2972,13 @@ From IETF draft 08 -> IETF draft 09:
 * issue #88, clarified, that the PVR in {{tpvr}} and PER in {{tper}} may contain the certificate chain. If not contained it MUST be available at the registrar.
 * issue #91, clarified that a separate HTTP connection may also be used to provide the PER in {{per}}
 * resolved remaining editorial issues discovered after WGLC (responded to on the mailing list in Reply 1 and Reply 2) resulting in more consistent descriptions
-* issue #92: kept separate endpoint for wrapped CSR on registrar {{req_cacerts}}
+* issue #92: kept separate endpoint for wrapped CSR on registrar {{obtain_cacerts}}
 * issue #94: clarified terminology (possess vs. obtained)
 * issue #95: clarified optional IDevID CA certificates on Registrar-Agent
 * issue #96: updated exchangesfig_uc2_3 to correct to just one CA certificate provisioning
 * issue #97: deleted format explanation in exchanges_uc2_3 as it may be misleading
 * issue #99: motivated verification of second signature on voucher in {{voucher}}
-* issue #100: included negative example in {{vstat}}
+* issue #100: included negative example in {{vstatus_data_example_error}}
 
 * issue #101: included handling if {{voucher}} voucher telemetry information has not been received by the Registrar-Agent
 * issue #102: relaxed requirements for CA certs provisioning in {{cacerts}}
