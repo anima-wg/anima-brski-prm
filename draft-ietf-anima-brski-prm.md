@@ -2482,25 +2482,31 @@ agent), once the pledge is enrolled with CA certificates and a matching domain c
 
 # Logging Considerations
 
-The registrar SHOULD log certain events and include the identity of the pledge, the identity of the Registrar-Agent that was interacting with the pledge, and relevant artifact fields, in particular telemetry information:
+The registrar SHOULD log certain events to provide an audit trail for the onboarding of pledges into its domain.
+This audit trail may support the root cause analysis in case of device or system failures. 
+The logging SHOULD include the identity of the pledge, the identity of the Registrar-Agent that was interacting with the pledge, and relevant artifact fields, in particular telemetry information:
 
 * PVR received from Registrar-Agent
-* Acceptance of a device into the domain
+* Acceptance of a pledge into the domain
 * Voucher provided to Registrar-Agent
 * PER received from Registrar-Agent
-* Pledge LDevID certificate created
+* Pledge LDevID certificate requested
+* Pledge LDevID certificate received from Domain CA
 * Pledge LDevID certificate provided to Registrar-Agent
+* CA Certificates provided to Registrar-Agent
 * Voucher Status received from Registrar-Agent
 * Enroll Status received from Registrar-Agent
+* Pledge Status received from Registrar-Agent
 * Pledge LDevID certificate revoked
 
 For log analysis the following may be considered:
 
-* The registrar knows which Registrar-Agent collected which PVR from the included agent-signed data object.
+* The registrar knows which Registrar-Agent collected which PVR from the included agent-signed-data object.
 * The registrar always knows the connecting Registrar-Agent from the TLS client authentication using the Registrar-Agent LDevID certificate and can log it accordingly.
-* The telemetry information from the pledge can be correlated to the voucher through the product-serial-number in EE certificate contained in the JWS Protected Header of the status artifacts and the product-serial-number contained in the voucher.
+* The telemetry information from the pledge can be correlated to the voucher through the product-serial-number in EE certificate contained in the JWS Protected Header of the status artifacts and the product-serial-number contained in the voucher. By this it can also be related to the PER.
 
 With this, it can for instance be analyzed if multiple Registrar-Agents are involved in bootstrapping devices.
+In addition, within the domain it can be analyzed, if the onboarding involved different registrar-agents or if different registrars have been used.
 
 
 
