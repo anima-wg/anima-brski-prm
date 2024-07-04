@@ -579,15 +579,17 @@ These endpoints accommodate for the authenticated self-contained objects used by
 |===============
 {: #registrar_ep_table title='Additional Well-Known Endpoints on a BRSKI-PRM Registrar'}
 
-According to {{Section 5.3 of !RFC8995}}, the domain registrar performs the pledge authorization for bootstrapping within its domain based on the Pledge Voucher-Request.
-For this, it MUST possess the IDevID trust anchor(s) (i.e., root or issuing CA certificate(s)) of the pledge vendor(s)/manufacturer(s).
-This behavior is retained in BRSKI-PRM.
-
-Further, the registrar possesses its own LDevID certificate and corresponding private key for authenticating and signing.
+The registrar possesses its own LDevID certificate and corresponding private key for authenticating and signing.
 It MUST use the same certificate/credential for authentication in the TLS session with a Registrar-Agent and for signing artifacts for that Registrar-Agent and its pledges (see {{rcv_artifact}}).
 If the registrar LDevID certificate is provided to the Registrar-Agent(s) via configuration, the credential used for signing artifacts for a Registrar-Agent MUST correspond to the registrar LDevID certificate configured at that Registrar-Agent.
 This ensures that Registrar-Agent and pledge can verify the certficate and signature of the intended domain registrar.
 Overall, this has operational implications when the registrar is part of a scalable framework as described in {{Section 1.3.1 of ?I-D.richardson-anima-registrar-considerations}}.
+
+According to {{Section 5.3 of !RFC8995}}, the domain registrar performs the pledge authorization for bootstrapping within its domain based on the Pledge Voucher-Request.
+For this, it MUST possess the IDevID trust anchor(s) (i.e., root or issuing CA certificate(s)) of the pledge vendor(s)/manufacturer(s).
+This behavior is retained in BRSKI-PRM.
+
+In its role as EST server {{!RFC7030}}, the domain registrar MUST also possess the domain CA certificates as defined in {{Section 5.9 of !RFC8995}}.
 
 Finally, the domain registrar MUST possess the Registrar-Agent LDevID certificate(s) to validate agent-signed data and to provide it to the MASA.
 The registrar MAY use the certificate verified during client authentication within the TLS sessions with the Registrar-Agent;
@@ -1139,7 +1141,7 @@ Optionally, TLS MAY be used to provide privacy for this exchange between the Reg
 
 The Registrar-Agent SHALL trigger the pledge to create the PER via HTTP(S) POST to the pledge endpoint at `/.well-known/brski/tper`.
 The request body MUST contain the JSON-based Pledge Enroll-Request Trigger (tPER) artifact as defined in {{tper_artifact}}.
-In the request header, the Content-Type field MUST be set to `application/json` and the Accept field SHOULD BE set to `application/jose+json`.
+In the request header, the Content-Type field MUST be set to `application/json` and the Accept field SHOULD be set to `application/jose+json`.
 
 Upon receiving a valid tPER, the pledge MUST reply with the PER artifact as defined in {{per_artifact}} in the body of a 200 OK response.
 In the response header, the Content-Type field MUST be set to `application/jose+json`.
@@ -1545,7 +1547,7 @@ While the pledge cannot verify the registrar certificate at the time of TLS sess
 
 In BRSKI-PRM with the Registrar-Agent mediating all communication, this second signature provides verification and POP of the private key for the registrar LDevID certificate provided in the initial tPVR artifact from the Registrar-Agent (see {{tpvr_artifact}}).
 
-Depending on the security policy of the operator, this signature can also be interpreted as explicit authorization of the registrar to install the contained trust anchor. TODO(what exactly is the trust anchor? pinned-domain-cert?)
+Depending on the security policy of the operator, this signature can also be interpreted as explicit authorization of the registrar to install the contained trust anchor (i.e., pinned domain certificate).
 
 #### JSON Voucher Data
 
@@ -2191,8 +2193,8 @@ There is no artifact provided to the Registrar-Agent.
 
 ## Enroll Status Telemetry {#estatus}
 
-The Registrar-Agent SHALL proceed with providing the enroll status telemetry.
-It indicates whether the pledge could process the Enroll-Response (pledge LDeviD certificate) and holds the corresponding private key.
+The Registrar-Agent SHALL complete the sequence of exchanges for bootstrapping with providing the enroll status telemetry to the domain registrar.
+This status indicates whether the pledge could process the Enroll-Response (pledge LDeviD certificate) and holds the corresponding private key.
 
 In case the TLS session to the registrar is already closed, the Registrar-Agent establishes a new session as described in {{pvr}}.
 
@@ -2247,9 +2249,13 @@ There is no artifact provided to the Registrar-Agent.
 
 ## Query Pledge Status {#query}
 
-The following assumes that a Registrar-Agent might need to query the status of a pledge.
+The following assumes that a Registrar-Agent MAY need to query the overall status of a pledge.
 This information can be useful to solve errors, when the pledge was not able to connect to the target domain during bootstrapping.
 A pledge MAY omit the dedicated endpoint for the Query Pledge Status operation (see {{pledge_component}}).
+
+Optionally, TLS MAY be used to provide privacy for this exchange between the Registrar-Agent and the pledge (see {{pledgehttps}}).
+
+{{exchangesfig_uc2_11}} shows the query and response for the overall pledge status and the following subsections describe the corresponding artifacts.
 
 ~~~~ aasvg
 +--------+    +------------+    +-----------+    +--------+    +------+
@@ -2269,12 +2275,12 @@ A pledge MAY omit the dedicated endpoint for the Query Pledge Status operation (
 ~~~~
 {: #exchangesfig_uc2_11 title="Pledge Status exchange" artwork-align="center"}
 
-The Registrar-Agent queries the Pledge Status via HTTP(S) POST request on the well-known pledge endpoint at `/.well-known/brski/qps`.
+The Registrar-Agent SHALL query the pledge via HTTP(S) POST to the pledge endpoint at `/.well-known/brski/qps`.
 The request body MUST contain the JWS-signed Status Trigger (tStatus) artifact as defined in {{tstatus_artifact}}.
-The request header MUST set the Content-Type field `application/jose+json`.
+In the request header, the Content-Type field MUST be set to `application/jose+json` and the Accept field SHOULD be set to `application/jose+json`.
 
-If the pledge provides the Query Pledge Status endpoint, it MUST reply to this request with the Pledge Status (pStatus) artifact in the body of a 200 OK response.
-The response header MUST have the Content-Type field set to `application/jose+json`.
+If the pledge provides the Query Pledge Status endpoint, it MUST reply with the Pledge Status (pStatus) artifact as defined in {{pstatus_artifact}} in the body of an HTTP 200 OK response.
+
 
 ### Request Artifact: Status Trigger (tStatus) {#tstatus_artifact}
 
@@ -2337,7 +2343,7 @@ When using a JWS signature, the Status Query artifact looks as shown in {{stat_r
 For details on `JWS Protected Header` and `JWS Signature` see {{!I-D.ietf-anima-jws-voucher}} or {{!RFC7515}}.
 
 
-### Response Artifact: Pledge Status (pStatus)
+### Response Artifact: Pledge Status (pStatus) {#pstatus_artifact}
 
 When the pledge receives a Status Query with status-type `bootstrap` it SHALL respond with previously collected telemetry information (see {{vstatus}} and {{estatus}}) in a single Pledge Status artifact.
 
