@@ -207,6 +207,10 @@ EE:
 
 EE certificate:
 : Either IDevID certificate or LDevID certificate of the EE.
+//stf: proposal to include the discussed text:
+: the certificate of the EE signed by its owner (e.g., CA).
+For domain components, the EE certificate is signed by the domain owner.
+For the pledge, the EE certficate is either the IDevID certificate signed by the manufacturer or the LDevID certificate signed by the domain owner.
 
 endpoint:
 : Term equivalent to resource in HTTP {{RFC9110}} and CoAP {{RFC7252}}.
@@ -221,6 +225,7 @@ LDevID:
 This is a term from 802.1AR {{IEEE-802.1AR}}.
 TODO(check): Note that for BRSKI-PRM, LDevIDs do not have to be fully compliant to 802.1AR, e.g., no management interface needs to be provided;
 the important aspect for BRSKI-PRM is that an LDevID certificate is signed by the domain CA.
+//stf: proposal to remove the statement as discussed, should be addressed by the updted definition of EE certificate 
 
 mTLS:
 : mutual Transport Layer Security.
@@ -554,6 +559,7 @@ In BRSKI, the TLS connection is considered provisional until the pledge receives
 
 In contrast, in BRSKI-PRM, the pledge has no direct connection to the registrar and MUST accept the registrar LDevID certificate provisionally until it receives the voucher as described in {{voucher}}.
 In a similar fashion, the pledge MUST accept the Registrar-Agent LDevID certificate provisionally. TODO(is this HTTPS-related? otherwise why accept it at all?)
+//stf: This is to resemble the provisional accept state from BRSKI. It intended to create the state for the registrar-certificate and to ensure the one in the agent-provided-registrar-certificate correlates to the one provided in the voucher.
 See also {{Section 5 of !RFC8995}} on "provisional state".
 
 For the Agent Proximity Assertion, the Registrar-Agent LDevID certificate and registrar LDevID certificate must be signed by the same domain owner, i.e., MUST possess a common domain trust anchor in their certificate chain.
@@ -945,7 +951,7 @@ The following client error status codes SHOULD be used:
 * 415 Unsupported Media Type: if the Content-Type request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/json`
 
 The pledge MAY use the response body to signal success/failure details to the service technician operating the Registrar-Agent. TODO(confirm, taken from telemetry)
-
+//stf: fits from my understanding. Good place to put it.
 
 ### Request Artifact: Pledge Voucher-Request Trigger (tPVR) {#tpvr_artifact}
 
@@ -1154,7 +1160,7 @@ The following client error status codes MAY be used:
 * 415 Unsupported Media Type: if the Content-Type request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/json`
 
 The pledge MAY use the response body to signal success/failure details to the service technician operating the Registrar-Agent. TODO(confirm, taken from telemetry)
-
+//stf: fits from my understanding. Good place to put it.
 
 ### Request Artifact: Pledge Enroll-Request Trigger (tPER) {#tper_artifact}
 
@@ -1333,6 +1339,8 @@ Due to the Registrar-Agent in the middle, the registrar MUST verify in addition 
 
 * the `agent-provided-proximity-registrar-cert` field of the PVR contains a registrar LDevID certificate signed by the same domain owner as the registrar-own LDevID certificate;
   TODO(RegAgt may change registrar or reg cert may change; allow for multi-registrar installations; many installations same cert)
+  //stf: Proposal
+* the `agent-provided-proximity-registrar-cert` field of the PVR contains a registrar LDevID certificate signed by the same domain owner as the registrar LDevID certificate used to sign the RVR (this accommodates domains with multiple registrars) ;
   to ensure the registrar in proximity of the Registrar-Agent is the desired registrar for this PVR.
 * the `agent-signed-data` field of the PVR is signed with the private key corresponding to the Registrar-Agent LDevID certificate as known by the registrar (see {{registrar_component}});
   this is done via the SubjectKeyIdentifier of the certificate in the `kid` Header Parameter of the JWS Protected Header of the `agent-signed-data` field.
@@ -1354,6 +1362,7 @@ Optionally, the domain registrar MAY respond with an HTTP 202 Accepted response 
 in this case, the registrar still continues with the MASA interaction to provide the Voucher artifact to the retry request.
 
 The registrar MAY use the response body to signal success/failure details to the service technician operating the Registrar-Agent. TODO(confirm, taken from telemetry)
+//stf: confirm, good place to put it. 
 
 ### MASA Interaction {#masa_interaction}
 
@@ -1613,15 +1622,19 @@ Hence, upon receiving a PER artifact, the registrar MUST verify that
 * the PER was signed signed with the private key corresponding to the pledge EE certificate, which is contained in the JWS Protected Header of the PER.
 * the pledge identified by its EE certificate is accepted to join the domain after successful validation of the corresponding PVR.
 
-If the registrar is unable to process the request or validate the PVR, it MUST respond with an HTTP client error status code to the Registrar-Agent.
+If the registrar is unable to process the request or validate the PER, it MUST respond with an HTTP client error status code to the Registrar-Agent.
 The following client error codes SHOULD be used:
 
 * TODO
+* //stf:
+* 403 Forbidden: if the PER is not signed correctly
+* 404 Not Found: if the PER is for a device that is not known to the registrar
+* 415 Unsupported Media Type: if the PER uses an artifact format or Accept header value that is not supported by the registrar
 
 Otherwise, the registrar extracts the PKCS#10 Certificate Signing Request (CSR) inside the PER (see {{per_artifact}}) and uses the CSR to request a new pledge LDevID certificate from the domain Key Infrastructure.
 The exact interaction and exchanged data objects depends on the certificate management protocol used by the Key Infrastructure, and is out of scope for this document.
 
-A successful interaction with the Key Infrastrcutre will result in a pledge LDevID certificate.
+A successful interaction with the Key Infrastructure will result in a pledge LDevID certificate.
 The registrar MUST reply to the Registrar-Agent with the Enroll-Response (Enroll-Resp) as defined in {{er_artifact}} in the body of a 200 OK response.
 In the response header, the Content-Type field MUST be set to `application/pkcs7-mime`.
 
@@ -1629,6 +1642,11 @@ If the domain registrar is unable to return the Enroll-Resp, it MUST respond wit
 The following server error codes SHOULD be used:
 
 * TODO
+* //stf:
+* 500 Internal Server Error: if the Key Infrastructure response is valid, but the registrar still failed to return the Enroll-Resp, e.g., due to missing configuration or a program failure
+* 502 Bad Gateway: if the registrar received an invalid response from the Key Infrastructure
+* 503 Service Unavailable: if a simple retry of the Registrar-Agent request might lead to a successful response; this error response SHOULD include the Retry-After response header field with an appropriate value
+* 504 Gateway Timeout: if the backend request to the Key Infrastructure timed out
 
 Note that while BRSKI-PRM targets the initial enrollment, re-enrollment may be supported in a similar way with the exception that the current pledge LDevID certificate is used instead of the IDevID certificate to sign the PER artifact (see also {{tper}}).
 Hence, there is no verification whether the pledge is accepted to join the domain, as the still valid LDevID certificate identifies the pledge as already accepted component of the domain.
@@ -1687,6 +1705,8 @@ Upon receiving a GET request at `/.well-known/brski/wrappedcacerts`, the domain 
 In the response header, the Content-Type field MUST be set to `application/jose+json`.
 
 TODO(from where do the CA certificates come? I would expect an exchange with the Key Infrastructure, as there was no requirement in Section 6.1 to configure the CA certs at the registrar; also need to be up-to-date)
+//stf: Proposal
+As the domain registrar acts as RA for the domain, it is expected to possess the CA certificates applicable for the domain and can thus deliver them to the pledge. 
 
 ### Request (no artifact)
 
@@ -1973,10 +1993,12 @@ The following client error status codes SHOULD be used:
 * 400 Bad Request: if the pledge detects an error in the format of the request, e.g., missing field, wrong data types, etc. or if the request is not valid JWS-signed JSON even though the Content-Type request header field was set to `application/jose+json`
 * 401 Unauthorized: if the signature of the registrar cannot be verified against the installed initial trust anchor (pinned domain certificate)
 * 403 Forbidden: if one of the intermediate CA certificates cannot be verified against the available root certificates TODO(confirm; was unclear how to handle failure in this verification; matches well with 403)
+  //stf: confirm in genral. Proposal to replace root certificates with trust anchor to not introduce the term here. The root certificate is typically named trust anchor. 
 * 415 Unsupported Media Type: if the Content-Type request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/jose+json`
 
 Otherwise, if processing completes successfully, the pledge SHOULD reply with HTTP 200 OK without a response body.
 The pledge MAY use the response body to signal success/failure details to the service technician operating the Registrar-Agent. TODO(confirm, taken from telemetry)
+//stf: okay
 
 ### Request Artifact: CA-Certificates (caCerts)
 
