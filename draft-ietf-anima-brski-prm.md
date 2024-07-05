@@ -2533,7 +2533,7 @@ The JWS Signature is generated over the JWS Protected Header and the JWS Payload
 
 
 
-# Logging Considerations {#log_hints}}
+# Logging Considerations {#log_hints}
 
 The registrar SHOULD log certain events to provide an audit trail for the onboarding of pledges into its domain.
 This audit trail may support the root cause analysis in case of device or system failures. 
