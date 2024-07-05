@@ -581,9 +581,7 @@ These endpoints accommodate for the authenticated self-contained objects used by
 
 The registrar possesses its own EE certificate and corresponding private key for authenticating and signing.
 It MUST use the same certificate/credentials for authentication in the TLS session with a Registrar-Agent and for signing artifacts for that Registrar-Agent and its pledges (see {{rcv_artifact}}).
-If the registrar EE certificate is provided to the Registrar-Agent(s) via configuration, the credential used for signing artifacts for a Registrar-Agent MUST correspond to the registrar EE certificate configured at that Registrar-Agent.
-This ensures that Registrar-Agent and pledge can verify the certficate and signature of the intended domain registrar. TODO("intended" domain registrar is not clear anymore when the RegAgt can change registrar between collecting and providing artifacts)
-Overall, this has operational implications when the registrar is part of a scalable framework as described in {{Section 1.3.1 of ?I-D.richardson-anima-registrar-considerations}}.
+Overall, this may have operational implications when the registrar is part of a scalable framework as described in {{Section 1.3.1 of ?I-D.richardson-anima-registrar-considerations}}.
 
 According to {{Section 5.3 of !RFC8995}}, the domain registrar performs the pledge authorization for bootstrapping within its domain based on the Pledge Voucher-Request.
 For this, it MUST possess the IDevID trust anchor(s) (i.e., root or issuing CA certificate(s)) of the pledge vendor(s)/manufacturer(s).
@@ -601,13 +599,11 @@ Alternatively, the Registrar-Agent EE certificate(s) MAY be provided via configu
 
 A registrar with combined BRSKI and BRSKI-PRM functionality MAY detect if the bootstrapping is performed by the pledge directly (BRSKI case) or by a Registrar-Agent (BRSKI-PRM case) based on the utilized credentials for client authentication during the TLS session establishment and switch the operational mode from BRSKI to BRSKI-PRM.
 
-This may be supported by a specific naming in the SAN (subject alternative name) component of the Registrar-Agent EE certificate. TODO(totally unclear purpose)
+This may be supported by a specific naming in the SAN (subject alternative name) component of the Registrar-Agent EE certificate, which allows the domain registrar to explicitly detect already in the TLS session establishment, that the connecting client is a Registrar-Agent.
 
-Alternatively, this may be supported by using an EE certificate signed by the domain owner for the client authentication of the Registrar-Agent. TODO(statement in l.602 already relies on this EE cert, what is the alternative here?)
-Using an EE certificate also allows the registrar to verify that a Registrar-Agent is authorized to perform the bootstrapping of a pledge. TODO(yes, this is why there is an RegAgt EE cert in the first place; what is the point here?)
-See also Agent Proximity Assertion in {{agt_prx}}.
+The registrar MAY be restricted by configuration, if it accepts every Registrar-Agent, which can authenticate with a domain issued certificate or only explicitly authorized ones.
 
-Using an EE certificate for TLS client authentication of the Registrar-Agent is a deviation from {{!RFC8995}}, in which the pledge IDevID certificate is used to perform TLS client authentication. TODO(again l.602 is already based on this fact.)
+Note that using an EE certificate for TLS client authentication of the Registrar-Agent is a deviation from {{!RFC8995}}, in which the pledge IDevID certificate is used to perform TLS client authentication.
 
 
 
@@ -617,7 +613,7 @@ The Registrar-Agent is a new component in BRSKI-PRM that provides a store and fo
 
 It uses its own EE certificate and corresponding credentials (i.e., private key) for TLS client authentication and for signing agent-signed data objects.
 This EE certificate MUST include a SubjectKeyIdentifier as defined in {{Section 4.2.1.2 of !RFC5280}}, which is used as a reference in the context of the agent-signed data object as defined in {{jws-asd}}.
-Note that this is an additional requirement for issuing the Registrar-Agent EE certificate, as {{!IEEE-802.1AR}} only requires the SubjectKeyIdentifier to be included for intermediate CA certificates. TODO(I though .1AR does not apply here anyway?)
+Note that this is an additional requirement for issuing the Registrar-Agent EE certificate.
 {{!RFC8995}} has a similar requirement for the registrar EE certificate.
 
 In BRSKI-PRM, the SubjectKeyIdentifier is used in favor of providing the complete Registrar-Agent EE certificate to accommodate also constrained environments and reduce bandwidth needed for communication with the pledge.
@@ -1174,10 +1170,9 @@ $enroll-type /= "enroll-generic-cert"
 {: #tper_CDDL_def title='CDDL for Pledge Enroll-Request Trigger (pledgeenrollrequesttrigger)' artwork-align="left"}
 
 The `enroll-type` member allows for specifying which type of certificate is to be enrolled.
-As shown in {{tper_CDDL_def}}, BRSKI-PRM only defines the enum value `enroll-generic-cert` for the enrollment of the generic, device-related LDevID certificate.
+As shown in {{tper_CDDL_def}}, BRSKI-PRM only defines the enumeration value `enroll-generic-cert` for the enrollment of the generic, device-related LDevID certificate.
 Other specifications using this artifact may define further enum values, e.g., to bootstrap application-related EE certificates with addtional CSR attributes.
-
-TODO(Create an IANA registry for the enroll-type enum?)
+The enumeration values are managed in an IANA registray to track extensions to BRSKI-PRM (see {{iana_con}}).
 
 
 ### Response Artifact: Pledge Enroll-Request (PER) {#per_artifact}
@@ -2332,6 +2327,7 @@ The JSON Status Trigger Data SHALL be a JSON document {{RFC8259}} that MUST conf
   }
 
   $status-type /= "bootstrap"
+  $status-type /= "operation"
 ~~~~
 {: #stat_req_def title="CDDL for JSON Status Trigger Data (statustrigger)" artwork-align="left"}
 
@@ -2348,10 +2344,13 @@ it can be used as reference time for the corresponding Pledge Status response ar
 note that pledges may not have synchronized time to provide the created-on date and time on their own.
 
 The `status-type` allows for specifying which status information is to be returned.
-As shown in {{stat_req_def}}, BRSKI-PRM currently only defines the enum value `bootstrap` to provide current status information regarding the bootstrapping status (voucher processing and enrollment of the pledge into a domain).
-Other specifications using this artifact may define further enum values, e.g., to query application-related status.
+As shown in {{stat_req_def}}, BRSKI-PRM defines two enumeration values:
 
-TODO(Create an IANA registry for the status-type enum?)
+* `bootstrap` to query current status information regarding the bootstrapping status (e.g., voucher processing and enrollment of the pledge into a domain)
+* `operation` to query current status information regarding the operational status (e.g., utilization of the bootstrapped EE credentials in communication with other peers)
+
+Other specifications using this artifact may define further enumeration values, e.g., to query application-related status.
+The enumeration values are managed in an IANA registray to track extensions to BRSKI-PRM (see {{iana_con}}).
 
 {{stat_req_data}} below shows an example for the JSON Status Trigger Data using the status type `bootstrap`:
 
@@ -2424,20 +2423,21 @@ The JSON Pledge Status Data SHALL be a JSON document {{RFC8259}} that MUST confo
 ~~~~ cddl
   pledgestatus = {
     "version": uint,
-    "status": $status-enumerations,
+    "status": $status-enums,
     ?"reason" : text,
     ?"reason-context": { * $$arbitrary-map }
   }
 
-  $status-enumerations /= $status-bootstrap
+  $status-enums /= $status-bootstrap
+  $status-bootstrap /= "factory-default"
+  $status-bootstrap /= "voucher-success"
+  $status-bootstrap /= "voucher-error"
+  $status-bootstrap /= "enroll-success"
+  $status-bootstrap /= "enroll-error"
 
-  $status-bootstrap /= "factory-default" /
-      "voucher-success" /
-      "voucher-error" /
-      "enroll-success" /
-      "enroll-error" /
-      "connect-success" /
-      "connect-error"
+  $status-enums /= $status-operation
+  $status-operation /= "connect-success"
+  $status-operation /= "connect-error"
 ~~~~
 {: #stat_res_def title='CDDL for JSON Pledge Status Data (pledgestatus)' artwork-align="left"}
 
@@ -2446,11 +2446,15 @@ The `version` member follows the definition in {{tstatus_data}} (same as in JSON
 The `reason` and `reason-context` members follow the definitions in {{vstatus_data}} (same as in JSON Voucher Status Data).
 
 The `status` member SHALL contain a status value corresponding to the queried `status-type`.
-For this, the CDDL in {{stat_res_def}} defines `status` as an extensible list of valid status text enumerations that correspond to different status-type values.
-This document only defines the enumeration "status-bootstrap" corresponding to the status-type `bootstrap`.
-Other documents may enhance the enumeration to reflect further status information or add additional enumerations for other status-types.
+For this, the CDDL in {{stat_res_def}} defines `status` as an extensible list of valid status label enumerations that correspond to different status-type values.
+This document defines the following status label enumerations:
 
-The status-bootstrap enumeration defines the following values with the given semantics, while additional information MAY be provided in the `reason` or `reason-context` members:
+* "status-bootstrap" with an (extensible) enumeration of status labels corresponding to the status-type `bootstrap` defined in {{stat_req_def}}
+* "status-operation" with an (extensible) enumeration of status labels corresponding to the status-type `operation` defined in {{stat_req_def}}
+
+Other documents may enhance the enumeration to reflect further status information or add additional enumerations for other `statustrigger` status-types (see {{tstatus_data}}).
+
+The status-bootstrap enumeration defines the following status values with the given semantics, while additional information MAY be provided in the `reason` or `reason-context` members:
 
 * `factory-default`: Pledge has not been bootstrapped.
   The pledge signs the response message using its IDevID certificate/credentials.
@@ -2466,27 +2470,38 @@ The status-bootstrap enumeration defines the following values with the given sem
   Additional information may be provided in the `reason` or `reason-context` members.
   The pledge signs the response message using its IDevID certificate/credentials.
 
-As the pledge is assumed to utilize its bootstrapped EE credentials in communication with other peers, additional status information is provided for the connectivity to other peers, which may be helpful in analyzing potential error cases.
+The status-bootstrap status values SHALL be cumulative in the sense that `enroll-success` and `enroll-error` imply `voucher-success`.
+{{stat_example_bootstrap}} below provides an example for bootstrap status information in the JSON Pledge Status Data:
+
+~~~~
+{
+  "version": 1,
+  "status": "enroll-success",
+  "reason": "Pledge has processed the enrollment exchange successfully."
+}
+~~~~
+{: #stat_example_bootstrap title='status-bootstrap JSON Pledge Status Data Example' artwork-align="left"}
+
+The status-operation enumeration defines the following values with the given semantics, while additional information MAY be provided in the `reason` or `reason-context` members:
 
 * `connect-success`: Pledge could successfully establish a connection to another peer.
   The pledge signs the response message using its domain-owner signed EE certificate/credentials.
 * `connect-error`: Pledge connection establishment terminated with error.
   The pledge signs the response message using its domain-owner signed EE certificate/credentials.
 
-The pledge-status responses are cumulative in the sense that connect-success implies enroll-success, which in turn implies voucher-success.
-
-{{stat_example}} below provides an example for bootstrapping status information in the JSON Pledge Status Data:
+{{stat_example_operation}} below provides an example for operational status information in the JSON Pledge Status Data:
 
 ~~~~
 {
   "version": 1,
-  "status": "enroll-success",
+  "status": "connect-error",
+  "reason": "Pledge connection establishment terminated with error.",
   "reason-context": {
-    "additional" : "JSON"
+    "app-server.example.com" : "Cannot verify TLS server certificate."
   }
 }
 ~~~~
-{: #stat_example title='JSON Pledge Status Data Example' artwork-align="left"}
+{: #stat_example_operation title='status-operation JSON Pledge Status Data Example' artwork-align="left"}
 
 #### JWS Protected Header
 
@@ -2549,7 +2564,7 @@ In addition, within the domain it can be analyzed, if the onboarding involved di
 
 
 
-# IANA Considerations {#iana-con}
+# IANA Considerations {#iana_con}
 
 This document requires the following IANA actions.
 
@@ -2573,6 +2588,30 @@ IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with
 {: #iana_table title='BRSKI Well-Known URIs Additions' }
 
 
+
+##  Pledge Enrollment Type Indication
+ 
+IANA is required to enhance the Registry entitled "BRSKI Parameters" with a new sub-registry for the enroll-type.
+The `enroll-type` member is a trigger parameter for the pledge that allows to specify what type of certificate is to be enrolled via PVR.
+BRSKI-PRM results in a generic operational device certificate (LDevID).
+The sub-registry allows for indicating other certificates to be enrolled such as application-related certificates, which can be used by other specifications.
+The references for each entry MUST also provide a CDDL {{!RFC8610}} definition with a separate `"/="` rule for `$enroll-type` defined in {{tper_CDDL_def}}.
+The following item is in the initial registration, with this document (see {{tper_artifact}}) as the reference:
+ 
+* enroll-generic-cert
+
+
+
+##  Pledge Status Telemetry Enhancements
+ 
+IANA is required to enhance the Registry entitled "BRSKI Parameters" with a new sub-registry for the status-type.
+The `status-type` member is a query parameter for the pledge that allows to specify which status information is to be returned.
+The sub-registry allows for indicating the defined status-types.
+The references for each entry MUST also define an enumeration of status labels corresponding to the defined status-type using separate CDDL {{!RFC8610}} rules for `$status-enums` defined in {{stat_res_def}}.
+The following item is in the initial registration, with this document (see {{tstatus_data}}) as the reference:
+ 
+* bootstrap
+* operation
 
 ##  DNS Service Names
 
@@ -3079,7 +3118,7 @@ From IETF draft 10 -> IETF draft 11:
 * issue #79, clarified that BRSKI discovery in the context of BRSKI-PRM is not needed in {{discovery_uc2_reg}}.
 * issue #103, removed step 6 in verification handling for the wrapped CA certificate provisioning as only applicable after enrollment {{cacerts}}
 * issue #128: included notation of nomadic operation of the Registrar-Agent in {{architecture}}, including proposed text from PR #131
-* issue #130, introduced DNS service discovery name for brski_pledge to enable discovery by the Registrar-Agent in {{iana-con}}
+* issue #130, introduced DNS service discovery name for brski_pledge to enable discovery by the Registrar-Agent in {{iana_con}}
 * removed unused reference RFC 5280
 * removed site terminology
 * deleted duplicated text in {{pledge_component}}
@@ -3128,7 +3167,7 @@ From IETF draft 08 -> IETF draft 09:
 * issue #107: included example for certificate revocation in {{estatus}}
 * issue	#108: renamed heading to Pledge-Status Request of {{query}}
 * issue #111: included pledge-status response processing for authenticated requests in {{query}}
-* issue #112: added "Example key word in pledge-status response in {{stat_example}}
+* issue #112: added "Example key word in pledge-status response in {{stat_example_bootstrap}}
 * issue #113: enhanced description of status reply for "factory-default" in  {{query}}
 * issue #114: Consideration of optional TLS usage in Privacy Considerations
 * issue #115: Consideration of optional TLS usage in Privacy Considerations to protect potentially privacy related information in the bootstrapping like status information, etc.
