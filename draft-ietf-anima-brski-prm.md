@@ -208,7 +208,7 @@ EE:
 EE certificate:
 : the certificate of the EE signed by its owner (e.g., CA).
 For domain components, the EE certificate is signed by the domain owner.
-For the pledge, the EE certficate is either the IDevID certificate signed by the manufacturer or the LDevID certificate signed by the domain owner or an application-specific EE certificate signed by the domain owner.
+For the pledge, the EE certificate is either the IDevID certificate signed by the manufacturer or the LDevID certificate signed by the domain owner or an application-specific EE certificate signed by the domain owner.
 
 endpoint:
 : Term equivalent to resource in HTTP {{RFC9110}} and CoAP {{RFC7252}}.
@@ -247,7 +247,7 @@ For BRSKI-PRM, it contains a copy of the original PVR received from the pledge.
 
 This document uses the following encoding notations in the given JWS-signed artifact examples:
 
-BASE64(OCTESTS):
+BASE64(OCTETS):
 : Denotes the base64 encoding of an octet sequence using the character set defined in {{Section 4 of ?RFC4648}} and without the inclusion of any line breaks, whitespace, or other additional characters.
   Note that the base64 encoding of the empty octet sequence is the empty string.
 
@@ -434,7 +434,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
   This is for situations in which the domain registrar is not directly reachable by the pledge, which may be due to a different technology stacks or due to missing connectivity.
   A Registrar-Agent acting as client leads to the following new aspects:
 
-  * The order of exchanges in the BRSKI-PRM call flow is different from that in BRSKI {{!RFC8995}}, as the Registrar-Agent can trigger one or more pledges and collects the PVR and PER artifcats simultaneously as defined in {{exchanges}}.
+  * The order of exchanges in the BRSKI-PRM call flow is different from that in BRSKI {{!RFC8995}}, as the Registrar-Agent can trigger one or more pledges and collects the PVR and PER artifacts simultaneously as defined in {{exchanges}}.
     This enables bulk bootstrapping of several devices.
   * There is no trust assumption between the pledge and the Registrar-Agent as only authenticated self-contained objects are used, which are transported via the Registrar-Agent and provided either by the pledge or the domain registrar.
   * The trust assumption between the Registrar-Agent and the domain registrar may be based on EE certificates that are both signed by the domain owner.
@@ -880,7 +880,7 @@ The following sub sections split the interactions shown in {{exchangesfig_uc2_al
 
 4. {{per}} describes the enroll exchange initiated by the Registrar-Agent to the registrar including the interaction of the registrar with the CA using the PER as well as the artifact processing by these entities.
 
-5. {{obtain_cacerts}} describes the retrival exchange for the optional CA certificate provisioning to the pledge initiated by the Registrar-Agent to the CA.
+5. {{obtain_cacerts}} describes the retrieval exchange for the optional CA certificate provisioning to the pledge initiated by the Registrar-Agent to the CA.
 
 6. {{voucher}} describes the Voucher exchange initiated by the Registrar-Agent to the pledge and the returned status information.
 
@@ -972,7 +972,7 @@ The `agent-signed-data` member SHALL contain the base64-encoded JWS Agent-Signed
 #### JWS Agent-Signed Data {#jws-asd}
 
 To enable alternative formats, the YANG module in {{I-D.ietf-anima-rfc8366bis}} defines the leaf `agent-signed-data` as binary.
-For the JWS-signed JSON format used by this specification, the `agent-signed-data` leaf SHALL be a UTF-8 endcoded JWS structure in "General JWS JSON Serialization Syntax" as defined in {{Section 7.2.1 of RFC7515}} signing the JSON Agent-Signed Data defined in {{prm-asd}}.
+For the JWS-signed JSON format used by this specification, the `agent-signed-data` leaf SHALL be a UTF-8 encoded JWS structure in "General JWS JSON Serialization Syntax" as defined in {{Section 7.2.1 of RFC7515}} signing the JSON Agent-Signed Data defined in {{prm-asd}}.
 {{asd_representation}} summarizes this JWS structure for the `agent-signed-data` member of the tPVR artifact:
 
 ~~~~
@@ -1103,7 +1103,7 @@ If the certificate chain is not included in the `x5c` Header Parameter, it MUST 
 
 #### JWS Signature
 
-The plege MUST sign the PVR artifact using its IDevID credential following the definitions of {{Section 3.4 of !I-D.ietf-anima-jws-voucher}}.
+The pledge MUST sign the PVR artifact using its IDevID credential following the definitions of {{Section 3.4 of !I-D.ietf-anima-jws-voucher}}.
 
 
 
@@ -1171,8 +1171,8 @@ $enroll-type /= "enroll-generic-cert"
 
 The `enroll-type` member allows for specifying which type of certificate is to be enrolled.
 As shown in {{tper_CDDL_def}}, BRSKI-PRM only defines the enumeration value `enroll-generic-cert` for the enrollment of the generic, device-related LDevID certificate.
-Other specifications using this artifact may define further enum values, e.g., to bootstrap application-related EE certificates with addtional CSR attributes.
-The enumeration values are managed in an IANA registray to track extensions to BRSKI-PRM (see {{iana_con}}).
+Other specifications using this artifact may define further enum values, e.g., to bootstrap application-related EE certificates with additional CSR attributes.
+The enumeration values are managed in an IANA registry to track extensions to BRSKI-PRM (see {{iana_con}}).
 
 
 ### Response Artifact: Pledge Enroll-Request (PER) {#per_artifact}
@@ -1327,7 +1327,7 @@ Due to the Registrar-Agent in the middle, the registrar MUST verify in addition 
 
 * the `agent-provided-proximity-registrar-cert` field of the PVR contains a registrar EE certificate signed by the same domain owner as the registrar EE certificate used to sign the RVR;
   note that this check allows for installations with multiple domain registrars and for registrar EE certificate renewal between exchanges with the Registrar-Agent (see {{arch_nomadic}});
-  in many installations with a single registrar the contained certificate is identical to the sigining certificate
+  in many installations with a single registrar the contained certificate is identical to the signing certificate
 * the `agent-signed-data` field of the PVR is signed with the private key corresponding to the Registrar-Agent EE certificate as known by the registrar (see {{registrar_component}});
   this is done via the SubjectKeyIdentifier of the certificate in the `kid` Header Parameter of the JWS Protected Header of the `agent-signed-data` field.
 * the product-serial-number inside the `agent-signed-data` is equal to the `serial-number` field of the PVR as well as the X520SerialNumber field of the pledge IDevID certificate, which is contained in the JWS Protected Header of the PVR.
@@ -1361,7 +1361,7 @@ The assumption is that a pledge typically supports a single artifact format and 
 to ensure that the pledge is able to process the voucher, the registrar requests this format via the HTTP Accept header field when requesting the voucher.
 Further, the RVR artifact and the PVR artifact inside should also use the same format to limit the number of required format encoders.
 Note that BRSKI-PRM allows for alternative formats such as CMS-signed JSON as used in BRSKI {{!RFC8995}} or COSE-signed CBOR for constrained environments, when defined by other specifications.
-Overall, a MASA responsible for BRSKI-PRM capabable pledges MUST support the same formats as supported by those pledges.
+Overall, a MASA responsible for BRSKI-PRM capable pledges MUST support the same formats as supported by those pledges.
 
 Once the MASA receives the RVR artifact, it MUST perform the verification as described in {{Section 5.5 of !RFC8995}}.
 Depending on policy, the MASA MAY chose the type of assertion to perform.
@@ -1385,7 +1385,7 @@ The client error status codes are kept the same as defined in {{Section 5.6 of !
 * 415 Unsupported Media Type: if the request uses an artifact format or Accept header value that is not supported by the MASA
 
 Otherwise, the MASA creates a Voucher artifact as defined in {{voucher_artifact}} and updates the audit-log as described in {{Section 5.5 of !RFC8995}}.
-The Voucher is then supplied to the registrar withen the body of an HTTP 200 OK response according to {{Section 5.6 of !RFC8995}}.
+The Voucher is then supplied to the registrar within the body of an HTTP 200 OK response according to {{Section 5.6 of !RFC8995}}.
 In the response header, the Content-Type field MUST be set to the media type of the incoming RVR artifact.
 For the default format used in this specification, this is `application/voucher-jws+json` as defined in {{I-D.ietf-anima-jws-voucher}}.
 
@@ -1492,7 +1492,7 @@ The domain registrar MUST sign the RVR artifact using its EE credentials followi
 ### Backend Response Artifact: Voucher {#voucher_artifact}
 
 The Voucher artifact is defined in {{Section 5.6 of !RFC8995}} (cf. "voucher response").
-The only difference for BRSKI-PRM is that the `assertion` field MAY contain the value `agent-proximity` as defined in {{I-D.ietf-anima-rfc8366bis}}, when the Agent-Proxomity Assertion (see {{agt_prx}}) is performed by the MASA.
+The only difference for BRSKI-PRM is that the `assertion` field MAY contain the value `agent-proximity` as defined in {{I-D.ietf-anima-rfc8366bis}}, when the Agent-Proximity Assertion (see {{agt_prx}}) is performed by the MASA.
 
 For the JWS-signed JSON format used by this specification, the Voucher artifact MUST be a JWS Voucher structure as defined in {{!I-D.ietf-anima-jws-voucher}}.
 It contains JSON Voucher Data in the JWS Payload, for which an example is given in {{voucher_data_example}}:
@@ -1636,7 +1636,7 @@ Hence, there is no verification whether the pledge is accepted to join the domai
 
 ### Request Artifact: Pledge Enroll-Request (PER)
 
-Identifical to the PER artifact defined in {{per_artifact}}.
+Identical to the PER artifact defined in {{per_artifact}}.
 The Registrar-Agent MUST NOT modify PERs received from pledges.
 
 
@@ -1680,7 +1680,7 @@ The CA certificates do not need to be correlated to a specific voucher or Enroll
 ~~~~
 {: #exchangesfig_uc2_5 title="CA certificates retrieval exchange" artwork-align="center"}
 
-As a third step of the interaction with the domain registrar, the Registrar-Agent SHALL obtain the CA-Certificates artificat from the registrar via HTTP-over-TLS GET to the registrar endpoint at `/.well-known/brski/wrappedcacerts`.
+As a third step of the interaction with the domain registrar, the Registrar-Agent SHALL obtain the CA-Certificates artifact from the registrar via HTTP-over-TLS GET to the registrar endpoint at `/.well-known/brski/wrappedcacerts`.
 In the request header, the Accept field SHOULD be set to `application/jose+json`.
 
 Upon receiving a GET request at `/.well-known/brski/wrappedcacerts`, the domain registrar MUST reply with the CA-Certificates artifact as defined in {{cacerts_artifact}} in the body of an HTTP 200 OK response.
@@ -1694,7 +1694,7 @@ There is no artifact provided to the registrar.
 
 ### Response Artifact: CA-Certificates (caCerts) {#cacerts_artifact}
 
-The CA-Certificates (caCerts) artifact SHALL be an authenticated self-contained object signed by the registrar, containing the domain trust anchors and the certificate chain for the pledge domain EE certificate, i.e., the root CA certificate(s) and possibly intermediate certificate(s) as descibed in {{Section 4.1.3 of !RFC7030}}.
+The CA-Certificates (caCerts) artifact SHALL be an authenticated self-contained object signed by the registrar, containing the domain trust anchors and the certificate chain for the pledge domain EE certificate, i.e., the root CA certificate(s) and possibly intermediate certificate(s) as described in {{Section 4.1.3 of !RFC7030}}.
 
 For the JWS-signed JSON format used by this specification, the caCerts artifact MUST use the "General JWS JSON Serialization Syntax" defined in {{Section 7.2.1 of !RFC7515}}, which MUST contain the JSON CA Data defined in {{cacerts_data}} in the JWS Payload.
 
@@ -2126,7 +2126,7 @@ The JWS Signature is generated over the JWS Protected Header and the JWS Payload
 Implementation Note:
 : Due to similar JSON Data, in a failure case the resulting eStatus artifact is not distinguishable from a vStatus artifact defined in {{vstatus_artifact}} (both are signed using the pledge IDevID credential).
 Hence, Registrar-Agents need to carefully manage from which exchange/endpoint they receive a status artifact and ensure to only send it to the corresponding endpoint on the domain registrar.
-BRSKI-PRM implementations MAY utilize the `reason-context` to provide a distiguishable token that enables the registrar to detect status artifacts provided to the wrong endpoint, e.g., using the `reason-context` object key `pvs-details` for vStatus and `pes-details` for eStatus.
+BRSKI-PRM implementations MAY utilize the `reason-context` to provide a distinguishable token that enables the registrar to detect status artifacts provided to the wrong endpoint, e.g., using the `reason-context` object key `pvs-details` for vStatus and `pes-details` for eStatus.
 Standardization of this mechanism is out of scope of this document.
 
 
@@ -2350,7 +2350,7 @@ As shown in {{stat_req_def}}, BRSKI-PRM defines two enumeration values:
 * `operation` to query current status information regarding the operational status (e.g., utilization of the bootstrapped EE credentials in communication with other peers)
 
 Other specifications using this artifact may define further enumeration values, e.g., to query application-related status.
-The enumeration values are managed in an IANA registray to track extensions to BRSKI-PRM (see {{iana_con}}).
+The enumeration values are managed in an IANA registry to track extensions to BRSKI-PRM (see {{iana_con}}).
 
 {{stat_req_data}} below shows an example for the JSON Status Trigger Data using the status type `bootstrap`:
 
@@ -2533,7 +2533,7 @@ The JWS Signature is generated over the JWS Protected Header and the JWS Payload
 
 
 
-# Logging Considerations
+# Logging Considerations {#log_hints}}
 
 The registrar SHOULD log certain events to provide an audit trail for the onboarding of pledges into its domain.
 This audit trail may support the root cause analysis in case of device or system failures. 
@@ -2739,6 +2739,7 @@ For this reason, these guidelines do not follow the template described by {{Sect
 We would like to thank the various reviewers, in particular Brian E. Carpenter, Charlie Kaufman (Early SECDIR review), Martin Bj&ouml;rklund (Early YANGDOCTORS review), Marco Tiloca (Early IOTDIR review), Oskar Camenzind, Hendrik Brockhaus, and Ingo Wenda for their input and discussion on use cases and call flows.
 Further review input was provided by Jesser Bouzid, Dominik Tacke, Christian Spindler, and Julian Krieger.
 Special thanks to Esko Dijk for the in deep review and the improving proposals.
+Another special thanks for the detailed Shepherad review and connected discussions to Matthias Kovatsch.  
 Support in PoC implementations and comments resulting from the implementation was provided by Hong Rui Li and He Peng Jia.
 Review comments in the context of a formal analysis of BRSKI-PRM have been provided by Marco Calipari. 
 
@@ -3101,11 +3102,18 @@ Proof of Concept Code available
 From IETF draft 12 -> IETF draft 13:
 
 * Deleted figure in Section "Request Artifact: Pledge Voucher-Request Trigger (tPVR)" for JSON representation of tPVR, as it has been replaced by CDDL
-* Updated reason-content description in status response messages (enroll-status, voucher-status, and status-response.
+* Updated reason-content description in status response messages (enroll-status, voucher-status, and status-response).
 * Updated CDDL source code integration to allow for automatic verification
 * Reordered description in section {{pvr}} in {{tper}} to better match the order of communication and artifact processing.
 * Updated CDDL for the request-enroll trigger in {{tper_CDDL_def}} according to the outcome of the interim ANIMA WG meeting discussions on April 19, 2024
 * Included statement in {{per_artifact}} for using the advanced created-on time from the agent-signed-data also for the PER, when the pledge has no synchronized clock
+* Update of the examples in {{examples}} to align with the defined prototypes 
+* Changes incorporated based on Shepherd review PR #133:
+  * Terminology alignment and clarification throughout the document to use terms more consistently 
+  * Restructuring of section {{exchanges}} for protocol steps to align to the general approach: Overview, data description, CDDL description (if necessary), JWS Header an Signature. This lead to some movement of text between existing and new subsections.
+  * Inclusion of new section on logging hints {{log_hints}} to give recommendations on which events to be logged for auditing
+  * Enhancement of IANA considerations in {{iana_con}} with values for the trigger messages and with an enhancement of the pledge status query and response to allow for a more flexible status inquiry and reporting
+    
 
 From IETF draft 11 -> IETF draft 12:
 
