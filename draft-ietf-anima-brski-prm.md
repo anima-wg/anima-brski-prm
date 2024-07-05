@@ -931,12 +931,12 @@ The Registrar-Agent SHALL trigger the pledge to create a PVR via HTTP(S) POST to
 The request body MUST contain the JSON-based Pledge Voucher-Request Trigger (tPVR) artifact as defined in {{tpvr_artifact}}.
 In the request header, the Content-Type field MUST be set to `application/json` and the Accept field SHOULD be set to `application/voucher-jws+json` as defined in {{!I-D.ietf-anima-jws-voucher}}.
 
-Upon receiving a valid tPVR, the pledge MUST reply with the PVR artifact as defined in {{pvr_artifact}} in the body of a 200 OK response.
+Upon receiving a valid tPVR, the pledge MUST reply with the PVR artifact as defined in {{pvr_artifact}} in the body of an HTTP 200 OK response.
 In the response header, the Content-Type field MUST be set to `application/voucher-jws+json` as defined in {{!I-D.ietf-anima-jws-voucher}}.
 
 Note that the pledge provisionally accepts the registrar EE certificate contained in the tPVR until it receives the voucher (see {{agt_prx}}).
 
-If the pledge is unable to create the PVR, it SHOULD respond with an HTTP error code.
+If the pledge is unable to create the PVR, it SHOULD respond with an HTTP error status code to the Registrar-Agent.
 The following client error status codes SHOULD be used:
 
 * 400 Bad Request: if the pledge detects an error in the format of the request, e.g., missing field, wrong data types, etc. or if the request is not valid JSON even though the Content-Type request header field was set to `application/json`
@@ -959,7 +959,7 @@ For the JSON-based format used by this specification, the tPVR artifact SHALL be
     "agent-signed-data": bytes
   }
 ~~~~
-{: #tpvr_CDDL_def title='CDDL for Pledge Voucher-Request Trigger' artwork-align="left"}
+{: #tpvr_CDDL_def title='CDDL for Pledge Voucher-Request Trigger (pledgevoucherrequesttrigger)' artwork-align="left"}
 
 The `agent-provided-proximity-registrar-cert` member SHALL contain the base64-encoded registrar EE certificate in X.509 v3 (DER) format.
 The `agent-signed-data` member SHALL contain the base64-encoded JWS Agent-Signed Data as defined in {{jws-asd}}.
@@ -1007,7 +1007,7 @@ The JSON Agent-Signed Data SHALL be a JSON document {{!RFC8259}} that MUST confo
     "serial-number": text
   }
 ~~~~
-{: #prmasd_CDDL_def title='CDDL for BRSKI-PRM Agent Signed Data' artwork-align="left"}
+{: #prmasd_CDDL_def title='CDDL for JSON Agent-Signed Data (prmasd)' artwork-align="left"}
 
 The `created-on` member SHALL contain the current date and time at tPVR creation as standard date/time string as defined in {{Section 5.6 of !RFC3339}}.
 
@@ -1052,7 +1052,7 @@ The JWS Signature is generated over the JWS Protected Header and the JWS Payload
 The Pledge Voucher-Request (PVR) artifact SHALL be an authenticated self-contained object signed by the pledge, containing an extended Voucher-Request artifact based on {{Section 5.2 of !RFC8995}}.
 The BRSKI-PRM related enhancements of the `ietf-voucher-request` YANG module are defined in {{I-D.ietf-anima-rfc8366bis}}.
 
-For the JWS-signed JSON format used by this specification, the PVR artifact MUST be a JWS Voucher structure as defined in {{!I-D.ietf-anima-jws-voucher}}, which MUST contain the JSON PVR Data defined in {{pvr-data}} in the JWS Payload.
+For the JWS-signed JSON format used by this specification, the PVR artifact MUST be a JWS Voucher structure as defined in {{!I-D.ietf-anima-jws-voucher}}, which MUST contain the JSON PVR Data defined in {{pvr_data}} in the JWS Payload.
 {{pvr_representation}} summarizes the serialization of the JWS-signed JSON PVR artifact:
 
 ~~~~
@@ -1068,7 +1068,7 @@ For the JWS-signed JSON format used by this specification, the PVR artifact MUST
 ~~~~
 {: #pvr_representation title='PVR Representation in General JWS JSON Serialization Syntax' artwork-align="left"}
 
-#### JSON PVR Data {#pvr-data}
+#### JSON PVR Data {#pvr_data}
 
 The JSON PVR Data MUST contain the following fields of the `ietf-voucher-request` YANG module as defined in {{I-D.ietf-anima-rfc8366bis}};
 note that this makes optional leaves in the YANG definition mandatory for the PVR artifact:
@@ -1141,10 +1141,10 @@ The Registrar-Agent SHALL trigger the pledge to create the PER via HTTP(S) POST 
 The request body MUST contain the JSON-based Pledge Enroll-Request Trigger (tPER) artifact as defined in {{tper_artifact}}.
 In the request header, the Content-Type field MUST be set to `application/json` and the Accept field SHOULD be set to `application/jose+json`.
 
-Upon receiving a valid tPER, the pledge MUST reply with the PER artifact as defined in {{per_artifact}} in the body of a 200 OK response.
+Upon receiving a valid tPER, the pledge MUST reply with the PER artifact as defined in {{per_artifact}} in the body of an HTTP 200 OK response.
 In the response header, the Content-Type field MUST be set to `application/jose+json`.
 
-If the pledge is unable to create the PER, it SHOULD respond with an HTTP error code.
+If the pledge is unable to create the PER, it SHOULD respond with an HTTP error status code to the Registrar-Agent.
 The following client error status codes MAY be used:
 
 * 400 Bad Request: if the pledge detects an error in the format of the request
@@ -1171,11 +1171,13 @@ pledgeenrollrequesttrigger = {
 
 $enroll-type /= "enroll-generic-cert"
 ~~~~
-{: #tper_CDDL_def title='CDDL for Pledge Enroll-Request Trigger' artwork-align="left"}
+{: #tper_CDDL_def title='CDDL for Pledge Enroll-Request Trigger (pledgeenrollrequesttrigger)' artwork-align="left"}
 
-The `enroll-type` member allows for specifying arbitrary indications which type of certificate is to be enrolled.
+The `enroll-type` member allows for specifying which type of certificate is to be enrolled.
 As shown in {{tper_CDDL_def}}, BRSKI-PRM only defines the enum value `enroll-generic-cert` for the enrollment of the generic, device-related LDevID certificate.
 Other specifications using this artifact may define further enum values, e.g., to bootstrap application-related EE certificates with addtional CSR attributes.
+
+TODO(Create an IANA registry for the enroll-type enum?)
 
 
 ### Response Artifact: Pledge Enroll-Request (PER) {#per_artifact}
@@ -1184,7 +1186,7 @@ The Pledge Enroll-Request (PER) artifact SHALL be an authenticated self-containe
 The CSR already assures POP of the private key corresponding to the contained public key.
 In addition, based on the PER signature using the IDevID of the pledge, POI is provided.
 
-For the JWS-signed JSON format used by this specification, the PER artifact MUST use the "General JWS JSON Serialization Syntax" defined in {{Section 7.2.1 of RFC7515}}, which MUST contain the JSON CSR Data defined in {{per-data}} in the JWS Payload.
+For the JWS-signed JSON format used by this specification, the PER artifact MUST use the "General JWS JSON Serialization Syntax" defined in {{Section 7.2.1 of RFC7515}}, which MUST contain the JSON CSR Data defined in {{per_data}} in the JWS Payload.
 {{per_representation}} summarizes the serialization of the JWS-signed JSON PER artifact:
 
 ~~~~
@@ -1205,7 +1207,7 @@ The JWS Payload is further base64url-encoded to become the string value of the `
 The octets of the UTF-8 representation of the JWS Protected Header are base64url-encoded to become the string value of the `protected` member.
 The generated JWS Signature is base64url-encoded to become the string value of the `signature` member.
 
-#### JSON CSR Data {#per-data}
+#### JSON CSR Data {#per_data}
 
 The JSON CSR Data SHALL be a JSON document {{RFC8259}} that MUST conform with the data model described by the `csr-grouping` of the `ietf-ztp-types` YANG module defined in {{Section 3.2 of !I-D.ietf-netconf-sztp-csr}} and MUST be encoded using the rules defined in {{!RFC7951}}.
 Note that {{!I-D.ietf-netconf-sztp-csr}} also allows for inclusion of CSRs in different formats used by CMP and CMC.
@@ -1388,7 +1390,7 @@ The client error status codes are kept the same as defined in {{Section 5.6 of !
 * 415 Unsupported Media Type: if the request uses an artifact format or Accept header value that is not supported by the MASA
 
 Otherwise, the MASA creates a Voucher artifact as defined in {{voucher_artifact}} and updates the audit-log as described in {{Section 5.5 of !RFC8995}}.
-The Voucher is then supplied to the registrar withen the body of a 200 OK response according to {{Section 5.6 of !RFC8995}}.
+The Voucher is then supplied to the registrar withen the body of an HTTP 200 OK response according to {{Section 5.6 of !RFC8995}}.
 In the response header, the Content-Type field MUST be set to the media type of the incoming RVR artifact.
 For the default format used in this specification, this is `application/voucher-jws+json` as defined in {{I-D.ietf-anima-jws-voucher}}.
 
@@ -1397,12 +1399,12 @@ For the default format used in this specification, this is `application/voucher-
 After receiving the Voucher from the MASA, the registrar SHOULD evaluate it for transparency and logging purposes as outlined in {{Section 5.6 of !RFC8995}}.
 It then countersigns the Voucher for delivery to the pledge via the Registrar-Agent.
 
-The registrar MUST reply to the Registrar-Agent with the Registrar-Countersigned Voucher artifact (Voucher') as defined in {{rcv_artifact}} in the body of a 200 OK response.
+The registrar MUST reply to the Registrar-Agent with the Registrar-Countersigned Voucher artifact (Voucher') as defined in {{rcv_artifact}} in the body of an HTTP 200 OK response.
 In the response header, the Content-Type field MUST be set to the media type of the incoming PVR artifact.
 For the default format used in this specification, this is `application/voucher-jws+json` as defined in {{I-D.ietf-anima-jws-voucher}}.
 
-If the domain registrar is unable to return the Voucher, it MUST respond with an HTTP server error code to the Registrar-Agent.
-The following server error codes SHOULD be used:
+If the domain registrar is unable to return the Voucher, it MUST respond with an HTTP server error status code to the Registrar-Agent.
+The following server error status codes SHOULD be used:
 
 * 500 Internal Server Error: if both Registrar-Agent request and MASA response are valid, but the registrar still failed to return the Voucher, e.g., due to missing configuration or a program failure
 * 502 Bad Gateway: if the registrar received an invalid response from the MASA
@@ -1422,7 +1424,7 @@ The Registrar-Agent MUST NOT modify PVRs.
 The Registrar Voucher-Request (RVR) artifact SHALL be an extended Voucher-Request artifact based on {{Section 5.5 of !RFC8995}}.
 The BRSKI-PRM related enhancements of the `ietf-voucher-request` YANG module are defined in {{I-D.ietf-anima-rfc8366bis}}.
 
-For the JWS-signed JSON format used by this specification, the RVR artifact MUST be a JWS Voucher structure as defined in {{!I-D.ietf-anima-jws-voucher}}, which MUST contain the JSON RVR Data defined in {{rvr-data}} in the JWS Payload.
+For the JWS-signed JSON format used by this specification, the RVR artifact MUST be a JWS Voucher structure as defined in {{!I-D.ietf-anima-jws-voucher}}, which MUST contain the JSON RVR Data defined in {{rvr_data}} in the JWS Payload.
 {{rvr_representation}} summarizes the serialization of the JWS-signed JSON RVR artifact:
 
 ~~~~
@@ -1438,7 +1440,7 @@ For the JWS-signed JSON format used by this specification, the RVR artifact MUST
 ~~~~
 {: #rvr_representation title='RVR Representation in General JWS JSON Serialization Syntax' artwork-align="left"}
 
-#### JSON RVR Data {#rvr-data}
+#### JSON RVR Data {#rvr_data}
 
 The JSON RVR Data MUST contain the following fields of the `ietf-voucher-request` YANG module as defined in {{I-D.ietf-anima-rfc8366bis}};
 note that this makes optional leaves in the YANG definition mandatory for the RVR artifact:
@@ -1610,7 +1612,7 @@ Hence, upon receiving a PER artifact, the registrar MUST verify that
 * the pledge identified by its EE certificate is accepted to join the domain after successful validation of the corresponding PVR.
 
 If the registrar is unable to process the request or validate the PER, it MUST respond with an HTTP client error status code to the Registrar-Agent.
-The following client error codes SHOULD be used:
+The following client error status codes SHOULD be used:
 
 * 400 Bad Request: if the registrar detects an error in the format of the request
 * 401 Unauthorized: if the signature of the PER cannot be verified
@@ -1622,11 +1624,11 @@ Otherwise, the registrar extracts the PKCS#10 Certificate Signing Request (CSR) 
 The exact interaction and exchanged data objects depends on the certificate management protocol used by the Key Infrastructure, and is out of scope for this document.
 
 A successful interaction with the Key Infrastructure will result in a pledge EE certificate singed by the domain owner (e.g., LDevID certificate).
-The registrar MUST reply to the Registrar-Agent with the Enroll-Response (Enroll-Resp) as defined in {{er_artifact}} in the body of a 200 OK response.
+The registrar MUST reply to the Registrar-Agent with the Enroll-Response (Enroll-Resp) as defined in {{er_artifact}} in the body of an HTTP 200 OK response.
 In the response header, the Content-Type field MUST be set to `application/pkcs7-mime`.
 
-If the domain registrar is unable to return the Enroll-Resp, it MUST respond with an HTTP server error code to the Registrar-Agent.
-The following server error codes SHOULD be used:
+If the domain registrar is unable to return the Enroll-Resp, it MUST respond with an HTTP server error status code to the Registrar-Agent.
+The following server error status codes SHOULD be used:
 
 * 500 Internal Server Error: if the Key Infrastructure response is valid, but the registrar still failed to return the Enroll-Resp, e.g., due to missing configuration or a program failure
 * 502 Bad Gateway: if the registrar received an invalid response from the Key Infrastructure
@@ -1686,7 +1688,7 @@ The CA certificates do not need to be correlated to a specific voucher or Enroll
 As a third step of the interaction with the domain registrar, the Registrar-Agent SHALL obtain the CA-Certificates artificat from the registrar via HTTP-over-TLS GET to the registrar endpoint at `/.well-known/brski/wrappedcacerts`.
 In the request header, the Accept field SHOULD be set to `application/jose+json`.
 
-Upon receiving a GET request at `/.well-known/brski/wrappedcacerts`, the domain registrar MUST reply with the CA-Certificates artifact as defined in {{cacerts_artifact}} in the body of a 200 OK response.
+Upon receiving a GET request at `/.well-known/brski/wrappedcacerts`, the domain registrar MUST reply with the CA-Certificates artifact as defined in {{cacerts_artifact}} in the body of an HTTP 200 OK response.
 In the response header, the Content-Type field MUST be set to `application/jose+json`.
 
 
@@ -1699,7 +1701,7 @@ There is no artifact provided to the registrar.
 
 The CA-Certificates (caCerts) artifact SHALL be an authenticated self-contained object signed by the registrar, containing the domain trust anchors and the certificate chain for the pledge domain EE certificate, i.e., the root CA certificate(s) and possibly intermediate certificate(s) as descibed in {{Section 4.1.3 of !RFC7030}}.
 
-For the JWS-signed JSON format used by this specification, the caCerts artifact MUST use the "General JWS JSON Serialization Syntax" defined in {{Section 7.2.1 of !RFC7515}}, which MUST contain the JSON CA Data defined in {{cacerts-data}} in the JWS Payload.
+For the JWS-signed JSON format used by this specification, the caCerts artifact MUST use the "General JWS JSON Serialization Syntax" defined in {{Section 7.2.1 of !RFC7515}}, which MUST contain the JSON CA Data defined in {{cacerts_data}} in the JWS Payload.
 
 {{cacerts_representation}} summarizes the serialization of the JWS-signed JSON caCerts artifact:
 
@@ -1721,16 +1723,16 @@ The JWS Payload is further base64url-encoded to become the string value of the `
 The octets of the UTF-8 representation of the JWS Protected Header are base64url-encoded to become the string value of the `protected` member.
 The generated JWS Signature is base64url-encoded to become the string value of the `signature` member.
 
-#### JSON CA Data {#cacerts-data}
+#### JSON CA Data {#cacerts_data}
 
 The JSON CA Data SHALL be a JSON document {{RFC8259}} that MUST conform with the CDDL {{!RFC8610}} data model defined in {{cacerts_CDDL_def}}:
 
 ~~~~ cddl
-pledgeenrollrequesttrigger = {
+cacerts = {
 	"x5bag": bytes / [+ bytes]
 }
 ~~~~
-{: #cacerts_CDDL_def title='CDDL for JSON CA Data' artwork-align="left"}
+{: #cacerts_CDDL_def title='CDDL for JSON CA Data (cacerts)' artwork-align="left"}
 
 The `x5bag` member MUST follow the definition of the `x5bag` COSE Header Parameter in {{Section 2 of !RFC9360}}.
 It is either a single X.509 v3 certificate or an array of at least two X.509 v3 certificates in DER format.
@@ -1830,7 +1832,7 @@ If all steps above complete successfully, the pledge SHALL terminate the "provis
 A nonceless voucher MAY be accepted as in {{!RFC8995}} if allowed by the pledge implementation of the manufacturer.
 
 After voucher validation and verification, the pledge needs to reply with a status telemetry message as defined in {{Section 5.7 of !RFC8995}}.
-The pledge MUST generate the Voucher Status (vStatus) artifact as defined in {{vstatus_artifact}} and MUST provide it to the Registrar-Agent in the body of a 200 OK response.
+The pledge MUST generate the Voucher Status (vStatus) artifact as defined in {{vstatus_artifact}} and MUST provide it to the Registrar-Agent in the body of an HTTP 200 OK response.
 In the response header, the Content-Type field MUST be set to `application/jose+json`.
 
 If the pledge is unable to validate or verify the voucher, it MUST report the reason in the corresponding field of the Voucher Status.
@@ -1849,7 +1851,7 @@ The Registrar-Agent MUST NOT modify countersigned vouchers.
 
 The Voucher Status (vStatus) artifact SHALL be an authenticated self-contained object signed by the pledge, containing status telemetry as defined in {{Section 5.7 of !RFC8995}}.
 
-For the JWS-signed JSON format used by this specification, the vStatus artifact MUST use the "General JWS JSON Serialization Syntax" defined in {{Section 7.2.1 of RFC7515}}, which MUST contain the JSON Voucher Status Data defined in {{vstatus-data}} in the JWS Payload.
+For the JWS-signed JSON format used by this specification, the vStatus artifact MUST use the "General JWS JSON Serialization Syntax" defined in {{Section 7.2.1 of RFC7515}}, which MUST contain the JSON Voucher Status Data defined in {{vstatus_data}} in the JWS Payload.
 {{vstatus_representation}} summarizes the serialization of the JWS-signed JSON vStatus artifact:
 
 ~~~~
@@ -1870,7 +1872,7 @@ The JWS Payload is further base64url-encoded to become the string value of the `
 The octets of the UTF-8 representation of the JWS Protected Header are base64url-encoded to become the string value of the `protected` member.
 The generated JWS Signature is base64url-encoded to become the string value of the `signature` member.
 
-#### JSON Voucher Status Data {#vstatus-data}
+#### JSON Voucher Status Data {#vstatus_data}
 
 The JSON Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with the `voucherstatus-post` CDDL {{!RFC8610}} data model defined in {{Section 5.7 of !RFC8995}}:
 
@@ -1898,7 +1900,8 @@ The JSON Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with
 {
   "version": 1,
   "status": false,
-  "reason": "Failed to authenticate MASA certificate because it starts in the future (1/1/2023).",
+  "reason": "Failed to authenticate MASA certificate
+             because it starts in the future (1/1/2023).",
   "reason-context": {
     "pvs-details": "Current date: 1/1/1970"
   }
@@ -1971,10 +1974,10 @@ Upon receiving valid caCerts artifact, the pledge MUST first verify the signatur
 In the case of success, the pledge MUST install the contained CA certificates as trust anchors as described in {{Section 4.1.3 of !RFC7030}}.
 This includes the verification of all intermediate CA certificates (i.e., not self-signed CA certificates).
 
-If the pledge is unable to process the caCerts, it SHOULD respond with an HTTP error code.
+If the pledge is unable to process the caCerts, it SHOULD respond with an HTTP error status code to the Registrar-Agent.
 The following client error status codes SHOULD be used:
 
-* 400 Bad Request: if the pledge detects an error in the format of the request, e.g., missing field, wrong data types, etc. or if the request is not valid JWS-signed JSON even though the Content-Type request header field was set to `application/jose+json`
+* 400 Bad Request: if the pledge detects an error in the format of the request
 * 401 Unauthorized: if the signature of the registrar cannot be verified against the installed initial trust anchor (pinned domain certificate)
 * 403 Forbidden: if one of the intermediate CA certificates cannot be verified against the available trust anchors (e.g., self-signed CA certificates)
 * 415 Unsupported Media Type: if the Content-Type request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/jose+json`
@@ -2027,7 +2030,7 @@ In the request header, the Content-Type field MUST be set to `application/pkcs7-
 
 Upon reception, the pledge SHALL verify the received EE certificate using the installed trust anchors.
 After Enroll-Resp validation and verification, the pledge needs to reply with a status telemetry message as defined in {{Section 5.9.4 of !RFC8995}}.
-The pledge MUST generate the Enroll Status (eStatus) artifact as defined in {{estatus_artifact}} and MUST provide it to the Registrar-Agent in the body of a 200 OK response.
+The pledge MUST generate the Enroll Status (eStatus) artifact as defined in {{estatus_artifact}} and MUST provide it to the Registrar-Agent in the body of an HTTP 200 OK response.
 In the response header, the Content-Type field MUST be set to `application/jose+json`.
 
 If the pledge is unable to validate or verify the Enroll-Response, it MUST report the reason in the corresponding field of the Enroll Status.
@@ -2043,7 +2046,7 @@ The Registrar-Agent MUST NOT modify Enroll-Response artifacts.
 
 The Enroll Status (eStatus) artifact SHALL be an authenticated self-contained object signed by the pledge, containing status telemetry as defined in {{Section 5.9.4 of !RFC8995}}.
 
-For the JWS-signed JSON format used by this specification, the eStatus artifact MUST use the "General JWS JSON Serialization Syntax" defined in {{Section 7.2.1 of RFC7515}}, which MUST contain the JSON Enroll Status Data defined in {{estatus-data}} in the JWS Payload.
+For the JWS-signed JSON format used by this specification, the eStatus artifact MUST use the "General JWS JSON Serialization Syntax" defined in {{Section 7.2.1 of RFC7515}}, which MUST contain the JSON Enroll Status Data defined in {{estatus_data}} in the JWS Payload.
 {{estatus_representation}} summarizes the serialization of the JWS-signed JSON eStatus artifact:
 
 ~~~~
@@ -2064,18 +2067,10 @@ The JWS Payload is further base64url-encoded to become the string value of the `
 The octets of the UTF-8 representation of the JWS Protected Header are base64url-encoded to become the string value of the `protected` member.
 The generated JWS Signature is base64url-encoded to become the string value of the `signature` member.
 
-#### JSON Enroll Status Data {#estatus-data}
+#### JSON Enroll Status Data {#estatus_data}
 
-The JSON Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with the `enrollstatus-post` CDDL {{!RFC8610}} data model defined in {{Section 5.9.4 of !RFC8995}}:
-
-* `version`: contains a version number for the format and semantics of the other fields;
-  this specification assumes version `1` just like BRSKI {{!RFC8995}}
-* `status`: contains the boolean value `true` in case of success and `false` in case of failure
-* `reason`: contains a human-readable message;
-  MAY be omitted in the case of success;
-  SHOULD NOT provide information beneficial to an attacker
-* `reason-context`: contain an arbitrary JSON object that provides additional information specific to a failure;
-   MAY be omitted in the case of success
+The JSON Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with the `enrollstatus-post` CDDL {{!RFC8610}} data model defined in {{Section 5.9.4 of !RFC8995}}.
+The members are the same as for the JSON Voucher Status Data and follow the same definitions as given in {{vstatus_data}}.
 
 {{estatus_data_example_success}} below shows an example for the JSON Enroll Status Data in case of success and {{estatus_data_example_error}} in case of failure:
 
@@ -2280,43 +2275,85 @@ Optionally, TLS MAY be used to provide privacy for this exchange between the Reg
 {: #exchangesfig_uc2_11 title="Pledge Status exchange" artwork-align="center"}
 
 The Registrar-Agent SHALL query the pledge via HTTP(S) POST to the pledge endpoint at `/.well-known/brski/qps`.
-The request body MUST contain the JWS-signed Status Trigger (tStatus) artifact as defined in {{tstatus_artifact}}.
+The request body MUST contain the Status Trigger (tStatus) artifact as defined in {{tstatus_artifact}}.
 In the request header, the Content-Type field MUST be set to `application/jose+json` and the Accept field SHOULD be set to `application/jose+json`.
 
-If the pledge provides the Query Pledge Status endpoint, it MUST reply with the Pledge Status (pStatus) artifact as defined in {{pstatus_artifact}} in the body of an HTTP 200 OK response.
+If the pledge implements the Query Pledge Status endpoint, it MUST first verify the signature of the tStatus artifact using its trust anchors.
+If the pledge does not possess any domain trust anchor yet, it MAY skip the signature verification and choose to reply without it.
+In the case of success, it MUST reply with the Pledge Status (pStatus) artifact as defined in {{pstatus_artifact}} in the body of an HTTP 200 OK response.
+In the response header, the Content-Type field MUST be set to `application/jose+json`.
+
+If the pledge is unable to create the pStatus artifact, the pledge SHOULD respond with an HTTP error status code to the Registrar-Agent.
+The following client error status codes SHOULD be used:
+
+* 400 Bad Request: if the pledge detects an error in the format of the request
+* 401 Unauthorized: if the signature of the Registrar-Agent cannot be verified using the installed trust anchors
+* 406 Not Acceptable: if the Accept request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/jose+json`
+* 415 Unsupported Media Type: if the Content-Type request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/jose+json`
+
+The pledge MAY use the response body to signal failure details to the service technician operating the Registrar-Agent.
 
 
 ### Request Artifact: Status Trigger (tStatus) {#tstatus_artifact}
 
-The Status Query artifact is a JWS structure signing information on the requested status-type, the time and date the request is created, and the product-serial-number of the pledge contacted as shown in {{stat_req_def}}.
-The following Concise Data Definition Language (CDDL) {{RFC8610}} defines the structure of the unsigned Status Query data (i.e., JWS payload):
+The Status Query (tStatus) artifact SHALL be an authenticated self-contained object signed by the pledge, providing status query parameters.
+
+For the JWS-signed JSON format used by this specification, the tStatus artifact MUST use the "General JWS JSON Serialization Syntax" defined in {{Section 7.2.1 of RFC7515}}, which MUST contain the JSON Status Trigger Data defined in {{tstatus_data}} in the JWS Payload.
+{{tstatus_representation}} summarizes the serialization of the JWS-signed JSON PER artifact:
+
+~~~~
+{
+  "payload": BASE64URL(UTF8(JSON Status Trigger Data)),
+  "signatures": [
+    {
+      "protected": BASE64URL(UTF8(JWS Protected Header)),
+      "signature": BASE64URL(JWS Signature)
+    }
+  ]
+}
+~~~~
+{: #tstatus_representation title='tStatus Representation in General JWS JSON Serialization Syntax' artwork-align="left"}
+
+The JSON Status Trigger Data MUST be UTF-8 encoded to become the octet-based JWS Payload defined in {{RFC7515}}.
+The JWS Payload is further base64url-encoded to become the string value of the `payload` member as described in {{Section 3.2 of RFC7515}}.
+The octets of the UTF-8 representation of the JWS Protected Header are base64url-encoded to become the string value of the `protected` member.
+The generated JWS Signature is base64url-encoded to become the string value of the `signature` member.
+
+#### JSON Status Trigger Data {#tstatus_data}
+
+The JSON Status Trigger Data SHALL be a JSON document {{RFC8259}} that MUST that MUST conform with the CDDL {{!RFC8610}} data model defined in {{stat_req_def}}:
 
 ~~~~ cddl
   statustrigger = {
       "version": uint,
-      "created-on": tdate,
       "serial-number": text,
-      "status-type": text
+      "created-on": tdate,
+      "status-type": $status-type
   }
-~~~~
-{: #stat_req_def title="CDDL for unsigned Status Trigger data (statustrigger)" artwork-align="left"}
 
-The `version` field is included to permit significant changes to the pledge status artifacts in the future.
+  $status-type /= "bootstrap"
+~~~~
+{: #stat_req_def title="CDDL for JSON Status Trigger Data (statustrigger)" artwork-align="left"}
+
+The `version` member is included to permit significant changes to the pledge status artifacts in the future.
 The format and semantics in this document follow the status telemetry definitions of {{!RFC8995}}.
-Hence, the version MUST be set to `1`.
+Hence, the `version` SHALL be set to `1`.
 A pledge (or Registrar-Agent) that receives a version larger than it knows about SHOULD log the contents and alert a human.
 
-The `created-on` field contains a standard date/time string following {{!RFC3339}}.
+The `serial-number` member SHALL contain the product-serial-number corresponding to the X520SerialNumber field of the pledge IDevID certificate;
+it can be correlated with the product-serial-number in the signing certificate contained in the JWS Protected Header of the Pledge Status response artifact.
 
-The `serial-number` field takes the product-serial-number corresponding to the X520SerialNumber field of the pledge IDevID certificate.
+The `created-on` member SHALL contain the current date and time at tStatus creation as standard date/time string as defined in {{Section 5.6 of !RFC3339}};
+it can be used as reference time for the corresponding Pledge Status response artifact after correlating via the product-serial-number;
+note that pledges may not have synchronized time to provide the created-on date and time on their own.
 
-The `status-type` value defined for BRSKI-PRM Status Query is `bootstrap`.
-This indicates the pledge to provide current status information regarding the bootstrapping status (voucher processing and enrollment of the pledge into the new domain).
+The `status-type` allows for specifying which status information is to be returned.
+As shown in {{stat_req_def}}, BRSKI-PRM currently only defines the enum value `bootstrap` to provide current status information regarding the bootstrapping status (voucher processing and enrollment of the pledge into a domain).
+Other specifications using this artifact may define further enum values, e.g., to query application-related status.
 
-As the Status Query artifact is defined generic, it may be used by other specifications to request further status information using other status types, e.g., for onboarding to get further information about enrollment of application-related EE certificates or other parameters.
-This is out of scope for this specification.
+TODO(Create an IANA registry for the status-type enum?)
 
-{{stat_req_data}} below shows an example for unsigned Status Query data in JSON syntax using status-type `bootstrap`:
+{{stat_req_data}} below shows an example for the JSON Status Trigger Data using the status type `bootstrap`:
 
 ~~~~
 {
@@ -2326,14 +2363,45 @@ This is out of scope for this specification.
   "status-type": "bootstrap"
 }
 ~~~~
-{: #stat_req_data title="Example of unsigned Status Query data in JSON syntax using status-type bootstrap for the Status Query artifact" artwork-align="left"}
+{: #stat_req_data title="JSON Status Trigger Data Example" artwork-align="left"}
 
-The Status Query data MUST be signed by the Registrar-Agent using its private key corresponding to the Registrar-Agent EE certificate.
-When using a JWS signature, the Status Query artifact looks as shown in {{stat_req}} and the Content-Type response header MUST be set to `application/jose+json`:
+#### JWS Protected Header
+
+The JWS Protected Header of the tStatus artifact MUST contain the following standard Header Parameters as defined in {{RFC7515}}:
+
+* `alg`: SHALL contain the algorithm type used to create the signature, e.g., `ES256`, as defined in {{Section 4.1.1 of RFC7515}}
+* `x5c`: SHALL contain the base64-encoded Registrar-Agent EE certificate used to sign the tStatus artifact as well as the certificate chain
+
+{{tstatus_header}} below shows an example for this JWS Protected Header:
 
 ~~~~
 {
-  "payload": BASE64URL(UTF8(status-query)),
+  "alg": "ES256",
+  "x5c": [
+    "base64encodedvalue==",
+    "base64encodedvalue=="
+  ]
+}
+~~~~
+{: #tstatus_header title='JWS Protected Header Example within tStatus' artwork-align="left"}
+
+#### JWS Signature
+
+The Registrar-Agent MUST sign the tStatus artifact using its EE credentials.
+The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
+
+
+### Response Artifact: Pledge Status (pStatus) {#pstatus_artifact}
+
+The Pledge Status (pStatus) artifact SHALL be an authenticated self-contained object signed by the pledge, containing status telemetry information.
+The exact content depends on the Status Trigger parameter `status-type`.
+
+For the JWS-signed JSON format used by this specification, the pStatus artifact MUST use the "General JWS JSON Serialization Syntax" defined in {{Section 7.2.1 of RFC7515}}, which MUST contain the JSON Pledge Status Data defined in {{pstatus_data}} in the JWS Payload.
+{{pstatus_representation}} summarizes the serialization of the JWS-signed JSON PER artifact:
+
+~~~~
+{
+  "payload": BASE64URL(UTF8(JSON Pledge Status Data)),
   "signatures": [
     {
       "protected": BASE64URL(UTF8(JWS Protected Header)),
@@ -2342,89 +2410,74 @@ When using a JWS signature, the Status Query artifact looks as shown in {{stat_r
   ]
 }
 ~~~~
-{: #stat_req title="Status Query Representation in General JWS JSON Serialization Syntax" artwork-align="left"}
+{: #pstatus_representation title='pStatus Representation in General JWS JSON Serialization Syntax' artwork-align="left"}
 
-For details on `JWS Protected Header` and `JWS Signature` see {{!I-D.ietf-anima-jws-voucher}} or {{!RFC7515}}.
+The JSON Pledge Status Data MUST be UTF-8 encoded to become the octet-based JWS Payload defined in {{RFC7515}}.
+The JWS Payload is further base64url-encoded to become the string value of the `payload` member as described in {{Section 3.2 of RFC7515}}.
+The octets of the UTF-8 representation of the JWS Protected Header are base64url-encoded to become the string value of the `protected` member.
+The generated JWS Signature is base64url-encoded to become the string value of the `signature` member.
 
+#### JSON Pledge Status Data {#pstatus_data}
 
-### Response Artifact: Pledge Status (pStatus) {#pstatus_artifact}
-
-When the pledge receives a Status Query with status-type `bootstrap` it SHALL respond with previously collected telemetry information (see {{vstatus}} and {{estatus}}) in a single Pledge Status artifact.
-
-
-The pledge-status response message is signed with IDevID or domain-owner signed EE credentials, depending on bootstrapping state of the pledge.
-
-The following CDDL defines the structure of the Pledge Status (pStatus) data:
+The JSON Pledge Status Data SHALL be a JSON document {{RFC8259}} that MUST that MUST conform with the CDDL {{!RFC8610}} data model defined in {{stat_res_def}}:
 
 ~~~~ cddl
   pledgestatus = {
     "version": uint,
-    "status":
-      "factory-default" /
+    "status": $status-enumerations,
+    ?"reason" : text,
+    ?"reason-context": { * $$arbitrary-map }
+  }
+
+  $status-enumerations /= $status-bootstrap
+
+  $status-bootstrap /= "factory-default" /
       "voucher-success" /
       "voucher-error" /
       "enroll-success" /
       "enroll-error" /
       "connect-success" /
-      "connect-error",
-    ?"reason" : text,
-    ?"reason-context": { * $$arbitrary-map }
-  }
+      "connect-error"
 ~~~~
-{: #stat_res_def title='CDDL for unsigned Pledge Status data (pledgestatus)' artwork-align="left"}
+{: #stat_res_def title='CDDL for JSON Pledge Status Data (pledgestatus)' artwork-align="left"}
 
-Different cases for pledge bootstrapping status may occur, which SHOULD be reflected using the status enumeration.
-This document specifies the status values in the context of the bootstrapping process and credential application.
-Other documents may enhance the above enumeration to reflect further status information.
+The `version` member follows the definition in {{tstatus_data}} (same as in JSON Status Query Data).
 
+The `reason` and `reason-context` members follow the definitions in {{vstatus_data}} (same as in JSON Voucher Status Data).
 
+The `status` member SHALL contain a status value corresponding to the queried `status-type`.
+For this, the CDDL in {{stat_res_def}} defines `status` as an extensible list of valid status text enumerations that correspond to different status-type values.
+This document only defines the enumeration "status-bootstrap" corresponding to the status-type `bootstrap`.
+Other documents may enhance the enumeration to reflect further status information or add additional enumerations for other status-types.
 
-* "factory-default": Pledge has not been bootstrapped.
-  Additional information may be provided in the reason or reason-context.
-  The pledge signs the response message using its IDevID(Pledge).
-* "voucher-success": Pledge processed the voucher exchange successfully.
-  Additional information may be provided in the reason or reason-context.
-  The pledge signs the response message using its IDevID(Pledge).
-* "voucher-error": Pledge voucher processing terminated with error.
-  Additional information may be provided in the reason or reason-context.
-  The pledge signs the response message using its IDevID(Pledge).
-* "enroll-success": Pledge has processed the enrollment exchange successfully.
-  Additional information may be provided in the reason or reason-context.
-  The pledge signs the response message using its EE(Pledge).
-* "enroll-error": Pledge enrollment-response processing terminated with error.
-  Additional information may be provided in the reason or reason-context.
-  The pledge signs the response message using its IDevID(Pledge).
+The status-bootstrap enumeration defines the following values with the given semantics, while additional information MAY be provided in the `reason` or `reason-context` members:
+
+* `factory-default`: Pledge has not been bootstrapped.
+  The pledge signs the response message using its IDevID certificate/credentials.
+* `voucher-success`: Pledge processed the voucher exchange successfully.
+  The pledge signs the response message using its IDevID certificate/credentials.
+* `voucher-error`: Pledge voucher processing terminated with error.
+  Additional information may be provided in the `reason` or `reason-context` members.
+  The pledge signs the response message using its IDevID certificate/credentials.
+* `enroll-success`: Pledge has processed the enrollment exchange successfully.
+  Additional information may be provided in the `reason` or `reason-context` members.
+  The pledge signs the response message using its domain-owner signed EE certificate/credentials.
+* `enroll-error`: Pledge enrollment-response processing terminated with error.
+  Additional information may be provided in the `reason` or `reason-context` members.
+  The pledge signs the response message using its IDevID certificate/credentials.
 
 As the pledge is assumed to utilize its bootstrapped EE credentials in communication with other peers, additional status information is provided for the connectivity to other peers, which may be helpful in analyzing potential error cases.
 
-* "connect-success": Pledge could successfully establish a connection to another peer.
-  Additional information may be provided in the reason or reason-context.
-  The pledge signs the response message using its EE(Pledge).
-* "connect-error": Pledge connection establishment terminated with error.
-  Additional information may be provided in the reason or reason-context.
-  The pledge signs the response message using its EE(Pledge).
+* `connect-success`: Pledge could successfully establish a connection to another peer.
+  The pledge signs the response message using its domain-owner signed EE certificate/credentials.
+* `connect-error`: Pledge connection establishment terminated with error.
+  The pledge signs the response message using its domain-owner signed EE certificate/credentials.
 
 The pledge-status responses are cumulative in the sense that connect-success implies enroll-success, which in turn implies voucher-success.
-The reason-context is an arbitrary JSON object that provides additional information specific to a failure. 
-The content of this field is not subject to standardization, but examples are provided in {{stat_res}}. 
 
-{{stat_res}} provides an example for the bootstrapping-status information.
-
+{{stat_example}} below provides an example for bootstrapping status information in the JSON Pledge Status Data:
 
 ~~~~
-# The pledge "status-response" in General JWS Serialization syntax
-{
-  "payload": BASE64URL(UTF8(status-response)),
-  "signatures": [
-    {
-      "protected": BASE64URL(UTF8(JWS Protected Header)),
-      "signature": BASE64URL(JWS Signature)
-    }
-  ]
-}
-
-# Example: Decoded payload "status-response" representation
-  in JSON syntax
 {
   "version": 1,
   "status": "enroll-success",
@@ -2432,32 +2485,35 @@ The content of this field is not subject to standardization, but examples are pr
     "additional" : "JSON"
   }
 }
+~~~~
+{: #stat_example title='JSON Pledge Status Data Example' artwork-align="left"}
 
-# Example: Decoded "JWS Protected Header" representation
-  in JSON syntax
+#### JWS Protected Header
+
+The JWS Protected Header of the pStatus artifact MUST contain the following standard Header Parameters as defined in {{RFC7515}}:
+
+* `alg`: SHALL contain the algorithm type used to create the signature, e.g., `ES256`, as defined in {{Section 4.1.1 of RFC7515}}
+* `x5c`: SHALL contain the base64-encoded pledge EE certificate used to sign the pStatus artifact;
+  it SHOULD also contain the certificate chain for this certificate;
+  if the certificate chain is not included in the x5c Header Parameter, it MUST be available at the Registrar-Agent for verification
+
+{{pstatus_header}} below shows an example for this JWS Protected Header:
+
+~~~~
 {
   "alg": "ES256",
   "x5c": [
     "base64encodedvalue==",
     "base64encodedvalue=="
-  ],
-  "typ": "jose+json
+  ]
 }
 ~~~~
-{: #stat_res title='Example of pledge-status response' artwork-align="left"}
+{: #pstatus_header title='JWS Protected Header Example within pStatus' artwork-align="left"}
 
-* In case "factory-default" the pledge does not possess the domain certificate resp. the domain trust-anchor.
-It will not be able to verify the signature of the Registrar-Agent in the bootstrapping-status request.
+#### JWS Signature
 
-* In cases "vouchered" and "enrolled" the pledge already possesses the domain certificate (has domain trust-anchor) and can therefore validate the signature of the Registrar-Agent.
-If validation of the JWS signature fails, the pledge SHOULD respond with the HTTP 403 Forbidden status code.
-
-* The HTTP 406 Not Acceptable status code SHOULD be used, if the Accept header in the request indicates an unknown or unsupported format.
-* The HTTP 415 Unsupported Media Type status code SHOULD be used, if the Content-Type of the request is an unknown or unsupported format.
-* The HTTP 400 Bad Request status code SHOULD be used, if the Accept/Content-Type headers are correct but nevertheless the status-request cannot be correctly parsed.
-
-The pledge SHOULD by default only respond to requests from nodes it can authenticate (such as registrar
-agent), once the pledge is enrolled with CA certificates and a matching domain certificate.
+The pledge MUST sign the tStatus artifact using its IDevID or domain-owner signed EE credentials according its bootstrapping status as defined in {{pstatus_data}}.
+The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
 
 
 
@@ -3072,7 +3128,7 @@ From IETF draft 08 -> IETF draft 09:
 * issue #107: included example for certificate revocation in {{estatus}}
 * issue	#108: renamed heading to Pledge-Status Request of {{query}}
 * issue #111: included pledge-status response processing for authenticated requests in {{query}}
-* issue #112: added "Example key word in pledge-status response in {{stat_res}}
+* issue #112: added "Example key word in pledge-status response in {{stat_example}}
 * issue #113: enhanced description of status reply for "factory-default" in  {{query}}
 * issue #114: Consideration of optional TLS usage in Privacy Considerations
 * issue #115: Consideration of optional TLS usage in Privacy Considerations to protect potentially privacy related information in the bootstrapping like status information, etc.
@@ -3310,8 +3366,8 @@ From individual version 03 -> IETF draft 00:
   pledge-agent use case {{architecture}}, e.g. to
   accommodate distribution of CA certificates.
 
-* Updated CMP example in to use lightweight CMP instead of CMP, as the draft already provides
-  the necessary /.well-known endpoints.
+* Updated CMP example in to use lightweight CMP instead of CMP, as the
+  draft already provides the necessary /.well-known endpoints.
 
 * Requirements discussion moved to separate section in
   {{req-sol}}. Shortened description of proof
