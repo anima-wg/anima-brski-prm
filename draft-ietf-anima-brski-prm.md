@@ -2321,7 +2321,7 @@ The generated JWS Signature is base64url-encoded to become the string value of t
 
 #### JSON Status Trigger Data {#tstatus_data}
 
-The JSON Status Trigger Data SHALL be a JSON document {{RFC8259}} that MUST that MUST conform with the CDDL {{!RFC8610}} data model defined in {{stat_req_def}}:
+The JSON Status Trigger Data SHALL be a JSON document {{RFC8259}} that MUST conform with the CDDL {{!RFC8610}} data model defined in {{stat_req_def}}:
 
 ~~~~ cddl
   statustrigger = {
@@ -2419,7 +2419,7 @@ The generated JWS Signature is base64url-encoded to become the string value of t
 
 #### JSON Pledge Status Data {#pstatus_data}
 
-The JSON Pledge Status Data SHALL be a JSON document {{RFC8259}} that MUST that MUST conform with the CDDL {{!RFC8610}} data model defined in {{stat_res_def}}:
+The JSON Pledge Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with the CDDL {{!RFC8610}} data model defined in {{stat_res_def}}:
 
 ~~~~ cddl
   pledgestatus = {
