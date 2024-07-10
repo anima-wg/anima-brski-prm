@@ -17,7 +17,7 @@ To establish the trust relation between pledge and registrar, BRSKI-PRM relies o
 The approach defined here is agnostic to the enrollment protocol that connects the domain registrar to the Key Infrastructure (e.g., domain CA). 
     " name="description">
 <meta content="xml2rfc 3.22.0" name="generator">
-<meta content="draft-ietf-anima-brski-prm-13" name="ietf.draft">
+<meta content="draft-ietf-anima-brski-prm-14" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.22.0
     Python 3.9.2
@@ -1220,7 +1220,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 6 January 2025</td>
+<td class="center">Expires 11 January 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1230,15 +1230,15 @@ li > p:last-of-type:only-child {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">ANIMA WG</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-ietf-anima-brski-prm-13</dd>
+<dd class="internet-draft">draft-ietf-anima-brski-prm-14</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-07-05" class="published">5 July 2024</time>
+<time datetime="2024-07-10" class="published">10 July 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-01-06">6 January 2025</time></dd>
+<dd class="expires"><time datetime="2025-01-11">11 January 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1298,7 +1298,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 6 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 11 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1555,13 +1555,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
                 <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-brski-well-known-registry" class="internal xref">BRSKI .well-known Registry</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-pledge-enrollment-type-indi" class="internal xref">Pledge Enrollment Type Indication</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
-                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-pledge-status-telemetry-enh" class="internal xref">Pledge Status Telemetry Enhancements</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.4">
-                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="auto internal xref">9.4</a>.  <a href="#name-dns-service-names" class="internal xref">DNS Service Names</a></p>
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-dns-service-names" class="internal xref">DNS Service Names</a></p>
 </li>
             </ul>
 </li>
@@ -2327,7 +2321,7 @@ In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, pledges inst
 <figure id="figure-3">
           <div id="section-5.3-2.1">
             <div class="alignCenter art-svg artwork" id="section-5.3-2.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="352" width="472" viewBox="0 0 472 352" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="352" width="448" viewBox="0 0 448 352" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                 <path d="M 8,160 L 8,208" fill="none" stroke="black"></path>
                 <path d="M 80,160 L 80,208" fill="none" stroke="black"></path>
                 <path d="M 200,32 L 200,64" fill="none" stroke="black"></path>
@@ -3719,8 +3713,7 @@ $enroll-type /= "enroll-generic-cert"
 </div>
 <p id="section-7.2.1-5">The <code>enroll-type</code> member allows for specifying which type of certificate is to be enrolled.
 As shown in <a href="#tper_CDDL_def" class="auto internal xref">Figure 15</a>, BRSKI-PRM only defines the enumeration value <code>enroll-generic-cert</code> for the enrollment of the generic, device-related LDevID certificate.
-Other specifications using this artifact may define further enum values, e.g., to bootstrap application-related EE certificates with additional CSR attributes.
-The enumeration values are managed in an IANA registry to track extensions to BRSKI-PRM (see <a href="#iana_con" class="auto internal xref">Section 9</a>).<a href="#section-7.2.1-5" class="pilcrow">¶</a></p>
+Other specifications using this artifact may define further enum values, e.g., to bootstrap application-related EE certificates with additional CSR attributes.<a href="#section-7.2.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="per_artifact">
@@ -4947,23 +4940,28 @@ this specification assumes version <code>1</code> just like BRSKI <span>[<a href
 </li>
               <li class="normal" id="section-7.6.2.1-2.3">
                 <p id="section-7.6.2.1-2.3.1"><code>reason</code>: contains a human-readable message;
-<span class="bcp14">MAY</span> be omitted in the case of success;
+in contrast to <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.7" class="relref">Section 5.7</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> <span class="bcp14">MUST</span> be provided;
 <span class="bcp14">SHOULD NOT</span> provide information beneficial to an attacker<a href="#section-7.6.2.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-7.6.2.1-2.4">
                 <p id="section-7.6.2.1-2.4.1"><code>reason-context</code>: contain an arbitrary JSON object that provides additional information specific to a failure;
- <span class="bcp14">MAY</span> be omitted in the case of success<a href="#section-7.6.2.1-2.4.1" class="pilcrow">¶</a></p>
+in contrast to <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.7" class="relref">Section 5.7</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> <span class="bcp14">MUST</span> be provided;<a href="#section-7.6.2.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-7.6.2.1-3"><a href="#vstatus_data_example_success" class="auto internal xref">Figure 32</a> below shows an example for the JSON Voucher Status Data in case of success and <a href="#vstatus_data_example_error" class="auto internal xref">Figure 33</a> in case of failure:<a href="#section-7.6.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.6.2.1-3">BRSKI-PRM implementations <span class="bcp14">MUST</span> utilize the reason-context to provide a distinguishable token that enables the registrar to detect status artifacts provided to the wrong endpoint.
+For vStatus the reason-context <span class="bcp14">MUST</span> be "pvs-details".<a href="#section-7.6.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.6.2.1-4"><a href="#vstatus_data_example_success" class="auto internal xref">Figure 32</a> below shows an example for the JSON Voucher Status Data in case of success and <a href="#vstatus_data_example_error" class="auto internal xref">Figure 33</a> in case of failure:<a href="#section-7.6.2.1-4" class="pilcrow">¶</a></p>
 <span id="name-json-voucher-status-data-su"></span><div id="vstatus_data_example_success">
 <figure id="figure-32">
-              <div class="alignLeft art-text artwork" id="section-7.6.2.1-4.1">
+              <div class="alignLeft art-text artwork" id="section-7.6.2.1-5.1">
 <pre>
 {
   "version": 1,
   "status": true,
   "reason": "Voucher successfully processed."
+  "reason-context": {
+    "pvs-details": "Current date: 1/1/1970"
+  }
 }
 </pre>
 </div>
@@ -4973,7 +4971,7 @@ this specification assumes version <code>1</code> just like BRSKI <span>[<a href
 </div>
 <span id="name-json-voucher-status-data-fa"></span><div id="vstatus_data_example_error">
 <figure id="figure-33">
-              <div class="alignLeft art-text artwork" id="section-7.6.2.1-5.1">
+              <div class="alignLeft art-text artwork" id="section-7.6.2.1-6.1">
 <pre>
 {
   "version": 1,
@@ -5330,10 +5328,12 @@ The generated JWS Signature is base64url-encoded to become the string value of t
             </h5>
 <p id="section-7.8.2.1-1">The JSON Status Data <span class="bcp14">SHALL</span> be a JSON document <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> that <span class="bcp14">MUST</span> conform with the <code>enrollstatus-post</code> CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> data model defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.9.4" class="relref">Section 5.9.4</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 The members are the same as for the JSON Voucher Status Data and follow the same definitions as given in <a href="#vstatus_data" class="auto internal xref">Section 7.6.2.1</a>.<a href="#section-7.8.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.8.2.1-2"><a href="#estatus_data_example_success" class="auto internal xref">Figure 38</a> below shows an example for the JSON Enroll Status Data in case of success and <a href="#estatus_data_example_error" class="auto internal xref">Figure 39</a> in case of failure:<a href="#section-7.8.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.8.2.1-2">BRSKI-PRM implementations <span class="bcp14">MUST</span> utilize the reason-context to provide a distinguishable token that enables the registrar to detect status artifacts provided to the wrong endpoint.
+For eStatus the reason-context <span class="bcp14">MUST</span> be "pes-details".<a href="#section-7.8.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.8.2.1-3"><a href="#estatus_data_example_success" class="auto internal xref">Figure 38</a> below shows an example for the JSON Enroll Status Data in case of success and <a href="#estatus_data_example_error" class="auto internal xref">Figure 39</a> in case of failure:<a href="#section-7.8.2.1-3" class="pilcrow">¶</a></p>
 <span id="name-json-enroll-status-data-suc"></span><div id="estatus_data_example_success">
 <figure id="figure-38">
-              <div class="alignLeft art-text artwork" id="section-7.8.2.1-3.1">
+              <div class="alignLeft art-text artwork" id="section-7.8.2.1-4.1">
 <pre>
 {
   "version": 1,
@@ -5351,7 +5351,7 @@ The members are the same as for the JSON Voucher Status Data and follow the same
 </div>
 <span id="name-json-enroll-status-data-fai"></span><div id="estatus_data_example_error">
 <figure id="figure-39">
-              <div class="alignLeft art-text artwork" id="section-7.8.2.1-4.1">
+              <div class="alignLeft art-text artwork" id="section-7.8.2.1-5.1">
 <pre>
 {
   "version": 1,
@@ -5888,8 +5888,7 @@ As shown in <a href="#stat_req_def" class="auto internal xref">Figure 45</a>, BR
                 <p id="section-7.11.1.1-7.2.1"><code>operation</code> to query current status information regarding the operational status (e.g., utilization of the bootstrapped EE credentials in communication with other peers)<a href="#section-7.11.1.1-7.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-7.11.1.1-8">Other specifications using this artifact may define further enumeration values, e.g., to query application-related status.
-The enumeration values are managed in an IANA registry to track extensions to BRSKI-PRM (see <a href="#iana_con" class="auto internal xref">Section 9</a>).<a href="#section-7.11.1.1-8" class="pilcrow">¶</a></p>
+<p id="section-7.11.1.1-8">Other specifications using this artifact may define further enumeration values, e.g., to query application-related status.<a href="#section-7.11.1.1-8" class="pilcrow">¶</a></p>
 <p id="section-7.11.1.1-9"><a href="#stat_req_data" class="auto internal xref">Figure 46</a> below shows an example for the JSON Status Trigger Data using the status type <code>bootstrap</code>:<a href="#section-7.11.1.1-9" class="pilcrow">¶</a></p>
 <span id="name-json-status-trigger-data-ex"></span><div id="stat_req_data">
 <figure id="figure-46">
@@ -5991,28 +5990,17 @@ The generated JWS Signature is base64url-encoded to become the string value of t
             <h5 id="name-json-pledge-status-data">
 <a href="#section-7.11.2.1" class="section-number selfRef">7.11.2.1. </a><a href="#name-json-pledge-status-data" class="section-name selfRef">JSON Pledge Status Data</a>
             </h5>
-<p id="section-7.11.2.1-1">The JSON Pledge Status Data <span class="bcp14">SHALL</span> be a JSON document <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> that <span class="bcp14">MUST</span> conform with the CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> data model defined in <a href="#stat_res_def" class="auto internal xref">Figure 49</a>:<a href="#section-7.11.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.11.2.1-1">The JSON Pledge Status Data <span class="bcp14">SHALL</span> be a JSON document <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> that <span class="bcp14">MUST</span> conform with the CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> data model defined in <a href="#stat_res_def" class="auto internal xref">Figure 49</a>, which has the same members as the <code>voucherstatus-post</code> CDDL defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.7" class="relref">Section 5.7</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> and the  <code>enrollstatus-post</code> CDDL defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.9.4" class="relref">Section 5.9.4</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-7.11.2.1-1" class="pilcrow">¶</a></p>
 <span id="name-cddl-for-json-pledge-status"></span><div id="stat_res_def">
 <figure id="figure-49">
               <div class="alignLeft art-cddl art-text artwork" id="section-7.11.2.1-2.1">
 <pre>
   pledgestatus = {
     "version": uint,
-    "status": $status-enums,
+    "status": bool,
     ?"reason" : text,
     ?"reason-context": { * $$arbitrary-map }
   }
-
-  $status-enums /= $status-bootstrap
-  $status-bootstrap /= "factory-default"
-  $status-bootstrap /= "voucher-success"
-  $status-bootstrap /= "voucher-error"
-  $status-bootstrap /= "enroll-success"
-  $status-bootstrap /= "enroll-error"
-
-  $status-enums /= $status-operation
-  $status-operation /= "connect-success"
-  $status-operation /= "connect-error"
 </pre>
 </div>
 <figcaption><a href="#figure-49" class="selfRef">Figure 49</a>:
@@ -6021,54 +6009,50 @@ The generated JWS Signature is base64url-encoded to become the string value of t
 </div>
 <p id="section-7.11.2.1-3">The <code>version</code> member follows the definition in <a href="#tstatus_data" class="auto internal xref">Section 7.11.1.1</a> (same as in JSON Status Query Data).<a href="#section-7.11.2.1-3" class="pilcrow">¶</a></p>
 <p id="section-7.11.2.1-4">The <code>reason</code> and <code>reason-context</code> members follow the definitions in <a href="#vstatus_data" class="auto internal xref">Section 7.6.2.1</a> (same as in JSON Voucher Status Data).<a href="#section-7.11.2.1-4" class="pilcrow">¶</a></p>
-<p id="section-7.11.2.1-5">The <code>status</code> member <span class="bcp14">SHALL</span> contain a status value corresponding to the queried <code>status-type</code>.
-For this, the CDDL in <a href="#stat_res_def" class="auto internal xref">Figure 49</a> defines <code>status</code> as an extensible list of valid status label enumerations that correspond to different status-type values.
-This document defines the following status label enumerations:<a href="#section-7.11.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-7.11.2.1-5">BRSKI-PRM implementations <span class="bcp14">MUST</span> utilize the reason-context to provide a distinguishable token that enables the registrar to detect status artifacts provided to the wrong endpoint.
+For pStatus the reason-context <span class="bcp14">MUST</span> be either
+* "pbs-details" for bootstrapping related status information or
+* "pos-details" for operation related status information<a href="#section-7.11.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-7.11.2.1-6">Other documents may enhance the reason-context to reflect further status information or add additional values correlating to other <code>statustrigger</code> status-types (see <a href="#tstatus_data" class="auto internal xref">Section 7.11.1.1</a>).<a href="#section-7.11.2.1-6" class="pilcrow">¶</a></p>
+<p id="section-7.11.2.1-7">For the "pbs-details" reason-context the following status values with the given semantics are defined, while additional information <span class="bcp14">MAY</span> be provided in the <code>reason</code> member:<a href="#section-7.11.2.1-7" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.11.2.1-6.1">
-                <p id="section-7.11.2.1-6.1.1">"status-bootstrap" with an (extensible) enumeration of status labels corresponding to the status-type <code>bootstrap</code> defined in <a href="#stat_req_def" class="auto internal xref">Figure 45</a><a href="#section-7.11.2.1-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.11.2.1-8.1">
+                <p id="section-7.11.2.1-8.1.1"><code>factory-default</code>: Pledge has not been bootstrapped.
+The pledge signs the response message using its IDevID certificate/credentials.<a href="#section-7.11.2.1-8.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-7.11.2.1-6.2">
-                <p id="section-7.11.2.1-6.2.1">"status-operation" with an (extensible) enumeration of status labels corresponding to the status-type <code>operation</code> defined in <a href="#stat_req_def" class="auto internal xref">Figure 45</a><a href="#section-7.11.2.1-6.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-7.11.2.1-8.2">
+                <p id="section-7.11.2.1-8.2.1"><code>voucher-success</code>: Pledge processed the voucher exchange successfully.
+The pledge signs the response message using its IDevID certificate/credentials.<a href="#section-7.11.2.1-8.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-7.11.2.1-8.3">
+                <p id="section-7.11.2.1-8.3.1"><code>voucher-error</code>: Pledge voucher processing terminated with error.
+Additional information may be provided in the <code>reason</code> or <code>reason-context</code> members.
+The pledge signs the response message using its IDevID certificate/credentials.<a href="#section-7.11.2.1-8.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-7.11.2.1-8.4">
+                <p id="section-7.11.2.1-8.4.1"><code>enroll-success</code>: Pledge has processed the enrollment exchange successfully.
+Additional information may be provided in the <code>reason</code> or <code>reason-context</code> members.
+The pledge signs the response message using its domain-owner signed EE certificate/credentials.<a href="#section-7.11.2.1-8.4.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-7.11.2.1-8.5">
+                <p id="section-7.11.2.1-8.5.1"><code>enroll-error</code>: Pledge enrollment-response processing terminated with error.
+Additional information may be provided in the <code>reason</code> or <code>reason-context</code> members.
+The pledge signs the response message using its IDevID certificate/credentials.<a href="#section-7.11.2.1-8.5.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-7.11.2.1-7">Other documents may enhance the enumeration to reflect further status information or add additional enumerations for other <code>statustrigger</code> status-types (see <a href="#tstatus_data" class="auto internal xref">Section 7.11.1.1</a>).<a href="#section-7.11.2.1-7" class="pilcrow">¶</a></p>
-<p id="section-7.11.2.1-8">The status-bootstrap enumeration defines the following status values with the given semantics, while additional information <span class="bcp14">MAY</span> be provided in the <code>reason</code> or <code>reason-context</code> members:<a href="#section-7.11.2.1-8" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-7.11.2.1-9.1">
-                <p id="section-7.11.2.1-9.1.1"><code>factory-default</code>: Pledge has not been bootstrapped.
-The pledge signs the response message using its IDevID certificate/credentials.<a href="#section-7.11.2.1-9.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-7.11.2.1-9.2">
-                <p id="section-7.11.2.1-9.2.1"><code>voucher-success</code>: Pledge processed the voucher exchange successfully.
-The pledge signs the response message using its IDevID certificate/credentials.<a href="#section-7.11.2.1-9.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-7.11.2.1-9.3">
-                <p id="section-7.11.2.1-9.3.1"><code>voucher-error</code>: Pledge voucher processing terminated with error.
-Additional information may be provided in the <code>reason</code> or <code>reason-context</code> members.
-The pledge signs the response message using its IDevID certificate/credentials.<a href="#section-7.11.2.1-9.3.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-7.11.2.1-9.4">
-                <p id="section-7.11.2.1-9.4.1"><code>enroll-success</code>: Pledge has processed the enrollment exchange successfully.
-Additional information may be provided in the <code>reason</code> or <code>reason-context</code> members.
-The pledge signs the response message using its domain-owner signed EE certificate/credentials.<a href="#section-7.11.2.1-9.4.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-7.11.2.1-9.5">
-                <p id="section-7.11.2.1-9.5.1"><code>enroll-error</code>: Pledge enrollment-response processing terminated with error.
-Additional information may be provided in the <code>reason</code> or <code>reason-context</code> members.
-The pledge signs the response message using its IDevID certificate/credentials.<a href="#section-7.11.2.1-9.5.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-<p id="section-7.11.2.1-10">The status-bootstrap status values <span class="bcp14">SHALL</span> be cumulative in the sense that <code>enroll-success</code> and <code>enroll-error</code> imply <code>voucher-success</code>.
-<a href="#stat_example_bootstrap" class="auto internal xref">Figure 50</a> below provides an example for bootstrap status information in the JSON Pledge Status Data:<a href="#section-7.11.2.1-10" class="pilcrow">¶</a></p>
+<p id="section-7.11.2.1-9">The status-bootstrap status values <span class="bcp14">SHALL</span> be cumulative in the sense that <code>enroll-success</code> and <code>enroll-error</code> imply <code>voucher-success</code>.
+<a href="#stat_example_bootstrap" class="auto internal xref">Figure 50</a> below provides an example for bootstrap status information in the JSON Pledge Status Data:<a href="#section-7.11.2.1-9" class="pilcrow">¶</a></p>
 <span id="name-status-bootstrap-json-pledg"></span><div id="stat_example_bootstrap">
 <figure id="figure-50">
-              <div class="alignLeft art-text artwork" id="section-7.11.2.1-11.1">
+              <div class="alignLeft art-text artwork" id="section-7.11.2.1-10.1">
 <pre>
 {
   "version": 1,
-  "status": "enroll-success",
+  "status": true,
   "reason": "Pledge has processed the enrollment exchange successfully."
+  "reason-context": {
+    "pbs-details": "Pledge has processed the enrollment exchange successfully."
+  }
 }
 </pre>
 </div>
@@ -6076,28 +6060,28 @@ The pledge signs the response message using its IDevID certificate/credentials.<
 <a href="#name-status-bootstrap-json-pledg" class="selfRef">status-bootstrap JSON Pledge Status Data Example</a>
               </figcaption></figure>
 </div>
-<p id="section-7.11.2.1-12">The status-operation enumeration defines the following values with the given semantics, while additional information <span class="bcp14">MAY</span> be provided in the <code>reason</code> or <code>reason-context</code> members:<a href="#section-7.11.2.1-12" class="pilcrow">¶</a></p>
+<p id="section-7.11.2.1-11">For the "pos-details" reason-context the following status values with the given semantics are defined, while additional information <span class="bcp14">MAY</span> be provided in the <code>reason</code> member:<a href="#section-7.11.2.1-11" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.11.2.1-13.1">
-                <p id="section-7.11.2.1-13.1.1"><code>connect-success</code>: Pledge could successfully establish a connection to another peer.
-The pledge signs the response message using its domain-owner signed EE certificate/credentials.<a href="#section-7.11.2.1-13.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.11.2.1-12.1">
+                <p id="section-7.11.2.1-12.1.1"><code>connect-success</code>: Pledge could successfully establish a connection to another peer.
+The pledge signs the response message using its domain-owner signed EE certificate/credentials.<a href="#section-7.11.2.1-12.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-7.11.2.1-13.2">
-                <p id="section-7.11.2.1-13.2.1"><code>connect-error</code>: Pledge connection establishment terminated with error.
-The pledge signs the response message using its domain-owner signed EE certificate/credentials.<a href="#section-7.11.2.1-13.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-7.11.2.1-12.2">
+                <p id="section-7.11.2.1-12.2.1"><code>connect-error</code>: Pledge connection establishment terminated with error.
+The pledge signs the response message using its domain-owner signed EE certificate/credentials.<a href="#section-7.11.2.1-12.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-7.11.2.1-14"><a href="#stat_example_operation" class="auto internal xref">Figure 51</a> below provides an example for operational status information in the JSON Pledge Status Data:<a href="#section-7.11.2.1-14" class="pilcrow">¶</a></p>
+<p id="section-7.11.2.1-13"><a href="#stat_example_operation" class="auto internal xref">Figure 51</a> below provides an example for operational status information in the JSON Pledge Status Data:<a href="#section-7.11.2.1-13" class="pilcrow">¶</a></p>
 <span id="name-status-operation-json-pledg"></span><div id="stat_example_operation">
 <figure id="figure-51">
-              <div class="alignLeft art-text artwork" id="section-7.11.2.1-15.1">
+              <div class="alignLeft art-text artwork" id="section-7.11.2.1-14.1">
 <pre>
 {
   "version": 1,
   "status": "connect-error",
-  "reason": "Pledge connection establishment terminated with error.",
+  "reason": "TLS certificate could not be verified.",
   "reason-context": {
-    "app-server.example.com" : "Cannot verify TLS server certificate."
+    "connect-error" : "Pledge connection establishment terminated with error."
   }
 }
 </pre>
@@ -6165,7 +6149,7 @@ The JWS Signature is generated over the JWS Protected Header and the JWS Payload
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-logging-considerations" class="section-name selfRef">Logging Considerations</a>
       </h2>
 <p id="section-8-1">The registrar <span class="bcp14">SHOULD</span> log certain events to provide an audit trail for the onboarding of pledges into its domain.
-This audit trail may support the root cause analysis in case of device or system failures. 
+This audit trail may support the root cause analysis in case of device or system failures.
 The logging <span class="bcp14">SHOULD</span> include the identity of the pledge, the identity of the Registrar-Agent that was interacting with the pledge, and relevant artifact fields, in particular telemetry information:<a href="#section-8-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-8-2.1">
@@ -6233,7 +6217,7 @@ In addition, within the domain it can be analyzed, if the onboarding involved di
 <a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-brski-well-known-registry" class="section-name selfRef">BRSKI .well-known Registry</a>
         </h3>
 <p id="section-9.1-1">IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with the following endpoints:<a href="#section-9.1-1" class="pilcrow">¶</a></p>
-<span id="name-brski-well-known-uris-addit"></span><div id="iana_table">
+<span id="name-brski-well-known-uris-addit"></span><div id="iana_table_uri">
 <table class="center" id="table-3">
           <caption>
 <a href="#table-3" class="selfRef">Table 3</a>:
@@ -6292,56 +6276,18 @@ In addition, within the domain it can be analyzed, if the onboarding involved di
 </div>
 </section>
 </div>
-<div id="pledge-enrollment-type-indication">
-<section id="section-9.2">
-        <h3 id="name-pledge-enrollment-type-indi">
-<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-pledge-enrollment-type-indi" class="section-name selfRef">Pledge Enrollment Type Indication</a>
-        </h3>
-<p id="section-9.2-1">IANA is required to enhance the Registry entitled "BRSKI Parameters" with a new sub-registry for the enroll-type.
-The <code>enroll-type</code> member is a trigger parameter for the pledge that allows to specify what type of certificate is to be enrolled via PVR.
-BRSKI-PRM results in a generic operational device certificate (LDevID).
-The sub-registry allows for indicating other certificates to be enrolled such as application-related certificates, which can be used by other specifications.
-The references for each entry <span class="bcp14">MUST</span> also provide a CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> definition with a separate <code>"/="</code> rule for <code>$enroll-type</code> defined in <a href="#tper_CDDL_def" class="auto internal xref">Figure 15</a>.
-The following item is in the initial registration, with this document (see <a href="#tper_artifact" class="auto internal xref">Section 7.2.1</a>) as the reference:<a href="#section-9.2-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-9.2-2.1">
-            <p id="section-9.2-2.1.1">enroll-generic-cert<a href="#section-9.2-2.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-</section>
-</div>
-<div id="pledge-status-telemetry-enhancements">
-<section id="section-9.3">
-        <h3 id="name-pledge-status-telemetry-enh">
-<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-pledge-status-telemetry-enh" class="section-name selfRef">Pledge Status Telemetry Enhancements</a>
-        </h3>
-<p id="section-9.3-1">IANA is required to enhance the Registry entitled "BRSKI Parameters" with a new sub-registry for the status-type.
-The <code>status-type</code> member is a query parameter for the pledge that allows to specify which status information is to be returned.
-The sub-registry allows for indicating the defined status-types.
-The references for each entry <span class="bcp14">MUST</span> also define an enumeration of status labels corresponding to the defined status-type using separate CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> rules for <code>$status-enums</code> defined in <a href="#stat_res_def" class="auto internal xref">Figure 49</a>.
-The following item is in the initial registration, with this document (see <a href="#tstatus_data" class="auto internal xref">Section 7.11.1.1</a>) as the reference:<a href="#section-9.3-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-9.3-2.1">
-            <p id="section-9.3-2.1.1">bootstrap<a href="#section-9.3-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-9.3-2.2">
-            <p id="section-9.3-2.2.1">operation<a href="#section-9.3-2.2.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-</section>
-</div>
 <div id="dns-service-names">
-<section id="section-9.4">
+<section id="section-9.2">
         <h3 id="name-dns-service-names">
-<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-dns-service-names" class="section-name selfRef">DNS Service Names</a>
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-dns-service-names" class="section-name selfRef">DNS Service Names</a>
         </h3>
-<p id="section-9.4-1">IANA has registered the following service names:<a href="#section-9.4-1" class="pilcrow">¶</a></p>
-<p id="section-9.4-2"><strong>Service Name:</strong> brski-pledge<br>
+<p id="section-9.2-1">IANA has registered the following service names:<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<p id="section-9.2-2"><strong>Service Name:</strong> brski-pledge<br>
           <strong>Transport Protocol(s):</strong> tcp<br>
           <strong>Assignee:</strong> IESG <a href="mailto:iesg@ietf.org">iesg@ietf.org</a><br>
           <strong>Contact:</strong> IESG <a href="mailto:iesg@ietf.org">iesg@ietf.org</a><br>
           <strong>Description:</strong> The Bootstrapping Remote Secure Key Infrastructure Pledge<br>
-          <strong>Reference:</strong> [THISRFC]<a href="#section-9.4-2" class="pilcrow">¶</a></p>
+          <strong>Reference:</strong> [THISRFC]<a href="#section-9.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -6482,7 +6428,7 @@ For this reason, these guidelines do not follow the template described by <span>
 <p id="section-12-1">We would like to thank the various reviewers, in particular Brian E. Carpenter, Charlie Kaufman (Early SECDIR review), Martin Björklund (Early YANGDOCTORS review), Marco Tiloca (Early IOTDIR review), Oskar Camenzind, Hendrik Brockhaus, and Ingo Wenda for their input and discussion on use cases and call flows.
 Further review input was provided by Jesser Bouzid, Dominik Tacke, Christian Spindler, and Julian Krieger.
 Special thanks to Esko Dijk for the in deep review and the improving proposals.
-Another special thanks for the detailed Shepherad review and connected discussions to Matthias Kovatsch.<br>
+Another special thanks for the detailed Shepherad review and connected discussions to Matthias Kovatsch.
 Support in PoC implementations and comments resulting from the implementation was provided by Hong Rui Li and He Peng Jia.
 Review comments in the context of a formal analysis of BRSKI-PRM have been provided by Marco Calipari.<a href="#section-12-1" class="pilcrow">¶</a></p>
 </section>
@@ -6503,7 +6449,7 @@ Review comments in the context of a formal analysis of BRSKI-PRM have been provi
 <dd class="break"></dd>
 <dt id="I-D.ietf-anima-rfc8366bis">[I-D.ietf-anima-rfc8366bis]</dt>
         <dd>
-<span class="refAuthor">Watsen, K.</span>, <span class="refAuthor">Richardson, M.</span>, <span class="refAuthor">Pritikin, M.</span>, <span class="refAuthor">Eckert, T. T.</span>, and <span class="refAuthor">Q. Ma</span>, <span class="refTitle">"A Voucher Artifact for Bootstrapping Protocols"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-rfc8366bis-11</span>, <time datetime="2024-03-04" class="refDate">4 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-rfc8366bis-11">https://datatracker.ietf.org/doc/html/draft-ietf-anima-rfc8366bis-11</a>&gt;</span>. </dd>
+<span class="refAuthor">Watsen, K.</span>, <span class="refAuthor">Richardson, M.</span>, <span class="refAuthor">Pritikin, M.</span>, <span class="refAuthor">Eckert, T. T.</span>, and <span class="refAuthor">Q. Ma</span>, <span class="refTitle">"A Voucher Artifact for Bootstrapping Protocols"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-rfc8366bis-12</span>, <time datetime="2024-07-08" class="refDate">8 July 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-rfc8366bis-12">https://datatracker.ietf.org/doc/html/draft-ietf-anima-rfc8366bis-12</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-netconf-sztp-csr">[I-D.ietf-netconf-sztp-csr]</dt>
         <dd>
@@ -6592,11 +6538,11 @@ Review comments in the context of a formal analysis of BRSKI-PRM have been provi
 <dd class="break"></dd>
 <dt id="I-D.ietf-anima-brski-ae">[I-D.ietf-anima-brski-ae]</dt>
         <dd>
-<span class="refAuthor">von Oheimb, D.</span>, <span class="refAuthor">Fries, S.</span>, and <span class="refAuthor">H. Brockhaus</span>, <span class="refTitle">"BRSKI-AE: Alternative Enrollment Protocols in BRSKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-brski-ae-11</span>, <time datetime="2024-06-03" class="refDate">3 June 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-11">https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-11</a>&gt;</span>. </dd>
+<span class="refAuthor">von Oheimb, D.</span>, <span class="refAuthor">Fries, S.</span>, and <span class="refAuthor">H. Brockhaus</span>, <span class="refTitle">"BRSKI-AE: Alternative Enrollment Protocols in BRSKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-brski-ae-12</span>, <time datetime="2024-07-05" class="refDate">5 July 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-12">https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-ae-12</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-anima-brski-discovery">[I-D.ietf-anima-brski-discovery]</dt>
         <dd>
-<span class="refAuthor">Eckert, T. T.</span> and <span class="refAuthor">E. Dijk</span>, <span class="refTitle">"Discovery for BRSKI variations"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-brski-discovery-01</span>, <time datetime="2024-04-18" class="refDate">18 April 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-discovery-01">https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-discovery-01</a>&gt;</span>. </dd>
+<span class="refAuthor">Eckert, T. T.</span> and <span class="refAuthor">E. Dijk</span>, <span class="refTitle">"Discovery for BRSKI variations"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-anima-brski-discovery-03</span>, <time datetime="2024-07-07" class="refDate">7 July 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-discovery-03">https://datatracker.ietf.org/doc/html/draft-ietf-anima-brski-discovery-03</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.irtf-t2trg-taxonomy-manufacturer-anchors">[I-D.irtf-t2trg-taxonomy-manufacturer-anchors]</dt>
         <dd>
@@ -6641,6 +6587,10 @@ Review comments in the context of a formal analysis of BRSKI-PRM have been provi
 <dt id="RFC8040">[RFC8040]</dt>
         <dd>
 <span class="refAuthor">Bierman, A.</span>, <span class="refAuthor">Bjorklund, M.</span>, and <span class="refAuthor">K. Watsen</span>, <span class="refTitle">"RESTCONF Protocol"</span>, <span class="seriesInfo">RFC 8040</span>, <span class="seriesInfo">DOI 10.17487/RFC8040</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8040">https://www.rfc-editor.org/rfc/rfc8040</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8126">[RFC8126]</dt>
+        <dd>
+<span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8126">https://www.rfc-editor.org/rfc/rfc8126</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8407">[RFC8407]</dt>
         <dd>
@@ -7080,679 +7030,685 @@ IDevID certificates are intended to be widely useable and EKU does not support t
 <a href="#appendix-C" class="section-number selfRef">Appendix C. </a><a href="#name-history-of-changes-rfc-edit" class="section-name selfRef">History of Changes [RFC Editor: please delete]</a>
       </h2>
 <p id="appendix-C-1">Proof of Concept Code available<a href="#appendix-C-1" class="pilcrow">¶</a></p>
-<p id="appendix-C-2">From IETF draft 12 -&gt; IETF draft 13:<a href="#appendix-C-2" class="pilcrow">¶</a></p>
+<p id="appendix-C-2">From IETF draft 13 -&gt; IETF draft 14:<a href="#appendix-C-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-3.1">
-          <p id="appendix-C-3.1.1">Deleted figure in Section "Request Artifact: Pledge Voucher-Request Trigger (tPVR)" for JSON representation of tPVR, as it has been replaced by CDDL<a href="#appendix-C-3.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.1.1">Update of the examples in <a href="#examples" class="auto internal xref">Appendix A</a> to align with the defined prototypes<a href="#appendix-C-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.2">
-          <p id="appendix-C-3.2.1">Updated reason-content description in status response messages (enroll-status, voucher-status, and status-response).<a href="#appendix-C-3.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-3.3">
-          <p id="appendix-C-3.3.1">Updated CDDL source code integration to allow for automatic verification<a href="#appendix-C-3.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-3.4">
-          <p id="appendix-C-3.4.1">Reordered description in section <a href="#pvr" class="auto internal xref">Section 7.3</a> in <a href="#tper" class="auto internal xref">Section 7.2</a> to better match the order of communication and artifact processing.<a href="#appendix-C-3.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-3.5">
-          <p id="appendix-C-3.5.1">Updated CDDL for the request-enroll trigger in <a href="#tper_CDDL_def" class="auto internal xref">Figure 15</a> according to the outcome of the interim ANIMA WG meeting discussions on April 19, 2024<a href="#appendix-C-3.5.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-3.6">
-          <p id="appendix-C-3.6.1">Included statement in <a href="#per_artifact" class="auto internal xref">Section 7.2.2</a> for using the advanced created-on time from the agent-signed-data also for the PER, when the pledge has no synchronized clock<a href="#appendix-C-3.6.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-3.7">
-          <p id="appendix-C-3.7.1">Update of the examples in <a href="#examples" class="auto internal xref">Appendix A</a> to align with the defined prototypes<a href="#appendix-C-3.7.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-3.8">
-          <p id="appendix-C-3.8.1">Changes incorporated based on Shepherd review PR #133:<a href="#appendix-C-3.8.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.2.1">Changes incorporated based on Shepherd review PR #133:<a href="#appendix-C-3.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-C-3.8.2.1">
-              <p id="appendix-C-3.8.2.1.1">Terminology alignment and clarification throughout the document to use terms more consistently<a href="#appendix-C-3.8.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="appendix-C-3.2.2.1">
+              <p id="appendix-C-3.2.2.1.1">Terminology alignment and clarification throughout the document to use terms more consistently<a href="#appendix-C-3.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="appendix-C-3.8.2.2">
-              <p id="appendix-C-3.8.2.2.1">Restructuring of section <a href="#exchanges" class="auto internal xref">Section 7</a> for protocol steps to align to the general approach: Overview, data description, CDDL description (if necessary), JWS Header an Signature. This lead to some movement of text between existing and new subsections.<a href="#appendix-C-3.8.2.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="appendix-C-3.2.2.2">
+              <p id="appendix-C-3.2.2.2.1">Restructuring of <a href="#exchanges" class="auto internal xref">Section 7</a> for protocol steps to align to the general approach: Overview, data description, CDDL description (if necessary), JWS Header an Signature. This lead to some movement of text between existing and new subsections.<a href="#appendix-C-3.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="appendix-C-3.8.2.3">
-              <p id="appendix-C-3.8.2.3.1">Inclusion of new section on logging hints <a href="#log_hints" class="auto internal xref">Section 8</a> to give recommendations on which events to be logged for auditing<a href="#appendix-C-3.8.2.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="appendix-C-3.2.2.3">
+              <p id="appendix-C-3.2.2.3.1">Inclusion of new section on logging hints <a href="#log_hints" class="auto internal xref">Section 8</a> to give recommendations on which events to be logged for auditing<a href="#appendix-C-3.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="appendix-C-3.8.2.4">
-              <p id="appendix-C-3.8.2.4.1">Enhancement of IANA considerations in <a href="#iana_con" class="auto internal xref">Section 9</a> with values for the trigger messages and with an enhancement of the pledge status query and response to allow for a more flexible status inquiry and reporting<a href="#appendix-C-3.8.2.4.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="appendix-C-3.2.2.4">
+              <p id="appendix-C-3.2.2.4.1">Alignment of pledge status response data across <a href="#vstatus_data" class="auto internal xref">Section 7.6.2.1</a>, <a href="#estatus_data" class="auto internal xref">Section 7.8.2.1</a>, and <a href="#pstatus_data" class="auto internal xref">Section 7.11.2.1</a>.<a href="#appendix-C-3.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </li>
+        <li class="normal" id="appendix-C-3.3">
+          <p id="appendix-C-3.3.1">Update of informative references<a href="#appendix-C-3.3.1" class="pilcrow">¶</a></p>
+</li>
       </ul>
-<p id="appendix-C-4">From IETF draft 11 -&gt; IETF draft 12:<a href="#appendix-C-4" class="pilcrow">¶</a></p>
+<p id="appendix-C-4">From IETF draft 12 -&gt; IETF draft 13:<a href="#appendix-C-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-5.1">
-          <p id="appendix-C-5.1.1">Updated acknowledgements to reflect early reviews<a href="#appendix-C-5.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-5.1.1">Deleted figure in Section "Request Artifact: Pledge Voucher-Request Trigger (tPVR)" for JSON representation of tPVR, as it has been replaced by CDDL<a href="#appendix-C-5.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-5.2">
-          <p id="appendix-C-5.2.1">Addressed Shepherd review part 2 (Pull Request #132); containing: terminology alignment, structural improvements of the document; deletion of leftovers from previous draft versions; change of definitions to CDDL, when no YANG is available<a href="#appendix-C-5.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-5.2.1">Updated reason-content description in status response messages (enroll-status, voucher-status, and status-response).<a href="#appendix-C-5.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-5.3">
+          <p id="appendix-C-5.3.1">Updated CDDL source code integration to allow for automatic verification<a href="#appendix-C-5.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-5.4">
+          <p id="appendix-C-5.4.1">Reordered description in <a href="#pvr" class="auto internal xref">Section 7.3</a> in <a href="#tper" class="auto internal xref">Section 7.2</a> to better match the order of communication and artifact processing.<a href="#appendix-C-5.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-5.5">
+          <p id="appendix-C-5.5.1">Updated CDDL for the request-enroll trigger in <a href="#tper_CDDL_def" class="auto internal xref">Figure 15</a> according to the outcome of the interim ANIMA WG meeting discussions on April 19, 2024<a href="#appendix-C-5.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-5.6">
+          <p id="appendix-C-5.6.1">Included statement in <a href="#per_artifact" class="auto internal xref">Section 7.2.2</a> for using the advanced created-on time from the agent-signed-data also for the PER, when the pledge has no synchronized clock<a href="#appendix-C-5.6.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-6">From IETF draft 10 -&gt; IETF draft 11:<a href="#appendix-C-6" class="pilcrow">¶</a></p>
+<p id="appendix-C-6">From IETF draft 11 -&gt; IETF draft 12:<a href="#appendix-C-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-7.1">
-          <p id="appendix-C-7.1.1">issue #79, clarified that BRSKI discovery in the context of BRSKI-PRM is not needed in <a href="#discovery_uc2_reg" class="auto internal xref">Section 6.2.1</a>.<a href="#appendix-C-7.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-7.1.1">Updated acknowledgments to reflect early reviews<a href="#appendix-C-7.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-7.2">
-          <p id="appendix-C-7.2.1">issue #103, removed step 6 in verification handling for the wrapped CA certificate provisioning as only applicable after enrollment <a href="#cacerts" class="auto internal xref">Section 7.7</a><a href="#appendix-C-7.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-7.3">
-          <p id="appendix-C-7.3.1">issue #128: included notation of nomadic operation of the Registrar-Agent in <a href="#architecture" class="auto internal xref">Section 5</a>, including proposed text from PR #131<a href="#appendix-C-7.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-7.4">
-          <p id="appendix-C-7.4.1">issue #130, introduced DNS service discovery name for brski_pledge to enable discovery by the Registrar-Agent in <a href="#iana_con" class="auto internal xref">Section 9</a><a href="#appendix-C-7.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-7.5">
-          <p id="appendix-C-7.5.1">removed unused reference RFC 5280<a href="#appendix-C-7.5.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-7.6">
-          <p id="appendix-C-7.6.1">removed site terminology<a href="#appendix-C-7.6.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-7.7">
-          <p id="appendix-C-7.7.1">deleted duplicated text in <a href="#pledge_component" class="auto internal xref">Section 6.3</a><a href="#appendix-C-7.7.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-7.8">
-          <p id="appendix-C-7.8.1">clarified registrar discovery and relation to BRSKI-Discovery in <a href="#discovery_uc2_reg" class="auto internal xref">Section 6.2.1</a><a href="#appendix-C-7.8.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-7.9">
-          <p id="appendix-C-7.9.1">clarified discovery of pledges by the Registrar-Agent in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 6.2.2</a>, deleted reference to GRASP as handled in BRSKI-Discovery<a href="#appendix-C-7.9.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-7.10">
-          <p id="appendix-C-7.10.1">addressed comments from SECDIR early review<a href="#appendix-C-7.10.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-7.2.1">Addressed Shepherd review part 2 (Pull Request #132); containing: terminology alignment, structural improvements of the document; deletion of leftovers from previous draft versions; change of definitions to CDDL, when no YANG is available<a href="#appendix-C-7.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-8">From IETF draft 09 -&gt; IETF draft 10:<a href="#appendix-C-8" class="pilcrow">¶</a></p>
+<p id="appendix-C-8">From IETF draft 10 -&gt; IETF draft 11:<a href="#appendix-C-8" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-9.1">
-          <p id="appendix-C-9.1.1">issue #79, clarified discovery in the context of BRSKI-PRM and included information about future discovery enhancements in a separate draft in <a href="#discovery_uc2_reg" class="auto internal xref">Section 6.2.1</a>.<a href="#appendix-C-9.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-9.1.1">issue #79, clarified that BRSKI discovery in the context of BRSKI-PRM is not needed in <a href="#discovery_uc2_reg" class="auto internal xref">Section 6.2.1</a>.<a href="#appendix-C-9.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-9.2">
-          <p id="appendix-C-9.2.1">issue #93, included information about conflict resolution in mDNS and GRASP in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 6.2.2</a><a href="#appendix-C-9.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-9.2.1">issue #103, removed step 6 in verification handling for the wrapped CA certificate provisioning as only applicable after enrollment <a href="#cacerts" class="auto internal xref">Section 7.7</a><a href="#appendix-C-9.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-9.3">
-          <p id="appendix-C-9.3.1">issue #103, included verification handling for the wrapped CA certificate provisioning in <a href="#cacerts" class="auto internal xref">Section 7.7</a><a href="#appendix-C-9.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-9.3.1">issue #128: included notation of nomadic operation of the Registrar-Agent in <a href="#architecture" class="auto internal xref">Section 5</a>, including proposed text from PR #131<a href="#appendix-C-9.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-9.4">
-          <p id="appendix-C-9.4.1">issue #106, included additional text to elaborate more the registrar status handling in <a href="#vstatus" class="auto internal xref">Section 7.9</a> and <a href="#estatus" class="auto internal xref">Section 7.10</a><a href="#appendix-C-9.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-9.4.1">issue #130, introduced DNS service discovery name for brski_pledge to enable discovery by the Registrar-Agent in <a href="#iana_con" class="auto internal xref">Section 9</a><a href="#appendix-C-9.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-9.5">
-          <p id="appendix-C-9.5.1">issue #116, enhanced DoS description in <a href="#sec_cons-dos" class="auto internal xref">Section 11.1</a><a href="#appendix-C-9.5.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-9.5.1">removed unused reference RFC 5280<a href="#appendix-C-9.5.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-9.6">
-          <p id="appendix-C-9.6.1">issue #120, included statement regarding pledge host header processing in <a href="#pledge_component" class="auto internal xref">Section 6.3</a><a href="#appendix-C-9.6.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-9.6.1">removed site terminology<a href="#appendix-C-9.6.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-9.7">
-          <p id="appendix-C-9.7.1">issue #122, availability of product-serial-number information on registrar agent clarified in <a href="#tpvr" class="auto internal xref">Section 7.1</a><a href="#appendix-C-9.7.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-9.7.1">deleted duplicated text in <a href="#pledge_component" class="auto internal xref">Section 6.3</a><a href="#appendix-C-9.7.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-9.8">
-          <p id="appendix-C-9.8.1">issue #123, Clarified usage of alternative voucher formats in  <a href="#rvr_artifact" class="auto internal xref">Section 7.3.4</a><a href="#appendix-C-9.8.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-9.8.1">clarified registrar discovery and relation to BRSKI-Discovery in <a href="#discovery_uc2_reg" class="auto internal xref">Section 6.2.1</a><a href="#appendix-C-9.8.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-9.9">
-          <p id="appendix-C-9.9.1">issue #124, determination of pinned domain certificate done as in RFC 8995 included in <a href="#voucher_artifact" class="auto internal xref">Section 7.3.5</a><a href="#appendix-C-9.9.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-9.9.1">clarified discovery of pledges by the Registrar-Agent in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 6.2.2</a>, deleted reference to GRASP as handled in BRSKI-Discovery<a href="#appendix-C-9.9.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-9.10">
-          <p id="appendix-C-9.10.1">issue #125, remove strength comparison of voucher assertions in <a href="#agt_prx" class="auto internal xref">Section 5.4</a> and <a href="#exchanges" class="auto internal xref">Section 7</a><a href="#appendix-C-9.10.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-9.11">
-          <p id="appendix-C-9.11.1">issue #130, aligned the usage of site and domain throughout the document<a href="#appendix-C-9.11.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-9.12">
-          <p id="appendix-C-9.12.1">changed naming of registrar certificate from LDevID(RegAgt) to Registrar-Agent EE certificate throughout the document<a href="#appendix-C-9.12.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-9.13">
-          <p id="appendix-C-9.13.1">change x5b to x5bag according to <span>[<a href="#RFC9360" class="cite xref">RFC9360</a>]</span><a href="#appendix-C-9.13.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-9.14">
-          <p id="appendix-C-9.14.1">updated JSON examples -&gt; "signature": BASE64URL(JWS Signature)<a href="#appendix-C-9.14.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-9.10.1">addressed comments from SECDIR early review<a href="#appendix-C-9.10.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-10">From IETF draft 08 -&gt; IETF draft 09:<a href="#appendix-C-10" class="pilcrow">¶</a></p>
+<p id="appendix-C-10">From IETF draft 09 -&gt; IETF draft 10:<a href="#appendix-C-10" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-11.1">
-          <p id="appendix-C-11.1.1">issue #80, enhanced <a href="#discovery_uc2_ppa" class="auto internal xref">Section 6.2.2</a> with clarification on the product-serial-number and the inclusion of GRASP<a href="#appendix-C-11.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.1.1">issue #79, clarified discovery in the context of BRSKI-PRM and included information about future discovery enhancements in a separate draft in <a href="#discovery_uc2_reg" class="auto internal xref">Section 6.2.1</a>.<a href="#appendix-C-11.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.2">
-          <p id="appendix-C-11.2.1">issue #81, enhanced introduction with motivation for agent_signed_data<a href="#appendix-C-11.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.2.1">issue #93, included information about conflict resolution in mDNS and GRASP in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 6.2.2</a><a href="#appendix-C-11.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.3">
-          <p id="appendix-C-11.3.1">issue #82, included optional TLS protection of the communication link between Registrar-Agent and pledge in the introduction <a href="#req-sol" class="auto internal xref">Section 4</a>, and <a href="#tpvr" class="auto internal xref">Section 7.1</a><a href="#appendix-C-11.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.3.1">issue #103, included verification handling for the wrapped CA certificate provisioning in <a href="#cacerts" class="auto internal xref">Section 7.7</a><a href="#appendix-C-11.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.4">
-          <p id="appendix-C-11.4.1">issue #83, enhanced <a href="#tper" class="auto internal xref">Section 7.2</a> and <a href="#pvr" class="auto internal xref">Section 7.3</a> with note to re-enrollment<a href="#appendix-C-11.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.4.1">issue #106, included additional text to elaborate more the registrar status handling in <a href="#vstatus" class="auto internal xref">Section 7.9</a> and <a href="#estatus" class="auto internal xref">Section 7.10</a><a href="#appendix-C-11.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.5">
-          <p id="appendix-C-11.5.1">issue #87, clarified available information at the Registrar-Agent in <a href="#tpvr" class="auto internal xref">Section 7.1</a><a href="#appendix-C-11.5.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.5.1">issue #116, enhanced DoS description in <a href="#sec_cons-dos" class="auto internal xref">Section 11.1</a><a href="#appendix-C-11.5.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.6">
-          <p id="appendix-C-11.6.1">issue #88, clarified, that the PVR in <a href="#tpvr" class="auto internal xref">Section 7.1</a> and PER in <a href="#tper" class="auto internal xref">Section 7.2</a> may contain the certificate chain. If not contained it <span class="bcp14">MUST</span> be available at the registrar.<a href="#appendix-C-11.6.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.6.1">issue #120, included statement regarding pledge host header processing in <a href="#pledge_component" class="auto internal xref">Section 6.3</a><a href="#appendix-C-11.6.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.7">
-          <p id="appendix-C-11.7.1">issue #91, clarified that a separate HTTP connection may also be used to provide the PER in <a href="#per" class="auto internal xref">Section 7.4</a><a href="#appendix-C-11.7.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.7.1">issue #122, availability of product-serial-number information on registrar agent clarified in <a href="#tpvr" class="auto internal xref">Section 7.1</a><a href="#appendix-C-11.7.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.8">
-          <p id="appendix-C-11.8.1">resolved remaining editorial issues discovered after WGLC (responded to on the mailing list in Reply 1 and Reply 2) resulting in more consistent descriptions<a href="#appendix-C-11.8.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.8.1">issue #123, Clarified usage of alternative voucher formats in  <a href="#rvr_artifact" class="auto internal xref">Section 7.3.4</a><a href="#appendix-C-11.8.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.9">
-          <p id="appendix-C-11.9.1">issue #92: kept separate endpoint for wrapped CSR on registrar <a href="#obtain_cacerts" class="auto internal xref">Section 7.5</a><a href="#appendix-C-11.9.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.9.1">issue #124, determination of pinned domain certificate done as in RFC 8995 included in <a href="#voucher_artifact" class="auto internal xref">Section 7.3.5</a><a href="#appendix-C-11.9.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.10">
-          <p id="appendix-C-11.10.1">issue #94: clarified terminology (possess vs. obtained)<a href="#appendix-C-11.10.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.10.1">issue #125, remove strength comparison of voucher assertions in <a href="#agt_prx" class="auto internal xref">Section 5.4</a> and <a href="#exchanges" class="auto internal xref">Section 7</a><a href="#appendix-C-11.10.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.11">
-          <p id="appendix-C-11.11.1">issue #95: clarified optional IDevID CA certificates on Registrar-Agent<a href="#appendix-C-11.11.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.11.1">issue #130, aligned the usage of site and domain throughout the document<a href="#appendix-C-11.11.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.12">
-          <p id="appendix-C-11.12.1">issue #96: updated exchangesfig_uc2_3 to correct to just one CA certificate provisioning<a href="#appendix-C-11.12.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.12.1">changed naming of registrar certificate from LDevID(RegAgt) to Registrar-Agent EE certificate throughout the document<a href="#appendix-C-11.12.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.13">
-          <p id="appendix-C-11.13.1">issue #97: deleted format explanation in exchanges_uc2_3 as it may be misleading<a href="#appendix-C-11.13.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.13.1">change x5b to x5bag according to <span>[<a href="#RFC9360" class="cite xref">RFC9360</a>]</span><a href="#appendix-C-11.13.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-11.14">
-          <p id="appendix-C-11.14.1">issue #99: motivated verification of second signature on voucher in <a href="#voucher" class="auto internal xref">Section 7.6</a><a href="#appendix-C-11.14.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-11.15">
-          <p id="appendix-C-11.15.1">issue #100: included negative example in <a href="#vstatus_data_example_error" class="auto internal xref">Figure 33</a><a href="#appendix-C-11.15.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-11.16">
-          <p id="appendix-C-11.16.1">issue #101: included handling if <a href="#voucher" class="auto internal xref">Section 7.6</a> voucher telemetry information has not been received by the Registrar-Agent<a href="#appendix-C-11.16.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-11.17">
-          <p id="appendix-C-11.17.1">issue #102: relaxed requirements for CA certs provisioning in <a href="#cacerts" class="auto internal xref">Section 7.7</a><a href="#appendix-C-11.17.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-11.18">
-          <p id="appendix-C-11.18.1">issue #105: included negative example in <a href="#estatus_data_example_error" class="auto internal xref">Figure 39</a><a href="#appendix-C-11.18.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-11.19">
-          <p id="appendix-C-11.19.1">issue #107: included example for certificate revocation in <a href="#estatus" class="auto internal xref">Section 7.10</a><a href="#appendix-C-11.19.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-11.20">
-          <p id="appendix-C-11.20.1">issue #108: renamed heading to Pledge-Status Request of <a href="#query" class="auto internal xref">Section 7.11</a><a href="#appendix-C-11.20.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-11.21">
-          <p id="appendix-C-11.21.1">issue #111: included pledge-status response processing for authenticated requests in <a href="#query" class="auto internal xref">Section 7.11</a><a href="#appendix-C-11.21.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-11.22">
-          <p id="appendix-C-11.22.1">issue #112: added "Example key word in pledge-status response in <a href="#stat_example_bootstrap" class="auto internal xref">Figure 50</a><a href="#appendix-C-11.22.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-11.23">
-          <p id="appendix-C-11.23.1">issue #113: enhanced description of status reply for "factory-default" in  <a href="#query" class="auto internal xref">Section 7.11</a><a href="#appendix-C-11.23.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-11.24">
-          <p id="appendix-C-11.24.1">issue #114: Consideration of optional TLS usage in Privacy Considerations<a href="#appendix-C-11.24.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-11.25">
-          <p id="appendix-C-11.25.1">issue #115: Consideration of optional TLS usage in Privacy Considerations to protect potentially privacy related information in the bootstrapping like status information, etc.<a href="#appendix-C-11.25.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-11.26">
-          <p id="appendix-C-11.26.1">issue #116: Enhanced DoS description and mitigation options in security consideration section<a href="#appendix-C-11.26.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-11.27">
-          <p id="appendix-C-11.27.1">updated references<a href="#appendix-C-11.27.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-11.14.1">updated JSON examples -&gt; "signature": BASE64URL(JWS Signature)<a href="#appendix-C-11.14.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-12">From IETF draft 07 -&gt; IETF draft 08:<a href="#appendix-C-12" class="pilcrow">¶</a></p>
+<p id="appendix-C-12">From IETF draft 08 -&gt; IETF draft 09:<a href="#appendix-C-12" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-13.1">
-          <p id="appendix-C-13.1.1">resolved editorial issues discovered after WGLC (still open issues remaining)<a href="#appendix-C-13.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-13.1.1">issue #80, enhanced <a href="#discovery_uc2_ppa" class="auto internal xref">Section 6.2.2</a> with clarification on the product-serial-number and the inclusion of GRASP<a href="#appendix-C-13.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-13.2">
-          <p id="appendix-C-13.2.1">resolved first comments from the Shepherd review as discussed in PR #85 on the ANIMA github<a href="#appendix-C-13.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-13.2.1">issue #81, enhanced introduction with motivation for agent_signed_data<a href="#appendix-C-13.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.3">
+          <p id="appendix-C-13.3.1">issue #82, included optional TLS protection of the communication link between Registrar-Agent and pledge in the introduction <a href="#req-sol" class="auto internal xref">Section 4</a>, and <a href="#tpvr" class="auto internal xref">Section 7.1</a><a href="#appendix-C-13.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.4">
+          <p id="appendix-C-13.4.1">issue #83, enhanced <a href="#tper" class="auto internal xref">Section 7.2</a> and <a href="#pvr" class="auto internal xref">Section 7.3</a> with note to re-enrollment<a href="#appendix-C-13.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.5">
+          <p id="appendix-C-13.5.1">issue #87, clarified available information at the Registrar-Agent in <a href="#tpvr" class="auto internal xref">Section 7.1</a><a href="#appendix-C-13.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.6">
+          <p id="appendix-C-13.6.1">issue #88, clarified, that the PVR in <a href="#tpvr" class="auto internal xref">Section 7.1</a> and PER in <a href="#tper" class="auto internal xref">Section 7.2</a> may contain the certificate chain. If not contained it <span class="bcp14">MUST</span> be available at the registrar.<a href="#appendix-C-13.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.7">
+          <p id="appendix-C-13.7.1">issue #91, clarified that a separate HTTP connection may also be used to provide the PER in <a href="#per" class="auto internal xref">Section 7.4</a><a href="#appendix-C-13.7.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.8">
+          <p id="appendix-C-13.8.1">resolved remaining editorial issues discovered after WGLC (responded to on the mailing list in Reply 1 and Reply 2) resulting in more consistent descriptions<a href="#appendix-C-13.8.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.9">
+          <p id="appendix-C-13.9.1">issue #92: kept separate endpoint for wrapped CSR on registrar <a href="#obtain_cacerts" class="auto internal xref">Section 7.5</a><a href="#appendix-C-13.9.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.10">
+          <p id="appendix-C-13.10.1">issue #94: clarified terminology (possess vs. obtained)<a href="#appendix-C-13.10.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.11">
+          <p id="appendix-C-13.11.1">issue #95: clarified optional IDevID CA certificates on Registrar-Agent<a href="#appendix-C-13.11.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.12">
+          <p id="appendix-C-13.12.1">issue #96: updated exchangesfig_uc2_3 to correct to just one CA certificate provisioning<a href="#appendix-C-13.12.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.13">
+          <p id="appendix-C-13.13.1">issue #97: deleted format explanation in exchanges_uc2_3 as it may be misleading<a href="#appendix-C-13.13.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.14">
+          <p id="appendix-C-13.14.1">issue #99: motivated verification of second signature on voucher in <a href="#voucher" class="auto internal xref">Section 7.6</a><a href="#appendix-C-13.14.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.15">
+          <p id="appendix-C-13.15.1">issue #100: included negative example in <a href="#vstatus_data_example_error" class="auto internal xref">Figure 33</a><a href="#appendix-C-13.15.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.16">
+          <p id="appendix-C-13.16.1">issue #101: included handling if <a href="#voucher" class="auto internal xref">Section 7.6</a> voucher telemetry information has not been received by the Registrar-Agent<a href="#appendix-C-13.16.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.17">
+          <p id="appendix-C-13.17.1">issue #102: relaxed requirements for CA certs provisioning in <a href="#cacerts" class="auto internal xref">Section 7.7</a><a href="#appendix-C-13.17.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.18">
+          <p id="appendix-C-13.18.1">issue #105: included negative example in <a href="#estatus_data_example_error" class="auto internal xref">Figure 39</a><a href="#appendix-C-13.18.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.19">
+          <p id="appendix-C-13.19.1">issue #107: included example for certificate revocation in <a href="#estatus" class="auto internal xref">Section 7.10</a><a href="#appendix-C-13.19.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.20">
+          <p id="appendix-C-13.20.1">issue #108: renamed heading to Pledge-Status Request of <a href="#query" class="auto internal xref">Section 7.11</a><a href="#appendix-C-13.20.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.21">
+          <p id="appendix-C-13.21.1">issue #111: included pledge-status response processing for authenticated requests in <a href="#query" class="auto internal xref">Section 7.11</a><a href="#appendix-C-13.21.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.22">
+          <p id="appendix-C-13.22.1">issue #112: added "Example key word in pledge-status response in <a href="#stat_example_bootstrap" class="auto internal xref">Figure 50</a><a href="#appendix-C-13.22.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.23">
+          <p id="appendix-C-13.23.1">issue #113: enhanced description of status reply for "factory-default" in  <a href="#query" class="auto internal xref">Section 7.11</a><a href="#appendix-C-13.23.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.24">
+          <p id="appendix-C-13.24.1">issue #114: Consideration of optional TLS usage in Privacy Considerations<a href="#appendix-C-13.24.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.25">
+          <p id="appendix-C-13.25.1">issue #115: Consideration of optional TLS usage in Privacy Considerations to protect potentially privacy related information in the bootstrapping like status information, etc.<a href="#appendix-C-13.25.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.26">
+          <p id="appendix-C-13.26.1">issue #116: Enhanced DoS description and mitigation options in security consideration section<a href="#appendix-C-13.26.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-13.27">
+          <p id="appendix-C-13.27.1">updated references<a href="#appendix-C-13.27.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-14">From IETF draft 06 -&gt; IETF draft 07:<a href="#appendix-C-14" class="pilcrow">¶</a></p>
+<p id="appendix-C-14">From IETF draft 07 -&gt; IETF draft 08:<a href="#appendix-C-14" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-15.1">
-          <p id="appendix-C-15.1.1">WGLC resulted in a removal of the voucher enhancements completely from this document to RFC 8366bis, containing all enhancements and augmentations of the voucher, including the voucher-request as well as the tree diagrams<a href="#appendix-C-15.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-15.1.1">resolved editorial issues discovered after WGLC (still open issues remaining)<a href="#appendix-C-15.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-15.2">
-          <p id="appendix-C-15.2.1">smaller editorial corrections<a href="#appendix-C-15.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-15.2.1">resolved first comments from the Shepherd review as discussed in PR #85 on the ANIMA github<a href="#appendix-C-15.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-16">From IETF draft 05 -&gt; IETF draft 06:<a href="#appendix-C-16" class="pilcrow">¶</a></p>
+<p id="appendix-C-16">From IETF draft 06 -&gt; IETF draft 07:<a href="#appendix-C-16" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-17.1">
-          <p id="appendix-C-17.1.1">Update of list of reviewers<a href="#appendix-C-17.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-17.1.1">WGLC resulted in a removal of the voucher enhancements completely from this document to RFC 8366bis, containing all enhancements and augmentations of the voucher, including the voucher-request as well as the tree diagrams<a href="#appendix-C-17.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-17.2">
-          <p id="appendix-C-17.2.1">Issue #67, shortened the pledge endpoints to prepare for constraint deployments<a href="#appendix-C-17.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-17.3">
-          <p id="appendix-C-17.3.1">Included table for new endpoints on the registrar in the overview of the Registrar-Agent<a href="#appendix-C-17.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-17.4">
-          <p id="appendix-C-17.4.1">addressed review comments from SECDIR early review (terminology clarifications, editorial improvements)<a href="#appendix-C-17.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-17.5">
-          <p id="appendix-C-17.5.1">addressed review comments from IOTDIR early review (terminology clarifications, editorial improvements)<a href="#appendix-C-17.5.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-17.2.1">smaller editorial corrections<a href="#appendix-C-17.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-18">From IETF draft 04 -&gt; IETF draft 05:<a href="#appendix-C-18" class="pilcrow">¶</a></p>
+<p id="appendix-C-18">From IETF draft 05 -&gt; IETF draft 06:<a href="#appendix-C-18" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-19.1">
-          <p id="appendix-C-19.1.1">Restructured document to have a distinct section for the object flow and handling and shortened introduction, issue #72<a href="#appendix-C-19.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-19.1.1">Update of list of reviewers<a href="#appendix-C-19.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-19.2">
-          <p id="appendix-C-19.2.1">Added security considerations for using mDNS without a specific product-serial-number, issue #75<a href="#appendix-C-19.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-19.2.1">Issue #67, shortened the pledge endpoints to prepare for constraint deployments<a href="#appendix-C-19.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-19.3">
-          <p id="appendix-C-19.3.1">Clarified pledge-status responses are cumulative, issue #73<a href="#appendix-C-19.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-19.3.1">Included table for new endpoints on the registrar in the overview of the Registrar-Agent<a href="#appendix-C-19.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-19.4">
-          <p id="appendix-C-19.4.1">Removed agent-sign-cert from trigger data to save bandwidth and remove complexity through options, issue #70<a href="#appendix-C-19.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-19.4.1">addressed review comments from SECDIR early review (terminology clarifications, editorial improvements)<a href="#appendix-C-19.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-19.5">
-          <p id="appendix-C-19.5.1">Changed terminology for LDevID(Reg) certificate to registrar LDevID certificate, as it does not need to be an LDevID, issue #66<a href="#appendix-C-19.5.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.6">
-          <p id="appendix-C-19.6.1">Added new protected header parameter (created-on) in PER to support freshness validation, issue #63<a href="#appendix-C-19.6.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.7">
-          <p id="appendix-C-19.7.1">Removed reference to CAB Forum as not needed for BRSKI-PRM specifically, issue #65<a href="#appendix-C-19.7.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.8">
-          <p id="appendix-C-19.8.1">Enhanced error codes in section 5.5.1, issue #39, #64<a href="#appendix-C-19.8.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.9">
-          <p id="appendix-C-19.9.1">Enhanced security considerations and privacy considerations, issue #59<a href="#appendix-C-19.9.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.10">
-          <p id="appendix-C-19.10.1">Issue #50 addressed by referring to the utilized enrollment protocol<a href="#appendix-C-19.10.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.11">
-          <p id="appendix-C-19.11.1">Issue #47 MASA verification of LDevID(RegAgt) to the same registrar LDevID certificate domain CA<a href="#appendix-C-19.11.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.12">
-          <p id="appendix-C-19.12.1">Reworked terminology of "enrollment object", "certification object", "enrollment request object", etc., issue #27<a href="#appendix-C-19.12.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.13">
-          <p id="appendix-C-19.13.1">Reworked all message representations to align with encoding<a href="#appendix-C-19.13.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.14">
-          <p id="appendix-C-19.14.1">Added explanation of MASA requiring domain CA cert in section 5.5.1 and section 5.5.2, issue #36<a href="#appendix-C-19.14.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.15">
-          <p id="appendix-C-19.15.1">Defined new endpoint for pledge bootstrapping status inquiry, issue #35 in section <a href="#query" class="auto internal xref">Section 7.11</a>, IANA considerations and section <a href="#pledge_component" class="auto internal xref">Section 6.3</a><a href="#appendix-C-19.15.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.16">
-          <p id="appendix-C-19.16.1">Included examples for several objects in section <a href="#examples" class="auto internal xref">Appendix A</a> including message example sizes, issue #33<a href="#appendix-C-19.16.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.17">
-          <p id="appendix-C-19.17.1">PoP for private key to registrar certificate included as mandatory, issues #32 and #49<a href="#appendix-C-19.17.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.18">
-          <p id="appendix-C-19.18.1">Issue #31, clarified that combined pledge may act as client/server for further (re)enrollment<a href="#appendix-C-19.18.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.19">
-          <p id="appendix-C-19.19.1">Issue #42, clarified that Registrar needs to verify the status responses with and ensure that they match the audit log response from the MASA, otherwise it needs drop the pledge and revoke the certificate<a href="#appendix-C-19.19.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.20">
-          <p id="appendix-C-19.20.1">Issue #43, clarified that the pledge shall use the create time from the trigger message if the time has not been synchronized, yet.<a href="#appendix-C-19.20.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-19.21">
-          <p id="appendix-C-19.21.1">Several editorial changes and enhancements to increasing readability.<a href="#appendix-C-19.21.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-19.5.1">addressed review comments from IOTDIR early review (terminology clarifications, editorial improvements)<a href="#appendix-C-19.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-20">From IETF draft 03 -&gt; IETF draft 04:<a href="#appendix-C-20" class="pilcrow">¶</a></p>
+<p id="appendix-C-20">From IETF draft 04 -&gt; IETF draft 05:<a href="#appendix-C-20" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-21.1">
-          <p id="appendix-C-21.1.1">In deep Review by Esko Dijk lead to issues #22-#61, which are bein stepwise integrated<a href="#appendix-C-21.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-21.1.1">Restructured document to have a distinct section for the object flow and handling and shortened introduction, issue #72<a href="#appendix-C-21.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-21.2">
-          <p id="appendix-C-21.2.1">Simplified YANG definition by augmenting the voucher-request from RFC 8995 instead of redefining it.<a href="#appendix-C-21.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-21.2.1">Added security considerations for using mDNS without a specific product-serial-number, issue #75<a href="#appendix-C-21.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-21.3">
-          <p id="appendix-C-21.3.1">Added explanation for terminology "endpoint" used in this document, issue #16<a href="#appendix-C-21.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-21.3.1">Clarified pledge-status responses are cumulative, issue #73<a href="#appendix-C-21.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-21.4">
-          <p id="appendix-C-21.4.1">Added clarification that Registrar-Agent may collect PVR or PER or both in one run, issue #17<a href="#appendix-C-21.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-21.4.1">Removed agent-sign-cert from trigger data to save bandwidth and remove complexity through options, issue #70<a href="#appendix-C-21.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-21.5">
-          <p id="appendix-C-21.5.1">Added a statement that nonceless voucher may be accepted, issue #18<a href="#appendix-C-21.5.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-21.5.1">Changed terminology for LDevID(Reg) certificate to registrar LDevID certificate, as it does not need to be an LDevID, issue #66<a href="#appendix-C-21.5.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-21.6">
-          <p id="appendix-C-21.6.1">Simplified structure in section <a href="#sup-env" class="auto internal xref">Section 3.1</a>, issue #19<a href="#appendix-C-21.6.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-21.6.1">Added new protected header parameter (created-on) in PER to support freshness validation, issue #63<a href="#appendix-C-21.6.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-21.7">
-          <p id="appendix-C-21.7.1">Removed join proxy in <a href="#uc2figure" class="auto internal xref">Figure 1</a> and added explanatory text, issue #20<a href="#appendix-C-21.7.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-21.7.1">Removed reference to CAB Forum as not needed for BRSKI-PRM specifically, issue #65<a href="#appendix-C-21.7.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-21.8">
-          <p id="appendix-C-21.8.1">Added description of pledge-CAcerts endpoint plus further handling of providing a wrapped CA certs response to the pledge in section <a href="#cacerts" class="auto internal xref">Section 7.7</a>; also added new required registrar endpoint (section <a href="#pvr" class="auto internal xref">Section 7.3</a> and IANA considerations) for the registrar to provide a wrapped CA certs response, issue #21<a href="#appendix-C-21.8.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-21.8.1">Enhanced error codes in section 5.5.1, issue #39, #64<a href="#appendix-C-21.8.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-21.9">
-          <p id="appendix-C-21.9.1">utilized defined abbreviations in the document consistently, issue #22<a href="#appendix-C-21.9.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-21.9.1">Enhanced security considerations and privacy considerations, issue #59<a href="#appendix-C-21.9.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-21.10">
-          <p id="appendix-C-21.10.1">Reworked text on discovery according to issue #23 to clarify scope and handling<a href="#appendix-C-21.10.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-21.10.1">Issue #50 addressed by referring to the utilized enrollment protocol<a href="#appendix-C-21.10.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-21.11">
-          <p id="appendix-C-21.11.1">Added several clarifications based on review comments<a href="#appendix-C-21.11.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-21.11.1">Issue #47 MASA verification of LDevID(RegAgt) to the same registrar LDevID certificate domain CA<a href="#appendix-C-21.11.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-21.12">
+          <p id="appendix-C-21.12.1">Reworked terminology of "enrollment object", "certification object", "enrollment request object", etc., issue #27<a href="#appendix-C-21.12.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-21.13">
+          <p id="appendix-C-21.13.1">Reworked all message representations to align with encoding<a href="#appendix-C-21.13.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-21.14">
+          <p id="appendix-C-21.14.1">Added explanation of MASA requiring domain CA cert in section 5.5.1 and section 5.5.2, issue #36<a href="#appendix-C-21.14.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-21.15">
+          <p id="appendix-C-21.15.1">Defined new endpoint for pledge bootstrapping status inquiry, issue #35 in section <a href="#query" class="auto internal xref">Section 7.11</a>, IANA considerations and section <a href="#pledge_component" class="auto internal xref">Section 6.3</a><a href="#appendix-C-21.15.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-21.16">
+          <p id="appendix-C-21.16.1">Included examples for several objects in section <a href="#examples" class="auto internal xref">Appendix A</a> including message example sizes, issue #33<a href="#appendix-C-21.16.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-21.17">
+          <p id="appendix-C-21.17.1">PoP for private key to registrar certificate included as mandatory, issues #32 and #49<a href="#appendix-C-21.17.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-21.18">
+          <p id="appendix-C-21.18.1">Issue #31, clarified that combined pledge may act as client/server for further (re)enrollment<a href="#appendix-C-21.18.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-21.19">
+          <p id="appendix-C-21.19.1">Issue #42, clarified that Registrar needs to verify the status responses with and ensure that they match the audit log response from the MASA, otherwise it needs drop the pledge and revoke the certificate<a href="#appendix-C-21.19.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-21.20">
+          <p id="appendix-C-21.20.1">Issue #43, clarified that the pledge shall use the create time from the trigger message if the time has not been synchronized, yet.<a href="#appendix-C-21.20.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-21.21">
+          <p id="appendix-C-21.21.1">Several editorial changes and enhancements to increasing readability.<a href="#appendix-C-21.21.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-22">From IETF draft 02 -&gt; IETF draft 03:<a href="#appendix-C-22" class="pilcrow">¶</a></p>
+<p id="appendix-C-22">From IETF draft 03 -&gt; IETF draft 04:<a href="#appendix-C-22" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-23.1">
-          <p id="appendix-C-23.1.1">Updated examples to state "base64encodedvalue==" for x5c occurrences<a href="#appendix-C-23.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-23.1.1">In deep Review by Esko Dijk lead to issues #22-#61, which are bein stepwise integrated<a href="#appendix-C-23.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-23.2">
-          <p id="appendix-C-23.2.1">Include link to SVG graphic as general overview<a href="#appendix-C-23.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-23.2.1">Simplified YANG definition by augmenting the voucher-request from RFC 8995 instead of redefining it.<a href="#appendix-C-23.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-23.3">
-          <p id="appendix-C-23.3.1">Restructuring of section 5 to flatten hierarchy<a href="#appendix-C-23.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-23.3.1">Added explanation for terminology "endpoint" used in this document, issue #16<a href="#appendix-C-23.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-23.4">
-          <p id="appendix-C-23.4.1">Enhanced requirements and motivation in <a href="#req-sol" class="auto internal xref">Section 4</a><a href="#appendix-C-23.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-23.4.1">Added clarification that Registrar-Agent may collect PVR or PER or both in one run, issue #17<a href="#appendix-C-23.4.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-23.5">
-          <p id="appendix-C-23.5.1">Several editorial improvements based on review comments<a href="#appendix-C-23.5.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-23.5.1">Added a statement that nonceless voucher may be accepted, issue #18<a href="#appendix-C-23.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-23.6">
+          <p id="appendix-C-23.6.1">Simplified structure in section <a href="#sup-env" class="auto internal xref">Section 3.1</a>, issue #19<a href="#appendix-C-23.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-23.7">
+          <p id="appendix-C-23.7.1">Removed join proxy in <a href="#uc2figure" class="auto internal xref">Figure 1</a> and added explanatory text, issue #20<a href="#appendix-C-23.7.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-23.8">
+          <p id="appendix-C-23.8.1">Added description of pledge-CAcerts endpoint plus further handling of providing a wrapped CA certs response to the pledge in section <a href="#cacerts" class="auto internal xref">Section 7.7</a>; also added new required registrar endpoint (section <a href="#pvr" class="auto internal xref">Section 7.3</a> and IANA considerations) for the registrar to provide a wrapped CA certs response, issue #21<a href="#appendix-C-23.8.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-23.9">
+          <p id="appendix-C-23.9.1">utilized defined abbreviations in the document consistently, issue #22<a href="#appendix-C-23.9.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-23.10">
+          <p id="appendix-C-23.10.1">Reworked text on discovery according to issue #23 to clarify scope and handling<a href="#appendix-C-23.10.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-23.11">
+          <p id="appendix-C-23.11.1">Added several clarifications based on review comments<a href="#appendix-C-23.11.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-24">From IETF draft 01 -&gt; IETF draft 02:<a href="#appendix-C-24" class="pilcrow">¶</a></p>
+<p id="appendix-C-24">From IETF draft 02 -&gt; IETF draft 03:<a href="#appendix-C-24" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-25.1">
-          <p id="appendix-C-25.1.1">Issue #15 included additional signature on voucher from registrar in section <a href="#pvr" class="auto internal xref">Section 7.3</a> and section <a href="#agt_prx" class="auto internal xref">Section 5.4</a>
-The verification of multiple signatures is described in section <a href="#voucher" class="auto internal xref">Section 7.6</a><a href="#appendix-C-25.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-25.1.1">Updated examples to state "base64encodedvalue==" for x5c occurrences<a href="#appendix-C-25.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-25.2">
-          <p id="appendix-C-25.2.1">Included representation for General JWS JSON Serialization for examples<a href="#appendix-C-25.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-25.2.1">Include link to SVG graphic as general overview<a href="#appendix-C-25.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-25.3">
-          <p id="appendix-C-25.3.1">Included error responses from pledge if it is not able to create a Pledge-Voucher-Request or an enrollment request in section <a href="#tpvr" class="auto internal xref">Section 7.1</a><a href="#appendix-C-25.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-25.3.1">Restructuring of section 5 to flatten hierarchy<a href="#appendix-C-25.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-25.4">
-          <p id="appendix-C-25.4.1">Removed open issue regarding handling of multiple CSRs and Enroll-Responses during the bootstrapping as the initial target it the provisioning of a generic LDevID certificate. The defined endpoint on the pledge may also be used for management of further certificates.<a href="#appendix-C-25.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-25.4.1">Enhanced requirements and motivation in <a href="#req-sol" class="auto internal xref">Section 4</a><a href="#appendix-C-25.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-25.5">
+          <p id="appendix-C-25.5.1">Several editorial improvements based on review comments<a href="#appendix-C-25.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-26">From IETF draft 00 -&gt; IETF draft 01:<a href="#appendix-C-26" class="pilcrow">¶</a></p>
+<p id="appendix-C-26">From IETF draft 01 -&gt; IETF draft 02:<a href="#appendix-C-26" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-27.1">
-          <p id="appendix-C-27.1.1">Issue #15 lead to the inclusion of an option for an additional signature of the registrar on the voucher received from the MASA before forwarding to the Registrar-Agent to support verification of POP of the registrars private key in section <a href="#pvr" class="auto internal xref">Section 7.3</a> and exchanges_uc2_3.<a href="#appendix-C-27.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-27.1.1">Issue #15 included additional signature on voucher from registrar in section <a href="#pvr" class="auto internal xref">Section 7.3</a> and section <a href="#agt_prx" class="auto internal xref">Section 5.4</a>
+The verification of multiple signatures is described in section <a href="#voucher" class="auto internal xref">Section 7.6</a><a href="#appendix-C-27.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-27.2">
-          <p id="appendix-C-27.2.1">Based on issue #11, a new endpoint was defined for the registrar to enable delivery of the wrapped enrollment request from the pledge (in contrast to plain PKCS#10 in simple enroll).<a href="#appendix-C-27.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-27.2.1">Included representation for General JWS JSON Serialization for examples<a href="#appendix-C-27.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-27.3">
-          <p id="appendix-C-27.3.1">Decision on issue #8 to not provide an additional signature on the enrollment-response object by the registrar. As the Enroll-Response will only contain the generic LDevID certificate. This credential builds the base for further configuration outside the initial enrollment.<a href="#appendix-C-27.3.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-27.3.1">Included error responses from pledge if it is not able to create a Pledge-Voucher-Request or an enrollment request in section <a href="#tpvr" class="auto internal xref">Section 7.1</a><a href="#appendix-C-27.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-27.4">
-          <p id="appendix-C-27.4.1">Decision on issue #7 to not support multiple CSRs during the bootstrapping, as based on the generic LDevID certificate the pledge may enroll for further certificates.<a href="#appendix-C-27.4.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-27.4.1">Removed open issue regarding handling of multiple CSRs and Enroll-Responses during the bootstrapping as the initial target it the provisioning of a generic LDevID certificate. The defined endpoint on the pledge may also be used for management of further certificates.<a href="#appendix-C-27.4.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-27.5">
-          <p id="appendix-C-27.5.1">Closed open issue #5 regarding verification of ietf-ztp-types usage as verified
-via a proof-of-concept in section <a href="#tpvr" class="auto internal xref">Section 7.1</a>.<a href="#appendix-C-27.5.1" class="pilcrow">¶</a></p>
+      </ul>
+<p id="appendix-C-28">From IETF draft 00 -&gt; IETF draft 01:<a href="#appendix-C-28" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-C-29.1">
+          <p id="appendix-C-29.1.1">Issue #15 lead to the inclusion of an option for an additional signature of the registrar on the voucher received from the MASA before forwarding to the Registrar-Agent to support verification of POP of the registrars private key in section <a href="#pvr" class="auto internal xref">Section 7.3</a> and exchanges_uc2_3.<a href="#appendix-C-29.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-27.6">
-          <p id="appendix-C-27.6.1">Housekeeping: Removed already addressed open issues stated in the draft directly.<a href="#appendix-C-27.6.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-29.2">
+          <p id="appendix-C-29.2.1">Based on issue #11, a new endpoint was defined for the registrar to enable delivery of the wrapped enrollment request from the pledge (in contrast to plain PKCS#10 in simple enroll).<a href="#appendix-C-29.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-27.7">
-          <p id="appendix-C-27.7.1">Reworked text in from introduction to section pledge-responder-mode<a href="#appendix-C-27.7.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-29.3">
+          <p id="appendix-C-29.3.1">Decision on issue #8 to not provide an additional signature on the enrollment-response object by the registrar. As the Enroll-Response will only contain the generic LDevID certificate. This credential builds the base for further configuration outside the initial enrollment.<a href="#appendix-C-29.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-27.8">
-          <p id="appendix-C-27.8.1">Fixed "serial-number" encoding in PVR/RVR<a href="#appendix-C-27.8.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-29.4">
+          <p id="appendix-C-29.4.1">Decision on issue #7 to not support multiple CSRs during the bootstrapping, as based on the generic LDevID certificate the pledge may enroll for further certificates.<a href="#appendix-C-29.4.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-27.9">
-          <p id="appendix-C-27.9.1">Added prior-signed-voucher-request in the parameter description of the
-registrar-voucher-request in <a href="#pvr" class="auto internal xref">Section 7.3</a>.<a href="#appendix-C-27.9.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-29.5">
+          <p id="appendix-C-29.5.1">Closed open issue #5 regarding verification of ietf-ztp-types usage as verified
+via a proof-of-concept in section <a href="#tpvr" class="auto internal xref">Section 7.1</a>.<a href="#appendix-C-29.5.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-27.10">
-          <p id="appendix-C-27.10.1">Note added in <a href="#pvr" class="auto internal xref">Section 7.3</a> if sub-CAs are used, that the
-corresponding information is to be provided to the MASA.<a href="#appendix-C-27.10.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-29.6">
+          <p id="appendix-C-29.6.1">Housekeeping: Removed already addressed open issues stated in the draft directly.<a href="#appendix-C-29.6.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-27.11">
-          <p id="appendix-C-27.11.1">Inclusion of limitation section (pledge sleeps and needs to be waked
-up. Pledge is awake but Registrar-Agent is not available) (Issue #10).<a href="#appendix-C-27.11.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-29.7">
+          <p id="appendix-C-29.7.1">Reworked text in from introduction to section pledge-responder-mode<a href="#appendix-C-29.7.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-27.12">
-          <p id="appendix-C-27.12.1">Assertion-type aligned with voucher in RFC8366bis, deleted related
-open issues. (Issue #4)<a href="#appendix-C-27.12.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-29.8">
+          <p id="appendix-C-29.8.1">Fixed "serial-number" encoding in PVR/RVR<a href="#appendix-C-29.8.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-27.13">
-          <p id="appendix-C-27.13.1">Included table for endpoints in <a href="#pledge_component" class="auto internal xref">Section 6.3</a> for better readability.<a href="#appendix-C-27.13.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-29.9">
+          <p id="appendix-C-29.9.1">Added prior-signed-voucher-request in the parameter description of the
+registrar-voucher-request in <a href="#pvr" class="auto internal xref">Section 7.3</a>.<a href="#appendix-C-29.9.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-27.14">
-          <p id="appendix-C-27.14.1">Included registrar authorization check for Registrar-Agent during
+        <li class="normal" id="appendix-C-29.10">
+          <p id="appendix-C-29.10.1">Note added in <a href="#pvr" class="auto internal xref">Section 7.3</a> if sub-CAs are used, that the
+corresponding information is to be provided to the MASA.<a href="#appendix-C-29.10.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-29.11">
+          <p id="appendix-C-29.11.1">Inclusion of limitation section (pledge sleeps and needs to be waked
+up. Pledge is awake but Registrar-Agent is not available) (Issue #10).<a href="#appendix-C-29.11.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-29.12">
+          <p id="appendix-C-29.12.1">Assertion-type aligned with voucher in RFC8366bis, deleted related
+open issues. (Issue #4)<a href="#appendix-C-29.12.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-29.13">
+          <p id="appendix-C-29.13.1">Included table for endpoints in <a href="#pledge_component" class="auto internal xref">Section 6.3</a> for better readability.<a href="#appendix-C-29.13.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-29.14">
+          <p id="appendix-C-29.14.1">Included registrar authorization check for Registrar-Agent during
 TLS handshake  in section <a href="#pvr" class="auto internal xref">Section 7.3</a>. Also enhanced figure
-<a href="#exchangesfig_uc2_all" class="auto internal xref">Figure 4</a> with the authorization step on TLS level.<a href="#appendix-C-27.14.1" class="pilcrow">¶</a></p>
+<a href="#exchangesfig_uc2_all" class="auto internal xref">Figure 4</a> with the authorization step on TLS level.<a href="#appendix-C-29.14.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-27.15">
-          <p id="appendix-C-27.15.1">Enhanced description of registrar authorization check for Registrar-Agent
+        <li class="normal" id="appendix-C-29.15">
+          <p id="appendix-C-29.15.1">Enhanced description of registrar authorization check for Registrar-Agent
 based on the agent-signed-data in section <a href="#pvr" class="auto internal xref">Section 7.3</a>. Also
 enhanced figure <a href="#exchangesfig_uc2_all" class="auto internal xref">Figure 4</a> with the authorization step
-on Pledge-Voucher-Request level.<a href="#appendix-C-27.15.1" class="pilcrow">¶</a></p>
+on Pledge-Voucher-Request level.<a href="#appendix-C-29.15.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-27.16">
-          <p id="appendix-C-27.16.1">Changed agent-signed-cert to an array to allow for providing further
+        <li class="normal" id="appendix-C-29.16">
+          <p id="appendix-C-29.16.1">Changed agent-signed-cert to an array to allow for providing further
 certificate information like the issuing CA cert for the LDevID(RegAgt)
 certificate in case the registrar and the Registrar-Agent have different
 issuing CAs in <a href="#exchangesfig_uc2_all" class="auto internal xref">Figure 4</a> (issue #12).
-This also required changes in the YANG module in <span>[<a href="#I-D.ietf-anima-rfc8366bis" class="cite xref">I-D.ietf-anima-rfc8366bis</a>]</span><a href="#appendix-C-27.16.1" class="pilcrow">¶</a></p>
+This also required changes in the YANG module in <span>[<a href="#I-D.ietf-anima-rfc8366bis" class="cite xref">I-D.ietf-anima-rfc8366bis</a>]</span><a href="#appendix-C-29.16.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-27.17">
-          <p id="appendix-C-27.17.1">Addressed YANG warning (issue #1)<a href="#appendix-C-27.17.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-29.17">
+          <p id="appendix-C-29.17.1">Addressed YANG warning (issue #1)<a href="#appendix-C-29.17.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-27.18">
-          <p id="appendix-C-27.18.1">Inclusion of examples for a trigger to create a Pledge-Voucher-Request
-and an Pledge Enroll-Request.<a href="#appendix-C-27.18.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<p id="appendix-C-28">From IETF draft-ietf-anima-brski-async-enroll-03 -&gt; IETF anima-brski-prm-00:<a href="#appendix-C-28" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-C-29.1">
-          <p id="appendix-C-29.1.1">Moved UC2 related parts defining the Pledge in Responder Mode from
-draft-ietf-anima-brski-async-enroll-03 to this document
-This required changes and adaptations in several sections to remove
-the description and references to UC1.<a href="#appendix-C-29.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-29.2">
-          <p id="appendix-C-29.2.1">Addressed feedback for voucher-request enhancements from YANG doctor
-early review, meanwhile moved to <span>[<a href="#I-D.ietf-anima-rfc8366bis" class="cite xref">I-D.ietf-anima-rfc8366bis</a>]</span> as well as in the security considerations (formerly named ietf-async-voucher-request).<a href="#appendix-C-29.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-29.3">
-          <p id="appendix-C-29.3.1">Renamed ietf-async-voucher-request to IETF-voucher-request-prm to
-to allow better listing of voucher related extensions; aligned with
-constraint voucher (#20)<a href="#appendix-C-29.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-29.4">
-          <p id="appendix-C-29.4.1">Utilized ietf-voucher-request-async instead of ietf-voucher-request
-in voucher exchanges to utilize the enhanced voucher-request.<a href="#appendix-C-29.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-29.5">
-          <p id="appendix-C-29.5.1">Included changes from draft-ietf-netconf-sztp-csr-06 regarding the
-YANG definition of csr-types into the enrollment request exchange.<a href="#appendix-C-29.5.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-29.18">
+          <p id="appendix-C-29.18.1">Inclusion of examples for a trigger to create a Pledge-Voucher-Request
+and an Pledge Enroll-Request.<a href="#appendix-C-29.18.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-30">From IETF draft 02 -&gt; IETF draft 03:<a href="#appendix-C-30" class="pilcrow">¶</a></p>
+<p id="appendix-C-30">From IETF draft-ietf-anima-brski-async-enroll-03 -&gt; IETF anima-brski-prm-00:<a href="#appendix-C-30" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-31.1">
-          <p id="appendix-C-31.1.1">Housekeeping, deleted open issue regarding YANG voucher-request
-in <a href="#tpvr" class="auto internal xref">Section 7.1</a> as voucher-request was
-enhanced with additional leaf.<a href="#appendix-C-31.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-31.1.1">Moved UC2 related parts defining the Pledge in Responder Mode from
+draft-ietf-anima-brski-async-enroll-03 to this document
+This required changes and adaptations in several sections to remove
+the description and references to UC1.<a href="#appendix-C-31.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-31.2">
-          <p id="appendix-C-31.2.1">Included open issues in YANG model in <a href="#architecture" class="auto internal xref">Section 5</a> regarding assertion
-value agent-proximity and csr encapsulation using SZTP sub module).<a href="#appendix-C-31.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-31.2.1">Addressed feedback for voucher-request enhancements from YANG doctor
+early review, meanwhile moved to <span>[<a href="#I-D.ietf-anima-rfc8366bis" class="cite xref">I-D.ietf-anima-rfc8366bis</a>]</span> as well as in the security considerations (formerly named ietf-async-voucher-request).<a href="#appendix-C-31.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-31.3">
+          <p id="appendix-C-31.3.1">Renamed ietf-async-voucher-request to IETF-voucher-request-prm to
+to allow better listing of voucher related extensions; aligned with
+constraint voucher (#20)<a href="#appendix-C-31.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-31.4">
+          <p id="appendix-C-31.4.1">Utilized ietf-voucher-request-async instead of ietf-voucher-request
+in voucher exchanges to utilize the enhanced voucher-request.<a href="#appendix-C-31.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-31.5">
+          <p id="appendix-C-31.5.1">Included changes from draft-ietf-netconf-sztp-csr-06 regarding the
+YANG definition of csr-types into the enrollment request exchange.<a href="#appendix-C-31.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-32">From IETF draft 01 -&gt; IETF draft 02:<a href="#appendix-C-32" class="pilcrow">¶</a></p>
+<p id="appendix-C-32">From IETF draft 02 -&gt; IETF draft 03:<a href="#appendix-C-32" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-33.1">
-          <p id="appendix-C-33.1.1">Defined call flow and objects for interactions in UC2. Object format
-based on draft for JOSE signed voucher artifacts and aligned the
-remaining objects with this approach in <a href="#exchanges" class="auto internal xref">Section 7</a>.<a href="#appendix-C-33.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-33.1.1">Housekeeping, deleted open issue regarding YANG voucher-request
+in <a href="#tpvr" class="auto internal xref">Section 7.1</a> as voucher-request was
+enhanced with additional leaf.<a href="#appendix-C-33.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-33.2">
-          <p id="appendix-C-33.2.1">Terminology change: issue #2 pledge-agent -&gt; Registrar-Agent to
-better underline Registrar-Agent relation.<a href="#appendix-C-33.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-33.2.1">Included open issues in YANG model in <a href="#architecture" class="auto internal xref">Section 5</a> regarding assertion
+value agent-proximity and csr encapsulation using SZTP sub module).<a href="#appendix-C-33.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-33.3">
-          <p id="appendix-C-33.3.1">Terminology change: issue #3 PULL/PUSH -&gt; pledge-initiator-mode
-and pledge-responder-mode to better address the pledge operation.<a href="#appendix-C-33.3.1" class="pilcrow">¶</a></p>
+      </ul>
+<p id="appendix-C-34">From IETF draft 01 -&gt; IETF draft 02:<a href="#appendix-C-34" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-C-35.1">
+          <p id="appendix-C-35.1.1">Defined call flow and objects for interactions in UC2. Object format
+based on draft for JOSE signed voucher artifacts and aligned the
+remaining objects with this approach in <a href="#exchanges" class="auto internal xref">Section 7</a>.<a href="#appendix-C-35.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-33.4">
-          <p id="appendix-C-33.4.1">Communication approach between pledge and Registrar-Agent
+        <li class="normal" id="appendix-C-35.2">
+          <p id="appendix-C-35.2.1">Terminology change: issue #2 pledge-agent -&gt; Registrar-Agent to
+better underline Registrar-Agent relation.<a href="#appendix-C-35.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-35.3">
+          <p id="appendix-C-35.3.1">Terminology change: issue #3 PULL/PUSH -&gt; pledge-initiator-mode
+and pledge-responder-mode to better address the pledge operation.<a href="#appendix-C-35.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-35.4">
+          <p id="appendix-C-35.4.1">Communication approach between pledge and Registrar-Agent
 changed by removing TLS-PSK (former section TLS establishment)
 and associated references to other drafts in favor of relying on
 higher layer exchange of signed data objects. These data objects
 are included also in the Pledge-Voucher-Request and lead to an
-extension of the YANG module for the voucher-request (issue #12).<a href="#appendix-C-33.4.1" class="pilcrow">¶</a></p>
+extension of the YANG module for the voucher-request (issue #12).<a href="#appendix-C-35.4.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-33.5">
-          <p id="appendix-C-33.5.1">Details on trust relationship between Registrar-Agent and
-registrar (issue #4, #5, #9) included in <a href="#architecture" class="auto internal xref">Section 5</a>.<a href="#appendix-C-33.5.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-35.5">
+          <p id="appendix-C-35.5.1">Details on trust relationship between Registrar-Agent and
+registrar (issue #4, #5, #9) included in <a href="#architecture" class="auto internal xref">Section 5</a>.<a href="#appendix-C-35.5.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-33.6">
-          <p id="appendix-C-33.6.1">Recommendation regarding short-lived certificates for
+        <li class="normal" id="appendix-C-35.6">
+          <p id="appendix-C-35.6.1">Recommendation regarding short-lived certificates for
 Registrar-Agent authentication towards registrar (issue #7) in
-the security considerations.<a href="#appendix-C-33.6.1" class="pilcrow">¶</a></p>
+the security considerations.<a href="#appendix-C-35.6.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-33.7">
-          <p id="appendix-C-33.7.1">Introduction of reference to Registrar-Agent signing certificate using
-SubjectKeyIdentifier in Registrar-Agent signed data (issue #37).<a href="#appendix-C-33.7.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-35.7">
+          <p id="appendix-C-35.7.1">Introduction of reference to Registrar-Agent signing certificate using
+SubjectKeyIdentifier in Registrar-Agent signed data (issue #37).<a href="#appendix-C-35.7.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-33.8">
-          <p id="appendix-C-33.8.1">Enhanced objects in exchanges between pledge and Registrar-Agent
+        <li class="normal" id="appendix-C-35.8">
+          <p id="appendix-C-35.8.1">Enhanced objects in exchanges between pledge and Registrar-Agent
 to allow the registrar to verify agent-proximity to the pledge
-(issue #1) in <a href="#exchanges" class="auto internal xref">Section 7</a>.<a href="#appendix-C-33.8.1" class="pilcrow">¶</a></p>
+(issue #1) in <a href="#exchanges" class="auto internal xref">Section 7</a>.<a href="#appendix-C-35.8.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-33.9">
-          <p id="appendix-C-33.9.1">Details on trust relationship between Registrar-Agent and
-pledge (issue #5) included in <a href="#architecture" class="auto internal xref">Section 5</a>.<a href="#appendix-C-33.9.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-35.9">
+          <p id="appendix-C-35.9.1">Details on trust relationship between Registrar-Agent and
+pledge (issue #5) included in <a href="#architecture" class="auto internal xref">Section 5</a>.<a href="#appendix-C-35.9.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-33.10">
-          <p id="appendix-C-33.10.1">Split of use case 2 call flow into sub sections in <a href="#exchanges" class="auto internal xref">Section 7</a>.<a href="#appendix-C-33.10.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-35.10">
+          <p id="appendix-C-35.10.1">Split of use case 2 call flow into sub sections in <a href="#exchanges" class="auto internal xref">Section 7</a>.<a href="#appendix-C-35.10.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-34">From IETF draft 00 -&gt; IETF draft 01:<a href="#appendix-C-34" class="pilcrow">¶</a></p>
+<p id="appendix-C-36">From IETF draft 00 -&gt; IETF draft 01:<a href="#appendix-C-36" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-C-35.1">
-          <p id="appendix-C-35.1.1">Update of scope in <a href="#sup-env" class="auto internal xref">Section 3.1</a> to include in
+<li class="normal" id="appendix-C-37.1">
+          <p id="appendix-C-37.1.1">Update of scope in <a href="#sup-env" class="auto internal xref">Section 3.1</a> to include in
 which the pledge acts as a server. This is one main motivation
-for use case 2.<a href="#appendix-C-35.1.1" class="pilcrow">¶</a></p>
+for use case 2.<a href="#appendix-C-37.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-35.2">
-          <p id="appendix-C-35.2.1">Rework of use case 2 in <a href="#architecture" class="auto internal xref">Section 5</a> to consider the
+        <li class="normal" id="appendix-C-37.2">
+          <p id="appendix-C-37.2.1">Rework of use case 2 in <a href="#architecture" class="auto internal xref">Section 5</a> to consider the
 transport between the pledge and the pledge-agent. Addressed is
 the TLS channel establishment between the pledge-agent and the
-pledge as well as the endpoint definition on the pledge.<a href="#appendix-C-35.2.1" class="pilcrow">¶</a></p>
+pledge as well as the endpoint definition on the pledge.<a href="#appendix-C-37.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-35.3">
-          <p id="appendix-C-35.3.1">First description of exchanged object types (needs more work)<a href="#appendix-C-35.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-37.3">
+          <p id="appendix-C-37.3.1">First description of exchanged object types (needs more work)<a href="#appendix-C-37.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-35.4">
-          <p id="appendix-C-35.4.1">Clarification in discovery options for enrollment endpoints at
+        <li class="normal" id="appendix-C-37.4">
+          <p id="appendix-C-37.4.1">Clarification in discovery options for enrollment endpoints at
 the domain registrar based on well-known endpoints do not
 result in additional /.well-known URIs. Update of the illustrative example.
 Note that the change to /brski for the voucher related endpoints
-has been taken over in the BRSKI main document.<a href="#appendix-C-35.4.1" class="pilcrow">¶</a></p>
+has been taken over in the BRSKI main document.<a href="#appendix-C-37.4.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-35.5">
-          <p id="appendix-C-35.5.1">Updated references.<a href="#appendix-C-35.5.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-37.5">
+          <p id="appendix-C-37.5.1">Updated references.<a href="#appendix-C-37.5.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-35.6">
-          <p id="appendix-C-35.6.1">Included Thomas Werner as additional author for the document.<a href="#appendix-C-35.6.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-37.6">
+          <p id="appendix-C-37.6.1">Included Thomas Werner as additional author for the document.<a href="#appendix-C-37.6.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-36">From individual version 03 -&gt; IETF draft 00:<a href="#appendix-C-36" class="pilcrow">¶</a></p>
+<p id="appendix-C-38">From individual version 03 -&gt; IETF draft 00:<a href="#appendix-C-38" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-C-37.1">
-          <p id="appendix-C-37.1.1">Inclusion of discovery options of enrollment endpoints at
+<li class="normal" id="appendix-C-39.1">
+          <p id="appendix-C-39.1.1">Inclusion of discovery options of enrollment endpoints at
 the domain registrar based on well-known endpoints in
 new section as replacement of section 5.1.3
 in the individual draft. This is intended to support both use
-cases in the document. An illustrative example is provided.<a href="#appendix-C-37.1.1" class="pilcrow">¶</a></p>
+cases in the document. An illustrative example is provided.<a href="#appendix-C-39.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-37.2">
-          <p id="appendix-C-37.2.1">Missing details provided for the description and call flow in
+        <li class="normal" id="appendix-C-39.2">
+          <p id="appendix-C-39.2.1">Missing details provided for the description and call flow in
 pledge-agent use case <a href="#architecture" class="auto internal xref">Section 5</a>, e.g. to
-accommodate distribution of CA certificates.<a href="#appendix-C-37.2.1" class="pilcrow">¶</a></p>
+accommodate distribution of CA certificates.<a href="#appendix-C-39.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-37.3">
-          <p id="appendix-C-37.3.1">Updated CMP example in to use lightweight CMP instead of CMP, as the
-draft already provides the necessary /.well-known endpoints.<a href="#appendix-C-37.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-39.3">
+          <p id="appendix-C-39.3.1">Updated CMP example in to use lightweight CMP instead of CMP, as the
+draft already provides the necessary /.well-known endpoints.<a href="#appendix-C-39.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-37.4">
-          <p id="appendix-C-37.4.1">Requirements discussion moved to separate section in
+        <li class="normal" id="appendix-C-39.4">
+          <p id="appendix-C-39.4.1">Requirements discussion moved to separate section in
 <a href="#req-sol" class="auto internal xref">Section 4</a>. Shortened description of proof
-of identity binding and mapping to existing protocols.<a href="#appendix-C-37.4.1" class="pilcrow">¶</a></p>
+of identity binding and mapping to existing protocols.<a href="#appendix-C-39.4.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-37.5">
-          <p id="appendix-C-37.5.1">Removal of copied call flows for voucher exchange and registrar
+        <li class="normal" id="appendix-C-39.5">
+          <p id="appendix-C-39.5.1">Removal of copied call flows for voucher exchange and registrar
 discovery flow from <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> in UC1 to avoid doubling or text or
-inconsistencies.<a href="#appendix-C-37.5.1" class="pilcrow">¶</a></p>
+inconsistencies.<a href="#appendix-C-39.5.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-37.6">
-          <p id="appendix-C-37.6.1">Reworked abstract and introduction to be more crisp regarding
+        <li class="normal" id="appendix-C-39.6">
+          <p id="appendix-C-39.6.1">Reworked abstract and introduction to be more crisp regarding
 the targeted solution. Several structural changes in the document
 to have a better distinction between requirements, use case
 description, and solution description as separate sections.
-History moved to appendix.<a href="#appendix-C-37.6.1" class="pilcrow">¶</a></p>
+History moved to appendix.<a href="#appendix-C-39.6.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-38">From individual version 02 -&gt; 03:<a href="#appendix-C-38" class="pilcrow">¶</a></p>
+<p id="appendix-C-40">From individual version 02 -&gt; 03:<a href="#appendix-C-40" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-C-39.1">
-          <p id="appendix-C-39.1.1">Update of terminology from self-contained to authenticated
+<li class="normal" id="appendix-C-41.1">
+          <p id="appendix-C-41.1.1">Update of terminology from self-contained to authenticated
 self-contained object to be consistent in the wording and to
 underline the protection of the object with an existing
 credential. Note that the naming of this object may be discussed.
-An alternative name may be attestation object.<a href="#appendix-C-39.1.1" class="pilcrow">¶</a></p>
+An alternative name may be attestation object.<a href="#appendix-C-41.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-39.2">
-          <p id="appendix-C-39.2.1">Simplification of the architecture approach for the initial use
-case having an offsite PKI.<a href="#appendix-C-39.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-41.2">
+          <p id="appendix-C-41.2.1">Simplification of the architecture approach for the initial use
+case having an offsite PKI.<a href="#appendix-C-41.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-39.3">
-          <p id="appendix-C-39.3.1">Introduction of a new use case utilizing authenticated
+        <li class="normal" id="appendix-C-41.3">
+          <p id="appendix-C-41.3.1">Introduction of a new use case utilizing authenticated
 self-contain objects to onboard a pledge using a commissioning
 tool containing a pledge-agent. This requires additional changes
 in the BRSKI call flow sequence and led to changes in the
 introduction, the application example,and also in the
-related BRSKI-PRM call flow.<a href="#appendix-C-39.3.1" class="pilcrow">¶</a></p>
+related BRSKI-PRM call flow.<a href="#appendix-C-41.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="appendix-C-40">From individual version 01 -&gt; 02:<a href="#appendix-C-40" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="appendix-C-41.1">
-          <p id="appendix-C-41.1.1">Update of introduction text to clearly relate to the usage of
-IDevID and LDevID.<a href="#appendix-C-41.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-41.2">
-          <p id="appendix-C-41.2.1">Update of description of architecture elements and
-changes to BRSKI in <a href="#architecture" class="auto internal xref">Section 5</a>.<a href="#appendix-C-41.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="appendix-C-41.3">
-          <p id="appendix-C-41.3.1">Enhanced consideration of existing enrollment protocols in the
-context of mapping the requirements to existing solutions in
-<a href="#req-sol" class="auto internal xref">Section 4</a>.<a href="#appendix-C-41.3.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<p id="appendix-C-42">From individual version 00 -&gt; 01:<a href="#appendix-C-42" class="pilcrow">¶</a></p>
+<p id="appendix-C-42">From individual version 01 -&gt; 02:<a href="#appendix-C-42" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C-43.1">
-          <p id="appendix-C-43.1.1">Update of examples, specifically for building automation as
-well as two new application use cases in <a href="#sup-env" class="auto internal xref">Section 3.1</a>.<a href="#appendix-C-43.1.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-43.1.1">Update of introduction text to clearly relate to the usage of
+IDevID and LDevID.<a href="#appendix-C-43.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-43.2">
-          <p id="appendix-C-43.2.1">Deletion of asynchronous interaction with MASA to not
+          <p id="appendix-C-43.2.1">Update of description of architecture elements and
+changes to BRSKI in <a href="#architecture" class="auto internal xref">Section 5</a>.<a href="#appendix-C-43.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-43.3">
+          <p id="appendix-C-43.3.1">Enhanced consideration of existing enrollment protocols in the
+context of mapping the requirements to existing solutions in
+<a href="#req-sol" class="auto internal xref">Section 4</a>.<a href="#appendix-C-43.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="appendix-C-44">From individual version 00 -&gt; 01:<a href="#appendix-C-44" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-C-45.1">
+          <p id="appendix-C-45.1.1">Update of examples, specifically for building automation as
+well as two new application use cases in <a href="#sup-env" class="auto internal xref">Section 3.1</a>.<a href="#appendix-C-45.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-45.2">
+          <p id="appendix-C-45.2.1">Deletion of asynchronous interaction with MASA to not
 complicate the use case. Note that the voucher exchange can
 already be handled in an asynchronous manner and is therefore
 not considered further. This resulted in removal of the
 alternative path the MASA in Figure 1 and the associated
-description in <a href="#architecture" class="auto internal xref">Section 5</a>.<a href="#appendix-C-43.2.1" class="pilcrow">¶</a></p>
+description in <a href="#architecture" class="auto internal xref">Section 5</a>.<a href="#appendix-C-45.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-43.3">
-          <p id="appendix-C-43.3.1">Enhancement of description of architecture elements and
-changes to BRSKI in <a href="#architecture" class="auto internal xref">Section 5</a>.<a href="#appendix-C-43.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-45.3">
+          <p id="appendix-C-45.3.1">Enhancement of description of architecture elements and
+changes to BRSKI in <a href="#architecture" class="auto internal xref">Section 5</a>.<a href="#appendix-C-45.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-43.4">
-          <p id="appendix-C-43.4.1">Consideration of existing enrollment protocols in the context
-of mapping the requirements to existing solutions in <a href="#req-sol" class="auto internal xref">Section 4</a>.<a href="#appendix-C-43.4.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="appendix-C-45.4">
+          <p id="appendix-C-45.4.1">Consideration of existing enrollment protocols in the context
+of mapping the requirements to existing solutions in <a href="#req-sol" class="auto internal xref">Section 4</a>.<a href="#appendix-C-45.4.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="appendix-C-43.5">
-          <p id="appendix-C-43.5.1">New section starting with the
+        <li class="normal" id="appendix-C-45.5">
+          <p id="appendix-C-45.5.1">New section starting with the
 mapping to existing enrollment protocols by collecting
-boundary conditions.<a href="#appendix-C-43.5.1" class="pilcrow">¶</a></p>
+boundary conditions.<a href="#appendix-C-45.5.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>

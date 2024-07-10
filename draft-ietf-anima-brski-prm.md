@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-13
+docname: draft-ietf-anima-brski-prm-14
 area: Operations and Management
 wg: ANIMA WG
 date: 2024
@@ -91,6 +91,7 @@ informative:
   RFC7252:
   RFC8040:
   RFC8407:
+  RFC8126:
   RFC8792:
   RFC8990:
   RFC9052:
@@ -423,7 +424,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
   Any other protocol can be used as long as it supports the exchange of the necessary artifacts.
   This includes CoAP or protocol to be used over Bluetooth or NFC connections.
   A pledge acting as server leads to the following differences compared to BRSKI {{!RFC8995}}:
-  
+
   * The pledge no longer initiates bootstrapping, but is discovered and triggered by the Registrar-Agent as defined in {{discovery_uc2_ppa}}.
   * The pledge offers additional endpoints as defined in {{pledge_component}}, so that the Registrar-Agent can request data required for bootstrapping the pledge.
   * The pledge includes additional data in the PVR, which is provided and signed by the Registrar-Agent as defined in {{tpvr}}.
@@ -446,7 +447,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 
 * Domain registrar: In general fulfills the same functionality regarding the bootstrapping of the pledge in a customer domain by facilitating the communication of the pledge with the MASA service and the domain key infrastructure (PKI).
   However, there are also differences compared to BRSKI {{!RFC8995}}:
-  
+
   * A BRSKI-PRM domain registrar does not interact with a pledge directly, but through the Registrar-Agent as defined in {{exchanges}}.
   * A BRSKI-PRM domain registrar offers additional endpoints as defined in {{registrar_component}} to support the signature-wrapped artifacts used by BRSKI-PRM.
 
@@ -523,10 +524,10 @@ In {{!RFC8995}}, pledges instead need to continuously request enrollment from a 
     :          ...............................|.........
     :          .                              v        .
     v          .          +-------------------------+  .
- +--------+    .          |..............           |  .   
+ +--------+    .          |..............           |  .
  |        |    .          |. Registrar- . Domain    |  .
  | Pledge |<------------->|. Agent      . Registrar |  .
- +--------+ L2 or L3      |..............           |  .   
+ +--------+ L2 or L3      |..............           |  .
             connectivity  +-------------------+-----+  .
                .                              |        .
                .           +------------------+-----+  .
@@ -1172,7 +1173,6 @@ $enroll-type /= "enroll-generic-cert"
 The `enroll-type` member allows for specifying which type of certificate is to be enrolled.
 As shown in {{tper_CDDL_def}}, BRSKI-PRM only defines the enumeration value `enroll-generic-cert` for the enrollment of the generic, device-related LDevID certificate.
 Other specifications using this artifact may define further enum values, e.g., to bootstrap application-related EE certificates with additional CSR attributes.
-The enumeration values are managed in an IANA registry to track extensions to BRSKI-PRM (see {{iana_con}}).
 
 
 ### Response Artifact: Pledge Enroll-Request (PER) {#per_artifact}
@@ -1875,10 +1875,13 @@ The JSON Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with
   this specification assumes version `1` just like BRSKI {{!RFC8995}}
 * `status`: contains the boolean value `true` in case of success and `false` in case of failure
 * `reason`: contains a human-readable message;
-  MAY be omitted in the case of success;
+  in contrast to {{Section 5.7 of !RFC8995}} MUST be provided;
   SHOULD NOT provide information beneficial to an attacker
 * `reason-context`: contain an arbitrary JSON object that provides additional information specific to a failure;
-   MAY be omitted in the case of success
+  in contrast to {{Section 5.7 of !RFC8995}} MUST be provided;
+
+BRSKI-PRM implementations MUST utilize the reason-context to provide a distinguishable token that enables the registrar to detect status artifacts provided to the wrong endpoint.
+For vStatus the reason-context MUST be "pvs-details".
 
 {{vstatus_data_example_success}} below shows an example for the JSON Voucher Status Data in case of success and {{vstatus_data_example_error}} in case of failure:
 
@@ -1887,6 +1890,9 @@ The JSON Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with
   "version": 1,
   "status": true,
   "reason": "Voucher successfully processed."
+  "reason-context": {
+    "pvs-details": "Current date: 1/1/1970"
+  }
 }
 ~~~~
 {: #vstatus_data_example_success title='JSON Voucher Status Data Success Example' artwork-align="left"}
@@ -2066,6 +2072,9 @@ The generated JWS Signature is base64url-encoded to become the string value of t
 
 The JSON Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with the `enrollstatus-post` CDDL {{!RFC8610}} data model defined in {{Section 5.9.4 of !RFC8995}}.
 The members are the same as for the JSON Voucher Status Data and follow the same definitions as given in {{vstatus_data}}.
+
+BRSKI-PRM implementations MUST utilize the reason-context to provide a distinguishable token that enables the registrar to detect status artifacts provided to the wrong endpoint.
+For eStatus the reason-context MUST be "pes-details".
 
 {{estatus_data_example_success}} below shows an example for the JSON Enroll Status Data in case of success and {{estatus_data_example_error}} in case of failure:
 
@@ -2350,7 +2359,6 @@ As shown in {{stat_req_def}}, BRSKI-PRM defines two enumeration values:
 * `operation` to query current status information regarding the operational status (e.g., utilization of the bootstrapped EE credentials in communication with other peers)
 
 Other specifications using this artifact may define further enumeration values, e.g., to query application-related status.
-The enumeration values are managed in an IANA registry to track extensions to BRSKI-PRM (see {{iana_con}}).
 
 {{stat_req_data}} below shows an example for the JSON Status Trigger Data using the status type `bootstrap`:
 
@@ -2418,26 +2426,15 @@ The generated JWS Signature is base64url-encoded to become the string value of t
 
 #### JSON Pledge Status Data {#pstatus_data}
 
-The JSON Pledge Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with the CDDL {{!RFC8610}} data model defined in {{stat_res_def}}:
+The JSON Pledge Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with the CDDL {{!RFC8610}} data model defined in {{stat_res_def}}, which has the same members as the `voucherstatus-post` CDDL defined in {{Section 5.7 of !RFC8995}} and the  `enrollstatus-post` CDDL defined in {{Section 5.9.4 of !RFC8995}}.
 
 ~~~~ cddl
   pledgestatus = {
     "version": uint,
-    "status": $status-enums,
+    "status": bool,
     ?"reason" : text,
     ?"reason-context": { * $$arbitrary-map }
   }
-
-  $status-enums /= $status-bootstrap
-  $status-bootstrap /= "factory-default"
-  $status-bootstrap /= "voucher-success"
-  $status-bootstrap /= "voucher-error"
-  $status-bootstrap /= "enroll-success"
-  $status-bootstrap /= "enroll-error"
-
-  $status-enums /= $status-operation
-  $status-operation /= "connect-success"
-  $status-operation /= "connect-error"
 ~~~~
 {: #stat_res_def title='CDDL for JSON Pledge Status Data (pledgestatus)' artwork-align="left"}
 
@@ -2445,16 +2442,14 @@ The `version` member follows the definition in {{tstatus_data}} (same as in JSON
 
 The `reason` and `reason-context` members follow the definitions in {{vstatus_data}} (same as in JSON Voucher Status Data).
 
-The `status` member SHALL contain a status value corresponding to the queried `status-type`.
-For this, the CDDL in {{stat_res_def}} defines `status` as an extensible list of valid status label enumerations that correspond to different status-type values.
-This document defines the following status label enumerations:
+BRSKI-PRM implementations MUST utilize the reason-context to provide a distinguishable token that enables the registrar to detect status artifacts provided to the wrong endpoint.
+For pStatus the reason-context MUST be either
+* "pbs-details" for bootstrapping related status information or
+* "pos-details" for operation related status information
 
-* "status-bootstrap" with an (extensible) enumeration of status labels corresponding to the status-type `bootstrap` defined in {{stat_req_def}}
-* "status-operation" with an (extensible) enumeration of status labels corresponding to the status-type `operation` defined in {{stat_req_def}}
+Other documents may enhance the reason-context to reflect further status information or add additional values correlating to other `statustrigger` status-types (see {{tstatus_data}}).
 
-Other documents may enhance the enumeration to reflect further status information or add additional enumerations for other `statustrigger` status-types (see {{tstatus_data}}).
-
-The status-bootstrap enumeration defines the following status values with the given semantics, while additional information MAY be provided in the `reason` or `reason-context` members:
+For the "pbs-details" reason-context the following status values with the given semantics are defined, while additional information MAY be provided in the `reason` member:
 
 * `factory-default`: Pledge has not been bootstrapped.
   The pledge signs the response message using its IDevID certificate/credentials.
@@ -2476,13 +2471,16 @@ The status-bootstrap status values SHALL be cumulative in the sense that `enroll
 ~~~~
 {
   "version": 1,
-  "status": "enroll-success",
+  "status": true,
   "reason": "Pledge has processed the enrollment exchange successfully."
+  "reason-context": {
+    "pbs-details": "Pledge has processed the enrollment exchange successfully."
+  }
 }
 ~~~~
 {: #stat_example_bootstrap title='status-bootstrap JSON Pledge Status Data Example' artwork-align="left"}
 
-The status-operation enumeration defines the following values with the given semantics, while additional information MAY be provided in the `reason` or `reason-context` members:
+For the "pos-details" reason-context the following status values with the given semantics are defined, while additional information MAY be provided in the `reason` member:
 
 * `connect-success`: Pledge could successfully establish a connection to another peer.
   The pledge signs the response message using its domain-owner signed EE certificate/credentials.
@@ -2495,9 +2493,9 @@ The status-operation enumeration defines the following values with the given sem
 {
   "version": 1,
   "status": "connect-error",
-  "reason": "Pledge connection establishment terminated with error.",
+  "reason": "TLS certificate could not be verified.",
   "reason-context": {
-    "app-server.example.com" : "Cannot verify TLS server certificate."
+    "connect-error" : "Pledge connection establishment terminated with error."
   }
 }
 ~~~~
@@ -2536,7 +2534,7 @@ The JWS Signature is generated over the JWS Protected Header and the JWS Payload
 # Logging Considerations {#log_hints}
 
 The registrar SHOULD log certain events to provide an audit trail for the onboarding of pledges into its domain.
-This audit trail may support the root cause analysis in case of device or system failures. 
+This audit trail may support the root cause analysis in case of device or system failures.
 The logging SHOULD include the identity of the pledge, the identity of the Registrar-Agent that was interacting with the pledge, and relevant artifact fields, in particular telemetry information:
 
 * PVR received from Registrar-Agent
@@ -2585,33 +2583,8 @@ IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with
 | ser            | Supply Enroll-Response to pledge  | [THISRFC] |
 | qps            | Query pledge status               | [THISRFC] |
 |=========
-{: #iana_table title='BRSKI Well-Known URIs Additions' }
+{: #iana_table_uri title='BRSKI Well-Known URIs Additions' }
 
-
-
-##  Pledge Enrollment Type Indication
- 
-IANA is required to enhance the Registry entitled "BRSKI Parameters" with a new sub-registry for the enroll-type.
-The `enroll-type` member is a trigger parameter for the pledge that allows to specify what type of certificate is to be enrolled via PVR.
-BRSKI-PRM results in a generic operational device certificate (LDevID).
-The sub-registry allows for indicating other certificates to be enrolled such as application-related certificates, which can be used by other specifications.
-The references for each entry MUST also provide a CDDL {{!RFC8610}} definition with a separate `"/="` rule for `$enroll-type` defined in {{tper_CDDL_def}}.
-The following item is in the initial registration, with this document (see {{tper_artifact}}) as the reference:
- 
-* enroll-generic-cert
-
-
-
-##  Pledge Status Telemetry Enhancements
- 
-IANA is required to enhance the Registry entitled "BRSKI Parameters" with a new sub-registry for the status-type.
-The `status-type` member is a query parameter for the pledge that allows to specify which status information is to be returned.
-The sub-registry allows for indicating the defined status-types.
-The references for each entry MUST also define an enumeration of status labels corresponding to the defined status-type using separate CDDL {{!RFC8610}} rules for `$status-enums` defined in {{stat_res_def}}.
-The following item is in the initial registration, with this document (see {{tstatus_data}}) as the reference:
- 
-* bootstrap
-* operation
 
 ##  DNS Service Names
 
@@ -2623,8 +2596,6 @@ IANA has registered the following service names:
 **Contact:** IESG <iesg@ietf.org><br>
 **Description:** The Bootstrapping Remote Secure Key Infrastructure Pledge<br>
 **Reference:** [THISRFC]
-
-
 
 
 # Privacy Considerations
@@ -2739,9 +2710,9 @@ For this reason, these guidelines do not follow the template described by {{Sect
 We would like to thank the various reviewers, in particular Brian E. Carpenter, Charlie Kaufman (Early SECDIR review), Martin Bj&ouml;rklund (Early YANGDOCTORS review), Marco Tiloca (Early IOTDIR review), Oskar Camenzind, Hendrik Brockhaus, and Ingo Wenda for their input and discussion on use cases and call flows.
 Further review input was provided by Jesser Bouzid, Dominik Tacke, Christian Spindler, and Julian Krieger.
 Special thanks to Esko Dijk for the in deep review and the improving proposals.
-Another special thanks for the detailed Shepherad review and connected discussions to Matthias Kovatsch.  
+Another special thanks for the detailed Shepherad review and connected discussions to Matthias Kovatsch.
 Support in PoC implementations and comments resulting from the implementation was provided by Hong Rui Li and He Peng Jia.
-Review comments in the context of a formal analysis of BRSKI-PRM have been provided by Marco Calipari. 
+Review comments in the context of a formal analysis of BRSKI-PRM have been provided by Marco Calipari.
 
 
 
@@ -3099,25 +3070,29 @@ IDevID certificates are intended to be widely useable and EKU does not support t
 
 Proof of Concept Code available
 
+From IETF draft 13 -> IETF draft 14:
+
+* Update of the examples in {{examples}} to align with the defined prototypes
+* Changes incorporated based on Shepherd review PR #133:
+  * Terminology alignment and clarification throughout the document to use terms more consistently
+  * Restructuring of {{exchanges}} for protocol steps to align to the general approach: Overview, data description, CDDL description (if necessary), JWS Header an Signature. This lead to some movement of text between existing and new subsections.
+  * Inclusion of new section on logging hints {{log_hints}} to give recommendations on which events to be logged for auditing
+  * Alignment of pledge status response data across {{vstatus_data}}, {{estatus_data}}, and {{pstatus_data}}.
+* Update of informative references
+
 From IETF draft 12 -> IETF draft 13:
 
 * Deleted figure in Section "Request Artifact: Pledge Voucher-Request Trigger (tPVR)" for JSON representation of tPVR, as it has been replaced by CDDL
 * Updated reason-content description in status response messages (enroll-status, voucher-status, and status-response).
 * Updated CDDL source code integration to allow for automatic verification
-* Reordered description in section {{pvr}} in {{tper}} to better match the order of communication and artifact processing.
+* Reordered description in {{pvr}} in {{tper}} to better match the order of communication and artifact processing.
 * Updated CDDL for the request-enroll trigger in {{tper_CDDL_def}} according to the outcome of the interim ANIMA WG meeting discussions on April 19, 2024
 * Included statement in {{per_artifact}} for using the advanced created-on time from the agent-signed-data also for the PER, when the pledge has no synchronized clock
-* Update of the examples in {{examples}} to align with the defined prototypes 
-* Changes incorporated based on Shepherd review PR #133:
-  * Terminology alignment and clarification throughout the document to use terms more consistently 
-  * Restructuring of section {{exchanges}} for protocol steps to align to the general approach: Overview, data description, CDDL description (if necessary), JWS Header an Signature. This lead to some movement of text between existing and new subsections.
-  * Inclusion of new section on logging hints {{log_hints}} to give recommendations on which events to be logged for auditing
-  * Enhancement of IANA considerations in {{iana_con}} with values for the trigger messages and with an enhancement of the pledge status query and response to allow for a more flexible status inquiry and reporting
-    
+
 
 From IETF draft 11 -> IETF draft 12:
 
-* Updated acknowledgements to reflect early reviews
+* Updated acknowledgments to reflect early reviews
 * Addressed Shepherd review part 2 (Pull Request #132); containing: terminology alignment, structural improvements of the document; deletion of leftovers from previous draft versions; change of definitions to CDDL, when no YANG is available
 
 
