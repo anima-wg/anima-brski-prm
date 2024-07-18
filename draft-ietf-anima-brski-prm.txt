@@ -5,11 +5,11 @@
 ANIMA WG                                                        S. Fries
 Internet-Draft                                                 T. Werner
 Intended status: Standards Track                                 Siemens
-Expires: 11 January 2025                                         E. Lear
+Expires: 19 January 2025                                         E. Lear
                                                            Cisco Systems
                                                            M. Richardson
                                                 Sandelman Software Works
-                                                            10 July 2024
+                                                            18 July 2024
 
 
             BRSKI with Pledge in Responder Mode (BRSKI-PRM)
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Fries, et al.            Expires 11 January 2025                [Page 1]
+Fries, et al.            Expires 19 January 2025                [Page 1]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -68,7 +68,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 January 2025.
+   This Internet-Draft will expire on 19 January 2025.
 
 Copyright Notice
 
@@ -101,101 +101,102 @@ Table of Contents
      5.3.  Co-located Registrar-Agent and Domain Registrar . . . . .  17
      5.4.  Agent Proximity Assertion . . . . . . . . . . . . . . . .  18
    6.  System Components . . . . . . . . . . . . . . . . . . . . . .  18
-     6.1.  Domain Registrar  . . . . . . . . . . . . . . . . . . . .  19
-       6.1.1.  Domain Registrar with Combined Functionality  . . . .  20
-     6.2.  Registrar-Agent . . . . . . . . . . . . . . . . . . . . .  20
-       6.2.1.  Discovery of the Registrar  . . . . . . . . . . . . .  22
-       6.2.2.  Discovery of the Pledge . . . . . . . . . . . . . . .  22
+     6.1.  Registrar-Agent . . . . . . . . . . . . . . . . . . . . .  19
+       6.1.1.  Discovery of the Registrar  . . . . . . . . . . . . .  20
+       6.1.2.  Discovery of the Pledge . . . . . . . . . . . . . . .  21
+     6.2.  Pledge in Responder Mode  . . . . . . . . . . . . . . . .  22
+       6.2.1.  Pledge with Combined Functionality  . . . . . . . . .  24
 
 
 
-Fries, et al.            Expires 11 January 2025                [Page 2]
+Fries, et al.            Expires 19 January 2025                [Page 2]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
 
-     6.3.  Pledge in Responder Mode  . . . . . . . . . . . . . . . .  23
-       6.3.1.  Pledge with Combined Functionality  . . . . . . . . .  24
-   7.  Exchanges and Artifacts . . . . . . . . . . . . . . . . . . .  25
-     7.1.  Trigger Pledge Voucher-Request  . . . . . . . . . . . . .  29
+     6.3.  Domain Registrar  . . . . . . . . . . . . . . . . . . . .  24
+       6.3.1.  Domain Registrar with Combined Functionality  . . . .  25
+     6.4.  MASA  . . . . . . . . . . . . . . . . . . . . . . . . . .  26
+   7.  Exchanges and Artifacts . . . . . . . . . . . . . . . . . . .  26
+     7.1.  Trigger Pledge Voucher-Request  . . . . . . . . . . . . .  30
        7.1.1.  Request Artifact: Pledge Voucher-Request Trigger
-               (tPVR)  . . . . . . . . . . . . . . . . . . . . . . .  30
-       7.1.2.  Response Artifact: Pledge Voucher-Request (PVR) . . .  33
-     7.2.  Trigger Pledge Enroll-Request . . . . . . . . . . . . . .  35
+               (tPVR)  . . . . . . . . . . . . . . . . . . . . . . .  32
+       7.1.2.  Response Artifact: Pledge Voucher-Request (PVR) . . .  35
+     7.2.  Trigger Pledge Enroll-Request . . . . . . . . . . . . . .  36
        7.2.1.  Request Artifact: Pledge Enroll-Request Trigger
-               (tPER)  . . . . . . . . . . . . . . . . . . . . . . .  36
-       7.2.2.  Response Artifact: Pledge Enroll-Request (PER)  . . .  37
-     7.3.  Supply PVR to Registrar (including MASA interaction)  . .  40
-       7.3.1.  MASA Interaction  . . . . . . . . . . . . . . . . . .  43
-       7.3.2.  Supply Voucher to Registrar-Agent . . . . . . . . . .  45
-       7.3.3.  Request Artifact: Pledge Voucher-Request (PVR)  . . .  45
+               (tPER)  . . . . . . . . . . . . . . . . . . . . . . .  38
+       7.2.2.  Response Artifact: Pledge Enroll-Request (PER)  . . .  39
+     7.3.  Supply PVR to Registrar (including MASA interaction)  . .  41
+       7.3.1.  MASA Interaction  . . . . . . . . . . . . . . . . . .  44
+       7.3.2.  Supply Voucher to Registrar-Agent . . . . . . . . . .  46
+       7.3.3.  Request Artifact: Pledge Voucher-Request (PVR)  . . .  47
        7.3.4.  Backend Request Artifact: Registrar Voucher-Request
-               (RVR) . . . . . . . . . . . . . . . . . . . . . . . .  46
-       7.3.5.  Backend Response Artifact: Voucher  . . . . . . . . .  48
-       7.3.6.  Response Artifact: Registrar-Countersigned Voucher  .  48
+               (RVR) . . . . . . . . . . . . . . . . . . . . . . . .  47
+       7.3.5.  Backend Response Artifact: Voucher  . . . . . . . . .  49
+       7.3.6.  Response Artifact: Registrar-Countersigned Voucher  .  50
      7.4.  Supply PER to Registrar (including Key Infrastructure
-            interaction) . . . . . . . . . . . . . . . . . . . . . .  50
-       7.4.1.  Request Artifact: Pledge Enroll-Request (PER) . . . .  53
+            interaction) . . . . . . . . . . . . . . . . . . . . . .  51
+       7.4.1.  Request Artifact: Pledge Enroll-Request (PER) . . . .  54
        7.4.2.  Response Artifact: Registrar Enroll-Response
-               (Enroll-Resp) . . . . . . . . . . . . . . . . . . . .  53
-     7.5.  Obtain CA Certificates  . . . . . . . . . . . . . . . . .  53
-       7.5.1.  Request (no artifact) . . . . . . . . . . . . . . . .  54
-       7.5.2.  Response Artifact: CA-Certificates (caCerts)  . . . .  54
-     7.6.  Supply Voucher to Pledge  . . . . . . . . . . . . . . . .  56
-       7.6.1.  Request Artifact: Registrar-Countersigned Voucher . .  58
-       7.6.2.  Response Artifact: Voucher Status (vStatus) . . . . .  59
-     7.7.  Supply CA Certificates to Pledge  . . . . . . . . . . . .  61
-       7.7.1.  Request Artifact: CA-Certificates (caCerts) . . . . .  63
-       7.7.2.  Response (no artifact)  . . . . . . . . . . . . . . .  63
-     7.8.  Supply Enroll-Response to Pledge  . . . . . . . . . . . .  63
-       7.8.1.  Request Artifact: Enroll-Response (Enroll-Resp) . . .  64
-       7.8.2.  Response Artifact: Enroll Status (eStatus)  . . . . .  64
-     7.9.  Voucher Status Telemetry (including MASA interaction) . .  67
-       7.9.1.  Request Artifact: Voucher Status (vStatus)  . . . . .  68
-       7.9.2.  Response (no artifact)  . . . . . . . . . . . . . . .  68
-     7.10. Enroll Status Telemetry . . . . . . . . . . . . . . . . .  68
-       7.10.1.  Request Artifact: Enroll Status (eStatus)  . . . . .  70
-       7.10.2.  Response (no artifact) . . . . . . . . . . . . . . .  70
-     7.11. Query Pledge Status . . . . . . . . . . . . . . . . . . .  70
-       7.11.1.  Request Artifact: Status Trigger (tStatus) . . . . .  71
-       7.11.2.  Response Artifact: Pledge Status (pStatus) . . . . .  74
-   8.  Logging Considerations  . . . . . . . . . . . . . . . . . . .  78
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  79
-     9.1.  BRSKI .well-known Registry  . . . . . . . . . . . . . . .  79
+               (Enroll-Resp) . . . . . . . . . . . . . . . . . . . .  54
+     7.5.  Obtain CA Certificates  . . . . . . . . . . . . . . . . .  54
+       7.5.1.  Request (no artifact) . . . . . . . . . . . . . . . .  55
+       7.5.2.  Response Artifact: CA-Certificates (caCerts)  . . . .  56
+     7.6.  Supply Voucher to Pledge  . . . . . . . . . . . . . . . .  58
+       7.6.1.  Request Artifact: Registrar-Countersigned Voucher . .  60
+       7.6.2.  Response Artifact: Voucher Status (vStatus) . . . . .  60
+     7.7.  Supply CA Certificates to Pledge  . . . . . . . . . . . .  63
+       7.7.1.  Request Artifact: CA-Certificates (caCerts) . . . . .  64
+       7.7.2.  Response (no artifact)  . . . . . . . . . . . . . . .  64
+     7.8.  Supply Enroll-Response to Pledge  . . . . . . . . . . . .  64
+       7.8.1.  Request Artifact: Enroll-Response (Enroll-Resp) . . .  65
+       7.8.2.  Response Artifact: Enroll Status (eStatus)  . . . . .  66
+     7.9.  Voucher Status Telemetry (including MASA interaction) . .  68
+       7.9.1.  Request Artifact: Voucher Status (vStatus)  . . . . .  69
+       7.9.2.  Response (no artifact)  . . . . . . . . . . . . . . .  69
+     7.10. Enroll Status Telemetry . . . . . . . . . . . . . . . . .  69
+       7.10.1.  Request Artifact: Enroll Status (eStatus)  . . . . .  71
+       7.10.2.  Response (no artifact) . . . . . . . . . . . . . . .  71
+     7.11. Query Pledge Status . . . . . . . . . . . . . . . . . . .  71
+       7.11.1.  Request Artifact: Status Trigger (tStatus) . . . . .  72
+       7.11.2.  Response Artifact: Pledge Status (pStatus) . . . . .  75
+   8.  Logging Considerations  . . . . . . . . . . . . . . . . . . .  79
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  80
 
 
 
-Fries, et al.            Expires 11 January 2025                [Page 3]
+Fries, et al.            Expires 19 January 2025                [Page 3]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
 
-     9.2.  DNS Service Names . . . . . . . . . . . . . . . . . . . .  80
-   10. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  80
-   11. Security Considerations . . . . . . . . . . . . . . . . . . .  81
-     11.1.  Denial of Service (DoS) Attack on Pledge . . . . . . . .  82
-     11.2.  Misuse of acquired PVR and PER by Registrar-Agent  . . .  82
-     11.3.  Misuse of Registrar-Agent Credentials  . . . . . . . . .  83
-     11.4.  Misuse of DNS-SD with mDNS to obtain list of pledges . .  83
-     11.5.  YANG Module Security Considerations  . . . . . . . . . .  84
-   12. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  84
-   13. References  . . . . . . . . . . . . . . . . . . . . . . . . .  84
-     13.1.  Normative References . . . . . . . . . . . . . . . . . .  84
-     13.2.  Informative References . . . . . . . . . . . . . . . . .  86
-   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  89
+     9.1.  BRSKI .well-known Registry  . . . . . . . . . . . . . . .  80
+     9.2.  DNS Service Names . . . . . . . . . . . . . . . . . . . .  81
+   10. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  81
+   11. Security Considerations . . . . . . . . . . . . . . . . . . .  82
+     11.1.  Denial of Service (DoS) Attack on Pledge . . . . . . . .  83
+     11.2.  Misuse of acquired PVR and PER by Registrar-Agent  . . .  83
+     11.3.  Misuse of Registrar-Agent Credentials  . . . . . . . . .  84
+     11.4.  Misuse of DNS-SD with mDNS to obtain list of pledges . .  84
+     11.5.  YANG Module Security Considerations  . . . . . . . . . .  85
+   12. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  85
+   13. References  . . . . . . . . . . . . . . . . . . . . . . . . .  85
+     13.1.  Normative References . . . . . . . . . . . . . . . . . .  85
+     13.2.  Informative References . . . . . . . . . . . . . . . . .  87
+   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  90
      A.1.  Example Pledge Voucher-Request (PVR) - from Pledge to
            Registrar-Agent . . . . . . . . . . . . . . . . . . . . .  90
      A.2.  Example Parboiled Registrar Voucher-Request (RVR) - from
-           Registrar to MASA . . . . . . . . . . . . . . . . . . . .  91
+           Registrar to MASA . . . . . . . . . . . . . . . . . . . .  92
      A.3.  Example Voucher - from MASA to Pledge, via Registrar and
-           Registrar-Agent . . . . . . . . . . . . . . . . . . . . .  94
+           Registrar-Agent . . . . . . . . . . . . . . . . . . . . .  95
      A.4.  Example Voucher, MASA issued Voucher with additional
            Registrar signature (from MASA to Pledge, via Registrar and
-           Registrar-Agent)  . . . . . . . . . . . . . . . . . . . .  95
+           Registrar-Agent)  . . . . . . . . . . . . . . . . . . . .  96
    Appendix B.  HTTP-over-TLS operations between Registrar-Agent and
            Pledge  . . . . . . . . . . . . . . . . . . . . . . . . .  97
    Appendix C.  History of Changes [RFC Editor: please delete] . . .  98
-   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . . 111
+   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . . 112
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . 112
 
 1.  Introduction
@@ -220,8 +221,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-
-Fries, et al.            Expires 11 January 2025                [Page 4]
+Fries, et al.            Expires 19 January 2025                [Page 4]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -277,7 +277,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025                [Page 5]
+Fries, et al.            Expires 19 January 2025                [Page 5]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -333,7 +333,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025                [Page 6]
+Fries, et al.            Expires 19 January 2025                [Page 6]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -389,7 +389,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025                [Page 7]
+Fries, et al.            Expires 19 January 2025                [Page 7]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -445,7 +445,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025                [Page 8]
+Fries, et al.            Expires 19 January 2025                [Page 8]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -501,7 +501,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025                [Page 9]
+Fries, et al.            Expires 19 January 2025                [Page 9]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -557,7 +557,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 10]
+Fries, et al.            Expires 19 January 2025               [Page 10]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -613,7 +613,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 11]
+Fries, et al.            Expires 19 January 2025               [Page 11]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -669,7 +669,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 12]
+Fries, et al.            Expires 19 January 2025               [Page 12]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -717,15 +717,15 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
       -  The pledge no longer initiates bootstrapping, but is discovered
          and triggered by the Registrar-Agent as defined in
-         Section 6.2.2.
+         Section 6.1.2.
 
       -  The pledge offers additional endpoints as defined in
-         Section 6.3, so that the Registrar-Agent can request data
+         Section 6.2, so that the Registrar-Agent can request data
          required for bootstrapping the pledge.
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 13]
+Fries, et al.            Expires 19 January 2025               [Page 13]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -739,7 +739,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
          via the Registrar-Agent are authenticated self-contained
          objects (i.e., signature-wrapped artifacts).
 
-   *  Registrar-Agent: Is a new component defined in Section 6.2 that
+   *  Registrar-Agent: Is a new component defined in Section 6.1 that
       provides a store and forward communication path to exchange data
       objects between the pledge and the domain registrar.  This is for
       situations in which the domain registrar is not directly reachable
@@ -781,7 +781,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 14]
+Fries, et al.            Expires 19 January 2025               [Page 14]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -797,7 +797,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
          Section 7.
 
       -  A BRSKI-PRM domain registrar offers additional endpoints as
-         defined in Section 6.1 to support the signature-wrapped
+         defined in Section 6.3 to support the signature-wrapped
          artifacts used by BRSKI-PRM.
 
    *  Vendor services: Encompass MASA and Ownership Tracker and are used
@@ -837,7 +837,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 15]
+Fries, et al.            Expires 19 January 2025               [Page 15]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -893,7 +893,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 16]
+Fries, et al.            Expires 19 January 2025               [Page 16]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -949,7 +949,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 17]
+Fries, et al.            Expires 19 January 2025               [Page 17]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -973,13 +973,13 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    can be verified by the registrar and MASA during BRSKI-PRM voucher-
    request processing.
 
-   In BRSKI, the pledge verifies POP of the registrar EE credentials via
-   the TLS handshake and pins that public key as the proximity-
-   registrar-cert into the voucher request.  This allows the MASA to
-   verify the proximity of the pledge and registrar, facilitating a
-   decision to assign the pledge to that domain owner.  In BRSKI, the
-   TLS session is considered provisional until the pledge receives the
-   voucher to verify POI.
+   In BRSKI, the pledge verifies POP of the registrar end-entity (EE)
+   credentials via the TLS handshake and pins that public key as the
+   proximity-registrar-cert into the voucher request.  This allows the
+   MASA to verify the proximity of the pledge and registrar,
+   facilitating a decision to assign the pledge to that domain owner.
+   In BRSKI, the TLS session is considered provisional until the pledge
+   receives the voucher to verify POI.
 
    In contrast, in BRSKI-PRM the pledge has no direct connection to the
    registrar and MUST accept the supplied registrar EE certificate
@@ -1005,127 +1005,31 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 18]
+Fries, et al.            Expires 19 January 2025               [Page 18]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
 
-6.1.  Domain Registrar
-
-   In BRSKI-PRM, the domain registrar provides the endpoints already
-   specified in [RFC8995] (derived from EST [RFC7030]) where suitable.
-   In addition, it MUST provide the endpoints defined in Table 1 within
-   the BRSKI-defined /.well-known/brski/ Well-Known URI path.  These
-   endpoints accommodate for the authenticated self-contained objects
-   used by BRSKI-PRM to provide Pledge Enroll-Request (PER) artifacts
-   and signature-wrapped CA certificates via the Registrar-Agent.
-
-   +================+=========================+========================+
-   | Endpoint       | Operation               | Exchange and Artifacts |
-   +================+=========================+========================+
-   | requestenroll  | Supply PER              | Section 7.4            |
-   |                | to Registrar            |                        |
-   +----------------+-------------------------+------------------------+
-   | wrappedcacerts | Obtain CA               | Section 7.5            |
-   |                | Certificates            |                        |
-   +----------------+-------------------------+------------------------+
-
-     Table 1: Additional Well-Known Endpoints on a BRSKI-PRM Registrar
-
-   The registrar possesses its own EE certificate and corresponding
-   private key for authenticating and signing.  It MUST use the same
-   certificate/credentials for authentication in the TLS session with a
-   Registrar-Agent and for signing artifacts for that Registrar-Agent
-   and its pledges (see Section 7.3.6).  Overall, this may have
-   operational implications when the registrar is part of a scalable
-   framework as described in Section 1.3.1 of
-   [I-D.richardson-anima-registrar-considerations].
-
-   According to Section 5.3 of [RFC8995], the domain registrar performs
-   the pledge authorization for bootstrapping within its domain based on
-   the Pledge Voucher-Request.  For this, it MUST possess the IDevID
-   trust anchor(s) (i.e., root or issuing CA certificate(s)) of the
-   pledge vendor(s)/manufacturer(s).  This behavior is retained in
-   BRSKI-PRM.
-
-   In its role as EST server [RFC7030], the domain registrar MUST also
-   possess the domain CA certificates as defined in Section 5.9 of
-   [RFC8995].
-
-
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 19]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
-   Finally, the domain registrar MUST possess the Registrar-Agent EE
-   certificate(s) to validate agent-signed data and to provide it to the
-   MASA.  The registrar MAY use the certificate verified during client
-   authentication within the TLS sessions with the Registrar-Agent; in
-   this case, the registrar MUST possess the domain trust anchor (i.e.,
-   domain CA certificate) for the Registrar-Agent EE certificate to
-   verify the certificate chain.  Alternatively, the Registrar-Agent EE
-   certificate(s) MAY be provided via configuration or a repository.
-
-6.1.1.  Domain Registrar with Combined Functionality
-
-   A registrar with combined BRSKI and BRSKI-PRM functionality MAY
-   detect if the bootstrapping is performed by the pledge directly
-   (BRSKI case) or by a Registrar-Agent (BRSKI-PRM case) based on the
-   utilized credentials for client authentication during the TLS session
-   establishment and switch the operational mode from BRSKI to BRSKI-
-   PRM.
-
-   This may be supported by a specific naming in the SAN (subject
-   alternative name) component of the Registrar-Agent EE certificate,
-   which allows the domain registrar to explicitly detect already in the
-   TLS session establishment, that the connecting client is a Registrar-
-   Agent.
-
-   The registrar MAY be restricted by configuration, if it accepts every
-   Registrar-Agent, which can authenticate with a domain issued
-   certificate or only explicitly authorized ones.
-
-   Note that using an EE certificate for TLS client authentication of
-   the Registrar-Agent is a deviation from [RFC8995], in which the
-   pledge IDevID certificate is used to perform TLS client
-   authentication.
-
-6.2.  Registrar-Agent
+6.1.  Registrar-Agent
 
    The Registrar-Agent is a new component in BRSKI-PRM that provides a
    store and forward communication path with secure message passing
-   between pledges in responder mode and the domain registrar.
+   between pledges in responder mode and the domain registrar.  It uses
+   its own end-entity (EE) certificate and corresponding credentials
+   (i.e., private key) for TLS client authentication and for signing
+   agent-signed data objects.
 
-   It uses its own EE certificate and corresponding credentials (i.e.,
-   private key) for TLS client authentication and for signing agent-
-   signed data objects.  This EE certificate MUST include a
+   The Registrar-Agent EE certificate MUST include a
    SubjectKeyIdentifier as defined in Section 4.2.1.2 of [RFC5280],
-   which is used as a reference in the context of the agent-signed data
-   object as defined in Section 7.1.1.1.  Note that this is an
-   additional requirement for issuing the Registrar-Agent EE
-   certificate.  [RFC8995] has a similar requirement for the registrar
-   EE certificate.
+   which is used as a reference within agent-signed data objects as
+   defined in Section 7.1.1.1.  Note that this is an additional
+   requirement for issuing the Registrar-Agent EE certificate.
+   [RFC8995] has a similar requirement for the registrar EE certificate.
 
-
-
-Fries, et al.            Expires 11 January 2025               [Page 20]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
-   In BRSKI-PRM, the SubjectKeyIdentifier is used in favor of providing
-   the complete Registrar-Agent EE certificate to accommodate also
-   constrained environments and reduce bandwidth needed for
-   communication with the pledge.  In addition, it follows the
+   The SubjectKeyIdentifier is used in favor of providing the complete
+   Registrar-Agent EE certificate in agent-signed data objects to
+   accommodate also constrained environments and reduce bandwidth needed
+   for communication with the pledge.  In addition, it follows the
    recommendation from BRSKI to use SubjectKeyIdentifier in favor of a
    certificate fingerprint to avoid additional computations.
 
@@ -1144,23 +1048,39 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    certificate MAY be provided via configuration or a repository.  The
    registrar IP address or hostname is provided either by configuration
    or by using the discovery mechanism defined in [RFC8995] (see
-   Section 6.2.1).
+   Section 6.1.1).
+
+
+
+
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 19]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    In addition to the certificates, the Registrar-Agent is provided with
    the product-serial-number(s) of the pledge(s) to be bootstrapped.
-   This is necessary to allow the discovery of pledge(s) by the
-   Registrar-Agent using DNS-SD with mDNS (see Section 6.2.2).  The list
+   This is necessary to allow for the discovery of pledges by the
+   Registrar-Agent using DNS-SD with mDNS (see Section 6.1.2).  The list
    may be provided by prior administrative means or the Registrar-Agent
-   may get the information via an interaction with the pledge.  For
-   instance, [RFC9238] describes scanning of a QR code, where the
-   product-serial-number would be initialized from the 12N B005 Product
-   Serial Number.
+   may get the information via an (out-of-band) interaction with the
+   pledge.  For instance, [RFC9238] describes scanning of a QR code,
+   where the product-serial-number would be initialized from the 12N
+   B005 Product Serial Number data record.
 
    In summary, the following information MUST be available at the
-   Registrar-Agent before interaction with a pledge:
+   Registrar-Agent before the interaction with a pledge:
 
    *  Registrar-Agent EE certificate and corresponding private key: own
-      operational key pair to authenticate and sign agent-signed data
+      operational credentials to authenticate and sign agent-signed data
 
    *  Registrar EE certificate: certificate of the domain registrar to
       be provided to the pledge
@@ -1170,22 +1090,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    Further, the Registrar-Agent SHOULD have synchronized time.
 
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 21]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    Finally, the Registrar-Agent MAY possess the IDevID (root or issuing)
-   CA certificate of the pledge vendor/manufacturer to validate the
+   CA certificate of the pledge manufacturer/vendor to validate the
    IDevID certificate on returned PVR or in case of optional TLS usage
    for pledge communication (see Appendix B).  The distribution of
    IDevID CA certificates to the Registrar-Agent is out of scope of this
    document and may be done by a manual configuration.
 
-6.2.1.  Discovery of the Registrar
+6.1.1.  Discovery of the Registrar
 
    While the Registrar-Agent requires the IP address of the domain
    registrar to initiate a TLS session, a separate discovery of the
@@ -1199,6 +1111,17 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    exchange information about product-serial-number(s) of pledges to be
    discovered as outlined in Section 5.2.
 
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 20]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    Moreover, the standard discovery described in Section 4 of [RFC8995]
    and the Appendix A.2 of [RFC8995] does not support identification of
    registrars with an enhanced feature set (like the support of BRSKI-
@@ -1211,42 +1134,49 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    scope of this document.  This may be provided in
    [I-D.ietf-anima-brski-discovery].
 
-6.2.2.  Discovery of the Pledge
+6.1.2.  Discovery of the Pledge
 
-   The discovery of the pledge by Registrar-Agent in the context of this
-   document describes the minimum discovery approach to be supported.  A
-   more general discovery mechanism, also supporting GRASP besides DNS-
-   SD with mDNS may be provided in [I-D.ietf-anima-brski-discovery].
+   The discovery of the pledge by the Registrar-Agent in the context of
+   this document describes the minimum discovery approach to be
+   supported.  A more general discovery mechanism, also supporting GRASP
+   besides DNS-SD with mDNS, may be provided in
+   [I-D.ietf-anima-brski-discovery].
 
    Discovery in BRSKI-PRM uses DNS-based Service Discovery [RFC6763]
    over Multicast DNS [RFC6762] to discover the pledge.  Note that
-   [RFC6762] Section 9 provides support for conflict resolution in
+   Section 9 of [RFC6762] provides support for conflict resolution in
    situations when an DNS-SD with mDNS responder receives a mDNS
    response with inconsistent data.  Note that [RFC8990] does not
    support conflict resolution of mDNS, which may be a limitation for
    its application.
 
+   The pledge constructs a Service Instance Name based on device local
+   information (manufacturer/vendor name and serial number), which
+   results in <product-serial-number>._brski-pledge._tcp.local.  The
+   product-serial-number composition is manufacturer dependent and may
+   contain information regarding the manufacturer, the product type, and
+   further information specific to the product instance.  To allow
+   distinction of pledges, the product-serial-number therefore needs to
+   be sufficiently unique.
 
-
-
-Fries, et al.            Expires 11 January 2025               [Page 22]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
-   The pledge constructs a local host name based on device local
-   information (product-serial-number), which results in <product-
-   serial-number>._brski-pledge._tcp.local.  The product-serial-number
-   composition is manufacturer dependent and may contain information
-   regarding the manufacturer, the product type, and further information
-   specific to the product instance.  To allow distinction of pledges,
-   the product-serial-number therefore needs to be sufficiently unique.
+   Note that this goes against the naming recommendation of [RFC6763].
+   The _brski-pledge._tcp service, however, targets machine-to-machine
+   discovery.
 
    In the absence of a more general discovery as defined in
    [I-D.ietf-anima-brski-discovery] the Registrar-Agent MUST use
 
    *  <product-serial-number>._brski-pledge._tcp.local, to discover a
       specific pledge, e.g., when connected to a local network.
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 21]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    *  _brski-pledge._tcp.local to get a list of pledges to be
       bootstrapped.
@@ -1266,16 +1196,17 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    by 6LoWPAN/mesh using a pre-agreed PAN ID.  How to gain network
    connectivity is out of scope of this document.
 
-6.3.  Pledge in Responder Mode
+6.2.  Pledge in Responder Mode
 
-   The pledge is triggered by the Registrar-Agent to create the PVR and
-   PER.  It is also triggered for processing of the responses and the
-   generation of status information once the Registrar-Agent has
-   received the responses from the registrar later in the process.
+   In BRSKI-PRM, the pledge is triggered by the Registrar-Agent to
+   create the PVR and PER.  It is also triggered for processing of the
+   responses and the generation of status information once the
+   Registrar-Agent has received the responses from the registrar later
+   in the process.
 
    To enable interaction as responder with the Registrar-Agent, pledges
    in responder mode MUST act as servers and MUST provide the endpoints
-   defined in Table 2 within the BRSKI-defined /.well-known/brski/ URI
+   defined in Table 1 within the BRSKI-defined /.well-known/brski/ URI
    path, except for the OPTIONAL endpoint "qps".  The endpoints are
    defined with short names to also accommodate for resource-constrained
    devices.
@@ -1285,7 +1216,20 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 23]
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 22]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -1311,41 +1255,48 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       | qps      | Query Pledge Status    | Section 7.11           |
       +----------+------------------------+------------------------+
 
-       Table 2: Well-Known Endpoints on a Pledge in Responder Mode
+       Table 1: Well-Known Endpoints on a Pledge in Responder Mode
 
-   Section 7.2 of [RFC9110] makes the Host header field mandatory, so it
-   will always be present.  The pledge MUST respond to all queries
-   regardless of the Host header field provided by the client.
+   HTTP(S) uses the Host header field (or :authority in HTTP/2) to allow
+   for name-based virtual hosting as explained in Section 7.2 of
+   [RFC9110].  This header field is mandatory, and so a compliant
+   HTTP(S) client is going to insert it, which may be just an IP
+   address.  The pledge MUST respond to all requests regardless of the
+   Host header field provided by the client (i.e., ignore it).  Note
+   that there is no requirement for the pledge to operate its BRSKI-PRM
+   service on port 80 or port 443, so there is no reason for name-based
+   virtual hosting.
 
    For instance, when the Registrar-Agent reaches out to the "tpvr"
    endpoint on a pledge in responder mode with the full URI
    http://pledge.example.com/.well-known/brski/tpvr, it sets the Host
    header field to pledge.example.com and the absolute path /.well-
-   known/brski/tpbr.  In practice, however, the pledge often is only
-   known by its IP address as returned by a discovery protocol, which
-   will be included in the Host header field.
+   known/brski/tpbr.  In practice, however, the pledge is usually known
+   by a .local hostname or only its IP address as returned by a
+   discovery protocol, which will be included in the Host header field.
 
    As BRSKI-PRM uses authenticated self-contained objects between the
    pledge and the domain registrar, the binding of the pledge identity
-   to the requests is provided by the wrapping signature employing the
-   pledge IDevID credential.  Hence, pledges MUST have an Initial Device
-   Identifier (IDevID) installed in them at the factory.
+   to the voucher-requests is provided by the wrapping signature
+   employing the pledge IDevID credential.  Hence, pledges MUST have an
+   Initial Device Identifier (IDevID) installed in them at the factory.
 
-6.3.1.  Pledge with Combined Functionality
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 23]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
+6.2.1.  Pledge with Combined Functionality
 
    Pledges MAY support both initiator and responder mode.
 
    A pledge in initiator mode should listen for announcement messages as
    described in Section 4.1 of [RFC8995].  Upon discovery of a potential
    registrar, it initiates the bootstrapping to that registrar.  At the
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 24]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    same time (so as to avoid the Slowloris-attack described in
    [RFC8995]), it SHOULD also respond to the triggers for responder mode
    described in this document.
@@ -1356,6 +1307,118 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    server, the defined BRSKI-PRM endpoints to trigger a Pledge Enroll-
    Request (PER) or to provide an Enroll-Response can be used for
    further certificates.
+
+6.3.  Domain Registrar
+
+   In BRSKI-PRM, the domain registrar provides the endpoints already
+   specified in [RFC8995] (derived from EST [RFC7030]) where suitable.
+   In addition, it MUST provide the endpoints defined in Table 2 within
+   the BRSKI-defined /.well-known/brski/ Well-Known URI path.  These
+   endpoints accommodate for the authenticated self-contained objects
+   used by BRSKI-PRM to provide Pledge Enroll-Request (PER) artifacts
+   and signature-wrapped CA certificates via the Registrar-Agent.
+
+   +================+=========================+========================+
+   | Endpoint       | Operation               | Exchange and Artifacts |
+   +================+=========================+========================+
+   | requestenroll  | Supply PER              | Section 7.4            |
+   |                | to Registrar            |                        |
+   +----------------+-------------------------+------------------------+
+   | wrappedcacerts | Obtain CA               | Section 7.5            |
+   |                | Certificates            |                        |
+   +----------------+-------------------------+------------------------+
+
+     Table 2: Additional Well-Known Endpoints on a BRSKI-PRM Registrar
+
+   The registrar possesses its own EE certificate and corresponding
+   private key for authenticating and signing.  It MUST use the same
+   certificate/credentials for authentication in the TLS session with a
+   Registrar-Agent and for signing artifacts for that Registrar-Agent
+   and its pledges (see Section 7.3.6).  Overall, this may have
+   operational implications when the registrar is part of a scalable
+   framework as described in Section 1.3.1 of
+   [I-D.richardson-anima-registrar-considerations].
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 24]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
+   According to Section 5.3 of [RFC8995], the domain registrar performs
+   the pledge authorization for bootstrapping within its domain based on
+   the Pledge Voucher-Request.  For this, it MUST possess the IDevID
+   trust anchor(s) (i.e., root or issuing CA certificate(s)) of the
+   pledge vendor(s)/manufacturer(s).  This behavior is retained in
+   BRSKI-PRM.
+
+   In its role as EST server [RFC7030], the domain registrar MUST also
+   possess the domain CA certificates as defined in Section 5.9 of
+   [RFC8995].
+
+   Finally, the domain registrar MUST possess the Registrar-Agent EE
+   certificate(s) to validate agent-signed data and to provide it to the
+   MASA.  The registrar MAY use the certificate verified during client
+   authentication within the TLS sessions with the Registrar-Agent; in
+   this case, the registrar MUST possess the domain trust anchor (i.e.,
+   domain CA certificate) for the Registrar-Agent EE certificate to
+   verify the certificate chain.  Alternatively, the Registrar-Agent EE
+   certificate(s) MAY be provided via configuration or a repository.
+
+6.3.1.  Domain Registrar with Combined Functionality
+
+   A registrar with combined BRSKI and BRSKI-PRM functionality MAY
+   detect if the bootstrapping is performed by the pledge directly
+   (BRSKI case) or by a Registrar-Agent (BRSKI-PRM case) based on the
+   utilized credentials for client authentication during the TLS session
+   establishment and switch the operational mode from BRSKI to BRSKI-
+   PRM.
+
+   This may be supported by a specific naming in the SAN (subject
+   alternative name) component of the Registrar-Agent EE certificate,
+   which allows the domain registrar to explicitly detect already in the
+   TLS session establishment, that the connecting client is a Registrar-
+   Agent.
+
+   The registrar MAY be restricted by configuration, if it accepts every
+   Registrar-Agent, which can authenticate with a domain issued
+   certificate or only explicitly authorized ones.
+
+   Note that using an EE certificate for TLS client authentication of
+   the Registrar-Agent is a deviation from [RFC8995], in which the
+   pledge IDevID certificate is used to perform TLS client
+   authentication.
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 25]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
+6.4.  MASA
+
+   The Manufacturer Authorized Signing Authority (MASA) is a vendor
+   service that generates and signs voucher artifacts for pledges by the
+   same vendor.  When these pledges support BRSKI-PRM, the MASA needs to
+   implement the following functionality in addition to BRSKI [RFC8995].
+
+   A MASA for pledges in responder mode MUST support the voucher format
+   defined in [I-D.ietf-anima-jws-voucher] to parse and process JWS-
+   signed voucher-request artifacts and generate JWS-signed voucher
+   artifacts.
+
+   Further, a MASA for pledges in responder mode MUST support the Agent
+   Proximity Assertion (see Section 5.4) through the validation steps
+   defined in Section 7.3.1 based on the Pledge Voucher-Request (PVR)
+   and Registrar Voucher-Request (RVR) artifact fields defined in
+   Section 7.1.2 and Section 7.3.4, resp.
 
 7.  Exchanges and Artifacts
 
@@ -1382,6 +1445,19 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    Figure 4 provides an overview of the exchanges detailed in the
    following subsections.
 
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 26]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
  +--------+    +------------+    +-----------+    +--------+    +------+
  | Pledge |    | Registrar- |    |  Domain   |    |  Key   |    | MASA |
  |        |    |   Agent    |    | Registrar |    | Infra. |    |      |
@@ -1394,14 +1470,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
   |----------------->|                 |                 |            |
   |                  |                 |                 |            |
   ~                  ~                 ~                 ~            ~
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 25]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
  (1) Trigger Pledge Voucher-Request
   ~                  ~                 ~                 ~            ~
   |                  |                 |                 |            |
@@ -1438,6 +1506,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
   |                  |                 |                 ~            |
   |                  |                 |<-----------Voucher-----------|
   |                  |<----Voucher''---|                 |            |
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 27]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
   |                  |                 |                 |            |
   ~                  ~                 ~                 ~            ~
  (4) Supply PER to Registrar (including Key Infrastructure interaction)
@@ -1450,14 +1526,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
   |                  |<--Enroll-Resp---|                 |            |
   |                  |                 |                 |            |
   ~                  ~                 ~                 ~            ~
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 26]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
  (5) Obtain CA Certificates
   ~                  ~                 ~                 ~            ~
   |                  |                 |                 |            |
@@ -1494,6 +1562,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
   |                  |<----(mTLS)----->|                 |            |
   |                  |-----vStatus---->|                 |            |
   |                  |                 |<-----------(mTLS)----------->|
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 28]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
   |                  |                 |-----req device audit-log---->|
   |                  |                 |<------device audit-log-------|
   |                  |                 |                 |            |
@@ -1506,14 +1582,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
   |                  |<----(mTLS)----->|                 |            |
   |                  |-----eStatus---->|                 |            |
   |                  |                 |                 |            |
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 27]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
   ~                  ~                 ~                 ~            ~
  (11) Query Pledge Status
   ~                  ~                 ~                 ~            ~
@@ -1550,6 +1618,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
         certificate provisioning to the pledge initiated by the
         Registrar-Agent to the CA.
 
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 29]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    6.   Section 7.6 describes the Voucher exchange initiated by the
         Registrar-Agent to the pledge and the returned status
         information.
@@ -1560,15 +1636,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    8.   Section 7.8 describes the Enroll-Response exchange initiated by
         the Registrar-Agent to the pledge (containing a new pledge EE
         certificate) and the returned status information.
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 28]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    9.   Section 7.9 describes the Voucher Status telemetry exchange
         initiated by the Registrar-Agent to the registrar, including the
@@ -1586,13 +1653,34 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    The Registrar-Agent MUST begin the sequence of exchanges by sending
    the Pledge Voucher-Request Trigger (tPVR).  This assumes that the
    Registrar-Agent has already discovered the pledge, for instance as
-   described in Section 6.2.2 based on DNS-SD or similar.
+   described in Section 6.1.2 based on DNS-SD or similar.
 
    Optionally, TLS MAY be used to provide privacy for this exchange
    between the Registrar-Agent and the pledge (see Appendix B).
 
    Figure 5 shows the acquisition of the Pledge Voucher-Request (PVR)
    and the following subsections describe the corresponding artifacts.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 30]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
  +--------+    +------------+    +-----------+    +--------+    +------+
  | Pledge |    | Registrar- |    |  Domain   |    |  Key   |    | MASA |
@@ -1619,13 +1707,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    the Accept field SHOULD be set to application/voucher-jws+json as
    defined in [I-D.ietf-anima-jws-voucher].
 
-
-
-Fries, et al.            Expires 11 January 2025               [Page 29]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    Upon receiving a valid tPVR, the pledge MUST reply with the PVR
    artifact as defined in Section 7.1.2 in the body of an HTTP 200 OK
    response.  In the response header, the Content-Type field MUST be set
@@ -1649,6 +1730,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       type that is unknown or unsupported, e.g., a type other than
       application/voucher-jws+json
 
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 31]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  415 Unsupported Media Type: if the Content-Type request header
       field indicates a type that is unknown or unsupported, e.g., a
       type other than application/json
@@ -1671,17 +1760,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    artifact SHALL be a UTF-8 encoded JSON document [RFC8259] that
    conforms with the CDDL [RFC8610] data model defined in Figure 6:
 
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 30]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
      pledgevoucherrequesttrigger = {
        "agent-provided-proximity-registrar-cert": bytes,
        "agent-signed-data": bytes
@@ -1702,6 +1780,19 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    }
 
                    Figure 7: tPVR Representation in JSON
+
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 32]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
 7.1.1.1.  JWS Agent-Signed Data
 
@@ -1730,14 +1821,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    The JSON Agent-Signed Data MUST be UTF-8 encoded to become the octet-
    based JWS Payload defined in [RFC7515].  The JWS Payload is further
    base64url-encoded to become the string value of the payload member as
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 31]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    described in Section 3.2 of [RFC7515].  The octets of the UTF-8
    representation of the JWS Protected Header are base64url-encoded to
    become the string value of the protected member.  The generated JWS
@@ -1760,6 +1843,13 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    creation as standard date/time string as defined in Section 5.6 of
    [RFC3339].
 
+
+
+Fries, et al.            Expires 19 January 2025               [Page 33]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    The serial-number member SHALL contain the product-serial-number of
    the pledge with which the Registrar-Agent assumes to communicate as
    string.  The format MUST correspond to the X520SerialNumber field of
@@ -1769,7 +1859,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    {
      "created-on": "2021-04-16T00:00:01.000Z",
-     "serial-number": "callee4711"
+     "serial-number": "vendor-pledge4711"
    }
 
                  Figure 10: JSON Agent-Signed Data Example
@@ -1784,15 +1874,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    *  kid: SHALL contain the base64-encoded OCTET STRING value of the
       SubjectKeyIdentifier of the Registrar-Agent EE certificate as
-      described in Section 6.2
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 32]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
+      described in Section 6.1
 
    Figure 11 below shows an example for this JWS Protected Header:
 
@@ -1809,6 +1891,20 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    EE credentials.  The JWS Signature is generated over the JWS
    Protected Header and the JWS Payload as described in Section 5.1 of
    [RFC7515].
+
+
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 34]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
 7.1.2.  Response Artifact: Pledge Voucher-Request (PVR)
 
@@ -1837,19 +1933,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       Figure 12: PVR Representation in General JWS JSON Serialization
                                    Syntax
 
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 33]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
 7.1.2.1.  JSON PVR Data
 
    The JSON PVR Data MUST contain the following fields of the ietf-
@@ -1871,6 +1954,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       X520SerialNumber field of the pledge IDevID certificate as string
       as defined in Section 2.3.1 of [RFC8995]
 
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 35]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  assertion: SHALL contain the assertion type agent-proximity to
       indicate the pledge request (different from BRSKI [RFC8995])
 
@@ -1891,20 +1982,12 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    "ietf-voucher-request:voucher": {
       "created-on": "2021-04-16T00:00:02.000Z",
       "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
-      "serial-number": "callee4711",
+      "serial-number": "vendor-pledge4711",
       "assertion": "agent-proximity",
       "agent-provided-proximity-registrar-cert": "base64encodedvalue==",
       "agent-signed-data": "base64encodedvalue=="
    }
  }
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 34]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
                     Figure 13: JSON PVR Data Example
 
@@ -1925,6 +2008,15 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    Once the Registrar-Agent has received the PVR it can trigger the
    pledge to generate a Pledge Enroll-Request (PER).
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 36]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    Optionally, TLS MAY be used to provide privacy for this exchange
    between the Registrar-Agent and the pledge (see Appendix B).
@@ -1949,19 +2041,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
                   Figure 14: PER acquisition exchange
 
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 35]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    The Registrar-Agent SHALL trigger the pledge to create the PER via
    HTTP(S) POST to the pledge endpoint at /.well-known/brski/tper.  The
    request body MUST contain the JSON-based Pledge Enroll-Request
@@ -1984,6 +2063,16 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  406 Not Acceptable: if the Accept request header field indicates a
       type that is unknown or unsupported, e.g., a type other than
       application/jose+json
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 37]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    *  415 Unsupported Media Type: if the Content-Type request header
       field indicates a type that is unknown or unsupported, e.g., a
@@ -2010,14 +2099,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    artifact MUST be a UTF-8 encoded JSON document [RFC8259] that
    conforms with the CDDL [RFC8610] data model defined in Figure 15:
 
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 36]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    pledgeenrollrequesttrigger = {
            "enroll-type": $enroll-type
    }
@@ -2034,6 +2115,20 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    specifications using this artifact may define further enum values,
    e.g., to bootstrap application-related EE certificates with
    additional CSR attributes.
+
+
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 38]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
 7.2.2.  Response Artifact: Pledge Enroll-Request (PER)
 
@@ -2066,14 +2161,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    The JSON CSR Data MUST be UTF-8 encoded to become the octet-based JWS
    Payload defined in [RFC7515].  The JWS Payload is further base64url-
    encoded to become the string value of the payload member as described
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 37]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    in Section 3.2 of [RFC7515].  The octets of the UTF-8 representation
    of the JWS Protected Header are base64url-encoded to become the
    string value of the protected member.  The generated JWS Signature is
@@ -2091,6 +2178,13 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    case of the csr-grouping MUST be used.
 
    Figure 17 below shows an example for the JSON CSR Data:
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 39]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    {
      "ietf-ztp-types": {
@@ -2121,15 +2215,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    In addition, the JWS Protected Header of the PER artifact MUST
    contain the following extension Header Parameter:
 
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 38]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    *  created-on: SHALL contain the current date and time at PER
       creation as standard date/time string as defined in Section 5.6 of
       [RFC3339]; if the pledge does not have synchronized time, it SHALL
@@ -2146,6 +2231,16 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    point in time more than one pending PER from the pledge.
 
    Figure 18 below shows an example for this JWS Protected Header:
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 40]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    {
      "alg": "ES256",
@@ -2176,16 +2271,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    which also requires persisting the local clock advancements across
    reboots.
 
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 39]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
 7.3.  Supply PVR to Registrar (including MASA interaction)
 
    Once the Registrar-Agent has acquired one or more PVR and PER object
@@ -2202,9 +2287,16 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    The registrar SHOULD verify the TLS client authentication of the
    Registrar-Agent, in particular if the TLS session is used to obtain
-   the Registrar-Agent EE certificate (see Section 6.1).  Note that
+   the Registrar-Agent EE certificate (see Section 6.3).  Note that
    authentication and authorization is of the pledge verified during the
    TLS session based on the signatures inside the PVR artifact.
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 41]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    As already stated in [RFC8995], the use of TLS 1.3 (or newer) is
    encouraged.  TLS 1.2 or newer is REQUIRED on the Registrar-Agent
@@ -2214,33 +2306,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    Figure 19 shows the voucher-request processing and the following
    subsections describe the corresponding artifacts.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 40]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
  +--------+    +------------+    +-----------+    +--------+    +------+
  | Pledge |    | Registrar- |    |  Domain   |    |  Key   |    | MASA |
@@ -2273,6 +2338,22 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
                   Figure 19: Voucher issuing exchange
 
+
+
+
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 42]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    As a first step of the interaction with the domain registrar, the
    Registrar-Agent SHALL supply the PVR artifact(s) to the registrar via
    HTTP-over-TLS POST to the registrar endpoint at /.well-known/brski/
@@ -2290,14 +2371,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    Registrar-Agent in the middle, the registrar MUST verify in addition
    that
 
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 41]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    *  the agent-provided-proximity-registrar-cert field of the PVR
       contains a registrar EE certificate signed by the same domain
       owner as the registrar EE certificate used to sign the RVR; note
@@ -2309,7 +2382,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    *  the agent-signed-data field of the PVR is signed with the private
       key corresponding to the Registrar-Agent EE certificate as known
-      by the registrar (see Section 6.1); this is done via the
+      by the registrar (see Section 6.3); this is done via the
       SubjectKeyIdentifier of the certificate in the kid Header
       Parameter of the JWS Protected Header of the agent-signed-data
       field.
@@ -2329,6 +2402,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    Registrar-Agent.  The following client error status codes SHOULD be
    used:
 
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 43]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  400 Bad Request: if the registrar detects an error in the format
       of the request
 
@@ -2345,14 +2426,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    Otherwise, the registrar converts the PVR artifact to an Registrar
    Voucher-Request (RVR) artifact (see Section 7.3.4) and starts the
    backend interaction with the MASA.
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 42]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    Optionally, the domain registrar MAY respond with an HTTP 202
    Accepted response status code to the Registrar-Agent at this point
@@ -2385,6 +2458,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    should also use the same format to limit the number of required
    format encoders.  Note that BRSKI-PRM allows for alternative formats
    such as CMS-signed JSON as used in BRSKI [RFC8995] or COSE-signed
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 44]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    CBOR for constrained environments, when defined by other
    specifications.  Overall, a MASA responsible for BRSKI-PRM capable
    pledges MUST support the same formats as supported by those pledges.
@@ -2396,19 +2477,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    MUST skip the verification described in Section 5.5.5 of [RFC8995]
    and instead MUST verify for the PVR contained in the prior-signed-
    voucher-request field of the RVR that
-
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 43]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    *  the agent-provided-proximity-registrar-cert field contains an EE
       certificate that signed by the same domain owner as the EE
@@ -2447,6 +2515,13 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       is stale or if the pledge has another outstanding voucher that
       cannot be overridden
 
+
+
+Fries, et al.            Expires 19 January 2025               [Page 45]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  404 Not Found: if the request is for a device that is not known to
       the MASA
 
@@ -2457,14 +2532,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    *  415 Unsupported Media Type: if the request uses an artifact format
       or Accept header value that is not supported by the MASA
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 44]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    Otherwise, the MASA creates a Voucher artifact as defined in
    Section 7.3.5 and updates the audit-log as described in Section 5.5
@@ -2502,6 +2569,15 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  502 Bad Gateway: if the registrar received an invalid response
       from the MASA
 
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 46]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  503 Service Unavailable: if a simple retry of the Registrar-Agent
       request might lead to a successful response; this error response
       SHOULD include the Retry-After response header field with an
@@ -2513,14 +2589,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    Identical to the PVR artifact received from the pledge as defined in
    Section 7.1.2.  The Registrar-Agent MUST NOT modify PVRs.
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 45]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
 7.3.4.  Backend Request Artifact: Registrar Voucher-Request (RVR)
 
@@ -2559,6 +2627,13 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       creation as standard date/time string as defined in Section 5.6 of
       [RFC3339]
 
+
+
+Fries, et al.            Expires 19 January 2025               [Page 47]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  nonce: SHALL contain a copy of the nonce field from the JSON PVR
       Data the registrar provides this information to assure successful
       verification of Registrar-Agent proximity based on the agent-
@@ -2567,16 +2642,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  serial-number: SHALL contain the product-serial-number of the
       pledge; note the required verification by the registrar defined in
       Section 7.3
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 46]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    *  idevid-issuer: SHALL contain the issuer value from the pledge
       IDevID certificate obtained from the PVR JWS Protected Header x5c
@@ -2594,7 +2659,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    *  agent-sign-cert: SHALL be a JSON array that contains the
       base64-encoded Registrar-Agent EE certificate as possessed by the
-      registrar (see Section 6.1) as the first item; subsequent items
+      registrar (see Section 6.3) as the first item; subsequent items
       MUST contain the corresponding certificate chain for verification
       at the MASA; the field is used for verification of the agent-
       signed-data field of the contained PVR
@@ -2606,11 +2671,30 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    Figure 21 below shows an example for the JSON RVR Data:
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 48]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    {
      "ietf-voucher-request:voucher": {
         "created-on": "2022-01-04T02:37:39.235Z",
         "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
-        "serial-number": "callee4711",
+        "serial-number": "vendor-pledge4711",
         "idevid-issuer": "base64encodedvalue==",
         "prior-signed-voucher-request": "base64encodedvalue==",
         "assertion": "agent-proximity",
@@ -2623,16 +2707,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    }
 
                       Figure 21: JSON RVR Data Example
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 47]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
 7.3.4.2.  JWS Protected Header
 
@@ -2659,13 +2733,26 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    [I-D.ietf-anima-jws-voucher].  It contains JSON Voucher Data in the
    JWS Payload, for which an example is given in Figure 22:
 
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 49]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    {
      "ietf-voucher:voucher": {
        "created-on": "2022-01-04T00:00:02.000Z",
        "nonce": "base64encodedvalue==",
        "assertion": "agent-proximity",
        "pinned-domain-cert": "base64encodedvalue==",
-       "serial-number": "callee4711"
+       "serial-number": "vendor-pledge4711"
      }
    }
 
@@ -2681,14 +2768,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    Protected Header and JWS Signature to the MASA-provided Voucher.
    Figure 23 summarizes the serialization of the JWS-signed JSON
    Voucher' artifact:
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 48]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    {
      "payload": BASE64URL(JSON Voucher Data),
@@ -2714,6 +2793,15 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    certificate through the certificate in the pinned-domain-cert field
    upon receiving the Voucher artifact (see Section 5.6.2 of [RFC8995]).
 
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 50]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    In BRSKI-PRM with the Registrar-Agent mediating all communication,
    this second signature provides verification and POP of the private
    key for the registrar EE certificate provided in the initial tPVR
@@ -2736,16 +2824,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  alg: SHALL contain the algorithm type used to create the
       signature, e.g., ES256, as defined in Section 4.1.1 of [RFC7515]
 
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 49]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    *  x5c: SHALL contain the base64-encoded registrar EE certificate
       used to sign the voucher as well as the certificate chain up to
       (but not including) the pinned domain certificate (the initial
@@ -2764,12 +2842,21 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    Note that the credentials need to be the same as used for server
    authentication in the TLS session with the Registrar-Agent receiving
-   this artifact (see Section 6.1).
+   this artifact (see Section 6.3).
 
 7.4.  Supply PER to Registrar (including Key Infrastructure interaction)
 
    After receiving the Voucher artifact, the Registrar-Agent sends the
    PER to the domain registrar within the same TLS session.
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 51]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    In case the TLS session to the registrar is already closed, the
    Registrar-Agent establishes a new session as described in
@@ -2783,24 +2870,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    that "Request" and "Certificate" do not denote BRSKI-PRM defined
    artifacts, but are data objects depending on the certificate
    management protocol used by the domain Key Infrastructure.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 50]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
  +--------+    +------------+    +-----------+    +--------+    +------+
  | Pledge |    | Registrar- |    |  Domain   |    |  Key   |    | MASA |
@@ -2837,6 +2906,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       the pledge EE certificate, which is contained in the JWS Protected
       Header of the PER.
 
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 52]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  the pledge identified by its EE certificate is accepted to join
       the domain after successful validation of the corresponding PVR.
 
@@ -2849,14 +2926,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       of the request
 
    *  401 Unauthorized: if the signature of the PER cannot be verified
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 51]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    *  404 Not Found: if the PER is for a device that is not known to the
       registrar
@@ -2894,6 +2963,13 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  502 Bad Gateway: if the registrar received an invalid response
       from the Key Infrastructure
 
+
+
+Fries, et al.            Expires 19 January 2025               [Page 53]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  503 Service Unavailable: if a simple retry of the Registrar-Agent
       request might lead to a successful response; this error response
       SHOULD include the Retry-After response header field with an
@@ -2906,14 +2982,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    enrollment may be supported in a similar way with the exception that
    the current, potentially application-related pledge EE certificate is
    used instead of the IDevID certificate to sign the PER artifact (see
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 52]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    also Section 7.2).  Hence, there is no verification whether the
    pledge is accepted to join the domain, as the still valid EE
    certificate signed by the domain owner identifies the pledge as
@@ -2949,6 +3017,15 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    Note that this is a deviation from EST [RFC7030] used in BRSKI
    [RFC8995].
 
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 54]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    The Registrar-Agent obtains this artifact within the same TLS
    session.  In case the TLS session to the registrar is already closed,
    the Registrar-Agent establishes a new session as described in
@@ -2957,18 +3034,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    Figure 25 shows the acquisition of the CA certificate(s) and the
    following subsections describe the corresponding artifact.
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 53]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
  +--------+    +------------+    +-----------+    +--------+    +------+
  | Pledge |    | Registrar- |    |  Domain   |    |  Key   |    | MASA |
@@ -3004,6 +3069,19 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    transport for this specification.  There is no artifact provided to
    the registrar.
 
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 55]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
 7.5.2.  Response Artifact: CA-Certificates (caCerts)
 
    The CA-Certificates (caCerts) artifact SHALL be an authenticated
@@ -3017,14 +3095,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    caCerts artifact MUST use the "General JWS JSON Serialization Syntax"
    defined in Section 7.2.1 of [RFC7515], which MUST contain the JSON CA
    Data defined in Section 7.5.2.1 in the JWS Payload.
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 54]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    Figure 26 summarizes the serialization of the JWS-signed JSON caCerts
    artifact:
@@ -3061,6 +3131,13 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
                  Figure 27: CDDL for JSON CA Data (cacerts)
 
+
+
+Fries, et al.            Expires 19 January 2025               [Page 56]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    The x5bag member MUST follow the definition of the x5bag COSE Header
    Parameter in Section 2 of [RFC9360].  It is either a single X.509 v3
    certificate or an array of at least two X.509 v3 certificates in DER
@@ -3070,17 +3147,9 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    Note that as per [RFC8995], the domain registrar acts as EST server,
    and hence is expected to possess the CA certificates applicable for
-   the domain and can thus deliver them to the pledge (see Section 6.1).
+   the domain and can thus deliver them to the pledge (see Section 6.3).
 
    Figure 28 below shows an example for the JSON CA Data:
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 55]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    {
      "x5bag": [
@@ -3115,6 +3184,16 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
              Figure 29: JWS Protected Header Example within PER
 
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 57]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
 7.5.2.3.  JWS Signature
 
    The registrar MUST sign the caCerts artifact using its EE
@@ -3130,14 +3209,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  Voucher': voucher countersigned by the registrar (from MASA via
       Registrar)
 
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 56]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    *  Enroll-Resp: pledge EE certificate signed by the domain owner
       (from Key Infrastructure via registrar)
 
@@ -3145,7 +3216,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       Registrar)
 
    Reconnecting to the pledge might require to re-discover the pledge as
-   described in Section 6.2.2.  The Registrar-Agent MAY stored
+   described in Section 6.1.2.  The Registrar-Agent MAY stored
    information from the first connection with the pledge to optimize.
 
    Optionally, TLS MAY be used to provide privacy for this exchange
@@ -3171,6 +3242,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
                       Figure 30: Voucher exchange
 
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 58]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    The Registrar-Agent SHALL supply the voucher to the pledge via
    HTTP(S) POST to the pledge endpoint at /.well-known/brski/svr.  The
    request body MUST contain the Registrar-Countersigned Voucher
@@ -3186,13 +3265,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    1.  Verify the MASA signature as described in Section 5.6.1 of
        [RFC8995] against the pre-installed manufacturer trust anchor
        (e.g., IDevID).
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 57]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    2.  Provisionally install the initial domain trust anchor contained
        in the pinned-domain-cert field of the voucher.
@@ -3225,6 +3297,15 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    response header, the Content-Type field MUST be set to application/
    jose+json.
 
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 59]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    If the pledge is unable to validate or verify the voucher, it MUST
    report the reason in the corresponding field of the Voucher Status.
 
@@ -3239,16 +3320,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    Identical to the Registrar-Countersigned Voucher (Voucher') artifact
    received from the registrar as defined in Section 7.3.6.  The
    Registrar-Agent MUST NOT modify countersigned vouchers.
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 58]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
 7.6.2.  Response Artifact: Voucher Status (vStatus)
 
@@ -3276,6 +3347,21 @@ Internet-Draft                  BRSKI-PRM                      July 2024
            Figure 31: vStatus Representation in General JWS JSON
                             Serialization Syntax
 
+
+
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 60]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    The JSON Status Data MUST be UTF-8 encoded to become the octet-based
    JWS Payload defined in [RFC7515].  The JWS Payload is further
    base64url-encoded to become the string value of the payload member as
@@ -3298,26 +3384,19 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  status: contains the boolean value true in case of success and
       false in case of failure
 
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 59]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
-   *  reason: contains a human-readable message; in contrast to
-      Section 5.7 of [RFC8995] MUST be provided; SHOULD NOT provide
+   *  reason: contains a human-readable message; SHOULD NOT provide
       information beneficial to an attacker
 
-   *  reason-context: contain an arbitrary JSON object that provides
-      additional information specific to a failure; in contrast to
-      Section 5.7 of [RFC8995] MUST be provided;
+   *  reason-context: contains a JSON object that provides additional
+      information specific to a failure; in contrast to Section 5.7 of
+      [RFC8995], MUST be provided; SHOULD NOT provide information
+      beneficial to an attacker
 
-   BRSKI-PRM implementations MUST utilize the reason-context to provide
-   a distinguishable token that enables the registrar to detect status
-   artifacts provided to the wrong endpoint.  For vStatus the reason-
-   context MUST be "pvs-details".
+   BRSKI-PRM implementations utilize the reason-context field to provide
+   a distinguishable token, which enables the registrar to detect status
+   artifacts provided to the wrong endpoint.  For vStatus artifacts, the
+   JSON object in the reason-context field MUST contain the member pvs-
+   details.
 
    Figure 32 below shows an example for the JSON Voucher Status Data in
    case of success and Figure 33 in case of failure:
@@ -3325,21 +3404,28 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    {
      "version": 1,
      "status": true,
-     "reason": "Voucher successfully processed."
+     "reason": "Voucher successfully processed.",
      "reason-context": {
-       "pvs-details": "Current date: 1/1/1970"
+       "pvs-details": "Current date 5/23/2024"
      }
    }
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 61]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
             Figure 32: JSON Voucher Status Data Success Example
 
    {
      "version": 1,
      "status": false,
-     "reason": "Failed to authenticate MASA certificate
-                because it starts in the future (1/1/2023).",
+     "reason": "Failed to authenticate MASA certificate.",
      "reason-context": {
-       "pvs-details": "Current date: 1/1/1970"
+       "pvs-details": "Current date 1/1/1970 < valid from 1/1/2023"
      }
    }
 
@@ -3353,15 +3439,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  alg: SHALL contain the algorithm type used to create the
       signature, e.g., ES256, as defined in Section 4.1.1 of [RFC7515]
 
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 60]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    *  x5c: SHALL contain the base64-encoded pledge IDevID certificate
       used to sign the vStatus artifact; it SHOULD also contain the
       certificate chain for this certificate; if the certificate chain
@@ -3370,8 +3447,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    Figure 34 below shows an example for this JWS Protected Header:
 
-   # Example: Decoded "JWS Protected Header" representation
-     in JSON syntax
    {
      "alg": "ES256",
      "x5c": [
@@ -3388,6 +3463,17 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    The JWS Signature is generated over the JWS Protected Header and the
    JWS Payload as described in Section 5.1 of [RFC7515].
 
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 62]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
 7.7.  Supply CA Certificates to Pledge
 
    Before supplying the pledge EE certificate, the Registrar-Agent
@@ -3403,20 +3489,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    Figure 35 shows the provisioning of the CA certificates to the pledge
    and the following subsections describe the corresponding artifacts.
-
-
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 61]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
  +--------+    +------------+    +-----------+    +--------+    +------+
  | Pledge |    | Registrar- |    |  Domain   |    |  Key   |    | MASA |
@@ -3448,6 +3520,16 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    Section 4.1.3 of [RFC7030].  This includes the verification of all
    intermediate CA certificates (i.e., not self-signed CA certificates).
 
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 63]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    If the pledge is unable to process the caCerts, it SHOULD respond
    with an HTTP error status code to the Registrar-Agent.  The following
    client error status codes SHOULD be used:
@@ -3466,13 +3548,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  415 Unsupported Media Type: if the Content-Type request header
       field indicates a type that is unknown or unsupported, e.g., a
       type other than application/jose+json
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 62]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    Otherwise, if processing completes successfully, the pledge SHOULD
    reply with HTTP 200 OK without a response body.  The pledge MAY use
@@ -3503,6 +3578,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    certificate to the pledge and the following subsections describe the
    corresponding artifacts.
 
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 64]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
  +--------+    +------------+    +-----------+    +--------+    +------+
  | Pledge |    | Registrar- |    |  Domain   |    |  Key   |    | MASA |
  |        |    |   Agent    |    | Registrar |    | Infra. |    |      |
@@ -3519,16 +3602,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
   ~                  ~                 ~                 ~            ~
 
                   Figure 36: Enroll-Response exchange
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 63]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    The Registrar-Agent SHALL send the domain-owner signed EE certificate
    to the pledge by HTTP(S) POST to the pledge endpoint at /.well-
@@ -3557,6 +3630,18 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    the registrar as defined in Section 7.4.2.  The Registrar-Agent MUST
    NOT modify Enroll-Response artifacts.
 
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 65]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
 7.8.2.  Response Artifact: Enroll Status (eStatus)
 
    The Enroll Status (eStatus) artifact SHALL be an authenticated self-
@@ -3569,22 +3654,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    Enroll Status Data defined in Section 7.8.2.1 in the JWS Payload.
    Figure 37 summarizes the serialization of the JWS-signed JSON eStatus
    artifact:
-
-
-
-
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 64]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    {
      "payload": BASE64URL(UTF8(JSON Enroll Status Data)),
@@ -3614,12 +3683,20 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    conform with the enrollstatus-post CDDL [RFC8610] data model defined
    in Section 5.9.4 of [RFC8995].  The members are the same as for the
    JSON Voucher Status Data and follow the same definitions as given in
-   Section 7.6.2.1.
+   Section 7.6.2.1 (incl. making reason-context mandatory).
 
-   BRSKI-PRM implementations MUST utilize the reason-context to provide
-   a distinguishable token that enables the registrar to detect status
-   artifacts provided to the wrong endpoint.  For eStatus the reason-
-   context MUST be "pes-details".
+   BRSKI-PRM implementations again utilize the reason-context field to
+   provide a distinguishable token.  For eStatus artifacts, the JSON
+   object in the reason-context field MUST contain the member pes-
+   details.
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 66]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    Figure 38 below shows an example for the JSON Enroll Status Data in
    case of success and Figure 39 in case of failure:
@@ -3634,13 +3711,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    }
 
              Figure 38: JSON Enroll Status Data Success Example
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 65]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    {
      "version": 1,
@@ -3669,8 +3739,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    Figure 40 below shows an example for this JWS Protected Header:
 
-   # Example: Decoded "JWS Protected Header" representation
-     in JSON syntax
    {
      "alg": "ES256",
      "x5c": [
@@ -3678,6 +3746,13 @@ Internet-Draft                  BRSKI-PRM                      July 2024
        "base64encodedvalue=="
      ]
    }
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 67]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
            Figure 40: JWS Protected Header Example within eStatus
 
@@ -3688,27 +3763,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    failure case, the pledge MUST sign it using its IDevID credentials.
    The JWS Signature is generated over the JWS Protected Header and the
    JWS Payload as described in Section 5.1 of [RFC7515].
-
-   Implementation Note:  Due to similar JSON Data, in a failure case the
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 66]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
-      resulting eStatus artifact is not distinguishable from a vStatus
-      artifact defined in Section 7.6.2 (both are signed using the
-      pledge IDevID credential).  Hence, Registrar-Agents need to
-      carefully manage from which exchange/endpoint they receive a
-      status artifact and ensure to only send it to the corresponding
-      endpoint on the domain registrar.  BRSKI-PRM implementations MAY
-      utilize the reason-context to provide a distinguishable token that
-      enables the registrar to detect status artifacts provided to the
-      wrong endpoint, e.g., using the reason-context object key pvs-
-      details for vStatus and pes-details for eStatus.  Standardization
-      of this mechanism is out of scope of this document.
 
 7.9.  Voucher Status Telemetry (including MASA interaction)
 
@@ -3745,18 +3799,17 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
               Figure 41: Voucher Status telemetry exchange
 
+   First, the Registrar-Agent SHALL supply the voucher status telemetry
+   to the registrar via HTTP-over-TLS POST to the registrar endpoint at
+   /.well-known/brski/voucher_status.  The request body MUST contain one
 
 
 
-
-Fries, et al.            Expires 11 January 2025               [Page 67]
+Fries, et al.            Expires 19 January 2025               [Page 68]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
 
-   First, the Registrar-Agent SHALL supply the voucher status telemetry
-   to the registrar via HTTP-over-TLS POST to the registrar endpoint at
-   /.well-known/brski/voucher_status.  The request body MUST contain one
    previously acquired vStatus artifact as defined in Section 7.6.2.  In
    the request header, the Content-Type field MUST be set to
    application/jose+json.
@@ -3801,18 +3854,17 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    Registrar-Agent establishes a new session as described in
    Section 7.3.
 
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 68]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    Figure 42 shows the provisioning of the enroll status information
    from the pledge(s) to the registrar and the following subsections
    describe the corresponding artifact.
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 69]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
  +--------+    +------------+    +-----------+    +--------+    +------+
  | Pledge |    | Registrar- |    |  Domain   |    |  Key   |    | MASA |
@@ -3858,17 +3910,17 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    If the eStatus indicates failure, the registrar MAY decide that for
    security reasons the pledge is not allowed to reside in the domain.
    In this case, the registrar MUST revoke the pledge EE certificate.
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 69]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    An example case for the registrar revoking the issued certificate is
    when the pledge was not able to verify the received EE certificate
    and therefore did not accept it for installation.
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 70]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
 7.10.1.  Request Artifact: Enroll Status (eStatus)
 
@@ -3888,7 +3940,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    overall status of a pledge.  This information can be useful to solve
    errors, when the pledge was not able to connect to the target domain
    during bootstrapping.  A pledge MAY omit the dedicated endpoint for
-   the Query Pledge Status operation (see Section 6.3).
+   the Query Pledge Status operation (see Section 6.2).
 
    Optionally, TLS MAY be used to provide privacy for this exchange
    between the Registrar-Agent and the pledge (see Appendix B).
@@ -3917,7 +3969,11 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 70]
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 71]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -3973,7 +4029,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 71]
+Fries, et al.            Expires 19 January 2025               [Page 72]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -4029,7 +4085,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 72]
+Fries, et al.            Expires 19 January 2025               [Page 73]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -4076,7 +4132,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    {
      "version": 1,
      "created-on": "2022-08-12T02:37:39.235Z",
-     "serial-number": "pledge-callee4711",
+     "serial-number": "vendor-pledge4711",
      "status-type": "bootstrap"
    }
 
@@ -4085,7 +4141,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 73]
+Fries, et al.            Expires 19 January 2025               [Page 74]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -4141,7 +4197,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 74]
+Fries, et al.            Expires 19 January 2025               [Page 75]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -4180,7 +4236,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
        "version": uint,
        "status": bool,
        ?"reason" : text,
-       ?"reason-context": { * $$arbitrary-map }
+       "reason-context": { * $$arbitrary-map }
      }
 
          Figure 49: CDDL for JSON Pledge Status Data (pledgestatus)
@@ -4189,30 +4245,36 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    as in JSON Status Query Data).
 
    The reason and reason-context members follow the definitions in
-   Section 7.6.2.1 (same as in JSON Voucher Status Data).
-
-   BRSKI-PRM implementations MUST utilize the reason-context to provide
-   a distinguishable token that enables the registrar to detect status
-   artifacts provided to the wrong endpoint.  For pStatus the reason-
+   Section 7.6.2.1, i.e., in contrast to [RFC8995], reason-context MUST
+   be provided.
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 75]
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 76]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
 
-   context MUST be either * "pbs-details" for bootstrapping related
-   status information or * "pos-details" for operation related status
-   information
+   The new pStatus artifact also utilizes the reason-context field to
+   provide a distinguishable token.  For pStatus artifacts, the JSON
+   object in the reason-context field MUST contain either the
 
-   Other documents may enhance the reason-context to reflect further
-   status information or add additional values correlating to other
-   statustrigger status-types (see Section 7.11.1.1).
+   *  pbs-details member for status information corresponding to the
+      status-type bootstrap, or the
 
-   For the "pbs-details" reason-context the following status values with
-   the given semantics are defined, while additional information MAY be
-   provided in the reason member:
+   *  pos-details member for status information corresponding to the
+      status-type operation (see Section 7.11.1.1)
+
+   Other documents may add additional reason-context members correlating
+   to other statustrigger status-types or to include further status
+   information.
+
+   For the pbs-details member, the following values with the given
+   semantics are defined, while additional information MAY be provided
+   in the top-level reason member:
 
    *  factory-default: Pledge has not been bootstrapped.  The pledge
       signs the response message using its IDevID certificate/
@@ -4227,7 +4289,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       context members.  The pledge signs the response message using its
       IDevID certificate/credentials.
 
-   *  enroll-success: Pledge has processed the enrollment exchange
+   *  enroll-success: Pledge processed the enrollment exchange
       successfully.  Additional information may be provided in the
       reason or reason-context members.  The pledge signs the response
       message using its domain-owner signed EE certificate/credentials.
@@ -4237,32 +4299,35 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       or reason-context members.  The pledge signs the response message
       using its IDevID certificate/credentials.
 
-   The status-bootstrap status values SHALL be cumulative in the sense
-   that enroll-success and enroll-error imply voucher-success.
-   Figure 50 below provides an example for bootstrap status information
-   in the JSON Pledge Status Data:
-
-{
-  "version": 1,
-  "status": true,
-  "reason": "Pledge has processed the enrollment exchange successfully."
-  "reason-context": {
-    "pbs-details": "Pledge has processed the enrollment exchange successfully."
-  }
-}
+   The pbs-details values SHALL be cumulative in the sense that enroll-
+   success and enroll-error imply voucher-success.  Figure 50 below
+   provides an example for bootstrap status information in the JSON
+   Pledge Status Data:
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 76]
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 77]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
 
-     Figure 50: status-bootstrap JSON Pledge Status Data Example
+ {
+   "version": 1,
+   "status": true,
+   "reason": "Pledge processed enrollment exchange successfully.",
+   "reason-context": {
+     "pbs-details": "Pledge processed enrollment exchange successfully."
+   }
+ }
 
-   For the "pos-details" reason-context the following status values with
-   the given semantics are defined, while additional information MAY be
-   provided in the reason member:
+      Figure 50: status-bootstrap JSON Pledge Status Data Example
+
+   For the pos-details member, the following values with the given
+   semantics are defined, while additional information MAY be provided
+   in the top-level reason member:
 
    *  connect-success: Pledge could successfully establish a connection
       to another peer.  The pledge signs the response message using its
@@ -4275,16 +4340,16 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    Figure 51 below provides an example for operational status
    information in the JSON Pledge Status Data:
 
-{
-  "version": 1,
-  "status": "connect-error",
-  "reason": "TLS certificate could not be verified.",
-  "reason-context": {
-    "connect-error" : "Pledge connection establishment terminated with error."
-  }
-}
+ {
+   "version": 1,
+   "status": "connect-error",
+   "reason": "TLS certificate could not be verified.",
+   "reason-context": {
+     "connect-error" : "Connection establishment terminated with error."
+   }
+ }
 
-     Figure 51: status-operation JSON Pledge Status Data Example
+      Figure 51: status-operation JSON Pledge Status Data Example
 
 7.11.2.2.  JWS Protected Header
 
@@ -4294,6 +4359,17 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  alg: SHALL contain the algorithm type used to create the
       signature, e.g., ES256, as defined in Section 4.1.1 of [RFC7515]
 
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 78]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  x5c: SHALL contain the base64-encoded pledge EE certificate used
       to sign the pStatus artifact; it SHOULD also contain the
       certificate chain for this certificate; if the certificate chain
@@ -4301,18 +4377,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       at the Registrar-Agent for verification
 
    Figure 52 below shows an example for this JWS Protected Header:
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 77]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    {
      "alg": "ES256",
@@ -4355,6 +4419,13 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    *  Pledge EE certificate provided to Registrar-Agent
 
+
+
+Fries, et al.            Expires 19 January 2025               [Page 79]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  CA Certificates provided to Registrar-Agent
 
    *  Voucher Status received from Registrar-Agent
@@ -4362,13 +4433,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  Enroll Status received from Registrar-Agent
 
    *  Pledge Status received from Registrar-Agent
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 78]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    *  Pledge EE certificate revoked
 
@@ -4413,15 +4477,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 79]
+Fries, et al.            Expires 19 January 2025               [Page 80]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -4477,7 +4533,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 80]
+Fries, et al.            Expires 19 January 2025               [Page 81]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -4502,8 +4558,8 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       their environment.  As the communication between the pledge and
       the Registrar-Agent may be realized over wireless link, this
       information could easily be eavesdropped, if the wireless network
-      is unencrypted.  Even if the wireless network is encrypted, if it
-      uses a network-wide key, then layer-2 attacks (ARP/ND spoofing)
+      is not encrypted.  Even if the wireless network is encrypted, if
+      it uses a network-wide key, then layer-2 attacks (ARP/ND spoofing)
       could insert an on-path observer into the path.
 
    *  the Timestamp data could reveal the activation time of the device.
@@ -4533,7 +4589,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 81]
+Fries, et al.            Expires 19 January 2025               [Page 82]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -4589,7 +4645,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 82]
+Fries, et al.            Expires 19 January 2025               [Page 83]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -4645,7 +4701,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 83]
+Fries, et al.            Expires 19 January 2025               [Page 84]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -4701,7 +4757,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 84]
+Fries, et al.            Expires 19 January 2025               [Page 85]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -4757,7 +4813,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 85]
+Fries, et al.            Expires 19 January 2025               [Page 86]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -4813,7 +4869,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 86]
+Fries, et al.            Expires 19 January 2025               [Page 87]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -4869,7 +4925,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 
-Fries, et al.            Expires 11 January 2025               [Page 87]
+Fries, et al.            Expires 19 January 2025               [Page 88]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
@@ -4910,30 +4966,25 @@ Internet-Draft                  BRSKI-PRM                      July 2024
               Protocol", RFC 8040, DOI 10.17487/RFC8040, January 2017,
               <https://www.rfc-editor.org/rfc/rfc8040>.
 
-   [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
-              Writing an IANA Considerations Section in RFCs", BCP 26,
-              RFC 8126, DOI 10.17487/RFC8126, June 2017,
-              <https://www.rfc-editor.org/rfc/rfc8126>.
-
    [RFC8407]  Bierman, A., "Guidelines for Authors and Reviewers of
               Documents Containing YANG Data Models", BCP 216, RFC 8407,
               DOI 10.17487/RFC8407, October 2018,
               <https://www.rfc-editor.org/rfc/rfc8407>.
 
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 88]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    [RFC8792]  Watsen, K., Auerswald, E., Farrel, A., and Q. Wu,
               "Handling Long Lines in Content of Internet-Drafts and
               RFCs", RFC 8792, DOI 10.17487/RFC8792, June 2020,
               <https://www.rfc-editor.org/rfc/rfc8792>.
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 89]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    [RFC8971]  Pallagatti, S., Ed., Mirsky, G., Ed., Paragiri, S.,
               Govindan, V., and M. Mudigonda, "Bidirectional Forwarding
@@ -4975,23 +5026,21 @@ Appendix A.  Examples
    These examples are folded according to [RFC8792] Single Backslash
    rule.
 
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 89]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
 A.1.  Example Pledge Voucher-Request (PVR) - from Pledge to Registrar-
       Agent
 
    The following is an example request sent from a Pledge to the
    Registrar-Agent, in "General JWS JSON Serialization".  The message
    size of this PVR is: 2973 bytes
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 90]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
 
@@ -5034,14 +5083,6 @@ A.1.  Example Pledge Voucher-Request (PVR) - from Pledge to Registrar-
    RFZRUUZFd293TVRJek5EVTJOemc1TVJjd0ZRWURWUVFEREE1S2FXNW5TbWx1WjBSbGRt\
    bGpaVEJaTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEEwSUFCQzc5bGlhUmNCalpj\
    RUVYdzdyVWVhdnRHSkF1SDRwazRJNDJ2YUJNc1UxMWlMRENDTGtWaHRVVjIxbXZhS0N2\
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 90]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    TXgyWStTTWdROGZmd0wyM3ozVElWQldqZFRCek1Dc0dDQ3NHQVFVRkJ3RWdCQjhXSFcx\
    aGMyRXRkR1Z6ZEM1emFXVnRaVzV6TFdKMExtNWxkRG81TkRRek1COEdBMVVkSXdRWU1C\
    YUFGRlFMak56UC9TL2tvdWpRd2pnNUU1ZnZ3Y1liTUJNR0ExVWRKUVFNTUFvR0NDc0dB\
@@ -5049,6 +5090,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    QWlCdTN3UkJMc0pNUDVzTTA3MEgrVUZyeU5VNmdLekxPUmNGeVJST2xxcUhpZ0lnWENt\
    SkxUekVsdkQycG9LNmR4NmwxL3V5bVRuYlFERGZKbGF0dVgyUm9PRT0iXSwidHlwIjoi\
    dm91Y2hlci1qd3MranNvbiIsImFsZyI6IkVTMjU2In0",
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 91]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
          "signature": "ntAgC7GT7xIDYcHBXoYej8uIUI6WR2Iv-7T1CaR-J6-xS60D\
    iWS1-vfc5Uu5INZS1dyWZ4vVH6uaoPceRxNc8g"
        }
@@ -5090,14 +5139,6 @@ A.2.  Example Parboiled Registrar Voucher-Request (RVR) - from Registrar
    xGV1NrTmFNRFZYVVd0R2RsUlZUbkpOVkZaU1lteGFObGxXWXpGaVIwMTZWRmhvUlZaRl\
    JrMVJiV1JQVm10S1Fsa3dNVU5TYXpWM1drVmtWbVZGVWpaUlZUVkRXakExVjFGclJrNV\
    VWVXB6VlcxNGFrMHhTa1ZWVmxKQ1dsVmFNMDFJYkU1U1JWWTFWRlZTYW1Rd05YRlNWRk\
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 91]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    pPVmtWd2FGSnVZM2RsYXpGRlVsaHNUbEpIVGpOVWJYQkdUa1V4VlZOdFJrNVNSRkkwVW\
    xod1FsVnJTbTVVYkZwRFVWYzVUbEV5YzNoT1ZrWjFWbTV3YUZaNlZuTlplazVPWlVWU1\
    ZWRlZlRU5hTURWWFVXdEdhbFJWU2tkVWJrSnJVakZXTkZJd1VrSldNRXB1Vkd4YVExRl\
@@ -5105,6 +5146,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    VTTUVvMVkxVmtWRlJVVVRWUlYyUkdVakJPUkdOVlpGUlVWRkUxVVZoa1JsTkZSWGRUVl\
    VaRFVXMXplRTVyYzNaaFZHTTFZakZLY2xONlZscFpiVlpSV25wb1ZsVXhTVFJNTTFaNl\
    RWZFNVVlpYYkdGVFJURXdZakowVkZwSVJreFdlbFp0WW14a2VsRnRVWEpqVmtwTlRqRm\
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 92]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    tVMXB0V214V01uUTFXakpXYVdJd2NHMVRWM2h6WkZoS2FtRlVTVEZrTWpWdllWVTVWMU\
    V3WkhGYVdIQkRUbFV4UTAxRlpFSk5WbFpyVTJ4R1VsWXdNVU5WVldSRVVUTk9TRkZXUm\
    xaU2Ewb3pWRlZLUTFveVpIbFJiV1JHVW10S1Vsa3dVa2xTUlVaUVVXMWtUMVpyYUZKUF\
@@ -5146,14 +5195,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    hwVGJtUk9WV3N4TTFKV1JscFNSbHBTVlZWYVJtUXlPVE5VVmxKS1pXczFSVlpVU2s5bG\
    JXTXhWRlpLYW1Rd1dsSlhWVkpYVlZaR1JWSkZSVEZUTWtaWVRsYzFWR0pYZURGWGFrSl\
    RZa2RTZEdKSGNHRldSVXBoVkZWS1RsSXdTalZqVldSVVZGUlJOVkZYWkVaU01FNUVZMV\
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 92]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    ZrVkZSVVVUVlJXR1JHVTBWRmQxTlZSa05SZW1NMVlrZHNhRlZ0VGtOaGJIQnFVbFZXV1\
    dSNlpIbFdWMVpvWkc1U1NGTnJSakZUUkZKM1lYcFNTazVFU2pKWlZVcE9ZekZWZUUxWG\
    JFMVNSVTVFVkVkMFYyRklVbFpXYWtsNFlsaGFhRk13VGpKVVdHZDVWMU4wVkZSWFpGSl\
@@ -5161,6 +5202,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    pXVW10S00xSlhaRU5SYW1oWVUwWmplR0ZIVFhsU1dGSnJVakZhTmxwRlRURmxiVVpZVm\
    01U1lWWjZWalpVUm1STFRVVjRkRTVYZUd0U1J6Z3hWR3RTVW1Wck1VTlBSV1JDVFZaV2\
    ExTllaRkpYVlRGRFdWVkdSMUpzUmsxaGF6VTJWVU01VkV3eWRIWmtWM0JTWkRKd2JrNV\
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 93]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    ZWVEZhYmxveldURnNhVlJWU2s1U01FVjRWbGRTUzFWV1JrNVVWVVoyVWpCT1JHTXdaRU\
    pWVmxaSFVXNWtUbEV3TVVKT1JXUkNUVlpXYTFKSVpFWlJhVGt6VlZWV1FtUXdiRWxhTU\
    ZKQ1V6QktibG96Um05aE1uQlFWVVpHVWxKRlJtNVVhMmhDVWtWS1JsRlhiRU5rVkU0el\
@@ -5202,14 +5251,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    UFd5Y2VFUjExUHhIT24rMENwU0hpMnFncFdYIl0sInR5cCI6InZvdWNoZXItandzK2pz\
    b24iLCJhbGciOiJFUzI1NiJ9",
          "signature": "_mcsO5vo0g2rFmBvTb-UsOWkEmhYNfQ5XmbuKHKH0ZLjea-7\
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 93]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    911BilAMdFORmT4vCzWKBSH6HSqtpIRcSSxx7Q"
        }
      ]
@@ -5217,54 +5258,20 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
              Figure 54: Example Registrar-Voucher-Request - RVR
 
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 94]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
 A.3.  Example Voucher - from MASA to Pledge, via Registrar and
       Registrar-Agent
 
    The following is an example voucher-response from MASA to Pledge via
    Registrar and Registrar-Agent, in "General JWS JSON Serialization".
    The message size of this Voucher is: 1916 bytes
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 94]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
 
@@ -5304,23 +5311,23 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
                Figure 55: Example Voucher-Response from MASA
 
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 95]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
 A.4.  Example Voucher, MASA issued Voucher with additional Registrar
       signature (from MASA to Pledge, via Registrar and Registrar-Agent)
 
    The following is an example voucher-response from MASA to Pledge via
    Registrar and Registrar-Agent, in "General JWS JSON Serialization".
    The message size of this Voucher is: 2994 bytes
-
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 95]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
 
@@ -5363,6 +5370,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    QUxCZ05WQkFjTUJGTnBkR1V4RHpBTkJnTlZCQU1NQmxSbGMzUkRRVEFlRncweU1ERXlN\
    RGN3TmpFNE1USmFGdzB6TURFeU1EY3dOakU0TVRKYU1ENHhFekFSQmdOVkJBb01DazE1\
    UW5WemFXNWxjM014RFRBTEJnTlZCQWNNQkZOcGRHVXhHREFXQmdOVkJBTU1EMFJ2YldG\
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 96]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    cGJsSmxaMmx6ZEhKaGNqQlpNQk1HQnlxR1NNNDlBZ0VHQ0NxR1NNNDlBd0VIQTBJQUJC\
    azE2Sy9pNzlvUmtLNVliZVBnOFVTUjgvdXMxZFBVaVpITXRva1NkcUtXNWZuV3NCZCtx\
    Ukw3V1JmZmVXa3lnZWJvSmZJbGx1cmNpMjV3bmhpT1ZDR2plekI1TUIwR0ExVWRKUVFX\
@@ -5370,14 +5385,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    d1NBWURWUjBSQkVFd1A0SWRjbVZuYVhOMGNtRnlMWFJsYzNRdWMybGxiV1Z1Y3kxaWRD\
    NXVaWFNDSG5KbFoybHpkSEpoY2kxMFpYTjBOaTV6YVdWdFpXNXpMV0owTG01bGREQUtC\
    Z2dxaGtqT1BRUURBZ05JQURCRkFpQnhsZEJoWnEwRXY1SkwyUHJXQ3R5UzZoRFlXMXlD\
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 96]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
    Ty9SYXVicEM3TWFJRGdJaEFMU0piZ0xuZ2hiYkFnMGRjV0ZVVm8vZ0dOMC9qd3pKWjBT\
    bDJoNHhJWGsxIl0sInR5cCI6InZvdWNoZXItandzK2pzb24iLCJhbGciOiJFUzI1NiJ9\
    ",
@@ -5406,8 +5413,8 @@ Appendix B.  HTTP-over-TLS operations between Registrar-Agent and Pledge
 
    1.  A certificate is generally required in order to do TLS.  While
        there are other modes of authentication including PSK, various
-       EAP methods, and raw public key, they do no help as there is no
-       previous relationship between the Registrar-Agent.
+       EAP methods, and raw public key, they do not help as there is no
+       previous relationship between the Registrar-Agent and the pledge.
 
    2.  The pledge can use its IDevID certificate to authenticate itself,
        but [RFC9525] DNS-ID methods do not apply, as the pledge does not
@@ -5416,53 +5423,41 @@ Appendix B.  HTTP-over-TLS operations between Registrar-Agent and Pledge
        X520SerialNumber DN attribute that must be present in every
        IDevID.
 
-   If the Registrar-Agent has a preconfigured list of which product-
+   If the Registrar-Agent has a pre-configured list of which product-
    serial-number(s), from which manufacturers it expects to see, then it
    can attempt to match this pledge against a list of potential devices.
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 97]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    In many cases only the list of manufacturers is known ahead of time,
    so at most the Registrar-Agent can show the X520SerialNumber to the
    (human) operator who may then attempt to confirm that they are
    standing in front of a device with that product-serial-number.  The
-   use of scannable QRcodes may help automate this in some cases.
+   use of scanable QR codes may help automate this in some cases.
 
+   The CA used to sign the IDevID will be a manufacturer private PKI as
+   described in Section 4.1 of
+   [I-D.irtf-t2trg-taxonomy-manufacturer-anchors].  The anchors for this
+   PKI will never be part of the public WebPKI anchors which are
+   distributed with most smartphone operating systems.  A Registrar-
+   Agent application will need to use different APIs in order to
+   initiate an HTTPS connection without performing WebPKI verification.
+   The application will then have to do its own certificate chain
+   verification against a store of manufacturer trust anchors.  In the
+   Android ecosystem this involves use of a customer TrustManager: many
+   application developers do not create these correctly, and there is
+   significant push to remove this option as it has repeatedly resulted
+   in security failures (see [androidtrustfail]).
 
-
-
-Fries, et al.            Expires 11 January 2025               [Page 97]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
-   1.  The CA used to sign the IDevID will be a manufacturer private PKI
-       as described in [I-D.irtf-t2trg-taxonomy-manufacturer-anchors],
-       Section 4.1.  The anchors for this PKI will never be part of the
-       public WebPKI anchors which are distributed with most smartphone
-       operating systems.  A Registrar-Agent application will need to
-       use different APIs in order to initiate an HTTPS connection
-       without performing WebPKI verification.  The application will
-       then have to do it's own certificate chain verification against a
-       store of manufacturer trust anchors.  In the Android ecosystem
-       this involved use of a customer TrustManager: many application
-       developers do not create these correctly, and there is
-       significant push to remove this option as it has repeatedly
-       resulted in security failures.  See [androidtrustfail]
-
-   2.  The use of the Host: (or :authority in HTTP/2) is explained in
-       [RFC9110], Section 7.2.  This header is mandatory, and so a
-       compliant HTTPS client is going to insert it.  But, the contents
-       of this header will at best be an IP address that came from the
-       discovery process.  The pledge MUST therefore ignore the Host:
-       header when it processes requests, and the pledge MUST NOT do any
-       kind of name-base virtual hosting using the IP address/port
-       combination.  Note that there is no requirement for the pledge to
-       operate it's BRSKI-PRM service on port 80 or port 443, so if
-       there is no reason for name-based virtual hosting.
-
-   3.  Note that an Extended Key Usage (EKU) for TLS WWW Server
-       authentication cannot be expected in the pledge's IDevID
-       certificate.  IDevID certificates are intended to be widely
-       useable and EKU does not support that use.
+   Also note that an Extended Key Usage (EKU) for TLS WWW Server
+   authentication cannot be expected in the pledge IDevID certificate.
+   IDevID certificates are intended to be widely useable and EKU does
+   not support that use.
 
 Appendix C.  History of Changes [RFC Editor: please delete]
 
@@ -5483,20 +5478,35 @@ Appendix C.  History of Changes [RFC Editor: please delete]
          (if necessary), JWS Header an Signature.  This lead to some
          movement of text between existing and new subsections.
 
+      -  Inclusion of new section on logging hints Section 8 to give
+         recommendations on which events to be logged for auditing
 
 
-Fries, et al.            Expires 11 January 2025               [Page 98]
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 98]
 
 Internet-Draft                  BRSKI-PRM                      July 2024
 
 
-      -  Inclusion of new section on logging hints Section 8 to give
-         recommendations on which events to be logged for auditing
-
       -  Alignment of pledge status response data across
          Section 7.6.2.1, Section 7.8.2.1, and Section 7.11.2.1.
 
-   *  Update of informative references
+      -  Included MASA component in description of affected components
+         in Section 6
+
+      -  Moved host header field handling from Appendix B to Section 6.2
+         as generally applicable
+
+      -  Updated status artifacts (vStatus, eStatus, pStatus) to align
+         with BRSKI CDDL definition, but made reason-context mandatory
+         to have distinguishable objects for the registrar-agent
+
+      -  Correction of terminology of local host name vs. service
+         instance name in Section 6.1.2
+
+   *  Update of informative references and nits
 
    From IETF draft 12 -> IETF draft 13:
 
@@ -5525,6 +5535,17 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    *  Updated acknowledgments to reflect early reviews
 
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025               [Page 99]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  Addressed Shepherd review part 2 (Pull Request #132); containing:
       terminology alignment, structural improvements of the document;
       deletion of leftovers from previous draft versions; change of
@@ -5533,18 +5554,11 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    From IETF draft 10 -> IETF draft 11:
 
    *  issue #79, clarified that BRSKI discovery in the context of BRSKI-
-      PRM is not needed in Section 6.2.1.
+      PRM is not needed in Section 6.1.1.
 
    *  issue #103, removed step 6 in verification handling for the
       wrapped CA certificate provisioning as only applicable after
       enrollment Section 7.7
-
-
-
-Fries, et al.            Expires 11 January 2025               [Page 99]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    *  issue #128: included notation of nomadic operation of the
       Registrar-Agent in Section 5, including proposed text from PR #131
@@ -5556,13 +5570,13 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    *  removed site terminology
 
-   *  deleted duplicated text in Section 6.3
+   *  deleted duplicated text in Section 6.2
 
    *  clarified registrar discovery and relation to BRSKI-Discovery in
-      Section 6.2.1
+      Section 6.1.1
 
    *  clarified discovery of pledges by the Registrar-Agent in
-      Section 6.2.2, deleted reference to GRASP as handled in BRSKI-
+      Section 6.1.2, deleted reference to GRASP as handled in BRSKI-
       Discovery
 
    *  addressed comments from SECDIR early review
@@ -5571,13 +5585,22 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    *  issue #79, clarified discovery in the context of BRSKI-PRM and
       included information about future discovery enhancements in a
-      separate draft in Section 6.2.1.
+      separate draft in Section 6.1.1.
 
    *  issue #93, included information about conflict resolution in mDNS
-      and GRASP in Section 6.2.2
+      and GRASP in Section 6.1.2
 
    *  issue #103, included verification handling for the wrapped CA
       certificate provisioning in Section 7.7
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025              [Page 100]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    *  issue #106, included additional text to elaborate more the
       registrar status handling in Section 7.9 and Section 7.10
@@ -5585,22 +5608,13 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  issue #116, enhanced DoS description in Section 11.1
 
    *  issue #120, included statement regarding pledge host header
-      processing in Section 6.3
+      processing in Section 6.2
 
    *  issue #122, availability of product-serial-number information on
       registrar agent clarified in Section 7.1
 
    *  issue #123, Clarified usage of alternative voucher formats in
       Section 7.3.4
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025              [Page 100]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    *  issue #124, determination of pinned domain certificate done as in
       RFC 8995 included in Section 7.3.5
@@ -5620,7 +5634,7 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    From IETF draft 08 -> IETF draft 09:
 
-   *  issue #80, enhanced Section 6.2.2 with clarification on the
+   *  issue #80, enhanced Section 6.1.2 with clarification on the
       product-serial-number and the inclusion of GRASP
 
    *  issue #81, enhanced introduction with motivation for
@@ -5636,6 +5650,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  issue #87, clarified available information at the Registrar-Agent
       in Section 7.1
 
+
+
+
+Fries, et al.            Expires 19 January 2025              [Page 101]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  issue #88, clarified, that the PVR in Section 7.1 and PER in
       Section 7.2 may contain the certificate chain.  If not contained
       it MUST be available at the registrar.
@@ -5649,14 +5671,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    *  issue #92: kept separate endpoint for wrapped CSR on registrar
       Section 7.5
-
-
-
-
-Fries, et al.            Expires 11 January 2025              [Page 101]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    *  issue #94: clarified terminology (possess vs. obtained)
 
@@ -5691,6 +5705,15 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  issue #111: included pledge-status response processing for
       authenticated requests in Section 7.11
 
+
+
+
+
+Fries, et al.            Expires 19 January 2025              [Page 102]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  issue #112: added "Example key word in pledge-status response in
       Figure 50
 
@@ -5706,13 +5729,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    *  issue #116: Enhanced DoS description and mitigation options in
       security consideration section
-
-
-
-Fries, et al.            Expires 11 January 2025              [Page 102]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    *  updated references
 
@@ -5746,6 +5762,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  addressed review comments from SECDIR early review (terminology
       clarifications, editorial improvements)
 
+
+
+
+Fries, et al.            Expires 19 January 2025              [Page 103]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  addressed review comments from IOTDIR early review (terminology
       clarifications, editorial improvements)
 
@@ -5761,14 +5785,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    *  Removed agent-sign-cert from trigger data to save bandwidth and
       remove complexity through options, issue #70
-
-
-
-
-Fries, et al.            Expires 11 January 2025              [Page 103]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    *  Changed terminology for LDevID(Reg) certificate to registrar
       LDevID certificate, as it does not need to be an LDevID, issue #66
@@ -5800,7 +5816,15 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    *  Defined new endpoint for pledge bootstrapping status inquiry,
       issue #35 in section Section 7.11, IANA considerations and section
-      Section 6.3
+      Section 6.2
+
+
+
+
+Fries, et al.            Expires 19 January 2025              [Page 104]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    *  Included examples for several objects in section Appendix A
       including message example sizes, issue #33
@@ -5815,16 +5839,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       responses with and ensure that they match the audit log response
       from the MASA, otherwise it needs drop the pledge and revoke the
       certificate
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025              [Page 104]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    *  Issue #43, clarified that the pledge shall use the create time
       from the trigger message if the time has not been synchronized,
@@ -5861,6 +5875,13 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       Section 7.3 and IANA considerations) for the registrar to provide
       a wrapped CA certs response, issue #21
 
+
+
+Fries, et al.            Expires 19 January 2025              [Page 105]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  utilized defined abbreviations in the document consistently, issue
       #22
 
@@ -5873,14 +5894,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    *  Updated examples to state "base64encodedvalue==" for x5c
       occurrences
-
-
-
-
-Fries, et al.            Expires 11 January 2025              [Page 105]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    *  Include link to SVG graphic as general overview
 
@@ -5917,6 +5930,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       of POP of the registrars private key in section Section 7.3 and
       exchanges_uc2_3.
 
+
+
+
+Fries, et al.            Expires 19 January 2025              [Page 106]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  Based on issue #11, a new endpoint was defined for the registrar
       to enable delivery of the wrapped enrollment request from the
       pledge (in contrast to plain PKCS#10 in simple enroll).
@@ -5930,13 +5951,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  Decision on issue #7 to not support multiple CSRs during the
       bootstrapping, as based on the generic LDevID certificate the
       pledge may enroll for further certificates.
-
-
-
-Fries, et al.            Expires 11 January 2025              [Page 106]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    *  Closed open issue #5 regarding verification of ietf-ztp-types
       usage as verified via a proof-of-concept in section Section 7.1.
@@ -5962,12 +5976,23 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  Assertion-type aligned with voucher in RFC8366bis, deleted related
       open issues.  (Issue #4)
 
-   *  Included table for endpoints in Section 6.3 for better
+   *  Included table for endpoints in Section 6.2 for better
       readability.
 
    *  Included registrar authorization check for Registrar-Agent during
       TLS handshake in section Section 7.3.  Also enhanced figure
       Figure 4 with the authorization step on TLS level.
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025              [Page 107]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
 
    *  Enhanced description of registrar authorization check for
       Registrar-Agent based on the agent-signed-data in section
@@ -5985,14 +6010,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    *  Inclusion of examples for a trigger to create a Pledge-Voucher-
       Request and an Pledge Enroll-Request.
-
-
-
-
-Fries, et al.            Expires 11 January 2025              [Page 107]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    From IETF draft-ietf-anima-brski-async-enroll-03 -> IETF anima-brski-
    prm-00:
@@ -6023,6 +6040,16 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  Housekeeping, deleted open issue regarding YANG voucher-request in
       Section 7.1 as voucher-request was enhanced with additional leaf.
 
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025              [Page 108]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  Included open issues in YANG model in Section 5 regarding
       assertion value agent-proximity and csr encapsulation using SZTP
       sub module).
@@ -6042,14 +6069,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  Communication approach between pledge and Registrar-Agent changed
       by removing TLS-PSK (former section TLS establishment) and
       associated references to other drafts in favor of relying on
-
-
-
-Fries, et al.            Expires 11 January 2025              [Page 108]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
-
       higher layer exchange of signed data objects.  These data objects
       are included also in the Pledge-Voucher-Request and lead to an
       extension of the YANG module for the voucher-request (issue #12).
@@ -6079,6 +6098,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  Update of scope in Section 3.1 to include in which the pledge acts
       as a server.  This is one main motivation for use case 2.
 
+
+
+
+Fries, et al.            Expires 19 January 2025              [Page 109]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  Rework of use case 2 in Section 5 to consider the transport
       between the pledge and the pledge-agent.  Addressed is the TLS
       channel establishment between the pledge-agent and the pledge as
@@ -6097,14 +6124,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  Included Thomas Werner as additional author for the document.
 
    From individual version 03 -> IETF draft 00:
-
-
-
-
-Fries, et al.            Expires 11 January 2025              [Page 109]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    *  Inclusion of discovery options of enrollment endpoints at the
       domain registrar based on well-known endpoints in new section as
@@ -6135,6 +6154,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
 
    From individual version 02 -> 03:
 
+
+
+
+Fries, et al.            Expires 19 January 2025              [Page 110]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    *  Update of terminology from self-contained to authenticated self-
       contained object to be consistent in the wording and to underline
       the protection of the object with an existing credential.  Note
@@ -6152,15 +6179,6 @@ Internet-Draft                  BRSKI-PRM                      July 2024
       BRSKI-PRM call flow.
 
    From individual version 01 -> 02:
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025              [Page 110]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
-
 
    *  Update of introduction text to clearly relate to the usage of
       IDevID and LDevID.
@@ -6192,6 +6210,14 @@ Internet-Draft                  BRSKI-PRM                      July 2024
    *  New section starting with the mapping to existing enrollment
       protocols by collecting boundary conditions.
 
+
+
+
+Fries, et al.            Expires 19 January 2025              [Page 111]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
 Contributors
 
    Esko Dijk
@@ -6207,15 +6233,6 @@ Contributors
    Matthias Kovatsch
    Siemens Schweiz AG
    Email: ietf@kovatsch.net
-
-
-
-
-
-
-Fries, et al.            Expires 11 January 2025              [Page 111]
-
-Internet-Draft                  BRSKI-PRM                      July 2024
 
 
 Authors' Addresses
@@ -6249,6 +6266,14 @@ Authors' Addresses
 
    Michael C. Richardson
    Sandelman Software Works
+
+
+
+Fries, et al.            Expires 19 January 2025              [Page 112]
+
+Internet-Draft                  BRSKI-PRM                      July 2024
+
+
    Email: mcr+ietf@sandelman.ca
    URI:   http://www.sandelman.ca/
 
@@ -6269,4 +6294,35 @@ Authors' Addresses
 
 
 
-Fries, et al.            Expires 11 January 2025              [Page 112]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 January 2025              [Page 113]

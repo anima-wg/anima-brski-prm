@@ -563,7 +563,7 @@ But additionally, the Agent Proximity Assertion allows the domain registrar to b
 
 
 
-# System Components
+# System Components {#system-components}
 
 
 
@@ -2628,7 +2628,7 @@ Depending on the requests and responses, the following information is disclosed.
 
 * the Pledge product-serial-number is contained in the trigger message for the PVR and in all responses from the pledge.
   This information reveals the identity of the devices being bootstrapped and allows deduction of which products an operator is using in their environment.
-  As the communication between the pledge and the Registrar-Agent may be realized over wireless link, this information could easily be eavesdropped, if the wireless network is unencrypted.
+  As the communication between the pledge and the Registrar-Agent may be realized over wireless link, this information could easily be eavesdropped, if the wireless network is not encrypted.
   Even if the wireless network is encrypted, if it uses a network-wide key, then layer-2 attacks (ARP/ND spoofing) could insert an on-path observer into the path.
 * the Timestamp data could reveal the activation time of the device.
 * the Status data of the device could reveal information about the current state of the device in the domain network.
@@ -3056,10 +3056,10 @@ The use of HTTP-over-TLS is not mandated by this document for two main reasons:
 
 2. The pledge can use its IDevID certificate to authenticate itself, but {{?RFC9525}} DNS-ID methods do not apply, as the pledge does not have a FQDN, and hence cannot be identified by DNS name.  Instead a new mechanism is required, which authenticates the X520SerialNumber DN attribute that must be present in every IDevID.
 
-If the Registrar-Agent has a preconfigured list of which product-serial-number(s), from which manufacturers it expects to see, then it can attempt to match this pledge against a list of potential devices.
+If the Registrar-Agent has a pre-configured list of which product-serial-number(s), from which manufacturers it expects to see, then it can attempt to match this pledge against a list of potential devices.
 
 In many cases only the list of manufacturers is known ahead of time, so at most the Registrar-Agent can show the X520SerialNumber to the (human) operator who may then attempt to confirm that they are standing in front of a device with that product-serial-number.
-The use of scannable QRcodes may help automate this in some cases.
+The use of scanable QR codes may help automate this in some cases.
 
 The CA used to sign the IDevID will be a manufacturer private PKI as described in {{Section 4.1 of ?I-D.irtf-t2trg-taxonomy-manufacturer-anchors}}.
 The anchors for this PKI will never be part of the public WebPKI anchors which are distributed with most smartphone operating systems.
@@ -3082,7 +3082,11 @@ From IETF draft 13 -> IETF draft 14:
   * Restructuring of {{exchanges}} for protocol steps to align to the general approach: Overview, data description, CDDL description (if necessary), JWS Header an Signature. This lead to some movement of text between existing and new subsections.
   * Inclusion of new section on logging hints {{log_hints}} to give recommendations on which events to be logged for auditing
   * Alignment of pledge status response data across {{vstatus_data}}, {{estatus_data}}, and {{pstatus_data}}.
-* Update of informative references
+  * Included MASA component in description of affected components in {{system-components}}
+  * Moved host header field handling from {{pledgehttps}} to {{pledge_component}} as generally applicable 
+  * Updated status artifacts (vStatus, eStatus, pStatus) to align with BRSKI CDDL definition, but made reason-context mandatory  to have distinguishable objects for the registrar-agent
+  * Correction of terminology of local host name vs. service instance name in {{discovery_uc2_ppa}}  
+* Update of informative references and nits
 
 From IETF draft 12 -> IETF draft 13:
 
