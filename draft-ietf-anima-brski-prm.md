@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-14
+docname: draft-ietf-anima-brski-prm-15
 area: Operations and Management
 wg: ANIMA WG
 date: 2024
@@ -615,13 +615,13 @@ Moreover, the standard discovery described in {{Section 4 of !RFC8995}} and the 
 
 As a more general solution, the BRSKI discovery mechanism can be extended to provide upfront information on the capabilities of registrars, such as the mode of operation (pledge-responder-mode or registrar-responder-mode).
 Defining discovery extensions is out of scope of this document.
-This may be provided in {{I-D.ietf-anima-brski-discovery}}.
+For further discussion, see {{I-D.ietf-anima-brski-discovery}}.
 
 
 ### Discovery of the Pledge {#discovery_uc2_ppa}
 
 The discovery of the pledge by the Registrar-Agent in the context of this document describes the minimum discovery approach to be supported.
-A more general discovery mechanism, also supporting GRASP besides DNS-SD with mDNS, may be provided in {{I-D.ietf-anima-brski-discovery}}.
+A more general discovery mechanism, also supporting GRASP besides DNS-SD with mDNS, is discussed in {{I-D.ietf-anima-brski-discovery}}.
 
 Discovery in BRSKI-PRM uses DNS-based Service Discovery {{RFC6763}} over Multicast DNS {{RFC6762}} to discover the pledge.
 Note that {{Section 9 of RFC6762}} provides support for conflict resolution in situations when an DNS-SD with mDNS responder receives a mDNS response with inconsistent data.
@@ -3073,6 +3073,11 @@ IDevID certificates are intended to be widely useable and EKU does not support t
 # History of Changes [RFC Editor: please delete] {#app_history}
 
 Proof of Concept Code available
+
+From IETF draft 14 -> IETF draft 15:
+
+* issue #134: editorial clarifications on references to {{I-D.ietf-anima-brski-discovery}} in {{discovery_uc2_reg}} and  {{discovery_uc2_ppa}} 
+
 
 From IETF draft 13 -> IETF draft 14:
 
