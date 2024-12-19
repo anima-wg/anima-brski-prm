@@ -80,8 +80,8 @@ normative:
   RFC8615:
   RFC8995:
   RFC9360:
+  RFC9646:
   I-D.ietf-anima-jws-voucher:
-  I-D.ietf-netconf-sztp-csr:
   I-D.ietf-anima-rfc8366bis:
 informative:
   RFC2986:
@@ -1222,8 +1222,8 @@ The generated JWS Signature is base64url-encoded to become the string value of t
 
 #### JSON CSR Data {#per_data}
 
-The JSON CSR Data SHALL be a JSON document {{RFC8259}} that MUST conform with the data model described by the `csr-grouping` of the `ietf-ztp-types` YANG module defined in {{Section 3.2 of !I-D.ietf-netconf-sztp-csr}} and MUST be encoded using the rules defined in {{!RFC7951}}.
-Note that {{!I-D.ietf-netconf-sztp-csr}} also allows for inclusion of CSRs in different formats used by CMP and CMC.
+The JSON CSR Data SHALL be a JSON document {{RFC8259}} that MUST conform with the data model described by the `csr-grouping` of the `ietf-ztp-types` YANG module defined in {{Section 3.2 of !RFC9646}} and MUST be encoded using the rules defined in {{!RFC7951}}.
+Note that {{!RFC9646}} also allows for inclusion of CSRs in different formats used by CMP and CMC.
 For PKCS#10 CSRs as used in BRSKI and BRSKI-PRM, the `p10-csr` case of the `csr-grouping` MUST be used.
 
 {{csr_example}} below shows an example for the JSON CSR Data:
@@ -3077,6 +3077,7 @@ Proof of Concept Code available
 From IETF draft 15 -> IETF draft 16:
 
 * issue #135: corrections from IOTDIR review (clarification regarding minimum supported discovery in {{discovery_uc2_ppa}}, clarification regarding CDDl notation in {{cacerts_CDDL_def}} and editorial nits.
+* updated references (draft-ietf-netconf-sztp-csr became RFC 9646)
 
 From IETF draft 14 -> IETF draft 15:
 
