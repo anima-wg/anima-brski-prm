@@ -2607,7 +2607,7 @@ As outlined in {{system-components}} there are additional configuration items du
 
 With the Registrar-Agent enhancement a new component is introduced in the communication path between the pledge and the registrar. 
 This likely increases the latency of the communication between the pledge and the registrar.
-This may be negligibly when the Registrar-Agent operates with nomadic connectivity as outlined in {{arch_nomadic}}.
+The increase in latency due to this additional component may be neglected given that the Registrar-Agent operates with nomadic connectivity as outlined in {{arch_nomadic}}.
 
 Besides the above, also consider the existing documents on operational modes for  
 
