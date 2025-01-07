@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-15
+docname: draft-ietf-anima-brski-prm-16
 area: Operations and Management
 wg: ANIMA WG
 date: 2024
@@ -699,7 +699,7 @@ Pledges MAY support both initiator and responder mode.
 
 A pledge in initiator mode should listen for announcement messages as described in {{Section 4.1 of !RFC8995}}.
 Upon discovery of a potential registrar, it initiates the bootstrapping to that registrar.
-At the same time (so as to avoid the Slowloris-attack described in {{!RFC8995}}), it SHOULD also respond to the triggers for responder mode described in this document.
+At the same time (so as to avoid the Slowloris-like attack described in {{!RFC8995}}), it SHOULD also respond to the triggers for responder mode described in this document.
 
 Once a pledge with combined functionality has been bootstrapped, it MAY act as client for enrollment of further certificates needed, e.g., using the enrollment protocol of choice.
 If it still acts as server, the defined BRSKI-PRM endpoints to trigger a Pledge Enroll-Request (PER) or to provide an Enroll-Response can be used for further certificates.
@@ -2622,7 +2622,7 @@ This document requires the following IANA actions.
 
 
 
-##  BRSKI .well-known Registry
+##  BRSKI well-known Registry
 
 IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with the following endpoints:
 
@@ -3134,9 +3134,9 @@ From IETF draft 15 -> IETF draft 16:
 * AD review: enhanced interaction information in {{uc2figure}} and {{uc3figure}}
 * AD review: included new section on {{op_cons}} to outline operational considerations
 * AD review: enhanced {{log_hints}} with more detailed recommendations on logging
-* AD review: enhanced {{priv_cons}} with recommendations on logging
+* AD review: enhanced {{priv_cons}} with enhanced recommendations concerning logging
 * AD review: enhanced {{sec_cons_reg-agt}} with more information about misuse of the Registrar-Agent
-* AD review: addressed nits received throughout the draft
+* IOTDIR/OPSDIR/AD review: addressed various nits received throughout the draft
 
 From IETF draft 14 -> IETF draft 15:
 
