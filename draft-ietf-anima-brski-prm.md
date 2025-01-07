@@ -4,7 +4,7 @@ abbrev: BRSKI-PRM
 docname: draft-ietf-anima-brski-prm-16
 area: Operations and Management
 wg: ANIMA WG
-date: 2024
+date: 2025
 stand_alone: true
 ipr: trust200902
 submissionType: IETF
