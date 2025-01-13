@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-16
+docname: draft-ietf-anima-brski-prm-17
 area: Operations and Management
 wg: ANIMA WG
 date: 2025
@@ -2551,6 +2551,7 @@ The JWS Signature is generated over the JWS Protected Header and the JWS Payload
 The registrar SHOULD log certain events to provide an audit trail for the onboarding of pledges into its domain.
 This audit trail may support the root cause analysis in case of device or system failures.
 Recommend key events for logging comprise 
+
 * Communication attempts between the pledge, Registrar-Agent, and registrar.
 * Protocol handshakes and onboarding steps.
 * Voucher requests and responses.
@@ -3125,6 +3126,10 @@ IDevID certificates are intended to be widely usable and EKU does not support th
 # History of Changes [RFC Editor: please delete] {#app_history}
 
 Proof of Concept Code available
+
+From IETF draft 16 -> IETF draft 17:
+
+* updated formatting of key events in {{log_hints}} 
 
 From IETF draft 15 -> IETF draft 16:
 
