@@ -1123,12 +1123,12 @@ note that this makes optional leaves in the YANG definition mandatory for the PV
 
 #### JWS Protected Header
 
-The JWS Protected Header MUST follow the definitions of {{Section 3.3 of !I-D.ietf-anima-jws-voucher}}.
+The JWS Protected Header MUST follow the definitions of {{Section 3.2 of !I-D.ietf-anima-jws-voucher}}.
 If the certificate chain is not included in the `x5c` Header Parameter, it MUST be available at the domain registrar for verification of the pledge IDevID certificate.
 
 #### JWS Signature
 
-The pledge MUST sign the PVR artifact using its IDevID credential following the definitions of {{Section 3.4 of !I-D.ietf-anima-jws-voucher}}.
+The pledge MUST sign the PVR artifact using its IDevID credential following the definitions of {{Section 3.3 of !I-D.ietf-anima-jws-voucher}}.
 
 
 
@@ -1505,12 +1505,12 @@ this specification refines it as a JSON array structure similar to the `x5c` Hea
 
 #### JWS Protected Header
 
-The JWS Protected Header MUST follow the definitions of {{Section 3.3 of !I-D.ietf-anima-jws-voucher}}.
+The JWS Protected Header MUST follow the definitions of {{Section 3.2 of !I-D.ietf-anima-jws-voucher}}.
 However, the `x5c` Header Parameter MUST also contain the certificate chain for verification at the MASA.
 
 #### JWS Signature
 
-The domain registrar MUST sign the RVR artifact using its EE credentials following the definitions of {{Section 3.4 of !I-D.ietf-anima-jws-voucher}}.
+The domain registrar MUST sign the RVR artifact using its EE credentials following the definitions of {{Section 3.3 of !I-D.ietf-anima-jws-voucher}}.
 
 
 ### Backend Response Artifact: Voucher {#voucher_artifact}
@@ -3130,6 +3130,7 @@ Proof of Concept Code available
 From IETF draft 16 -> IETF draft 17:
 
 * updated formatting of key events in {{log_hints}} 
+* updated reference to corresponding sections for JWS Header and Signature in {{I-D.ietf-anima-jws-voucher}} in {{pvr_data}} and {{rvr_data}} 
 
 From IETF draft 15 -> IETF draft 16:
 
