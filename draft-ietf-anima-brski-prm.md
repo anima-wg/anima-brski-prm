@@ -1124,7 +1124,7 @@ note that this makes optional leaves in the YANG definition mandatory for the PV
 #### JWS Protected Header
 
 The JWS Protected Header MUST follow the definitions of {{Section 3.2 of !I-D.ietf-anima-jws-voucher}}.
-If the certificate chain is not included in the `x5c` Header Parameter, it MUST be available at the domain registrar for verification of the pledge IDevID certificate.
+
 
 #### JWS Signature
 
@@ -1506,7 +1506,7 @@ this specification refines it as a JSON array structure similar to the `x5c` Hea
 #### JWS Protected Header
 
 The JWS Protected Header MUST follow the definitions of {{Section 3.2 of !I-D.ietf-anima-jws-voucher}}.
-However, the `x5c` Header Parameter MUST also contain the certificate chain for verification at the MASA.
+
 
 #### JWS Signature
 
@@ -3131,6 +3131,7 @@ From IETF draft 16 -> IETF draft 17:
 
 * updated formatting of key events in {{log_hints}} 
 * updated reference to corresponding sections for JWS Header and Signature in {{I-D.ietf-anima-jws-voucher}} in {{pvr_data}} and {{rvr_data}} 
+* simplified description for JWS Protected Header aligning with the update in draft-ietf-anima-jws-voucher-15 to always include the certificate chain in {{pvr_data}} and {{rvr_data}}   
 
 From IETF draft 15 -> IETF draft 16:
 
