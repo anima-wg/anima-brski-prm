@@ -2641,14 +2641,14 @@ IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with
 {: #iana_table_uri title='BRSKI Well-Known URIs Additions' }
 
 
-##  DNS Service Names
+##  DNS Service Names {#DNS_sn}
 
 IANA has registered the following service names:
 
 **Service Name:** brski-pledge<br>
 **Transport Protocol(s):** tcp<br>
 **Assignee:** IESG <iesg@ietf.org><br>
-**Contact:** IESG <iesg@ietf.org><br>
+**Contact:** IETF Chair <chair@ietf.org><br>
 **Description:** The Bootstrapping Remote Secure Key Infrastructure Pledge<br>
 **Reference:** [THISRFC]
 
@@ -3130,6 +3130,7 @@ Proof of Concept Code available
 From IETF draft 17 -> IETF draft 18:
 
 * addressed nits received from the GenART review 
+* addressed comment from IANA to update contact for service name registration from IESG to IETF Chair in {{DNS_sn}}
 
 
 From IETF draft 16 -> IETF draft 17:
