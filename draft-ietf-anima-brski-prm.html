@@ -1218,11 +1218,11 @@ li > p:last-of-type:only-child {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">BRSKI-PRM</td>
-<td class="right">January 2025</td>
+<td class="right">February 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 2 August 2025</td>
+<td class="center">Expires 9 August 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1235,12 +1235,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-18</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-01-29" class="published">29 January 2025</time>
+<time datetime="2025-02-05" class="published">5 February 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-08-02">2 August 2025</time></dd>
+<dd class="expires"><time datetime="2025-08-09">9 August 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1300,7 +1300,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 2 August 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 9 August 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1563,7 +1563,7 @@ The approach defined here is agnostic to the enrollment protocol that connects t
                 <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-brski-well-known-registry" class="internal xref">BRSKI well-known Registry</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
-                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-dns-service-names" class="internal xref">DNS Service Names</a></p>
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-service-name-and-transport-" class="internal xref">Service Name and Transport Protocol Port Number Registry</a></p>
 </li>
             </ul>
 </li>
@@ -1647,7 +1647,7 @@ This includes the discovery of the BRSKI registrar in the customer domain and th
 <p id="section-1-2">Security information about the customer domain, specifically the customer domain certificate, are exchanged and authenticated utilizing signed data objects, the voucher artifacts as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 In response to a voucher-request, the Manufacturer Authorized Signing Authority (MASA) issues the voucher and provides it via the domain registrar to the pledge.
 <span>[<a href="#I-D.ietf-anima-rfc8366bis" class="cite xref">I-D.ietf-anima-rfc8366bis</a>]</span> specifies the format of the voucher artifacts, including the voucher-request artifact.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">For the certificate enrollment of devices, BRSKI relies on EST <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> to request and distribute customer domain specific device certificates.
+<p id="section-1-3">For the certificate enrollment of devices, BRSKI relies on EST (Enrollment over Secure Transport, <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span>) to request and distribute customer domain specific device certificates.
 EST in turn relies for the authentication and authorization of the certification request on the credentials used by the underlying TLS between the EST client and the EST server.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">BRSKI addresses scenarios in which the pledge initiates the bootstrapping acting as client (referred to as initiator mode by this document).
 BRSKI with Pledge in Responder Mode (BRSKI-PRM) defined in this document allows the pledge to act as server, so that it can be triggered externally and at a specific time to generate bootstrapping requests in the customer domain.
@@ -1699,7 +1699,8 @@ The binding is assumed to be provided through a digital signature of the actual 
         <dd class="break"></dd>
 <dt id="section-2-3.3">CA:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.4">
-          <p id="section-2-3.4.1">Certification Authority, issues certificates.<a href="#section-2-3.4.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.4.1">Certification Authority.
+An entity, which issues certificates and maintains certificate revocation information.<a href="#section-2-3.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 <dt id="section-2-3.5">Commissioning tool:</dt>
@@ -1880,7 +1881,7 @@ To overcome this situation, the pledges may need to be powered on, either manual
       <h2 id="name-requirements-discussion-and">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-requirements-discussion-and" class="section-name selfRef">Requirements Discussion and Mapping to Solution-Elements</a>
       </h2>
-<p id="section-4-1">Based on the intended target environment described in <a href="#sup-env" class="auto internal xref">Section 3.1</a>, the following requirements are derived to support bootstrapping of pledges in responder mode (acting as server):<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">Based on the intended target environment described in <a href="#sup-env" class="auto internal xref">Section 3.1</a>, the following boundary conditions are derived to support bootstrapping of pledges in responder mode (acting as server):<a href="#section-4-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4-2.1">
           <p id="section-4-2.1.1">To facilitate the communication between a pledge in responder mode and the registrar, additional functionality is needed either on the registrar or as a stand-alone component.
@@ -2334,7 +2335,8 @@ Both connections may also be possible in a single location at the same time, bas
 <a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-co-located-registrar-agent-" class="section-name selfRef">Co-located Registrar-Agent and Domain Registrar</a>
         </h3>
 <p id="section-5.3-1">Compared to <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> BRSKI, pledges supporting BRSKI-PRM can be completely passive and only need to react when being requested to react by a Registrar-Agent.
-In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, pledges instead need to continuously request enrollment from a domain registrar, which may result in undesirable communications pattern and possible overload of a domain registrar.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, pledges instead need to continuously interact with the domain registrar during onboarding, through discovery, voucher exchange, and enrollment. 
+This may increase the load on the domain registrar, specifically, if a larger number of pledges onboards simultaneously.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
 <span id="name-registrar-agent-integrated-"></span><div id="uc4figure">
 <figure id="figure-3">
           <div id="section-5.3-2.1">
@@ -2471,7 +2473,8 @@ Note that this is an additional requirement for issuing the Registrar-Agent EE c
 <p id="section-6.1-3">The SubjectKeyIdentifier is used in favor of providing the complete Registrar-Agent EE certificate in agent-signed data objects to accommodate also constrained environments and reduce bandwidth needed for communication with the pledge.
 In addition, it follows the recommendation from BRSKI to use SubjectKeyIdentifier in favor of a certificate fingerprint to avoid additional computations.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.1-4">The provisioning of the Registrar-Agent EE certificate is out of scope for this document, but may be done using its own BRSKI run or by other means such as configuration.
-It is <span class="bcp14">RECOMMENDED</span> to use short lived Registrar-Agent EE certificates in the range of days or weeks as outlined in <a href="#sec_cons_reg-agt" class="auto internal xref">Section 12.3</a>.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+It is <span class="bcp14">RECOMMENDED</span> to use short-lived Registrar-Agent EE certificates in the range of days or weeks. 
+This is to address the assumed nature of stand-alone Registrar-Agents as nomadic devices (see <a href="#arch_nomadic" class="auto internal xref">Section 5.2</a>) and to avoid potential misuse as outlined in <a href="#sec_cons_reg-agt" class="auto internal xref">Section 12.3</a>.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
 <p id="section-6.1-5">Further, the Registrar-Agent requires the registrar EE certificate to provide it to the pledge.
 It <span class="bcp14">MAY</span> use the certificate verified during server authentication within an initial TLS session with the registrar;
 in this case, the Registrar-Agent <span class="bcp14">MUST</span> possess the domain trust anchor (i.e., CA certificate) for the registrar EE certificate to verify the certificate chain.
@@ -3243,7 +3246,7 @@ Other specifications may define alternative formats for representing authenticat
         </h3>
 <p id="section-7.1-1">The Registrar-Agent <span class="bcp14">MUST</span> begin the sequence of exchanges by sending the Pledge Voucher-Request Trigger (tPVR).
 This assumes that the Registrar-Agent has already discovered the pledge, for instance as described in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 6.1.2</a> based on DNS-SD or similar.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.1-2">Optionally, TLS <span class="bcp14">MAY</span> be used to provide privacy for this exchange between the Registrar-Agent and the pledge (see <a href="#pledgehttps" class="auto internal xref">Appendix B</a>).<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">Optionally, TLS <span class="bcp14">MAY</span> be used to provide transport security, e.g., privacy and peer authentication, for the exchange between the Registrar-Agent and the pledge (see <a href="#pledgehttps" class="auto internal xref">Appendix B</a>).<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1-3"><a href="#exchangesfig_uc2_1" class="auto internal xref">Figure 5</a> shows the acquisition of the Pledge Voucher-Request (PVR) and the following subsections describe the corresponding artifacts.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
 <span id="name-pvr-acquisition-exchange"></span><div id="exchangesfig_uc2_1">
 <figure id="figure-5">
@@ -3335,6 +3338,7 @@ This assumes that the Registrar-Agent has already discovered the pledge, for ins
 The request body <span class="bcp14">MUST</span> contain the JSON-based Pledge Voucher-Request Trigger (tPVR) artifact as defined in <a href="#tpvr_artifact" class="auto internal xref">Section 7.1.1</a>.
 In the request header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/json</code> and the Accept field <span class="bcp14">SHOULD</span> be set to <code>application/voucher-jws+json</code> as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
 <p id="section-7.1-6">Upon receiving a valid tPVR, the pledge <span class="bcp14">MUST</span> reply with the PVR artifact as defined in <a href="#pvr_artifact" class="auto internal xref">Section 7.1.2</a> in the body of an HTTP 200 OK response.
+If the Accept header was not provided in the PVR, the pledge assumes that the accepted response format is <code>application/voucher-jws+json</code> and proceeds processing.
 In the response header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/voucher-jws+json</code> as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
 <p id="section-7.1-7">Note that the pledge provisionally accepts the registrar EE certificate contained in the tPVR until it receives the voucher (see <a href="#agt_prx" class="auto internal xref">Section 5.4</a>).<a href="#section-7.1-7" class="pilcrow">¶</a></p>
 <p id="section-7.1-8">If the pledge is unable to create the PVR, it <span class="bcp14">SHOULD</span> respond with an HTTP error status code to the Registrar-Agent.
@@ -3351,6 +3355,7 @@ The following client error status codes <span class="bcp14">SHOULD</span> be use
 </li>
         </ul>
 <p id="section-7.1-10">The pledge <span class="bcp14">MAY</span> use the response body to signal success/failure details to the service technician operating the Registrar-Agent.<a href="#section-7.1-10" class="pilcrow">¶</a></p>
+<p id="section-7.1-11">While BRSKI-PRM does not specify which content may be provided in the response body, it is recommended to provided it as JSON encoded information as other BRSKI-PRM exchanges also utilize this encoding.<a href="#section-7.1-11" class="pilcrow">¶</a></p>
 <div id="tpvr_artifact">
 <section id="section-7.1.1">
           <h4 id="name-request-artifact-pledge-vou">
@@ -3706,6 +3711,7 @@ also enables the registrar to log which Registrar-Agent was in contact with the 
 The request body <span class="bcp14">MUST</span> contain the JSON-based Pledge Enroll-Request Trigger (tPER) artifact as defined in <a href="#tper_artifact" class="auto internal xref">Section 7.2.1</a>.
 In the request header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/json</code> and the Accept field <span class="bcp14">SHOULD</span> be set to <code>application/jose+json</code>.<a href="#section-7.2-5" class="pilcrow">¶</a></p>
 <p id="section-7.2-6">Upon receiving a valid tPER, the pledge <span class="bcp14">MUST</span> reply with the PER artifact as defined in <a href="#per_artifact" class="auto internal xref">Section 7.2.2</a> in the body of an HTTP 200 OK response.
+If the Accept header was not provided in the PER, the pledge assumes that the accepted response format is <code>application/voucher-jws+json</code> and proceeds processing.
 In the response header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/jose+json</code>.<a href="#section-7.2-6" class="pilcrow">¶</a></p>
 <p id="section-7.2-7">If the pledge is unable to create the PER, it <span class="bcp14">SHOULD</span> respond with an HTTP error status code to the Registrar-Agent.
 The following client error status codes <span class="bcp14">MAY</span> be used:<a href="#section-7.2-7" class="pilcrow">¶</a></p>
@@ -3720,7 +3726,8 @@ The following client error status codes <span class="bcp14">MAY</span> be used:<
             <p id="section-7.2-8.3.1">415 Unsupported Media Type: if the Content-Type request header field indicates a type that is unknown or unsupported, e.g., a type other than <code>application/json</code><a href="#section-7.2-8.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-7.2-9">The pledge <span class="bcp14">MAY</span> use the response body to signal success/failure details to the service technician operating the Registrar-Agent.<a href="#section-7.2-9" class="pilcrow">¶</a></p>
+<p id="section-7.2-9">The pledge <span class="bcp14">MAY</span> use the response body to signal success/failure details to the service technician operating the Registrar-Agent.
+While BRSKI-PRM does not specify which content may be provided in the response body, it is recommended to provided it as JSON encoded information as other BRSKI-PRM exchanges also utilize this encoding.<a href="#section-7.2-9" class="pilcrow">¶</a></p>
 <div id="tper_artifact">
 <section id="section-7.2.1">
           <h4 id="name-request-artifact-pledge-enr">
@@ -5892,7 +5899,7 @@ The generated JWS Signature is base64url-encoded to become the string value of t
 <p id="section-7.11.1.1-3">The <code>version</code> member is included to permit significant changes to the pledge status artifacts in the future.
 The format and semantics in this document follow the status telemetry definitions of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 Hence, the <code>version</code> <span class="bcp14">SHALL</span> be set to <code>1</code>.
-A pledge (or Registrar-Agent) that receives a version larger than it knows about <span class="bcp14">SHOULD</span> log the contents and alert a human.<a href="#section-7.11.1.1-3" class="pilcrow">¶</a></p>
+A pledge (or Registrar-Agent) that receives a version larger than it knows about <span class="bcp14">SHOULD</span> log the contents and emit an operational notification.<a href="#section-7.11.1.1-3" class="pilcrow">¶</a></p>
 <p id="section-7.11.1.1-4">The <code>serial-number</code> member <span class="bcp14">SHALL</span> contain the product-serial-number corresponding to the X520SerialNumber field of the pledge IDevID certificate;
 it can be correlated with the product-serial-number in the signing certificate contained in the JWS Protected Header of the Pledge Status response artifact.<a href="#section-7.11.1.1-4" class="pilcrow">¶</a></p>
 <p id="section-7.11.1.1-5">The <code>created-on</code> member <span class="bcp14">SHALL</span> contain the current date and time at tStatus creation as standard date/time string as defined in <span><a href="https://rfc-editor.org/rfc/rfc3339#section-5.6" class="relref">Section 5.6</a> of [<a href="#RFC3339" class="cite xref">RFC3339</a>]</span>;
@@ -6298,13 +6305,18 @@ This has an influence on the configuration and operation not only of the Registr
 <p id="section-9-4">With the Registrar-Agent enhancement a new component is introduced in the communication path between the pledge and the registrar. 
 This likely increases the latency of the communication between the pledge and the registrar.
 The increase in latency due to this additional component may be neglected given that the Registrar-Agent operates with nomadic connectivity as outlined in <a href="#arch_nomadic" class="auto internal xref">Section 5.2</a>.<a href="#section-9-4" class="pilcrow">¶</a></p>
-<p id="section-9-5">Besides the above, also consider the existing documents on operational modes for<a href="#section-9-5" class="pilcrow">¶</a></p>
+<p id="section-9-5">BRSKI-PRM requires pledges to possess an IDevID to enable onboarding in new domains. 
+IDevID (and corresponding trust anchors) are expected to have a rather long lifetime. 
+This may allow for a longer period between device acquisition and initial onboarding. 
+Contrary, if devices that have been provided with an LDevID (and corresponding trust anchors) and temporarily taken out of service, immediate connectivity when bringing them back to operation may not be given, as the LDevIDs typically have a much shorter validity period compared to IDevIDs. 
+It is therefore recommended to onboard them as new devices to ensure they possess valid LDevIDs.<a href="#section-9-5" class="pilcrow">¶</a></p>
+<p id="section-9-6">Besides the above, also consider the existing documents on operational modes for<a href="#section-9-6" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9-6.1">
-          <p id="section-9-6.1.1">BRSKI registrars in <span>[<a href="#I-D.richardson-anima-registrar-considerations" class="cite xref">I-D.richardson-anima-registrar-considerations</a>]</span><a href="#section-9-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9-7.1">
+          <p id="section-9-7.1.1">BRSKI registrars in <span>[<a href="#I-D.richardson-anima-registrar-considerations" class="cite xref">I-D.richardson-anima-registrar-considerations</a>]</span><a href="#section-9-7.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-9-6.2">
-          <p id="section-9-6.2.1">BRSKI MASA in <span>[<a href="#I-D.richardson-anima-masa-considerations" class="cite xref">I-D.richardson-anima-masa-considerations</a>]</span><a href="#section-9-6.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-9-7.2">
+          <p id="section-9-7.2.1">BRSKI MASA in <span>[<a href="#I-D.richardson-anima-masa-considerations" class="cite xref">I-D.richardson-anima-masa-considerations</a>]</span><a href="#section-9-7.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
@@ -6380,10 +6392,10 @@ The increase in latency due to this additional component may be neglected given 
 </div>
 </section>
 </div>
-<div id="DNS_sn">
+<div id="sn_reg">
 <section id="section-10.2">
-        <h3 id="name-dns-service-names">
-<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-dns-service-names" class="section-name selfRef">DNS Service Names</a>
+        <h3 id="name-service-name-and-transport-">
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-service-name-and-transport-" class="section-name selfRef">Service Name and Transport Protocol Port Number Registry</a>
         </h3>
 <p id="section-10.2-1">IANA has registered the following service names:<a href="#section-10.2-1" class="pilcrow">¶</a></p>
 <p id="section-10.2-2"><strong>Service Name:</strong> brski-pledge<br>
@@ -7140,7 +7152,25 @@ IDevID certificates are intended to be widely usable and EKU does not support th
           <p id="appendix-C-3.1.1">addressed nits received from the GenART review<a href="#appendix-C-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="appendix-C-3.2">
-          <p id="appendix-C-3.2.1">addressed comment from IANA to update contact for service name registration from IESG to IETF Chair in <a href="#DNS_sn" class="auto internal xref">Section 10.2</a><a href="#appendix-C-3.2.1" class="pilcrow">¶</a></p>
+          <p id="appendix-C-3.2.1">addressed comment from IANA to update contact for service name registration from IESG to IETF Chair in <a href="#sn_reg" class="auto internal xref">Section 10.2</a><a href="#appendix-C-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-3.3">
+          <p id="appendix-C-3.3.1">SECDIR review: included reasoning for short lived certificates in <a href="#agent_component" class="auto internal xref">Section 6.1</a><a href="#appendix-C-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-3.4">
+          <p id="appendix-C-3.4.1">SECDIR review: enhanced reasoning for optional TLS usage in <a href="#tpvr" class="auto internal xref">Section 7.1</a><a href="#appendix-C-3.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-3.5">
+          <p id="appendix-C-3.5.1">SECDIR review: added hint for handling if the accept header is not used in <a href="#tpvr" class="auto internal xref">Section 7.1</a> and <a href="#tper" class="auto internal xref">Section 7.2</a><a href="#appendix-C-3.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-3.6">
+          <p id="appendix-C-3.6.1">SECDIR review: added hint for response body encoding in <a href="#tpvr" class="auto internal xref">Section 7.1</a> and <a href="#tper" class="auto internal xref">Section 7.2</a><a href="#appendix-C-3.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-3.7">
+          <p id="appendix-C-3.7.1">SECDIR review: added hint regarding IDevID and LDevID validity in <a href="#op_cons" class="auto internal xref">Section 9</a><a href="#appendix-C-3.7.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-3.8">
+          <p id="appendix-C-3.8.1">DNSDIR review: renamed <a href="#sn_reg" class="auto internal xref">Section 10.2</a> to Service Name and Transport Protocol Port Number Registry<a href="#appendix-C-3.8.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-C-4">From IETF draft 16 -&gt; IETF draft 17:<a href="#appendix-C-4" class="pilcrow">¶</a></p>

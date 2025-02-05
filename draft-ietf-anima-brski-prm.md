@@ -153,7 +153,7 @@ Security information about the customer domain, specifically the customer domain
 In response to a voucher-request, the Manufacturer Authorized Signing Authority (MASA) issues the voucher and provides it via the domain registrar to the pledge.
 {{I-D.ietf-anima-rfc8366bis}} specifies the format of the voucher artifacts, including the voucher-request artifact.
 
-For the certificate enrollment of devices, BRSKI relies on EST {{!RFC7030}} to request and distribute customer domain specific device certificates.
+For the certificate enrollment of devices, BRSKI relies on EST (Enrollment over Secure Transport, {{!RFC7030}}) to request and distribute customer domain specific device certificates.
 EST in turn relies for the authentication and authorization of the certification request on the credentials used by the underlying TLS between the EST client and the EST server.
 
 BRSKI addresses scenarios in which the pledge initiates the bootstrapping acting as client (referred to as initiator mode by this document).
@@ -196,7 +196,8 @@ authenticated self-contained object:
   The binding is assumed to be provided through a digital signature of the actual object using the corresponding private key of the certificate.
 
 CA:
-: Certification Authority, issues certificates.
+: Certification Authority.
+An entity, which issues certificates and maintains certificate revocation information.
 
 Commissioning tool:
 : Tool to interact with devices to provide configuration data.
@@ -322,7 +323,7 @@ To overcome this situation, the pledges may need to be powered on, either manual
 
 # Requirements Discussion and Mapping to Solution-Elements {#req-sol}
 
-Based on the intended target environment described in {{sup-env}}, the following requirements are derived to support bootstrapping of pledges in responder mode (acting as server):
+Based on the intended target environment described in {{sup-env}}, the following boundary conditions are derived to support bootstrapping of pledges in responder mode (acting as server):
 
 * To facilitate the communication between a pledge in responder mode and the registrar, additional functionality is needed either on the registrar or as a stand-alone component.
   This new functionality is defined as Registrar-Agent and acts as an agent of the registrar to trigger the pledge to generate requests for voucher and enrollment.
@@ -518,7 +519,8 @@ Both connections may also be possible in a single location at the same time, bas
 ## Co-located Registrar-Agent and Domain Registrar
 
 Compared to {{!RFC8995}} BRSKI, pledges supporting BRSKI-PRM can be completely passive and only need to react when being requested to react by a Registrar-Agent.
-In {{!RFC8995}}, pledges instead need to continuously request enrollment from a domain registrar, which may result in undesirable communications pattern and possible overload of a domain registrar.
+In {{!RFC8995}}, pledges instead need to continuously interact with the domain registrar during onboarding, through discovery, voucher exchange, and enrollment. 
+This may increase the load on the domain registrar, specifically, if a larger number of pledges onboards simultaneously.
 
 ~~~~ aasvg
                          +---------------------------+
@@ -586,7 +588,8 @@ The SubjectKeyIdentifier is used in favor of providing the complete Registrar-Ag
 In addition, it follows the recommendation from BRSKI to use SubjectKeyIdentifier in favor of a certificate fingerprint to avoid additional computations.
 
 The provisioning of the Registrar-Agent EE certificate is out of scope for this document, but may be done using its own BRSKI run or by other means such as configuration.
-It is RECOMMENDED to use short lived Registrar-Agent EE certificates in the range of days or weeks as outlined in {{sec_cons_reg-agt}}.
+It is RECOMMENDED to use short-lived Registrar-Agent EE certificates in the range of days or weeks. 
+This is to address the assumed nature of stand-alone Registrar-Agents as nomadic devices (see {{arch_nomadic}}) and to avoid potential misuse as outlined in {{sec_cons_reg-agt}}.
 
 Further, the Registrar-Agent requires the registrar EE certificate to provide it to the pledge.
 It MAY use the certificate verified during server authentication within an initial TLS session with the registrar;
@@ -926,7 +929,7 @@ The following subsections split the interactions shown in {{exchangesfig_uc2_all
 The Registrar-Agent MUST begin the sequence of exchanges by sending the Pledge Voucher-Request Trigger (tPVR).
 This assumes that the Registrar-Agent has already discovered the pledge, for instance as described in {{discovery_uc2_ppa}} based on DNS-SD or similar.
 
-Optionally, TLS MAY be used to provide privacy for this exchange between the Registrar-Agent and the pledge (see {{pledgehttps}}).
+Optionally, TLS MAY be used to provide transport security, e.g., privacy and peer authentication, for the exchange between the Registrar-Agent and the pledge (see {{pledgehttps}}).
 
 {{exchangesfig_uc2_1}} shows the acquisition of the Pledge Voucher-Request (PVR) and the following subsections describe the corresponding artifacts.
 
@@ -953,6 +956,7 @@ The request body MUST contain the JSON-based Pledge Voucher-Request Trigger (tPV
 In the request header, the Content-Type field MUST be set to `application/json` and the Accept field SHOULD be set to `application/voucher-jws+json` as defined in {{!I-D.ietf-anima-jws-voucher}}.
 
 Upon receiving a valid tPVR, the pledge MUST reply with the PVR artifact as defined in {{pvr_artifact}} in the body of an HTTP 200 OK response.
+If the Accept header was not provided in the PVR, the pledge assumes that the accepted response format is `application/voucher-jws+json` and proceeds processing.
 In the response header, the Content-Type field MUST be set to `application/voucher-jws+json` as defined in {{!I-D.ietf-anima-jws-voucher}}.
 
 Note that the pledge provisionally accepts the registrar EE certificate contained in the tPVR until it receives the voucher (see {{agt_prx}}).
@@ -965,6 +969,8 @@ The following client error status codes SHOULD be used:
 * 415 Unsupported Media Type: if the Content-Type request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/json`
 
 The pledge MAY use the response body to signal success/failure details to the service technician operating the Registrar-Agent.
+
+While BRSKI-PRM does not specify which content may be provided in the response body, it is recommended to provided it as JSON encoded information as other BRSKI-PRM exchanges also utilize this encoding.
 
 ### Request Artifact: Pledge Voucher-Request Trigger (tPVR) {#tpvr_artifact}
 
@@ -1163,6 +1169,7 @@ The request body MUST contain the JSON-based Pledge Enroll-Request Trigger (tPER
 In the request header, the Content-Type field MUST be set to `application/json` and the Accept field SHOULD be set to `application/jose+json`.
 
 Upon receiving a valid tPER, the pledge MUST reply with the PER artifact as defined in {{per_artifact}} in the body of an HTTP 200 OK response.
+If the Accept header was not provided in the PER, the pledge assumes that the accepted response format is `application/voucher-jws+json` and proceeds processing.
 In the response header, the Content-Type field MUST be set to `application/jose+json`.
 
 If the pledge is unable to create the PER, it SHOULD respond with an HTTP error status code to the Registrar-Agent.
@@ -1173,6 +1180,7 @@ The following client error status codes MAY be used:
 * 415 Unsupported Media Type: if the Content-Type request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/json`
 
 The pledge MAY use the response body to signal success/failure details to the service technician operating the Registrar-Agent.
+While BRSKI-PRM does not specify which content may be provided in the response body, it is recommended to provided it as JSON encoded information as other BRSKI-PRM exchanges also utilize this encoding.
 
 ### Request Artifact: Pledge Enroll-Request Trigger (tPER) {#tper_artifact}
 
@@ -2357,7 +2365,7 @@ The JSON Status Trigger Data SHALL be a JSON document {{RFC8259}} that MUST conf
 The `version` member is included to permit significant changes to the pledge status artifacts in the future.
 The format and semantics in this document follow the status telemetry definitions of {{!RFC8995}}.
 Hence, the `version` SHALL be set to `1`.
-A pledge (or Registrar-Agent) that receives a version larger than it knows about SHOULD log the contents and alert a human.
+A pledge (or Registrar-Agent) that receives a version larger than it knows about SHOULD log the contents and emit an operational notification.
 
 The `serial-number` member SHALL contain the product-serial-number corresponding to the X520SerialNumber field of the pledge IDevID certificate;
 it can be correlated with the product-serial-number in the signing certificate contained in the JWS Protected Header of the Pledge Status response artifact.
@@ -2610,6 +2618,12 @@ With the Registrar-Agent enhancement a new component is introduced in the commun
 This likely increases the latency of the communication between the pledge and the registrar.
 The increase in latency due to this additional component may be neglected given that the Registrar-Agent operates with nomadic connectivity as outlined in {{arch_nomadic}}.
 
+BRSKI-PRM requires pledges to possess an IDevID to enable onboarding in new domains. 
+IDevID (and corresponding trust anchors) are expected to have a rather long lifetime. 
+This may allow for a longer period between device acquisition and initial onboarding. 
+Contrary, if devices that have been provided with an LDevID (and corresponding trust anchors) and temporarily taken out of service, immediate connectivity when bringing them back to operation may not be given, as the LDevIDs typically have a much shorter validity period compared to IDevIDs. 
+It is therefore recommended to onboard them as new devices to ensure they possess valid LDevIDs.
+
 Besides the above, also consider the existing documents on operational modes for  
 
 * BRSKI registrars in {{I-D.richardson-anima-registrar-considerations}} 
@@ -2641,7 +2655,7 @@ IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with
 {: #iana_table_uri title='BRSKI Well-Known URIs Additions' }
 
 
-##  DNS Service Names {#DNS_sn}
+##  Service Name and Transport Protocol Port Number Registry {#sn_reg}
 
 IANA has registered the following service names:
 
@@ -3130,8 +3144,13 @@ Proof of Concept Code available
 From IETF draft 17 -> IETF draft 18:
 
 * addressed nits received from the GenART review 
-* addressed comment from IANA to update contact for service name registration from IESG to IETF Chair in {{DNS_sn}}
-
+* addressed comment from IANA to update contact for service name registration from IESG to IETF Chair in {{sn_reg}}
+* SECDIR review: included reasoning for short lived certificates in {{agent_component}}
+* SECDIR review: enhanced reasoning for optional TLS usage in {{tpvr}}
+* SECDIR review: added hint for handling if the accept header is not used in {{tpvr}} and {{tper}}
+* SECDIR review: added hint for response body encoding in {{tpvr}} and {{tper}}
+* SECDIR review: added hint regarding IDevID and LDevID validity in {{op_cons}}
+* DNSDIR review: renamed {{sn_reg}} to Service Name and Transport Protocol Port Number Registry
 
 From IETF draft 16 -> IETF draft 17:
 
