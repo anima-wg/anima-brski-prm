@@ -5,11 +5,11 @@
 ANIMA WG                                                        S. Fries
 Internet-Draft                                                 T. Werner
 Intended status: Standards Track                                 Siemens
-Expires: 9 August 2025                                           E. Lear
+Expires: 15 August 2025                                          E. Lear
                                                            Cisco Systems
                                                            M. Richardson
                                                 Sandelman Software Works
-                                                         5 February 2025
+                                                        11 February 2025
 
 
             BRSKI with Pledge in Responder Mode (BRSKI-PRM)
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Fries, et al.             Expires 9 August 2025                 [Page 1]
+Fries, et al.            Expires 15 August 2025                 [Page 1]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -68,7 +68,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 August 2025.
+   This Internet-Draft will expire on 15 August 2025.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Fries, et al.             Expires 9 August 2025                 [Page 2]
+Fries, et al.            Expires 15 August 2025                 [Page 2]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -135,20 +135,20 @@ Internet-Draft                  BRSKI-PRM                  February 2025
        7.3.5.  Backend Response Artifact: Voucher  . . . . . . . . .  49
        7.3.6.  Response Artifact: Registrar-Countersigned Voucher  .  50
      7.4.  Supply PER to Registrar (including Key Infrastructure
-            interaction) . . . . . . . . . . . . . . . . . . . . . .  51
+            interaction; requestenroll)  . . . . . . . . . . . . . .  51
        7.4.1.  Request Artifact: Pledge Enroll-Request (PER) . . . .  54
        7.4.2.  Response Artifact: Registrar Enroll-Response
                (Enroll-Resp) . . . . . . . . . . . . . . . . . . . .  54
-     7.5.  Obtain CA Certificates  . . . . . . . . . . . . . . . . .  54
+     7.5.  Obtain CA Certificates (wrappedcacerts) . . . . . . . . .  54
        7.5.1.  Request (no artifact) . . . . . . . . . . . . . . . .  55
        7.5.2.  Response Artifact: CA-Certificates (caCerts)  . . . .  56
-     7.6.  Supply Voucher to Pledge  . . . . . . . . . . . . . . . .  58
+     7.6.  Supply Voucher to Pledge (svr)  . . . . . . . . . . . . .  58
        7.6.1.  Request Artifact: Registrar-Countersigned Voucher . .  60
        7.6.2.  Response Artifact: Voucher Status (vStatus) . . . . .  60
-     7.7.  Supply CA Certificates to Pledge  . . . . . . . . . . . .  63
+     7.7.  Supply CA Certificates to Pledge (scac) . . . . . . . . .  63
        7.7.1.  Request Artifact: CA-Certificates (caCerts) . . . . .  64
        7.7.2.  Response (no artifact)  . . . . . . . . . . . . . . .  64
-     7.8.  Supply Enroll-Response to Pledge  . . . . . . . . . . . .  64
+     7.8.  Supply Enroll-Response to Pledge (ser)  . . . . . . . . .  64
        7.8.1.  Request Artifact: Enroll-Response (Enroll-Resp) . . .  65
        7.8.2.  Response Artifact: Enroll Status (eStatus)  . . . . .  66
      7.9.  Voucher Status Telemetry (including MASA interaction) . .  68
@@ -157,7 +157,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
      7.10. Enroll Status Telemetry . . . . . . . . . . . . . . . . .  69
        7.10.1.  Request Artifact: Enroll Status (eStatus)  . . . . .  71
        7.10.2.  Response (no artifact) . . . . . . . . . . . . . . .  71
-     7.11. Query Pledge Status . . . . . . . . . . . . . . . . . . .  71
+     7.11. Query Pledge Status (qps) . . . . . . . . . . . . . . . .  71
        7.11.1.  Request Artifact: Status Trigger (tStatus) . . . . .  72
        7.11.2.  Response Artifact: Pledge Status (pStatus) . . . . .  75
    8.  Logging Considerations  . . . . . . . . . . . . . . . . . . .  79
@@ -165,13 +165,13 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                 [Page 3]
+Fries, et al.            Expires 15 August 2025                 [Page 3]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
 
    10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  82
-     10.1.  BRSKI well-known Registry  . . . . . . . . . . . . . . .  82
+     10.1.  BRSKI Well-Known URIs  . . . . . . . . . . . . . . . . .  82
      10.2.  Service Name and Transport Protocol Port Number
             Registry . . . . . . . . . . . . . . . . . . . . . . . .  83
    11. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  83
@@ -221,7 +221,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                 [Page 4]
+Fries, et al.            Expires 15 August 2025                 [Page 4]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -277,7 +277,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                 [Page 5]
+Fries, et al.            Expires 15 August 2025                 [Page 5]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -333,7 +333,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                 [Page 6]
+Fries, et al.            Expires 15 August 2025                 [Page 6]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -389,7 +389,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                 [Page 7]
+Fries, et al.            Expires 15 August 2025                 [Page 7]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -445,7 +445,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                 [Page 8]
+Fries, et al.            Expires 15 August 2025                 [Page 8]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -501,7 +501,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                 [Page 9]
+Fries, et al.            Expires 15 August 2025                 [Page 9]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -557,7 +557,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 10]
+Fries, et al.            Expires 15 August 2025                [Page 10]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -613,7 +613,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 11]
+Fries, et al.            Expires 15 August 2025                [Page 11]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -669,7 +669,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 12]
+Fries, et al.            Expires 15 August 2025                [Page 12]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -725,7 +725,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 13]
+Fries, et al.            Expires 15 August 2025                [Page 13]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -781,7 +781,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 14]
+Fries, et al.            Expires 15 August 2025                [Page 14]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -837,7 +837,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 15]
+Fries, et al.            Expires 15 August 2025                [Page 15]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -893,7 +893,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 16]
+Fries, et al.            Expires 15 August 2025                [Page 16]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -949,7 +949,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 17]
+Fries, et al.            Expires 15 August 2025                [Page 17]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1005,7 +1005,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 18]
+Fries, et al.            Expires 15 August 2025                [Page 18]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1061,7 +1061,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 19]
+Fries, et al.            Expires 15 August 2025                [Page 19]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1117,7 +1117,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 20]
+Fries, et al.            Expires 15 August 2025                [Page 20]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1173,7 +1173,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 21]
+Fries, et al.            Expires 15 August 2025                [Page 21]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1229,7 +1229,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 22]
+Fries, et al.            Expires 15 August 2025                [Page 22]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1285,7 +1285,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 23]
+Fries, et al.            Expires 15 August 2025                [Page 23]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1341,7 +1341,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 24]
+Fries, et al.            Expires 15 August 2025                [Page 24]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1397,7 +1397,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 25]
+Fries, et al.            Expires 15 August 2025                [Page 25]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1453,7 +1453,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 26]
+Fries, et al.            Expires 15 August 2025                [Page 26]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1509,7 +1509,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 27]
+Fries, et al.            Expires 15 August 2025                [Page 27]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1565,7 +1565,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 28]
+Fries, et al.            Expires 15 August 2025                [Page 28]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1621,7 +1621,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 29]
+Fries, et al.            Expires 15 August 2025                [Page 29]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1677,7 +1677,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 30]
+Fries, et al.            Expires 15 August 2025                [Page 30]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1733,7 +1733,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 31]
+Fries, et al.            Expires 15 August 2025                [Page 31]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1789,7 +1789,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 32]
+Fries, et al.            Expires 15 August 2025                [Page 32]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1845,7 +1845,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 33]
+Fries, et al.            Expires 15 August 2025                [Page 33]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1901,7 +1901,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 34]
+Fries, et al.            Expires 15 August 2025                [Page 34]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -1957,7 +1957,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 35]
+Fries, et al.            Expires 15 August 2025                [Page 35]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2013,7 +2013,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 36]
+Fries, et al.            Expires 15 August 2025                [Page 36]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2069,7 +2069,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 37]
+Fries, et al.            Expires 15 August 2025                [Page 37]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2125,7 +2125,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 38]
+Fries, et al.            Expires 15 August 2025                [Page 38]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2181,7 +2181,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 39]
+Fries, et al.            Expires 15 August 2025                [Page 39]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2237,7 +2237,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 40]
+Fries, et al.            Expires 15 August 2025                [Page 40]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2293,7 +2293,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 41]
+Fries, et al.            Expires 15 August 2025                [Page 41]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2349,7 +2349,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 42]
+Fries, et al.            Expires 15 August 2025                [Page 42]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2405,7 +2405,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 43]
+Fries, et al.            Expires 15 August 2025                [Page 43]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2461,7 +2461,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 44]
+Fries, et al.            Expires 15 August 2025                [Page 44]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2517,7 +2517,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 45]
+Fries, et al.            Expires 15 August 2025                [Page 45]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2573,7 +2573,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 46]
+Fries, et al.            Expires 15 August 2025                [Page 46]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2629,7 +2629,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 47]
+Fries, et al.            Expires 15 August 2025                [Page 47]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2685,7 +2685,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 48]
+Fries, et al.            Expires 15 August 2025                [Page 48]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2741,7 +2741,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 49]
+Fries, et al.            Expires 15 August 2025                [Page 49]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2797,7 +2797,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 50]
+Fries, et al.            Expires 15 August 2025                [Page 50]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2844,7 +2844,8 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    authentication in the TLS session with the Registrar-Agent receiving
    this artifact (see Section 6.3).
 
-7.4.  Supply PER to Registrar (including Key Infrastructure interaction)
+7.4.  Supply PER to Registrar (including Key Infrastructure interaction;
+      requestenroll)
 
    After receiving the Voucher artifact, the Registrar-Agent sends the
    PER to the domain registrar within the same TLS session.
@@ -2852,8 +2853,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-
-Fries, et al.             Expires 9 August 2025                [Page 51]
+Fries, et al.            Expires 15 August 2025                [Page 51]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2909,7 +2909,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 52]
+Fries, et al.            Expires 15 August 2025                [Page 52]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -2965,7 +2965,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 53]
+Fries, et al.            Expires 15 August 2025                [Page 53]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3004,7 +3004,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    pledge EE certificate, but not the certificate chain.  The chain is
    provided with the CA certificates.
 
-7.5.  Obtain CA Certificates
+7.5.  Obtain CA Certificates (wrappedcacerts)
 
    The pinned domain certificate in the voucher is only the initial
    trust anchor for only the domain registrar.  To fully trust the
@@ -3021,7 +3021,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 54]
+Fries, et al.            Expires 15 August 2025                [Page 54]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3077,7 +3077,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 55]
+Fries, et al.            Expires 15 August 2025                [Page 55]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3133,7 +3133,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 56]
+Fries, et al.            Expires 15 August 2025                [Page 56]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3189,7 +3189,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 57]
+Fries, et al.            Expires 15 August 2025                [Page 57]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3200,7 +3200,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    credentials.  The JWS Signature is generated over the JWS Protected
    Header and the JWS Payload as described in Section 5.1 of [RFC7515].
 
-7.6.  Supply Voucher to Pledge
+7.6.  Supply Voucher to Pledge (svr)
 
    Once the Registrar-Agent has acquired the following three
    bootstrapping artifacts, it can supply them to the pledge starting
@@ -3245,7 +3245,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 58]
+Fries, et al.            Expires 15 August 2025                [Page 58]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3301,7 +3301,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 59]
+Fries, et al.            Expires 15 August 2025                [Page 59]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3357,7 +3357,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 60]
+Fries, et al.            Expires 15 August 2025                [Page 60]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3413,7 +3413,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 61]
+Fries, et al.            Expires 15 August 2025                [Page 61]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3469,12 +3469,12 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 62]
+Fries, et al.            Expires 15 August 2025                [Page 62]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
 
-7.7.  Supply CA Certificates to Pledge
+7.7.  Supply CA Certificates to Pledge (scac)
 
    Before supplying the pledge EE certificate, the Registrar-Agent
    supplies the domain CA certificates to the pledge, so the pledge can
@@ -3525,7 +3525,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 63]
+Fries, et al.            Expires 15 August 2025                [Page 63]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3566,7 +3566,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    transport for this specification.  There is no artifact provided to
    the Registrar-Agent.
 
-7.8.  Supply Enroll-Response to Pledge
+7.8.  Supply Enroll-Response to Pledge (ser)
 
    After supplying the CA certificates, the Registrar-Agent supplies the
    pledge EE certificate to the pledge.
@@ -3581,7 +3581,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 64]
+Fries, et al.            Expires 15 August 2025                [Page 64]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3637,7 +3637,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 65]
+Fries, et al.            Expires 15 August 2025                [Page 65]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3693,7 +3693,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 66]
+Fries, et al.            Expires 15 August 2025                [Page 66]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3749,7 +3749,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 67]
+Fries, et al.            Expires 15 August 2025                [Page 67]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3805,7 +3805,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 68]
+Fries, et al.            Expires 15 August 2025                [Page 68]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3861,7 +3861,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 69]
+Fries, et al.            Expires 15 August 2025                [Page 69]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3917,7 +3917,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 70]
+Fries, et al.            Expires 15 August 2025                [Page 70]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -3934,7 +3934,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    transport for this specification.  There is no artifact provided to
    the Registrar-Agent.
 
-7.11.  Query Pledge Status
+7.11.  Query Pledge Status (qps)
 
    The following assumes that a Registrar-Agent MAY need to query the
    overall status of a pledge.  This information can be useful to solve
@@ -3973,7 +3973,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 71]
+Fries, et al.            Expires 15 August 2025                [Page 71]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4029,7 +4029,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 72]
+Fries, et al.            Expires 15 August 2025                [Page 72]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4085,7 +4085,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 73]
+Fries, et al.            Expires 15 August 2025                [Page 73]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4141,7 +4141,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 74]
+Fries, et al.            Expires 15 August 2025                [Page 74]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4197,7 +4197,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 75]
+Fries, et al.            Expires 15 August 2025                [Page 75]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4253,7 +4253,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 76]
+Fries, et al.            Expires 15 August 2025                [Page 76]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4309,7 +4309,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 77]
+Fries, et al.            Expires 15 August 2025                [Page 77]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4365,7 +4365,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 78]
+Fries, et al.            Expires 15 August 2025                [Page 78]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4421,7 +4421,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 79]
+Fries, et al.            Expires 15 August 2025                [Page 79]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4477,7 +4477,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 80]
+Fries, et al.            Expires 15 August 2025                [Page 80]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4533,7 +4533,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 81]
+Fries, et al.            Expires 15 August 2025                [Page 81]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4581,7 +4581,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
    This document requires the following IANA actions.
 
-10.1.  BRSKI well-known Registry
+10.1.  BRSKI Well-Known URIs
 
    IANA is requested to enhance the Registry entitled: "BRSKI Well-Known
    URIs" with the following endpoints:
@@ -4589,7 +4589,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 82]
+Fries, et al.            Expires 15 August 2025                [Page 82]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4645,7 +4645,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 83]
+Fries, et al.            Expires 15 August 2025                [Page 83]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4701,7 +4701,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 84]
+Fries, et al.            Expires 15 August 2025                [Page 84]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4757,7 +4757,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 85]
+Fries, et al.            Expires 15 August 2025                [Page 85]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4813,7 +4813,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 86]
+Fries, et al.            Expires 15 August 2025                [Page 86]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4869,7 +4869,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 87]
+Fries, et al.            Expires 15 August 2025                [Page 87]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4925,7 +4925,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 88]
+Fries, et al.            Expires 15 August 2025                [Page 88]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -4981,7 +4981,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 89]
+Fries, et al.            Expires 15 August 2025                [Page 89]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -5037,7 +5037,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 90]
+Fries, et al.            Expires 15 August 2025                [Page 90]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -5093,7 +5093,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 91]
+Fries, et al.            Expires 15 August 2025                [Page 91]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -5149,7 +5149,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 92]
+Fries, et al.            Expires 15 August 2025                [Page 92]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -5205,7 +5205,7 @@ A.1.  Example Pledge Voucher-Request (PVR) - from Pledge to Registrar-
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 93]
+Fries, et al.            Expires 15 August 2025                [Page 93]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -5261,7 +5261,7 @@ A.2.  Example Parboiled Registrar Voucher-Request (RVR) - from Registrar
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 94]
+Fries, et al.            Expires 15 August 2025                [Page 94]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -5317,7 +5317,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 95]
+Fries, et al.            Expires 15 August 2025                [Page 95]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -5373,7 +5373,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 96]
+Fries, et al.            Expires 15 August 2025                [Page 96]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -5429,7 +5429,7 @@ A.3.  Example Voucher - from MASA to Pledge, via Registrar and
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 97]
+Fries, et al.            Expires 15 August 2025                [Page 97]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -5485,7 +5485,7 @@ A.4.  Example Voucher, MASA issued Voucher with additional Registrar
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 98]
+Fries, et al.            Expires 15 August 2025                [Page 98]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -5541,7 +5541,7 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-Fries, et al.             Expires 9 August 2025                [Page 99]
+Fries, et al.            Expires 15 August 2025                [Page 99]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -5597,7 +5597,7 @@ Appendix B.  HTTP-over-TLS operations between Registrar-Agent and Pledge
 
 
 
-Fries, et al.             Expires 9 August 2025               [Page 100]
+Fries, et al.            Expires 15 August 2025               [Page 100]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
@@ -5653,10 +5653,13 @@ Appendix C.  History of Changes [RFC Editor: please delete]
 
 
 
-Fries, et al.             Expires 9 August 2025               [Page 101]
+Fries, et al.            Expires 15 August 2025               [Page 101]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
+
+   *  from IANA expert review: included registered service names in
+      headings
 
    From IETF draft 16 -> IETF draft 17:
 
@@ -5703,16 +5706,17 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
    From IETF draft 14 -> IETF draft 15:
 
-   *  issue #134: editorial clarifications on references to
-      [I-D.ietf-anima-brski-discovery] in Section 6.1.1 and
-      Section 6.1.2
 
 
 
-Fries, et al.             Expires 9 August 2025               [Page 102]
+Fries, et al.            Expires 15 August 2025               [Page 102]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
+
+   *  issue #134: editorial clarifications on references to
+      [I-D.ietf-anima-brski-discovery] in Section 6.1.1 and
+      Section 6.1.2
 
    From IETF draft 13 -> IETF draft 14:
 
@@ -5759,16 +5763,15 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    *  Updated reason-content description in status response messages
       (enroll-status, voucher-status, and status-response).
 
-   *  Updated CDDL source code integration to allow for automatic
-      verification
 
 
-
-
-Fries, et al.             Expires 9 August 2025               [Page 103]
+Fries, et al.            Expires 15 August 2025               [Page 103]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
+
+   *  Updated CDDL source code integration to allow for automatic
+      verification
 
    *  Reordered description in Section 7.3 in Section 7.2 to better
       match the order of communication and artifact processing.
@@ -5814,17 +5817,18 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    *  clarified registrar discovery and relation to BRSKI-Discovery in
       Section 6.1.1
 
-   *  clarified discovery of pledges by the Registrar-Agent in
-      Section 6.1.2, deleted reference to GRASP as handled in BRSKI-
-      Discovery
 
 
 
 
-Fries, et al.             Expires 9 August 2025               [Page 104]
+Fries, et al.            Expires 15 August 2025               [Page 104]
 
 Internet-Draft                  BRSKI-PRM                  February 2025
 
+
+   *  clarified discovery of pledges by the Registrar-Agent in
+      Section 6.1.2, deleted reference to GRASP as handled in BRSKI-
+      Discovery
 
    *  addressed comments from SECDIR early review
 
@@ -5870,17 +5874,18 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
    *  updated JSON examples -> "signature": BASE64URL(JWS Signature)
 
+
+
+
+Fries, et al.            Expires 15 August 2025               [Page 105]
+
+Internet-Draft                  BRSKI-PRM                  February 2025
+
+
    From IETF draft 08 -> IETF draft 09:
 
    *  issue #80, enhanced Section 6.1.2 with clarification on the
       product-serial-number and the inclusion of GRASP
-
-
-
-Fries, et al.             Expires 9 August 2025               [Page 105]
-
-Internet-Draft                  BRSKI-PRM                  February 2025
-
 
    *  issue #81, enhanced introduction with motivation for
       agent_signed_data
@@ -5925,18 +5930,19 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
    *  issue #100: included negative example in Figure 33
 
+
+
+
+Fries, et al.            Expires 15 August 2025               [Page 106]
+
+Internet-Draft                  BRSKI-PRM                  February 2025
+
+
    *  issue #101: included handling if Section 7.6 voucher telemetry
       information has not been received by the Registrar-Agent
 
    *  issue #102: relaxed requirements for CA certs provisioning in
       Section 7.7
-
-
-
-Fries, et al.             Expires 9 August 2025               [Page 106]
-
-Internet-Draft                  BRSKI-PRM                  February 2025
-
 
    *  issue #105: included negative example in Figure 39
 
@@ -5977,6 +5983,17 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
    From IETF draft 06 -> IETF draft 07:
 
+
+
+
+
+
+
+Fries, et al.            Expires 15 August 2025               [Page 107]
+
+Internet-Draft                  BRSKI-PRM                  February 2025
+
+
    *  WGLC resulted in a removal of the voucher enhancements completely
       from this document to RFC 8366bis, containing all enhancements and
       augmentations of the voucher, including the voucher-request as
@@ -5985,14 +6002,6 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    *  smaller editorial corrections
 
    From IETF draft 05 -> IETF draft 06:
-
-
-
-
-Fries, et al.             Expires 9 August 2025               [Page 107]
-
-Internet-Draft                  BRSKI-PRM                  February 2025
-
 
    *  Update of list of reviewers
 
@@ -6032,6 +6041,15 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
    *  Enhanced error codes in section 5.5.1, issue #39, #64
 
+
+
+
+
+Fries, et al.            Expires 15 August 2025               [Page 108]
+
+Internet-Draft                  BRSKI-PRM                  February 2025
+
+
    *  Enhanced security considerations and privacy considerations, issue
       #59
 
@@ -6040,15 +6058,6 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
    *  Issue #47 MASA verification of LDevID(RegAgt) to the same
       registrar LDevID certificate domain CA
-
-
-
-
-
-Fries, et al.             Expires 9 August 2025               [Page 108]
-
-Internet-Draft                  BRSKI-PRM                  February 2025
-
 
    *  Reworked terminology of "enrollment object", "certification
       object", "enrollment request object", etc., issue #27
@@ -6088,6 +6097,15 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    *  In deep Review by Esko Dijk lead to issues #22-#61, which are bein
       stepwise integrated
 
+
+
+
+
+Fries, et al.            Expires 15 August 2025               [Page 109]
+
+Internet-Draft                  BRSKI-PRM                  February 2025
+
+
    *  Simplified YANG definition by augmenting the voucher-request from
       RFC 8995 instead of redefining it.
 
@@ -6096,15 +6114,6 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
    *  Added clarification that Registrar-Agent may collect PVR or PER or
       both in one run, issue #17
-
-
-
-
-
-Fries, et al.             Expires 9 August 2025               [Page 109]
-
-Internet-Draft                  BRSKI-PRM                  February 2025
-
 
    *  Added a statement that nonceless voucher may be accepted, issue
       #18
@@ -6143,6 +6152,16 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
    From IETF draft 01 -> IETF draft 02:
 
+
+
+
+
+
+Fries, et al.            Expires 15 August 2025               [Page 110]
+
+Internet-Draft                  BRSKI-PRM                  February 2025
+
+
    *  Issue #15 included additional signature on voucher from registrar
       in section Section 7.3 and section Section 5.4 The verification of
       multiple signatures is described in section Section 7.6
@@ -6153,14 +6172,6 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    *  Included error responses from pledge if it is not able to create a
       Pledge-Voucher-Request or an enrollment request in section
       Section 7.1
-
-
-
-
-Fries, et al.             Expires 9 August 2025               [Page 110]
-
-Internet-Draft                  BRSKI-PRM                  February 2025
-
 
    *  Removed open issue regarding handling of multiple CSRs and Enroll-
       Responses during the bootstrapping as the initial target it the
@@ -6199,6 +6210,14 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    *  Reworked text in from introduction to section pledge-responder-
       mode
 
+
+
+
+Fries, et al.            Expires 15 August 2025               [Page 111]
+
+Internet-Draft                  BRSKI-PRM                  February 2025
+
+
    *  Fixed "serial-number" encoding in PVR/RVR
 
    *  Added prior-signed-voucher-request in the parameter description of
@@ -6210,13 +6229,6 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    *  Inclusion of limitation section (pledge sleeps and needs to be
       waked up.  Pledge is awake but Registrar-Agent is not available)
       (Issue #10).
-
-
-
-Fries, et al.             Expires 9 August 2025               [Page 111]
-
-Internet-Draft                  BRSKI-PRM                  February 2025
-
 
    *  Assertion-type aligned with voucher in RFC8366bis, deleted related
       open issues.  (Issue #4)
@@ -6253,6 +6265,15 @@ Internet-Draft                  BRSKI-PRM                  February 2025
       required changes and adaptations in several sections to remove the
       description and references to UC1.
 
+
+
+
+
+Fries, et al.            Expires 15 August 2025               [Page 112]
+
+Internet-Draft                  BRSKI-PRM                  February 2025
+
+
    *  Addressed feedback for voucher-request enhancements from YANG
       doctor early review, meanwhile moved to
       [I-D.ietf-anima-rfc8366bis] as well as in the security
@@ -6265,14 +6286,6 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    *  Utilized ietf-voucher-request-async instead of ietf-voucher-
       request in voucher exchanges to utilize the enhanced voucher-
       request.
-
-
-
-
-Fries, et al.             Expires 9 August 2025               [Page 112]
-
-Internet-Draft                  BRSKI-PRM                  February 2025
-
 
    *  Included changes from draft-ietf-netconf-sztp-csr-06 regarding the
       YANG definition of csr-types into the enrollment request exchange.
@@ -6308,6 +6321,15 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    *  Details on trust relationship between Registrar-Agent and
       registrar (issue #4, #5, #9) included in Section 5.
 
+
+
+
+
+Fries, et al.            Expires 15 August 2025               [Page 113]
+
+Internet-Draft                  BRSKI-PRM                  February 2025
+
+
    *  Recommendation regarding short-lived certificates for Registrar-
       Agent authentication towards registrar (issue #7) in the security
       considerations.
@@ -6322,13 +6344,6 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
    *  Details on trust relationship between Registrar-Agent and pledge
       (issue #5) included in Section 5.
-
-
-
-Fries, et al.             Expires 9 August 2025               [Page 113]
-
-Internet-Draft                  BRSKI-PRM                  February 2025
-
 
    *  Split of use case 2 call flow into sub sections in Section 7.
 
@@ -6362,6 +6377,15 @@ Internet-Draft                  BRSKI-PRM                  February 2025
       intended to support both use cases in the document.  An
       illustrative example is provided.
 
+
+
+
+
+Fries, et al.            Expires 15 August 2025               [Page 114]
+
+Internet-Draft                  BRSKI-PRM                  February 2025
+
+
    *  Missing details provided for the description and call flow in
       pledge-agent use case Section 5, e.g. to accommodate distribution
       of CA certificates.
@@ -6376,15 +6400,6 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    *  Removal of copied call flows for voucher exchange and registrar
       discovery flow from [RFC8995] in UC1 to avoid doubling or text or
       inconsistencies.
-
-
-
-
-
-Fries, et al.             Expires 9 August 2025               [Page 114]
-
-Internet-Draft                  BRSKI-PRM                  February 2025
-
 
    *  Reworked abstract and introduction to be more crisp regarding the
       targeted solution.  Several structural changes in the document to
@@ -6418,6 +6433,15 @@ Internet-Draft                  BRSKI-PRM                  February 2025
    *  Update of description of architecture elements and changes to
       BRSKI in Section 5.
 
+
+
+
+
+Fries, et al.            Expires 15 August 2025               [Page 115]
+
+Internet-Draft                  BRSKI-PRM                  February 2025
+
+
    *  Enhanced consideration of existing enrollment protocols in the
       context of mapping the requirements to existing solutions in
       Section 4.
@@ -6432,15 +6456,6 @@ Internet-Draft                  BRSKI-PRM                  February 2025
       handled in an asynchronous manner and is therefore not considered
       further.  This resulted in removal of the alternative path the
       MASA in Figure 1 and the associated description in Section 5.
-
-
-
-
-
-Fries, et al.             Expires 9 August 2025               [Page 115]
-
-Internet-Draft                  BRSKI-PRM                  February 2025
-
 
    *  Enhancement of description of architecture elements and changes to
       BRSKI in Section 5.
@@ -6475,6 +6490,14 @@ Authors' Addresses
    Otto-Hahn-Ring 6
    81739 Munich
    Germany
+
+
+
+Fries, et al.            Expires 15 August 2025               [Page 116]
+
+Internet-Draft                  BRSKI-PRM                  February 2025
+
+
    Email: steffen.fries@siemens.com
    URI:   https://www.siemens.com/
 
@@ -6486,16 +6509,6 @@ Authors' Addresses
    Germany
    Email: thomas-werner@siemens.com
    URI:   https://www.siemens.com/
-
-
-
-
-
-
-
-Fries, et al.             Expires 9 August 2025               [Page 116]
-
-Internet-Draft                  BRSKI-PRM                  February 2025
 
 
    Eliot Lear
@@ -6536,17 +6549,4 @@ Internet-Draft                  BRSKI-PRM                  February 2025
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Fries, et al.             Expires 9 August 2025               [Page 117]
+Fries, et al.            Expires 15 August 2025               [Page 117]

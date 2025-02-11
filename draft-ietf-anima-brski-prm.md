@@ -1597,7 +1597,7 @@ The registrar MUST use its EE credentials to sign.
 Note that the credentials need to be the same as used for server authentication in the TLS session with the Registrar-Agent receiving this artifact (see {{registrar_component}}).
 
 
-## Supply PER to Registrar (including Key Infrastructure interaction) {#per}
+## Supply PER to Registrar (including Key Infrastructure interaction; requestenroll) {#per}
 
 After receiving the Voucher artifact, the Registrar-Agent sends the PER to the domain registrar within the same TLS session.
 
@@ -1681,7 +1681,7 @@ Note that it only contains the pledge EE certificate, but not the certificate ch
 The chain is provided with the CA certificates.
 
 
-## Obtain CA Certificates {#obtain_cacerts}
+## Obtain CA Certificates (wrappedcacerts) {#obtain_cacerts}
 
 The pinned domain certificate in the voucher is only the initial trust anchor for only the domain registrar.
 To fully trust the domain and also to verify its own EE certificate, the pledge also needs the corresponding domain CA certificate(s).
@@ -1808,7 +1808,7 @@ The JWS Signature is generated over the JWS Protected Header and the JWS Payload
 
 
 
-## Supply Voucher to Pledge {#voucher}
+## Supply Voucher to Pledge (svr) {#voucher}
 
 Once the Registrar-Agent has acquired the following three bootstrapping artifacts, it can supply them to the pledge starting with the Voucher':
 
@@ -1970,7 +1970,7 @@ The JWS Signature is generated over the JWS Protected Header and the JWS Payload
 
 
 
-## Supply CA Certificates to Pledge {#cacerts}
+## Supply CA Certificates to Pledge (scac) {#cacerts}
 
 Before supplying the pledge EE certificate, the Registrar-Agent supplies the domain CA certificates to the pledge, so the pledge can verify its EE certificate in the next exchange.
 As the CA certificate provisioning is crucial from a security perspective, this exchange SHOULD only be done, if supplying the voucher in the previous exchange ({{voucher}}) has been successfully processed by the pledge as reflected in the vStatus artifact.
@@ -2028,7 +2028,7 @@ There is no artifact provided to the Registrar-Agent.
 
 
 
-## Supply Enroll-Response to Pledge {#enroll_response}
+## Supply Enroll-Response to Pledge (ser) {#enroll_response}
 
 After supplying the CA certificates, the Registrar-Agent supplies the pledge EE certificate to the pledge.
 
@@ -2272,7 +2272,7 @@ There is no artifact provided to the Registrar-Agent.
 
 
 
-## Query Pledge Status {#query}
+## Query Pledge Status (qps) {#query}
 
 The following assumes that a Registrar-Agent MAY need to query the overall status of a pledge.
 This information can be useful to solve errors, when the pledge was not able to connect to the target domain during bootstrapping.
@@ -2637,7 +2637,7 @@ This document requires the following IANA actions.
 
 
 
-##  BRSKI well-known Registry
+##  BRSKI Well-Known URIs
 
 IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with the following endpoints:
 
@@ -3151,6 +3151,7 @@ From IETF draft 17 -> IETF draft 18:
 * SECDIR review: added hint for response body encoding in {{tpvr}} and {{tper}}
 * SECDIR review: added hint regarding IDevID and LDevID validity in {{op_cons}}
 * DNSDIR review: renamed {{sn_reg}} to Service Name and Transport Protocol Port Number Registry
+* from IANA expert review: included registered service names in headings 
 
 From IETF draft 16 -> IETF draft 17:
 
