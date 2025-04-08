@@ -1301,7 +1301,7 @@ Consequently, the domain registrar can distinguish BRSKI (pledge-initiator-mode)
 The registrar SHOULD verify the TLS client authentication of the Registrar-Agent, in particular if the TLS session is used to obtain the Registrar-Agent EE certificate (see {{registrar_component}}).
 Note that authentication and authorization of the pledge verified during the TLS session based on the signatures inside the PVR artifact.
 
-As already stated in {{!RFC8995}}, the use of TLS 1.3 (or newer) is encouraged.
+As already stated in {{!RFC8995}}, and required by {{I-D.ietf-uta-require-tls13}}, the use of TLS 1.3 (or newer) is encouraged.
 TLS 1.2 or newer is REQUIRED on the Registrar-Agent side.
 TLS 1.3 (or newer) SHOULD be available on the registrar, but TLS 1.2 MAY be used.
 TLS 1.3 (or newer) SHOULD be available on the MASA, but TLS 1.2 MAY be used.
