@@ -99,7 +99,7 @@ informative:
   RFC9238:
   RFC9662:
   RFC9733:
-  I-D.richardson-emu-eap-onboarding:
+  I-D.ietf-uta-require-tls13:
   I-D.richardson-anima-masa-considerations:
   I-D.richardson-anima-registrar-considerations:
   I-D.ietf-anima-brski-discovery:
@@ -219,7 +219,7 @@ For domain components, the EE certificate is signed by the domain owner.
 For the pledge, the EE certificate is either the IDevID certificate signed by the manufacturer or the LDevID certificate signed by the domain owner or an application-specific EE certificate signed by the domain owner.
 
 endpoint:
-: Term equivalent to resource in HTTP {{RFC9110}} and CoAP {{RFC7252}}.
+: Term equivalent to resource in HTTP {{RFC9110}}.
   Endpoints are accessible via Well-Known URIs {{RFC8615}}.
 
 IDevID:
@@ -325,7 +325,7 @@ To overcome this situation, the pledges may need to be powered on, either manual
 
 
 
-# Requirements Discussion and Mapping to Solution-Elements {#req-sol}
+# Requirements Discussion and Mapping to BRSKI-PRM Functional Elements {#req-sol}
 
 Based on the intended target environment described in {{sup-env}}, the following boundary conditions are derived to support bootstrapping of pledges in responder mode (acting as server):
 
@@ -651,13 +651,15 @@ In the absence of a more general discovery as defined in {{I-D.ietf-anima-brski-
 * `<product-serial-number>._brski-pledge._tcp.local`, to discover a specific pledge, e.g., when connected to a local network.
 * `_brski-pledge._tcp.local` to get a list of pledges to be bootstrapped.
 
+When supporting different options for discovery, as outlined in {{I-D.ietf-anima-brski-discovery}}, a manufacturer may support configuration of preferred options.
+
 A manufacturer may allow the pledge to react on DNS-SD with mDNS discovery without its product-serial-number contained.
 This allows a commissioning tool to discover pledges to be bootstrapped in the domain.
 The manufacturer supports this functionality as outlined in {{sec_cons_mDNS}}.
 
 Establishing network connectivity of the pledge is out of scope of this document but necessary to apply DNS-SD with mDNS.
 For Ethernet, it is provided by simply connecting the network cable.
-For WiFi networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping, e.g., as proposed in {{I-D.richardson-emu-eap-onboarding}}.
+For WiFi networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping. 
 The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN ID.
 How to gain network connectivity is out of scope of this document.
 
@@ -963,6 +965,7 @@ If the Accept header was not provided in the PVR, the pledge assumes that the ac
 In the response header, the Content-Type field MUST be set to `application/voucher-jws+json` as defined in {{!I-D.ietf-anima-jws-voucher}}.
 
 Note that the pledge provisionally accepts the registrar EE certificate contained in the tPVR until it receives the voucher (see {{agt_prx}}).
+The pledge will take the last received tPVR for the provisional accept of the received registrar EE certificate, if it does not have the capability to store more that one registrar EE certificate.
 
 If the pledge is unable to create the PVR, it SHOULD respond with an HTTP error status code to the Registrar-Agent.
 The following client error status codes SHOULD be used:
@@ -1860,6 +1863,7 @@ Upon receiving the voucher, the pledge SHALL perform the signature verification 
 If all steps above complete successfully, the pledge SHALL terminate the "provisional state" for the initial domain trust anchor (i.e., the pinned domain certificate).
 
 A nonceless voucher MAY be accepted as in {{!RFC8995}} if allowed by the pledge implementation of the manufacturer.
+A manufacturer may opt to provide the acceptance of nonceless voucher  as configurable item.
 
 After voucher validation and verification, the pledge needs to reply with a status telemetry message as defined in {{Section 5.7 of !RFC8995}}.
 The pledge MUST generate the Voucher Status (vStatus) artifact as defined in {{vstatus_artifact}} and MUST provide it to the Registrar-Agent in the body of an HTTP 200 OK response.
@@ -2630,6 +2634,8 @@ This may allow for a longer period between device acquisition and initial onboar
 Contrary, if devices that have been provided with an LDevID (and corresponding trust anchors) and temporarily taken out of service, immediate connectivity when bringing them back to operation may not be given, as the LDevIDs typically have a much shorter validity period compared to IDevIDs. 
 It is therefore recommended to onboard them as new devices to ensure they possess valid LDevIDs.
 
+The key infrastructure as part of the customer domain discussed in {{architecture}} may be operated locally by the operator of that domain or may be provided as a third party service.
+
 Requirements to the utilized credentials authenticating and artifact signatures on the registrar as outlined in {{registrar_component}} may have operational implications when the registrar is part of a scalable framework as described in {{Section 1.3.1 of ?I-D.richardson-anima-registrar-considerations}}.
 
 Besides the above, also consider the existing documents on operational modes for  
@@ -3150,7 +3156,14 @@ Proof of Concept Code available
 
 From IETF draft 18 -> IETF draft 19:
 
-* addressed comments (DISCUSS, COMMENT, NITS, received during telechat preparation
+* addressed DISCUSS received during telechat preparation:
+  * issue 136: included hint for reaction on HTTP requests to avoid DoS (rate limiting) in {{pledge_component}}
+  * issue 137: HTTP error handling BCP: proposal to avoid normative language
+  * issue 139: usage of TLS 1.3 emphasized by also referencing UTA draft in {{pvr}}
+* addressed COMMENT, NITS, received during telechat preparation, specifically
+  * issue 140: synchronized time
+  * issue 141: config options for discovery and nonceless vouchers in {{voucher}} and {{agent_component}}
+  * issue 142: addressed TTL of provisional accept state by utilizing the last received tPVR for the binding in 
 * updated reference of BRSKI-AE (now RFC 9733).
 
 From IETF draft 17 -> IETF draft 18:
