@@ -100,6 +100,7 @@ informative:
   RFC9662:
   RFC9733:
   I-D.ietf-uta-require-tls13:
+  I-D.draft-ietf-emu-eap-arpa:
   I-D.richardson-anima-masa-considerations:
   I-D.richardson-anima-registrar-considerations:
   I-D.ietf-anima-brski-discovery:
@@ -659,7 +660,7 @@ The manufacturer supports this functionality as outlined in {{sec_cons_mDNS}}.
 
 Establishing network connectivity of the pledge is out of scope of this document but necessary to apply DNS-SD with mDNS.
 For Ethernet, it is provided by simply connecting the network cable.
-For WiFi networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping. 
+For WiFi networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping, e.g., as proposed in {{I-D.draft-ietf-emu-eap-arpa}}. 
 The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN ID.
 How to gain network connectivity is out of scope of this document.
 
@@ -670,7 +671,7 @@ How to gain network connectivity is out of scope of this document.
 In BRSKI-PRM, the pledge is triggered by a Registrar-Agent to create the PVR and PER.
 It is also triggered for processing of the responses and the generation of status information once the Registrar-Agent has received the responses from the registrar later in the process.
 
-To enable interaction as responder with a Registrar-Agent, pledges in responder mode MUST act as servers and MUST provide the endpoints defined in {{pledge_ep_table}} within the BRSKI-defined `/.well-known/brski/` URI path, except for the OPTIONAL endpoint "qps".
+To enable interaction as responder with a Registrar-Agent, pledges in responder mode MUST act as servers and MUST provide the endpoints provide the endpoints "tpvr", "tper", "svr", "scac", and "ser" defined in {{pledge_ep_table}} within the BRSKI-defined `/.well-known/brski/` URI path. The optional endpoint "qps" SHOULD be supported.
 The endpoints are defined with short names to also accommodate for resource-constrained devices.
 
 | Endpoint | Operation                        | Exchange and Artifacts |
