@@ -1221,7 +1221,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 11 October 2025</td>
+<td class="center">Expires 12 October 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1234,12 +1234,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-19</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-04-09" class="published">9 April 2025</time>
+<time datetime="2025-04-10" class="published">10 April 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-10-11">11 October 2025</time></dd>
+<dd class="expires"><time datetime="2025-10-12">12 October 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1299,7 +1299,7 @@ This approach is agnostic to the enrollment protocol that connects the domain re
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 11 October 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 12 October 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2556,7 +2556,8 @@ How to gain network connectivity is out of scope of this document.<a href="#sect
         </h3>
 <p id="section-6.2-1">In BRSKI-PRM, the pledge is triggered by a Registrar-Agent to create the PVR and PER.
 It is also triggered for processing of the responses and the generation of status information once the Registrar-Agent has received the responses from the registrar later in the process.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2-2">To enable interaction as responder with a Registrar-Agent, pledges in responder mode <span class="bcp14">MUST</span> act as servers and <span class="bcp14">MUST</span> provide the endpoints provide the endpoints "tpvr", "tper", "svr", "scac", and "ser" defined in <a href="#pledge_ep_table" class="auto internal xref">Table 1</a> within the BRSKI-defined <code>/.well-known/brski/</code> URI path. The optional endpoint "qps" <span class="bcp14">SHOULD</span> be supported.
+<p id="section-6.2-2">To enable interaction as responder with a Registrar-Agent, pledges in responder mode <span class="bcp14">MUST</span> act as servers and <span class="bcp14">MUST</span> provide the endpoints "tpvr", "tper", "svr", "scac", and "ser" defined in <a href="#pledge_ep_table" class="auto internal xref">Table 1</a> within the BRSKI-defined <code>/.well-known/brski/</code> URI path. 
+The optional endpoint "qps" <span class="bcp14">SHOULD</span> be supported.
 The endpoints are defined with short names to also accommodate for resource-constrained devices.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
 <span id="name-well-known-endpoints-on-a-p"></span><div id="pledge_ep_table">
 <table class="center" id="table-1">
@@ -3342,8 +3343,8 @@ If the Accept header was not provided in the PVR, the pledge assumes that the ac
 In the response header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/voucher-jws+json</code> as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
 <p id="section-7.1-7">Note that the pledge provisionally accepts the registrar EE certificate contained in the tPVR until it receives the voucher (see <a href="#agt_prx" class="auto internal xref">Section 5.4</a>).
 The pledge will take the last received tPVR for the provisional accept of the received registrar EE certificate, if it does not have the capability to store more that one registrar EE certificate.<a href="#section-7.1-7" class="pilcrow">¶</a></p>
-<p id="section-7.1-8">If the pledge is unable to create the PVR, it <span class="bcp14">SHOULD</span> respond with an HTTP error status code to the Registrar-Agent.
-The following client error status codes <span class="bcp14">SHOULD</span> be used:<a href="#section-7.1-8" class="pilcrow">¶</a></p>
+<p id="section-7.1-8">If the pledge is unable to create the PVR, it responds with an HTTP error status code to the Registrar-Agent.
+The following client error status codes can be used:<a href="#section-7.1-8" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.1-9.1">
             <p id="section-7.1-9.1.1">400 Bad Request: if the pledge detects an error in the format of the request, e.g., missing field, wrong data types, etc. or if the request is not valid JSON even though the Content-Type request header field was set to <code>application/json</code>.<a href="#section-7.1-9.1.1" class="pilcrow">¶</a></p>
@@ -3714,8 +3715,8 @@ In the request header, the Content-Type field <span class="bcp14">MUST</span> be
 <p id="section-7.2-6">Upon receiving a valid tPER, the pledge <span class="bcp14">MUST</span> reply with the PER artifact as defined in <a href="#per_artifact" class="auto internal xref">Section 7.2.2</a> in the body of an HTTP 200 OK response.
 If the Accept header was not provided in the PER, the pledge assumes that the accepted response format is <code>application/voucher-jws+json</code> and proceeds processing.
 In the response header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/jose+json</code>.<a href="#section-7.2-6" class="pilcrow">¶</a></p>
-<p id="section-7.2-7">If the pledge is unable to create the PER, it <span class="bcp14">SHOULD</span> respond with an HTTP error status code to the Registrar-Agent.
-The following client error status codes <span class="bcp14">MAY</span> be used:<a href="#section-7.2-7" class="pilcrow">¶</a></p>
+<p id="section-7.2-7">If the pledge is unable to create the PER, it responds with an HTTP error status code to the Registrar-Agent.
+The following client error status codes can be used:<a href="#section-7.2-7" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.2-8.1">
             <p id="section-7.2-8.1.1">400 Bad Request: if the pledge detects an error in the format of the request.<a href="#section-7.2-8.1.1" class="pilcrow">¶</a></p>
@@ -4045,8 +4046,8 @@ this is done via the SubjectKeyIdentifier of the certificate in the <code>kid</c
 this is necessary to avoid that a rogue Registrar-Agent generates <code>agent-signed-data</code> objects to onboard arbitrary pledges at a later point in time, see also <a href="#sec_cons_reg-agt" class="auto internal xref">Section 12.3</a>.<a href="#section-7.3-9.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-7.3-10">If the registrar is unable to process the request or validate the PVR, it <span class="bcp14">MUST</span> respond with an HTTP client error status code to the Registrar-Agent.
-The following client error status codes <span class="bcp14">SHOULD</span> be used:<a href="#section-7.3-10" class="pilcrow">¶</a></p>
+<p id="section-7.3-10">If the registrar is unable to process the request or validate the PVR, it responds with an HTTP client error status code to the Registrar-Agent.
+The following client error status codes can be used:<a href="#section-7.3-10" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.3-11.1">
             <p id="section-7.3-11.1.1">400 Bad Request: if the registrar detects an error in the format of the request.<a href="#section-7.3-11.1.1" class="pilcrow">¶</a></p>
@@ -4062,7 +4063,7 @@ The following client error status codes <span class="bcp14">SHOULD</span> be use
 </li>
         </ul>
 <p id="section-7.3-12">Otherwise, the registrar converts the PVR artifact to a Registrar Voucher-Request (RVR) artifact (see <a href="#rvr_artifact" class="auto internal xref">Section 7.3.4</a>) and starts the backend interaction with the MASA.<a href="#section-7.3-12" class="pilcrow">¶</a></p>
-<p id="section-7.3-13">The domain registrar <span class="bcp14">MAY</span> respond with an HTTP 202 Accepted response status code to the Registrar-Agent at this point following <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.6" class="relref">Section 5.6</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, while the rules defined for the pledge also apply to the Registrar-Agent;
+<p id="section-7.3-13">The domain registrar can respond with an HTTP 202 Accepted response status code to the Registrar-Agent at this point following <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.6" class="relref">Section 5.6</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, while the rules defined for the pledge also apply to the Registrar-Agent;
 in this case, the registrar still continues with the MASA interaction to provide the Voucher artifact to the retry request.<a href="#section-7.3-13" class="pilcrow">¶</a></p>
 <p id="section-7.3-14">The registrar <span class="bcp14">MAY</span> use the response body to signal success/failure details to the service technician operating the Registrar-Agent.<a href="#section-7.3-14" class="pilcrow">¶</a></p>
 <div id="masa_interaction">
@@ -4100,7 +4101,7 @@ this is done via the SubjectKeyIdentifier of the certificate in the <code>kid</c
 </li>
           </ul>
 <p id="section-7.3.1-5">If the <code>agent-sign-cert</code> field in the RVR is not set, the MASA <span class="bcp14">MAY</span> state a lower level assertion value instead of failing the verification, e.g., "logged" or "verified".<a href="#section-7.3.1-5" class="pilcrow">¶</a></p>
-<p id="section-7.3.1-6">If the verification fails, the MASA <span class="bcp14">SHOULD</span> respond with an HTTP client error status code to the registrar.
+<p id="section-7.3.1-6">If the verification fails, the MASA responds with an HTTP client error status code to the registrar.
 The client error status codes are kept the same as defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.6" class="relref">Section 5.6</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>:<a href="#section-7.3.1-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.3.1-7.1">
@@ -4132,8 +4133,8 @@ It then countersigns the Voucher for delivery to the pledge via the Registrar-Ag
 <p id="section-7.3.2-2">The registrar <span class="bcp14">MUST</span> reply to the Registrar-Agent with the Registrar-Countersigned Voucher artifact (Voucher') as defined in <a href="#rcv_artifact" class="auto internal xref">Section 7.3.6</a> in the body of an HTTP 200 OK response.
 In the response header, the Content-Type field <span class="bcp14">MUST</span> be set to the media type of the incoming PVR artifact.
 For the default format used in this specification, this is <code>application/voucher-jws+json</code> as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.<a href="#section-7.3.2-2" class="pilcrow">¶</a></p>
-<p id="section-7.3.2-3">If the domain registrar is unable to return the Voucher, it <span class="bcp14">MUST</span> respond with an HTTP server error status code to the Registrar-Agent.
-The following server error status codes <span class="bcp14">SHOULD</span> be used:<a href="#section-7.3.2-3" class="pilcrow">¶</a></p>
+<p id="section-7.3.2-3">If the domain registrar is unable to return the Voucher, it responds with an HTTP server error status code to the Registrar-Agent.
+The following server error status codes can be used:<a href="#section-7.3.2-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.3.2-4.1">
               <p id="section-7.3.2-4.1.1">500 Internal Server Error: if both Registrar-Agent request and MASA response are valid, but the registrar still failed to return the Voucher, e.g., due to missing configuration or a program failure.<a href="#section-7.3.2-4.1.1" class="pilcrow">¶</a></p>
@@ -4500,8 +4501,8 @@ Hence, upon receiving a PER artifact, the registrar <span class="bcp14">MUST</sp
             <p id="section-7.4-7.2.1">the pledge identified by its EE certificate is accepted to join the domain after successful validation of the corresponding PVR.<a href="#section-7.4-7.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-7.4-8">If the registrar is unable to process the request or validate the PER, it <span class="bcp14">MUST</span> respond with an HTTP client error status code to the Registrar-Agent.
-The following client error status codes <span class="bcp14">SHOULD</span> be used:<a href="#section-7.4-8" class="pilcrow">¶</a></p>
+<p id="section-7.4-8">If the registrar is unable to process the request or validate the PER, it responds with an HTTP client error status code to the Registrar-Agent.
+The following client error status codes can be used:<a href="#section-7.4-8" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.4-9.1">
             <p id="section-7.4-9.1.1">400 Bad Request: if the registrar detects an error in the format of the request.<a href="#section-7.4-9.1.1" class="pilcrow">¶</a></p>
@@ -4524,8 +4525,8 @@ The exact interaction and exchanged data objects depends on the certificate mana
 <p id="section-7.4-11">A successful interaction with the Key Infrastructure will result in a pledge EE certificate signed by the domain owner (e.g., LDevID certificate).
 The registrar <span class="bcp14">MUST</span> reply to the Registrar-Agent with the Enroll-Response (Enroll-Resp) as defined in <a href="#er_artifact" class="auto internal xref">Section 7.4.2</a> in the body of an HTTP 200 OK response.
 In the response header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/pkcs7-mime</code>.<a href="#section-7.4-11" class="pilcrow">¶</a></p>
-<p id="section-7.4-12">If the domain registrar is unable to return the Enroll-Resp, it <span class="bcp14">MUST</span> respond with an HTTP server error status code to the Registrar-Agent.
-The following server error status codes <span class="bcp14">SHOULD</span> be used:<a href="#section-7.4-12" class="pilcrow">¶</a></p>
+<p id="section-7.4-12">If the domain registrar is unable to return the Enroll-Resp, it responds with an HTTP server error status code to the Registrar-Agent.
+The following server error status codes can be used:<a href="#section-7.4-12" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.4-13.1">
             <p id="section-7.4-13.1.1">500 Internal Server Error: if the Key Infrastructure response is valid, but the registrar still failed to return the Enroll-Resp, e.g., due to missing configuration or a program failure.<a href="#section-7.4-13.1.1" class="pilcrow">¶</a></p>
@@ -5181,8 +5182,8 @@ In the request header, the Content-Type field <span class="bcp14">MUST</span> be
 <p id="section-7.7-6">Upon receiving valid caCerts artifact, the pledge <span class="bcp14">MUST</span> first verify the signature of the registrar using the initial trust anchor (pinned domain certificate).
 In the case of success, the pledge <span class="bcp14">MUST</span> install the contained CA certificates as trust anchors as described in <span><a href="https://rfc-editor.org/rfc/rfc7030#section-4.1.3" class="relref">Section 4.1.3</a> of [<a href="#RFC7030" class="cite xref">RFC7030</a>]</span>.
 This includes the verification of all intermediate CA certificates (i.e., not self-signed CA certificates).<a href="#section-7.7-6" class="pilcrow">¶</a></p>
-<p id="section-7.7-7">If the pledge is unable to process the caCerts, it <span class="bcp14">SHOULD</span> respond with an HTTP error status code to the Registrar-Agent.
-The following client error status codes <span class="bcp14">SHOULD</span> be used:<a href="#section-7.7-7" class="pilcrow">¶</a></p>
+<p id="section-7.7-7">If the pledge is unable to process the caCerts, it responds with an HTTP error status code to the Registrar-Agent.
+The following client error status codes can be used:<a href="#section-7.7-7" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.7-8.1">
             <p id="section-7.7-8.1.1">400 Bad Request: if the pledge detects an error in the format of the request.<a href="#section-7.7-8.1.1" class="pilcrow">¶</a></p>
@@ -5577,7 +5578,7 @@ The request body <span class="bcp14">MUST</span> contain one previously acquired
 In the request header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/jose+json</code>.<a href="#section-7.9-5" class="pilcrow">¶</a></p>
 <p id="section-7.9-6">Upon receiving a vStatus artifact, the registrar <span class="bcp14">MUST</span> process it as described in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.7" class="relref">Section 5.7</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 Due to the Registrar-Agent in the middle, the registrar <span class="bcp14">MUST</span> in addition verify the signature of the vStatus and that it belongs to an accepted device of the domain based on the <code>serial-number</code> field of the IDevID certificate contained in the JWS Protected Header of the vStatus.<a href="#section-7.9-6" class="pilcrow">¶</a></p>
-<p id="section-7.9-7">According to <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.7" class="relref">Section 5.7</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the registrar <span class="bcp14">SHOULD</span> respond with an HTTP 200 OK without a response body in the success case or fail with an HTTP error status code.
+<p id="section-7.9-7">According to <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.7" class="relref">Section 5.7</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the registrar responds with an HTTP 200 OK without a response body in the success case or fail with an HTTP error status code.
 The registrar <span class="bcp14">MAY</span> use the response body to signal success/failure details to the service technician operating the Registrar-Agent.<a href="#section-7.9-7" class="pilcrow">¶</a></p>
 <p id="section-7.9-8">The registrar <span class="bcp14">SHOULD</span> proceed with the audit-log request to the MASA as in BRSKI described in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.8" class="relref">Section 5.8</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-7.9-8" class="pilcrow">¶</a></p>
 <div id="request-artifact-voucher-status-vstatus">
@@ -5697,7 +5698,7 @@ In the request header, the Content-Type field <span class="bcp14">MUST</span> be
 Due to the Registrar-Agent in the middle, instead of the BRSKI TLS session with the pledge, the registrar <span class="bcp14">MUST</span> verify the signature of the eStatus artifact and that it belongs to an accepted device of the domain based on the <code>serial-number</code> field of the EE certificate contained in the JWS Protected Header of the eStatus.
 Note that if the Enroll Status indicates success, the eStatus artifact is signed with the new pledge EE credentials;
 if it indicates failure, the pledge was unable to process the supplied EE certificate and therefore signed with its IDevID credentials.<a href="#section-7.10-6" class="pilcrow">¶</a></p>
-<p id="section-7.10-7">According to <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.9.4" class="relref">Section 5.9.4</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the registrar <span class="bcp14">SHOULD</span> respond with an HTTP 200 OK in the success case or <span class="bcp14">MAY</span> fail with an HTTP 404 client error status code.
+<p id="section-7.10-7">According to <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.9.4" class="relref">Section 5.9.4</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the registrar responds with an HTTP 200 OK in the success case or can fail with an HTTP 404 client error status code.
 The registrar <span class="bcp14">MAY</span> use the response body to signal success/failure details to the service technician operating the Registrar-Agent.<a href="#section-7.10-7" class="pilcrow">¶</a></p>
 <p id="section-7.10-8">If the eStatus indicates failure, the registrar <span class="bcp14">MAY</span> decide that for security reasons the pledge is not allowed to reside in the domain.
 In this case, the registrar <span class="bcp14">MUST</span> revoke the pledge EE certificate.
@@ -5825,8 +5826,8 @@ In the request header, the Content-Type field <span class="bcp14">MUST</span> be
 If the pledge does not possess any domain trust anchor yet, it <span class="bcp14">MAY</span> skip the signature verification and choose to reply without it.
 In the case of success, it <span class="bcp14">MUST</span> reply with the Pledge Status (pStatus) artifact as defined in <a href="#pstatus_artifact" class="auto internal xref">Section 7.11.2</a> in the body of an HTTP 200 OK response.
 In the response header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/jose+json</code>.<a href="#section-7.11-6" class="pilcrow">¶</a></p>
-<p id="section-7.11-7">If the pledge is unable to create the pStatus artifact, the pledge <span class="bcp14">SHOULD</span> respond with an HTTP error status code to the Registrar-Agent.
-The following client error status codes <span class="bcp14">SHOULD</span> be used:<a href="#section-7.11-7" class="pilcrow">¶</a></p>
+<p id="section-7.11-7">If the pledge is unable to create the pStatus artifact, the pledge responds with an HTTP error status code to the Registrar-Agent.
+The following client error status codes can be used:<a href="#section-7.11-7" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.11-8.1">
             <p id="section-7.11-8.1.1">400 Bad Request: if the pledge detects an error in the format of the request.<a href="#section-7.11-8.1.1" class="pilcrow">¶</a></p>
@@ -7171,7 +7172,7 @@ IDevID certificates are intended to be widely usable and EKU does not support th
               <p id="appendix-C-3.1.2.1.1">issue 136: included hint for reaction on HTTP requests to avoid DoS (rate limiting) in <a href="#pledge_component" class="auto internal xref">Section 6.2</a><a href="#appendix-C-3.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="appendix-C-3.1.2.2">
-              <p id="appendix-C-3.1.2.2.1">issue 137: HTTP error handling BCP: proposal to avoid normative language<a href="#appendix-C-3.1.2.2.1" class="pilcrow">¶</a></p>
+              <p id="appendix-C-3.1.2.2.1">issue 137: HTTP error handling BCP RFC 9205: removed normative language for HTTP status codes<a href="#appendix-C-3.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="appendix-C-3.1.2.3">
               <p id="appendix-C-3.1.2.3.1">issue 139: usage of TLS 1.3 emphasized by also referencing UTA draft in <a href="#pvr" class="auto internal xref">Section 7.3</a><a href="#appendix-C-3.1.2.3.1" class="pilcrow">¶</a></p>

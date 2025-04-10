@@ -671,7 +671,8 @@ How to gain network connectivity is out of scope of this document.
 In BRSKI-PRM, the pledge is triggered by a Registrar-Agent to create the PVR and PER.
 It is also triggered for processing of the responses and the generation of status information once the Registrar-Agent has received the responses from the registrar later in the process.
 
-To enable interaction as responder with a Registrar-Agent, pledges in responder mode MUST act as servers and MUST provide the endpoints provide the endpoints "tpvr", "tper", "svr", "scac", and "ser" defined in {{pledge_ep_table}} within the BRSKI-defined `/.well-known/brski/` URI path. The optional endpoint "qps" SHOULD be supported.
+To enable interaction as responder with a Registrar-Agent, pledges in responder mode MUST act as servers and MUST provide the endpoints "tpvr", "tper", "svr", "scac", and "ser" defined in {{pledge_ep_table}} within the BRSKI-defined `/.well-known/brski/` URI path. 
+The optional endpoint "qps" SHOULD be supported.
 The endpoints are defined with short names to also accommodate for resource-constrained devices.
 
 | Endpoint | Operation                        | Exchange and Artifacts |
@@ -968,8 +969,8 @@ In the response header, the Content-Type field MUST be set to `application/vouch
 Note that the pledge provisionally accepts the registrar EE certificate contained in the tPVR until it receives the voucher (see {{agt_prx}}).
 The pledge will take the last received tPVR for the provisional accept of the received registrar EE certificate, if it does not have the capability to store more that one registrar EE certificate.
 
-If the pledge is unable to create the PVR, it SHOULD respond with an HTTP error status code to the Registrar-Agent.
-The following client error status codes SHOULD be used:
+If the pledge is unable to create the PVR, it responds with an HTTP error status code to the Registrar-Agent.
+The following client error status codes can be used:
 
 * 400 Bad Request: if the pledge detects an error in the format of the request, e.g., missing field, wrong data types, etc. or if the request is not valid JSON even though the Content-Type request header field was set to `application/json`.
 * 406 Not Acceptable: if the Accept request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/voucher-jws+json`.
@@ -1179,8 +1180,8 @@ Upon receiving a valid tPER, the pledge MUST reply with the PER artifact as defi
 If the Accept header was not provided in the PER, the pledge assumes that the accepted response format is `application/voucher-jws+json` and proceeds processing.
 In the response header, the Content-Type field MUST be set to `application/jose+json`.
 
-If the pledge is unable to create the PER, it SHOULD respond with an HTTP error status code to the Registrar-Agent.
-The following client error status codes MAY be used:
+If the pledge is unable to create the PER, it responds with an HTTP error status code to the Registrar-Agent.
+The following client error status codes can be used:
 
 * 400 Bad Request: if the pledge detects an error in the format of the request.
 * 406 Not Acceptable: if the Accept request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/jose+json`.
@@ -1373,8 +1374,8 @@ Due to the Registrar-Agent in the middle, the registrar MUST verify in addition 
 * the Registrar-Agent EE certificate is still valid;
   this is necessary to avoid that a rogue Registrar-Agent generates `agent-signed-data` objects to onboard arbitrary pledges at a later point in time, see also {{sec_cons_reg-agt}}.
 
-If the registrar is unable to process the request or validate the PVR, it MUST respond with an HTTP client error status code to the Registrar-Agent.
-The following client error status codes SHOULD be used:
+If the registrar is unable to process the request or validate the PVR, it responds with an HTTP client error status code to the Registrar-Agent.
+The following client error status codes can be used:
 
 * 400 Bad Request: if the registrar detects an error in the format of the request.
 * 403 Forbidden: if the registrar detected that one or more security related fields are not valid or if the pledge-provided information could not be used with automated allowance.
@@ -1383,7 +1384,7 @@ The following client error status codes SHOULD be used:
 
 Otherwise, the registrar converts the PVR artifact to a Registrar Voucher-Request (RVR) artifact (see {{rvr_artifact}}) and starts the backend interaction with the MASA.
 
-The domain registrar MAY respond with an HTTP 202 Accepted response status code to the Registrar-Agent at this point following {{Section 5.6 of !RFC8995}}, while the rules defined for the pledge also apply to the Registrar-Agent;
+The domain registrar can respond with an HTTP 202 Accepted response status code to the Registrar-Agent at this point following {{Section 5.6 of !RFC8995}}, while the rules defined for the pledge also apply to the Registrar-Agent;
 in this case, the registrar still continues with the MASA interaction to provide the Voucher artifact to the retry request.
 
 The registrar MAY use the response body to signal success/failure details to the service technician operating the Registrar-Agent.
@@ -1415,7 +1416,7 @@ For the Agent Proximity Assertion of BRSKI-PRM (see {{agt_prx}}), the MASA MUST 
 
 If the `agent-sign-cert` field in the RVR is not set, the MASA MAY state a lower level assertion value instead of failing the verification, e.g., "logged" or "verified".
 
-If the verification fails, the MASA SHOULD respond with an HTTP client error status code to the registrar.
+If the verification fails, the MASA responds with an HTTP client error status code to the registrar.
 The client error status codes are kept the same as defined in {{Section 5.6 of !RFC8995}}:
 
 * 403 Forbidden: if the voucher-request is not signed correctly or is stale or if the pledge has another outstanding voucher that cannot be overridden.
@@ -1437,8 +1438,8 @@ The registrar MUST reply to the Registrar-Agent with the Registrar-Countersigned
 In the response header, the Content-Type field MUST be set to the media type of the incoming PVR artifact.
 For the default format used in this specification, this is `application/voucher-jws+json` as defined in {{I-D.ietf-anima-jws-voucher}}.
 
-If the domain registrar is unable to return the Voucher, it MUST respond with an HTTP server error status code to the Registrar-Agent.
-The following server error status codes SHOULD be used:
+If the domain registrar is unable to return the Voucher, it responds with an HTTP server error status code to the Registrar-Agent.
+The following server error status codes can be used:
 
 * 500 Internal Server Error: if both Registrar-Agent request and MASA response are valid, but the registrar still failed to return the Voucher, e.g., due to missing configuration or a program failure.
 * 502 Bad Gateway: if the registrar received an invalid response from the MASA.
@@ -1645,8 +1646,8 @@ Hence, upon receiving a PER artifact, the registrar MUST verify that
 * the PER was signed with the private key corresponding to the pledge EE certificate, which is contained in the JWS Protected Header of the PER.
 * the pledge identified by its EE certificate is accepted to join the domain after successful validation of the corresponding PVR.
 
-If the registrar is unable to process the request or validate the PER, it MUST respond with an HTTP client error status code to the Registrar-Agent.
-The following client error status codes SHOULD be used:
+If the registrar is unable to process the request or validate the PER, it responds with an HTTP client error status code to the Registrar-Agent.
+The following client error status codes can be used:
 
 * 400 Bad Request: if the registrar detects an error in the format of the request.
 * 401 Unauthorized: if the signature of the PER cannot be verified.
@@ -1661,8 +1662,8 @@ A successful interaction with the Key Infrastructure will result in a pledge EE 
 The registrar MUST reply to the Registrar-Agent with the Enroll-Response (Enroll-Resp) as defined in {{er_artifact}} in the body of an HTTP 200 OK response.
 In the response header, the Content-Type field MUST be set to `application/pkcs7-mime`.
 
-If the domain registrar is unable to return the Enroll-Resp, it MUST respond with an HTTP server error status code to the Registrar-Agent.
-The following server error status codes SHOULD be used:
+If the domain registrar is unable to return the Enroll-Resp, it responds with an HTTP server error status code to the Registrar-Agent.
+The following server error status codes can be used:
 
 * 500 Internal Server Error: if the Key Infrastructure response is valid, but the registrar still failed to return the Enroll-Resp, e.g., due to missing configuration or a program failure.
 * 502 Bad Gateway: if the registrar received an invalid response from the Key Infrastructure.
@@ -2012,8 +2013,8 @@ Upon receiving valid caCerts artifact, the pledge MUST first verify the signatur
 In the case of success, the pledge MUST install the contained CA certificates as trust anchors as described in {{Section 4.1.3 of !RFC7030}}.
 This includes the verification of all intermediate CA certificates (i.e., not self-signed CA certificates).
 
-If the pledge is unable to process the caCerts, it SHOULD respond with an HTTP error status code to the Registrar-Agent.
-The following client error status codes SHOULD be used:
+If the pledge is unable to process the caCerts, it responds with an HTTP error status code to the Registrar-Agent.
+The following client error status codes can be used:
 
 * 400 Bad Request: if the pledge detects an error in the format of the request.
 * 401 Unauthorized: if the signature of the registrar cannot be verified against the installed initial trust anchor (pinned domain certificate).
@@ -2206,7 +2207,7 @@ In the request header, the Content-Type field MUST be set to `application/jose+j
 Upon receiving a vStatus artifact, the registrar MUST process it as described in {{Section 5.7 of !RFC8995}}.
 Due to the Registrar-Agent in the middle, the registrar MUST in addition verify the signature of the vStatus and that it belongs to an accepted device of the domain based on the `serial-number` field of the IDevID certificate contained in the JWS Protected Header of the vStatus.
 
-According to {{Section 5.7 of !RFC8995}}, the registrar SHOULD respond with an HTTP 200 OK without a response body in the success case or fail with an HTTP error status code.
+According to {{Section 5.7 of !RFC8995}}, the registrar responds with an HTTP 200 OK without a response body in the success case or fail with an HTTP error status code.
 The registrar MAY use the response body to signal success/failure details to the service technician operating the Registrar-Agent.
 
 The registrar SHOULD proceed with the audit-log request to the MASA as in BRSKI described in {{Section 5.8 of !RFC8995}}.
@@ -2259,7 +2260,7 @@ Due to the Registrar-Agent in the middle, instead of the BRSKI TLS session with 
 Note that if the Enroll Status indicates success, the eStatus artifact is signed with the new pledge EE credentials;
 if it indicates failure, the pledge was unable to process the supplied EE certificate and therefore signed with its IDevID credentials.
 
-According to {{Section 5.9.4 of !RFC8995}}, the registrar SHOULD respond with an HTTP 200 OK in the success case or MAY fail with an HTTP 404 client error status code.
+According to {{Section 5.9.4 of !RFC8995}}, the registrar responds with an HTTP 200 OK in the success case or can fail with an HTTP 404 client error status code.
 The registrar MAY use the response body to signal success/failure details to the service technician operating the Registrar-Agent.
 
 If the eStatus indicates failure, the registrar MAY decide that for security reasons the pledge is not allowed to reside in the domain.
@@ -2317,8 +2318,8 @@ If the pledge does not possess any domain trust anchor yet, it MAY skip the sign
 In the case of success, it MUST reply with the Pledge Status (pStatus) artifact as defined in {{pstatus_artifact}} in the body of an HTTP 200 OK response.
 In the response header, the Content-Type field MUST be set to `application/jose+json`.
 
-If the pledge is unable to create the pStatus artifact, the pledge SHOULD respond with an HTTP error status code to the Registrar-Agent.
-The following client error status codes SHOULD be used:
+If the pledge is unable to create the pStatus artifact, the pledge responds with an HTTP error status code to the Registrar-Agent.
+The following client error status codes can be used:
 
 * 400 Bad Request: if the pledge detects an error in the format of the request.
 * 401 Unauthorized: if the signature of the Registrar-Agent cannot be verified using the installed trust anchors.
@@ -3159,7 +3160,7 @@ From IETF draft 18 -> IETF draft 19:
 
 * addressed DISCUSS received during telechat preparation:
   * issue 136: included hint for reaction on HTTP requests to avoid DoS (rate limiting) in {{pledge_component}}
-  * issue 137: HTTP error handling BCP: proposal to avoid normative language
+  * issue 137: HTTP error handling BCP RFC 9205: removed normative language for HTTP status codes 
   * issue 139: usage of TLS 1.3 emphasized by also referencing UTA draft in {{pvr}}
 * addressed COMMENT, NITS, received during telechat preparation, specifically
   * issue 140: synchronized time
