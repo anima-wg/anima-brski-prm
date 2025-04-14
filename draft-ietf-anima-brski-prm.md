@@ -135,11 +135,13 @@ informative:
 
 --- abstract
 
-This document defines enhancements to Bootstrapping a Remote Secure Key Infrastructure (BRSKI, RFC8995) to enable bootstrapping in domains featuring no or only limited connectivity between a pledge and the domain registrar.
-It specifically changes the interaction model from a pledge-initiated mode, as used in BRSKI, to a pledge-responding mode, where the pledge is in server role.
-For this, BRSKI with Pledge in Responder Mode (BRSKI-PRM) introduces new endpoints for the Domain Registrar and pledge, and a new component, the Registrar-Agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
+This document defines enhancements to Bootstrapping Remote Secure Key Infrastructure (BRSKI, RFC8995) as BRSKI with Pledge in Responder Mode (BRSKI-PRM).  
+BRSKI-PRM supports the secure bootstrapping of devices, referred to as pledges, into a domain where direct communication with the registrar is either limited or not possible at all.
+To facilitate interaction between a pledge and a domain registrar the registrar-agent is introduced as new component. 
+The registrar-agent supports the reversal of the interaction model from a pledge-initiated mode, to a pledge-responding mode, where the pledge is in a server role.
 To establish the trust relation between pledge and registrar, BRSKI-PRM relies on object security rather than transport security.
-This approach is agnostic to the enrollment protocol that connects the domain registrar to a Key Infrastructure (e.g., domain Certification Authority).
+This approach is agnostic to enrollment protocols that connect a domain registrar to a key infrastructure (e.g., domain Certification Authority).
+
 
 --- middle
 
@@ -151,7 +153,7 @@ This approach is agnostic to the enrollment protocol that connects the domain re
 BRSKI as defined in {{!RFC8995}} specifies a solution for secure zero-touch (automated) bootstrapping of devices (pledges) in a customer domain, which may be associated with a specific installation location.
 This includes the discovery of the BRSKI registrar in the customer domain and the exchange of security information necessary to establish trust between a pledge and the domain.
 
-Security information about the customer domain, specifically the customer domain certificate, are exchanged and authenticated utilizing signed data objects, the voucher artifacts as defined in {{!RFC8995}}.
+Security information pertaining to the customer domain, specifically, the customer domain certificate, is exchanged and authenticated through the use of signed data objects, namely the voucher artifacts, as defined in {{!I-D.ietf-anima-rfc8366bis}}.
 In response to a voucher-request, the Manufacturer Authorized Signing Authority (MASA) issues the voucher and provides it via the domain registrar to the pledge.
 {{I-D.ietf-anima-rfc8366bis}} specifies the format of the voucher artifacts, including the voucher-request artifact.
 
@@ -2700,6 +2702,7 @@ This avoids revealing potentially included personal information to Registrar and
 
 As logging is recommended to better handle failure situations, it is necessary to avoid capturing  sensitive or personal data.
 Privacy-preserving measures in logs SHOULD be applied, such as:
+
 * Avoid logging personally identifiable information unless unavoidable.
 * Anonymize or pseudonymize data where possible.
 

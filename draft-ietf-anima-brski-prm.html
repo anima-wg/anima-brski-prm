@@ -10,11 +10,12 @@
 <meta content="Eliot Lear" name="author">
 <meta content="Michael C. Richardson" name="author">
 <meta content="
-       This document defines enhancements to Bootstrapping a Remote Secure Key Infrastructure (BRSKI, RFC8995) to enable bootstrapping in domains featuring no or only limited connectivity between a pledge and the domain registrar.
-It specifically changes the interaction model from a pledge-initiated mode, as used in BRSKI, to a pledge-responding mode, where the pledge is in server role.
-For this, BRSKI with Pledge in Responder Mode (BRSKI-PRM) introduces new endpoints for the Domain Registrar and pledge, and a new component, the Registrar-Agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
+       This document defines enhancements to Bootstrapping Remote Secure Key Infrastructure (BRSKI, RFC8995) as BRSKI with Pledge in Responder Mode (BRSKI-PRM). 
+BRSKI-PRM supports the secure bootstrapping of devices, referred to as pledges, into a domain where direct communication with the registrar is either limited or not possible at all.
+To facilitate interaction between a pledge and a domain registrar the registrar-agent is introduced as new component. 
+The registrar-agent supports the reversal of the interaction model from a pledge-initiated mode, to a pledge-responding mode, where the pledge is in a server role.
 To establish the trust relation between pledge and registrar, BRSKI-PRM relies on object security rather than transport security.
-This approach is agnostic to the enrollment protocol that connects the domain registrar to a Key Infrastructure (e.g., domain Certification Authority). 
+This approach is agnostic to enrollment protocols that connect a domain registrar to a key infrastructure (e.g., domain Certification Authority). 
     " name="description">
 <meta content="xml2rfc 3.28.1" name="generator">
 <meta content="draft-ietf-anima-brski-prm-19" name="ietf.draft">
@@ -1221,7 +1222,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 12 October 2025</td>
+<td class="center">Expires 16 October 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1234,12 +1235,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-19</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-04-10" class="published">10 April 2025</time>
+<time datetime="2025-04-14" class="published">14 April 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-10-12">12 October 2025</time></dd>
+<dd class="expires"><time datetime="2025-10-16">16 October 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1264,11 +1265,12 @@ li > p:last-of-type:only-child {
 <h1 id="title">BRSKI with Pledge in Responder Mode (BRSKI-PRM)</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document defines enhancements to Bootstrapping a Remote Secure Key Infrastructure (BRSKI, RFC8995) to enable bootstrapping in domains featuring no or only limited connectivity between a pledge and the domain registrar.
-It specifically changes the interaction model from a pledge-initiated mode, as used in BRSKI, to a pledge-responding mode, where the pledge is in server role.
-For this, BRSKI with Pledge in Responder Mode (BRSKI-PRM) introduces new endpoints for the Domain Registrar and pledge, and a new component, the Registrar-Agent, which facilitates the communication between pledge and registrar during the bootstrapping phase.
+<p id="section-abstract-1">This document defines enhancements to Bootstrapping Remote Secure Key Infrastructure (BRSKI, RFC8995) as BRSKI with Pledge in Responder Mode (BRSKI-PRM).<br>
+BRSKI-PRM supports the secure bootstrapping of devices, referred to as pledges, into a domain where direct communication with the registrar is either limited or not possible at all.
+To facilitate interaction between a pledge and a domain registrar the registrar-agent is introduced as new component. 
+The registrar-agent supports the reversal of the interaction model from a pledge-initiated mode, to a pledge-responding mode, where the pledge is in a server role.
 To establish the trust relation between pledge and registrar, BRSKI-PRM relies on object security rather than transport security.
-This approach is agnostic to the enrollment protocol that connects the domain registrar to a Key Infrastructure (e.g., domain Certification Authority).<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+This approach is agnostic to enrollment protocols that connect a domain registrar to a key infrastructure (e.g., domain Certification Authority).<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1299,7 +1301,7 @@ This approach is agnostic to the enrollment protocol that connects the domain re
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 October 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 16 October 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1643,7 +1645,7 @@ This approach is agnostic to the enrollment protocol that connects the domain re
       </h2>
 <p id="section-1-1">BRSKI as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> specifies a solution for secure zero-touch (automated) bootstrapping of devices (pledges) in a customer domain, which may be associated with a specific installation location.
 This includes the discovery of the BRSKI registrar in the customer domain and the exchange of security information necessary to establish trust between a pledge and the domain.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">Security information about the customer domain, specifically the customer domain certificate, are exchanged and authenticated utilizing signed data objects, the voucher artifacts as defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
+<p id="section-1-2">Security information pertaining to the customer domain, specifically, the customer domain certificate, is exchanged and authenticated through the use of signed data objects, namely the voucher artifacts, as defined in <span>[<a href="#I-D.ietf-anima-rfc8366bis" class="cite xref">I-D.ietf-anima-rfc8366bis</a>]</span>.
 In response to a voucher-request, the Manufacturer Authorized Signing Authority (MASA) issues the voucher and provides it via the domain registrar to the pledge.
 <span>[<a href="#I-D.ietf-anima-rfc8366bis" class="cite xref">I-D.ietf-anima-rfc8366bis</a>]</span> specifies the format of the voucher artifacts, including the voucher-request artifact.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">For the certificate enrollment of devices, BRSKI relies on Enrollment over Secure Transport (EST, <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span>) to request and distribute customer domain specific device certificates.
@@ -6436,24 +6438,30 @@ The following is therefore applicable to the communication without the TLS prote
 Therefore, it is recommended to use an EE certificate associated with the commissioning device instead of an EE certificate associated with the service technician operating the device.
 This avoids revealing potentially included personal information to Registrar and MASA.<a href="#section-11-4" class="pilcrow">¶</a></p>
 <p id="section-11-5">As logging is recommended to better handle failure situations, it is necessary to avoid capturing  sensitive or personal data.
-Privacy-preserving measures in logs <span class="bcp14">SHOULD</span> be applied, such as:
-* Avoid logging personally identifiable information unless unavoidable.
-* Anonymize or pseudonymize data where possible.<a href="#section-11-5" class="pilcrow">¶</a></p>
-<p id="section-11-6">The communication between the pledge and the Registrar-Agent is performed over plain HTTP.
-Therefore, it is subject to disclosure by a Dolev-Yao attacker (an "oppressive observer")<span>[<a href="#onpath" class="cite xref">onpath</a>]</span>.
-Depending on the requests and responses, the following information is disclosed.<a href="#section-11-6" class="pilcrow">¶</a></p>
+Privacy-preserving measures in logs <span class="bcp14">SHOULD</span> be applied, such as:<a href="#section-11-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-11-7.1">
-          <p id="section-11-7.1.1">the Pledge product-serial-number is contained in the trigger message for the PVR and in all responses from the pledge.
+<li class="normal" id="section-11-6.1">
+          <p id="section-11-6.1.1">Avoid logging personally identifiable information unless unavoidable.<a href="#section-11-6.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-11-6.2">
+          <p id="section-11-6.2.1">Anonymize or pseudonymize data where possible.<a href="#section-11-6.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-11-7">The communication between the pledge and the Registrar-Agent is performed over plain HTTP.
+Therefore, it is subject to disclosure by a Dolev-Yao attacker (an "oppressive observer")<span>[<a href="#onpath" class="cite xref">onpath</a>]</span>.
+Depending on the requests and responses, the following information is disclosed.<a href="#section-11-7" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-11-8.1">
+          <p id="section-11-8.1.1">the Pledge product-serial-number is contained in the trigger message for the PVR and in all responses from the pledge.
 This information reveals the identity of the devices being bootstrapped and allows deduction of which products an operator is using in their environment.
 As the communication between the pledge and the Registrar-Agent may be realized over wireless link, this information could easily be eavesdropped, if the wireless network is not encrypted.
-Even if the wireless network is encrypted, if it uses a network-wide key, then layer-2 attacks (ARP/ND spoofing) could insert an on-path observer into the path.<a href="#section-11-7.1.1" class="pilcrow">¶</a></p>
+Even if the wireless network is encrypted, if it uses a network-wide key, then layer-2 attacks (ARP/ND spoofing) could insert an on-path observer into the path.<a href="#section-11-8.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-11-7.2">
-          <p id="section-11-7.2.1">the Timestamp data could reveal the activation time of the device.<a href="#section-11-7.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-11-8.2">
+          <p id="section-11-8.2.1">the Timestamp data could reveal the activation time of the device.<a href="#section-11-8.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-11-7.3">
-          <p id="section-11-7.3.1">the Status data of the device could reveal information about the current state of the device in the domain network.<a href="#section-11-7.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-11-8.3">
+          <p id="section-11-8.3.1">the Status data of the device could reveal information about the current state of the device in the domain network.<a href="#section-11-8.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
