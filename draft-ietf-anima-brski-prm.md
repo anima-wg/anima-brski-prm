@@ -1668,7 +1668,7 @@ If the registrar is unable to process the request or validate the PER, it respon
 The following client error status codes can be used:
 
 * 400 Bad Request: if the registrar detects an error in the format of the request.
-* 401 Unauthorized: if the signature of the PER cannot be verified.
+* 403 Forbidden: if the signature of the PER cannot be verified.
 * 404 Not Found: if the PER is for a device that is not known to the registrar.
 * 406 Not Acceptable: if the Accept request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/jose+json`.
 * 415 Unsupported Media Type: if the PER uses an artifact format that is not supported by the registrar, e.g., a type other than `application/jose+json`.
@@ -2055,7 +2055,7 @@ If the pledge is unable to process the caCerts, it responds with an HTTP error s
 The following client error status codes can be used:
 
 * 400 Bad Request: if the pledge detects an error in the format of the request.
-* 401 Unauthorized: if the signature of the registrar cannot be verified against the installed initial trust anchor (pinned domain certificate).
+* 403 Forbidden: if the signature of the registrar cannot be verified against the installed initial trust anchor (pinned domain certificate).
 * 403 Forbidden: if one of the intermediate CA certificates cannot be verified against the available trust anchors (e.g., self-signed CA certificates).
 * 415 Unsupported Media Type: if the Content-Type request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/jose+json`.
 
@@ -2361,7 +2361,7 @@ If the pledge is unable to create the pStatus artifact, the pledge responds with
 The following client error status codes can be used:
 
 * 400 Bad Request: if the pledge detects an error in the format of the request.
-* 401 Unauthorized: if the signature of the Registrar-Agent cannot be verified using the installed trust anchors.
+* 403 Forbidden: if the signature of the Registrar-Agent cannot be verified using the installed trust anchors.
 * 406 Not Acceptable: if the Accept request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/jose+json`.
 * 415 Unsupported Media Type: if the Content-Type request header field indicates a type that is unknown or unsupported, e.g., a type other than `application/jose+json`.
 
