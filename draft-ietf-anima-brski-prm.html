@@ -1612,7 +1612,7 @@ This approach is agnostic to enrollment protocols that connect a domain registra
                 <p id="section-toc.1-1.15.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-example-pledge-voucher-requ" class="internal xref">Example Pledge Voucher-Request (PVR) - from Pledge to Registrar-Agent</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.2">
-                <p id="section-toc.1-1.15.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-example-parboiled-registrar" class="internal xref">Example Parboiled Registrar Voucher-Request (RVR) - from Registrar to MASA</a></p>
+                <p id="section-toc.1-1.15.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-example-registrar-voucher-r" class="internal xref">Example Registrar Voucher-Request (RVR) - from Registrar to MASA</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.3">
                 <p id="section-toc.1-1.15.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-example-voucher-from-masa-t" class="internal xref">Example Voucher - from MASA to Pledge, via Registrar and Registrar-Agent</a></p>
@@ -1705,87 +1705,92 @@ The binding is assumed to be provided through a digital signature of the actual 
 An entity, which issues certificates and maintains certificate revocation information.<a href="#section-2-3.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.5">Commissioning tool:</dt>
+<dt id="section-2-3.5">CMS:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.6">
-          <p id="section-2-3.6.1">Tool to interact with devices to provide configuration data.<a href="#section-2-3.6.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.6.1">Cryptographic Message Syntax, as defined in <span>[<a href="#RFC5652" class="cite xref">RFC5652</a>]</span>.<a href="#section-2-3.6.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.7">CSR:</dt>
+<dt id="section-2-3.7">Commissioning tool:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.8">
-          <p id="section-2-3.8.1">Certificate Signing Request, as defined in <span>[<a href="#RFC2986" class="cite xref">RFC2986</a>]</span>.<a href="#section-2-3.8.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.8.1">Tool to interact with devices to provide configuration data.<a href="#section-2-3.8.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.9">EE:</dt>
+<dt id="section-2-3.9">CSR:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.10">
-          <p id="section-2-3.10.1">End entity, as defined in <span>[<a href="#RFC9483" class="cite xref">RFC9483</a>]</span>.
-Typically, a device or service that owns a public-private key pair for which it manages a public key certificate.<a href="#section-2-3.10.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.10.1">Certificate Signing Request, as defined in <span>[<a href="#RFC2986" class="cite xref">RFC2986</a>]</span>.<a href="#section-2-3.10.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.11">EE certificate:</dt>
+<dt id="section-2-3.11">EE:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.12">
-          <p id="section-2-3.12.1">the certificate of the EE signed by its owner (e.g., CA).
-For domain components, the EE certificate is signed by the domain owner.
-For the pledge, the EE certificate is either the IDevID certificate signed by the manufacturer or the LDevID certificate signed by the domain owner or an application-specific EE certificate signed by the domain owner.<a href="#section-2-3.12.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.12.1">End entity, as defined in <span>[<a href="#RFC9483" class="cite xref">RFC9483</a>]</span>.
+Typically, a device or service that owns a public-private key pair for which it manages a public key certificate.<a href="#section-2-3.12.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.13">endpoint:</dt>
+<dt id="section-2-3.13">EE certificate:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.14">
-          <p id="section-2-3.14.1">Term equivalent to resource in HTTP <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.
-Endpoints are accessible via Well-Known URIs <span>[<a href="#RFC8615" class="cite xref">RFC8615</a>]</span>.<a href="#section-2-3.14.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.14.1">the certificate of the EE signed by its owner (e.g., CA).
+For domain components, the EE certificate is signed by the domain owner.
+For the pledge, the EE certificate is either the IDevID certificate signed by the manufacturer or the LDevID certificate signed by the domain owner or an application-specific EE certificate signed by the domain owner.<a href="#section-2-3.14.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.15">IDevID:</dt>
+<dt id="section-2-3.15">endpoint:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.16">
-          <p id="section-2-3.16.1">An Initial Device Identifier X.509 certificate installed by the vendor on new equipment.
-This is a term from 802.1AR <span>[<a href="#IEEE-802.1AR" class="cite xref">IEEE-802.1AR</a>]</span>.<a href="#section-2-3.16.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.16.1">Term equivalent to resource in HTTP <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.
+Endpoints are accessible via Well-Known URIs <span>[<a href="#RFC8615" class="cite xref">RFC8615</a>]</span>.<a href="#section-2-3.16.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.17">LDevID:</dt>
+<dt id="section-2-3.17">IDevID:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.18">
-          <p id="section-2-3.18.1">A Local Device Identifier X.509 certificate installed by the owner of the equipment.
+          <p id="section-2-3.18.1">An Initial Device Identifier X.509 certificate installed by the vendor on new equipment.
 This is a term from 802.1AR <span>[<a href="#IEEE-802.1AR" class="cite xref">IEEE-802.1AR</a>]</span>.<a href="#section-2-3.18.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.19">mTLS:</dt>
+<dt id="section-2-3.19">LDevID:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.20">
-          <p id="section-2-3.20.1">mutual Transport Layer Security, refers to mutual authenticated TLS as specified in <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>.<a href="#section-2-3.20.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.20.1">A Local Device Identifier X.509 certificate installed by the owner of the equipment.
+This is a term from 802.1AR <span>[<a href="#IEEE-802.1AR" class="cite xref">IEEE-802.1AR</a>]</span>.<a href="#section-2-3.20.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.21">PER:</dt>
+<dt id="section-2-3.21">mTLS:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.22">
-          <p id="section-2-3.22.1">Pledge Enroll-Request is a signature-wrapped CSR, signed by the pledge that requests enrollment to a domain via the Registrar-Agent.<a href="#section-2-3.22.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.22.1">mutual Transport Layer Security, refers to mutual authenticated TLS as specified in <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>.<a href="#section-2-3.22.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.23">POI:</dt>
+<dt id="section-2-3.23">PER:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.24">
-          <p id="section-2-3.24.1">Proof-of-Identity, as defined in <span>[<a href="#RFC5272" class="cite xref">RFC5272</a>]</span>.<a href="#section-2-3.24.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.24.1">Pledge Enroll-Request is a signature-wrapped CSR, signed by the pledge that requests enrollment to a domain via the Registrar-Agent.<a href="#section-2-3.24.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.25">POP:</dt>
+<dt id="section-2-3.25">POI:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.26">
-          <p id="section-2-3.26.1">Proof-of-Possession (of a private key), as defined in <span>[<a href="#RFC5272" class="cite xref">RFC5272</a>]</span>.<a href="#section-2-3.26.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.26.1">Proof-of-Identity, as defined in <span>[<a href="#RFC5272" class="cite xref">RFC5272</a>]</span>.<a href="#section-2-3.26.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.27">PVR:</dt>
+<dt id="section-2-3.27">POP:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.28">
-          <p id="section-2-3.28.1">Pledge Voucher-Request is a signature-wrapped voucher-request, signed by the pledge that sends it to the domain registrar via the Registrar-Agent.<a href="#section-2-3.28.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.28.1">Proof-of-Possession (of a private key), as defined in <span>[<a href="#RFC5272" class="cite xref">RFC5272</a>]</span>.<a href="#section-2-3.28.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.29">RA:</dt>
+<dt id="section-2-3.29">PVR:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.30">
-          <p id="section-2-3.30.1">Registration Authority, an optional system component to which a CA delegates certificate management functions such as authorization checks.
-In BRSKI-PRM, this is a functionality of the domain registrar, as in BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-2-3.30.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.30.1">Pledge Voucher-Request is a signature-wrapped voucher-request, signed by the pledge that sends it to the domain registrar via the Registrar-Agent.<a href="#section-2-3.30.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.31">Registrar-Agent:</dt>
+<dt id="section-2-3.31">RA:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.32">
-          <p id="section-2-3.32.1">Component facilitating the data exchange between a pledge in responder mode and a domain registrar.<a href="#section-2-3.32.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.32.1">Registration Authority, an optional system component to which a CA delegates certificate management functions such as authorization checks.
+In BRSKI-PRM, this is a functionality of the domain registrar, as in BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-2-3.32.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
-<dt id="section-2-3.33">RVR:</dt>
+<dt id="section-2-3.33">Registrar-Agent:</dt>
         <dd style="margin-left: 1.5em" id="section-2-3.34">
-          <p id="section-2-3.34.1">Registrar Voucher-Request is a signature-wrapped voucher-request, signed by the domain registrar that sends it to the MASA.
-For BRSKI-PRM, it contains a copy of the original PVR received from the pledge.<a href="#section-2-3.34.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.34.1">Component facilitating the data exchange between a pledge in responder mode and a domain registrar.<a href="#section-2-3.34.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-3.35">RVR:</dt>
+        <dd style="margin-left: 1.5em" id="section-2-3.36">
+          <p id="section-2-3.36.1">Registrar Voucher-Request is a signature-wrapped voucher-request, signed by the domain registrar that sends it to the MASA.
+For BRSKI-PRM, it contains a copy of the original PVR received from the pledge.<a href="#section-2-3.36.1" class="pilcrow">¶</a></p>
 </dd>
       <dd class="break"></dd>
 </dl>
@@ -2161,7 +2166,7 @@ However, there are also differences compared to BRSKI <span>[<a href="#RFC8995" 
 A MASA responsible for pledges that implement BRSKI-PRM is expected to support BRSKI-PRM extensions:<a href="#section-5.1-11.5.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.1-11.5.2.1">
-                <p id="section-5.1-11.5.2.1.1">The default format for voucher artifacts (incl. voucher-request) is JWS-signed JSON as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.<a href="#section-5.1-11.5.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-5.1-11.5.2.1.1">The default format for voucher artifacts (including voucher-request) is JWS-signed JSON as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.<a href="#section-5.1-11.5.2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-5.1-11.5.2.2">
                 <p id="section-5.1-11.5.2.2.1">The Agent Proximity Assertion (see <a href="#agt_prx" class="auto internal xref">Section 5.4</a>) requires additional validation steps as defined in <a href="#masa_interaction" class="auto internal xref">Section 7.3.1</a>.<a href="#section-5.1-11.5.2.2.1" class="pilcrow">¶</a></p>
@@ -2481,7 +2486,7 @@ This is to address the assumed nature of stand-alone Registrar-Agents as nomadic
 <p id="section-6.1-5">Further, the Registrar-Agent requires the registrar EE certificate to provide it to the pledge.
 It <span class="bcp14">MAY</span> use the certificate verified during server authentication within an initial TLS session with the registrar;
 in this case, the Registrar-Agent <span class="bcp14">MUST</span> possess the domain trust anchor (i.e., CA certificate) for the registrar EE certificate to verify the certificate chain.
-Alternatively, the registrar EE certificate <span class="bcp14">MAY</span> be provided via configuration or a repository.
+Alternatively, the registrar EE certificate <span class="bcp14">MAY</span> be provided via configuration.
 The registrar IP address or hostname is provided either by configuration or by using the discovery mechanism defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> (see <a href="#discovery_uc2_reg" class="auto internal xref">Section 6.1.1</a>).<a href="#section-6.1-5" class="pilcrow">¶</a></p>
 <p id="section-6.1-6">In addition to the certificates, the Registrar-Agent is provided with the product-serial-number(s) of the pledge(s) to be bootstrapped.
 This is necessary to allow for the discovery of pledges by the Registrar-Agent using DNS-SD with mDNS (see <a href="#discovery_uc2_ppa" class="auto internal xref">Section 6.1.2</a>).
@@ -2499,7 +2504,9 @@ For instance, <span>[<a href="#RFC9238" class="cite xref">RFC9238</a>]</span> de
             <p id="section-6.1-8.3.1">Serial number(s): product-serial-number(s) of pledge(s) to be bootstrapped; used for discovery<a href="#section-6.1-8.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-6.1-9">Further, the Registrar-Agent <span class="bcp14">SHOULD</span> have synchronized time.<a href="#section-6.1-9" class="pilcrow">¶</a></p>
+<p id="section-6.1-9">Further, the Registrar-Agent <span class="bcp14">SHOULD</span> have synchronized time.
+In case the registrar-agent does not have synchronized time, it may not be able to verify the registrar EE certificate during the optional TLS handshake. 
+As the registrar-agent is recommended to utilize short-lived certificates in <a href="#sec_cons_reg-agt" class="auto internal xref">Section 12.3</a>, a registrar-agent may use the valid from time of its short-lived certificate for time synchronization.<a href="#section-6.1-9" class="pilcrow">¶</a></p>
 <p id="section-6.1-10">Finally, the Registrar-Agent <span class="bcp14">MAY</span> possess the IDevID (root or issuing) CA certificate of the pledge manufacturer/vendor to validate the IDevID certificate on returned PVR or in case of optional TLS usage for pledge communication (see <a href="#pledgehttps" class="auto internal xref">Appendix B</a>).
 The distribution of IDevID CA certificates to the Registrar-Agent is out of scope of this document and may be done by a manual configuration.<a href="#section-6.1-10" class="pilcrow">¶</a></p>
 <div id="discovery_uc2_reg">
@@ -2529,26 +2536,28 @@ Note that <span>[<a href="#RFC8990" class="cite xref">RFC8990</a>]</span> does n
 <p id="section-6.1.2-3">The pledge constructs a Service Instance Name based on device local information (manufacturer/vendor name and serial number), which results in <code>&lt;product-serial-number&gt;._brski-pledge._tcp.local</code>.
 The product-serial-number composition is manufacturer-dependent and may contain information regarding the manufacturer, the product type, and further information specific to the product instance.
 To allow distinction of pledges, the product-serial-number therefore needs to be sufficiently unique.<a href="#section-6.1.2-3" class="pilcrow">¶</a></p>
-<p id="section-6.1.2-4">Note that this goes against the naming recommendation of <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>.
-The <code>_brski-pledge._tcp</code> service, however, targets machine-to-machine discovery.<a href="#section-6.1.2-4" class="pilcrow">¶</a></p>
-<p id="section-6.1.2-5">In the absence of a more general discovery as defined in <span>[<a href="#I-D.ietf-anima-brski-discovery" class="cite xref">I-D.ietf-anima-brski-discovery</a>]</span> the Registrar-Agent <span class="bcp14">MUST</span> use<a href="#section-6.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-4">Note that the service name definition is not fully inline with the naming recommendation of <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>.
+However, the definition allows to discover specific instances of a pledge.<a href="#section-6.1.2-4" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-5">The <code>_brski-pledge._tcp</code> service, however, targets machine-to-machine discovery.<a href="#section-6.1.2-5" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-6">For discovery the Registrar-Agent <span class="bcp14">MUST</span> use<a href="#section-6.1.2-6" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.1.2-6.1">
-              <p id="section-6.1.2-6.1.1"><code>&lt;product-serial-number&gt;._brski-pledge._tcp.local</code>, to discover a specific pledge, e.g., when connected to a local network.<a href="#section-6.1.2-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.1.2-7.1">
+              <p id="section-6.1.2-7.1.1"><code>&lt;product-serial-number&gt;._brski-pledge._tcp.local</code>, to discover a specific pledge, e.g., when connected to a local network<a href="#section-6.1.2-7.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-6.1.2-6.2">
-              <p id="section-6.1.2-6.2.1"><code>_brski-pledge._tcp.local</code> to get a list of pledges to be bootstrapped.<a href="#section-6.1.2-6.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.1.2-7.2">
+              <p id="section-6.1.2-7.2.1"><code>_brski-pledge._tcp.local</code> to get a list of pledges to be bootstrapped<a href="#section-6.1.2-7.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-6.1.2-7">When supporting different options for discovery, as outlined in <span>[<a href="#I-D.ietf-anima-brski-discovery" class="cite xref">I-D.ietf-anima-brski-discovery</a>]</span>, a manufacturer may support configuration of preferred options.<a href="#section-6.1.2-7" class="pilcrow">¶</a></p>
-<p id="section-6.1.2-8">A manufacturer may allow the pledge to react on DNS-SD with mDNS discovery without its product-serial-number contained.
+<p id="section-6.1.2-8">if it does not support a more general discovery as defined in <span>[<a href="#I-D.ietf-anima-brski-discovery" class="cite xref">I-D.ietf-anima-brski-discovery</a>]</span>.<a href="#section-6.1.2-8" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-9">When supporting different options for discovery, as outlined in <span>[<a href="#I-D.ietf-anima-brski-discovery" class="cite xref">I-D.ietf-anima-brski-discovery</a>]</span>, a manufacturer may support configuration of preferred options.<a href="#section-6.1.2-9" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-10">A manufacturer may allow the pledge to react on DNS-SD with mDNS discovery without its product-serial-number contained.
 This allows a commissioning tool to discover pledges to be bootstrapped in the domain.
-The manufacturer supports this functionality as outlined in <a href="#sec_cons_mDNS" class="auto internal xref">Section 12.4</a>.<a href="#section-6.1.2-8" class="pilcrow">¶</a></p>
-<p id="section-6.1.2-9">Establishing network connectivity of the pledge is out of scope of this document but necessary to apply DNS-SD with mDNS.
-For Ethernet, it is provided by simply connecting the network cable.
+The manufacturer supports this functionality as outlined in <a href="#sec_cons_mDNS" class="auto internal xref">Section 12.4</a>.<a href="#section-6.1.2-10" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-11">Establishing network connectivity of the pledge is out of scope of this document but necessary to apply DNS-SD with mDNS.
+For Ethernet, network connectivity can be provided, e.g., via a switch to an operational network or to a specific VLAN for bootstrapping, depending on an operators security policy.
 For WiFi networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping, e.g., as proposed in <span>[<a href="#I-D.draft-ietf-emu-eap-arpa" class="cite xref">I-D.draft-ietf-emu-eap-arpa</a>]</span>. 
 The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN ID.
-How to gain network connectivity is out of scope of this document.<a href="#section-6.1.2-9" class="pilcrow">¶</a></p>
+How to gain network connectivity is out of scope of this document.<a href="#section-6.1.2-11" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2636,7 +2645,7 @@ Hence, pledges <span class="bcp14">MUST</span> have an Initial Device Identifier
           <h4 id="name-pledge-with-combined-functi">
 <a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-pledge-with-combined-functi" class="section-name selfRef">Pledge with Combined Functionality</a>
           </h4>
-<p id="section-6.2.1-1">Pledges <span class="bcp14">MAY</span> support both initiator and responder mode.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.2.1-1">Pledges may support both initiator and responder mode.<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.2.1-2">A pledge in initiator mode should listen for announcement messages as described in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 Upon discovery of a potential registrar, it initiates the bootstrapping to that registrar.
 At the same time (so as to avoid the Slowloris-like attack described in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>), it <span class="bcp14">SHOULD</span> also respond to the triggers for responder mode described in this document.<a href="#section-6.2.1-2" class="pilcrow">¶</a></p>
@@ -2685,16 +2694,17 @@ These endpoints accommodate for the authenticated self-contained objects used by
           </tbody>
         </table>
 </div>
-<p id="section-6.3-3">The registrar possesses its own EE certificate and corresponding private key for authenticating and signing.
-It <span class="bcp14">MUST</span> use the same certificate/credentials for authentication in the TLS session with a Registrar-Agent and for signing artifacts for that Registrar-Agent and its pledges (see <a href="#rcv_artifact" class="auto internal xref">Section 7.3.6</a>).<a href="#section-6.3-3" class="pilcrow">¶</a></p>
-<p id="section-6.3-4">According to <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.3" class="relref">Section 5.3</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, a domain registrar performs the pledge authorization for bootstrapping within its domain based on the Pledge Voucher-Request.
+<p id="section-6.3-3">For the supply of the PVR to the registrar, the pledge uses the endpoint "requestvoucher", defined in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> as described in <a href="#pvr" class="auto internal xref">Section 7.3</a>.<a href="#section-6.3-3" class="pilcrow">¶</a></p>
+<p id="section-6.3-4">The registrar possesses its own EE certificate and corresponding private key for authenticating and signing.
+It <span class="bcp14">MUST</span> use the same certificate/credentials for authentication in the TLS session with a Registrar-Agent and for signing artifacts for that Registrar-Agent and its pledges (see <a href="#rcv_artifact" class="auto internal xref">Section 7.3.6</a>).<a href="#section-6.3-4" class="pilcrow">¶</a></p>
+<p id="section-6.3-5">According to <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.3" class="relref">Section 5.3</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, a domain registrar performs the pledge authorization for bootstrapping within its domain based on the Pledge Voucher-Request.
 For this, it <span class="bcp14">MUST</span> possess the IDevID trust anchor(s) (i.e., root or issuing CA certificate(s)) of the pledge vendor(s)/manufacturer(s).
-This behavior is retained in BRSKI-PRM.<a href="#section-6.3-4" class="pilcrow">¶</a></p>
-<p id="section-6.3-5">In its role as EST server <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span>, the domain registrar <span class="bcp14">MUST</span> also possess the domain CA certificates as defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.9" class="relref">Section 5.9</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-6.3-5" class="pilcrow">¶</a></p>
-<p id="section-6.3-6">Finally, the domain registrar <span class="bcp14">MUST</span> possess the Registrar-Agent EE certificate(s) to validate agent-signed data and to provide it to the MASA.
+This behavior is retained in BRSKI-PRM.<a href="#section-6.3-5" class="pilcrow">¶</a></p>
+<p id="section-6.3-6">In its role as EST server <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span>, the domain registrar <span class="bcp14">MUST</span> also possess the domain CA certificates as defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.9" class="relref">Section 5.9</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-6.3-6" class="pilcrow">¶</a></p>
+<p id="section-6.3-7">Finally, the domain registrar <span class="bcp14">MUST</span> possess the Registrar-Agent EE certificate(s) to validate agent-signed data and to provide it to the MASA.
 The registrar <span class="bcp14">MAY</span> use the certificate verified during client authentication within the TLS sessions with the Registrar-Agent;
 in this case, the registrar <span class="bcp14">MUST</span> possess the domain trust anchor (i.e., domain CA certificate) for the Registrar-Agent EE certificate to verify the certificate chain.
-Alternatively, the Registrar-Agent EE certificate(s) <span class="bcp14">MAY</span> be provided via configuration or a repository.<a href="#section-6.3-6" class="pilcrow">¶</a></p>
+Alternatively, the Registrar-Agent EE certificate(s) <span class="bcp14">MAY</span> be provided via configuration or a repository.<a href="#section-6.3-7" class="pilcrow">¶</a></p>
 <div id="domain-registrar-with-combined-functionality">
 <section id="section-6.3.1">
           <h4 id="name-domain-registrar-with-combi">
@@ -2702,7 +2712,7 @@ Alternatively, the Registrar-Agent EE certificate(s) <span class="bcp14">MAY</sp
           </h4>
 <p id="section-6.3.1-1">A registrar with combined BRSKI and BRSKI-PRM functionality <span class="bcp14">MAY</span> detect if the bootstrapping is performed by the pledge directly (BRSKI case) or by a Registrar-Agent (BRSKI-PRM case) based on the utilized credentials for client authentication during the TLS session establishment and switch the operational mode from BRSKI to BRSKI-PRM.<a href="#section-6.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-2">This may be supported by a specific naming in the SAN (subject alternative name) component of the Registrar-Agent EE certificate, which allows the domain registrar to explicitly detect already in the TLS session establishment that the connecting client is a Registrar-Agent.<a href="#section-6.3.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.3.1-3">The registrar <span class="bcp14">MAY</span> be restricted by configuration, if it accepts every Registrar-Agent, which can authenticate with a domain issued certificate or only explicitly authorized ones.<a href="#section-6.3.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-3">The registrar <span class="bcp14">MAY</span> be restricted by configuration, to only accept dedicated Registrar-Agents, based on the presented Registrar-Agent EE certificate.<a href="#section-6.3.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-4">Note that using an EE certificate for TLS client authentication of the Registrar-Agent is a deviation from <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, in which the pledge IDevID certificate is used to perform TLS client authentication.<a href="#section-6.3.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -3249,7 +3259,7 @@ Other specifications may define alternative formats for representing authenticat
         <h3 id="name-trigger-pledge-voucher-requ">
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-trigger-pledge-voucher-requ" class="section-name selfRef">Trigger Pledge Voucher-Request</a>
         </h3>
-<p id="section-7.1-1">The Registrar-Agent <span class="bcp14">MUST</span> begin the sequence of exchanges by sending the Pledge Voucher-Request Trigger (tPVR).
+<p id="section-7.1-1">The Registrar-Agent begins the sequence of exchanges by sending the Pledge Voucher-Request Trigger (tPVR).
 This assumes that the Registrar-Agent has already discovered the pledge, for instance as described in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 6.1.2</a> based on DNS-SD or similar.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.1-2">TLS <span class="bcp14">MAY</span> be used to provide transport security, e.g., privacy and peer authentication, for the exchange between the Registrar-Agent and the pledge (see <a href="#pledgehttps" class="auto internal xref">Appendix B</a>).<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1-3"><a href="#exchangesfig_uc2_1" class="auto internal xref">Figure 5</a> shows the acquisition of the Pledge Voucher-Request (PVR) and the following subsections describe the corresponding artifacts.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
@@ -3339,7 +3349,7 @@ This assumes that the Registrar-Agent has already discovered the pledge, for ins
 <a href="#name-pvr-acquisition-exchange" class="selfRef">PVR acquisition exchange</a>
           </figcaption></figure>
 </div>
-<p id="section-7.1-5">The Registrar-Agent <span class="bcp14">SHALL</span> trigger the pledge to create a PVR via HTTP(S) POST to the pledge endpoint at <code>/.well-known/brski/tpvr</code>.
+<p id="section-7.1-5">The Registrar-Agent triggers the pledge to create a PVR via HTTP(S) POST to the pledge endpoint at <code>/.well-known/brski/tpvr</code>.
 The request body <span class="bcp14">MUST</span> contain the JSON-based Pledge Voucher-Request Trigger (tPVR) artifact as defined in <a href="#tpvr_artifact" class="auto internal xref">Section 7.1.1</a>.
 In the request header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/json</code> and the Accept field <span class="bcp14">SHOULD</span> be set to <code>application/voucher-jws+json</code> as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
 <p id="section-7.1-6">Upon receiving a valid tPVR, the pledge <span class="bcp14">MUST</span> reply with the PVR artifact as defined in <a href="#pvr_artifact" class="auto internal xref">Section 7.1.2</a> in the body of an HTTP 200 OK response.
@@ -3510,7 +3520,8 @@ The format <span class="bcp14">MUST</span> correspond to the X520SerialNumber fi
 <a href="#section-7.1.1.1.3" class="section-number selfRef">7.1.1.1.3. </a><a href="#name-jws-signature" class="section-name selfRef">JWS Signature</a>
               </h6>
 <p id="section-7.1.1.1.3-1">The Registrar-Agent <span class="bcp14">MUST</span> sign the <code>agent-signed-data</code> member using its EE credentials.
-The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.<a href="#section-7.1.1.1.3-1" class="pilcrow">¶</a></p>
+The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.
+Algorithms supported for JWS signatures <span class="bcp14">MUST</span> support ES256 as recommended in <span>[<a href="#RFC7518" class="cite xref">RFC7518</a>]</span> and <span class="bcp14">MAY</span> support further algorithms.<a href="#section-7.1.1.1.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3612,7 +3623,8 @@ also enables the registrar to log which Registrar-Agent was in contact with the 
             <h5 id="name-jws-signature-2">
 <a href="#section-7.1.2.3" class="section-number selfRef">7.1.2.3. </a><a href="#name-jws-signature-2" class="section-name selfRef">JWS Signature</a>
             </h5>
-<p id="section-7.1.2.3-1">The pledge <span class="bcp14">MUST</span> sign the PVR artifact using its IDevID credential following the definitions of <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-jws-voucher-16#section-3.3" class="relref">Section 3.3</a> of [<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.<a href="#section-7.1.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.1.2.3-1">The pledge <span class="bcp14">MUST</span> sign the PVR artifact using its IDevID credential following the definitions of <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-jws-voucher-16#section-3.3" class="relref">Section 3.3</a> of [<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.
+Algorithms supported for JWS signatures <span class="bcp14">MUST</span> support ES256 as recommended in <span>[<a href="#RFC7518" class="cite xref">RFC7518</a>]</span> and <span class="bcp14">MAY</span> support further algorithms.<a href="#section-7.1.2.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -3713,7 +3725,7 @@ also enables the registrar to log which Registrar-Agent was in contact with the 
 <a href="#name-per-acquisition-exchange" class="selfRef">PER acquisition exchange</a>
           </figcaption></figure>
 </div>
-<p id="section-7.2-5">The Registrar-Agent <span class="bcp14">SHALL</span> trigger the pledge to create the PER via HTTP(S) POST to the pledge endpoint at <code>/.well-known/brski/tper</code>.
+<p id="section-7.2-5">The Registrar-Agent triggers the pledge to create the PER via HTTP(S) POST to the pledge endpoint at <code>/.well-known/brski/tper</code>.
 The request body <span class="bcp14">MUST</span> contain the JSON-based Pledge Enroll-Request Trigger (tPER) artifact as defined in <a href="#tper_artifact" class="auto internal xref">Section 7.2.1</a>.
 In the request header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/json</code> and the Accept field <span class="bcp14">SHOULD</span> be set to <code>application/jose+json</code>.<a href="#section-7.2-5" class="pilcrow">¶</a></p>
 <p id="section-7.2-6">Upon receiving a valid tPER, the pledge <span class="bcp14">MUST</span> reply with the PER artifact as defined in <a href="#per_artifact" class="auto internal xref">Section 7.2.2</a> in the body of an HTTP 200 OK response.
@@ -3852,7 +3864,7 @@ if the pledge does not have synchronized time, it <span class="bcp14">SHALL</spa
             </ul>
 <p id="section-7.2.2.2-5">The new protected Header Parameter <code>created-on</code> is introduced to reflect freshness of the PER.
 It allows the registrar to verify the timely correlation between the PER artifact and previous exchanges, i.e., <code>created-on</code> of PER &gt;= <code>created-on</code> of PVR &gt;= <code>created-on</code> of PVR trigger.
-The registrar <span class="bcp14">MAY</span> consider ignoring any but the newest PER artifact from the same pledge in case the registrar has at any point in time more than one pending PER from the pledge.<a href="#section-7.2.2.2-5" class="pilcrow">¶</a></p>
+The registrar <span class="bcp14">MAY</span> ignore any but the newest PER artifact from the same pledge in case the registrar has at any point in time more than one pending PER from the pledge.<a href="#section-7.2.2.2-5" class="pilcrow">¶</a></p>
 <p id="section-7.2.2.2-6"><a href="#per_header" class="auto internal xref">Figure 18</a> shows an example for this JWS Protected Header:<a href="#section-7.2.2.2-6" class="pilcrow">¶</a></p>
 <span id="name-jws-protected-header-example"></span><div id="per_header">
 <figure id="figure-18">
@@ -3881,7 +3893,8 @@ The registrar <span class="bcp14">MAY</span> consider ignoring any but the newes
 <a href="#section-7.2.2.3" class="section-number selfRef">7.2.2.3. </a><a href="#name-jws-signature-3" class="section-name selfRef">JWS Signature</a>
             </h5>
 <p id="section-7.2.2.3-1">The pledge <span class="bcp14">MUST</span> sign the PER artifact using its IDevID credential.
-The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.<a href="#section-7.2.2.3-1" class="pilcrow">¶</a></p>
+The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.
+Algorithms supported for JWS signatures <span class="bcp14">MUST</span> support ES256 as recommended in <span>[<a href="#RFC7518" class="cite xref">RFC7518</a>]</span> and <span class="bcp14">MAY</span> support further algorithms.<a href="#section-7.2.2.3-1" class="pilcrow">¶</a></p>
 <p id="section-7.2.2.3-2">While BRSKI-PRM targets the initial enrollment, re-enrollment can be supported similarly.
 In this case, the pledge <span class="bcp14">MAY</span> use its current, potentially application-related EE credential instead of its IDevID credential to sign the PER artifact.
 The issuing CA can associate the re-enrollment request with the pledge based on the previously issued and still valid EE certificate.
@@ -3902,17 +3915,15 @@ Collecting multiple pairs allows bulk bootstrapping of several pledges using the
 <p id="section-7.3-2">The Registrar-Agent <span class="bcp14">MUST</span> establish a TLS session to the registrar with mutual authentication.
 In contrast to BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the TLS client authentication uses the Registrar-Agent EE certificate instead of the pledge IDevID certificate.
 Consequently, the domain registrar can distinguish BRSKI (pledge-initiator-mode) from BRSKI-PRM (pledge-responder-mode).<a href="#section-7.3-2" class="pilcrow">¶</a></p>
-<p id="section-7.3-3">The registrar <span class="bcp14">SHOULD</span> verify the TLS client authentication of the Registrar-Agent, in particular if the TLS session is used to obtain the Registrar-Agent EE certificate (see <a href="#registrar_component" class="auto internal xref">Section 6.3</a>).
-Note that authentication and authorization of the pledge verified during the TLS session based on the signatures inside the PVR artifact.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
-<p id="section-7.3-4">As already stated in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, and required by <span>[<a href="#I-D.ietf-uta-require-tls13" class="cite xref">I-D.ietf-uta-require-tls13</a>]</span>, the use of TLS 1.3 (or newer) is encouraged.
+<p id="section-7.3-3">As already stated in <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, and required by <span>[<a href="#I-D.ietf-uta-require-tls13" class="cite xref">I-D.ietf-uta-require-tls13</a>]</span>, the use of TLS 1.3 (or newer) is encouraged.
 TLS 1.2 or newer is <span class="bcp14">REQUIRED</span> on the Registrar-Agent side.
 TLS 1.3 (or newer) <span class="bcp14">SHOULD</span> be available on the registrar, but TLS 1.2 <span class="bcp14">MAY</span> be used.
-TLS 1.3 (or newer) <span class="bcp14">SHOULD</span> be available on the MASA, but TLS 1.2 <span class="bcp14">MAY</span> be used.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
-<p id="section-7.3-5"><a href="#exchangesfig_uc2_3" class="auto internal xref">Figure 19</a> shows the voucher-request processing and the following subsections describe the corresponding artifacts.<a href="#section-7.3-5" class="pilcrow">¶</a></p>
+TLS 1.3 (or newer) <span class="bcp14">SHOULD</span> be available on the MASA, but TLS 1.2 <span class="bcp14">MAY</span> be used.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
+<p id="section-7.3-4"><a href="#exchangesfig_uc2_3" class="auto internal xref">Figure 19</a> shows the voucher-request processing and the following subsections describe the corresponding artifacts.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
 <span id="name-voucher-issuing-exchange"></span><div id="exchangesfig_uc2_3">
 <figure id="figure-19">
-          <div id="section-7.3-6.1">
-            <div class="alignCenter art-svg artwork" id="section-7.3-6.1.1">
+          <div id="section-7.3-5.1">
+            <div class="alignCenter art-svg artwork" id="section-7.3-5.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="480" width="576" viewBox="0 0 576 480" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                 <path d="M 8,32 L 8,80" fill="none" stroke="black"></path>
                 <path d="M 16,160 L 16,448" fill="none" stroke="black"></path>
@@ -4018,58 +4029,58 @@ TLS 1.3 (or newer) <span class="bcp14">SHOULD</span> be available on the MASA, b
                   <text x="456" y="468">~</text>
                   <text x="560" y="468">~</text>
                 </g>
-              </svg><a href="#section-7.3-6.1.1" class="pilcrow">¶</a>
+              </svg><a href="#section-7.3-5.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-19" class="selfRef">Figure 19</a>:
 <a href="#name-voucher-issuing-exchange" class="selfRef">Voucher issuing exchange</a>
           </figcaption></figure>
 </div>
-<p id="section-7.3-7">As a first step of the interaction with the domain registrar, the Registrar-Agent <span class="bcp14">SHALL</span> supply the PVR artifact(s) to the registrar via HTTP-over-TLS POST to the registrar endpoint at <code>/.well-known/brski/requestvoucher</code>.
+<p id="section-7.3-6">As a first step of the interaction with the domain registrar, the Registrar-Agent <span class="bcp14">SHALL</span> supply the PVR artifact(s) to the registrar via HTTP-over-TLS POST to the registrar endpoint at <code>/.well-known/brski/requestvoucher</code>.
 Note that this is the same endpoint as for BRSKI described in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.2" class="relref">Section 5.2</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 The request body <span class="bcp14">MUST</span> contain one previously acquired PVR artifact as defined in <a href="#pvr_artifact" class="auto internal xref">Section 7.1.2</a>.
-In the request header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/voucher-jws+json</code> and the Accept field <span class="bcp14">SHOULD</span> be set to <code>application/voucher-jws+json</code> as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.<a href="#section-7.3-7" class="pilcrow">¶</a></p>
-<p id="section-7.3-8">Upon receiving a PVR artifact, the registrar accepts or declines the request to join the domain.
+In the request header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/voucher-jws+json</code> and the Accept field <span class="bcp14">SHOULD</span> be set to <code>application/voucher-jws+json</code> as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.<a href="#section-7.3-6" class="pilcrow">¶</a></p>
+<p id="section-7.3-7">Upon receiving a PVR artifact, the registrar accepts or declines the request to join the domain.
 For this, it <span class="bcp14">MUST</span> perform pledge authorization as defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.3" class="relref">Section 5.3</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
-Due to the Registrar-Agent in the middle, the registrar <span class="bcp14">MUST</span> verify in addition that<a href="#section-7.3-8" class="pilcrow">¶</a></p>
+Due to the Registrar-Agent in the middle, the registrar <span class="bcp14">MUST</span> verify in addition that<a href="#section-7.3-7" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.3-9.1">
-            <p id="section-7.3-9.1.1">the <code>agent-provided-proximity-registrar-cert</code> field of the PVR contains a registrar EE certificate signed by the same domain owner as the registrar EE certificate used to sign the RVR;
+<li class="normal" id="section-7.3-8.1">
+            <p id="section-7.3-8.1.1">the <code>agent-provided-proximity-registrar-cert</code> field of the PVR contains a registrar EE certificate signed by the same domain owner as the registrar EE certificate used to sign the RVR;
 note that this check allows for installations with multiple domain registrars and for registrar EE certificate renewal between exchanges with the Registrar-Agent (see <a href="#arch_nomadic" class="auto internal xref">Section 5.2</a>);
-in many installations with a single registrar the contained certificate is identical to the signing certificate.<a href="#section-7.3-9.1.1" class="pilcrow">¶</a></p>
+in many installations with a single registrar the contained certificate is identical to the signing certificate.<a href="#section-7.3-8.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-7.3-9.2">
-            <p id="section-7.3-9.2.1">the <code>agent-signed-data</code> field of the PVR is signed with the private key corresponding to the Registrar-Agent EE certificate as known by the registrar (see <a href="#registrar_component" class="auto internal xref">Section 6.3</a>);
-this is done via the SubjectKeyIdentifier of the certificate in the <code>kid</code> Header Parameter of the JWS Protected Header of the <code>agent-signed-data</code> field.<a href="#section-7.3-9.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.3-8.2">
+            <p id="section-7.3-8.2.1">the <code>agent-signed-data</code> field of the PVR is signed with the private key corresponding to the Registrar-Agent EE certificate as known by the registrar (see <a href="#registrar_component" class="auto internal xref">Section 6.3</a>);
+this is done via the SubjectKeyIdentifier of the certificate in the <code>kid</code> Header Parameter of the JWS Protected Header of the <code>agent-signed-data</code> field.<a href="#section-7.3-8.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-7.3-9.3">
-            <p id="section-7.3-9.3.1">the product-serial-number inside the <code>agent-signed-data</code> is equal to the <code>serial-number</code> field of the PVR as well as the X520SerialNumber field of the pledge IDevID certificate, which is contained in the JWS Protected Header of the PVR.<a href="#section-7.3-9.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.3-8.3">
+            <p id="section-7.3-8.3.1">the product-serial-number inside the <code>agent-signed-data</code> is equal to the <code>serial-number</code> field of the PVR as well as the X520SerialNumber field of the pledge IDevID certificate, which is contained in the JWS Protected Header of the PVR.<a href="#section-7.3-8.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-7.3-9.4">
-            <p id="section-7.3-9.4.1">the Registrar-Agent EE certificate is still valid;
-this is necessary to avoid that a rogue Registrar-Agent generates <code>agent-signed-data</code> objects to onboard arbitrary pledges at a later point in time, see also <a href="#sec_cons_reg-agt" class="auto internal xref">Section 12.3</a>.<a href="#section-7.3-9.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.3-8.4">
+            <p id="section-7.3-8.4.1">the Registrar-Agent EE certificate is still valid;
+this is necessary to avoid that a rogue Registrar-Agent generates <code>agent-signed-data</code> objects to onboard arbitrary pledges at a later point in time, see also <a href="#sec_cons_reg-agt" class="auto internal xref">Section 12.3</a>.<a href="#section-7.3-8.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-7.3-10">If the registrar is unable to process the request or validate the PVR, it responds with an HTTP client error status code to the Registrar-Agent.
-The following client error status codes can be used:<a href="#section-7.3-10" class="pilcrow">¶</a></p>
+<p id="section-7.3-9">If the registrar is unable to process the request or validate the PVR, it responds with an HTTP client error status code to the Registrar-Agent.
+The following client error status codes can be used:<a href="#section-7.3-9" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.3-11.1">
-            <p id="section-7.3-11.1.1">400 Bad Request: if the registrar detects an error in the format of the request.<a href="#section-7.3-11.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.3-10.1">
+            <p id="section-7.3-10.1.1">400 Bad Request: if the registrar detects an error in the format of the request.<a href="#section-7.3-10.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-7.3-11.2">
-            <p id="section-7.3-11.2.1">403 Forbidden: if the registrar detected that one or more security related fields are not valid or if the pledge-provided information could not be used with automated allowance.<a href="#section-7.3-11.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.3-10.2">
+            <p id="section-7.3-10.2.1">403 Forbidden: if the registrar detected that one or more security related fields are not valid or if the pledge-provided information could not be used with automated allowance.<a href="#section-7.3-10.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-7.3-11.3">
-            <p id="section-7.3-11.3.1">406 Not Acceptable: if the Accept request header field indicates a type that is unknown or unsupported.<a href="#section-7.3-11.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.3-10.3">
+            <p id="section-7.3-10.3.1">406 Not Acceptable: if the Accept request header field indicates a type that is unknown or unsupported.<a href="#section-7.3-10.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-7.3-11.4">
-            <p id="section-7.3-11.4.1">415 Unsupported Media Type: if the Content-Type request header field indicates a type that is unknown or unsupported.<a href="#section-7.3-11.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.3-10.4">
+            <p id="section-7.3-10.4.1">415 Unsupported Media Type: if the Content-Type request header field indicates a type that is unknown or unsupported.<a href="#section-7.3-10.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-7.3-12">Otherwise, the registrar converts the PVR artifact to a Registrar Voucher-Request (RVR) artifact (see <a href="#rvr_artifact" class="auto internal xref">Section 7.3.4</a>) and starts the backend interaction with the MASA.<a href="#section-7.3-12" class="pilcrow">¶</a></p>
-<p id="section-7.3-13">The domain registrar can respond with an HTTP 202 Accepted response status code to the Registrar-Agent at this point following <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.6" class="relref">Section 5.6</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, while the rules defined for the pledge also apply to the Registrar-Agent;
-in this case, the registrar still continues with the MASA interaction to provide the Voucher artifact to the retry request.<a href="#section-7.3-13" class="pilcrow">¶</a></p>
-<p id="section-7.3-14">The registrar <span class="bcp14">MAY</span> use the response body to signal success/failure details to the service technician operating the Registrar-Agent.<a href="#section-7.3-14" class="pilcrow">¶</a></p>
+<p id="section-7.3-11">Otherwise, the registrar converts the PVR artifact to a Registrar Voucher-Request (RVR) artifact (see <a href="#rvr_artifact" class="auto internal xref">Section 7.3.4</a>) and starts the backend interaction with the MASA.<a href="#section-7.3-11" class="pilcrow">¶</a></p>
+<p id="section-7.3-12">The domain registrar can respond with an HTTP 202 Accepted response status code to the Registrar-Agent at this point following <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.6" class="relref">Section 5.6</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, while the rules defined for the pledge also apply to the Registrar-Agent;
+in this case, the registrar still continues with the MASA interaction to provide the Voucher artifact to the retry request.<a href="#section-7.3-12" class="pilcrow">¶</a></p>
+<p id="section-7.3-13">The registrar <span class="bcp14">MAY</span> use the response body to signal success/failure details to the service technician operating the Registrar-Agent.<a href="#section-7.3-13" class="pilcrow">¶</a></p>
 <div id="masa_interaction">
 <section id="section-7.3.1">
           <h4 id="name-masa-interaction">
@@ -4084,7 +4095,7 @@ For the default format used in this specification, this is <code>application/vou
 to ensure that the pledge is able to process the voucher, the registrar requests this format via the HTTP Accept header field when requesting the voucher.
 Further, the RVR artifact and the PVR artifact inside should also use the same format to limit the number of required format encoders.
 Note that BRSKI-PRM allows for alternative formats such as CMS-signed JSON as used in BRSKI <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> or COSE-signed CBOR for constrained environments, when defined by other specifications.
-Overall, a MASA responsible for BRSKI-PRM capable pledges <span class="bcp14">MUST</span> support the same formats as supported by those pledges.<a href="#section-7.3.1-2" class="pilcrow">¶</a></p>
+Overall, a MASA responsible for BRSKI-PRM capable pledges consequently supports the same formats as supported by those pledges.<a href="#section-7.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.3.1-3">Once the MASA receives the RVR artifact, it <span class="bcp14">MUST</span> perform the verification as described in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.5" class="relref">Section 5.5</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 Depending on policy, the MASA <span class="bcp14">MAY</span> choose the type of assertion to perform.
 For the Agent Proximity Assertion of BRSKI-PRM (see <a href="#agt_prx" class="auto internal xref">Section 5.4</a>), the MASA <span class="bcp14">MUST</span> skip the verification described in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.5.5" class="relref">Section 5.5.5</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> and instead <span class="bcp14">MUST</span> verify for the PVR contained in the <code>prior-signed-voucher-request</code> field of the RVR that<a href="#section-7.3.1-3" class="pilcrow">¶</a></p>
@@ -4134,7 +4145,7 @@ For the default format used in this specification, this is <code>application/vou
           </h4>
 <p id="section-7.3.2-1">After receiving the Voucher from the MASA, the registrar <span class="bcp14">SHOULD</span> evaluate it for transparency and logging purposes as outlined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.6" class="relref">Section 5.6</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 It then countersigns the Voucher for delivery to the pledge via the Registrar-Agent.<a href="#section-7.3.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.3.2-2">The registrar <span class="bcp14">MUST</span> reply to the Registrar-Agent with the Registrar-Countersigned Voucher artifact (Voucher') as defined in <a href="#rcv_artifact" class="auto internal xref">Section 7.3.6</a> in the body of an HTTP 200 OK response.
+<p id="section-7.3.2-2">The registrar <span class="bcp14">MUST</span> reply to the Registrar-Agent with the registrar-countersigned Voucher artifact ('Voucher') as defined in <a href="#rcv_artifact" class="auto internal xref">Section 7.3.6</a> in the body of an HTTP 200 OK response.
 In the response header, the Content-Type field <span class="bcp14">MUST</span> be set to the media type of the incoming PVR artifact.
 For the default format used in this specification, this is <code>application/voucher-jws+json</code> as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.<a href="#section-7.3.2-2" class="pilcrow">¶</a></p>
 <p id="section-7.3.2-3">If the domain registrar is unable to return the Voucher, it responds with an HTTP server error status code to the Registrar-Agent.
@@ -4273,7 +4284,8 @@ this specification refines it as a JSON array structure similar to the <code>x5c
             <h5 id="name-jws-signature-4">
 <a href="#section-7.3.4.3" class="section-number selfRef">7.3.4.3. </a><a href="#name-jws-signature-4" class="section-name selfRef">JWS Signature</a>
             </h5>
-<p id="section-7.3.4.3-1">The domain registrar <span class="bcp14">MUST</span> sign the RVR artifact using its EE credentials following the definitions of <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-jws-voucher-16#section-3.3" class="relref">Section 3.3</a> of [<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.<a href="#section-7.3.4.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3.4.3-1">The domain registrar <span class="bcp14">MUST</span> sign the RVR artifact using its EE credentials following the definitions of <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-anima-jws-voucher-16#section-3.3" class="relref">Section 3.3</a> of [<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span>.
+Algorithms supported for JWS signatures <span class="bcp14">MUST</span> support ES256 as recommended in <span>[<a href="#RFC7518" class="cite xref">RFC7518</a>]</span> and <span class="bcp14">MAY</span> support further algorithms.<a href="#section-7.3.4.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4376,8 +4388,9 @@ the pinned domain certificate is already contained in the JSON Voucher Data.<a h
 <a href="#section-7.3.6.3" class="section-number selfRef">7.3.6.3. </a><a href="#name-jws-signature-registrar" class="section-name selfRef">JWS Signature (Registrar)</a>
             </h5>
 <p id="section-7.3.6.3-1">The signature is created by signing the registrar-added JWS Protected Header (Registrar) and the original JWS Payload produced by the MASA as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.
-The registrar <span class="bcp14">MUST</span> use its EE credentials to sign.<a href="#section-7.3.6.3-1" class="pilcrow">¶</a></p>
-<p id="section-7.3.6.3-2">Note that the credentials need to be the same as used for server authentication in the TLS session with the Registrar-Agent receiving this artifact (see <a href="#registrar_component" class="auto internal xref">Section 6.3</a>).<a href="#section-7.3.6.3-2" class="pilcrow">¶</a></p>
+Algorithms supported for JWS signatures <span class="bcp14">MUST</span> support ES256 as recommended in <span>[<a href="#RFC7518" class="cite xref">RFC7518</a>]</span> and <span class="bcp14">MAY</span> support further algorithms.<a href="#section-7.3.6.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3.6.3-2">The registrar <span class="bcp14">MUST</span> use its EE credentials to sign.<a href="#section-7.3.6.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.3.6.3-3">Note that the credentials need to be the same as used for server authentication in the TLS session with the Registrar-Agent receiving this artifact (see <a href="#registrar_component" class="auto internal xref">Section 6.3</a>).<a href="#section-7.3.6.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4539,7 +4552,7 @@ The following server error status codes can be used:<a href="#section-7.4-12" cl
             <p id="section-7.4-13.2.1">502 Bad Gateway: if the registrar received an invalid response from the Key Infrastructure.<a href="#section-7.4-13.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.4-13.3">
-            <p id="section-7.4-13.3.1">503 Service Unavailable: if a simple retry of the Registrar-Agent request might lead to a successful response; this error response <span class="bcp14">SHOULD</span> include the Retry-After response header field with an appropriate value.<a href="#section-7.4-13.3.1" class="pilcrow">¶</a></p>
+            <p id="section-7.4-13.3.1">503 Service Unavailable: if a simple retry of the Registrar-Agent request might lead to a successful response; this error response <span class="bcp14">MUST</span> include the Retry-After response header field with an appropriate value.<a href="#section-7.4-13.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.4-13.4">
             <p id="section-7.4-13.4.1">504 Gateway Timeout: if the backend request to the Key Infrastructure timed out.<a href="#section-7.4-13.4.1" class="pilcrow">¶</a></p>
@@ -4673,7 +4686,8 @@ In the response header, the Content-Type field <span class="bcp14">MUST</span> b
 <a href="#section-7.5.1" class="section-number selfRef">7.5.1. </a><a href="#name-request-no-artifact" class="section-name selfRef">Request (no artifact)</a>
           </h4>
 <p id="section-7.5.1-1">In this exchange, the request is a result of the HTTP(S) default transport for this specification.
-There is no artifact provided to the registrar.<a href="#section-7.5.1-1" class="pilcrow">¶</a></p>
+There is no artifact provided to the registrar.
+As the caCerts artifact processing on the pledge may result in errors, signaled via HTTP status codes, the Registrar-Agent should log these for evaluation as outlined in <a href="#log_hints" class="auto internal xref">Section 8</a>.<a href="#section-7.5.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="cacerts_artifact">
@@ -4790,7 +4804,8 @@ It <span class="bcp14">SHALL</span> contain one or more domain CA (root or issui
 <a href="#section-7.5.2.3" class="section-number selfRef">7.5.2.3. </a><a href="#name-jws-signature-5" class="section-name selfRef">JWS Signature</a>
             </h5>
 <p id="section-7.5.2.3-1">The registrar <span class="bcp14">MUST</span> sign the caCerts artifact using its EE credentials.
-The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.<a href="#section-7.5.2.3-1" class="pilcrow">¶</a></p>
+The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.
+Algorithms supported for JWS signatures <span class="bcp14">MUST</span> support ES256 as recommended in <span>[<a href="#RFC7518" class="cite xref">RFC7518</a>]</span> and <span class="bcp14">MAY</span> support further algorithms.<a href="#section-7.5.2.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -4815,7 +4830,7 @@ The JWS Signature is generated over the JWS Protected Header and the JWS Payload
 </li>
         </ul>
 <p id="section-7.6-3">Reconnecting to the pledge might require to re-discover the pledge as described in <a href="#discovery_uc2_ppa" class="auto internal xref">Section 6.1.2</a>.
-The Registrar-Agent <span class="bcp14">MAY</span> store information from the first connection with the pledge to optimize.<a href="#section-7.6-3" class="pilcrow">¶</a></p>
+The Registrar-Agent <span class="bcp14">MAY</span> store information from the first connection with the pledge to optimize this process.<a href="#section-7.6-3" class="pilcrow">¶</a></p>
 <p id="section-7.6-4">TLS <span class="bcp14">MAY</span> be used to provide privacy for this exchange between the Registrar-Agent and the pledge (see <a href="#pledgehttps" class="auto internal xref">Appendix B</a>).<a href="#section-7.6-4" class="pilcrow">¶</a></p>
 <p id="section-7.6-5"><a href="#exchangesfig_uc2_6" class="auto internal xref">Figure 30</a> shows the provisioning of the voucher to the pledge and the following subsections describe the corresponding artifacts.<a href="#section-7.6-5" class="pilcrow">¶</a></p>
 <span id="name-voucher-exchange"></span><div id="exchangesfig_uc2_6">
@@ -4990,7 +5005,10 @@ this specification assumes version <code>1</code> just like BRSKI <span>[<a href
 </li>
               <li class="normal" id="section-7.6.2.1-2.3">
                 <p id="section-7.6.2.1-2.3.1"><code>reason</code>: contains a human-readable message;
-<span class="bcp14">SHOULD NOT</span> provide information beneficial to an attacker.<a href="#section-7.6.2.1-2.3.1" class="pilcrow">¶</a></p>
+should not provide information beneficial to an attacker.
+As the pledge is not localized at this point in time language selection cannot be done.
+Therefore, English is taken as a default here for this diagnostic messages. 
+The internationalization of text is expected to be done on another level.<a href="#section-7.6.2.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-7.6.2.1-2.4">
                 <p id="section-7.6.2.1-2.4.1"><code>reason-context</code>: contains a JSON object that provides additional information specific to a failure;
@@ -5094,7 +5112,8 @@ if the certificate chain is not included in the <code>x5c</code> Header Paramete
 <a href="#section-7.6.2.3" class="section-number selfRef">7.6.2.3. </a><a href="#name-jws-signature-6" class="section-name selfRef">JWS Signature</a>
             </h5>
 <p id="section-7.6.2.3-1">The pledge <span class="bcp14">MUST</span> sign the vStatus artifact using its IDevID credential.
-The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.<a href="#section-7.6.2.3-1" class="pilcrow">¶</a></p>
+The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.
+Algorithms supported for JWS signatures <span class="bcp14">MUST</span> support ES256 as recommended in <span>[<a href="#RFC7518" class="cite xref">RFC7518</a>]</span> and <span class="bcp14">MAY</span> support further algorithms.<a href="#section-7.6.2.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -5107,7 +5126,7 @@ The JWS Signature is generated over the JWS Protected Header and the JWS Payload
 <a href="#section-7.7" class="section-number selfRef">7.7. </a><a href="#name-supply-ca-certificates-to-p" class="section-name selfRef">Supply CA Certificates to Pledge (scac)</a>
         </h3>
 <p id="section-7.7-1">Before supplying the pledge EE certificate, the Registrar-Agent supplies the domain CA certificates to the pledge, so the pledge can verify its EE certificate in the next exchange.
-As the CA certificate provisioning is crucial from a security perspective, this exchange <span class="bcp14">SHOULD</span> only be done, if supplying the voucher in the previous exchange (<a href="#voucher" class="auto internal xref">Section 7.6</a>) has been successfully processed by the pledge as reflected in the vStatus artifact.<a href="#section-7.7-1" class="pilcrow">¶</a></p>
+As the CA certificate provisioning is crucial from a security perspective, this exchange <span class="bcp14">SHOULD</span> only be done if supplying the voucher in the previous exchange (<a href="#voucher" class="auto internal xref">Section 7.6</a>) has been successfully processed by the pledge as reflected in the vStatus artifact.<a href="#section-7.7-1" class="pilcrow">¶</a></p>
 <p id="section-7.7-2">TLS <span class="bcp14">MAY</span> be used to provide privacy for this exchange between the Registrar-Agent and the pledge (see <a href="#pledgehttps" class="auto internal xref">Appendix B</a>).<a href="#section-7.7-2" class="pilcrow">¶</a></p>
 <p id="section-7.7-3"><a href="#exchangesfig_uc2_7" class="auto internal xref">Figure 35</a> shows the provisioning of the CA certificates to the pledge and the following subsections describe the corresponding artifacts.<a href="#section-7.7-3" class="pilcrow">¶</a></p>
 <span id="name-certificate-provisioning-ex"></span><div id="exchangesfig_uc2_7">
@@ -5387,7 +5406,7 @@ The generated JWS Signature is base64url-encoded to become the string value of t
 <a href="#section-7.8.2.1" class="section-number selfRef">7.8.2.1. </a><a href="#name-json-enroll-status-data" class="section-name selfRef">JSON Enroll Status Data</a>
             </h5>
 <p id="section-7.8.2.1-1">The JSON Status Data <span class="bcp14">SHALL</span> be a JSON document <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> that <span class="bcp14">MUST</span> conform with the <code>enrollstatus-post</code> CDDL <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span> data model defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.9.4" class="relref">Section 5.9.4</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
-The members are the same as for the JSON Voucher Status Data and follow the same definitions as given in <a href="#vstatus_data" class="auto internal xref">Section 7.6.2.1</a> (incl. making <code>reason-context</code> mandatory).<a href="#section-7.8.2.1-1" class="pilcrow">¶</a></p>
+The members are the same as for the JSON Voucher Status Data and follow the same definitions as given in <a href="#vstatus_data" class="auto internal xref">Section 7.6.2.1</a> (including making <code>reason-context</code> mandatory).<a href="#section-7.8.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.8.2.1-2">BRSKI-PRM implementations again utilize the <code>reason-context</code> field to provide a distinguishable token.
 For eStatus artifacts, the JSON object in the <code>reason-context</code> field <span class="bcp14">MUST</span> contain the member <code>pes-details</code>.<a href="#section-7.8.2.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.8.2.1-3"><a href="#estatus_data_example_success" class="auto internal xref">Figure 38</a> below shows an example for the JSON Enroll Status Data in case of success and <a href="#estatus_data_example_error" class="auto internal xref">Figure 39</a> in case of failure:<a href="#section-7.8.2.1-3" class="pilcrow">¶</a></p>
@@ -5472,7 +5491,8 @@ if the certificate chain is not included in the <code>x5c</code> Header Paramete
             </h5>
 <p id="section-7.8.2.3-1">If the pledge verified the received EE certificate successfully, it <span class="bcp14">MUST</span> sign the eStatus artifact using its new EE credentials.
 In failure case, the pledge <span class="bcp14">MUST</span> sign it using its IDevID credentials.
-The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.<a href="#section-7.8.2.3-1" class="pilcrow">¶</a></p>
+The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.
+Algorithms supported for JWS signatures <span class="bcp14">MUST</span> support ES256 as recommended in <span>[<a href="#RFC7518" class="cite xref">RFC7518</a>]</span> and <span class="bcp14">MAY</span> support further algorithms.<a href="#section-7.8.2.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -5996,7 +6016,8 @@ As shown in <a href="#stat_req_def" class="auto internal xref">Figure 45</a>, BR
 <a href="#section-7.11.1.3" class="section-number selfRef">7.11.1.3. </a><a href="#name-jws-signature-8" class="section-name selfRef">JWS Signature</a>
             </h5>
 <p id="section-7.11.1.3-1">The Registrar-Agent <span class="bcp14">MUST</span> sign the tStatus artifact using its EE credentials.
-The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.<a href="#section-7.11.1.3-1" class="pilcrow">¶</a></p>
+The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.
+Algorithms supported for JWS signatures <span class="bcp14">MUST</span> support ES256 as recommended in <span>[<a href="#RFC7518" class="cite xref">RFC7518</a>]</span> and <span class="bcp14">MAY</span> support further algorithms.<a href="#section-7.11.1.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -6188,7 +6209,8 @@ if the certificate chain is not included in the x5c Header Parameter, it <span c
 <a href="#section-7.11.2.3" class="section-number selfRef">7.11.2.3. </a><a href="#name-jws-signature-9" class="section-name selfRef">JWS Signature</a>
             </h5>
 <p id="section-7.11.2.3-1">The pledge <span class="bcp14">MUST</span> sign the tStatus artifact using its IDevID or domain-owner signed EE credentials according to its bootstrapping status as defined in <a href="#pstatus_data" class="auto internal xref">Section 7.11.2.1</a>.
-The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.<a href="#section-7.11.2.3-1" class="pilcrow">¶</a></p>
+The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in <span><a href="https://rfc-editor.org/rfc/rfc7515#section-5.1" class="relref">Section 5.1</a> of [<a href="#RFC7515" class="cite xref">RFC7515</a>]</span>.
+Algorithms supported for JWS signatures <span class="bcp14">MUST</span> support ES256 as recommended in <span>[<a href="#RFC7518" class="cite xref">RFC7518</a>]</span> and <span class="bcp14">MAY</span> support further algorithms.<a href="#section-7.11.2.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -6488,16 +6510,16 @@ Even if the wireless network is encrypted, if it uses a network-wide key, then l
 <a href="#section-12" class="section-number selfRef">12. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
 <p id="section-12-1">In general, the security considerations of <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span> apply for BRSKI-PRM also.
-Further security aspects are considered here related to:<a href="#section-12-1" class="pilcrow">¶</a></p>
+Further security aspects are considered in the following subsections related to:<a href="#section-12-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-12-2.1">
-          <p id="section-12-2.1.1">the introduction of the additional component Registrar-Agent<a href="#section-12-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-12-2.1.1">the introduction of the additional component Registrar-Agent and related attack options.<a href="#section-12-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-12-2.2">
-          <p id="section-12-2.2.1">the reversal of the pledge communication direction (push mode, compared to BRSKI)<a href="#section-12-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-12-2.2.1">the reversal of the pledge communication direction (push mode, compared to BRSKI).<a href="#section-12-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-12-2.3">
-          <p id="section-12-2.3.1">no transport layer security between Registrar-Agent and pledge<a href="#section-12-2.3.1" class="pilcrow">¶</a></p>
+          <p id="section-12-2.3.1">no transport layer security between Registrar-Agent and pledge and the impact on transport of sensitive information.<a href="#section-12-2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <div id="sec_cons-dos">
@@ -6643,6 +6665,10 @@ Review comments in the context of a formal analysis of BRSKI-PRM have been provi
         <dd>
 <span class="refAuthor">Jones, M.</span>, <span class="refAuthor">Bradley, J.</span>, and <span class="refAuthor">N. Sakimura</span>, <span class="refTitle">"JSON Web Signature (JWS)"</span>, <span class="seriesInfo">RFC 7515</span>, <span class="seriesInfo">DOI 10.17487/RFC7515</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7515">https://www.rfc-editor.org/rfc/rfc7515</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC7518">[RFC7518]</dt>
+        <dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refTitle">"JSON Web Algorithms (JWA)"</span>, <span class="seriesInfo">RFC 7518</span>, <span class="seriesInfo">DOI 10.17487/RFC7518</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7518">https://www.rfc-editor.org/rfc/rfc7518</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC7951">[RFC7951]</dt>
         <dd>
 <span class="refAuthor">Lhotka, L.</span>, <span class="refTitle">"JSON Encoding of Data Modeled with YANG"</span>, <span class="seriesInfo">RFC 7951</span>, <span class="seriesInfo">DOI 10.17487/RFC7951</span>, <time datetime="2016-08" class="refDate">August 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7951">https://www.rfc-editor.org/rfc/rfc7951</a>&gt;</span>. </dd>
@@ -6740,9 +6766,9 @@ Review comments in the context of a formal analysis of BRSKI-PRM have been provi
         <dd>
 <span class="refAuthor">Josefsson, S.</span>, <span class="refTitle">"The Base16, Base32, and Base64 Data Encodings"</span>, <span class="seriesInfo">RFC 4648</span>, <span class="seriesInfo">DOI 10.17487/RFC4648</span>, <time datetime="2006-10" class="refDate">October 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4648">https://www.rfc-editor.org/rfc/rfc4648</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC6241">[RFC6241]</dt>
+<dt id="RFC5652">[RFC5652]</dt>
         <dd>
-<span class="refAuthor">Enns, R., Ed.</span>, <span class="refAuthor">Bjorklund, M., Ed.</span>, <span class="refAuthor">Schoenwaelder, J., Ed.</span>, and <span class="refAuthor">A. Bierman, Ed.</span>, <span class="refTitle">"Network Configuration Protocol (NETCONF)"</span>, <span class="seriesInfo">RFC 6241</span>, <span class="seriesInfo">DOI 10.17487/RFC6241</span>, <time datetime="2011-06" class="refDate">June 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6241">https://www.rfc-editor.org/rfc/rfc6241</a>&gt;</span>. </dd>
+<span class="refAuthor">Housley, R.</span>, <span class="refTitle">"Cryptographic Message Syntax (CMS)"</span>, <span class="seriesInfo">STD 70</span>, <span class="seriesInfo">RFC 5652</span>, <span class="seriesInfo">DOI 10.17487/RFC5652</span>, <time datetime="2009-09" class="refDate">September 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5652">https://www.rfc-editor.org/rfc/rfc5652</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7252">[RFC7252]</dt>
         <dd>
@@ -6751,14 +6777,6 @@ Review comments in the context of a formal analysis of BRSKI-PRM have been provi
 <dt id="RFC7952">[RFC7952]</dt>
         <dd>
 <span class="refAuthor">Lhotka, L.</span>, <span class="refTitle">"Defining and Using Metadata with YANG"</span>, <span class="seriesInfo">RFC 7952</span>, <span class="seriesInfo">DOI 10.17487/RFC7952</span>, <time datetime="2016-08" class="refDate">August 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7952">https://www.rfc-editor.org/rfc/rfc7952</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC8040">[RFC8040]</dt>
-        <dd>
-<span class="refAuthor">Bierman, A.</span>, <span class="refAuthor">Bjorklund, M.</span>, and <span class="refAuthor">K. Watsen</span>, <span class="refTitle">"RESTCONF Protocol"</span>, <span class="seriesInfo">RFC 8040</span>, <span class="seriesInfo">DOI 10.17487/RFC8040</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8040">https://www.rfc-editor.org/rfc/rfc8040</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC8407">[RFC8407]</dt>
-        <dd>
-<span class="refAuthor">Bierman, A.</span>, <span class="refTitle">"Guidelines for Authors and Reviewers of Documents Containing YANG Data Models"</span>, <span class="seriesInfo">BCP 216</span>, <span class="seriesInfo">RFC 8407</span>, <span class="seriesInfo">DOI 10.17487/RFC8407</span>, <time datetime="2018-10" class="refDate">October 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8407">https://www.rfc-editor.org/rfc/rfc8407</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8446">[RFC8446]</dt>
         <dd>
@@ -6887,19 +6905,17 @@ iWS1-vfc5Uu5INZS1dyWZ4vVH6uaoPceRxNc8g"
 </div>
 </section>
 </div>
-<div id="example-parboiled-registrar-voucher-request-rvr-from-registrar-to-masa">
+<div id="example-registrar-voucher-request-rvr-from-registrar-to-masa">
 <section id="appendix-A.2">
-        <h3 id="name-example-parboiled-registrar">
-<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-example-parboiled-registrar" class="section-name selfRef">Example Parboiled Registrar Voucher-Request (RVR) - from Registrar to MASA</a>
+        <h3 id="name-example-registrar-voucher-r">
+<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-example-registrar-voucher-r" class="section-name selfRef">Example Registrar Voucher-Request (RVR) - from Registrar to MASA</a>
         </h3>
-<p id="appendix-A.2-1">The term parboiled refers to food which is partially cooked.  In <span>[<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, the term refers to a pledge-voucher-request (PVR) which has
-been received by the Registrar, and then has been processed by the Registrar ("cooked"), and is now being forwarded to the MASA.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
-<p id="appendix-A.2-2">The following is an example registrar-voucher-request (RVR) sent from the Registrar to the MASA, in "General JWS JSON Serialization".
+<p id="appendix-A.2-1">The following is an example registrar-voucher-request (RVR) sent from the Registrar to the MASA, in "General JWS JSON Serialization".
 Note that the previous PVR can be seen in the payload as "prior-signed-voucher-request".
-The message size of this RVR is: 7533 bytes<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
-<span id="name-example-registrar-voucher-r"></span><div id="ExampleRegistrarVoucherRequestfigure">
+The message size of this RVR is: 7533 bytes<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
+<span id="name-example-registrar-voucher-re"></span><div id="ExampleRegistrarVoucherRequestfigure">
 <figure id="figure-54">
-          <div class="alignLeft art-text artwork" id="appendix-A.2-3.1">
+          <div class="alignLeft art-text artwork" id="appendix-A.2-2.1">
 <pre>
 =============== NOTE: '\' line wrapping per RFC 8792 ================
 
@@ -7024,7 +7040,7 @@ b24iLCJhbGciOiJFUzI1NiJ9",
 </pre>
 </div>
 <figcaption><a href="#figure-54" class="selfRef">Figure 54</a>:
-<a href="#name-example-registrar-voucher-r" class="selfRef">Example Registrar-Voucher-Request - RVR</a>
+<a href="#name-example-registrar-voucher-re" class="selfRef">Example Registrar-Voucher-Request - RVR</a>
           </figcaption></figure>
 </div>
 </section>
@@ -7182,7 +7198,7 @@ The authenticity of the onboarding and enrollment is not dependent upon the secu
 The use of scannable QR codes may help automate this in some cases.<a href="#appendix-B-6" class="pilcrow">¶</a></p>
 <p id="appendix-B-7">The CA used to sign the IDevID will be a manufacturer private PKI as described in <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-t2trg-taxonomy-manufacturer-anchors-07#section-4.1" class="relref">Section 4.1</a> of [<a href="#I-D.irtf-t2trg-taxonomy-manufacturer-anchors" class="cite xref">I-D.irtf-t2trg-taxonomy-manufacturer-anchors</a>]</span>.
 The anchors for this PKI will never be part of the public WebPKI anchors which are distributed with most smartphone operating systems.
-A Registrar-Agent application will need to use different APIs in order to initiate an HTTPS connection without performing WebPKI verification.
+A Registrar-Agent application will need to use different APIs in order to initiate an HTTP-over-TLS connection without performing WebPKI verification.
 The application will then have to do its own certificate chain verification against a store of manufacturer trust anchors.
 In the Android ecosystem this involves use of a customer TrustManager: many application developers do not create these correctly, and there is significant push to remove this option as it has repeatedly resulted in security failures (see <span>[<a href="#androidtrustfail" class="cite xref">androidtrustfail</a>]</span>).<a href="#appendix-B-7" class="pilcrow">¶</a></p>
 <p id="appendix-B-8">Also note that an Extended Key Usage (EKU) for TLS WWW Server authentication cannot be expected in the pledge IDevID certificate.
@@ -7209,6 +7225,12 @@ IDevID certificates are intended to be widely usable and EKU does not support th
             <li class="normal" id="appendix-C-3.1.2.3">
               <p id="appendix-C-3.1.2.3.1">issue 139: usage of TLS 1.3 emphasized by also referencing UTA draft in <a href="#pvr" class="auto internal xref">Section 7.3</a><a href="#appendix-C-3.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
+            <li class="normal" id="appendix-C-3.1.2.4">
+              <p id="appendix-C-3.1.2.4.1">issue 140: provided hint for time synchronization of registrar-agent in <a href="#agent_component" class="auto internal xref">Section 6.1</a><a href="#appendix-C-3.1.2.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="appendix-C-3.1.2.5">
+              <p id="appendix-C-3.1.2.5.1">issue 145: clarified language tagging in status information in <a href="#vstatus_data" class="auto internal xref">Section 7.6.2.1</a><a href="#appendix-C-3.1.2.5.1" class="pilcrow">¶</a></p>
+</li>
           </ul>
 </li>
         <li class="normal" id="appendix-C-3.2">
@@ -7221,12 +7243,24 @@ IDevID certificates are intended to be widely usable and EKU does not support th
               <p id="appendix-C-3.2.2.2.1">issue 141: config options for discovery and nonceless vouchers in <a href="#voucher" class="auto internal xref">Section 7.6</a> and <a href="#agent_component" class="auto internal xref">Section 6.1</a><a href="#appendix-C-3.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="appendix-C-3.2.2.3">
-              <p id="appendix-C-3.2.2.3.1">issue 142: addressed TTL of provisional accept state by utilizing the last received tPVR for the binding in<a href="#appendix-C-3.2.2.3.1" class="pilcrow">¶</a></p>
+              <p id="appendix-C-3.2.2.3.1">issue 142: addressed TTL of provisional accept state by utilizing the last received tPVR for the binding in <a href="#tpvr" class="auto internal xref">Section 7.1</a><a href="#appendix-C-3.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="appendix-C-3.2.2.4">
+              <p id="appendix-C-3.2.2.4.1">issue 144: clarified usage of "<span class="bcp14">MUST</span> ...unless" in <a href="#pledge_component" class="auto internal xref">Section 6.2</a><a href="#appendix-C-3.2.2.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="appendix-C-3.2.2.5">
+              <p id="appendix-C-3.2.2.5.1">issue 146: added MTI algorithm for JWS signatures<a href="#appendix-C-3.2.2.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="appendix-C-3.2.2.6">
+              <p id="appendix-C-3.2.2.6.1">issue 147: definitions of reason-context in status objects<a href="#appendix-C-3.2.2.6.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </li>
         <li class="normal" id="appendix-C-3.3">
           <p id="appendix-C-3.3.1">updated reference of BRSKI-AE (now RFC 9733).<a href="#appendix-C-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-C-3.4">
+          <p id="appendix-C-3.4.1">removed unused references<a href="#appendix-C-3.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="appendix-C-4">From IETF draft 17 -&gt; IETF draft 18:<a href="#appendix-C-4" class="pilcrow">¶</a></p>
