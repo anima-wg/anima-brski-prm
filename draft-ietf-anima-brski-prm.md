@@ -87,10 +87,7 @@ informative:
   RFC2986:
   RFC3629:
   RFC9525:
-  RFC6241:
   RFC7252:
-  RFC8040:
-  RFC8407:
   RFC8446:
   RFC8792:
   RFC8990:
@@ -711,7 +708,7 @@ Hence, pledges MUST have an Initial Device Identifier (IDevID) installed in them
 
 ### Pledge with Combined Functionality
 
-Pledges MAY support both initiator and responder mode.
+Pledges may support both initiator and responder mode.
 
 A pledge in initiator mode should listen for announcement messages as described in {{Section 4.1 of !RFC8995}}.
 Upon discovery of a potential registrar, it initiates the bootstrapping to that registrar.
@@ -1281,7 +1278,7 @@ In addition, the JWS Protected Header of the PER artifact MUST contain the follo
 
 The new protected Header Parameter `created-on` is introduced to reflect freshness of the PER.
 It allows the registrar to verify the timely correlation between the PER artifact and previous exchanges, i.e., `created-on` of PER >= `created-on` of PVR >= `created-on` of PVR trigger.
-The registrar MAY consider ignoring any but the newest PER artifact from the same pledge in case the registrar has at any point in time more than one pending PER from the pledge.
+The registrar MAY ignore any but the newest PER artifact from the same pledge in case the registrar has at any point in time more than one pending PER from the pledge.
 
 {{per_header}} shows an example for this JWS Protected Header:
 
@@ -1672,7 +1669,7 @@ The following server error status codes can be used:
 
 * 500 Internal Server Error: if the Key Infrastructure response is valid, but the registrar still failed to return the Enroll-Resp, e.g., due to missing configuration or a program failure.
 * 502 Bad Gateway: if the registrar received an invalid response from the Key Infrastructure.
-* 503 Service Unavailable: if a simple retry of the Registrar-Agent request might lead to a successful response; this error response SHOULD include the Retry-After response header field with an appropriate value.
+* 503 Service Unavailable: if a simple retry of the Registrar-Agent request might lead to a successful response; this error response MUST include the Retry-After response header field with an appropriate value.
 * 504 Gateway Timeout: if the backend request to the Key Infrastructure timed out.
 
 Note that while BRSKI-PRM targets the initial enrollment, re-enrollment may be supported similarly with the exception that the current, potentially application-related pledge EE certificate is used instead of the IDevID certificate to sign the PER artifact (see also {{tper}}).
@@ -1922,7 +1919,7 @@ The JSON Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with
   this specification assumes version `1` just like BRSKI {{!RFC8995}}.
 * `status`: contains the boolean value `true` in case of success and `false` in case of failure.
 * `reason`: contains a human-readable message;
-  SHOULD NOT provide information beneficial to an attacker.
+  should not provide information beneficial to an attacker.
 * `reason-context`: contains a JSON object that provides additional information specific to a failure;
   in contrast to {{Section 5.7 of !RFC8995}}, MUST be provided;
 
@@ -2739,11 +2736,11 @@ Depending on the requests and responses, the following information is disclosed.
 # Security Considerations {#sec_cons}
 
 In general, the security considerations of {{!RFC8995}} apply for BRSKI-PRM also.
-Further security aspects are considered here related to:
+Further security aspects are considered in the following subsections related to:
 
-* the introduction of the additional component Registrar-Agent
-* the reversal of the pledge communication direction (push mode, compared to BRSKI)
-* no transport layer security between Registrar-Agent and pledge
+* the introduction of the additional component Registrar-Agent and related attack options.
+* the reversal of the pledge communication direction (push mode, compared to BRSKI).
+* no transport layer security between Registrar-Agent and pledge and the impact on transport of sensitive information.
 
 
 
@@ -3184,8 +3181,10 @@ From IETF draft 18 -> IETF draft 19:
 * addressed COMMENT, NITS, received during telechat preparation, specifically
   * issue 140: synchronized time
   * issue 141: config options for discovery and nonceless vouchers in {{voucher}} and {{agent_component}}
-  * issue 142: addressed TTL of provisional accept state by utilizing the last received tPVR for the binding in 
+  * issue 142: addressed TTL of provisional accept state by utilizing the last received tPVR for the binding in {{tpvr}}
+  * issue 147: definitions of reason-context in status objects 
 * updated reference of BRSKI-AE (now RFC 9733).
+* removed unused references
 
 From IETF draft 17 -> IETF draft 18:
 
