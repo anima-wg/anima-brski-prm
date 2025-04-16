@@ -1222,7 +1222,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fries, et al.</td>
-<td class="center">Expires 16 October 2025</td>
+<td class="center">Expires 18 October 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1235,12 +1235,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-ietf-anima-brski-prm-19</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-04-14" class="published">14 April 2025</time>
+<time datetime="2025-04-16" class="published">16 April 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-10-16">16 October 2025</time></dd>
+<dd class="expires"><time datetime="2025-10-18">18 October 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1301,7 +1301,7 @@ This approach is agnostic to enrollment protocols that connect a domain registra
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 16 October 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 18 October 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1810,7 +1810,9 @@ Note that the base64 encoding of the empty octet sequence is the empty string.<a
 </dl>
 <p id="section-2-6">This document includes many examples that would contain many long sequences of base64-encoded objects with no content directly comprehensible to a human reader.
 In order to keep those examples short, they use the token <code>base64encodedvalue==</code> as a placeholder for base64 data.
-The full base64 data is included in the appendices of this document.<a href="#section-2-6" class="pilcrow">¶</a></p>
+The full base64 data is included in the appendices of this document.
+Note, base64-encoded values are mainly used for fields related to certificates like:<br>
+x5bag, x5c, agent-provided-proximity-registrar-cert, p10-csr<a href="#section-2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="scope-of-solution">
@@ -3556,7 +3558,7 @@ note that this makes optional leaf data nodes in the YANG definition mandatory f
 if the pledge does not have synchronized time, it <span class="bcp14">SHALL</span> use the <code>created-on</code> value from the JSON Agent-Signed Data received with the tPVR artifact and <span class="bcp14">SHOULD</span> advance that value based on its local clock to reflect the PVR creation time.<a href="#section-7.1.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-7.1.2.1-2.2">
-                <p id="section-7.1.2.1-2.2.1"><code>nonce</code>: <span class="bcp14">SHALL</span> contain a cryptographically strong pseudo-random number.<a href="#section-7.1.2.1-2.2.1" class="pilcrow">¶</a></p>
+                <p id="section-7.1.2.1-2.2.1"><code>nonce</code>: <span class="bcp14">SHALL</span> contain a cryptographically strong random or pseudo-random number nonce (see <span><a href="https://rfc-editor.org/rfc/rfc4086#section-6.2" class="relref">Section 6.2</a> of [<a href="#RFC4086" class="cite xref">RFC4086</a>]</span>).<a href="#section-7.1.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-7.1.2.1-2.3">
                 <p id="section-7.1.2.1-2.3.1"><code>serial-number</code>: <span class="bcp14">SHALL</span> contain the product-serial-number in the X520SerialNumber field of the pledge IDevID certificate as string as defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-2.3.1" class="relref">Section 2.3.1</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.<a href="#section-7.1.2.1-2.3.1" class="pilcrow">¶</a></p>
@@ -4526,7 +4528,7 @@ The following client error status codes can be used:<a href="#section-7.4-8" cla
 The exact interaction and exchanged data objects depends on the certificate management protocol used by the Key Infrastructure, and is out of scope for this document.<a href="#section-7.4-10" class="pilcrow">¶</a></p>
 <p id="section-7.4-11">A successful interaction with the Key Infrastructure will result in a pledge EE certificate signed by the domain owner (e.g., LDevID certificate).
 The registrar <span class="bcp14">MUST</span> reply to the Registrar-Agent with the Enroll-Response (Enroll-Resp) as defined in <a href="#er_artifact" class="auto internal xref">Section 7.4.2</a> in the body of an HTTP 200 OK response.
-In the response header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/pkcs7-mime</code>.<a href="#section-7.4-11" class="pilcrow">¶</a></p>
+In the response header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/pkcs7-mime</code> with an smime-type parameter <code>certs-only</code>, as specified in <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> and <span>[<a href="#RFC5273" class="cite xref">RFC5273</a>]</span>.<a href="#section-7.4-11" class="pilcrow">¶</a></p>
 <p id="section-7.4-12">If the domain registrar is unable to return the Enroll-Resp, it responds with an HTTP server error status code to the Registrar-Agent.
 The following server error status codes can be used:<a href="#section-7.4-12" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -4905,7 +4907,8 @@ The Registrar-Agent <span class="bcp14">MAY</span> store information from the fi
 </div>
 <p id="section-7.6-7">The Registrar-Agent <span class="bcp14">SHALL</span> supply the voucher to the pledge via HTTP(S) POST to the pledge endpoint at <code>/.well-known/brski/svr</code>.
 The request body <span class="bcp14">MUST</span> contain the Registrar-Countersigned Voucher (Voucher') artifact previously acquired from the domain registrar as defined in <a href="#rcv_artifact" class="auto internal xref">Section 7.3.6</a>.
-In the request header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/voucher-jws+json</code> as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span> and the Accept field <span class="bcp14">SHOULD</span> be set to <code>application/jose+json</code>.<a href="#section-7.6-7" class="pilcrow">¶</a></p>
+In the request header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/voucher-jws+json</code> as defined in <span>[<a href="#I-D.ietf-anima-jws-voucher" class="cite xref">I-D.ietf-anima-jws-voucher</a>]</span> and the Accept field <span class="bcp14">SHOULD</span> be set to <code>application/jose+json</code>,
+to indicate the encoding of the vStatus response object status telemetry message.<a href="#section-7.6-7" class="pilcrow">¶</a></p>
 <p id="section-7.6-8">Upon receiving the voucher, the pledge <span class="bcp14">SHALL</span> perform the signature verification in the following order:<a href="#section-7.6-8" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-7.6-9">
 <li id="section-7.6-9.1">
@@ -4991,16 +4994,22 @@ this specification assumes version <code>1</code> just like BRSKI <span>[<a href
 </li>
               <li class="normal" id="section-7.6.2.1-2.4">
                 <p id="section-7.6.2.1-2.4.1"><code>reason-context</code>: contains a JSON object that provides additional information specific to a failure;
-in contrast to <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.7" class="relref">Section 5.7</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, <span class="bcp14">MUST</span> be provided;
-<span class="bcp14">SHOULD NOT</span> provide information beneficial to an attacker.<a href="#section-7.6.2.1-2.4.1" class="pilcrow">¶</a></p>
+in contrast to <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.7" class="relref">Section 5.7</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>, <span class="bcp14">MUST</span> be provided;<a href="#section-7.6.2.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 <p id="section-7.6.2.1-3">BRSKI-PRM implementations utilize the <code>reason-context</code> field to provide a distinguishable token, which enables the registrar to detect status artifacts provided to the wrong endpoint.
 For vStatus artifacts, the JSON object in the <code>reason-context</code> field <span class="bcp14">MUST</span> contain the member <code>pvs-details</code>.<a href="#section-7.6.2.1-3" class="pilcrow">¶</a></p>
 <p id="section-7.6.2.1-4"><a href="#vstatus_data_example_success" class="auto internal xref">Figure 32</a> shows an example for the JSON Voucher Status Data in case of success and <a href="#vstatus_data_example_error" class="auto internal xref">Figure 33</a> in case of failure:<a href="#section-7.6.2.1-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.6.2.1-5">
+<pre>
+HTTP/1.1 200 OK
+Content-Type: application/jose+json
+Content-Language: en
+</pre><a href="#section-7.6.2.1-5" class="pilcrow">¶</a>
+</div>
 <span id="name-json-voucher-status-data-su"></span><div id="vstatus_data_example_success">
 <figure id="figure-32">
-              <div class="alignLeft art-json art-text artwork" id="section-7.6.2.1-5.1">
+              <div class="alignLeft art-json art-text artwork" id="section-7.6.2.1-6.1">
 <pre>
 {
   "version": 1,
@@ -5016,9 +5025,16 @@ For vStatus artifacts, the JSON object in the <code>reason-context</code> field 
 <a href="#name-json-voucher-status-data-su" class="selfRef">JSON Voucher Status Data Success Example</a>
               </figcaption></figure>
 </div>
+<div class="alignLeft art-text artwork" id="section-7.6.2.1-7">
+<pre>
+HTTP/1.1 400 Bad Request
+Content-Type: application/jose+json
+Content-Language: en
+</pre><a href="#section-7.6.2.1-7" class="pilcrow">¶</a>
+</div>
 <span id="name-json-voucher-status-data-fa"></span><div id="vstatus_data_example_error">
 <figure id="figure-33">
-              <div class="alignLeft art-json art-text artwork" id="section-7.6.2.1-6.1">
+              <div class="alignLeft art-json art-text artwork" id="section-7.6.2.1-8.1">
 <pre>
 {
   "version": 1,
@@ -5319,7 +5335,7 @@ There is no artifact provided to the Registrar-Agent.<a href="#section-7.7.2-1" 
 </div>
 <p id="section-7.8-5">The Registrar-Agent <span class="bcp14">SHALL</span> send the domain-owner signed EE certificate to the pledge by HTTP(S) POST to the pledge endpoint at <code>/.well-known/brski/ser</code>.
 The request body <span class="bcp14">MUST</span> contain the Enroll-Response (Enroll-Resp) artifact previously acquired from the domain registrar as defined in <a href="#er_artifact" class="auto internal xref">Section 7.4.2</a>.
-In the request header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/pkcs7-mime</code> and the Accept field <span class="bcp14">SHOULD</span> be set to <code>application/jose+json</code>.<a href="#section-7.8-5" class="pilcrow">¶</a></p>
+In the request header, the Content-Type field <span class="bcp14">MUST</span> be set to <code>application/pkcs7-mime</code> with an smime-type parameter <code>certs-only</code>, as specified in <span>[<a href="#RFC7030" class="cite xref">RFC7030</a>]</span> and <span>[<a href="#RFC5273" class="cite xref">RFC5273</a>]</span>, and the Accept field <span class="bcp14">SHOULD</span> be set to <code>application/jose+json</code>.<a href="#section-7.8-5" class="pilcrow">¶</a></p>
 <p id="section-7.8-6">Upon reception, the pledge <span class="bcp14">SHALL</span> verify the received EE certificate using the installed trust anchors.
 After Enroll-Resp validation and verification, the pledge needs to reply with a status telemetry message as defined in <span><a href="https://rfc-editor.org/rfc/rfc8995#section-5.9.4" class="relref">Section 5.9.4</a> of [<a href="#RFC8995" class="cite xref">RFC8995</a>]</span>.
 The pledge <span class="bcp14">MUST</span> generate the Enroll Status (eStatus) artifact as defined in <a href="#estatus_artifact" class="auto internal xref">Section 7.8.2</a> and <span class="bcp14">MUST</span> provide it to the Registrar-Agent in the body of an HTTP 200 OK response.
@@ -6595,9 +6611,17 @@ Review comments in the context of a formal analysis of BRSKI-PRM have been provi
         <dd>
 <span class="refAuthor">Klyne, G.</span> and <span class="refAuthor">C. Newman</span>, <span class="refTitle">"Date and Time on the Internet: Timestamps"</span>, <span class="seriesInfo">RFC 3339</span>, <span class="seriesInfo">DOI 10.17487/RFC3339</span>, <time datetime="2002-07" class="refDate">July 2002</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3339">https://www.rfc-editor.org/rfc/rfc3339</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC4086">[RFC4086]</dt>
+        <dd>
+<span class="refAuthor">Eastlake 3rd, D.</span>, <span class="refAuthor">Schiller, J.</span>, and <span class="refAuthor">S. Crocker</span>, <span class="refTitle">"Randomness Requirements for Security"</span>, <span class="seriesInfo">BCP 106</span>, <span class="seriesInfo">RFC 4086</span>, <span class="seriesInfo">DOI 10.17487/RFC4086</span>, <time datetime="2005-06" class="refDate">June 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4086">https://www.rfc-editor.org/rfc/rfc4086</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC5272">[RFC5272]</dt>
         <dd>
 <span class="refAuthor">Schaad, J.</span> and <span class="refAuthor">M. Myers</span>, <span class="refTitle">"Certificate Management over CMS (CMC)"</span>, <span class="seriesInfo">RFC 5272</span>, <span class="seriesInfo">DOI 10.17487/RFC5272</span>, <time datetime="2008-06" class="refDate">June 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5272">https://www.rfc-editor.org/rfc/rfc5272</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5273">[RFC5273]</dt>
+        <dd>
+<span class="refAuthor">Schaad, J.</span> and <span class="refAuthor">M. Myers</span>, <span class="refTitle">"Certificate Management over CMS (CMC): Transport Protocols"</span>, <span class="seriesInfo">RFC 5273</span>, <span class="seriesInfo">DOI 10.17487/RFC5273</span>, <time datetime="2008-06" class="refDate">June 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5273">https://www.rfc-editor.org/rfc/rfc5273</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC5280">[RFC5280]</dt>
         <dd>
@@ -6682,7 +6706,7 @@ Review comments in the context of a formal analysis of BRSKI-PRM have been provi
 <dd class="break"></dd>
 <dt id="I-D.ietf-uta-require-tls13">[I-D.ietf-uta-require-tls13]</dt>
         <dd>
-<span class="refAuthor">Salz, R.</span> and <span class="refAuthor">N. Aviram</span>, <span class="refTitle">"New Protocols Must Require TLS 1.3"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-uta-require-tls13-10</span>, <time datetime="2025-03-27" class="refDate">27 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-uta-require-tls13-10">https://datatracker.ietf.org/doc/html/draft-ietf-uta-require-tls13-10</a>&gt;</span>. </dd>
+<span class="refAuthor">Salz, R.</span> and <span class="refAuthor">N. Aviram</span>, <span class="refTitle">"New Protocols Using TLS Must Require TLS 1.3"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-uta-require-tls13-12</span>, <time datetime="2025-04-14" class="refDate">14 April 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-uta-require-tls13-12">https://datatracker.ietf.org/doc/html/draft-ietf-uta-require-tls13-12</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.irtf-t2trg-taxonomy-manufacturer-anchors">[I-D.irtf-t2trg-taxonomy-manufacturer-anchors]</dt>
         <dd>

@@ -274,6 +274,9 @@ UTF8(STRING):
 This document includes many examples that would contain many long sequences of base64-encoded objects with no content directly comprehensible to a human reader.
 In order to keep those examples short, they use the token `base64encodedvalue==` as a placeholder for base64 data.
 The full base64 data is included in the appendices of this document.
+Note, base64-encoded values are mainly used for fields related to certificates like:  
+x5bag, x5c, agent-provided-proximity-registrar-cert, p10-csr
+
 
 
 
@@ -1112,7 +1115,7 @@ note that this makes optional leaf data nodes in the YANG definition mandatory f
 
 * `created-on`: SHALL contain the current date and time at PVR creation as standard date/time string as defined in {{Section 5.6 of !RFC3339}};
   if the pledge does not have synchronized time, it SHALL use the `created-on` value from the JSON Agent-Signed Data received with the tPVR artifact and SHOULD advance that value based on its local clock to reflect the PVR creation time.
-* `nonce`: SHALL contain a cryptographically strong pseudo-random number.
+* `nonce`: SHALL contain a cryptographically strong random or pseudo-random number nonce (see {{Section 6.2 of !RFC4086}}).
 * `serial-number`: SHALL contain the product-serial-number in the X520SerialNumber field of the pledge IDevID certificate as string as defined in {{Section 2.3.1 of !RFC8995}}.
 * `assertion`: SHALL contain the assertion type `agent-proximity` to indicate the pledge request (different from BRSKI {{!RFC8995}}).
 * `agent-provided-proximity-registrar-cert`: SHALL contain the base64-encoded registrar EE certificate provided in the tPVR by the Registrar-Agent;
@@ -1662,7 +1665,7 @@ The exact interaction and exchanged data objects depends on the certificate mana
 
 A successful interaction with the Key Infrastructure will result in a pledge EE certificate signed by the domain owner (e.g., LDevID certificate).
 The registrar MUST reply to the Registrar-Agent with the Enroll-Response (Enroll-Resp) as defined in {{er_artifact}} in the body of an HTTP 200 OK response.
-In the response header, the Content-Type field MUST be set to `application/pkcs7-mime`.
+In the response header, the Content-Type field MUST be set to `application/pkcs7-mime` with an smime-type parameter `certs-only`, as specified in {{!RFC7030}} and {{!RFC5273}}.
 
 If the domain registrar is unable to return the Enroll-Resp, it responds with an HTTP server error status code to the Registrar-Agent.
 The following server error status codes can be used:
@@ -1854,7 +1857,8 @@ TLS MAY be used to provide privacy for this exchange between the Registrar-Agent
 
 The Registrar-Agent SHALL supply the voucher to the pledge via HTTP(S) POST to the pledge endpoint at `/.well-known/brski/svr`.
 The request body MUST contain the Registrar-Countersigned Voucher (Voucher') artifact previously acquired from the domain registrar as defined in {{rcv_artifact}}.
-In the request header, the Content-Type field MUST be set to `application/voucher-jws+json` as defined in [I-D.ietf-anima-jws-voucher] and the Accept field SHOULD be set to `application/jose+json`.
+In the request header, the Content-Type field MUST be set to `application/voucher-jws+json` as defined in [I-D.ietf-anima-jws-voucher] and the Accept field SHOULD be set to `application/jose+json`,
+to indicate the encoding of the vStatus response object status telemetry message.
 
 Upon receiving the voucher, the pledge SHALL perform the signature verification in the following order:
 
@@ -1921,12 +1925,17 @@ The JSON Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with
   SHOULD NOT provide information beneficial to an attacker.
 * `reason-context`: contains a JSON object that provides additional information specific to a failure;
   in contrast to {{Section 5.7 of !RFC8995}}, MUST be provided;
-  SHOULD NOT provide information beneficial to an attacker.
 
 BRSKI-PRM implementations utilize the `reason-context` field to provide a distinguishable token, which enables the registrar to detect status artifacts provided to the wrong endpoint.
 For vStatus artifacts, the JSON object in the `reason-context` field MUST contain the member `pvs-details`.
 
 {{vstatus_data_example_success}} shows an example for the JSON Voucher Status Data in case of success and {{vstatus_data_example_error}} in case of failure:
+
+~~~~
+HTTP/1.1 200 OK
+Content-Type: application/jose+json
+Content-Language: en
+~~~~
 
 ~~~~ json
 {
@@ -1939,6 +1948,13 @@ For vStatus artifacts, the JSON object in the `reason-context` field MUST contai
 }
 ~~~~
 {: #vstatus_data_example_success title='JSON Voucher Status Data Success Example' artwork-align="left"}
+
+
+~~~~
+HTTP/1.1 400 Bad Request
+Content-Type: application/jose+json
+Content-Language: en
+~~~~
 
 ~~~~ json
 {
@@ -2067,7 +2083,7 @@ TLS MAY be used to provide privacy for this exchange between the Registrar-Agent
 
 The Registrar-Agent SHALL send the domain-owner signed EE certificate to the pledge by HTTP(S) POST to the pledge endpoint at `/.well-known/brski/ser`.
 The request body MUST contain the Enroll-Response (Enroll-Resp) artifact previously acquired from the domain registrar as defined in {{er_artifact}}.
-In the request header, the Content-Type field MUST be set to `application/pkcs7-mime` and the Accept field SHOULD be set to `application/jose+json`.
+In the request header, the Content-Type field MUST be set to `application/pkcs7-mime` with an smime-type parameter `certs-only`, as specified in {{!RFC7030}} and {{!RFC5273}}, and the Accept field SHOULD be set to `application/jose+json`.
 
 Upon reception, the pledge SHALL verify the received EE certificate using the installed trust anchors.
 After Enroll-Resp validation and verification, the pledge needs to reply with a status telemetry message as defined in {{Section 5.9.4 of !RFC8995}}.
