@@ -134,9 +134,9 @@ informative:
 
 --- abstract
 
-This document defines enhancements to Bootstrapping Remote Secure Key Infrastructure (BRSKI, RFC8995) as BRSKI with Pledge in Responder Mode (BRSKI-PRM).  
+This document defines enhancements to Bootstrapping Remote Secure Key Infrastructure (BRSKI, RFC8995) as BRSKI with Pledge in Responder Mode (BRSKI-PRM).
 BRSKI-PRM supports the secure bootstrapping of devices, referred to as pledges, into a domain where direct communication with the registrar is either limited or not possible at all.
-To facilitate interaction between a pledge and a domain registrar the registrar-agent is introduced as new component. 
+To facilitate interaction between a pledge and a domain registrar the registrar-agent is introduced as new component.
 The registrar-agent supports the reversal of the interaction model from a pledge-initiated mode, to a pledge-responding mode, where the pledge is in a server role.
 To establish the trust relation between pledge and registrar, BRSKI-PRM relies on object security rather than transport security.
 This approach is agnostic to enrollment protocols that connect a domain registrar to a key infrastructure (e.g., domain Certification Authority).
@@ -255,7 +255,7 @@ RA:
 In BRSKI-PRM, this is a functionality of the domain registrar, as in BRSKI {{!RFC8995}}.
 
 Registrar-Agent:
-: Component facilitating the data exchange between a pledge in responder mode and a domain registrar. 
+: Component facilitating the data exchange between a pledge in responder mode and a domain registrar.
 
 RVR:
 : Registrar Voucher-Request is a signature-wrapped voucher-request, signed by the domain registrar that sends it to the MASA.
@@ -276,7 +276,7 @@ UTF8(STRING):
 This document includes many examples that would contain many long sequences of base64-encoded objects with no content directly comprehensible to a human reader.
 In order to keep those examples short, they use the token `base64encodedvalue==` as a placeholder for base64 data.
 The full base64 data is included in the appendices of this document.
-Note, base64-encoded values are mainly used for fields related to certificates like:  
+Note, base64-encoded values are mainly used for fields related to certificates like:
 x5bag, x5c, agent-provided-proximity-registrar-cert, p10-csr
 
 
@@ -531,7 +531,7 @@ Both connections may also be possible in a single location at the same time, bas
 ## Co-located Registrar-Agent and Domain Registrar {#colo-regagt}
 
 Compared to {{!RFC8995}} BRSKI, pledges supporting BRSKI-PRM can be completely passive and only need to react when being requested to react by a Registrar-Agent.
-In {{!RFC8995}}, pledges instead need to continuously interact with a domain registrar during onboarding, through discovery, voucher exchange, and enrollment. 
+In {{!RFC8995}}, pledges instead need to continuously interact with a domain registrar during onboarding, through discovery, voucher exchange, and enrollment.
 This may increase the load on the domain registrar, specifically, if a larger number of pledges onboards simultaneously.
 
 ~~~~ aasvg
@@ -599,7 +599,7 @@ The SubjectKeyIdentifier is used in favor of providing the complete Registrar-Ag
 In addition, it follows the recommendation from BRSKI to use SubjectKeyIdentifier in favor of a certificate fingerprint to avoid additional computations.
 
 The provisioning of the Registrar-Agent EE certificate is out of scope for this document, but may be done using its own BRSKI run or by other means such as configuration.
-It is RECOMMENDED to use short-lived Registrar-Agent EE certificates in the range of days or weeks. 
+It is RECOMMENDED to use short-lived Registrar-Agent EE certificates in the range of days or weeks.
 This is to address the assumed nature of stand-alone Registrar-Agents as nomadic devices (see {{arch_nomadic}}) and to avoid potential misuse as outlined in {{sec_cons_reg-agt}}.
 
 Further, the Registrar-Agent requires the registrar EE certificate to provide it to the pledge.
@@ -620,7 +620,7 @@ In summary, the following information MUST be available at the Registrar-Agent b
 * Serial number(s): product-serial-number(s) of pledge(s) to be bootstrapped; used for discovery
 
 Further, the Registrar-Agent SHOULD have synchronized time.
-In case the registrar-agent does not have synchronized time, it may not be able to verify the registrar EE certificate during the optional TLS handshake. 
+In case the registrar-agent does not have synchronized time, it may not be able to verify the registrar EE certificate during the optional TLS handshake.
 As the registrar-agent is recommended to utilize short-lived certificates in {{sec_cons_reg-agt}}, a registrar-agent may use the valid from time of its short-lived certificate for time synchronization.
 
 Finally, the Registrar-Agent MAY possess the IDevID (root or issuing) CA certificate of the pledge manufacturer/vendor to validate the IDevID certificate on returned PVR or in case of optional TLS usage for pledge communication (see {{pledgehttps}}).
@@ -673,7 +673,7 @@ The manufacturer supports this functionality as outlined in {{sec_cons_mDNS}}.
 
 Establishing network connectivity of the pledge is out of scope of this document but necessary to apply DNS-SD with mDNS.
 For Ethernet, network connectivity can be provided, e.g., via a switch to an operational network or to a specific VLAN for bootstrapping, depending on an operators security policy.
-For WiFi networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping, e.g., as proposed in {{I-D.draft-ietf-emu-eap-arpa}}. 
+For WiFi networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping, e.g., as proposed in {{I-D.draft-ietf-emu-eap-arpa}}.
 The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN ID.
 How to gain network connectivity is out of scope of this document.
 
@@ -684,7 +684,7 @@ How to gain network connectivity is out of scope of this document.
 In BRSKI-PRM, the pledge is triggered by a Registrar-Agent to create the PVR and PER.
 It is also triggered for processing of the responses and the generation of status information once the Registrar-Agent has received the responses from the registrar later in the process.
 
-To enable interaction as responder with a Registrar-Agent, pledges in responder mode MUST act as servers and MUST provide the endpoints "tpvr", "tper", "svr", "scac", and "ser" defined in {{pledge_ep_table}} within the BRSKI-defined `/.well-known/brski/` URI path. 
+To enable interaction as responder with a Registrar-Agent, pledges in responder mode MUST act as servers and MUST provide the endpoints "tpvr", "tper", "svr", "scac", and "ser" defined in {{pledge_ep_table}} within the BRSKI-defined `/.well-known/brski/` URI path.
 The optional endpoint "qps" SHOULD be supported.
 The endpoints are defined with short names to also accommodate for resource-constrained devices.
 
@@ -706,7 +706,7 @@ The endpoints are defined with short names to also accommodate for resource-cons
 
 HTTP(S) uses the Host header field (or :authority in HTTP/2) to allow for name-based virtual hosting as explained in {{Section 7.2 of ?RFC9110}}.
 This header field is mandatory, and so a compliant HTTP(S) client is going to insert it, which may be just an IP address.
-In the absence of a security policy the pledge MUST respond to all requests regardless of the Host header field provided by the client (i.e., ignore it). 
+In the absence of a security policy the pledge MUST respond to all requests regardless of the Host header field provided by the client (i.e., ignore it).
 A security policy  may include a rate limiting for a requests to avoid susceptibility of the pledge to overload.
 Note that there is no requirement for the pledge to operate its BRSKI-PRM service on port numbers 80 or 443, so there is no reason for name-based virtual hosting.
 
@@ -1940,7 +1940,7 @@ The JSON Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with
 * `reason`: contains a human-readable message;
   should not provide information beneficial to an attacker.
   As the pledge is not localized at this point in time language selection cannot be done.
-  Therefore, English is taken as a default here for this diagnostic messages. 
+  Therefore, English is taken as a default here for this diagnostic messages.
   The internationalization of text is expected to be done on another level.
 * `reason-context`: contains a JSON object that provides additional information specific to a failure;
   in contrast to {{Section 5.7 of !RFC8995}}, MUST be provided;
@@ -2608,7 +2608,7 @@ Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!
 
 The registrar SHOULD log certain events to provide an audit trail for the onboarding of pledges into its domain.
 This audit trail may support the root cause analysis in case of device or system failures.
-Recommend key events for logging comprise: 
+Recommend key events for logging comprise:
 
 * Communication attempts between the pledge, Registrar-Agent, and registrar.
 * Protocol handshakes and onboarding steps.
@@ -2630,12 +2630,12 @@ The logging SHOULD include the identity of the pledge, the identity of the Regis
 * Pledge Status received from Registrar-Agent
 * Pledge EE certificate revoked
 
-Furthermore, it is recommended to: 
+Furthermore, it is recommended to:
 
 * support adjustable logging levels (severity) to cater to different operational needs or failure situations.
 * include meta information to distinguish logs that relate to different BRSKI approaches (e.g., BRSKI, BRSKI-AE, BRSKI-PRM, constraint BRSKI) that are likely supported in the same domain in parallel.
-* include detailed error codes and diagnostics information as defined throughout the document or stemming from other used components or libraries also in the logging information.   
-* support synchronized time (e.g., via NTP) to include timestamps in logging to enable sequencing and  correlation of events. 
+* include detailed error codes and diagnostics information as defined throughout the document or stemming from other used components or libraries also in the logging information.
+* support synchronized time (e.g., via NTP) to include timestamps in logging to enable sequencing and  correlation of events.
 * utilize standard logging formats (e.g., syslog) to allow for easy integration into log analysis tools and SIEM systems.
 * utilize secure transmission of logs to centralized log servers, particularly in cloud or distributed environments (e.g., in case of syslog, {{RFC9662}} updates the utilized cipher suites for TLS and DTLS).
 * allow for definition of key operational thresholds (e.g., high latency, failed onboarding attempts) to trigger alerts for proactive issue resolution.
@@ -2650,12 +2650,12 @@ For log analysis the following may be considered:
 With this, it can for instance be analyzed if multiple Registrar-Agents are involved in bootstrapping devices.
 In addition, within the domain it can be analyzed, if the onboarding involved different Registrar-Agents or if different registrars have been used.
 
-In order to protect the registrar from overload attacks, a rate-limiting may be used by logging events from the same type just once. 
+In order to protect the registrar from overload attacks, a rate-limiting may be used by logging events from the same type just once.
 
 
 # Operational Considerations {#op_cons}
 
-As outlined in {{architecture}}, BRSKI-PRM introduces an additional component with the Registrar-Agent in the BRSKI architecture in addition to new modes of interaction to facilitate the communication between the pledge and the registrar. 
+As outlined in {{architecture}}, BRSKI-PRM introduces an additional component with the Registrar-Agent in the BRSKI architecture in addition to new modes of interaction to facilitate the communication between the pledge and the registrar.
 As outlined in {{colo-regagt}} the functional support of BRSKI-PRM can also be achieved using a Registrar-Agent co-located with the Registrar instead of a stand-alone Registrar-Agent, which may reduce operational complexity.
 
 This has an influence on the configuration and operation not only of the Registrar-Agent, but also for the registrar and the pledge.
@@ -2663,29 +2663,29 @@ This has an influence on the configuration and operation not only of the Registr
 As outlined in {{system-components}}, there are additional configuration items dues to the introduction of the Registrar-Agent. This may increase operational complexity and potential misconfigurations in deploying and managing this entity:
 
 * A Registrar-Agent needs to be provided with a Registrar-Agent EE certificate, the domain registrar EE certificate and the list of pledges. BRSKI-PRM is open regarding the selected provisioning method, which may be automated or by configuration.
-* Pledges may support either BRSKI-PRM only or combined with other modes of operation. 
+* Pledges may support either BRSKI-PRM only or combined with other modes of operation.
 * Registrars may support either BRSKI-PRM only or combined with other BRSKI modes of operation. The distinction of BRSKI and BRSKI-PRM is done based on the provided endpoints of the registrar. An operator deploying pledges with a mixed set of operation need to ensure that the domain registrar supports all necessary options to ensure bootstrapping of pledges depending of the supported operational mode.
 * In addition, registrars may  support a co-located Registrar-Agent, if nomadic operation of the Registrar-Agent is not required. This facilitates situations in which an operator wants to deploy BRSKI pledges acting as clients and BSKI pledges acting as servers.
 
-With the Registrar-Agent enhancement a new component is introduced in the communication path between the pledge and the registrar. 
+With the Registrar-Agent enhancement a new component is introduced in the communication path between the pledge and the registrar.
 This likely increases the latency of the communication between the pledge and the registrar.
 The increase in latency due to this additional component may be neglected given that the Registrar-Agent operates with nomadic connectivity as outlined in {{arch_nomadic}}.
 
-BRSKI-PRM requires pledges to possess an IDevID to enable onboarding in new domains. 
-IDevID (and corresponding trust anchors) are expected to have a rather long lifetime. 
-This may allow for a longer period between device acquisition and initial onboarding. 
-Contrary, if devices that have been provided with an LDevID (and corresponding trust anchors) and temporarily taken out of service, immediate connectivity when bringing them back to operation may not be given, as the LDevIDs typically have a much shorter validity period compared to IDevIDs. 
+BRSKI-PRM requires pledges to possess an IDevID to enable onboarding in new domains.
+IDevID (and corresponding trust anchors) are expected to have a rather long lifetime.
+This may allow for a longer period between device acquisition and initial onboarding.
+Contrary, if devices that have been provided with an LDevID (and corresponding trust anchors) and temporarily taken out of service, immediate connectivity when bringing them back to operation may not be given, as the LDevIDs typically have a much shorter validity period compared to IDevIDs.
 It is therefore recommended to onboard them as new devices to ensure they possess valid LDevIDs.
 
 The key infrastructure as part of the customer domain discussed in {{architecture}} may be operated locally by the operator of that domain or may be provided as a third party service.
 
 Requirements to the utilized credentials authenticating and artifact signatures on the registrar as outlined in {{registrar_component}} may have operational implications when the registrar is part of a scalable framework as described in {{Section 1.3.1 of ?I-D.richardson-anima-registrar-considerations}}.
 
-Besides the above, also consider the existing documents on operational modes for  
+Besides the above, also consider the existing documents on operational modes for
 
-* BRSKI registrars in {{I-D.richardson-anima-registrar-considerations}} 
+* BRSKI registrars in {{I-D.richardson-anima-registrar-considerations}}
 * BRSKI MASA in {{I-D.richardson-anima-masa-considerations}}
-  
+
 
 
 # IANA Considerations {#iana_con}
@@ -2807,9 +2807,9 @@ This avoids that a Registrar-Agent could be misused to create arbitrary "agent-s
 In this misuse "agent-signed-data" could be dated after the validity time of the Registrar-Agent EE certificate, due to missing trusted timestamp in the Registrar-Agents signature.
 To address this, the registrar SHOULD verify the certificate used to create the signature on "agent-signed-data".
 
-Furthermore, the registrar also verifies the Registrar-Agent EE certificate used in the TLS handshake with the Registrar-Agent. 
+Furthermore, the registrar also verifies the Registrar-Agent EE certificate used in the TLS handshake with the Registrar-Agent.
 If both certificates are verified successfully, the Registrar-Agent's signature can be considered as valid.
-If the registrar detects a mismatch in the utilized certificates, it may conclude the usage of either an outdated "agent-signed-data" component in the PVR or a man-in-the-middle attack by a potentially unauthorized Registrar-Agent. 
+If the registrar detects a mismatch in the utilized certificates, it may conclude the usage of either an outdated "agent-signed-data" component in the PVR or a man-in-the-middle attack by a potentially unauthorized Registrar-Agent.
 
 
 ## Misuse of DNS-SD with mDNS to obtain list of pledges {#sec_cons_mDNS}
@@ -3199,23 +3199,23 @@ From IETF draft 18 -> IETF draft 19:
 
 * addressed DISCUSS received during telechat preparation:
   * issue 136: included hint for reaction on HTTP requests to avoid DoS (rate limiting) in {{pledge_component}}
-  * issue 137: HTTP error handling BCP RFC 9205: removed normative language for HTTP status codes 
+  * issue 137: HTTP error handling BCP RFC 9205: removed normative language for HTTP status codes
   * issue 139: usage of TLS 1.3 emphasized by also referencing UTA draft in {{pvr}}
-  * issue 140: provided hint for time synchronization of registrar-agent in {{agent_component}} 
+  * issue 140: provided hint for time synchronization of registrar-agent in {{agent_component}}
   * issue 145: clarified language tagging in status information in {{vstatus_data}}
 * addressed COMMENT, NITS, received during telechat preparation, specifically
   * issue 140: synchronized time
   * issue 141: config options for discovery and nonceless vouchers in {{voucher}} and {{agent_component}}
   * issue 142: addressed TTL of provisional accept state by utilizing the last received tPVR for the binding in {{tpvr}}
   * issue 144: clarified usage of "MUST ...unless" in {{pledge_component}}
-  * issue 146: added MTI algorithm for JWS signatures 
-  * issue 147: definitions of reason-context in status objects 
+  * issue 146: added MTI algorithm for JWS signatures
+  * issue 147: definitions of reason-context in status objects
 * updated reference of BRSKI-AE (now RFC 9733).
 * removed unused references
 
 From IETF draft 17 -> IETF draft 18:
 
-* addressed nits received from the GenART review 
+* addressed nits received from the GenART review
 * addressed comment from IANA to update contact for service name registration from IESG to IETF Chair in {{sn_reg}}
 * SECDIR review: included reasoning for short lived certificates in {{agent_component}}
 * SECDIR review: enhanced reasoning for optional TLS usage in {{tpvr}}
@@ -3223,19 +3223,19 @@ From IETF draft 17 -> IETF draft 18:
 * SECDIR review: added hint for response body encoding in {{tpvr}} and {{tper}}
 * SECDIR review: added hint regarding IDevID and LDevID validity in {{op_cons}}
 * DNSDIR review: renamed {{sn_reg}} to Service Name and Transport Protocol Port Number Registry
-* from IANA expert review: included registered service names in headings 
+* from IANA expert review: included registered service names in headings
 
 From IETF draft 16 -> IETF draft 17:
 
-* updated formatting of key events in {{log_hints}} 
-* updated reference to corresponding sections for JWS Header and Signature in {{I-D.ietf-anima-jws-voucher}} in {{pvr_data}} and {{rvr_data}} 
-* simplified description for JWS Protected Header aligning with the update in draft-ietf-anima-jws-voucher-15 to always include the certificate chain in {{pvr_data}} and {{rvr_data}}   
+* updated formatting of key events in {{log_hints}}
+* updated reference to corresponding sections for JWS Header and Signature in {{I-D.ietf-anima-jws-voucher}} in {{pvr_data}} and {{rvr_data}}
+* simplified description for JWS Protected Header aligning with the update in draft-ietf-anima-jws-voucher-15 to always include the certificate chain in {{pvr_data}} and {{rvr_data}}
 
 From IETF draft 15 -> IETF draft 16:
 
 * issue #135: corrections from IOTDIR review (clarification regarding minimum supported discovery in {{discovery_uc2_ppa}}, clarification regarding CDDl notation in {{cacerts_CDDL_def}} and editorial nits.
 * updated references (draft-ietf-netconf-sztp-csr became RFC 9646, included RFC 9662, operational considerations drafts for registrar and MASA)
-* AD review: included term Registrar-Agent in Terminology section 
+* AD review: included term Registrar-Agent in Terminology section
 * AD review: enhanced interaction information in {{uc2figure}} and {{uc3figure}}
 * AD review: included new section on {{op_cons}} to outline operational considerations
 * AD review: enhanced {{log_hints}} with more detailed recommendations on logging
@@ -3245,7 +3245,7 @@ From IETF draft 15 -> IETF draft 16:
 
 From IETF draft 14 -> IETF draft 15:
 
-* issue #134: editorial clarifications on references to {{I-D.ietf-anima-brski-discovery}} in {{discovery_uc2_reg}} and  {{discovery_uc2_ppa}} 
+* issue #134: editorial clarifications on references to {{I-D.ietf-anima-brski-discovery}} in {{discovery_uc2_reg}} and  {{discovery_uc2_ppa}}
 
 
 From IETF draft 13 -> IETF draft 14:
@@ -3257,9 +3257,9 @@ From IETF draft 13 -> IETF draft 14:
   * Inclusion of new section on logging hints {{log_hints}} to give recommendations on which events to be logged for auditing
   * Alignment of pledge status response data across {{vstatus_data}}, {{estatus_data}}, and {{pstatus_data}}.
   * Included MASA component in description of affected components in {{system-components}}
-  * Moved host header field handling from {{pledgehttps}} to {{pledge_component}} as generally applicable 
+  * Moved host header field handling from {{pledgehttps}} to {{pledge_component}} as generally applicable
   * Updated status artifacts (vStatus, eStatus, pStatus) to align with BRSKI CDDL definition, but made reason-context mandatory  to have distinguishable objects for the registrar-agent
-  * Correction of terminology of local host name vs. service instance name in {{discovery_uc2_ppa}}  
+  * Correction of terminology of local host name vs. service instance name in {{discovery_uc2_ppa}}
 * Update of informative references and nits
 
 From IETF draft 12 -> IETF draft 13:
