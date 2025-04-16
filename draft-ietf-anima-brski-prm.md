@@ -76,6 +76,7 @@ normative:
   RFC6763:
   RFC7030:
   RFC7515:
+  RFC7518:
   RFC8610:
   RFC8615:
   RFC8995:
@@ -600,7 +601,7 @@ This is to address the assumed nature of stand-alone Registrar-Agents as nomadic
 Further, the Registrar-Agent requires the registrar EE certificate to provide it to the pledge.
 It MAY use the certificate verified during server authentication within an initial TLS session with the registrar;
 in this case, the Registrar-Agent MUST possess the domain trust anchor (i.e., CA certificate) for the registrar EE certificate to verify the certificate chain.
-Alternatively, the registrar EE certificate MAY be provided via configuration or a repository.
+Alternatively, the registrar EE certificate MAY be provided via configuration.
 The registrar IP address or hostname is provided either by configuration or by using the discovery mechanism defined in {{!RFC8995}} (see {{discovery_uc2_reg}}).
 
 In addition to the certificates, the Registrar-Agent is provided with the product-serial-number(s) of the pledge(s) to be bootstrapped.
@@ -615,6 +616,8 @@ In summary, the following information MUST be available at the Registrar-Agent b
 * Serial number(s): product-serial-number(s) of pledge(s) to be bootstrapped; used for discovery
 
 Further, the Registrar-Agent SHOULD have synchronized time.
+In case the registrar-agent does not have synchronized time, it may not be able to verify the registrar EE certificate during the optional TLS handshake. 
+As the registrar-agent is recommended to utilize short-lived certificates in {{sec_cons_reg-agt}}, a registrar-agent may use the valid from time of its short-lived certificate for time synchronization.
 
 Finally, the Registrar-Agent MAY possess the IDevID (root or issuing) CA certificate of the pledge manufacturer/vendor to validate the IDevID certificate on returned PVR or in case of optional TLS usage for pledge communication (see {{pledgehttps}}).
 The distribution of IDevID CA certificates to the Registrar-Agent is out of scope of this document and may be done by a manual configuration.
@@ -646,13 +649,17 @@ The pledge constructs a Service Instance Name based on device local information 
 The product-serial-number composition is manufacturer-dependent and may contain information regarding the manufacturer, the product type, and further information specific to the product instance.
 To allow distinction of pledges, the product-serial-number therefore needs to be sufficiently unique.
 
-Note that this goes against the naming recommendation of {{RFC6763}}.
+Note that the service name definition is not fully inline with the naming recommendation of {{RFC6763}}.
+However, the definition allows to discover specific instances of a pledge.
+
 The `_brski-pledge._tcp` service, however, targets machine-to-machine discovery.
 
-In the absence of a more general discovery as defined in {{I-D.ietf-anima-brski-discovery}} the Registrar-Agent MUST use
+For discovery the Registrar-Agent MUST use
 
-* `<product-serial-number>._brski-pledge._tcp.local`, to discover a specific pledge, e.g., when connected to a local network.
-* `_brski-pledge._tcp.local` to get a list of pledges to be bootstrapped.
+* `<product-serial-number>._brski-pledge._tcp.local`, to discover a specific pledge, e.g., when connected to a local network
+* `_brski-pledge._tcp.local` to get a list of pledges to be bootstrapped
+
+if it does not support a more general discovery as defined in {{I-D.ietf-anima-brski-discovery}}.
 
 When supporting different options for discovery, as outlined in {{I-D.ietf-anima-brski-discovery}}, a manufacturer may support configuration of preferred options.
 
@@ -661,7 +668,7 @@ This allows a commissioning tool to discover pledges to be bootstrapped in the d
 The manufacturer supports this functionality as outlined in {{sec_cons_mDNS}}.
 
 Establishing network connectivity of the pledge is out of scope of this document but necessary to apply DNS-SD with mDNS.
-For Ethernet, it is provided by simply connecting the network cable.
+For Ethernet, network connectivity can be provided, e.g., via a switch to an operational network or to a specific VLAN for bootstrapping, depending on an operators security policy.
 For WiFi networks, connectivity can be provided by using a pre-agreed SSID for bootstrapping, e.g., as proposed in {{I-D.draft-ietf-emu-eap-arpa}}. 
 The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN ID.
 How to gain network connectivity is out of scope of this document.
@@ -1082,6 +1089,7 @@ The JWS Protected Header of the `agent-signed-data` member MUST contain the foll
 
 The Registrar-Agent MUST sign the `agent-signed-data` member using its EE credentials.
 The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
+Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 ### Response Artifact: Pledge Voucher-Request (PVR) {#pvr_artifact}
@@ -1145,6 +1153,7 @@ The JWS Protected Header MUST follow the definitions of {{Section 3.2 of !I-D.ie
 #### JWS Signature
 
 The pledge MUST sign the PVR artifact using its IDevID credential following the definitions of {{Section 3.3 of !I-D.ietf-anima-jws-voucher}}.
+Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 
@@ -1299,6 +1308,7 @@ The registrar MAY ignore any but the newest PER artifact from the same pledge in
 
 The pledge MUST sign the PER artifact using its IDevID credential.
 The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
+Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 While BRSKI-PRM targets the initial enrollment, re-enrollment can be supported similarly.
 In this case, the pledge MAY use its current, potentially application-related EE credential instead of its IDevID credential to sign the PER artifact.
@@ -1315,9 +1325,6 @@ Collecting multiple pairs allows bulk bootstrapping of several pledges using the
 The Registrar-Agent MUST establish a TLS session to the registrar with mutual authentication.
 In contrast to BRSKI {{RFC8995}}, the TLS client authentication uses the Registrar-Agent EE certificate instead of the pledge IDevID certificate.
 Consequently, the domain registrar can distinguish BRSKI (pledge-initiator-mode) from BRSKI-PRM (pledge-responder-mode).
-
-The registrar SHOULD verify the TLS client authentication of the Registrar-Agent, in particular if the TLS session is used to obtain the Registrar-Agent EE certificate (see {{registrar_component}}).
-Note that authentication and authorization of the pledge verified during the TLS session based on the signatures inside the PVR artifact.
 
 As already stated in {{!RFC8995}}, and required by {{I-D.ietf-uta-require-tls13}}, the use of TLS 1.3 (or newer) is encouraged.
 TLS 1.2 or newer is REQUIRED on the Registrar-Agent side.
@@ -1529,6 +1536,7 @@ The JWS Protected Header MUST follow the definitions of {{Section 3.2 of !I-D.ie
 #### JWS Signature
 
 The domain registrar MUST sign the RVR artifact using its EE credentials following the definitions of {{Section 3.3 of !I-D.ietf-anima-jws-voucher}}.
+Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 ### Backend Response Artifact: Voucher {#voucher_artifact}
@@ -1602,6 +1610,8 @@ Note that for many installations with a single registrar credential, the registr
 #### JWS Signature (Registrar)
 
 The signature is created by signing the registrar-added JWS Protected Header (Registrar) and the original JWS Payload produced by the MASA as described in {{Section 5.1 of RFC7515}}.
+Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
+
 The registrar MUST use its EE credentials to sign.
 
 Note that the credentials need to be the same as used for server authentication in the TLS session with the Registrar-Agent receiving this artifact (see {{registrar_component}}).
@@ -1815,6 +1825,7 @@ The JWS Protected Header of the caCerts artifact MUST contain the following stan
 
 The registrar MUST sign the caCerts artifact using its EE credentials.
 The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
+Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 
@@ -1920,6 +1931,9 @@ The JSON Status Data SHALL be a JSON document {{RFC8259}} that MUST conform with
 * `status`: contains the boolean value `true` in case of success and `false` in case of failure.
 * `reason`: contains a human-readable message;
   should not provide information beneficial to an attacker.
+  As the pledge is not localized at this point in time language selection cannot be done.
+  Therefore, English is taken as a default here for this diagnostic messages. 
+  The internationalization of text is expected to be done on another level.
 * `reason-context`: contains a JSON object that provides additional information specific to a failure;
   in contrast to {{Section 5.7 of !RFC8995}}, MUST be provided;
 
@@ -1991,6 +2005,7 @@ The JWS Protected Header of the vStatus artifact MUST contain the following stan
 
 The pledge MUST sign the vStatus artifact using its IDevID credential.
 The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
+Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 
@@ -2182,6 +2197,7 @@ The JWS Protected Header of the eStatus artifact MUST contain the following stan
 If the pledge verified the received EE certificate successfully, it MUST sign the eStatus artifact using its new EE credentials.
 In failure case, the pledge MUST sign it using its IDevID credentials.
 The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
+Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 
@@ -2442,6 +2458,7 @@ The JWS Protected Header of the tStatus artifact MUST contain the following stan
 
 The Registrar-Agent MUST sign the tStatus artifact using its EE credentials.
 The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
+Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 ### Response Artifact: Pledge Status (pStatus) {#pstatus_artifact}
@@ -2574,6 +2591,7 @@ The JWS Protected Header of the pStatus artifact MUST contain the following stan
 
 The pledge MUST sign the tStatus artifact using its IDevID or domain-owner signed EE credentials according to its bootstrapping status as defined in {{pstatus_data}}.
 The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
+Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 
@@ -3182,6 +3200,7 @@ From IETF draft 18 -> IETF draft 19:
   * issue 140: synchronized time
   * issue 141: config options for discovery and nonceless vouchers in {{voucher}} and {{agent_component}}
   * issue 142: addressed TTL of provisional accept state by utilizing the last received tPVR for the binding in {{tpvr}}
+  * issue 146: added MTI algorithm for JWS signatures 
   * issue 147: definitions of reason-context in status objects 
 * updated reference of BRSKI-AE (now RFC 9733).
 * removed unused references
