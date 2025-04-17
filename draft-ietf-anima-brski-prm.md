@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-19
+docname: draft-ietf-anima-brski-prm-20
 area: Operations and Management
 wg: ANIMA WG
 date: 2025
@@ -99,6 +99,7 @@ informative:
   RFC9662:
   RFC9733:
   I-D.ietf-uta-require-tls13:
+  I-D.ietf-netmod-rfc8407bis:
   I-D.draft-ietf-emu-eap-arpa:
   I-D.richardson-anima-masa-considerations:
   I-D.richardson-anima-registrar-considerations:
@@ -213,6 +214,10 @@ Commissioning tool:
 
 CSR:
 : Certificate Signing Request, as defined in {{RFC2986}}.
+
+domain registrar:
+: An entity in the customer domain, which facilitates the interaction of a pledge or Registrar-Agent with a manufacturer service (MASA). 
+  It operates as BRSKI-EST server for the pledge when requesting vouchers and certificates and acts as the client BRSKI-MASA client when requesting vouchers from the MASA. This component was introduced in {{RFC8995}}.
 
 EE:
 : End entity, as defined in {{?RFC9483}}.
@@ -479,7 +484,7 @@ To enable reuse of BRSKI defined functionality as much as possible, BRSKI-PRM:
 ## Nomadic Connectivity {#arch_nomadic}
 
 In one example instance of the PRM architecture as shown in {{uc3figure}}, there is no connectivity between the location in which the pledge is installed and the location of the domain registrar.
-This is often the case in the building automation use case mentioned in ({{building-automation}}).
+This is often the case in the building automation use case mentioned in {{building-automation}}.
 
 ~~~~ aasvg
                          +---------------------------+
@@ -663,7 +668,7 @@ For discovery the Registrar-Agent MUST use
 * `<product-serial-number>._brski-pledge._tcp.local`, to discover a specific pledge, e.g., when connected to a local network
 * `_brski-pledge._tcp.local` to get a list of pledges to be bootstrapped
 
-if it does not support a more general discovery as defined in {{I-D.ietf-anima-brski-discovery}}.
+if it does not support a more general discovery such as defined in {{I-D.ietf-anima-brski-discovery}}.
 
 When supporting different options for discovery, as outlined in {{I-D.ietf-anima-brski-discovery}}, a manufacturer may support configuration of preferred options.
 
@@ -707,7 +712,7 @@ The endpoints are defined with short names to also accommodate for resource-cons
 HTTP(S) uses the Host header field (or :authority in HTTP/2) to allow for name-based virtual hosting as explained in {{Section 7.2 of ?RFC9110}}.
 This header field is mandatory, and so a compliant HTTP(S) client is going to insert it, which may be just an IP address.
 In the absence of a security policy the pledge MUST respond to all requests regardless of the Host header field provided by the client (i.e., ignore it).
-A security policy  may include a rate limiting for a requests to avoid susceptibility of the pledge to overload.
+A security policy  may include a rate limiting for requests to avoid susceptibility of the pledge to overload.
 Note that there is no requirement for the pledge to operate its BRSKI-PRM service on port numbers 80 or 443, so there is no reason for name-based virtual hosting.
 
 For instance, when the Registrar-Agent reaches out to the "tpvr" endpoint on a pledge in responder mode with the full URI `http://pledge.example.com/.well-known/brski/tpvr`, it sets the Host header field to `pledge.example.com` and the absolute path `/.well-known/brski/tpbr`.
@@ -767,7 +772,7 @@ A registrar with combined BRSKI and BRSKI-PRM functionality MAY detect if the bo
 
 This may be supported by a specific naming in the SAN (subject alternative name) component of the Registrar-Agent EE certificate, which allows the domain registrar to explicitly detect already in the TLS session establishment that the connecting client is a Registrar-Agent.
 
-The registrar MAY be restricted by configuration, to only accept dedicated Registrar-Agents, based on the presented Registrar-Agent EE certificate.
+The registrar MAY be configured to only accept certain Registrar-Agents, which authenticate using the Registrar-Agent EE certificate.
 
 Note that using an EE certificate for TLS client authentication of the Registrar-Agent is a deviation from {{!RFC8995}}, in which the pledge IDevID certificate is used to perform TLS client authentication.
 
@@ -1095,7 +1100,7 @@ The JWS Protected Header of the `agent-signed-data` member MUST contain the foll
 
 The Registrar-Agent MUST sign the `agent-signed-data` member using its EE credentials.
 The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
-Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
+Algorithms used for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 ### Response Artifact: Pledge Voucher-Request (PVR) {#pvr_artifact}
@@ -1159,7 +1164,7 @@ The JWS Protected Header MUST follow the definitions of {{Section 3.2 of !I-D.ie
 #### JWS Signature
 
 The pledge MUST sign the PVR artifact using its IDevID credential following the definitions of {{Section 3.3 of !I-D.ietf-anima-jws-voucher}}.
-Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
+Algorithms used for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 
@@ -1281,9 +1286,10 @@ For PKCS#10 CSRs as used in BRSKI and BRSKI-PRM, the `p10-csr` case of the `csr-
 The JWS Protected Header of the PER artifact MUST contain the following standard Header Parameters as defined in {{RFC7515}}:
 
 * `alg`: SHALL contain the algorithm type used to create the signature, e.g., `ES256`, as defined in {{Section 4.1.1 of RFC7515}}
-* `x5c`: SHALL contain the base64-encoded pledge EE certificate used to sign the PER artifact;
-  it SHOULD also contain the certificate chain for this certificate;
-  if the certificate chain is not included in the `x5c` Header Parameter, it MUST be available at the domain registrar for verification.
+* `x5c`: SHALL contain the base64-encoded pledge EE certificate used to sign the PER artifact and
+  it SHOULD also contain the certificate chain for this certificate.
+  The certificate chain MUST be available for certificate verification. 
+  If it is not contained in the x5c Header Parameter it is provided to the relying party by other means such as configuration.
 * `crit`: SHALL indicate the extension Header Parameter `created-on` to ensure that it must be understood and validated by the receiver as defined in {{Section 4.1.11 of RFC7515}}.
 
 In addition, the JWS Protected Header of the PER artifact MUST contain the following extension Header Parameter:
@@ -1314,7 +1320,7 @@ The registrar MAY ignore any but the newest PER artifact from the same pledge in
 
 The pledge MUST sign the PER artifact using its IDevID credential.
 The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
-Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
+Algorithms used for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 While BRSKI-PRM targets the initial enrollment, re-enrollment can be supported similarly.
 In this case, the pledge MAY use its current, potentially application-related EE credential instead of its IDevID credential to sign the PER artifact.
@@ -1542,7 +1548,7 @@ The JWS Protected Header MUST follow the definitions of {{Section 3.2 of !I-D.ie
 #### JWS Signature
 
 The domain registrar MUST sign the RVR artifact using its EE credentials following the definitions of {{Section 3.3 of !I-D.ietf-anima-jws-voucher}}.
-Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
+Algorithms used for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 ### Backend Response Artifact: Voucher {#voucher_artifact}
@@ -1616,7 +1622,7 @@ Note that for many installations with a single registrar credential, the registr
 #### JWS Signature (Registrar)
 
 The signature is created by signing the registrar-added JWS Protected Header (Registrar) and the original JWS Payload produced by the MASA as described in {{Section 5.1 of RFC7515}}.
-Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
+Algorithms used for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 The registrar MUST use its EE credentials to sign.
 
@@ -1833,7 +1839,7 @@ The JWS Protected Header of the caCerts artifact MUST contain the following stan
 
 The registrar MUST sign the caCerts artifact using its EE credentials.
 The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
-Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
+Algorithms used for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 
@@ -1992,9 +1998,10 @@ Content-Language: en
 The JWS Protected Header of the vStatus artifact MUST contain the following standard Header Parameters as defined in {{!RFC7515}}:
 
 * `alg`: SHALL contain the algorithm type used to create the signature, e.g., `ES256`, as defined in {{Section 4.1.1 of !RFC7515}}.
-* `x5c`: SHALL contain the base64-encoded pledge IDevID certificate used to sign the vStatus artifact;
-  it SHOULD also contain the certificate chain for this certificate;
-  if the certificate chain is not included in the `x5c` Header Parameter, it MUST be available at the domain registrar for verification.
+* `x5c`: SHALL contain the base64-encoded pledge IDevID certificate used to sign the vStatus artifact and
+  it SHOULD also contain the certificate chain for this certificate.
+  The certificate chain MUST be available for certificate verification. 
+  If it is not contained in the x5c Header Parameter it is provided to the relying party by other means such as configuration.
 
 {{vstatus_header}} shows an example for this JWS Protected Header:
 
@@ -2013,7 +2020,7 @@ The JWS Protected Header of the vStatus artifact MUST contain the following stan
 
 The pledge MUST sign the vStatus artifact using its IDevID credential.
 The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
-Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
+Algorithms used for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 
@@ -2072,7 +2079,7 @@ The Registrar-Agent MUST NOT modify CA-Certificates artifacts.
 
 In this exchange, the response is a result of the HTTP(S) default transport for this specification.
 There is no artifact provided to the Registrar-Agent.
-
+The pledge MAY use the response body to signal success/failure details to the service technician operating the Registrar-Agent. While BRSKI-PRM does not specify which content may be provided in the response body, it is recommended to provided it as JSON encoded information as other BRSKI-PRM exchanges also utilize this encoding.
 
 
 ## Supply Enroll-Response to Pledge (ser) {#enroll_response}
@@ -2183,9 +2190,10 @@ For eStatus artifacts, the JSON object in the `reason-context` field MUST contai
 The JWS Protected Header of the eStatus artifact MUST contain the following standard Header Parameters as defined in {{!RFC7515}}:
 
 * `alg`: SHALL contain the algorithm type used to create the signature, e.g., `ES256`, as defined in {{Section 4.1.1 of !RFC7515}}
-* `x5c`: SHALL contain the base64-encoded pledge EE certificate used to sign the eStatus artifact;
-  it SHOULD also contain the certificate chain for this certificate;
-  if the certificate chain is not included in the `x5c` Header Parameter, it MUST be available at the domain registrar for verification
+* `x5c`: SHALL contain the base64-encoded pledge EE certificate used to sign the eStatus artifact and
+  it SHOULD also contain the certificate chain for this certificate.
+  The certificate chain MUST be available for certificate verification. 
+  If it is not contained in the x5c Header Parameter it is provided to the relying party by other means such as configuration.
 
 {{estatus_header}} below shows an example for this JWS Protected Header:
 
@@ -2205,7 +2213,7 @@ The JWS Protected Header of the eStatus artifact MUST contain the following stan
 If the pledge verified the received EE certificate successfully, it MUST sign the eStatus artifact using its new EE credentials.
 In failure case, the pledge MUST sign it using its IDevID credentials.
 The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
-Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
+Algorithms used for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 
@@ -2466,7 +2474,7 @@ The JWS Protected Header of the tStatus artifact MUST contain the following stan
 
 The Registrar-Agent MUST sign the tStatus artifact using its EE credentials.
 The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
-Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
+Algorithms used for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 ### Response Artifact: Pledge Status (pStatus) {#pstatus_artifact}
@@ -2578,9 +2586,11 @@ For the `pos-details` member, the following values with the given semantics are 
 The JWS Protected Header of the pStatus artifact MUST contain the following standard Header Parameters as defined in {{RFC7515}}:
 
 * `alg`: SHALL contain the algorithm type used to create the signature, e.g., `ES256`, as defined in {{Section 4.1.1 of RFC7515}}.
-* `x5c`: SHALL contain the base64-encoded pledge EE certificate used to sign the pStatus artifact;
-  it SHOULD also contain the certificate chain for this certificate;
-  if the certificate chain is not included in the x5c Header Parameter, it MUST be available at the Registrar-Agent for verification.
+* `x5c`: SHALL contain the base64-encoded pledge EE certificate used to sign the pStatus artifact and
+  it SHOULD also contain the certificate chain for this certificate
+  The certificate chain MUST be available for certificate verification. 
+  If it is not contained in the x5c Header Parameter it is provided to the relying party by other means such as configuration.
+
 
 {{pstatus_header}} shows an example for this JWS Protected Header:
 
@@ -2599,7 +2609,7 @@ The JWS Protected Header of the pStatus artifact MUST contain the following stan
 
 The pledge MUST sign the tStatus artifact using its IDevID or domain-owner signed EE credentials according to its bootstrapping status as defined in {{pstatus_data}}.
 The JWS Signature is generated over the JWS Protected Header and the JWS Payload as described in {{Section 5.1 of RFC7515}}.
-Algorithms supported for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
+Algorithms used for JWS signatures MUST support ES256 as recommended in {{!RFC7518}} and MAY support further algorithms.
 
 
 
@@ -2681,10 +2691,7 @@ The key infrastructure as part of the customer domain discussed in {{architectur
 
 Requirements to the utilized credentials authenticating and artifact signatures on the registrar as outlined in {{registrar_component}} may have operational implications when the registrar is part of a scalable framework as described in {{Section 1.3.1 of ?I-D.richardson-anima-registrar-considerations}}.
 
-Besides the above, also consider the existing documents on operational modes for
-
-* BRSKI registrars in {{I-D.richardson-anima-registrar-considerations}}
-* BRSKI MASA in {{I-D.richardson-anima-masa-considerations}}
+Besides the above, also consider the existing document on operational modes for BRSKI MASA in {{I-D.richardson-anima-masa-considerations}}.
 
 
 
@@ -2832,9 +2839,7 @@ The security considerations as described in {{Section 11.7 of !RFC8995}} (Securi
 The YANG module specified in {{I-D.ietf-anima-rfc8366bis}} defines the schema for data that is subsequently encapsulated by a JOSE signed-data Content-type as described in {{I-D.ietf-anima-jws-voucher}}.
 As such, all of the YANG-modeled data is protected against modification.
 
-Documents that define exclusively modules following the extension in {{?RFC8971}} are not required to include the security template in Section 3.7.1.  Likewise, following the template is not required for modules that define YANG extensions such as {{?RFC7952}}.
-
-
+Documents that define exclusively modules following the extension in {{?RFC8971}} are not required to include the YANG security template per guidance in {{Section 3.7 of I-D.ietf-netmod-rfc8407bis}}.
 
 
 
@@ -3194,6 +3199,11 @@ IDevID certificates are intended to be widely usable and EKU does not support th
 # History of Changes [RFC Editor: please delete] {#app_history}
 
 Proof of Concept Code available
+
+From IETF draft 19 -> IETF draft 20:
+
+* addressed last comments and nits before telechat 
+
 
 From IETF draft 18 -> IETF draft 19:
 
