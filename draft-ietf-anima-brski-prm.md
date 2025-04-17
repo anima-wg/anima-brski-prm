@@ -658,9 +658,7 @@ The pledge constructs a Service Instance Name based on device local information 
 The product-serial-number composition is manufacturer-dependent and may contain information regarding the manufacturer, the product type, and further information specific to the product instance.
 To allow distinction of pledges, the product-serial-number therefore needs to be sufficiently unique.
 
-Note that the service name definition is not fully inline with the naming recommendation of {{RFC6763}} .
-However, the definition allows to discover specific instances of a pledge.
-As mDNS has some restrictions on the usable character set, the `product-serial-number`, which corresponds to the X520SerialNumber in the IDevID certificate, has limitations.  
+Note that the service name definition is not fully inline with the naming recommendation of {{RFC6763}} due to the positioning of `_tcp`. However, the definition of the `product-serial-number` has align with the allowed character set (see {{RFC6763}}) to avoid discovery problems. This check is necessary as the `product-serial-number` is also contained in the certificate as X520SerialNumber, that has a larger allowed character set. Using the `product-serial-number` as part of the service name allows to discover specific instances of a pledge.  
 
 The `_brski-pledge._tcp` service, however, targets machine-to-machine discovery.
 

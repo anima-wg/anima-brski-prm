@@ -115,7 +115,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
        6.2.1.  Pledge with Combined Functionality  . . . . . . . . .  25
-     6.3.  Domain Registrar  . . . . . . . . . . . . . . . . . . . .  26
+     6.3.  Domain Registrar  . . . . . . . . . . . . . . . . . . . .  25
        6.3.1.  Domain Registrar with Combined Functionality  . . . .  27
      6.4.  MASA  . . . . . . . . . . . . . . . . . . . . . . . . . .  27
    7.  Exchanges and Artifacts . . . . . . . . . . . . . . . . . . .  28
@@ -1244,11 +1244,14 @@ Internet-Draft                  BRSKI-PRM                     April 2025
    be sufficiently unique.
 
    Note that the service name definition is not fully inline with the
-   naming recommendation of [RFC6763] . However, the definition allows
-   to discover specific instances of a pledge.  As mDNS has some
-   restrictions on the usable character set, the product-serial-number,
-   which corresponds to the X520SerialNumber in the IDevID certificate,
-   has limitations.
+   naming recommendation of [RFC6763] due to the positioning of _tcp.
+   However, the definition of the product-serial-number has align with
+   the allowed character set (see [RFC6763]) to avoid discovery
+   problems.  This check is necessary as the product-serial-number is
+   also contained in the certificate as X520SerialNumber, that has a
+   larger allowed character set.  Using the product-serial-number as
+   part of the service name allows to discover specific instances of a
+   pledge.
 
    The _brski-pledge._tcp service, however, targets machine-to-machine
    discovery.
@@ -1274,14 +1277,11 @@ Internet-Draft                  BRSKI-PRM                     April 2025
    domain.  The manufacturer supports this functionality as outlined in
    Section 12.4.
 
-
-
-
-
-
-
-
-
+   Establishing network connectivity of the pledge is out of scope of
+   this document but necessary to apply DNS-SD with mDNS.  For Ethernet,
+   network connectivity can be provided, e.g., via a switch to an
+   operational network or to a specific VLAN for bootstrapping,
+   depending on an operators security policy.  For WiFi networks,
 
 
 
@@ -1290,11 +1290,6 @@ Fries, et al.            Expires 19 October 2025               [Page 23]
 Internet-Draft                  BRSKI-PRM                     April 2025
 
 
-   Establishing network connectivity of the pledge is out of scope of
-   this document but necessary to apply DNS-SD with mDNS.  For Ethernet,
-   network connectivity can be provided, e.g., via a switch to an
-   operational network or to a specific VLAN for bootstrapping,
-   depending on an operators security policy.  For WiFi networks,
    connectivity can be provided by using a pre-agreed SSID for
    bootstrapping, e.g., as proposed in [I-D.draft-ietf-emu-eap-arpa].
    The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN
@@ -1339,6 +1334,11 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
        Table 1: Well-Known Endpoints on a Pledge in Responder Mode
 
+   HTTP(S) uses the Host header field (or :authority in HTTP/2) to allow
+   for name-based virtual hosting as explained in Section 7.2 of
+   [RFC9110].  This header field is mandatory, and so a compliant
+   HTTP(S) client is going to insert it, which may be just an IP
+
 
 
 Fries, et al.            Expires 19 October 2025               [Page 24]
@@ -1346,10 +1346,6 @@ Fries, et al.            Expires 19 October 2025               [Page 24]
 Internet-Draft                  BRSKI-PRM                     April 2025
 
 
-   HTTP(S) uses the Host header field (or :authority in HTTP/2) to allow
-   for name-based virtual hosting as explained in Section 7.2 of
-   [RFC9110].  This header field is mandatory, and so a compliant
-   HTTP(S) client is going to insert it, which may be just an IP
    address.  In the absence of a security policy the pledge MUST respond
    to all requests regardless of the Host header field provided by the
    client (i.e., ignore it).  A security policy may include a rate
@@ -1390,18 +1386,6 @@ Internet-Draft                  BRSKI-PRM                     April 2025
    Request (PER) or to provide an Enroll-Response can be used for
    further certificates.
 
-
-
-
-
-
-
-
-Fries, et al.            Expires 19 October 2025               [Page 25]
-
-Internet-Draft                  BRSKI-PRM                     April 2025
-
-
 6.3.  Domain Registrar
 
    The domain registrar provides the endpoints already specified in
@@ -1410,6 +1394,14 @@ Internet-Draft                  BRSKI-PRM                     April 2025
    defined /.well-known/brski/ Well-Known URI path.  These endpoints
    accommodate for the authenticated self-contained objects used by
    BRSKI-PRM to provide Pledge Enroll-Request (PER) artifacts and
+
+
+
+Fries, et al.            Expires 19 October 2025               [Page 25]
+
+Internet-Draft                  BRSKI-PRM                     April 2025
+
+
    signature-wrapped CA certificates via the Registrar-Agent.
 
    +================+=========================+========================+
@@ -1450,6 +1442,14 @@ Internet-Draft                  BRSKI-PRM                     April 2025
    MASA.  The registrar MAY use the certificate verified during client
    authentication within the TLS sessions with the Registrar-Agent; in
    this case, the registrar MUST possess the domain trust anchor (i.e.,
+   domain CA certificate) for the Registrar-Agent EE certificate to
+   verify the certificate chain.  Alternatively, the Registrar-Agent EE
+   certificate(s) MAY be provided via configuration or a repository.
+
+
+
+
+
 
 
 
@@ -1457,10 +1457,6 @@ Fries, et al.            Expires 19 October 2025               [Page 26]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
-
-   domain CA certificate) for the Registrar-Agent EE certificate to
-   verify the certificate chain.  Alternatively, the Registrar-Agent EE
-   certificate(s) MAY be provided via configuration or a repository.
 
 6.3.1.  Domain Registrar with Combined Functionality
 
@@ -1502,6 +1498,10 @@ Internet-Draft                  BRSKI-PRM                     April 2025
    defined in Section 7.3.1 based on the Pledge Voucher-Request (PVR)
    and Registrar Voucher-Request (RVR) artifact fields defined in
    Section 7.1.2 and Section 7.3.4, respectively.
+
+
+
+
 
 
 
