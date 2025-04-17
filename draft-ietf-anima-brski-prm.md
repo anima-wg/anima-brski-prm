@@ -215,7 +215,7 @@ Commissioning tool:
 CSR:
 : Certificate Signing Request, as defined in {{RFC2986}}.
 
-domain registrar:
+Domain registrar:
 : An entity in the customer domain, which facilitates the interaction of a pledge or Registrar-Agent with a manufacturer service (MASA). 
   It operates as BRSKI-EST server for the pledge when requesting vouchers and certificates and acts as the client BRSKI-MASA client when requesting vouchers from the MASA. This component was introduced in {{RFC8995}}.
 
