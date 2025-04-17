@@ -347,7 +347,7 @@ Based on the intended target environment described in {{sup-env}}, the following
   These requests are then provided by the Registrar-Agent to the registrar.
   This requires the definition of pledge endpoints to allow interaction with the Registrar-Agent.
 
-* The security of communication between the Registrar-Agent and the pledge does not rely on Transport Layer Security (TLS) to enable application of BRSKI-PRM in environments, in which the communication between the Registrar-Agent and the pledge is done over other technologies like BTLE or NFC, which may not support TLS protected communication.
+* The security of communication between the Registrar-Agent and the pledge does not rely on Transport Layer Security (TLS) to enable application of BRSKI-PRM in environments, in which the communication between the Registrar-Agent and the pledge is done over other technologies like Bluetooth Low Energy (BLE) or NFC, which may not support TLS protected communication.
   In addition, the pledge does not have a certificate that can easily be verified by {{?RFC9525}} methods.
 
 * The use of authenticated self-contained objects addresses both, the TLS challenges and the technology stack challenge.
@@ -658,8 +658,9 @@ The pledge constructs a Service Instance Name based on device local information 
 The product-serial-number composition is manufacturer-dependent and may contain information regarding the manufacturer, the product type, and further information specific to the product instance.
 To allow distinction of pledges, the product-serial-number therefore needs to be sufficiently unique.
 
-Note that the service name definition is not fully inline with the naming recommendation of {{RFC6763}}.
+Note that the service name definition is not fully inline with the naming recommendation of {{RFC6763}} .
 However, the definition allows to discover specific instances of a pledge.
+As mDNS has some restrictions on the usable character set, the `product-serial-number`, which corresponds to the X520SerialNumber in the IDevID certificate, has limitations.  
 
 The `_brski-pledge._tcp` service, however, targets machine-to-machine discovery.
 
@@ -1311,7 +1312,7 @@ The registrar MAY ignore any but the newest PER artifact from the same pledge in
     "base64encodedvalue=="
   ],
   "crit": ["created-on"],
-  "created-on": "2022-09-13T00:00:02.000Z"
+  "created-on": "2025-01-13T00:00:02.000Z"
 }
 ~~~~
 {: #per_header title='JWS Protected Header Example within PER' artwork-align="left"}
@@ -1524,7 +1525,7 @@ this specification refines it as a JSON array structure similar to the `x5c` Hea
 ~~~~ json
 {
   "ietf-voucher-request:voucher": {
-     "created-on": "2022-01-04T02:37:39.235Z",
+     "created-on": "2025-01-04T02:37:39.235Z",
      "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
      "serial-number": "vendor-pledge4711",
      "idevid-issuer": "base64encodedvalue==",
@@ -1562,7 +1563,7 @@ It contains JSON Voucher Data in the JWS Payload, for which an example is given 
 ~~~~ json
 {
   "ietf-voucher:voucher": {
-    "created-on": "2022-01-04T00:00:02.000Z",
+    "created-on": "2025-01-04T00:00:02.000Z",
     "nonce": "base64encodedvalue==",
     "assertion": "agent-proximity",
     "pinned-domain-cert": "base64encodedvalue==",
@@ -2443,7 +2444,7 @@ Other specifications using this artifact may define further enumeration values, 
 ~~~~ json
 {
   "version": 1,
-  "created-on": "2022-08-12T02:37:39.235Z",
+  "created-on": "2025-01-12T02:37:39.235Z",
   "serial-number": "vendor-pledge4711",
   "status-type": "bootstrap"
 }
@@ -2721,7 +2722,7 @@ IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with
 
 ##  Service Name and Transport Protocol Port Number Registry {#sn_reg}
 
-IANA has registered the following service names:
+IANA is requested to register the following service names:
 
 **Service Name:** brski-pledge<br>
 **Transport Protocol(s):** tcp<br>

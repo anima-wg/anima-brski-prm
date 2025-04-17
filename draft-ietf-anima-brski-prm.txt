@@ -549,10 +549,10 @@ Internet-Draft                  BRSKI-PRM                     April 2025
       pledge does not rely on Transport Layer Security (TLS) to enable
       application of BRSKI-PRM in environments, in which the
       communication between the Registrar-Agent and the pledge is done
-      over other technologies like BTLE or NFC, which may not support
-      TLS protected communication.  In addition, the pledge does not
-      have a certificate that can easily be verified by [RFC9525]
-      methods.
+      over other technologies like Bluetooth Low Energy (BLE) or NFC,
+      which may not support TLS protected communication.  In addition,
+      the pledge does not have a certificate that can easily be verified
+      by [RFC9525] methods.
 
 
 
@@ -1244,8 +1244,11 @@ Internet-Draft                  BRSKI-PRM                     April 2025
    be sufficiently unique.
 
    Note that the service name definition is not fully inline with the
-   naming recommendation of [RFC6763].  However, the definition allows
-   to discover specific instances of a pledge.
+   naming recommendation of [RFC6763] . However, the definition allows
+   to discover specific instances of a pledge.  As mDNS has some
+   restrictions on the usable character set, the product-serial-number,
+   which corresponds to the X520SerialNumber in the IDevID certificate,
+   has limitations.
 
    The _brski-pledge._tcp service, however, targets machine-to-machine
    discovery.
@@ -1271,6 +1274,22 @@ Internet-Draft                  BRSKI-PRM                     April 2025
    domain.  The manufacturer supports this functionality as outlined in
    Section 12.4.
 
+
+
+
+
+
+
+
+
+
+
+
+Fries, et al.            Expires 19 October 2025               [Page 23]
+
+Internet-Draft                  BRSKI-PRM                     April 2025
+
+
    Establishing network connectivity of the pledge is out of scope of
    this document but necessary to apply DNS-SD with mDNS.  For Ethernet,
    network connectivity can be provided, e.g., via a switch to an
@@ -1281,14 +1300,6 @@ Internet-Draft                  BRSKI-PRM                     April 2025
    The same approach can be used by 6LoWPAN/mesh using a pre-agreed PAN
    ID.  How to gain network connectivity is out of scope of this
    document.
-
-
-
-
-Fries, et al.            Expires 19 October 2025               [Page 23]
-
-Internet-Draft                  BRSKI-PRM                     April 2025
-
 
 6.2.  Pledge in Responder Mode
 
@@ -1327,17 +1338,6 @@ Internet-Draft                  BRSKI-PRM                     April 2025
       +----------+------------------------+------------------------+
 
        Table 1: Well-Known Endpoints on a Pledge in Responder Mode
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2325,7 +2325,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
        "base64encodedvalue=="
      ],
      "crit": ["created-on"],
-     "created-on": "2022-09-13T00:00:02.000Z"
+     "created-on": "2025-01-13T00:00:02.000Z"
    }
 
              Figure 18: JWS Protected Header Example within PER
@@ -2776,7 +2776,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
    {
      "ietf-voucher-request:voucher": {
-        "created-on": "2022-01-04T02:37:39.235Z",
+        "created-on": "2025-01-04T02:37:39.235Z",
         "nonce": "eDs++/FuDHGUnRxN3E14CQ==",
         "serial-number": "vendor-pledge4711",
         "idevid-issuer": "base64encodedvalue==",
@@ -2830,7 +2830,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
    {
      "ietf-voucher:voucher": {
-       "created-on": "2022-01-04T00:00:02.000Z",
+       "created-on": "2025-01-04T00:00:02.000Z",
        "nonce": "base64encodedvalue==",
        "assertion": "agent-proximity",
        "pinned-domain-cert": "base64encodedvalue==",
@@ -4278,7 +4278,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
    {
      "version": 1,
-     "created-on": "2022-08-12T02:37:39.235Z",
+     "created-on": "2025-01-12T02:37:39.235Z",
      "serial-number": "vendor-pledge4711",
      "status-type": "bootstrap"
    }
@@ -4786,7 +4786,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 10.2.  Service Name and Transport Protocol Port Number Registry
 
-   IANA has registered the following service names:
+   IANA is requested to register the following service names:
 
    *Service Name:* brski-pledge
    *Transport Protocol(s):* tcp
