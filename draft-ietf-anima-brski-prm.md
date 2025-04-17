@@ -219,6 +219,9 @@ Domain registrar:
 : An entity in the customer domain, which facilitates the interaction of a pledge or Registrar-Agent with a manufacturer service (MASA). 
   It operates as BRSKI-EST server for the pledge when requesting vouchers and certificates and acts as the client BRSKI-MASA client when requesting vouchers from the MASA. This component was introduced in {{RFC8995}}.
 
+Drop ship:
+: delivery of a component or product. This component was introduced in {{RFC8995}}.
+
 EE:
 : End entity, as defined in {{?RFC9483}}.
   Typically, a device or service that owns a public-private key pair for which it manages a public key certificate.
@@ -350,7 +353,8 @@ Based on the intended target environment described in {{sup-env}}, the following
 * The security of communication between the Registrar-Agent and the pledge does not rely on Transport Layer Security (TLS) to enable application of BRSKI-PRM in environments, in which the communication between the Registrar-Agent and the pledge is done over other technologies like Bluetooth Low Energy (BLE) or NFC, which may not support TLS protected communication.
   In addition, the pledge does not have a certificate that can easily be verified by {{?RFC9525}} methods.
 
-* The use of authenticated self-contained objects addresses both, the TLS challenges and the technology stack challenge.
+* The use of authenticated self-contained objects addresses both, the TLS connection establishment challenges and the technology stack challenge.
+  Note that the chosen approach does not provide confidentiality for the self-contained object, which can be provided by employing TLS.
 
 * By contrast, the Registrar-Agent can be authenticated by the registrar as a component, acting on behalf of the registrar.
   In addition, the registrar must be able to verify, which Registrar-Agent was in direct contact with the pledge.

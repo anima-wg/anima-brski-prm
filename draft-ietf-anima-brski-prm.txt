@@ -99,13 +99,13 @@ Table of Contents
    5.  Solution Architecture . . . . . . . . . . . . . . . . . . . .  12
      5.1.  Overview  . . . . . . . . . . . . . . . . . . . . . . . .  12
      5.2.  Nomadic Connectivity  . . . . . . . . . . . . . . . . . .  16
-     5.3.  Co-located Registrar-Agent and Domain Registrar . . . . .  18
-     5.4.  Agent Proximity Assertion . . . . . . . . . . . . . . . .  19
-   6.  System Components . . . . . . . . . . . . . . . . . . . . . .  20
-     6.1.  Registrar-Agent . . . . . . . . . . . . . . . . . . . . .  20
-       6.1.1.  Discovery of the Registrar  . . . . . . . . . . . . .  22
-       6.1.2.  Discovery of the Pledge . . . . . . . . . . . . . . .  22
-     6.2.  Pledge in Responder Mode  . . . . . . . . . . . . . . . .  24
+     5.3.  Co-located Registrar-Agent and Domain Registrar . . . . .  17
+     5.4.  Agent Proximity Assertion . . . . . . . . . . . . . . . .  18
+   6.  System Components . . . . . . . . . . . . . . . . . . . . . .  19
+     6.1.  Registrar-Agent . . . . . . . . . . . . . . . . . . . . .  19
+       6.1.1.  Discovery of the Registrar  . . . . . . . . . . . . .  21
+       6.1.2.  Discovery of the Pledge . . . . . . . . . . . . . . .  21
+     6.2.  Pledge in Responder Mode  . . . . . . . . . . . . . . . .  23
 
 
 
@@ -114,54 +114,54 @@ Fries, et al.            Expires 19 October 2025                [Page 2]
 Internet-Draft                  BRSKI-PRM                     April 2025
 
 
-       6.2.1.  Pledge with Combined Functionality  . . . . . . . . .  25
-     6.3.  Domain Registrar  . . . . . . . . . . . . . . . . . . . .  25
-       6.3.1.  Domain Registrar with Combined Functionality  . . . .  27
-     6.4.  MASA  . . . . . . . . . . . . . . . . . . . . . . . . . .  27
-   7.  Exchanges and Artifacts . . . . . . . . . . . . . . . . . . .  28
-     7.1.  Trigger Pledge Voucher-Request  . . . . . . . . . . . . .  32
+       6.2.1.  Pledge with Combined Functionality  . . . . . . . . .  24
+     6.3.  Domain Registrar  . . . . . . . . . . . . . . . . . . . .  24
+       6.3.1.  Domain Registrar with Combined Functionality  . . . .  26
+     6.4.  MASA  . . . . . . . . . . . . . . . . . . . . . . . . . .  26
+   7.  Exchanges and Artifacts . . . . . . . . . . . . . . . . . . .  27
+     7.1.  Trigger Pledge Voucher-Request  . . . . . . . . . . . . .  31
        7.1.1.  Request Artifact: Pledge Voucher-Request Trigger
-               (tPVR)  . . . . . . . . . . . . . . . . . . . . . . .  33
-       7.1.2.  Response Artifact: Pledge Voucher-Request (PVR) . . .  36
-     7.2.  Trigger Pledge Enroll-Request . . . . . . . . . . . . . .  38
+               (tPVR)  . . . . . . . . . . . . . . . . . . . . . . .  32
+       7.1.2.  Response Artifact: Pledge Voucher-Request (PVR) . . .  35
+     7.2.  Trigger Pledge Enroll-Request . . . . . . . . . . . . . .  37
        7.2.1.  Request Artifact: Pledge Enroll-Request Trigger
-               (tPER)  . . . . . . . . . . . . . . . . . . . . . . .  39
-       7.2.2.  Response Artifact: Pledge Enroll-Request (PER)  . . .  40
-     7.3.  Supply PVR to Registrar (including MASA interaction)  . .  43
-       7.3.1.  MASA Interaction  . . . . . . . . . . . . . . . . . .  46
-       7.3.2.  Supply Voucher to Registrar-Agent . . . . . . . . . .  48
-       7.3.3.  Request Artifact: Pledge Voucher-Request (PVR)  . . .  48
+               (tPER)  . . . . . . . . . . . . . . . . . . . . . . .  38
+       7.2.2.  Response Artifact: Pledge Enroll-Request (PER)  . . .  39
+     7.3.  Supply PVR to Registrar (including MASA interaction)  . .  42
+       7.3.1.  MASA Interaction  . . . . . . . . . . . . . . . . . .  45
+       7.3.2.  Supply Voucher to Registrar-Agent . . . . . . . . . .  47
+       7.3.3.  Request Artifact: Pledge Voucher-Request (PVR)  . . .  47
        7.3.4.  Backend Request Artifact: Registrar Voucher-Request
-               (RVR) . . . . . . . . . . . . . . . . . . . . . . . .  49
-       7.3.5.  Backend Response Artifact: Voucher  . . . . . . . . .  51
-       7.3.6.  Response Artifact: Registrar-Countersigned Voucher  .  51
+               (RVR) . . . . . . . . . . . . . . . . . . . . . . . .  48
+       7.3.5.  Backend Response Artifact: Voucher  . . . . . . . . .  50
+       7.3.6.  Response Artifact: Registrar-Countersigned Voucher  .  50
      7.4.  Supply PER to Registrar (including Key Infrastructure
-            interaction; requestenroll)  . . . . . . . . . . . . . .  53
-       7.4.1.  Request Artifact: Pledge Enroll-Request (PER) . . . .  56
+            interaction; requestenroll)  . . . . . . . . . . . . . .  52
+       7.4.1.  Request Artifact: Pledge Enroll-Request (PER) . . . .  55
        7.4.2.  Response Artifact: Registrar Enroll-Response
-               (Enroll-Resp) . . . . . . . . . . . . . . . . . . . .  56
-     7.5.  Obtain CA Certificates (wrappedcacerts) . . . . . . . . .  56
-       7.5.1.  Request (no artifact) . . . . . . . . . . . . . . . .  57
-       7.5.2.  Response Artifact: CA-Certificates (caCerts)  . . . .  57
-     7.6.  Supply Voucher to Pledge (svr)  . . . . . . . . . . . . .  60
-       7.6.1.  Request Artifact: Registrar-Countersigned Voucher . .  62
-       7.6.2.  Response Artifact: Voucher Status (vStatus) . . . . .  62
-     7.7.  Supply CA Certificates to Pledge (scac) . . . . . . . . .  65
-       7.7.1.  Request Artifact: CA-Certificates (caCerts) . . . . .  66
-       7.7.2.  Response (no artifact)  . . . . . . . . . . . . . . .  66
-     7.8.  Supply Enroll-Response to Pledge (ser)  . . . . . . . . .  67
-       7.8.1.  Request Artifact: Enroll-Response (Enroll-Resp) . . .  68
-       7.8.2.  Response Artifact: Enroll Status (eStatus)  . . . . .  68
-     7.9.  Voucher Status Telemetry (including MASA interaction) . .  70
-       7.9.1.  Request Artifact: Voucher Status (vStatus)  . . . . .  72
-       7.9.2.  Response (no artifact)  . . . . . . . . . . . . . . .  72
-     7.10. Enroll Status Telemetry . . . . . . . . . . . . . . . . .  72
-       7.10.1.  Request Artifact: Enroll Status (eStatus)  . . . . .  73
-       7.10.2.  Response (no artifact) . . . . . . . . . . . . . . .  73
-     7.11. Query Pledge Status (qps) . . . . . . . . . . . . . . . .  74
-       7.11.1.  Request Artifact: Status Trigger (tStatus) . . . . .  75
-       7.11.2.  Response Artifact: Pledge Status (pStatus) . . . . .  78
-   8.  Logging Considerations  . . . . . . . . . . . . . . . . . . .  82
+               (Enroll-Resp) . . . . . . . . . . . . . . . . . . . .  55
+     7.5.  Obtain CA Certificates (wrappedcacerts) . . . . . . . . .  55
+       7.5.1.  Request (no artifact) . . . . . . . . . . . . . . . .  56
+       7.5.2.  Response Artifact: CA-Certificates (caCerts)  . . . .  56
+     7.6.  Supply Voucher to Pledge (svr)  . . . . . . . . . . . . .  59
+       7.6.1.  Request Artifact: Registrar-Countersigned Voucher . .  61
+       7.6.2.  Response Artifact: Voucher Status (vStatus) . . . . .  61
+     7.7.  Supply CA Certificates to Pledge (scac) . . . . . . . . .  64
+       7.7.1.  Request Artifact: CA-Certificates (caCerts) . . . . .  65
+       7.7.2.  Response (no artifact)  . . . . . . . . . . . . . . .  65
+     7.8.  Supply Enroll-Response to Pledge (ser)  . . . . . . . . .  66
+       7.8.1.  Request Artifact: Enroll-Response (Enroll-Resp) . . .  67
+       7.8.2.  Response Artifact: Enroll Status (eStatus)  . . . . .  67
+     7.9.  Voucher Status Telemetry (including MASA interaction) . .  69
+       7.9.1.  Request Artifact: Voucher Status (vStatus)  . . . . .  71
+       7.9.2.  Response (no artifact)  . . . . . . . . . . . . . . .  71
+     7.10. Enroll Status Telemetry . . . . . . . . . . . . . . . . .  71
+       7.10.1.  Request Artifact: Enroll Status (eStatus)  . . . . .  72
+       7.10.2.  Response (no artifact) . . . . . . . . . . . . . . .  72
+     7.11. Query Pledge Status (qps) . . . . . . . . . . . . . . . .  73
+       7.11.1.  Request Artifact: Status Trigger (tStatus) . . . . .  74
+       7.11.2.  Response Artifact: Pledge Status (pStatus) . . . . .  77
+   8.  Logging Considerations  . . . . . . . . . . . . . . . . . . .  81
 
 
 
@@ -170,37 +170,37 @@ Fries, et al.            Expires 19 October 2025                [Page 3]
 Internet-Draft                  BRSKI-PRM                     April 2025
 
 
-   9.  Operational Considerations  . . . . . . . . . . . . . . . . .  84
-   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  85
-     10.1.  BRSKI Well-Known URIs  . . . . . . . . . . . . . . . . .  85
+   9.  Operational Considerations  . . . . . . . . . . . . . . . . .  83
+   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  84
+     10.1.  BRSKI Well-Known URIs  . . . . . . . . . . . . . . . . .  84
      10.2.  Service Name and Transport Protocol Port Number
-            Registry . . . . . . . . . . . . . . . . . . . . . . . .  86
-   11. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  86
-   12. Security Considerations . . . . . . . . . . . . . . . . . . .  87
-     12.1.  Denial of Service (DoS) Attack on Pledge . . . . . . . .  88
-     12.2.  Misuse of acquired PVR and PER by Registrar-Agent  . . .  88
-     12.3.  Misuse of Registrar-Agent  . . . . . . . . . . . . . . .  89
-     12.4.  Misuse of DNS-SD with mDNS to obtain list of pledges . .  89
-     12.5.  YANG Module Security Considerations  . . . . . . . . . .  90
-   13. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  90
-   14. References  . . . . . . . . . . . . . . . . . . . . . . . . .  90
-     14.1.  Normative References . . . . . . . . . . . . . . . . . .  90
-     14.2.  Informative References . . . . . . . . . . . . . . . . .  92
-   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  96
+            Registry . . . . . . . . . . . . . . . . . . . . . . . .  85
+   11. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  85
+   12. Security Considerations . . . . . . . . . . . . . . . . . . .  86
+     12.1.  Denial of Service (DoS) Attack on Pledge . . . . . . . .  87
+     12.2.  Misuse of acquired PVR and PER by Registrar-Agent  . . .  87
+     12.3.  Misuse of Registrar-Agent  . . . . . . . . . . . . . . .  88
+     12.4.  Misuse of DNS-SD with mDNS to obtain list of pledges . .  88
+     12.5.  YANG Module Security Considerations  . . . . . . . . . .  89
+   13. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  89
+   14. References  . . . . . . . . . . . . . . . . . . . . . . . . .  89
+     14.1.  Normative References . . . . . . . . . . . . . . . . . .  89
+     14.2.  Informative References . . . . . . . . . . . . . . . . .  91
+   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  95
      A.1.  Example Pledge Voucher-Request (PVR) - from Pledge to
-           Registrar-Agent . . . . . . . . . . . . . . . . . . . . .  96
+           Registrar-Agent . . . . . . . . . . . . . . . . . . . . .  95
      A.2.  Example Registrar Voucher-Request (RVR) - from Registrar to
-           MASA  . . . . . . . . . . . . . . . . . . . . . . . . . .  97
+           MASA  . . . . . . . . . . . . . . . . . . . . . . . . . .  96
      A.3.  Example Voucher - from MASA to Pledge, via Registrar and
-           Registrar-Agent . . . . . . . . . . . . . . . . . . . . . 100
+           Registrar-Agent . . . . . . . . . . . . . . . . . . . . .  99
      A.4.  Example Voucher, MASA issued Voucher with additional
            Registrar signature (from MASA to Pledge, via Registrar and
-           Registrar-Agent)  . . . . . . . . . . . . . . . . . . . . 101
+           Registrar-Agent)  . . . . . . . . . . . . . . . . . . . . 100
    Appendix B.  HTTP-over-TLS operations between Registrar-Agent and
-           Pledge  . . . . . . . . . . . . . . . . . . . . . . . . . 103
-   Appendix C.  History of Changes [RFC Editor: please delete] . . . 104
-   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . . 120
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . 120
+           Pledge  . . . . . . . . . . . . . . . . . . . . . . . . . 102
+   Appendix C.  History of Changes [RFC Editor: please delete] . . . 103
+   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . . 119
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . 119
 
 1.  Introduction
 
@@ -347,6 +347,9 @@ Internet-Draft                  BRSKI-PRM                     April 2025
       the client BRSKI-MASA client when requesting vouchers from the
       MASA.  This component was introduced in [RFC8995].
 
+   Drop ship:  delivery of a component or product.  This component was
+      introduced in [RFC8995].
+
    EE:  End entity, as defined in [RFC9483].  Typically, a device or
       service that owns a public-private key pair for which it manages a
       public key certificate.
@@ -382,10 +385,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
       [RFC5272].
 
    PVR:  Pledge Voucher-Request is a signature-wrapped voucher-request,
-      signed by the pledge that sends it to the domain registrar via the
-      Registrar-Agent.
 
-   RA:  Registration Authority, an optional system component to which a
 
 
 
@@ -394,6 +394,10 @@ Fries, et al.            Expires 19 October 2025                [Page 7]
 Internet-Draft                  BRSKI-PRM                     April 2025
 
 
+      signed by the pledge that sends it to the domain registrar via the
+      Registrar-Agent.
+
+   RA:  Registration Authority, an optional system component to which a
       CA delegates certificate management functions such as
       authorization checks.  In BRSKI-PRM, this is a functionality of
       the domain registrar, as in BRSKI [RFC8995].
@@ -439,10 +443,6 @@ Internet-Draft                  BRSKI-PRM                     April 2025
    or require coordination of the pledge requests to be provided to a
    domain registrar.
 
-   This can be motivated by pledges deployed in environments not yet
-   connected to the operational customer domain network, e.g., at a
-   building construction site, or environments intentionally
-
 
 
 Fries, et al.            Expires 19 October 2025                [Page 8]
@@ -450,6 +450,9 @@ Fries, et al.            Expires 19 October 2025                [Page 8]
 Internet-Draft                  BRSKI-PRM                     April 2025
 
 
+   This can be motivated by pledges deployed in environments not yet
+   connected to the operational customer domain network, e.g., at a
+   building construction site, or environments intentionally
    disconnected from the Internet, e.g., critical industrial facilities.
    Another example is the assembly of electrical cabinets, which are
    prepared in advance before the installation at a customer domain.
@@ -491,9 +494,6 @@ Internet-Draft                  BRSKI-PRM                     April 2025
    domain registrar may be allowed in carefully controlled short periods
    of time, for example when a batch of new devices are deployed, but
    prohibited at other times.
-
-
-
 
 
 
@@ -563,7 +563,10 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
    *  The use of authenticated self-contained objects addresses both,
-      the TLS challenges and the technology stack challenge.
+      the TLS connection establishment challenges and the technology
+      stack challenge.  Note that the chosen approach does not provide
+      confidentiality for the self-contained object, which can be
+      provided by employing TLS.
 
    *  By contrast, the Registrar-Agent can be authenticated by the
       registrar as a component, acting on behalf of the registrar.  In
@@ -597,27 +600,6 @@ Internet-Draft                  BRSKI-PRM                     April 2025
       integrity of the voucher, while the corresponding signing
       certificate contains the identity of the signer.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 19 October 2025               [Page 11]
-
-Internet-Draft                  BRSKI-PRM                     April 2025
-
-
    *  Enroll-Requests are data structures containing the information
       from a requester for a CA to create a certificate.  The
       certification request format in BRSKI is PKCS#10 [RFC2986].  In
@@ -628,6 +610,14 @@ Internet-Draft                  BRSKI-PRM                     April 2025
       certification request and therefore the certification request
       needs to be additionally bound to the existing pledge IDevID
       credential.  This binding supports the authorization decision for
+
+
+
+Fries, et al.            Expires 19 October 2025               [Page 11]
+
+Internet-Draft                  BRSKI-PRM                     April 2025
+
+
       the certification request and may be provided directly with the
       certification request.  While BRSKI uses the binding to TLS,
       BRSKI-PRM aims at an additional signature of the PKCS#10 using
@@ -664,6 +654,16 @@ Internet-Draft                  BRSKI-PRM                     April 2025
    This leads to extensions of the logical components in the BRSKI
    architecture as shown in Figure 1.
 
+   Note that the Join Proxy is not shown in the figure.  In certain
+   situations the Join Proxy may still be present and could be used by
+   the Registrar-Agent to connect to the Registrar.  For example, a
+   Registrar-Agent application on a smartphone often can connect to
+   local Wi-Fi without giving up their cellular network connection
+   [androidnsd], but only can make link-local connections.
+
+
+
+
 
 
 
@@ -673,13 +673,6 @@ Fries, et al.            Expires 19 October 2025               [Page 12]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
-
-   Note that the Join Proxy is not shown in the figure.  In certain
-   situations the Join Proxy may still be present and could be used by
-   the Registrar-Agent to connect to the Registrar.  For example, a
-   Registrar-Agent application on a smartphone often can connect to
-   local Wi-Fi without giving up their cellular network connection
-   [androidnsd], but only can make link-local connections.
 
    The Registrar-Agent interacts with the pledge to transfer the
    required data objects for bootstrapping, which are then also
@@ -698,37 +691,6 @@ Internet-Draft                  BRSKI-PRM                     April 2025
    *  defines new endpoints where additional functionality is required,
       e.g., for wrapped certification request, wrapped CA certificates,
       and new status information.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 19 October 2025               [Page 13]
-
-Internet-Draft                  BRSKI-PRM                     April 2025
-
 
                                   +---------------------------+
              ..... Drop Ship .....| Vendor Services           |
@@ -760,6 +722,14 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
       Figure 1: BRSKI-PRM architecture overview using Registrar-Agent
 
+
+
+
+Fries, et al.            Expires 19 October 2025               [Page 13]
+
+Internet-Draft                  BRSKI-PRM                     April 2025
+
+
    Figure 1 shows the relations between the following main components:
 
    *  Pledge: Is expected to respond with the necessary data objects for
@@ -777,14 +747,6 @@ Internet-Draft                  BRSKI-PRM                     April 2025
       -  The pledge offers additional endpoints as defined in
          Section 6.2, so that a Registrar-Agent can request data
          required for bootstrapping the pledge.
-
-
-
-
-Fries, et al.            Expires 19 October 2025               [Page 14]
-
-Internet-Draft                  BRSKI-PRM                     April 2025
-
 
       -  The pledge includes additional data in the PVR, which is
          provided and signed by a Registrar-Agent as defined in
@@ -814,6 +776,16 @@ Internet-Draft                  BRSKI-PRM                     April 2025
          are used, which are transported via the Registrar-Agent and
          provided either by the pledge or the domain registrar.
 
+
+
+
+
+
+Fries, et al.            Expires 19 October 2025               [Page 14]
+
+Internet-Draft                  BRSKI-PRM                     April 2025
+
+
       -  The trust assumption between the Registrar-Agent and the domain
          registrar may be based on EE certificates that are both signed
          by the domain owner.
@@ -833,14 +805,6 @@ Internet-Draft                  BRSKI-PRM                     April 2025
       useful in cases where the Registrar-Agent does not have full IP
       connectivity via the domain network or cases where it has no other
       means to locate the registrar on the network.
-
-
-
-
-Fries, et al.            Expires 19 October 2025               [Page 15]
-
-Internet-Draft                  BRSKI-PRM                     April 2025
-
 
    *  Domain registrar: In general fulfills the same functionality
       regarding the bootstrapping of the pledge in a customer domain by
@@ -867,6 +831,17 @@ Internet-Draft                  BRSKI-PRM                     April 2025
       -  The Agent Proximity Assertion (see Section 5.4) requires
          additional validation steps as defined in Section 7.3.1.
 
+
+
+
+
+
+
+Fries, et al.            Expires 19 October 2025               [Page 15]
+
+Internet-Draft                  BRSKI-PRM                     April 2025
+
+
 5.2.  Nomadic Connectivity
 
    In one example instance of the PRM architecture as shown in Figure 2,
@@ -874,29 +849,6 @@ Internet-Draft                  BRSKI-PRM                     April 2025
    installed and the location of the domain registrar.  This is often
    the case in the building automation use case mentioned in
    Section 3.1.1.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Fries, et al.            Expires 19 October 2025               [Page 16]
-
-Internet-Draft                  BRSKI-PRM                     April 2025
-
 
                                   +---------------------------+
              ..... Drop Ship .....| Vendor Services           |
@@ -939,20 +891,18 @@ Internet-Draft                  BRSKI-PRM                     April 2025
        bootstrapping not part of the BRSKI-PRM protocol definition, like
        retrieval of list of pledges to enroll.
 
+
+
+Fries, et al.            Expires 19 October 2025               [Page 16]
+
+Internet-Draft                  BRSKI-PRM                     April 2025
+
+
    2.  Connectivity to pledge installation location: retrieve
        information about available pledges (IDevID), collect request
        objects (i.e., Pledge Voucher-Requests and Pledge Enroll-Requests
        using the BRSKI-PRM approach described in Section 7.1 and
        Section 7.2).
-
-
-
-
-
-Fries, et al.            Expires 19 October 2025               [Page 17]
-
-Internet-Draft                  BRSKI-PRM                     April 2025
-
 
    3.  Connectivity to domain registrar, submit collected request
        information of pledges, retrieve response objects (i.e., Voucher
@@ -999,13 +949,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-
-
-
-
-
-
-Fries, et al.            Expires 19 October 2025               [Page 18]
+Fries, et al.            Expires 19 October 2025               [Page 17]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1061,7 +1005,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 19]
+Fries, et al.            Expires 19 October 2025               [Page 18]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1117,7 +1061,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 20]
+Fries, et al.            Expires 19 October 2025               [Page 19]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1173,7 +1117,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 21]
+Fries, et al.            Expires 19 October 2025               [Page 20]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1229,7 +1173,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 22]
+Fries, et al.            Expires 19 October 2025               [Page 21]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1285,7 +1229,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 23]
+Fries, et al.            Expires 19 October 2025               [Page 22]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1341,7 +1285,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 24]
+Fries, et al.            Expires 19 October 2025               [Page 23]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1397,7 +1341,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 25]
+Fries, et al.            Expires 19 October 2025               [Page 24]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1453,7 +1397,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 26]
+Fries, et al.            Expires 19 October 2025               [Page 25]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1509,7 +1453,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 27]
+Fries, et al.            Expires 19 October 2025               [Page 26]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1565,7 +1509,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 28]
+Fries, et al.            Expires 19 October 2025               [Page 27]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1621,7 +1565,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 29]
+Fries, et al.            Expires 19 October 2025               [Page 28]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1677,7 +1621,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 30]
+Fries, et al.            Expires 19 October 2025               [Page 29]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1733,7 +1677,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 31]
+Fries, et al.            Expires 19 October 2025               [Page 30]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1789,7 +1733,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 32]
+Fries, et al.            Expires 19 October 2025               [Page 31]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1845,7 +1789,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 33]
+Fries, et al.            Expires 19 October 2025               [Page 32]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1901,7 +1845,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 34]
+Fries, et al.            Expires 19 October 2025               [Page 33]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -1957,7 +1901,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 35]
+Fries, et al.            Expires 19 October 2025               [Page 34]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2013,7 +1957,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 36]
+Fries, et al.            Expires 19 October 2025               [Page 35]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2069,7 +2013,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 37]
+Fries, et al.            Expires 19 October 2025               [Page 36]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2125,7 +2069,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 38]
+Fries, et al.            Expires 19 October 2025               [Page 37]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2181,7 +2125,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 39]
+Fries, et al.            Expires 19 October 2025               [Page 38]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2237,7 +2181,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 40]
+Fries, et al.            Expires 19 October 2025               [Page 39]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2293,7 +2237,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 41]
+Fries, et al.            Expires 19 October 2025               [Page 40]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2349,7 +2293,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 42]
+Fries, et al.            Expires 19 October 2025               [Page 41]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2405,7 +2349,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 43]
+Fries, et al.            Expires 19 October 2025               [Page 42]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2461,7 +2405,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 44]
+Fries, et al.            Expires 19 October 2025               [Page 43]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2517,7 +2461,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 45]
+Fries, et al.            Expires 19 October 2025               [Page 44]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2573,7 +2517,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 46]
+Fries, et al.            Expires 19 October 2025               [Page 45]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2629,7 +2573,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 47]
+Fries, et al.            Expires 19 October 2025               [Page 46]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2685,7 +2629,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 48]
+Fries, et al.            Expires 19 October 2025               [Page 47]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2741,7 +2685,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 49]
+Fries, et al.            Expires 19 October 2025               [Page 48]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2797,7 +2741,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 50]
+Fries, et al.            Expires 19 October 2025               [Page 49]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2853,7 +2797,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 51]
+Fries, et al.            Expires 19 October 2025               [Page 50]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2909,7 +2853,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 52]
+Fries, et al.            Expires 19 October 2025               [Page 51]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -2965,7 +2909,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 53]
+Fries, et al.            Expires 19 October 2025               [Page 52]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3021,7 +2965,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 54]
+Fries, et al.            Expires 19 October 2025               [Page 53]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3077,7 +3021,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 55]
+Fries, et al.            Expires 19 October 2025               [Page 54]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3133,7 +3077,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 56]
+Fries, et al.            Expires 19 October 2025               [Page 55]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3189,7 +3133,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 57]
+Fries, et al.            Expires 19 October 2025               [Page 56]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3245,7 +3189,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 58]
+Fries, et al.            Expires 19 October 2025               [Page 57]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3301,7 +3245,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 59]
+Fries, et al.            Expires 19 October 2025               [Page 58]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3357,7 +3301,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 60]
+Fries, et al.            Expires 19 October 2025               [Page 59]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3413,7 +3357,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 61]
+Fries, et al.            Expires 19 October 2025               [Page 60]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3469,7 +3413,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 62]
+Fries, et al.            Expires 19 October 2025               [Page 61]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3525,7 +3469,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 63]
+Fries, et al.            Expires 19 October 2025               [Page 62]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3581,7 +3525,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 64]
+Fries, et al.            Expires 19 October 2025               [Page 63]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3637,7 +3581,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 65]
+Fries, et al.            Expires 19 October 2025               [Page 64]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3693,7 +3637,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 66]
+Fries, et al.            Expires 19 October 2025               [Page 65]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3749,7 +3693,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 67]
+Fries, et al.            Expires 19 October 2025               [Page 66]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3805,7 +3749,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 68]
+Fries, et al.            Expires 19 October 2025               [Page 67]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3861,7 +3805,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 69]
+Fries, et al.            Expires 19 October 2025               [Page 68]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3917,7 +3861,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 70]
+Fries, et al.            Expires 19 October 2025               [Page 69]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -3973,7 +3917,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 71]
+Fries, et al.            Expires 19 October 2025               [Page 70]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4029,7 +3973,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 72]
+Fries, et al.            Expires 19 October 2025               [Page 71]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4085,7 +4029,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 73]
+Fries, et al.            Expires 19 October 2025               [Page 72]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4141,7 +4085,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 74]
+Fries, et al.            Expires 19 October 2025               [Page 73]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4197,7 +4141,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 75]
+Fries, et al.            Expires 19 October 2025               [Page 74]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4253,7 +4197,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 76]
+Fries, et al.            Expires 19 October 2025               [Page 75]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4309,7 +4253,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 77]
+Fries, et al.            Expires 19 October 2025               [Page 76]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4365,7 +4309,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 78]
+Fries, et al.            Expires 19 October 2025               [Page 77]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4421,7 +4365,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 79]
+Fries, et al.            Expires 19 October 2025               [Page 78]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4477,7 +4421,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 80]
+Fries, et al.            Expires 19 October 2025               [Page 79]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4533,7 +4477,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 81]
+Fries, et al.            Expires 19 October 2025               [Page 80]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4589,7 +4533,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 82]
+Fries, et al.            Expires 19 October 2025               [Page 81]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4645,7 +4589,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 83]
+Fries, et al.            Expires 19 October 2025               [Page 82]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4701,7 +4645,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 84]
+Fries, et al.            Expires 19 October 2025               [Page 83]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4757,7 +4701,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 85]
+Fries, et al.            Expires 19 October 2025               [Page 84]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4813,7 +4757,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 86]
+Fries, et al.            Expires 19 October 2025               [Page 85]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4869,7 +4813,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 87]
+Fries, et al.            Expires 19 October 2025               [Page 86]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4925,7 +4869,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 88]
+Fries, et al.            Expires 19 October 2025               [Page 87]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -4981,7 +4925,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 89]
+Fries, et al.            Expires 19 October 2025               [Page 88]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5037,7 +4981,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 90]
+Fries, et al.            Expires 19 October 2025               [Page 89]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5093,7 +5037,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 91]
+Fries, et al.            Expires 19 October 2025               [Page 90]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5149,7 +5093,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 92]
+Fries, et al.            Expires 19 October 2025               [Page 91]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5205,7 +5149,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 93]
+Fries, et al.            Expires 19 October 2025               [Page 92]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5261,7 +5205,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 94]
+Fries, et al.            Expires 19 October 2025               [Page 93]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5317,7 +5261,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 95]
+Fries, et al.            Expires 19 October 2025               [Page 94]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5373,7 +5317,7 @@ A.1.  Example Pledge Voucher-Request (PVR) - from Pledge to Registrar-
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 96]
+Fries, et al.            Expires 19 October 2025               [Page 95]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5429,7 +5373,7 @@ A.2.  Example Registrar Voucher-Request (RVR) - from Registrar to MASA
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 97]
+Fries, et al.            Expires 19 October 2025               [Page 96]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5485,7 +5429,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 98]
+Fries, et al.            Expires 19 October 2025               [Page 97]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5541,7 +5485,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025               [Page 99]
+Fries, et al.            Expires 19 October 2025               [Page 98]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5597,7 +5541,7 @@ A.3.  Example Voucher - from MASA to Pledge, via Registrar and
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 100]
+Fries, et al.            Expires 19 October 2025               [Page 99]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5653,7 +5597,7 @@ A.4.  Example Voucher, MASA issued Voucher with additional Registrar
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 101]
+Fries, et al.            Expires 19 October 2025              [Page 100]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5709,7 +5653,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 102]
+Fries, et al.            Expires 19 October 2025              [Page 101]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5765,7 +5709,7 @@ Appendix B.  HTTP-over-TLS operations between Registrar-Agent and Pledge
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 103]
+Fries, et al.            Expires 19 October 2025              [Page 102]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5821,7 +5765,7 @@ Appendix C.  History of Changes [RFC Editor: please delete]
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 104]
+Fries, et al.            Expires 19 October 2025              [Page 103]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5877,7 +5821,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 105]
+Fries, et al.            Expires 19 October 2025              [Page 104]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5933,7 +5877,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 106]
+Fries, et al.            Expires 19 October 2025              [Page 105]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -5989,7 +5933,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 107]
+Fries, et al.            Expires 19 October 2025              [Page 106]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -6045,7 +5989,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 108]
+Fries, et al.            Expires 19 October 2025              [Page 107]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -6101,7 +6045,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 109]
+Fries, et al.            Expires 19 October 2025              [Page 108]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -6157,7 +6101,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 110]
+Fries, et al.            Expires 19 October 2025              [Page 109]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -6213,7 +6157,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 111]
+Fries, et al.            Expires 19 October 2025              [Page 110]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -6269,7 +6213,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 112]
+Fries, et al.            Expires 19 October 2025              [Page 111]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -6325,7 +6269,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 113]
+Fries, et al.            Expires 19 October 2025              [Page 112]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -6381,7 +6325,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 114]
+Fries, et al.            Expires 19 October 2025              [Page 113]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -6437,7 +6381,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 115]
+Fries, et al.            Expires 19 October 2025              [Page 114]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -6493,7 +6437,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 116]
+Fries, et al.            Expires 19 October 2025              [Page 115]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -6549,7 +6493,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 117]
+Fries, et al.            Expires 19 October 2025              [Page 116]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -6605,7 +6549,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 118]
+Fries, et al.            Expires 19 October 2025              [Page 117]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -6661,7 +6605,7 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 119]
+Fries, et al.            Expires 19 October 2025              [Page 118]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -6717,7 +6661,7 @@ Authors' Addresses
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 120]
+Fries, et al.            Expires 19 October 2025              [Page 119]
 
 Internet-Draft                  BRSKI-PRM                     April 2025
 
@@ -6773,4 +6717,4 @@ Internet-Draft                  BRSKI-PRM                     April 2025
 
 
 
-Fries, et al.            Expires 19 October 2025              [Page 121]
+Fries, et al.            Expires 19 October 2025              [Page 120]
