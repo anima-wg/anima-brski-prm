@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-20
+docname: draft-ietf-anima-brski-prm-21
 area: Operations and Management
 wg: ANIMA WG
 date: 2025
@@ -1468,7 +1468,7 @@ The following server error status codes can be used:
 * 500 Internal Server Error: if both Registrar-Agent request and MASA response are valid, but the registrar still failed to return the Voucher, e.g., due to missing configuration or a program failure.
 * 502 Bad Gateway: if the registrar received an invalid response from the MASA.
 * 503 Service Unavailable: if a simple retry of the Registrar-Agent request might lead to a successful response;
-  this error response SHOULD include the `Retry-After` response header field with an appropriate value.
+  this error response MUST include the `Retry-After` response header field with an appropriate value.
 * 504 Gateway Timeout: if the backend request to the MASA timed out.
 
 
@@ -2740,7 +2740,7 @@ In general, the privacy considerations of {{!RFC8995}} apply for BRSKI-PRM also.
 Further privacy aspects need to be considered for:
 
 * the introduction of the additional component Registrar-Agent
-* potentially no transport layer security between Registrar-Agent and pledge
+* potentially no usage of TLS between Registrar-Agent and pledge
 
 {{tpvr}} describes to optionally apply TLS to protect the communication between the Registrar-Agent and the pledge.
 The following is therefore applicable to the communication without the TLS protection.
@@ -2776,7 +2776,7 @@ Further security aspects are considered in the following subsections related to:
 
 * the introduction of the additional component Registrar-Agent and related attack options.
 * the reversal of the pledge communication direction (push mode, compared to BRSKI).
-* no transport layer security between Registrar-Agent and pledge and the impact on transport of sensitive information.
+* no usage of TLS between Registrar-Agent and pledge and the resulting impact on transport of sensitive information (see {{tpvr}} regarding optional use of TLS to protect the communication between the Registrar-Agent and the pledge)
 
 
 
@@ -3202,6 +3202,13 @@ IDevID certificates are intended to be widely usable and EKU does not support th
 # History of Changes [RFC Editor: please delete] {#app_history}
 
 Proof of Concept Code available
+
+From IETF draft 20 -> IETF draft 21:
+
+* addressed remaining issues from telechat
+  * RetryAfter response to be always provided in case of 503 Service unavailable response
+  
+
 
 From IETF draft 19 -> IETF draft 20:
 
