@@ -216,7 +216,7 @@ CSR:
 : Certificate Signing Request, as defined in {{RFC2986}}.
 
 Domain registrar:
-: An entity in the customer domain, which facilitates the interaction of a pledge or Registrar-Agent with a manufacturer service (MASA). 
+: An entity in the customer domain, which facilitates the interaction of a pledge or Registrar-Agent with a manufacturer service (MASA).
   It operates as BRSKI-EST server for the pledge when requesting vouchers and certificates and acts as the client BRSKI-MASA client when requesting vouchers from the MASA. This component was introduced in {{RFC8995}}.
 
 Drop ship:
@@ -662,7 +662,7 @@ The pledge constructs a Service Instance Name based on device local information 
 The product-serial-number composition is manufacturer-dependent and may contain information regarding the manufacturer, the product type, and further information specific to the product instance.
 To allow distinction of pledges, the product-serial-number therefore needs to be sufficiently unique.
 
-Note that the service name definition is not fully inline with the naming recommendation of {{RFC6763}} due to the positioning of `_tcp`. However, the definition of the `product-serial-number` has to align with the allowed character set (see {{RFC6763}}) to avoid discovery problems. This check is necessary as the `product-serial-number` is also contained in the certificate as X520SerialNumber, that has a larger allowed character set. Using the `product-serial-number` as part of the service name allows to discover specific instances of a pledge.  
+Note that the service name definition is not fully inline with the naming recommendation of {{RFC6763}} due to the positioning of `_tcp`. However, the definition of the `product-serial-number` has to align with the allowed character set (see {{RFC6763}}) to avoid discovery problems. This check is necessary as the `product-serial-number` is also contained in the certificate as X520SerialNumber, that has a larger allowed character set. Using the `product-serial-number` as part of the service name allows to discover specific instances of a pledge.
 
 The `_brski-pledge._tcp` service, however, targets machine-to-machine discovery.
 
@@ -1228,7 +1228,7 @@ For the JSON-based format used by this specification, the tPER artifact MUST be 
 
 ~~~~ cddl
 pledgeenrollrequesttrigger = {
-	"enroll-type": $enroll-type
+    "enroll-type": $enroll-type
 }
 
 $enroll-type /= "enroll-generic-cert"
@@ -1291,7 +1291,7 @@ The JWS Protected Header of the PER artifact MUST contain the following standard
 * `alg`: SHALL contain the algorithm type used to create the signature, e.g., `ES256`, as defined in {{Section 4.1.1 of RFC7515}}
 * `x5c`: SHALL contain the base64-encoded pledge EE certificate used to sign the PER artifact and
   it SHOULD also contain the certificate chain for this certificate.
-  The certificate chain MUST be available for certificate verification. 
+  The certificate chain MUST be available for certificate verification.
   If it is not contained in the x5c Header Parameter it is provided to the relying party by other means such as configuration.
 * `crit`: SHALL indicate the extension Header Parameter `created-on` to ensure that it must be understood and validated by the receiver as defined in {{Section 4.1.11 of RFC7515}}.
 
@@ -1793,7 +1793,7 @@ The JSON CA Data SHALL be a JSON document {{RFC8259}} that MUST conform with the
 
 ~~~~ cddl
 cacerts = {
-	"x5bag": bytes / [2* bytes]
+    "x5bag": bytes / [2* bytes]
 }
 ~~~~
 {: #cacerts_CDDL_def title='CDDL for JSON CA Data (cacerts)' artwork-align="left"}
@@ -2003,7 +2003,7 @@ The JWS Protected Header of the vStatus artifact MUST contain the following stan
 * `alg`: SHALL contain the algorithm type used to create the signature, e.g., `ES256`, as defined in {{Section 4.1.1 of !RFC7515}}.
 * `x5c`: SHALL contain the base64-encoded pledge IDevID certificate used to sign the vStatus artifact and
   it SHOULD also contain the certificate chain for this certificate.
-  The certificate chain MUST be available for certificate verification. 
+  The certificate chain MUST be available for certificate verification.
   If it is not contained in the x5c Header Parameter it is provided to the relying party by other means such as configuration.
 
 {{vstatus_header}} shows an example for this JWS Protected Header:
@@ -2195,7 +2195,7 @@ The JWS Protected Header of the eStatus artifact MUST contain the following stan
 * `alg`: SHALL contain the algorithm type used to create the signature, e.g., `ES256`, as defined in {{Section 4.1.1 of !RFC7515}}
 * `x5c`: SHALL contain the base64-encoded pledge EE certificate used to sign the eStatus artifact and
   it SHOULD also contain the certificate chain for this certificate.
-  The certificate chain MUST be available for certificate verification. 
+  The certificate chain MUST be available for certificate verification.
   If it is not contained in the x5c Header Parameter it is provided to the relying party by other means such as configuration.
 
 {{estatus_header}} below shows an example for this JWS Protected Header:
@@ -2591,7 +2591,7 @@ The JWS Protected Header of the pStatus artifact MUST contain the following stan
 * `alg`: SHALL contain the algorithm type used to create the signature, e.g., `ES256`, as defined in {{Section 4.1.1 of RFC7515}}.
 * `x5c`: SHALL contain the base64-encoded pledge EE certificate used to sign the pStatus artifact and
   it SHOULD also contain the certificate chain for this certificate
-  The certificate chain MUST be available for certificate verification. 
+  The certificate chain MUST be available for certificate verification.
   If it is not contained in the x5c Header Parameter it is provided to the relying party by other means such as configuration.
 
 
@@ -3207,12 +3207,12 @@ From IETF draft 20 -> IETF draft 21:
 
 * addressed remaining issues from telechat
   * RetryAfter response to be always provided in case of 503 Service unavailable response
-  
+
 
 
 From IETF draft 19 -> IETF draft 20:
 
-* addressed last comments and nits before telechat 
+* addressed last comments and nits before telechat
 
 
 From IETF draft 18 -> IETF draft 19:
@@ -3350,7 +3350,7 @@ From IETF draft 08 -> IETF draft 09:
 * issue #102: relaxed requirements for CA certs provisioning in {{cacerts}}
 * issue #105: included negative example in {{estatus_data_example_error}}
 * issue #107: included example for certificate revocation in {{estatus}}
-* issue	#108: renamed heading to Pledge-Status Request of {{query}}
+* issue #108: renamed heading to Pledge-Status Request of {{query}}
 * issue #111: included pledge-status response processing for authenticated requests in {{query}}
 * issue #112: added "Example key word in pledge-status response in {{stat_example_bootstrap}}
 * issue #113: enhanced description of status reply for "factory-default" in  {{query}}
