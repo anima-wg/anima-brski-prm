@@ -1341,10 +1341,15 @@ The Registrar-Agent MUST establish a TLS session to the registrar with mutual au
 In contrast to BRSKI {{RFC8995}}, the TLS client authentication uses the Registrar-Agent EE certificate instead of the pledge IDevID certificate.
 Consequently, the domain registrar can distinguish BRSKI (pledge-initiator-mode) from BRSKI-PRM (pledge-responder-mode).
 
-As already stated in {{!RFC8995}}, and required by {{I-D.ietf-uta-require-tls13}}, the use of TLS 1.3 (or newer) is encouraged.
+As already stated in {{!RFC8995}}, and required by {{?I-D.ietf-uta-require-tls13}}, the use of TLS 1.3 (or newer) is encouraged.
 TLS 1.2 or newer is REQUIRED on the Registrar-Agent side.
 TLS 1.3 (or newer) SHOULD be available on the registrar, but TLS 1.2 MAY be used.
 TLS 1.3 (or newer) SHOULD be available on the MASA, but TLS 1.2 MAY be used.
+
+{{?I-D.ietf-uta-require-tls13}} allows for continued use of TLS 1.2 for operational reasons.
+{{RFC8995}} restricted itself to requiring TLS 1.2 (but not less) for a number of reasons including: the need for mutual TLS, and the need for FIPS certified modules on router and IoT platforms that have long software lifecycles, and often also include hardware offload of cryptographic options.  FIPS certification is not done on software, but on the binary, and those binary distributions are often part of a different software lifecycle than the applications that run on top of it.
+On the Registrar and MASA side, mutual TLS authentication combined with hardware TLS offload requires specific support for extensions, such as those provided by {{?RFC9440}}.
+TLS 1.2 and TLS 1.3 do client authentication at a different point in the state machine, many frameworks do not at the time of this writing support both in a bug free manner.
 
 {{exchangesfig_uc2_3}} shows the voucher-request processing and the following subsections describe the corresponding artifacts.
 
