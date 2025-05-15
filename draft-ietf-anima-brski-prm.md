@@ -381,6 +381,30 @@ Solution examples based on existing technology are provided with the focus on ex
   This binding supports the authorization decision for the certification request and may be provided directly with the certification request.
   While BRSKI uses the binding to TLS, BRSKI-PRM aims at an additional signature of the PKCS#10 using existing credentials on the pledge (IDevID). This allows the process to be independent of the selected transport.
 
+## TLS support required
+
+As already stated in {{!RFC8995}}, and required by {{?I-D.ietf-uta-require-tls13}}, the use of TLS 1.3 (or newer) is encouraged.
+TLS 1.2 or newer is REQUIRED on the Registrar-Agent side.
+TLS 1.3 (or newer) SHOULD be available on the registrar, but TLS 1.2 MAY be used.
+TLS 1.3 (or newer) SHOULD be available on the MASA, but TLS 1.2 MAY be used.
+
+{{?I-D.ietf-uta-require-tls13}} allows for continued use of TLS 1.2 for operational reasons.
+{{RFC8995}} specified TLS 1.2 was the minimum, consistent with {{?RFC8996}}.
+{{RFC8995}} requires mutual TLS, and many frameworks, embedded SDKs and hardware load balancers did not, at the time of writing, have APIs that permitted mutual TLS to be done consistently across TLS 1.2 and TLS 1.3.
+While TLS 1.3 is common in browsers, the use of mutual TLS with 1.3 is uncommon in browsers, and so working support for mutual TLS in frameworks is also uncommon.
+
+On the Registrar and MASA side, mutual TLS authentication combined with hardware TLS offload requires specific support for extensions, such as those provided by
+TLS 1.2 and TLS 1.3 do client authentication at a different point in the state machine.
+Frameworks do not at the time of this writing support this.
+Sometimes this is due to lack of support for {{?RFC9440}} or an equivalent.
+
+Many security certification schemes, such as FIPS-140, do not certify source code, but rather the resulting binary executable.  Even while TLS 1.3 source code is available, and new software can be added to existing platforms, replacing the TLS libraries on many embedded systems requires that the SDK vendor recertify the platform first.
+In industrial settings, these platforms have long lifecycles.
+
+Thus, {{RFC8995}} and this document can not turn off TLS 1.2 until all parts of the ecosystem can run TLS 1.3.
+That does not stop any of the parts of this ecosystem from deploying TLS 1.3 when possible, and for each part of the two or three transactions from negotiating TLS 1.3 in preference to TLS 1.2.
+
+
 
 
 
@@ -1331,7 +1355,6 @@ The issuing CA can associate the re-enrollment request with the pledge based on 
 Note that a pledge that does not have synchronized time needs to advance the last known current date and time based on its local clock over a longer period, which also requires persisting the local clock advancements across reboots.
 
 
-
 ## Supply PVR to Registrar (including MASA interaction) {#pvr}
 
 Once the Registrar-Agent has acquired one or more PVR and PER object pairs, it starts the interaction with the domain registrar.
@@ -1340,16 +1363,6 @@ Collecting multiple pairs allows bulk bootstrapping of several pledges using the
 The Registrar-Agent MUST establish a TLS session to the registrar with mutual authentication.
 In contrast to BRSKI {{RFC8995}}, the TLS client authentication uses the Registrar-Agent EE certificate instead of the pledge IDevID certificate.
 Consequently, the domain registrar can distinguish BRSKI (pledge-initiator-mode) from BRSKI-PRM (pledge-responder-mode).
-
-As already stated in {{!RFC8995}}, and required by {{?I-D.ietf-uta-require-tls13}}, the use of TLS 1.3 (or newer) is encouraged.
-TLS 1.2 or newer is REQUIRED on the Registrar-Agent side.
-TLS 1.3 (or newer) SHOULD be available on the registrar, but TLS 1.2 MAY be used.
-TLS 1.3 (or newer) SHOULD be available on the MASA, but TLS 1.2 MAY be used.
-
-{{?I-D.ietf-uta-require-tls13}} allows for continued use of TLS 1.2 for operational reasons.
-{{RFC8995}} restricted itself to requiring TLS 1.2 (but not less) for a number of reasons including: the need for mutual TLS, and the need for FIPS certified modules on router and IoT platforms that have long software lifecycles, and often also include hardware offload of cryptographic options.  FIPS certification is not done on software, but on the binary, and those binary distributions are often part of a different software lifecycle than the applications that run on top of it.
-On the Registrar and MASA side, mutual TLS authentication combined with hardware TLS offload requires specific support for extensions, such as those provided by {{?RFC9440}}.
-TLS 1.2 and TLS 1.3 do client authentication at a different point in the state machine, many frameworks do not at the time of this writing support both in a bug free manner.
 
 {{exchangesfig_uc2_3}} shows the voucher-request processing and the following subsections describe the corresponding artifacts.
 
