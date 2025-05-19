@@ -2696,6 +2696,29 @@ Requirements to the utilized credentials authenticating and artifact signatures 
 
 Besides the above, also consider the existing document on operational modes for BRSKI MASA in {{I-D.richardson-anima-masa-considerations}}.
 
+## TODO: BRSKI reason-context Overview
+
+IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with the following endpoints:
+
+| Status Type     | reason-context  | Value            | Description                                                                         | Reference |
+|-----------------|-----------------|------------------|-------------------------------------------------------------------------------------|-----------|
+| Pledge status   |                 |                  |            TODO                                                                     | [THISRFC] |
+|                 |  pbs-detail     |                  |            TODO                                                                     | [THISRFC] |
+|                 |                 | factory-default  |            TODO                                                                     | [THISRFC] |
+|                 |                 | voucher-success  |            TODO                                                                     | [THISRFC] |
+|                 |                 | voucher-error    |            TODO                                                                     | [THISRFC] |
+|                 |                 | enroll-success   |            TODO                                                                     | [THISRFC] |
+|                 |                 | enroll-error     |            TODO                                                                     | [THISRFC] |
+|                 |-----------------|------------------|-------------------------------------------------------------------------------------|-----------|
+|                 |  pos-details    |                  | status information corresponding to the status-type operation (see Section 7.11.1.1)| [THISRFC] |
+|                 |                 | connect-success  |            TODO                                                                     | [THISRFC] |
+|                 |                 | connect-error    |            TODO                                                                     | [THISRFC] |
+|-----------------|-----------------|------------------|-------------------------------------------------------------------------------------|-----------|
+| Voucher status  |  pvs-details    | TODO see BRSKI   | pledge-voucher-status details – TODO                                                | [RFC8995] |
+|-----------------|-----------------|------------------|-------------------------------------------------------------------------------------|-----------|
+| Enroll status   |  pes-details    | TODO see BRSKI   | pledge-enroll-status details - TODO                                                 | [RFC8995] |
+|=========
+{: #reason-context_table_uri title='TODO: reason-context' }
 
 
 # IANA Considerations {#iana_con}
@@ -3199,7 +3222,7 @@ In the Android ecosystem this involves use of a customer TrustManager: many appl
 Also note that an Extended Key Usage (EKU) for TLS WWW Server authentication cannot be expected in the pledge IDevID certificate.
 IDevID certificates are intended to be widely usable and EKU does not support that use.
 
-# History of Changes [RFC Editor: please delete] {#app_history}
+# History of Changes "RFC Editor: please delete" {#app_history}
 
 Proof of Concept Code available
 
