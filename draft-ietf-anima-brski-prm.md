@@ -736,6 +736,36 @@ At the same time (so as to avoid the Slowloris-like attack described in {{!RFC89
 Once a pledge with combined functionality has been bootstrapped, it MAY act as client for enrollment of further certificates needed, e.g., using the enrollment protocol of choice.
 If it still acts as server, the defined BRSKI-PRM endpoints to trigger a Pledge Enroll-Request (PER) or to provide an Enroll-Response can be used for further certificates.
 
+### TODO: Pledgestatus reason-context - Overview
+
+TODO: ...
+
+| reason-context  | Value            | Description          |
+|-----------------|------------------|----------------------|
+|  pbs-detail     |                  |            TODO, ref |
+|                 | factory-default  |            TODO, ref |
+|                 | voucher-success  |            TODO, ref |
+|                 | voucher-error    |            TODO, ref |
+|                 | enroll-success   |            TODO, ref |
+|                 | enroll-error     |            TODO, ref |
+|-----------------|------------------|------------------ ---|
+|  pos-details    |                  |            TODO, ref |
+|                 | connect-success  |            TODO, ref |
+|                 | connect-error    |            TODO, ref |
+|=========
+{: #reason-context_pstatus_table_uri title='TODO: reason-context' }
+
+### TODO: Voucher Status and Enroll Status Telemetry reason-context - Overview
+
+TODO: ...
+
+| reason-context  | Value            | Description                              |
+|-----------------|------------------|------------------------------------------|
+|  pvs-details    | TODO see BRSKI   | pledge-voucher-status details – TODO,ref |
+|-----------------|------------------|------------------------------------------|
+|  pes-details    | TODO see BRSKI   | pledge-enroll-status details - TODO,ref  |
+|=========
+{: #reason-context_tele_table_uri title='TODO: reason-context' }
 
 
 ## Domain Registrar {#registrar_component}
@@ -2695,30 +2725,6 @@ The key infrastructure as part of the customer domain discussed in {{architectur
 Requirements to the utilized credentials authenticating and artifact signatures on the registrar as outlined in {{registrar_component}} may have operational implications when the registrar is part of a scalable framework as described in {{Section 1.3.1 of ?I-D.richardson-anima-registrar-considerations}}.
 
 Besides the above, also consider the existing document on operational modes for BRSKI MASA in {{I-D.richardson-anima-masa-considerations}}.
-
-## TODO: BRSKI reason-context Overview
-
-IANA is requested to enhance the Registry entitled: "BRSKI Well-Known URIs" with the following endpoints:
-
-| Status Type     | reason-context  | Value            | Description                                                                         | Reference |
-|-----------------|-----------------|------------------|-------------------------------------------------------------------------------------|-----------|
-| Pledge status   |                 |                  |            TODO                                                                     | [THISRFC] |
-|                 |  pbs-detail     |                  |            TODO                                                                     | [THISRFC] |
-|                 |                 | factory-default  |            TODO                                                                     | [THISRFC] |
-|                 |                 | voucher-success  |            TODO                                                                     | [THISRFC] |
-|                 |                 | voucher-error    |            TODO                                                                     | [THISRFC] |
-|                 |                 | enroll-success   |            TODO                                                                     | [THISRFC] |
-|                 |                 | enroll-error     |            TODO                                                                     | [THISRFC] |
-|                 |-----------------|------------------|-------------------------------------------------------------------------------------|-----------|
-|                 |  pos-details    |                  | status information corresponding to the status-type operation (see Section 7.11.1.1)| [THISRFC] |
-|                 |                 | connect-success  |            TODO                                                                     | [THISRFC] |
-|                 |                 | connect-error    |            TODO                                                                     | [THISRFC] |
-|-----------------|-----------------|------------------|-------------------------------------------------------------------------------------|-----------|
-| Voucher status  |  pvs-details    | TODO see BRSKI   | pledge-voucher-status details – TODO                                                | [RFC8995] |
-|-----------------|-----------------|------------------|-------------------------------------------------------------------------------------|-----------|
-| Enroll status   |  pes-details    | TODO see BRSKI   | pledge-enroll-status details - TODO                                                 | [RFC8995] |
-|=========
-{: #reason-context_table_uri title='TODO: reason-context' }
 
 
 # IANA Considerations {#iana_con}
