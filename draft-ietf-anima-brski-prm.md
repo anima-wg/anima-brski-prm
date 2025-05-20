@@ -3254,6 +3254,8 @@ From IETF draft 20 -> IETF draft 21:
 
 * addressed remaining issues from telechat
   * RetryAfter response to be always provided in case of 503 Service unavailable response
+  * included overview subsections for reason-context definition and usage in {{pledge_component}}
+  * updated status detail examples to correctly use the defined types in the status structure.
 
 
 
