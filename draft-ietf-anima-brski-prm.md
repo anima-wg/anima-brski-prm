@@ -760,36 +760,36 @@ At the same time (so as to avoid the Slowloris-like attack described in {{!RFC89
 Once a pledge with combined functionality has been bootstrapped, it MAY act as client for enrollment of further certificates needed, e.g., using the enrollment protocol of choice.
 If it still acts as server, the defined BRSKI-PRM endpoints to trigger a Pledge Enroll-Request (PER) or to provide an Enroll-Response can be used for further certificates.
 
-### TODO: Pledgestatus reason-context - Overview
+### Pledgestatus "reason-context" Values
 
-TODO: ...
+The following table provides an overview of "reason-context" values and further details of pledgestatus data objects:
 
-| reason-context | Value RC    | Value Detail     | Description                                       |
-|----------------|-------------|------------------|---------------------------------------------------|
-|                | pbs-details |                  | Pledge bootstrap status details, {{pstatus_data}} |
-|                |             | factory-default  | Pledge has not been bootstrapped                  |
-|                |             | voucher-success  | Pledge processed voucher exchange successfully    |
-|                |             | voucher-error    | Pledge voucher processing with error              |
-|                |             | enroll-success   | Pledge processed enrollment exchange successfully |
-|                |             | enroll-error     | Pledge enrollment-response processing with error  |
-|----------------|-------------|------------------|---------------------------------------------------|
-|                | pos-details |                  | Pledge operation status details, {{pstatus_data}} |
-|                |             | connect-success  | Pledge successfully establish connection to  peer |
-|                |             | connect-error    | Pledge connection establishment with error        |
+| "reason-context" Value | Details          | Description                                       |
+|------------------------|------------------|---------------------------------------------------|
+| pbs-details            |                  | Pledge bootstrap status details, {{pstatus_data}} |
+|                        | factory-default  | Pledge has not been bootstrapped                  |
+|                        | voucher-success  | Pledge processed voucher exchange successfully    |
+|                        | voucher-error    | Pledge voucher processing with error              |
+|                        | enroll-success   | Pledge processed enrollment exchange successfully |
+|                        | enroll-error     | Pledge enrollment-response processing with error  |
+|------------------------|------------------|---------------------------------------------------|
+| pos-details            |                  | Pledge operation status details, {{pstatus_data}} |
+|                        | connect-success  | Pledge successfully establish connection to  peer |
+|                        | connect-error    | Pledge connection establishment with error        |
 |=========
-{: #reason-context_pstatus_table_uri title='TODO: reason-context' }
+{: #reason-context_pstatus_table_uri title='Pledgestatus "reason-context" values and details' }
 
-### TODO: Voucher Status and Enroll Status Telemetry reason-context - Overview
+### Voucher Status and Enroll Status Telemetry "reason-context" Values
 
-TODO: ...
+The following table provides an overview of "reason-context" values and further details of voucher status and enroll status telemetry data objects:
 
-| reason-context  | Value RC                          | Description                      |
-|-----------------|-----------------------------------|----------------------------------|
-|                 | pvs-details, {{vstatus_artifact}} | Pledge voucher status details    |
-|-----------------|-----------------------------------|------ ---------------------------|
-|                 | pes-details, {{estatus_artifact}} | Pledge-enroll-status details     |
+| "reason-context" Value | Details type   | Description                                         |
+|------------------------|----------------|-----------------------------------------------------|
+| pvs-details            | STRING         | Pledge voucher status details, {{vstatus_artifact}} |
+|------------------------|----------------|-----------------------------------------------------|
+| pes-details            | STRING         | Pledge enroll status details, {{estatus_artifact}}  |
 |=========
-{: #reason-context_tele_table_uri title='TODO: reason-context' }
+{: #reason-context_tele_table_uri title='Voucher Status and Enroll Status Telemetry "reason-context" values and details' }
 
 
 ## Domain Registrar {#registrar_component}
@@ -2218,7 +2218,7 @@ For eStatus artifacts, the JSON object in the `reason-context` field MUST contai
   "status": true,
   "reason": "Enroll-Response successfully processed.",
   "reason-context": {
-    "pes-details": "Success"
+    "pes-details": "Successfully enrolled"
   }
 }
 ~~~~
@@ -2605,7 +2605,7 @@ The `pbs-details` values SHALL be cumulative in the sense that `enroll-success` 
   "status": true,
   "reason": "Pledge processed enrollment exchange successfully.",
   "reason-context": {
-    "pbs-details": "Pledge processed enrollment exchange successfully."
+    "pbs-details": "enroll-success"
   }
 }
 ~~~~
@@ -2623,10 +2623,10 @@ For the `pos-details` member, the following values with the given semantics are 
 ~~~~ json
 {
   "version": 1,
-  "status": "connect-error",
+  "status": false,
   "reason": "TLS certificate could not be verified.",
   "reason-context": {
-    "connect-error" : "Connection establishment terminated with error."
+    "pos-details" : "connect-error"
   }
 }
 ~~~~
