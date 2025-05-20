@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-21
+docname: draft-ietf-anima-brski-prm-22
 area: Operations and Management
 wg: ANIMA WG
 date: 2025
@@ -3250,13 +3250,17 @@ IDevID certificates are intended to be widely usable and EKU does not support th
 
 Proof of Concept Code available
 
+
+From IETF draft 21 -> IETF draft 22:
+
+* addressed remaining issues from telechat
+  * included overview subsections for reason-context definition and usage in {{pledge_component}}
+  * updated status detail examples to correctly use the defined types in the status structure.
+
 From IETF draft 20 -> IETF draft 21:
 
 * addressed remaining issues from telechat
   * RetryAfter response to be always provided in case of 503 Service unavailable response
-  * included overview subsections for reason-context definition and usage in {{pledge_component}}
-  * updated status detail examples to correctly use the defined types in the status structure.
-
 
 
 From IETF draft 19 -> IETF draft 20:
