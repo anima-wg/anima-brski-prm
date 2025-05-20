@@ -764,18 +764,18 @@ If it still acts as server, the defined BRSKI-PRM endpoints to trigger a Pledge 
 
 TODO: ...
 
-| reason-context  | Value            | Description          |
-|-----------------|------------------|----------------------|
-|  pbs-detail     |                  |            TODO, ref |
-|                 | factory-default  |            TODO, ref |
-|                 | voucher-success  |            TODO, ref |
-|                 | voucher-error    |            TODO, ref |
-|                 | enroll-success   |            TODO, ref |
-|                 | enroll-error     |            TODO, ref |
-|-----------------|------------------|------------------ ---|
-|  pos-details    |                  |            TODO, ref |
-|                 | connect-success  |            TODO, ref |
-|                 | connect-error    |            TODO, ref |
+| reason-context | Value RC    | Value Detail     | Description                                       |
+|----------------|-------------|------------------|---------------------------------------------------|
+|                | pbs-details |                  | Pledge bootstrap status details, {{pstatus_data}} |
+|                |             | factory-default  | Pledge has not been bootstrapped                  |
+|                |             | voucher-success  | Pledge processed voucher exchange successfully    |
+|                |             | voucher-error    | Pledge voucher processing with error              |
+|                |             | enroll-success   | Pledge processed enrollment exchange successfully |
+|                |             | enroll-error     | Pledge enrollment-response processing with error  |
+|----------------|-------------|------------------|---------------------------------------------------|
+|                | pos-details |                  | Pledge operation status details, {{pstatus_data}} |
+|                |             | connect-success  | Pledge successfully establish connection to  peer |
+|                |             | connect-error    | Pledge connection establishment with error        |
 |=========
 {: #reason-context_pstatus_table_uri title='TODO: reason-context' }
 
@@ -783,11 +783,11 @@ TODO: ...
 
 TODO: ...
 
-| reason-context  | Value            | Description                              |
-|-----------------|------------------|------------------------------------------|
-|  pvs-details    | TODO see BRSKI   | pledge-voucher-status details – TODO,ref |
-|-----------------|------------------|------------------------------------------|
-|  pes-details    | TODO see BRSKI   | pledge-enroll-status details - TODO,ref  |
+| reason-context  | Value RC                          | Description                      |
+|-----------------|-----------------------------------|----------------------------------|
+|                 | pvs-details, {{vstatus_artifact}} | Pledge voucher status details    |
+|-----------------|-----------------------------------|------ ---------------------------|
+|                 | pes-details, {{estatus_artifact}} | Pledge-enroll-status details     |
 |=========
 {: #reason-context_tele_table_uri title='TODO: reason-context' }
 
