@@ -393,13 +393,11 @@ TLS 1.3 (or newer) SHOULD be available on the MASA, but TLS 1.2 MAY be used.
 {{RFC8995}} requires mutual TLS, and many frameworks, embedded SDKs and hardware load balancers did not, at the time of writing, have APIs that permitted mutual TLS to be done consistently across TLS 1.2 and TLS 1.3.
 While TLS 1.3 is common in browsers, the use of mutual TLS with 1.3 is uncommon in browsers, and so working support for mutual TLS in frameworks is also uncommon.
 
-On the Registrar and MASA side, mutual TLS authentication combined with hardware TLS offload requires specific support for extensions, such as those provided by
-TLS 1.2 and TLS 1.3 do client authentication at a different point in the state machine.
-Frameworks do not at the time of this writing support this.
-Sometimes this is due to lack of support for {{?RFC9440}} or an equivalent.
+On the Registrar and MASA side, mutual TLS authentication combined with hardware TLS offload requires specific support for extensions such as {{?RFC9440}} or an equivalent.
+TLS 1.2 and TLS 1.3 do client authentication at a different point in the state machine, and not all frameworks support both at the time of this writing.
 
 Many security certification schemes, such as FIPS-140, do not certify source code, but rather the resulting binary executable.  Even while TLS 1.3 source code is available, and new software can be added to existing platforms, replacing the TLS libraries on many embedded systems requires that the SDK vendor recertify the platform first.
-In industrial settings, these platforms have long lifecycles.
+In industrial settings, these platforms have long lifecycles, and it takes some time to recertify all platforms.
 
 Thus, {{RFC8995}} and this document can not turn off TLS 1.2 until all parts of the ecosystem can run TLS 1.3.
 That does not stop any of the parts of this ecosystem from deploying TLS 1.3 when possible, and for each part of the two or three transactions from negotiating TLS 1.3 in preference to TLS 1.2.
