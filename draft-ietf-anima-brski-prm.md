@@ -1,7 +1,7 @@
 ---
 title: BRSKI with Pledge in Responder Mode (BRSKI-PRM)
 abbrev: BRSKI-PRM
-docname: draft-ietf-anima-brski-prm-22
+docname: draft-ietf-anima-brski-prm-23
 area: Operations and Management
 wg: ANIMA WG
 date: 2025
@@ -381,7 +381,7 @@ Solution examples based on existing technology are provided with the focus on ex
   This binding supports the authorization decision for the certification request and may be provided directly with the certification request.
   While BRSKI uses the binding to TLS, BRSKI-PRM aims at an additional signature of the PKCS#10 using existing credentials on the pledge (IDevID). This allows the process to be independent of the selected transport.
 
-## TLS support required
+## TLS support required  {#tls_sup}
 
 As already stated in {{!RFC8995}}, and required by {{?I-D.ietf-uta-require-tls13}}, the use of TLS 1.3 (or newer) is encouraged.
 TLS 1.2 or newer is REQUIRED on the Registrar-Agent side.
@@ -762,7 +762,7 @@ If it still acts as server, the defined BRSKI-PRM endpoints to trigger a Pledge 
 
 The following table provides an overview of "reason-context" values and further details of pledgestatus data objects:
 
-| "reason-context" Value | Details          | Description                                       |
+| "reason-context" Value | Predef. Details  | Description                                       |
 |------------------------|------------------|---------------------------------------------------|
 | pbs-details            |                  | Pledge bootstrap status details, {{pstatus_data}} |
 |                        | factory-default  | Pledge has not been bootstrapped                  |
@@ -776,6 +776,10 @@ The following table provides an overview of "reason-context" values and further 
 |                        | connect-error    | Pledge connection establishment with error        |
 |=========
 {: #reason-context_pstatus_table_uri title='Pledgestatus "reason-context" values and details' }
+
+Note that the predefined details listed in {{reason-context_pstatus_table_uri}} may be enhanced by other specifications if necessary. 
+The currently defined details reflect the different stages during onboarding along the exchanges shown in {{exchangesfig_uc2_all}}.
+
 
 ### Voucher Status and Enroll Status Telemetry "reason-context" Values
 
@@ -3248,12 +3252,16 @@ IDevID certificates are intended to be widely usable and EKU does not support th
 
 Proof of Concept Code available
 
+From IETF draft 22 -> IETF draft 23:
 
+* editorial update of new section on TLS usage clarifications {{tls_sup}}
+ 
 From IETF draft 21 -> IETF draft 22:
 
 * addressed remaining issues from telechat
   * included overview subsections for reason-context definition and usage in {{pledge_component}}
   * updated status detail examples to correctly use the defined types in the status structure.
+  * new section on TLS usage clarifications {{tls_sup}}
 
 From IETF draft 20 -> IETF draft 21:
 
