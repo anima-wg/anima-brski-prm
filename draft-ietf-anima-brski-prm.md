@@ -2817,10 +2817,10 @@ There are some very constrained cases where this might be the case, but for many
 An active on-path attacker {{onpath}} could trivially impersonate the Pledge at the network layer, which is exactly the same situation when not using TLS.
 For many installations, a physical cable may be invoved (such as ethernet over USB), or a very low power wireless network will be used.
 Any active on-path attacker would have to be physically present at the site of the device.
-Such a physically present attacker could learn the identity of the Pledge by simply pretending to be a Registrar-Agent, and asking the device for it's identity.
+Such a physically present attacker could learn the identity of the Pledge by simply pretending to be a Registrar-Agent, and asking the device for its identity.
 It could equally do this over TLS/HTTPS.
 
-An active on-path attacker can not replace the signed objects that the Pledge and Registrar-Agent exchange.
+It is impossible for an active on-path attacker to replace the signed objects that the Pledge and Registrar-Agent exchange because those objects are signed by keys contained in the respective devices.
 
 Depending on the requests and responses, the following information is disclosed:
 
