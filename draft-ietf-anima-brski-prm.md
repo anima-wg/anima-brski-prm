@@ -2820,7 +2820,7 @@ Any active on-path attacker would have to be physically present at the site of t
 Such a physically present attacker could learn the identity of the Pledge by simply pretending to be a Registrar-Agent, and asking the device for its identity.
 It could equally do this over TLS/HTTPS.
 
-It is impossible for an active on-path attacker to replace the signed objects that the Pledge and Registrar-Agent exchange because those objects are signed by keys contained in the respective devices.
+It is impossible for an active on-path attacker to replace the signed objects that the Pledge and Registrar-Agent exchange undetected because those objects are signed by keys contained in the respective devices.
 
 Depending on the requests and responses, the following information is disclosed:
 
