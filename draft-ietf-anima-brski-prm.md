@@ -3274,6 +3274,7 @@ Proof of Concept Code available
 From IETF draft 22 -> IETF draft 23:
 
 * editorial update of new section on TLS usage clarifications {{tls_sup}}
+* structural and editorial improvements to privacy considerations {{priv_cons}}
  
 From IETF draft 21 -> IETF draft 22:
 
