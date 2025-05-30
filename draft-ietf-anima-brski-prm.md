@@ -2785,18 +2785,11 @@ IANA is requested to register the following service names:
 
 # Privacy Considerations {#priv_cons}
 
-In general, the privacy considerations of {{!RFC8995}} apply for BRSKI-PRM also.
-Further privacy aspects need to be considered for:
+The privacy considerations of {{!RFC8995}} also apply for BRSKI-PRM.
+Two architectural changes in this document require some additional consideration:
 
 * the introduction of the additional component Registrar-Agent
-* potentially no usage of TLS between Registrar-Agent and pledge
-
-{{tpvr}} describes to optionally apply TLS to protect the communication between the Registrar-Agent and the pledge.
-The following is therefore applicable to the communication without the TLS protection.
-
-The credentials used by the Registrar-Agent to sign the data for the pledge SHOULD NOT contain any personal information.
-Therefore, it is recommended to use an EE certificate associated with the commissioning device instead of an EE certificate associated with the service technician operating the device.
-This avoids revealing potentially included personal information to Registrar and MASA.
+* no TLS between Registrar-Agent and pledge
 
 As logging is recommended to better handle failure situations, it is necessary to avoid capturing  sensitive or personal data.
 Privacy-preserving measures in logs SHOULD be applied, such as:
@@ -2804,9 +2797,32 @@ Privacy-preserving measures in logs SHOULD be applied, such as:
 * Avoid logging personally identifiable information unless unavoidable.
 * Anonymize or pseudonymize data where possible.
 
+## Registrar-Agent identity Privacy Considerations
+
+The credentials used by the Registrar-Agent to sign the data for the pledge SHOULD NOT contain any personal information about the owner/operator of the Registar-Agent.
+So for instance, issuing an EE certificate to the Registrar-Agent that has a Subject DN saying something like "Frank Jones' Commissioning Tablet" would be a problem.
+
+Therefore, it is recommended to use an EE certificate associated with the commissioning device instead of an EE certificate associated with the service technician operating the device.
+This avoids revealing potentially included personal information to any eavesdroppers on the Registrar-Agent/Pledge communication.
+Along the Registrar-Agent/Registrar communication path, if TLS 1.2 is used, the client certificate details will be revealed to any on path passive attacker.
+This is one of the advantages of using TLS 1.3.
+
+## Registar-Agent/Pledge communications
+
 The communication between the pledge and the Registrar-Agent is performed over plain HTTP.
-Therefore, it is subject to disclosure by a Dolev-Yao attacker (an "oppressive observer"){{onpath}}.
-Depending on the requests and responses, the following information is disclosed.
+HTTPS can not be easily used as the Pledge's long-term IDevID certificate does not contain a SubjectAltName that {{?RFC9525}} DNS-ID verification can use to validate the certificate.
+In order for this connection to be more secure, the Registrar-Agent would need to know precisely which devices (down to the serial number) it expects to onboard.
+There are some very constrained cases where this might be the case, but for many installations, it is not practical.
+
+An active on-path attacker {{onpath}} could trivially impersonate the Pledge at the network layer, which is exactly the same situation when not using TLS.
+For many installations, a physical cable may be invoved (such as ethernet over USB), or a very low power wireless network will be used.
+Any active on-path attacker would have to be physically present at the site of the device.
+Such a physically present attacker could learn the identity of the Pledge by simply pretending to be a Registrar-Agent, and asking the device for its identity.
+It could equally do this over TLS/HTTPS.
+
+It is impossible for an active on-path attacker to replace the signed objects that the Pledge and Registrar-Agent exchange undetected because those objects are signed by keys contained in the respective devices.
+
+Depending on the requests and responses, the following information is disclosed:
 
 * the Pledge product-serial-number is contained in the trigger message for the PVR and in all responses from the pledge.
   This information reveals the identity of the devices being bootstrapped and allows deduction of which products an operator is using in their environment.
@@ -2814,6 +2830,9 @@ Depending on the requests and responses, the following information is disclosed.
   Even if the wireless network is encrypted, if it uses a network-wide key, then layer-2 attacks (ARP/ND spoofing) could insert an on-path observer into the path.
 * the Timestamp data could reveal the activation time of the device.
 * the Status data of the device could reveal information about the current state of the device in the domain network.
+
+{{tpvr}} describes to optionally apply TLS to protect the communication between the Registrar-Agent and the pledge.
+The following is therefore applicable to the communication without the TLS protection.
 
 
 
